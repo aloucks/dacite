@@ -173,6 +173,42 @@ impl From<InternalAllocationType> for vk_sys::VkInternalAllocationType {
     }
 }
 
+#[derive(Debug, Copy, Clone)]
+pub enum PhysicalDeviceType {
+    Other,
+    IntegratedGpu,
+    DiscreteGpu,
+    VirtualGpu,
+    Cpu,
+    Unknown(vk_sys::VkPhysicalDeviceType),
+}
+
+impl From<vk_sys::VkPhysicalDeviceType> for PhysicalDeviceType {
+    fn from(physical_device_type: vk_sys::VkPhysicalDeviceType) -> Self {
+        match physical_device_type {
+            vk_sys::VK_PHYSICAL_DEVICE_TYPE_OTHER => PhysicalDeviceType::Other,
+            vk_sys::VK_PHYSICAL_DEVICE_TYPE_INTEGRATED_GPU => PhysicalDeviceType::IntegratedGpu,
+            vk_sys::VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU => PhysicalDeviceType::DiscreteGpu,
+            vk_sys::VK_PHYSICAL_DEVICE_TYPE_VIRTUAL_GPU => PhysicalDeviceType::VirtualGpu,
+            vk_sys::VK_PHYSICAL_DEVICE_TYPE_CPU => PhysicalDeviceType::Cpu,
+            _ => PhysicalDeviceType::Unknown(physical_device_type),
+        }
+    }
+}
+
+impl From<PhysicalDeviceType> for vk_sys::VkPhysicalDeviceType {
+    fn from(physical_device_type: PhysicalDeviceType) -> Self {
+        match physical_device_type {
+            PhysicalDeviceType::Other => vk_sys::VK_PHYSICAL_DEVICE_TYPE_OTHER,
+            PhysicalDeviceType::IntegratedGpu => vk_sys::VK_PHYSICAL_DEVICE_TYPE_INTEGRATED_GPU,
+            PhysicalDeviceType::DiscreteGpu => vk_sys::VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU,
+            PhysicalDeviceType::VirtualGpu => vk_sys::VK_PHYSICAL_DEVICE_TYPE_VIRTUAL_GPU,
+            PhysicalDeviceType::Cpu => vk_sys::VK_PHYSICAL_DEVICE_TYPE_CPU,
+            PhysicalDeviceType::Unknown(physical_device_type) => physical_device_type,
+        }
+    }
+}
+
 #[derive(Debug, Clone)]
 pub struct ApplicationInfo {
     pub application_name: Option<String>,
