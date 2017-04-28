@@ -1,0 +1,24 @@
+[package]
+name = "dacite"
+version = "0.1.0"
+authors = ["Dennis Hamester <dennis.hamester@startmail.com>"]
+homepage = "https://gitlab.com/dennis-hamester/dacite"
+repository = "https://gitlab.com/dennis-hamester/dacite"
+keywords = [ "vulkan", "graphics" ]
+license = "ISC"
+
+[badges]
+gitlab = { repository = "https://gitlab.com/dennis-hamester/dacite" }
+
+[dependencies]
+libc = "0.2.22"
+
+[dependencies.vk-sys]
+git = "https://dennis-hamester@gitlab.com/dennis-hamester/vk-sys.git"
+tag = "0.12.0"
+default-features = false
+
+[features]
+default = [ "core_1_0_3" ]
+
+core_1_0_3 = [ "vk-sys/core_1_0_3" ]
