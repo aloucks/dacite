@@ -15,6 +15,7 @@
 mod allocator_helper;
 mod instance;
 mod instance_handle;
+mod physical_device;
 
 use libc::c_void;
 use std::ffi::CStr;
@@ -22,6 +23,7 @@ use std::fmt;
 use vk_sys;
 
 pub use self::instance::Instance;
+pub use self::physical_device::PhysicalDevice;
 
 #[derive(Debug, Copy, Clone)]
 pub struct Version {

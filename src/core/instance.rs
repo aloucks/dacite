@@ -130,6 +130,34 @@ impl Instance {
         })))
     }
 
+    pub fn enumerate_physical_devices(&self) -> Result<Vec<core::PhysicalDevice>> {
+        let mut num_physical_devices = 0;
+        let res = unsafe {
+            (self.0.loader.core.vkEnumeratePhysicalDevices)(self.0.instance, &mut num_physical_devices, ptr::null_mut())
+        };
+        if res != vk_sys::VK_SUCCESS {
+            return Err(res.into());
+        }
+
+        let mut physical_devices = Vec::with_capacity(num_physical_devices as usize);
+        let res = unsafe {
+            (self.0.loader.core.vkEnumeratePhysicalDevices)(self.0.instance, &mut num_physical_devices, physical_devices.as_mut_ptr())
+        };
+        if res != vk_sys::VK_SUCCESS {
+            return Err(res.into());
+        }
+        unsafe {
+            physical_devices.set_len(num_physical_devices as usize);
+        }
+
+        let physical_devices: Vec<_> = physical_devices
+            .iter()
+            .map(|&d| core::PhysicalDevice::new(self.0.clone(), d))
+            .collect();
+
+        Ok(physical_devices)
+    }
+
     pub fn enumerate_instance_layer_properties() -> Result<Vec<core::LayerProperties>> {
         unsafe {
             let mut loader = vk_sys::instance_proc_addr_loader::CoreNullInstance::new();

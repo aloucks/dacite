@@ -66,5 +66,8 @@ fn main() {
         enabled_extensions: vec![],
     };
 
-    let instance = dacite::core::Instance::create(instance_create_info, None);
+    let instance = dacite::core::Instance::create(instance_create_info, None).unwrap();;
+    let physical_devices = instance.enumerate_physical_devices().unwrap();
+
+    println!("Found {} physical device(s)", physical_devices.len());
 }
