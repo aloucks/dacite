@@ -17,7 +17,7 @@ extern crate vk_sys;
 
 fn main() {
     let instance_extensions = dacite::core::Instance::enumerate_instance_extension_properties(None).unwrap();
-    println!("Available instance extensions:");
+    println!("Instance extension(s) ({}):", instance_extensions.len());
     if !instance_extensions.is_empty() {
         for extension in instance_extensions {
             println!("    {} (revision {})", String::from(extension.extension), extension.spec_version);
@@ -29,7 +29,7 @@ fn main() {
 
     println!();
     let instance_layers = dacite::core::Instance::enumerate_instance_layer_properties().unwrap();
-    println!("Available instance layers:");
+    println!("Instance layer(s) ({}):", instance_layers.len());
     if !instance_layers.is_empty() {
         for layer in instance_layers {
             println!("    {}", layer.layer_name);
@@ -38,11 +38,9 @@ fn main() {
             println!("        Description: {}", layer.description);
 
             let extensions = dacite::core::Instance::enumerate_instance_extension_properties(Some(layer.layer_name)).unwrap();
-            if !extensions.is_empty() {
-                println!("        Extensions:");
-                for extension in extensions {
-                    println!("            {} (revision {})", String::from(extension.extension), extension.spec_version);
-                }
+            println!("        Extension(s) ({}):", extensions.len());
+            for extension in extensions {
+                println!("            {} (revision {})", String::from(extension.extension), extension.spec_version);
             }
         }
     }
