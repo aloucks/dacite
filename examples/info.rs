@@ -20,11 +20,11 @@ fn main() {
     println!("Available instance extensions:");
     if !instance_extensions.is_empty() {
         for extension in instance_extensions {
-            println!(" {} (revision {})", String::from(extension.extension), extension.spec_version);
+            println!("    {} (revision {})", String::from(extension.extension), extension.spec_version);
         }
     }
     else {
-        println!(" None");
+        println!("    None");
     }
 
     println!();
@@ -32,24 +32,22 @@ fn main() {
     println!("Available instance layers:");
     if !instance_layers.is_empty() {
         for layer in instance_layers {
-            println!(" {}", layer.layer_name);
-            println!("  Specification version: {}", layer.spec_version);
-            println!("  Implementation version: {}", layer.implementation_version);
-            println!("  Description: {}", layer.description);
+            println!("    {}", layer.layer_name);
+            println!("        Specification version: {}", layer.spec_version);
+            println!("        Implementation version: {}", layer.implementation_version);
+            println!("        Description: {}", layer.description);
 
             let extensions = dacite::core::Instance::enumerate_instance_extension_properties(Some(layer.layer_name)).unwrap();
             if !extensions.is_empty() {
-                println!("  Extensions:");
+                println!("        Extensions:");
                 for extension in extensions {
-                    println!("   {} (revision {})", String::from(extension.extension), extension.spec_version);
+                    println!("            {} (revision {})", String::from(extension.extension), extension.spec_version);
                 }
             }
-
-            println!();
         }
     }
     else {
-        println!(" None");
+        println!("    None");
         println!();
     }
 
@@ -69,5 +67,6 @@ fn main() {
     let instance = dacite::core::Instance::create(instance_create_info, None).unwrap();;
     let physical_devices = instance.enumerate_physical_devices().unwrap();
 
+    println!();
     println!("Found {} physical device(s)", physical_devices.len());
 }
