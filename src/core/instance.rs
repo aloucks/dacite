@@ -23,10 +23,7 @@ use std::sync::Arc;
 use vk_sys;
 
 #[derive(Debug, Clone)]
-pub struct Instance {
-    handle: Arc<InstanceHandle>,
-    loader: vk_sys::InstanceProcAddrLoader,
-}
+pub struct Instance(Arc<InstanceHandle>);
 
 impl Instance {
     pub fn create(mut create_info: core::InstanceCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<Instance> {
@@ -126,14 +123,11 @@ impl Instance {
             loader.load_core(instance);
         }
 
-        Ok(Instance {
-            handle: Arc::new(InstanceHandle {
-                instance: instance,
-                vk_destroy_instance: loader.core.vkDestroyInstance,
-                allocator: allocator_helper,
-            }),
+        Ok(Instance(Arc::new(InstanceHandle {
+            instance: instance,
+            allocator: allocator_helper,
             loader: loader,
-        })
+        })))
     }
 
     pub fn enumerate_instance_layer_properties() -> Result<Vec<core::LayerProperties>> {

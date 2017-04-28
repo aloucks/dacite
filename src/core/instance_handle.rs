@@ -13,14 +13,14 @@
 // PERFORMANCE OF THIS SOFTWARE.
 
 use core::allocator_helper::AllocatorHelper;
-use std::fmt;
 use std::ptr;
 use vk_sys;
 
+#[derive(Debug)]
 pub struct InstanceHandle {
     pub instance: vk_sys::VkInstance,
-    pub vk_destroy_instance: vk_sys::PFN_vkDestroyInstance,
     pub allocator: Option<AllocatorHelper>,
+    pub loader: vk_sys::InstanceProcAddrLoader,
 }
 
 impl Drop for InstanceHandle {
@@ -31,17 +31,7 @@ impl Drop for InstanceHandle {
         };
 
         unsafe {
-            (self.vk_destroy_instance)(self.instance, allocator);
+            (self.loader.core.vkDestroyInstance)(self.instance, allocator);
         }
-    }
-}
-
-impl fmt::Debug for InstanceHandle {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.debug_struct("InstanceHandle")
-            .field("instance", &self.instance)
-            .field("vk_destroy_instance", &(self.vk_destroy_instance as *mut usize))
-            .field("allocator", &self.allocator)
-            .finish()
     }
 }
