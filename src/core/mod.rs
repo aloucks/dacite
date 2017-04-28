@@ -52,6 +52,29 @@ impl Version {
     }
 }
 
+pub enum PipelineCacheHeaderVersion {
+    One,
+    Unknown(vk_sys::VkPipelineCacheHeaderVersion),
+}
+
+impl From<vk_sys::VkPipelineCacheHeaderVersion> for PipelineCacheHeaderVersion {
+    fn from(version: vk_sys::VkPipelineCacheHeaderVersion) -> Self {
+        match version {
+            vk_sys::VK_PIPELINE_CACHE_HEADER_VERSION_ONE => PipelineCacheHeaderVersion::One,
+            _ => PipelineCacheHeaderVersion::Unknown(version),
+        }
+    }
+}
+
+impl From<PipelineCacheHeaderVersion> for vk_sys::VkPipelineCacheHeaderVersion {
+    fn from(version: PipelineCacheHeaderVersion) -> Self {
+        match version {
+            PipelineCacheHeaderVersion::One => vk_sys::VK_PIPELINE_CACHE_HEADER_VERSION_ONE,
+            PipelineCacheHeaderVersion::Unknown(version) => version,
+        }
+    }
+}
+
 #[derive(Debug, Copy, Clone)]
 pub enum Error {
     OutOfHostMemory,
