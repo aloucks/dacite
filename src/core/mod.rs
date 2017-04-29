@@ -1865,6 +1865,30 @@ impl From<MemoryType> for vk_sys::VkMemoryType {
     }
 }
 
+#[derive(Debug, Copy, Clone)]
+pub struct MemoryHeap {
+    pub size: u64,
+    pub flags: vk_sys::VkMemoryHeapFlags,
+}
+
+impl From<vk_sys::VkMemoryHeap> for MemoryHeap {
+    fn from(heap: vk_sys::VkMemoryHeap) -> Self {
+        MemoryHeap {
+            size: heap.size,
+            flags: heap.flags,
+        }
+    }
+}
+
+impl From<MemoryHeap> for vk_sys::VkMemoryHeap {
+    fn from(heap: MemoryHeap) -> Self {
+        vk_sys::VkMemoryHeap {
+            size: heap.size,
+            flags: heap.flags,
+        }
+    }
+}
+
 #[derive(Debug, Clone)]
 pub enum InstanceExtension {
     Unknown(String),
