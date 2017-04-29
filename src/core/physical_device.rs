@@ -18,6 +18,7 @@ use core;
 use std::mem;
 use std::ptr;
 use std::sync::Arc;
+use utils;
 use vk_sys;
 
 #[derive(Debug, Clone)]
@@ -66,6 +67,27 @@ impl PhysicalDevice {
             layer_properties.set_len(num_layer_properties as usize);
 
             Ok(layer_properties.iter().map(|p| p.into()).collect())
+        }
+    }
+
+    pub fn enumerate_device_extension_properties(&self, layer_name: Option<String>) -> Result<Vec<core::InstanceExtensionProperties>> {
+        unsafe {
+            let layer_name_cstr = utils::cstr_from_string(layer_name);
+
+            let mut num_extension_properties = 0;
+            let res = (self.instance_handle.loader.core.vkEnumerateDeviceExtensionProperties)(self.physical_device, layer_name_cstr.1, &mut num_extension_properties, ptr::null_mut());
+            if res != vk_sys::VK_SUCCESS {
+                return Err(res.into());
+            }
+
+            let mut extension_properties = Vec::with_capacity(num_extension_properties as usize);
+            let res = (self.instance_handle.loader.core.vkEnumerateDeviceExtensionProperties)(self.physical_device, layer_name_cstr.1, &mut num_extension_properties, extension_properties.as_mut_ptr());
+            if res != vk_sys::VK_SUCCESS {
+                return Err(res.into());
+            }
+            extension_properties.set_len(num_extension_properties as usize);
+
+            Ok(extension_properties.iter().map(|p| p.into()).collect())
         }
     }
 }
