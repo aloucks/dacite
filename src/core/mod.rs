@@ -813,6 +813,33 @@ impl From<Format> for vk_sys::VkFormat {
 }
 
 #[derive(Debug, Copy, Clone)]
+pub enum ImageTiling {
+    Optimal,
+    Linear,
+    Unknown(vk_sys::VkImageTiling),
+}
+
+impl From<vk_sys::VkImageTiling> for ImageTiling {
+    fn from(tiling: vk_sys::VkImageTiling) -> Self {
+        match tiling {
+            vk_sys::VK_IMAGE_TILING_OPTIMAL => ImageTiling::Optimal,
+            vk_sys::VK_IMAGE_TILING_LINEAR => ImageTiling::Linear,
+            _ => ImageTiling::Unknown(tiling),
+        }
+    }
+}
+
+impl From<ImageTiling> for vk_sys::VkImageTiling {
+    fn from(tiling: ImageTiling) -> Self {
+        match tiling {
+            ImageTiling::Optimal => vk_sys::VK_IMAGE_TILING_OPTIMAL,
+            ImageTiling::Linear => vk_sys::VK_IMAGE_TILING_LINEAR,
+            ImageTiling::Unknown(tiling) => tiling,
+        }
+    }
+}
+
+#[derive(Debug, Copy, Clone)]
 pub enum PhysicalDeviceType {
     Other,
     IntegratedGpu,
