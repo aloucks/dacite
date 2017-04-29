@@ -13,7 +13,8 @@
 // PERFORMANCE OF THIS SOFTWARE.
 
 use libc::c_char;
-use std::ffi::CStr;
+use std::ffi::{CStr, CString};
+use std::ptr;
 use vk_sys;
 
 #[inline]
@@ -45,5 +46,18 @@ pub fn string_from_cstr(cstr: *const c_char) -> Option<String> {
     }
     else {
         None
+    }
+}
+
+#[inline]
+pub fn cstr_from_string(string: Option<String>) -> (Option<CString>, *const c_char) {
+    match string {
+        Some(string) => {
+            let cstr = CString::new(string).unwrap();
+            let ptr = cstr.as_ptr();
+            (Some(cstr), ptr)
+        }
+
+        None => (None, ptr::null()),
     }
 }
