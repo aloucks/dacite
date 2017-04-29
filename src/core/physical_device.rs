@@ -115,4 +115,20 @@ impl PhysicalDevice {
             Err(res.into())
         }
     }
+
+    pub fn sparse_image_format_properties(&self, format: core::Format, image_type: core::ImageType, samples: vk_sys::VkSampleCountFlagBits, usage: vk_sys::VkImageUsageFlags, tiling: core::ImageTiling) -> Vec<core::SparseImageFormatProperties> {
+        let mut num_properties = 0;
+        unsafe {
+            (self.instance_handle.loader.core.vkGetPhysicalDeviceSparseImageFormatProperties)(self.physical_device, format.into(), image_type.into(), samples, usage, tiling.into(), &mut num_properties, ptr::null_mut());
+        }
+
+        let mut properties = Vec::with_capacity(num_properties as usize);
+        unsafe {
+            (self.instance_handle.loader.core.vkGetPhysicalDeviceSparseImageFormatProperties)(self.physical_device, format.into(), image_type.into(), samples, usage, tiling.into(), &mut num_properties, properties.as_mut_ptr());
+            properties.set_len(num_properties as usize);
+        }
+
+        let properties = properties.drain(..).map(From::from).collect();
+        properties
+    }
 }
