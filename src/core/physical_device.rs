@@ -12,9 +12,11 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
+use Result;
 use core::instance_handle::InstanceHandle;
 use core;
 use std::mem;
+use std::ptr;
 use std::sync::Arc;
 use vk_sys;
 
@@ -45,6 +47,25 @@ impl PhysicalDevice {
             let mut features = mem::uninitialized();
             (self.instance_handle.loader.core.vkGetPhysicalDeviceFeatures)(self.physical_device, &mut features);
             features.into()
+        }
+    }
+
+    pub fn enumerate_device_layer_properties(&self) -> Result<Vec<core::LayerProperties>> {
+        unsafe {
+            let mut num_layer_properties = 0;
+            let res = (self.instance_handle.loader.core.vkEnumerateDeviceLayerProperties)(self.physical_device, &mut num_layer_properties, ptr::null_mut());
+            if res != vk_sys::VK_SUCCESS {
+                return Err(res.into());
+            }
+
+            let mut layer_properties = Vec::with_capacity(num_layer_properties as usize);
+            let res = (self.instance_handle.loader.core.vkEnumerateDeviceLayerProperties)(self.physical_device, &mut num_layer_properties, layer_properties.as_mut_ptr());
+            if res != vk_sys::VK_SUCCESS {
+                return Err(res.into());
+            }
+            layer_properties.set_len(num_layer_properties as usize);
+
+            Ok(layer_properties.iter().map(|p| p.into()).collect())
         }
     }
 }
