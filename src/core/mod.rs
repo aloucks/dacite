@@ -1811,6 +1811,36 @@ impl From<PhysicalDeviceProperties> for vk_sys::VkPhysicalDeviceProperties {
     }
 }
 
+#[derive(Debug, Copy, Clone)]
+pub struct QueueFamilyProperties {
+    pub queue_flags: vk_sys::VkQueueFlags,
+    pub queue_count: u32,
+    pub timestamp_valid_bits: u32,
+    pub min_image_transfer_granularity: Extent3D,
+}
+
+impl From<vk_sys::VkQueueFamilyProperties> for QueueFamilyProperties {
+    fn from(properties: vk_sys::VkQueueFamilyProperties) -> Self {
+        QueueFamilyProperties {
+            queue_flags: properties.queueFlags,
+            queue_count: properties.queueCount,
+            timestamp_valid_bits: properties.timestampValidBits,
+            min_image_transfer_granularity: properties.minImageTransferGranularity.into(),
+        }
+    }
+}
+
+impl From<QueueFamilyProperties> for vk_sys::VkQueueFamilyProperties {
+    fn from(properties: QueueFamilyProperties) -> Self {
+        vk_sys::VkQueueFamilyProperties {
+            queueFlags: properties.queue_flags,
+            queueCount: properties.queue_count,
+            timestampValidBits: properties.timestamp_valid_bits,
+            minImageTransferGranularity: properties.min_image_transfer_granularity.into(),
+        }
+    }
+}
+
 #[derive(Debug, Clone)]
 pub enum InstanceExtension {
     Unknown(String),
