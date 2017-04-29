@@ -13,6 +13,8 @@
 // PERFORMANCE OF THIS SOFTWARE.
 
 use core::instance_handle::InstanceHandle;
+use core;
+use std::mem;
 use std::sync::Arc;
 use vk_sys;
 
@@ -27,6 +29,14 @@ impl PhysicalDevice {
         PhysicalDevice {
             instance_handle,
             physical_device,
+        }
+    }
+
+    pub fn properties(&self) -> core::PhysicalDeviceProperties {
+        unsafe {
+            let mut properties = mem::uninitialized();
+            (self.instance_handle.loader.core.vkGetPhysicalDeviceProperties)(self.physical_device, &mut properties);
+            properties.into()
         }
     }
 }
