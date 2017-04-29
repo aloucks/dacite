@@ -1894,3 +1894,30 @@ impl<'a> From<&'a vk_sys::VkLayerProperties> for LayerProperties {
         }
     }
 }
+
+#[derive(Debug, Copy, Clone)]
+pub struct SparseImageFormatProperties {
+    pub aspect_mask: vk_sys::VkImageAspectFlags,
+    pub image_granularity: Extent3D,
+    pub flags: vk_sys::VkSparseImageFormatFlags,
+}
+
+impl From<vk_sys::VkSparseImageFormatProperties> for SparseImageFormatProperties {
+    fn from(properties: vk_sys::VkSparseImageFormatProperties) -> Self {
+        SparseImageFormatProperties {
+            aspect_mask: properties.aspectMask,
+            image_granularity: properties.imageGranularity.into(),
+            flags: properties.flags,
+        }
+    }
+}
+
+impl From<SparseImageFormatProperties> for vk_sys::VkSparseImageFormatProperties {
+    fn from(properties: SparseImageFormatProperties) -> Self {
+        vk_sys::VkSparseImageFormatProperties {
+            aspectMask: properties.aspect_mask,
+            imageGranularity: properties.image_granularity.into(),
+            flags: properties.flags,
+        }
+    }
+}
