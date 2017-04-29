@@ -140,6 +140,25 @@ impl From<vk_sys::VkResult> for Error {
     }
 }
 
+impl From<Error> for vk_sys::VkResult {
+    fn from(err: Error) -> Self {
+        match err {
+            Error::OutOfHostMemory => vk_sys::VK_ERROR_OUT_OF_HOST_MEMORY,
+            Error::OutOfDeviceMemory => vk_sys::VK_ERROR_OUT_OF_DEVICE_MEMORY,
+            Error::InitializationFailed => vk_sys::VK_ERROR_INITIALIZATION_FAILED,
+            Error::DeviceLost => vk_sys::VK_ERROR_DEVICE_LOST,
+            Error::MemoryMapFailed => vk_sys::VK_ERROR_MEMORY_MAP_FAILED,
+            Error::LayerNotPresent => vk_sys::VK_ERROR_LAYER_NOT_PRESENT,
+            Error::ExtensionNotPresent => vk_sys::VK_ERROR_EXTENSION_NOT_PRESENT,
+            Error::FeatureNotPresent => vk_sys::VK_ERROR_FEATURE_NOT_PRESENT,
+            Error::IncompatibleDriver => vk_sys::VK_ERROR_INCOMPATIBLE_DRIVER,
+            Error::TooManyObjects => vk_sys::VK_ERROR_TOO_MANY_OBJECTS,
+            Error::FormatNotSupported => vk_sys::VK_ERROR_FORMAT_NOT_SUPPORTED,
+            Error::Unknown(res) => res,
+        }
+    }
+}
+
 #[derive(Debug, Copy, Clone)]
 pub enum SystemAllocationSope {
     Command,
