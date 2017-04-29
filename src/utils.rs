@@ -19,12 +19,7 @@ use vk_sys;
 
 #[inline]
 pub fn from_vk_bool(v: vk_sys::VkBool32) -> bool {
-    if v != vk_sys::VK_FALSE {
-        true
-    }
-    else {
-        false
-    }
+    v != vk_sys::VK_FALSE
 }
 
 #[inline]
