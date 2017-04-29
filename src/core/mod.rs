@@ -22,6 +22,7 @@ use std::ffi::CStr;
 use std::fmt;
 use std::mem;
 use std::ptr;
+use std::slice;
 use utils;
 use vk_sys;
 
@@ -873,6 +874,43 @@ pub struct InstanceCreateInfo {
     pub application_info: Option<ApplicationInfo>,
     pub enabled_layers: Vec<String>,
     pub enabled_extensions: Vec<InstanceExtension>,
+}
+
+impl From<vk_sys::VkInstanceCreateInfo> for InstanceCreateInfo {
+    fn from(create_info: vk_sys::VkInstanceCreateInfo) -> Self {
+        let application_info = if !create_info.pApplicationInfo.is_null() {
+            unsafe {
+                Some((*create_info.pApplicationInfo).into())
+            }
+        }
+        else {
+            None
+        };
+
+        let enabled_layers_slice = unsafe {
+            slice::from_raw_parts(create_info.ppEnabledLayerNames, create_info.enabledLayerCount as usize)
+        };
+        let enabled_layers = enabled_layers_slice
+            .iter()
+            .map(|&e| unsafe { CStr::from_ptr(e).to_str().unwrap().to_owned() })
+            .collect();
+
+        let enabled_extensions_slice = unsafe {
+            slice::from_raw_parts(create_info.ppEnabledExtensionNames, create_info.enabledExtensionCount as usize)
+        };
+        let enabled_extensions = enabled_extensions_slice
+            .iter()
+            .map(|&e| unsafe { CStr::from_ptr(e).to_str().unwrap() })
+            .map(From::from)
+            .collect();
+
+        InstanceCreateInfo {
+            flags: create_info.flags,
+            application_info: application_info,
+            enabled_layers: enabled_layers,
+            enabled_extensions: enabled_extensions,
+        }
+    }
 }
 
 pub trait Allocator: Send {
