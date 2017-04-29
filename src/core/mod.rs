@@ -237,6 +237,7 @@ impl From<InternalAllocationType> for vk_sys::VkInternalAllocationType {
 }
 
 #[allow(non_camel_case_types)]
+#[derive(Debug, Copy, Clone)]
 pub enum Format {
     Undefined,
     R4G4_UNorm_Pack8,
