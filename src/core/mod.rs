@@ -813,6 +813,36 @@ impl From<Format> for vk_sys::VkFormat {
 }
 
 #[derive(Debug, Copy, Clone)]
+pub enum ImageType {
+    Type1D,
+    Type2D,
+    Type3D,
+    Unknown(vk_sys::VkImageType),
+}
+
+impl From<vk_sys::VkImageType> for ImageType {
+    fn from(image_type: vk_sys::VkImageType) -> Self {
+        match image_type {
+            vk_sys::VK_IMAGE_TYPE_1D => ImageType::Type1D,
+            vk_sys::VK_IMAGE_TYPE_2D => ImageType::Type2D,
+            vk_sys::VK_IMAGE_TYPE_3D => ImageType::Type3D,
+            _ => ImageType::Unknown(image_type),
+        }
+    }
+}
+
+impl From<ImageType> for vk_sys::VkImageType {
+    fn from(image_type: ImageType) -> Self {
+        match image_type {
+            ImageType::Type1D => vk_sys::VK_IMAGE_TYPE_1D,
+            ImageType::Type2D => vk_sys::VK_IMAGE_TYPE_2D,
+            ImageType::Type3D => vk_sys::VK_IMAGE_TYPE_3D,
+            ImageType::Unknown(image_type) => image_type,
+        }
+    }
+}
+
+#[derive(Debug, Copy, Clone)]
 pub enum ImageTiling {
     Optimal,
     Linear,
