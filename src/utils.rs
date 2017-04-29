@@ -12,6 +12,8 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
+use libc::c_char;
+use std::ffi::CStr;
 use vk_sys;
 
 #[inline]
@@ -31,5 +33,17 @@ pub fn to_vk_bool(v: bool) -> vk_sys::VkBool32 {
     }
     else {
         vk_sys::VK_FALSE
+    }
+}
+
+#[inline]
+pub fn string_from_cstr(cstr: *const c_char) -> Option<String> {
+    if !cstr.is_null() {
+        unsafe {
+            Some(CStr::from_ptr(cstr).to_str().unwrap().to_owned())
+        }
+    }
+    else {
+        None
     }
 }
