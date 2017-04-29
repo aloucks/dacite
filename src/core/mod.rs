@@ -950,6 +950,93 @@ impl From<vk_sys::VkInstanceCreateInfo> for InstanceCreateInfo {
     }
 }
 
+#[derive(Debug)]
+pub struct VkInstanceCreateInfoWrapper {
+    create_info: vk_sys::VkInstanceCreateInfo,
+    application_info: Option<Box<VkApplicationInfoWrapper>>,
+    enabled_layers: Vec<CString>,
+    enabled_layers_ptrs: Vec<*const c_char>,
+    enabled_extensions: Vec<CString>,
+    enabled_extensions_ptrs: Vec<*const c_char>,
+}
+
+impl Deref for VkInstanceCreateInfoWrapper {
+    type Target = vk_sys::VkInstanceCreateInfo;
+
+    fn deref(&self) -> &vk_sys::VkInstanceCreateInfo {
+        &self.create_info
+    }
+}
+
+impl From<InstanceCreateInfo> for VkInstanceCreateInfoWrapper {
+    fn from(mut create_info: InstanceCreateInfo) -> Self {
+        let application_info_ptr;
+        let application_info = match create_info.application_info {
+            Some(application_info) => {
+                let application_info: Box<VkApplicationInfoWrapper> = Box::new(application_info.into());
+                application_info_ptr = &**application_info as *const _;
+                Some(application_info)
+            }
+
+            None => {
+                application_info_ptr = ptr::null();
+                None
+            }
+        };
+
+        let enabled_layers: Vec<_> = create_info.enabled_layers
+            .drain(..)
+            .map(CString::new)
+            .map(Result::unwrap)
+            .collect();
+        let enabled_layers_ptrs: Vec<_> = enabled_layers
+            .iter()
+            .map(|l| l.as_ptr())
+            .collect();
+        let enabled_layers_ptr = if !enabled_layers_ptrs.is_empty() {
+            enabled_layers_ptrs.as_ptr()
+        }
+        else {
+            ptr::null()
+        };
+
+        let enabled_extensions: Vec<_> = create_info.enabled_extensions
+            .drain(..)
+            .map(<String as From<_>>::from)
+            .map(CString::new)
+            .map(Result::unwrap)
+            .collect();
+        let enabled_extensions_ptrs: Vec<_> = enabled_extensions
+            .iter()
+            .map(|l| l.as_ptr())
+            .collect();
+        let enabled_extensions_ptr = if !enabled_extensions_ptrs.is_empty() {
+            enabled_extensions_ptrs.as_ptr()
+        }
+        else {
+            ptr::null()
+        };
+
+        VkInstanceCreateInfoWrapper {
+            create_info: vk_sys::VkInstanceCreateInfo {
+                sType: vk_sys::VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO,
+                pNext: ptr::null(),
+                flags: create_info.flags,
+                pApplicationInfo: application_info_ptr,
+                enabledLayerCount: enabled_layers_ptrs.len() as u32,
+                ppEnabledLayerNames: enabled_layers_ptr,
+                enabledExtensionCount: enabled_extensions_ptrs.len() as u32,
+                ppEnabledExtensionNames: enabled_extensions_ptr,
+            },
+            application_info: application_info,
+            enabled_layers: enabled_layers,
+            enabled_layers_ptrs: enabled_layers_ptrs,
+            enabled_extensions: enabled_extensions,
+            enabled_extensions_ptrs: enabled_extensions_ptrs,
+        }
+    }
+}
+
 pub trait Allocator: Send {
     fn alloc(&mut self, size: usize, alignment: usize, allocation_scope: SystemAllocationSope) -> *mut c_void;
     fn realloc(&mut self, original: *mut c_void, size: usize, alignment: usize, allocation_scope: SystemAllocationSope) -> *mut c_void;
