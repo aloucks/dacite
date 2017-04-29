@@ -17,10 +17,11 @@ mod instance;
 mod instance_handle;
 mod physical_device;
 
-use libc::c_void;
-use std::ffi::CStr;
+use libc::{c_char, c_void};
+use std::ffi::{CStr, CString};
 use std::fmt;
 use std::mem;
+use std::ops::Deref;
 use std::ptr;
 use std::slice;
 use utils;
@@ -864,6 +865,42 @@ impl From<vk_sys::VkApplicationInfo> for ApplicationInfo {
             engine_name: utils::string_from_cstr(info.pEngineName),
             engine_version: info.engineVersion,
             api_version: Version::from_optional_api_version(info.apiVersion),
+        }
+    }
+}
+
+#[derive(Debug)]
+pub struct VkApplicationInfoWrapper {
+    application_info: vk_sys::VkApplicationInfo,
+    application_name_cstr: Option<CString>,
+    engine_name_cstr: Option<CString>,
+}
+
+impl Deref for VkApplicationInfoWrapper {
+    type Target = vk_sys::VkApplicationInfo;
+
+    fn deref(&self) -> &vk_sys::VkApplicationInfo {
+        &self.application_info
+    }
+}
+
+impl From<ApplicationInfo> for VkApplicationInfoWrapper {
+    fn from(info: ApplicationInfo) -> Self {
+        let application_name_cstr = utils::cstr_from_string(info.application_name);
+        let engine_name_cstr = utils::cstr_from_string(info.engine_name);
+
+        VkApplicationInfoWrapper {
+            application_info: vk_sys::VkApplicationInfo {
+                sType: vk_sys::VK_STRUCTURE_TYPE_APPLICATION_INFO,
+                pNext: ptr::null(),
+                pApplicationName: application_name_cstr.1,
+                applicationVersion: info.application_version,
+                pEngineName: engine_name_cstr.1,
+                engineVersion: info.engine_version,
+                apiVersion: Version::api_version_from_optional(info.api_version),
+            },
+            application_name_cstr: application_name_cstr.0,
+            engine_name_cstr: engine_name_cstr.0,
         }
     }
 }
