@@ -16,10 +16,9 @@ use Result;
 use core::allocator_helper::AllocatorHelper;
 use core::instance_handle::InstanceHandle;
 use core;
-use std::ffi::CString;
-use std::mem;
 use std::ptr;
 use std::sync::Arc;
+use utils;
 use vk_sys;
 
 #[derive(Debug, Clone)]
@@ -111,34 +110,20 @@ impl Instance {
             let mut loader = vk_sys::instance_proc_addr_loader::CoreNullInstance::new();
             loader.load(vk_sys::vkGetInstanceProcAddr, ptr::null_mut());
 
-            let mut layer_name_cstr = None;
-            let layer_name_ptr = match layer_name {
-                Some(layer_name) => {
-                    let tmp = CString::new(layer_name).unwrap();
-                    let ptr = tmp.as_ptr();
-                    layer_name_cstr = Some(tmp);
-                    ptr
-                }
-
-                None => ptr::null(),
-            };
+            let layer_name_cstr = utils::cstr_from_string(layer_name);
 
             let mut num_extension_properties = 0;
-            let res = (loader.vkEnumerateInstanceExtensionProperties)(layer_name_ptr, &mut num_extension_properties, ptr::null_mut());
+            let res = (loader.vkEnumerateInstanceExtensionProperties)(layer_name_cstr.1, &mut num_extension_properties, ptr::null_mut());
             if res != vk_sys::VK_SUCCESS {
                 return Err(res.into());
             }
 
             let mut extension_properties = Vec::with_capacity(num_extension_properties as usize);
-            let res = (loader.vkEnumerateInstanceExtensionProperties)(layer_name_ptr, &mut num_extension_properties, extension_properties.as_mut_ptr());
+            let res = (loader.vkEnumerateInstanceExtensionProperties)(layer_name_cstr.1, &mut num_extension_properties, extension_properties.as_mut_ptr());
             if res != vk_sys::VK_SUCCESS {
                 return Err(res.into());
             }
             extension_properties.set_len(num_extension_properties as usize);
-
-            // This is unnecessary, but silences two warnings about layer_name_cstr.
-            // No idea why there are warnings here, but not above in Instance::create.
-            mem::drop(layer_name_cstr);
 
             Ok(extension_properties.iter().map(|p| p.into()).collect())
         }
