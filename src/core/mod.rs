@@ -1056,6 +1056,33 @@ impl From<FormatProperties> for vk_sys::VkFormatProperties {
     }
 }
 
+#[derive(Debug, Copy, Clone)]
+pub struct Extent3D {
+    pub width: u32,
+    pub height: u32,
+    pub depth: u32,
+}
+
+impl From<vk_sys::VkExtent3D> for Extent3D {
+    fn from(extent: vk_sys::VkExtent3D) -> Self {
+        Extent3D {
+            width: extent.width,
+            height: extent.height,
+            depth: extent.depth,
+        }
+    }
+}
+
+impl From<Extent3D> for vk_sys::VkExtent3D {
+    fn from(extent: Extent3D) -> Self {
+        vk_sys::VkExtent3D {
+            width: extent.width,
+            height: extent.height,
+            depth: extent.depth,
+        }
+    }
+}
+
 #[derive(Debug, Clone)]
 pub enum InstanceExtension {
     Unknown(String),
