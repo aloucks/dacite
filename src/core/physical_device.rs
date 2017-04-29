@@ -147,4 +147,14 @@ impl PhysicalDevice {
         let properties = properties.drain(..).map(From::from).collect();
         properties
     }
+
+    pub fn memory_properties(&self) -> core::PhysicalDeviceMemoryProperties {
+        let mut properties = unsafe { mem::uninitialized() };
+
+        unsafe {
+            (self.instance_handle.loader.core.vkGetPhysicalDeviceMemoryProperties)(self.physical_device, &mut properties);
+        }
+
+        properties.into()
+    }
 }
