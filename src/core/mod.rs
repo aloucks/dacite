@@ -1029,6 +1029,33 @@ impl From<PhysicalDeviceFeatures> for vk_sys::VkPhysicalDeviceFeatures {
     }
 }
 
+#[derive(Debug, Copy, Clone)]
+pub struct FormatProperties {
+    pub linear_tiling_features: vk_sys::VkFormatFeatureFlags,
+    pub optimal_tiling_features: vk_sys::VkFormatFeatureFlags,
+    pub buffer_features: vk_sys::VkFormatFeatureFlags,
+}
+
+impl From<vk_sys::VkFormatProperties> for FormatProperties {
+    fn from(properties: vk_sys::VkFormatProperties) -> Self {
+        FormatProperties {
+            linear_tiling_features: properties.linearTilingFeatures,
+            optimal_tiling_features: properties.optimalTilingFeatures,
+            buffer_features: properties.bufferFeatures,
+        }
+    }
+}
+
+impl From<FormatProperties> for vk_sys::VkFormatProperties {
+    fn from(properties: FormatProperties) -> Self {
+        vk_sys::VkFormatProperties {
+            linearTilingFeatures: properties.linear_tiling_features,
+            optimalTilingFeatures: properties.optimal_tiling_features,
+            bufferFeatures: properties.buffer_features,
+        }
+    }
+}
+
 #[derive(Debug, Clone)]
 pub enum InstanceExtension {
     Unknown(String),
