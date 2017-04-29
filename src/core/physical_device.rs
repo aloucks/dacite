@@ -39,4 +39,12 @@ impl PhysicalDevice {
             properties.into()
         }
     }
+
+    pub fn features(&self) -> core::PhysicalDeviceFeatures {
+        unsafe {
+            let mut features = mem::uninitialized();
+            (self.instance_handle.loader.core.vkGetPhysicalDeviceFeatures)(self.physical_device, &mut features);
+            features.into()
+        }
+    }
 }
