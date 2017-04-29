@@ -20,6 +20,8 @@ mod physical_device;
 use libc::c_void;
 use std::ffi::CStr;
 use std::fmt;
+use std::mem;
+use std::ptr;
 use utils;
 use vk_sys;
 
@@ -1482,6 +1484,63 @@ impl From<PhysicalDeviceSparseProperties> for vk_sys::VkPhysicalDeviceSparseProp
             residencyAlignedMipSize: utils::to_vk_bool(properties.residency_aligned_mip_size),
             residencyNonResidentStrict: utils::to_vk_bool(properties.residency_non_resident_strict),
         }
+    }
+}
+
+#[derive(Debug, Clone)]
+pub struct PhysicalDeviceProperties {
+    pub api_version: Version,
+    pub driver_version: u32,
+    pub vendor_id: u32,
+    pub device_id: u32,
+    pub device_type: PhysicalDeviceType,
+    pub device_name: String,
+    pub pipeline_cache_uuid: [u8; 16],
+    pub limits: PhysicalDeviceLimits,
+    pub sparse_properties: PhysicalDeviceSparseProperties,
+}
+
+impl From<vk_sys::VkPhysicalDeviceProperties> for PhysicalDeviceProperties {
+    fn from(properties: vk_sys::VkPhysicalDeviceProperties) -> Self {
+        let device_name = unsafe {
+            CStr::from_ptr(properties.deviceName.as_ptr()).to_str().unwrap().to_owned()
+        };
+
+        PhysicalDeviceProperties {
+            api_version: Version::from_api_version(properties.apiVersion),
+            driver_version: properties.driverVersion,
+            vendor_id: properties.vendorID,
+            device_id: properties.deviceID,
+            device_type: properties.deviceType.into(),
+            device_name: device_name,
+            pipeline_cache_uuid: properties.pipelineCacheUUID,
+            limits: properties.limits.into(),
+            sparse_properties: properties.sparseProperties.into(),
+        }
+    }
+}
+
+impl From<PhysicalDeviceProperties> for vk_sys::VkPhysicalDeviceProperties {
+    fn from(properties: PhysicalDeviceProperties) -> Self {
+        let mut res = vk_sys::VkPhysicalDeviceProperties {
+            apiVersion: properties.api_version.as_api_version(),
+            driverVersion: properties.driver_version,
+            vendorID: properties.vendor_id,
+            deviceID: properties.device_id,
+            deviceType: properties.device_type.into(),
+            deviceName: unsafe { mem::uninitialized() },
+            pipelineCacheUUID: properties.pipeline_cache_uuid,
+            limits: properties.limits.into(),
+            sparseProperties: properties.sparse_properties.into(),
+        };
+
+        debug_assert!(properties.device_name.len() < res.deviceName.len());
+        unsafe {
+            ptr::copy_nonoverlapping(properties.device_name.as_ptr() as *const _, res.deviceName.as_mut_ptr(), properties.device_name.len());
+        }
+        res.deviceName[properties.device_name.len()] = 0;
+
+        res
     }
 }
 
