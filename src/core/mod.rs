@@ -1452,6 +1452,39 @@ impl From<PhysicalDeviceLimits> for vk_sys::VkPhysicalDeviceLimits {
     }
 }
 
+#[derive(Debug, Copy, Clone)]
+pub struct PhysicalDeviceSparseProperties {
+    pub residency_standard_2d_block_shape: bool,
+    pub residency_standard_2d_multisample_block_shape: bool,
+    pub residency_standard_3d_block_shape: bool,
+    pub residency_aligned_mip_size: bool,
+    pub residency_non_resident_strict: bool,
+}
+
+impl From<vk_sys::VkPhysicalDeviceSparseProperties> for PhysicalDeviceSparseProperties {
+    fn from(properties: vk_sys::VkPhysicalDeviceSparseProperties) -> Self {
+        PhysicalDeviceSparseProperties {
+            residency_standard_2d_block_shape: utils::from_vk_bool(properties.residencyStandard2DBlockShape),
+            residency_standard_2d_multisample_block_shape: utils::from_vk_bool(properties.residencyStandard2DMultisampleBlockShape),
+            residency_standard_3d_block_shape: utils::from_vk_bool(properties.residencyStandard3DBlockShape),
+            residency_aligned_mip_size: utils::from_vk_bool(properties.residencyAlignedMipSize),
+            residency_non_resident_strict: utils::from_vk_bool(properties.residencyNonResidentStrict),
+        }
+    }
+}
+
+impl From<PhysicalDeviceSparseProperties> for vk_sys::VkPhysicalDeviceSparseProperties {
+    fn from(properties: PhysicalDeviceSparseProperties) -> Self {
+        vk_sys::VkPhysicalDeviceSparseProperties {
+            residencyStandard2DBlockShape: utils::to_vk_bool(properties.residency_standard_2d_block_shape),
+            residencyStandard2DMultisampleBlockShape: utils::to_vk_bool(properties.residency_standard_2d_multisample_block_shape),
+            residencyStandard3DBlockShape: utils::to_vk_bool(properties.residency_standard_3d_block_shape),
+            residencyAlignedMipSize: utils::to_vk_bool(properties.residency_aligned_mip_size),
+            residencyNonResidentStrict: utils::to_vk_bool(properties.residency_non_resident_strict),
+        }
+    }
+}
+
 #[derive(Debug, Clone)]
 pub enum InstanceExtension {
     Unknown(String),
