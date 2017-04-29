@@ -1083,6 +1083,39 @@ impl From<Extent3D> for vk_sys::VkExtent3D {
     }
 }
 
+#[derive(Debug, Copy, Clone)]
+pub struct ImageFormatProperties {
+    pub max_extent: Extent3D,
+    pub max_mip_levels: u32,
+    pub max_array_layers: u32,
+    pub sample_counts: vk_sys::VkSampleCountFlags,
+    pub max_resource_size: u64,
+}
+
+impl From<vk_sys::VkImageFormatProperties> for ImageFormatProperties {
+    fn from(properties: vk_sys::VkImageFormatProperties) -> Self {
+        ImageFormatProperties {
+            max_extent: properties.maxExtent.into(),
+            max_mip_levels: properties.maxMipLevels,
+            max_array_layers: properties.maxArrayLayers,
+            sample_counts: properties.sampleCounts,
+            max_resource_size: properties.maxResourceSize,
+        }
+    }
+}
+
+impl From<ImageFormatProperties> for vk_sys::VkImageFormatProperties {
+    fn from(properties: ImageFormatProperties) -> Self {
+        vk_sys::VkImageFormatProperties {
+            maxExtent: properties.max_extent.into(),
+            maxMipLevels: properties.max_mip_levels,
+            maxArrayLayers: properties.max_array_layers,
+            sampleCounts: properties.sample_counts,
+            maxResourceSize: properties.max_resource_size,
+        }
+    }
+}
+
 #[derive(Debug, Clone)]
 pub enum InstanceExtension {
     Unknown(String),
