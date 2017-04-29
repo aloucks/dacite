@@ -1890,6 +1890,54 @@ impl From<MemoryHeap> for vk_sys::VkMemoryHeap {
 }
 
 #[derive(Debug, Clone)]
+pub struct PhysicalDeviceMemoryProperties {
+    pub memory_types: Vec<MemoryType>,
+    pub memory_heaps: Vec<MemoryHeap>,
+}
+
+impl From<vk_sys::VkPhysicalDeviceMemoryProperties> for PhysicalDeviceMemoryProperties {
+    fn from(properties: vk_sys::VkPhysicalDeviceMemoryProperties) -> Self {
+        let memory_types = properties.memoryTypes[..properties.memoryTypeCount as usize]
+            .iter()
+            .cloned()
+            .map(From::from)
+            .collect();
+
+        let memory_heaps = properties.memoryHeaps[..properties.memoryHeapCount as usize]
+            .iter()
+            .cloned()
+            .map(From::from)
+            .collect();
+
+        PhysicalDeviceMemoryProperties {
+            memory_types: memory_types,
+            memory_heaps: memory_heaps,
+        }
+    }
+}
+
+impl From<PhysicalDeviceMemoryProperties> for vk_sys::VkPhysicalDeviceMemoryProperties {
+    fn from(mut properties: PhysicalDeviceMemoryProperties) -> Self {
+        debug_assert!(properties.memory_types.len() <= vk_sys::VK_MAX_MEMORY_TYPES);
+        debug_assert!(properties.memory_heaps.len() <= vk_sys::VK_MAX_MEMORY_HEAPS);
+
+        let mut res: vk_sys::VkPhysicalDeviceMemoryProperties = unsafe { mem::uninitialized() };
+
+        res.memoryTypeCount = properties.memory_types.len() as u32;
+        for (src, dst) in properties.memory_types.drain(..).zip(res.memoryTypes.iter_mut()) {
+            *dst = src.into();
+        }
+
+        res.memoryHeapCount = properties.memory_heaps.len() as u32;
+        for (src, dst) in properties.memory_heaps.drain(..).zip(res.memoryHeaps.iter_mut()) {
+            *dst = src.into();
+        }
+
+        res
+    }
+}
+
+#[derive(Debug, Clone)]
 pub enum InstanceExtension {
     Unknown(String),
 }
