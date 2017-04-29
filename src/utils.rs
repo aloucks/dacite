@@ -12,14 +12,24 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-extern crate libc;
-extern crate vk_sys;
+use vk_sys;
 
-#[cfg(feature = "core_1_0_3")]
-mod utils;
+#[inline]
+pub fn from_vk_bool(v: vk_sys::VkBool32) -> bool {
+    if v != vk_sys::VK_FALSE {
+        true
+    }
+    else {
+        false
+    }
+}
 
-#[cfg(feature = "core_1_0_3")]
-pub mod core;
-
-#[cfg(feature = "core_1_0_3")]
-pub type Result<T> = ::std::result::Result<T, core::Error>;
+#[inline]
+pub fn to_vk_bool(v: bool) -> vk_sys::VkBool32 {
+    if v {
+        vk_sys::VK_TRUE
+    }
+    else {
+        vk_sys::VK_FALSE
+    }
+}
