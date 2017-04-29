@@ -131,4 +131,20 @@ impl PhysicalDevice {
         let properties = properties.drain(..).map(From::from).collect();
         properties
     }
+
+    pub fn queue_family_properties(&self) -> Vec<core::QueueFamilyProperties> {
+        let mut num_properties = 0;
+        unsafe {
+            (self.instance_handle.loader.core.vkGetPhysicalDeviceQueueFamilyProperties)(self.physical_device, &mut num_properties, ptr::null_mut());
+        }
+
+        let mut properties = Vec::with_capacity(num_properties as usize);
+        unsafe {
+            (self.instance_handle.loader.core.vkGetPhysicalDeviceQueueFamilyProperties)(self.physical_device, &mut num_properties, properties.as_mut_ptr());
+            properties.set_len(num_properties as usize);
+        }
+
+        let properties = properties.drain(..).map(From::from).collect();
+        properties
+    }
 }
