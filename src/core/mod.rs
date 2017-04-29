@@ -848,6 +848,18 @@ pub struct ApplicationInfo {
     pub api_version: Option<Version>,
 }
 
+impl From<vk_sys::VkApplicationInfo> for ApplicationInfo {
+    fn from(info: vk_sys::VkApplicationInfo) -> Self {
+        ApplicationInfo {
+            application_name: utils::string_from_cstr(info.pApplicationName),
+            application_version: info.applicationVersion,
+            engine_name: utils::string_from_cstr(info.pEngineName),
+            engine_version: info.engineVersion,
+            api_version: Version::from_optional_api_version(info.apiVersion),
+        }
+    }
+}
+
 #[derive(Debug, Clone)]
 pub struct InstanceCreateInfo {
     pub flags: vk_sys::VkInstanceCreateFlags,
