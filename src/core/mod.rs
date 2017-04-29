@@ -62,6 +62,13 @@ impl Version {
     pub fn as_api_version(&self) -> u32 {
         vk_sys::vk_make_version(self.major, self.minor, self.patch)
     }
+
+    pub fn api_version_from_optional(version: Option<Version>) -> u32 {
+        match version {
+            Some(version) => version.as_api_version(),
+            None => 0,
+        }
+    }
 }
 
 pub enum PipelineCacheHeaderVersion {
