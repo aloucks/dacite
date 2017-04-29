@@ -1841,6 +1841,30 @@ impl From<QueueFamilyProperties> for vk_sys::VkQueueFamilyProperties {
     }
 }
 
+#[derive(Debug, Copy, Clone)]
+pub struct MemoryType {
+    pub property_flags: vk_sys::VkMemoryPropertyFlags,
+    pub heap_index: u32,
+}
+
+impl From<vk_sys::VkMemoryType> for MemoryType {
+    fn from(memory_type: vk_sys::VkMemoryType) -> Self {
+        MemoryType {
+            property_flags: memory_type.propertyFlags,
+            heap_index: memory_type.heapIndex,
+        }
+    }
+}
+
+impl From<MemoryType> for vk_sys::VkMemoryType {
+    fn from(memory_type: MemoryType) -> Self {
+        vk_sys::VkMemoryType {
+            propertyFlags: memory_type.property_flags,
+            heapIndex: memory_type.heap_index,
+        }
+    }
+}
+
 #[derive(Debug, Clone)]
 pub enum InstanceExtension {
     Unknown(String),
