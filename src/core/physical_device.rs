@@ -90,4 +90,14 @@ impl PhysicalDevice {
             Ok(extension_properties.iter().map(|p| p.into()).collect())
         }
     }
+
+    pub fn format_properties(&self, format: core::Format) -> core::FormatProperties {
+        let mut properties = unsafe { mem::uninitialized() };
+
+        unsafe {
+            (self.instance_handle.loader.core.vkGetPhysicalDeviceFormatProperties)(self.physical_device, format.into(), &mut properties);
+        }
+
+        properties.into()
+    }
 }
