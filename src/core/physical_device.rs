@@ -100,4 +100,19 @@ impl PhysicalDevice {
 
         properties.into()
     }
+
+    pub fn image_format_properties(&self, format: core::Format, image_type: core::ImageType, tiling: core::ImageTiling, usage: vk_sys::VkImageUsageFlags, flags: vk_sys::VkImageCreateFlags) -> Result<core::ImageFormatProperties> {
+        let mut properties = unsafe { mem::uninitialized() };
+
+        let res = unsafe {
+            (self.instance_handle.loader.core.vkGetPhysicalDeviceImageFormatProperties)(self.physical_device, format.into(), image_type.into(), tiling.into(), usage, flags, &mut properties)
+        };
+
+        if res == vk_sys::VK_SUCCESS {
+            Ok(properties.into())
+        }
+        else {
+            Err(res.into())
+        }
+    }
 }
