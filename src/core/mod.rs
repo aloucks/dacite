@@ -1985,6 +1985,22 @@ impl<'a> From<&'a vk_sys::VkExtensionProperties> for InstanceExtensionProperties
     }
 }
 
+impl<'a> From<&'a InstanceExtensionProperties> for vk_sys::VkExtensionProperties {
+    fn from(properties: &'a InstanceExtensionProperties) -> Self {
+        unsafe {
+            let name: &str = (&properties.extension).into();
+            debug_assert!(name.len() < vk_sys::VK_MAX_EXTENSION_NAME_SIZE);
+
+            let mut res: vk_sys::VkExtensionProperties = mem::uninitialized();
+            ptr::copy_nonoverlapping(name.as_ptr() as *const _, res.extensionName.as_mut_ptr(), name.len());
+            res.extensionName[name.len()] = 0;
+            res.specVersion = properties.spec_version;
+
+            res
+        }
+    }
+}
+
 #[derive(Debug, Clone)]
 pub enum DeviceExtension {
     Unknown(String),
