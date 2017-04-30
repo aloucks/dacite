@@ -14,15 +14,34 @@
 
 use Result;
 use core::allocator_helper::AllocatorHelper;
-use core::instance_handle::InstanceHandle;
 use core;
 use std::ptr;
 use std::sync::Arc;
 use utils;
 use vk_sys;
 
+#[derive(Debug)]
+pub(crate) struct Inner {
+    pub handle: vk_sys::VkInstance,
+    pub allocator: Option<AllocatorHelper>,
+    pub loader: vk_sys::InstanceProcAddrLoader,
+}
+
+impl Drop for Inner {
+    fn drop(&mut self) {
+        let allocator = match self.allocator {
+            Some(ref allocator) => &allocator.callbacks,
+            None => ptr::null(),
+        };
+
+        unsafe {
+            (self.loader.core.vkDestroyInstance)(self.handle, allocator);
+        }
+    }
+}
+
 #[derive(Debug, Clone)]
-pub struct Instance(Arc<InstanceHandle>);
+pub struct Instance(pub(crate) Arc<Inner>);
 
 impl Instance {
     pub fn create(create_info: &core::InstanceCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<Instance> {
@@ -48,8 +67,8 @@ impl Instance {
             loader.load_core(instance);
         }
 
-        Ok(Instance(Arc::new(InstanceHandle {
-            instance: instance,
+        Ok(Instance(Arc::new(Inner {
+            handle: instance,
             allocator: allocator_helper,
             loader: loader,
         })))
@@ -58,7 +77,7 @@ impl Instance {
     pub fn enumerate_physical_devices(&self) -> Result<Vec<core::PhysicalDevice>> {
         let mut num_physical_devices = 0;
         let res = unsafe {
-            (self.0.loader.core.vkEnumeratePhysicalDevices)(self.0.instance, &mut num_physical_devices, ptr::null_mut())
+            (self.0.loader.core.vkEnumeratePhysicalDevices)(self.0.handle, &mut num_physical_devices, ptr::null_mut())
         };
         if res != vk_sys::VK_SUCCESS {
             return Err(res.into());
@@ -66,7 +85,7 @@ impl Instance {
 
         let mut physical_devices = Vec::with_capacity(num_physical_devices as usize);
         let res = unsafe {
-            (self.0.loader.core.vkEnumeratePhysicalDevices)(self.0.instance, &mut num_physical_devices, physical_devices.as_mut_ptr())
+            (self.0.loader.core.vkEnumeratePhysicalDevices)(self.0.handle, &mut num_physical_devices, physical_devices.as_mut_ptr())
         };
         if res != vk_sys::VK_SUCCESS {
             return Err(res.into());
@@ -77,7 +96,7 @@ impl Instance {
 
         let physical_devices: Vec<_> = physical_devices
             .iter()
-            .map(|&d| core::PhysicalDevice::new(self.0.clone(), d))
+            .map(|&d| core::PhysicalDevice::new(self.clone(), d))
             .collect();
 
         Ok(physical_devices)
