@@ -2088,6 +2088,28 @@ impl<'a> From<&'a vk_sys::VkLayerProperties> for LayerProperties {
     }
 }
 
+impl<'a> From<&'a LayerProperties> for vk_sys::VkLayerProperties {
+    fn from(properties: &'a LayerProperties) -> Self {
+        unsafe {
+            debug_assert!(properties.layer_name.len() < vk_sys::VK_MAX_EXTENSION_NAME_SIZE);
+            debug_assert!(properties.description.len() < vk_sys::VK_MAX_DESCRIPTION_SIZE);
+
+            let mut res: vk_sys::VkLayerProperties = mem::uninitialized();
+
+            ptr::copy_nonoverlapping(properties.layer_name.as_ptr() as *const _, res.layerName.as_mut_ptr(), properties.layer_name.len());
+            res.layerName[properties.layer_name.len()] = 0;
+
+            res.specVersion = properties.spec_version.as_api_version();
+            res.implementationVersion = properties.implementation_version;
+
+            ptr::copy_nonoverlapping(properties.description.as_ptr() as *const _, res.description.as_mut_ptr(), properties.description.len());
+            res.description[properties.description.len()] = 0;
+
+            res
+        }
+    }
+}
+
 #[derive(Debug, Copy, Clone)]
 pub struct SparseImageFormatProperties {
     pub aspect_mask: vk_sys::VkImageAspectFlags,
