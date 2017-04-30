@@ -1940,6 +1940,12 @@ pub enum InstanceExtension {
     Unknown(String),
 }
 
+impl From<String> for InstanceExtension {
+    fn from(name: String) -> Self {
+        InstanceExtension::Unknown(name)
+    }
+}
+
 impl<'a> From<&'a str> for InstanceExtension {
     fn from(name: &'a str) -> Self {
         InstanceExtension::Unknown(name.to_owned())
@@ -1950,6 +1956,14 @@ impl From<InstanceExtension> for String {
     fn from(extension: InstanceExtension) -> Self {
         match extension {
             InstanceExtension::Unknown(name) => name,
+        }
+    }
+}
+
+impl<'a> From<&'a InstanceExtension> for &'a str {
+    fn from(extension: &'a InstanceExtension) -> Self {
+        match *extension {
+            InstanceExtension::Unknown(ref name) => name,
         }
     }
 }
