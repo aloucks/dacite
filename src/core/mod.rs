@@ -2006,9 +2006,31 @@ pub enum DeviceExtension {
     Unknown(String),
 }
 
+impl From<String> for DeviceExtension {
+    fn from(name: String) -> Self {
+        DeviceExtension::Unknown(name)
+    }
+}
+
 impl<'a> From<&'a str> for DeviceExtension {
     fn from(name: &'a str) -> Self {
         DeviceExtension::Unknown(name.to_owned())
+    }
+}
+
+impl From<DeviceExtension> for String {
+    fn from(extension: DeviceExtension) -> Self {
+        match extension {
+            DeviceExtension::Unknown(name) => name,
+        }
+    }
+}
+
+impl<'a> From<&'a DeviceExtension> for &'a str {
+    fn from(extension: &'a DeviceExtension) -> Self {
+        match *extension {
+            DeviceExtension::Unknown(ref name) => name,
+        }
     }
 }
 
