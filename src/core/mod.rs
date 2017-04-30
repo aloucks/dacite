@@ -14,7 +14,6 @@
 
 mod allocator_helper;
 mod instance;
-mod instance_handle;
 mod physical_device;
 
 use libc::{c_char, c_void};
