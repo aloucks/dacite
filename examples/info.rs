@@ -37,7 +37,7 @@ fn main() {
             println!("        Implementation version: {}", layer.implementation_version);
             println!("        Description: {}", layer.description);
 
-            let extensions = dacite::core::Instance::enumerate_instance_extension_properties(Some(layer.layer_name)).unwrap();
+            let extensions = dacite::core::Instance::enumerate_instance_extension_properties(Some(&layer.layer_name)).unwrap();
             println!("        Extension(s) ({}):", extensions.len());
             for extension in extensions {
                 println!("            {} (revision {})", String::from(extension.extension), extension.spec_version);
@@ -62,7 +62,7 @@ fn main() {
         enabled_extensions: vec![],
     };
 
-    let instance = dacite::core::Instance::create(instance_create_info, None).unwrap();;
+    let instance = dacite::core::Instance::create(&instance_create_info, None).unwrap();;
     let physical_devices = instance.enumerate_physical_devices().unwrap();
 
     println!();

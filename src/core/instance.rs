@@ -25,7 +25,7 @@ use vk_sys;
 pub struct Instance(Arc<InstanceHandle>);
 
 impl Instance {
-    pub fn create(create_info: core::InstanceCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<Instance> {
+    pub fn create(create_info: &core::InstanceCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<Instance> {
         let allocator_helper = allocator.map(AllocatorHelper::new);
         let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), |a| &a.callbacks);
 
@@ -105,12 +105,12 @@ impl Instance {
         }
     }
 
-    pub fn enumerate_instance_extension_properties(layer_name: Option<String>) -> Result<Vec<core::InstanceExtensionProperties>> {
+    pub fn enumerate_instance_extension_properties(layer_name: Option<&str>) -> Result<Vec<core::InstanceExtensionProperties>> {
         unsafe {
             let mut loader = vk_sys::instance_proc_addr_loader::CoreNullInstance::new();
             loader.load(vk_sys::vkGetInstanceProcAddr, ptr::null_mut());
 
-            let layer_name_cstr = utils::cstr_from_string(layer_name);
+            let layer_name_cstr = utils::cstr_from_str(layer_name);
 
             let mut num_extension_properties = 0;
             let res = (loader.vkEnumerateInstanceExtensionProperties)(layer_name_cstr.1, &mut num_extension_properties, ptr::null_mut());

@@ -39,7 +39,7 @@ impl PhysicalDevice {
         unsafe {
             let mut properties = mem::uninitialized();
             (self.instance_handle.loader.core.vkGetPhysicalDeviceProperties)(self.physical_device, &mut properties);
-            properties.into()
+            (&properties).into()
         }
     }
 
@@ -47,7 +47,7 @@ impl PhysicalDevice {
         unsafe {
             let mut features = mem::uninitialized();
             (self.instance_handle.loader.core.vkGetPhysicalDeviceFeatures)(self.physical_device, &mut features);
-            features.into()
+            (&features).into()
         }
     }
 
@@ -70,9 +70,9 @@ impl PhysicalDevice {
         }
     }
 
-    pub fn enumerate_device_extension_properties(&self, layer_name: Option<String>) -> Result<Vec<core::InstanceExtensionProperties>> {
+    pub fn enumerate_device_extension_properties(&self, layer_name: Option<&str>) -> Result<Vec<core::InstanceExtensionProperties>> {
         unsafe {
-            let layer_name_cstr = utils::cstr_from_string(layer_name);
+            let layer_name_cstr = utils::cstr_from_str(layer_name);
 
             let mut num_extension_properties = 0;
             let res = (self.instance_handle.loader.core.vkEnumerateDeviceExtensionProperties)(self.physical_device, layer_name_cstr.1, &mut num_extension_properties, ptr::null_mut());
@@ -98,7 +98,7 @@ impl PhysicalDevice {
             (self.instance_handle.loader.core.vkGetPhysicalDeviceFormatProperties)(self.physical_device, format.into(), &mut properties);
         }
 
-        properties.into()
+        (&properties).into()
     }
 
     pub fn image_format_properties(&self, format: core::Format, image_type: core::ImageType, tiling: core::ImageTiling, usage: vk_sys::VkImageUsageFlags, flags: vk_sys::VkImageCreateFlags) -> Result<core::ImageFormatProperties> {
@@ -109,7 +109,7 @@ impl PhysicalDevice {
         };
 
         if res == vk_sys::VK_SUCCESS {
-            Ok(properties.into())
+            Ok((&properties).into())
         }
         else {
             Err(res.into())
@@ -128,7 +128,7 @@ impl PhysicalDevice {
             properties.set_len(num_properties as usize);
         }
 
-        let properties = properties.drain(..).map(From::from).collect();
+        let properties = properties.iter().map(From::from).collect();
         properties
     }
 
@@ -144,7 +144,10 @@ impl PhysicalDevice {
             properties.set_len(num_properties as usize);
         }
 
-        let properties = properties.drain(..).map(From::from).collect();
+        let properties = properties.iter()
+            .map(From::from)
+            .collect();
+
         properties
     }
 
@@ -155,6 +158,6 @@ impl PhysicalDevice {
             (self.instance_handle.loader.core.vkGetPhysicalDeviceMemoryProperties)(self.physical_device, &mut properties);
         }
 
-        properties.into()
+        (&properties).into()
     }
 }

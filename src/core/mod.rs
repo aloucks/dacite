@@ -915,8 +915,8 @@ pub struct ApplicationInfo {
     pub api_version: Option<Version>,
 }
 
-impl From<vk_sys::VkApplicationInfo> for ApplicationInfo {
-    fn from(info: vk_sys::VkApplicationInfo) -> Self {
+impl<'a> From<&'a vk_sys::VkApplicationInfo> for ApplicationInfo {
+    fn from(info: &'a vk_sys::VkApplicationInfo) -> Self {
         ApplicationInfo {
             application_name: utils::string_from_cstr(info.pApplicationName),
             application_version: info.applicationVersion,
@@ -942,10 +942,10 @@ impl Deref for VkApplicationInfoWrapper {
     }
 }
 
-impl From<ApplicationInfo> for VkApplicationInfoWrapper {
-    fn from(info: ApplicationInfo) -> Self {
-        let application_name_cstr = utils::cstr_from_string(info.application_name);
-        let engine_name_cstr = utils::cstr_from_string(info.engine_name);
+impl<'a> From<&'a ApplicationInfo> for VkApplicationInfoWrapper {
+    fn from(info: &'a ApplicationInfo) -> Self {
+        let application_name_cstr = utils::cstr_from_string(info.application_name.clone());
+        let engine_name_cstr = utils::cstr_from_string(info.engine_name.clone());
 
         VkApplicationInfoWrapper {
             application_info: vk_sys::VkApplicationInfo {
@@ -971,11 +971,11 @@ pub struct InstanceCreateInfo {
     pub enabled_extensions: Vec<InstanceExtension>,
 }
 
-impl From<vk_sys::VkInstanceCreateInfo> for InstanceCreateInfo {
-    fn from(create_info: vk_sys::VkInstanceCreateInfo) -> Self {
+impl<'a> From<&'a vk_sys::VkInstanceCreateInfo> for InstanceCreateInfo {
+    fn from(create_info: &'a vk_sys::VkInstanceCreateInfo) -> Self {
         let application_info = if !create_info.pApplicationInfo.is_null() {
             unsafe {
-                Some((*create_info.pApplicationInfo).into())
+                Some((&*create_info.pApplicationInfo).into())
             }
         }
         else {
@@ -1026,11 +1026,11 @@ impl Deref for VkInstanceCreateInfoWrapper {
     }
 }
 
-impl From<InstanceCreateInfo> for VkInstanceCreateInfoWrapper {
-    fn from(mut create_info: InstanceCreateInfo) -> Self {
+impl<'a> From<&'a InstanceCreateInfo> for VkInstanceCreateInfoWrapper {
+    fn from(create_info: &'a InstanceCreateInfo) -> Self {
         let application_info_ptr;
         let application_info = match create_info.application_info {
-            Some(application_info) => {
+            Some(ref application_info) => {
                 let application_info: Box<VkApplicationInfoWrapper> = Box::new(application_info.into());
                 application_info_ptr = &**application_info as *const _;
                 Some(application_info)
@@ -1042,8 +1042,8 @@ impl From<InstanceCreateInfo> for VkInstanceCreateInfoWrapper {
             }
         };
 
-        let enabled_layers: Vec<_> = create_info.enabled_layers
-            .drain(..)
+        let enabled_layers: Vec<_> = create_info.enabled_layers.iter()
+            .cloned()
             .map(CString::new)
             .map(Result::unwrap)
             .collect();
@@ -1058,8 +1058,8 @@ impl From<InstanceCreateInfo> for VkInstanceCreateInfoWrapper {
             ptr::null()
         };
 
-        let enabled_extensions: Vec<_> = create_info.enabled_extensions
-            .drain(..)
+        let enabled_extensions: Vec<_> = create_info.enabled_extensions.iter()
+            .cloned()
             .map(<String as From<_>>::from)
             .map(CString::new)
             .map(Result::unwrap)
@@ -1174,8 +1174,8 @@ pub struct PhysicalDeviceFeatures {
     pub inherited_queries: bool,
 }
 
-impl From<vk_sys::VkPhysicalDeviceFeatures> for PhysicalDeviceFeatures {
-    fn from(featurs: vk_sys::VkPhysicalDeviceFeatures) -> Self {
+impl<'a> From<&'a vk_sys::VkPhysicalDeviceFeatures> for PhysicalDeviceFeatures {
+    fn from(featurs: &'a vk_sys::VkPhysicalDeviceFeatures) -> Self {
         PhysicalDeviceFeatures {
             robust_buffer_access: utils::from_vk_bool(featurs.robustBufferAccess),
             full_draw_index_uint32: utils::from_vk_bool(featurs.fullDrawIndexUint32),
@@ -1236,8 +1236,8 @@ impl From<vk_sys::VkPhysicalDeviceFeatures> for PhysicalDeviceFeatures {
     }
 }
 
-impl From<PhysicalDeviceFeatures> for vk_sys::VkPhysicalDeviceFeatures {
-    fn from(featurs: PhysicalDeviceFeatures) -> Self {
+impl<'a> From<&'a PhysicalDeviceFeatures> for vk_sys::VkPhysicalDeviceFeatures {
+    fn from(featurs: &'a PhysicalDeviceFeatures) -> Self {
         vk_sys::VkPhysicalDeviceFeatures {
             robustBufferAccess: utils::to_vk_bool(featurs.robust_buffer_access),
             fullDrawIndexUint32: utils::to_vk_bool(featurs.full_draw_index_uint32),
@@ -1305,8 +1305,8 @@ pub struct FormatProperties {
     pub buffer_features: vk_sys::VkFormatFeatureFlags,
 }
 
-impl From<vk_sys::VkFormatProperties> for FormatProperties {
-    fn from(properties: vk_sys::VkFormatProperties) -> Self {
+impl<'a> From<&'a vk_sys::VkFormatProperties> for FormatProperties {
+    fn from(properties: &'a vk_sys::VkFormatProperties) -> Self {
         FormatProperties {
             linear_tiling_features: properties.linearTilingFeatures,
             optimal_tiling_features: properties.optimalTilingFeatures,
@@ -1315,8 +1315,8 @@ impl From<vk_sys::VkFormatProperties> for FormatProperties {
     }
 }
 
-impl From<FormatProperties> for vk_sys::VkFormatProperties {
-    fn from(properties: FormatProperties) -> Self {
+impl<'a> From<&'a FormatProperties> for vk_sys::VkFormatProperties {
+    fn from(properties: &'a FormatProperties) -> Self {
         vk_sys::VkFormatProperties {
             linearTilingFeatures: properties.linear_tiling_features,
             optimalTilingFeatures: properties.optimal_tiling_features,
@@ -1332,8 +1332,8 @@ pub struct Extent3D {
     pub depth: u32,
 }
 
-impl From<vk_sys::VkExtent3D> for Extent3D {
-    fn from(extent: vk_sys::VkExtent3D) -> Self {
+impl<'a> From<&'a vk_sys::VkExtent3D> for Extent3D {
+    fn from(extent: &'a vk_sys::VkExtent3D) -> Self {
         Extent3D {
             width: extent.width,
             height: extent.height,
@@ -1342,8 +1342,8 @@ impl From<vk_sys::VkExtent3D> for Extent3D {
     }
 }
 
-impl From<Extent3D> for vk_sys::VkExtent3D {
-    fn from(extent: Extent3D) -> Self {
+impl<'a> From<&'a Extent3D> for vk_sys::VkExtent3D {
+    fn from(extent: &'a Extent3D) -> Self {
         vk_sys::VkExtent3D {
             width: extent.width,
             height: extent.height,
@@ -1361,10 +1361,10 @@ pub struct ImageFormatProperties {
     pub max_resource_size: u64,
 }
 
-impl From<vk_sys::VkImageFormatProperties> for ImageFormatProperties {
-    fn from(properties: vk_sys::VkImageFormatProperties) -> Self {
+impl<'a> From<&'a vk_sys::VkImageFormatProperties> for ImageFormatProperties {
+    fn from(properties: &'a vk_sys::VkImageFormatProperties) -> Self {
         ImageFormatProperties {
-            max_extent: properties.maxExtent.into(),
+            max_extent: (&properties.maxExtent).into(),
             max_mip_levels: properties.maxMipLevels,
             max_array_layers: properties.maxArrayLayers,
             sample_counts: properties.sampleCounts,
@@ -1373,10 +1373,10 @@ impl From<vk_sys::VkImageFormatProperties> for ImageFormatProperties {
     }
 }
 
-impl From<ImageFormatProperties> for vk_sys::VkImageFormatProperties {
-    fn from(properties: ImageFormatProperties) -> Self {
+impl<'a> From<&'a ImageFormatProperties> for vk_sys::VkImageFormatProperties {
+    fn from(properties: &'a ImageFormatProperties) -> Self {
         vk_sys::VkImageFormatProperties {
-            maxExtent: properties.max_extent.into(),
+            maxExtent: (&properties.max_extent).into(),
             maxMipLevels: properties.max_mip_levels,
             maxArrayLayers: properties.max_array_layers,
             sampleCounts: properties.sample_counts,
@@ -1495,8 +1495,8 @@ pub struct PhysicalDeviceLimits {
     pub non_coherent_atom_size: u64,
 }
 
-impl From<vk_sys::VkPhysicalDeviceLimits> for PhysicalDeviceLimits {
-    fn from(limits: vk_sys::VkPhysicalDeviceLimits) -> Self {
+impl<'a> From<&'a vk_sys::VkPhysicalDeviceLimits> for PhysicalDeviceLimits {
+    fn from(limits: &'a vk_sys::VkPhysicalDeviceLimits) -> Self {
         PhysicalDeviceLimits {
             max_image_dimension_1d: limits.maxImageDimension1D,
             max_image_dimension_2d: limits.maxImageDimension2D,
@@ -1608,8 +1608,8 @@ impl From<vk_sys::VkPhysicalDeviceLimits> for PhysicalDeviceLimits {
     }
 }
 
-impl From<PhysicalDeviceLimits> for vk_sys::VkPhysicalDeviceLimits {
-    fn from(limits: PhysicalDeviceLimits) -> Self {
+impl<'a> From<&'a PhysicalDeviceLimits> for vk_sys::VkPhysicalDeviceLimits {
+    fn from(limits: &'a PhysicalDeviceLimits) -> Self {
         vk_sys::VkPhysicalDeviceLimits {
             maxImageDimension1D: limits.max_image_dimension_1d,
             maxImageDimension2D: limits.max_image_dimension_2d,
@@ -1730,8 +1730,8 @@ pub struct PhysicalDeviceSparseProperties {
     pub residency_non_resident_strict: bool,
 }
 
-impl From<vk_sys::VkPhysicalDeviceSparseProperties> for PhysicalDeviceSparseProperties {
-    fn from(properties: vk_sys::VkPhysicalDeviceSparseProperties) -> Self {
+impl<'a> From<&'a vk_sys::VkPhysicalDeviceSparseProperties> for PhysicalDeviceSparseProperties {
+    fn from(properties: &'a vk_sys::VkPhysicalDeviceSparseProperties) -> Self {
         PhysicalDeviceSparseProperties {
             residency_standard_2d_block_shape: utils::from_vk_bool(properties.residencyStandard2DBlockShape),
             residency_standard_2d_multisample_block_shape: utils::from_vk_bool(properties.residencyStandard2DMultisampleBlockShape),
@@ -1742,8 +1742,8 @@ impl From<vk_sys::VkPhysicalDeviceSparseProperties> for PhysicalDeviceSparseProp
     }
 }
 
-impl From<PhysicalDeviceSparseProperties> for vk_sys::VkPhysicalDeviceSparseProperties {
-    fn from(properties: PhysicalDeviceSparseProperties) -> Self {
+impl<'a> From<&'a PhysicalDeviceSparseProperties> for vk_sys::VkPhysicalDeviceSparseProperties {
+    fn from(properties: &'a PhysicalDeviceSparseProperties) -> Self {
         vk_sys::VkPhysicalDeviceSparseProperties {
             residencyStandard2DBlockShape: utils::to_vk_bool(properties.residency_standard_2d_block_shape),
             residencyStandard2DMultisampleBlockShape: utils::to_vk_bool(properties.residency_standard_2d_multisample_block_shape),
@@ -1767,8 +1767,8 @@ pub struct PhysicalDeviceProperties {
     pub sparse_properties: PhysicalDeviceSparseProperties,
 }
 
-impl From<vk_sys::VkPhysicalDeviceProperties> for PhysicalDeviceProperties {
-    fn from(properties: vk_sys::VkPhysicalDeviceProperties) -> Self {
+impl<'a> From<&'a vk_sys::VkPhysicalDeviceProperties> for PhysicalDeviceProperties {
+    fn from(properties: &'a vk_sys::VkPhysicalDeviceProperties) -> Self {
         let device_name = unsafe {
             CStr::from_ptr(properties.deviceName.as_ptr()).to_str().unwrap().to_owned()
         };
@@ -1781,14 +1781,14 @@ impl From<vk_sys::VkPhysicalDeviceProperties> for PhysicalDeviceProperties {
             device_type: properties.deviceType.into(),
             device_name: device_name,
             pipeline_cache_uuid: properties.pipelineCacheUUID,
-            limits: properties.limits.into(),
-            sparse_properties: properties.sparseProperties.into(),
+            limits: (&properties.limits).into(),
+            sparse_properties: (&properties.sparseProperties).into(),
         }
     }
 }
 
-impl From<PhysicalDeviceProperties> for vk_sys::VkPhysicalDeviceProperties {
-    fn from(properties: PhysicalDeviceProperties) -> Self {
+impl<'a> From<&'a PhysicalDeviceProperties> for vk_sys::VkPhysicalDeviceProperties {
+    fn from(properties: &'a PhysicalDeviceProperties) -> Self {
         let mut res = vk_sys::VkPhysicalDeviceProperties {
             apiVersion: properties.api_version.as_api_version(),
             driverVersion: properties.driver_version,
@@ -1797,8 +1797,8 @@ impl From<PhysicalDeviceProperties> for vk_sys::VkPhysicalDeviceProperties {
             deviceType: properties.device_type.into(),
             deviceName: unsafe { mem::uninitialized() },
             pipelineCacheUUID: properties.pipeline_cache_uuid,
-            limits: properties.limits.into(),
-            sparseProperties: properties.sparse_properties.into(),
+            limits: (&properties.limits).into(),
+            sparseProperties: (&properties.sparse_properties).into(),
         };
 
         debug_assert!(properties.device_name.len() < res.deviceName.len());
@@ -1819,24 +1819,24 @@ pub struct QueueFamilyProperties {
     pub min_image_transfer_granularity: Extent3D,
 }
 
-impl From<vk_sys::VkQueueFamilyProperties> for QueueFamilyProperties {
-    fn from(properties: vk_sys::VkQueueFamilyProperties) -> Self {
+impl<'a> From<&'a vk_sys::VkQueueFamilyProperties> for QueueFamilyProperties {
+    fn from(properties: &'a vk_sys::VkQueueFamilyProperties) -> Self {
         QueueFamilyProperties {
             queue_flags: properties.queueFlags,
             queue_count: properties.queueCount,
             timestamp_valid_bits: properties.timestampValidBits,
-            min_image_transfer_granularity: properties.minImageTransferGranularity.into(),
+            min_image_transfer_granularity: (&properties.minImageTransferGranularity).into(),
         }
     }
 }
 
-impl From<QueueFamilyProperties> for vk_sys::VkQueueFamilyProperties {
-    fn from(properties: QueueFamilyProperties) -> Self {
+impl<'a> From<&'a QueueFamilyProperties> for vk_sys::VkQueueFamilyProperties {
+    fn from(properties: &'a QueueFamilyProperties) -> Self {
         vk_sys::VkQueueFamilyProperties {
             queueFlags: properties.queue_flags,
             queueCount: properties.queue_count,
             timestampValidBits: properties.timestamp_valid_bits,
-            minImageTransferGranularity: properties.min_image_transfer_granularity.into(),
+            minImageTransferGranularity: (&properties.min_image_transfer_granularity).into(),
         }
     }
 }
@@ -1847,8 +1847,8 @@ pub struct MemoryType {
     pub heap_index: u32,
 }
 
-impl From<vk_sys::VkMemoryType> for MemoryType {
-    fn from(memory_type: vk_sys::VkMemoryType) -> Self {
+impl<'a> From<&'a vk_sys::VkMemoryType> for MemoryType {
+    fn from(memory_type: &'a vk_sys::VkMemoryType) -> Self {
         MemoryType {
             property_flags: memory_type.propertyFlags,
             heap_index: memory_type.heapIndex,
@@ -1856,8 +1856,8 @@ impl From<vk_sys::VkMemoryType> for MemoryType {
     }
 }
 
-impl From<MemoryType> for vk_sys::VkMemoryType {
-    fn from(memory_type: MemoryType) -> Self {
+impl<'a> From<&'a MemoryType> for vk_sys::VkMemoryType {
+    fn from(memory_type: &'a MemoryType) -> Self {
         vk_sys::VkMemoryType {
             propertyFlags: memory_type.property_flags,
             heapIndex: memory_type.heap_index,
@@ -1871,8 +1871,8 @@ pub struct MemoryHeap {
     pub flags: vk_sys::VkMemoryHeapFlags,
 }
 
-impl From<vk_sys::VkMemoryHeap> for MemoryHeap {
-    fn from(heap: vk_sys::VkMemoryHeap) -> Self {
+impl<'a> From<&'a vk_sys::VkMemoryHeap> for MemoryHeap {
+    fn from(heap: &'a vk_sys::VkMemoryHeap) -> Self {
         MemoryHeap {
             size: heap.size,
             flags: heap.flags,
@@ -1880,8 +1880,8 @@ impl From<vk_sys::VkMemoryHeap> for MemoryHeap {
     }
 }
 
-impl From<MemoryHeap> for vk_sys::VkMemoryHeap {
-    fn from(heap: MemoryHeap) -> Self {
+impl<'a> From<&'a MemoryHeap> for vk_sys::VkMemoryHeap {
+    fn from(heap: &'a MemoryHeap) -> Self {
         vk_sys::VkMemoryHeap {
             size: heap.size,
             flags: heap.flags,
@@ -1895,17 +1895,15 @@ pub struct PhysicalDeviceMemoryProperties {
     pub memory_heaps: Vec<MemoryHeap>,
 }
 
-impl From<vk_sys::VkPhysicalDeviceMemoryProperties> for PhysicalDeviceMemoryProperties {
-    fn from(properties: vk_sys::VkPhysicalDeviceMemoryProperties) -> Self {
+impl<'a> From<&'a vk_sys::VkPhysicalDeviceMemoryProperties> for PhysicalDeviceMemoryProperties {
+    fn from(properties: &'a vk_sys::VkPhysicalDeviceMemoryProperties) -> Self {
         let memory_types = properties.memoryTypes[..properties.memoryTypeCount as usize]
             .iter()
-            .cloned()
             .map(From::from)
             .collect();
 
         let memory_heaps = properties.memoryHeaps[..properties.memoryHeapCount as usize]
             .iter()
-            .cloned()
             .map(From::from)
             .collect();
 
@@ -1916,20 +1914,20 @@ impl From<vk_sys::VkPhysicalDeviceMemoryProperties> for PhysicalDeviceMemoryProp
     }
 }
 
-impl From<PhysicalDeviceMemoryProperties> for vk_sys::VkPhysicalDeviceMemoryProperties {
-    fn from(mut properties: PhysicalDeviceMemoryProperties) -> Self {
+impl<'a> From<&'a PhysicalDeviceMemoryProperties> for vk_sys::VkPhysicalDeviceMemoryProperties {
+    fn from(properties: &'a PhysicalDeviceMemoryProperties) -> Self {
         debug_assert!(properties.memory_types.len() <= vk_sys::VK_MAX_MEMORY_TYPES);
         debug_assert!(properties.memory_heaps.len() <= vk_sys::VK_MAX_MEMORY_HEAPS);
 
         let mut res: vk_sys::VkPhysicalDeviceMemoryProperties = unsafe { mem::uninitialized() };
 
         res.memoryTypeCount = properties.memory_types.len() as u32;
-        for (src, dst) in properties.memory_types.drain(..).zip(res.memoryTypes.iter_mut()) {
+        for (src, dst) in properties.memory_types.iter().zip(res.memoryTypes.iter_mut()) {
             *dst = src.into();
         }
 
         res.memoryHeapCount = properties.memory_heaps.len() as u32;
-        for (src, dst) in properties.memory_heaps.drain(..).zip(res.memoryHeaps.iter_mut()) {
+        for (src, dst) in properties.memory_heaps.iter().zip(res.memoryHeaps.iter_mut()) {
             *dst = src.into();
         }
 
@@ -2029,21 +2027,21 @@ pub struct SparseImageFormatProperties {
     pub flags: vk_sys::VkSparseImageFormatFlags,
 }
 
-impl From<vk_sys::VkSparseImageFormatProperties> for SparseImageFormatProperties {
-    fn from(properties: vk_sys::VkSparseImageFormatProperties) -> Self {
+impl<'a> From<&'a vk_sys::VkSparseImageFormatProperties> for SparseImageFormatProperties {
+    fn from(properties: &'a vk_sys::VkSparseImageFormatProperties) -> Self {
         SparseImageFormatProperties {
             aspect_mask: properties.aspectMask,
-            image_granularity: properties.imageGranularity.into(),
+            image_granularity: (&properties.imageGranularity).into(),
             flags: properties.flags,
         }
     }
 }
 
-impl From<SparseImageFormatProperties> for vk_sys::VkSparseImageFormatProperties {
-    fn from(properties: SparseImageFormatProperties) -> Self {
+impl<'a> From<&'a SparseImageFormatProperties> for vk_sys::VkSparseImageFormatProperties {
+    fn from(properties: &'a SparseImageFormatProperties) -> Self {
         vk_sys::VkSparseImageFormatProperties {
             aspectMask: properties.aspect_mask,
-            imageGranularity: properties.image_granularity.into(),
+            imageGranularity: (&properties.image_granularity).into(),
             flags: properties.flags,
         }
     }

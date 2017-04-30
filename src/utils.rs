@@ -56,3 +56,16 @@ pub fn cstr_from_string(string: Option<String>) -> (Option<CString>, *const c_ch
         None => (None, ptr::null()),
     }
 }
+
+#[inline]
+pub fn cstr_from_str(string: Option<&str>) -> (Option<CString>, *const c_char) {
+    match string {
+        Some(string) => {
+            let cstr = CString::new(string).unwrap();
+            let ptr = cstr.as_ptr();
+            (Some(cstr), ptr)
+        }
+
+        None => (None, ptr::null()),
+    }
+}
