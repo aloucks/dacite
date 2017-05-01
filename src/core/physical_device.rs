@@ -127,8 +127,7 @@ impl PhysicalDevice {
             properties.set_len(num_properties as usize);
         }
 
-        let properties = properties.iter().map(From::from).collect();
-        properties
+        properties.iter().map(From::from).collect()
     }
 
     pub fn queue_family_properties(&self) -> Vec<core::QueueFamilyProperties> {
@@ -143,11 +142,9 @@ impl PhysicalDevice {
             properties.set_len(num_properties as usize);
         }
 
-        let properties = properties.iter()
+        properties.iter()
             .map(From::from)
-            .collect();
-
-        properties
+            .collect()
     }
 
     pub fn memory_properties(&self) -> core::PhysicalDeviceMemoryProperties {

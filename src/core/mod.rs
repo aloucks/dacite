@@ -1964,7 +1964,7 @@ impl<'a> From<&'a vk_sys::VkDeviceQueueCreateInfo> for DeviceQueueCreateInfo {
         DeviceQueueCreateInfo {
             flags: create_info.flags,
             queue_family_index: create_info.queueFamilyIndex,
-            queue_priorities: queue_priorities_slice.iter().cloned().collect(),
+            queue_priorities: queue_priorities_slice.to_vec(),
         }
     }
 }
