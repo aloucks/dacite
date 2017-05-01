@@ -941,6 +941,12 @@ impl Deref for VkApplicationInfoWrapper {
     }
 }
 
+impl AsRef<vk_sys::VkApplicationInfo> for VkApplicationInfoWrapper {
+    fn as_ref(&self) -> &vk_sys::VkApplicationInfo {
+        &self.application_info
+    }
+}
+
 impl<'a> From<&'a ApplicationInfo> for VkApplicationInfoWrapper {
     fn from(info: &'a ApplicationInfo) -> Self {
         let application_name_cstr = utils::cstr_from_string(info.application_name.clone());
@@ -1021,6 +1027,12 @@ impl Deref for VkInstanceCreateInfoWrapper {
     type Target = vk_sys::VkInstanceCreateInfo;
 
     fn deref(&self) -> &vk_sys::VkInstanceCreateInfo {
+        &self.create_info
+    }
+}
+
+impl AsRef<vk_sys::VkInstanceCreateInfo> for VkInstanceCreateInfoWrapper {
+    fn as_ref(&self) -> &vk_sys::VkInstanceCreateInfo {
         &self.create_info
     }
 }
@@ -1969,6 +1981,12 @@ impl Deref for VkDeviceQueueCreateInfoWrapper {
     }
 }
 
+impl AsRef<vk_sys::VkDeviceQueueCreateInfo> for VkDeviceQueueCreateInfoWrapper {
+    fn as_ref(&self) -> &vk_sys::VkDeviceQueueCreateInfo {
+        &self.create_info
+    }
+}
+
 impl<'a> From<&'a DeviceQueueCreateInfo> for VkDeviceQueueCreateInfoWrapper {
     fn from(create_info: &'a DeviceQueueCreateInfo) -> Self {
         let queue_priorities = create_info.queue_priorities.clone();
@@ -2062,6 +2080,12 @@ impl Deref for VkDeviceCreateInfoWrapper {
     }
 }
 
+impl AsRef<vk_sys::VkDeviceCreateInfo> for VkDeviceCreateInfoWrapper {
+    fn as_ref(&self) -> &vk_sys::VkDeviceCreateInfo {
+        &self.create_info
+    }
+}
+
 impl<'a> From<&'a DeviceCreateInfo> for VkDeviceCreateInfoWrapper {
     fn from(create_info: &'a DeviceCreateInfo) -> Self {
         let queue_create_infos_wrappers: Vec<VkDeviceQueueCreateInfoWrapper> = create_info.queue_create_infos
@@ -2071,7 +2095,7 @@ impl<'a> From<&'a DeviceCreateInfo> for VkDeviceCreateInfoWrapper {
 
         let queue_create_infos: Vec<vk_sys::VkDeviceQueueCreateInfo> = queue_create_infos_wrappers
             .iter()
-            .map(Deref::deref)
+            .map(AsRef::as_ref)
             .cloned()
             .collect();
 
