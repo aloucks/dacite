@@ -54,10 +54,9 @@ impl Instance {
         }
 
         let create_info: core::VkInstanceCreateInfoWrapper = create_info.into();
-        let create_info: &vk_sys::VkInstanceCreateInfo = &create_info;
         let mut instance = ptr::null_mut();
         let res = unsafe {
-            (loader.core_null_instance.vkCreateInstance)(create_info, allocation_callbacks, &mut instance)
+            (loader.core_null_instance.vkCreateInstance)(create_info.as_ref(), allocation_callbacks, &mut instance)
         };
         if res != vk_sys::VK_SUCCESS {
             return Err(res.into());
