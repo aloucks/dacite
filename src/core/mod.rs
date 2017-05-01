@@ -13,6 +13,7 @@
 // PERFORMANCE OF THIS SOFTWARE.
 
 mod allocator_helper;
+mod device;
 mod instance;
 mod physical_device;
 
@@ -26,6 +27,7 @@ use std::slice;
 use utils;
 use vk_sys;
 
+pub use self::device::Device;
 pub use self::instance::Instance;
 pub use self::physical_device::PhysicalDevice;
 
