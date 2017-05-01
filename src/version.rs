@@ -12,20 +12,6 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-extern crate libc;
-extern crate vk_sys;
-
-#[cfg(feature = "core_1_0_3")]
-mod utils;
-
-#[cfg(feature = "core_1_0_3")]
-pub mod core;
-
-#[cfg(feature = "core_1_0_3")]
-mod version;
-
-#[cfg(feature = "core_1_0_3")]
-pub use version::{DACITE_API_VERSION_MAJOR, DACITE_API_VERSION_MINOR, DACITE_API_VERSION_PATCH};
-
-#[cfg(feature = "core_1_0_3")]
-pub type Result<T> = ::std::result::Result<T, core::Error>;
+pub const DACITE_API_VERSION_MAJOR: u32 = 1;
+pub const DACITE_API_VERSION_MINOR: u32 = 0;
+pub const DACITE_API_VERSION_PATCH: u32 = 3;

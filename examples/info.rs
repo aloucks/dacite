@@ -56,7 +56,11 @@ fn main() {
             application_version: 0,
             engine_name: None,
             engine_version: 0,
-            api_version: None,
+            api_version: Some(dacite::core::Version {
+                major: dacite::DACITE_API_VERSION_MAJOR,
+                minor: dacite::DACITE_API_VERSION_MINOR,
+                patch: dacite::DACITE_API_VERSION_PATCH,
+            }),
         }),
         enabled_layers: vec![],
         enabled_extensions: vec![],
