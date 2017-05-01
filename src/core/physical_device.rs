@@ -13,8 +13,8 @@
 // PERFORMANCE OF THIS SOFTWARE.
 
 use Result;
-use core::Instance;
-use core;
+use core::allocator_helper::AllocatorHelper;
+use core::{self, Device, Instance};
 use std::mem;
 use std::ptr;
 use utils;
@@ -158,5 +158,22 @@ impl PhysicalDevice {
         }
 
         (&properties).into()
+    }
+
+    pub fn create_device(&self, create_info: &core::DeviceCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<core::Device> {
+        let allocator_helper = allocator.map(AllocatorHelper::new);
+        let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), |a| &a.callbacks);
+        let create_info: core::VkDeviceCreateInfoWrapper = create_info.into();
+
+        let mut device = ptr::null_mut();
+        let res = unsafe {
+            (self.instance.0.loader.core.vkCreateDevice)(self.handle, create_info.as_ref(), allocation_callbacks, &mut device)
+        };
+
+        if res != vk_sys::VK_SUCCESS {
+            return Err(res.into());
+        }
+
+        Ok(Device::new(device, self.instance.clone(), allocator_helper))
     }
 }
