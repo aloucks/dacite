@@ -50,7 +50,7 @@ fn main() {
     }
 
     let instance_create_info = dacite::core::InstanceCreateInfo {
-        flags: vk_sys::VK_INSTANCE_CREATE_DUMMY,
+        flags: vk_sys::VkInstanceCreateFlags::empty(),
         application_info: Some(dacite::core::ApplicationInfo {
             application_name: Some("dacite info example".to_owned()),
             application_version: 0,
