@@ -1935,6 +1935,59 @@ impl<'a> From<&'a PhysicalDeviceMemoryProperties> for vk_sys::VkPhysicalDeviceMe
 }
 
 #[derive(Debug, Clone)]
+pub struct DeviceQueueCreateInfo {
+    pub flags: vk_sys::VkDeviceQueueCreateFlags,
+    pub queue_family_index: u32,
+    pub queue_priorities: Vec<f32>,
+}
+
+impl<'a> From<&'a vk_sys::VkDeviceQueueCreateInfo> for DeviceQueueCreateInfo {
+    fn from(create_info: &'a vk_sys::VkDeviceQueueCreateInfo) -> Self {
+        let queue_priorities_slice = unsafe {
+            slice::from_raw_parts(create_info.pQueuePriorities, create_info.queueCount as usize)
+        };
+
+        DeviceQueueCreateInfo {
+            flags: create_info.flags,
+            queue_family_index: create_info.queueFamilyIndex,
+            queue_priorities: queue_priorities_slice.iter().cloned().collect(),
+        }
+    }
+}
+
+#[derive(Debug)]
+pub struct VkDeviceQueueCreateInfoWrapper {
+    create_info: vk_sys::VkDeviceQueueCreateInfo,
+    queue_priorities: Vec<f32>,
+}
+
+impl Deref for VkDeviceQueueCreateInfoWrapper {
+    type Target = vk_sys::VkDeviceQueueCreateInfo;
+
+    fn deref(&self) -> &vk_sys::VkDeviceQueueCreateInfo {
+        &self.create_info
+    }
+}
+
+impl<'a> From<&'a DeviceQueueCreateInfo> for VkDeviceQueueCreateInfoWrapper {
+    fn from(create_info: &'a DeviceQueueCreateInfo) -> Self {
+        let queue_priorities = create_info.queue_priorities.clone();
+
+        VkDeviceQueueCreateInfoWrapper {
+            create_info: vk_sys::VkDeviceQueueCreateInfo {
+                sType: vk_sys::VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO,
+                pNext: ptr::null(),
+                flags: create_info.flags,
+                queueFamilyIndex: create_info.queue_family_index,
+                queueCount: queue_priorities.len() as u32,
+                pQueuePriorities: queue_priorities.as_ptr(),
+            },
+            queue_priorities: queue_priorities,
+        }
+    }
+}
+
+#[derive(Debug, Clone)]
 pub enum InstanceExtension {
     Unknown(String),
 }
