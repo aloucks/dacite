@@ -1988,6 +1988,167 @@ impl<'a> From<&'a DeviceQueueCreateInfo> for VkDeviceQueueCreateInfoWrapper {
 }
 
 #[derive(Debug, Clone)]
+pub struct DeviceCreateInfo {
+    pub flags: vk_sys::VkDeviceCreateFlags,
+    pub queue_create_infos: Vec<DeviceQueueCreateInfo>,
+    pub enabled_layers: Vec<String>,
+    pub enabled_extensions: Vec<DeviceExtension>,
+    pub enabled_features: Option<PhysicalDeviceFeatures>,
+}
+
+impl<'a> From<&'a vk_sys::VkDeviceCreateInfo> for DeviceCreateInfo {
+    fn from(create_info: &'a vk_sys::VkDeviceCreateInfo) -> Self {
+        let queue_create_infos_slice = unsafe {
+            slice::from_raw_parts(create_info.pQueueCreateInfos, create_info.queueCreateInfoCount as usize)
+        };
+        let queue_create_infos = queue_create_infos_slice
+            .iter()
+            .map(From::from)
+            .collect();
+
+        let enabled_layers_slice = unsafe {
+            slice::from_raw_parts(create_info.ppEnabledLayerNames, create_info.enabledLayerCount as usize)
+        };
+        let enabled_layers = enabled_layers_slice
+            .iter()
+            .map(|&e| unsafe { CStr::from_ptr(e).to_str().unwrap().to_owned() })
+            .collect();
+
+        let enabled_extensions_slice = unsafe {
+            slice::from_raw_parts(create_info.ppEnabledExtensionNames, create_info.enabledExtensionCount as usize)
+        };
+        let enabled_extensions = enabled_extensions_slice
+            .iter()
+            .map(|&e| unsafe { CStr::from_ptr(e).to_str().unwrap() })
+            .map(From::from)
+            .collect();
+
+        let enabled_features = if !create_info.pEnabledFeatures.is_null() {
+            unsafe {
+                Some((&*create_info.pEnabledFeatures).into())
+            }
+        }
+        else {
+            None
+        };
+
+        DeviceCreateInfo {
+            flags: create_info.flags,
+            queue_create_infos: queue_create_infos,
+            enabled_layers: enabled_layers,
+            enabled_extensions: enabled_extensions,
+            enabled_features: enabled_features,
+        }
+    }
+}
+
+#[derive(Debug)]
+pub struct VkDeviceCreateInfoWrapper {
+    create_info: vk_sys::VkDeviceCreateInfo,
+    queue_create_infos_wrappers: Vec<VkDeviceQueueCreateInfoWrapper>,
+    queue_create_infos: Vec<vk_sys::VkDeviceQueueCreateInfo>,
+    enabled_layers: Vec<CString>,
+    enabled_layers_ptrs: Vec<*const c_char>,
+    enabled_extensions: Vec<CString>,
+    enabled_extensions_ptrs: Vec<*const c_char>,
+    enabled_features: Option<Box<vk_sys::VkPhysicalDeviceFeatures>>,
+}
+
+impl Deref for VkDeviceCreateInfoWrapper {
+    type Target = vk_sys::VkDeviceCreateInfo;
+
+    fn deref(&self) -> &vk_sys::VkDeviceCreateInfo {
+        &self.create_info
+    }
+}
+
+impl<'a> From<&'a DeviceCreateInfo> for VkDeviceCreateInfoWrapper {
+    fn from(create_info: &'a DeviceCreateInfo) -> Self {
+        let queue_create_infos_wrappers: Vec<VkDeviceQueueCreateInfoWrapper> = create_info.queue_create_infos
+            .iter()
+            .map(From::from)
+            .collect();
+
+        let queue_create_infos: Vec<vk_sys::VkDeviceQueueCreateInfo> = queue_create_infos_wrappers
+            .iter()
+            .map(Deref::deref)
+            .cloned()
+            .collect();
+
+        let enabled_layers: Vec<_> = create_info.enabled_layers
+            .iter()
+            .cloned()
+            .map(CString::new)
+            .map(Result::unwrap)
+            .collect();
+        let enabled_layers_ptrs: Vec<_> = enabled_layers
+            .iter()
+            .map(|l| l.as_ptr())
+            .collect();
+        let enabled_layers_ptr = if !enabled_layers_ptrs.is_empty() {
+            enabled_layers_ptrs.as_ptr()
+        }
+        else {
+            ptr::null()
+        };
+
+        let enabled_extensions: Vec<_> = create_info.enabled_extensions
+            .iter()
+            .cloned()
+            .map(<String as From<_>>::from)
+            .map(CString::new)
+            .map(Result::unwrap)
+            .collect();
+        let enabled_extensions_ptrs: Vec<_> = enabled_extensions
+            .iter()
+            .map(|l| l.as_ptr())
+            .collect();
+        let enabled_extensions_ptr = if !enabled_extensions_ptrs.is_empty() {
+            enabled_extensions_ptrs.as_ptr()
+        }
+        else {
+            ptr::null()
+        };
+
+        let enabled_features_ptr;
+        let enabled_features = match create_info.enabled_features {
+            Some(ref enabled_features) => {
+                let enabled_features: Box<vk_sys::VkPhysicalDeviceFeatures> = Box::new(enabled_features.into());
+                enabled_features_ptr = &*enabled_features as *const _;
+                Some(enabled_features)
+            }
+
+            None => {
+                enabled_features_ptr = ptr::null();
+                None
+            }
+        };
+
+        VkDeviceCreateInfoWrapper {
+            create_info: vk_sys::VkDeviceCreateInfo {
+                sType: vk_sys::VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO,
+                pNext: ptr::null(),
+                flags: create_info.flags,
+                queueCreateInfoCount: queue_create_infos.len() as u32,
+                pQueueCreateInfos: queue_create_infos.as_ptr(),
+                enabledLayerCount: enabled_layers.len() as u32,
+                ppEnabledLayerNames: enabled_layers_ptr,
+                enabledExtensionCount: enabled_extensions.len() as u32,
+                ppEnabledExtensionNames: enabled_extensions_ptr,
+                pEnabledFeatures: enabled_features_ptr,
+            },
+            queue_create_infos_wrappers: queue_create_infos_wrappers,
+            queue_create_infos: queue_create_infos,
+            enabled_layers: enabled_layers,
+            enabled_layers_ptrs: enabled_layers_ptrs,
+            enabled_extensions: enabled_extensions,
+            enabled_extensions_ptrs: enabled_extensions_ptrs,
+            enabled_features: enabled_features,
+        }
+    }
+}
+
+#[derive(Debug, Clone)]
 pub enum InstanceExtension {
     Unknown(String),
 }
