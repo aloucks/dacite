@@ -25,6 +25,7 @@ mod physical_device;
 mod query_pool;
 mod queue;
 mod semaphore;
+mod shader_module;
 
 use libc::{c_char, c_void};
 use std::ffi::{CStr, CString};
@@ -48,6 +49,7 @@ pub use self::physical_device::PhysicalDevice;
 pub use self::query_pool::QueryPool;
 pub use self::queue::Queue;
 pub use self::semaphore::Semaphore;
+pub use self::shader_module::ShaderModule;
 
 #[derive(Debug, Copy, Clone)]
 pub struct Version {
