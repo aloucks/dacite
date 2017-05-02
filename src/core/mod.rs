@@ -948,6 +948,36 @@ impl From<PhysicalDeviceType> for vk_sys::VkPhysicalDeviceType {
 }
 
 #[derive(Debug, Copy, Clone)]
+pub enum QueryType {
+    Occlusion,
+    PipelineStatistics,
+    Timestamp,
+    Unknown(vk_sys::VkQueryType),
+}
+
+impl From<vk_sys::VkQueryType> for QueryType {
+    fn from(query_type: vk_sys::VkQueryType) -> Self {
+        match query_type {
+            vk_sys::VK_QUERY_TYPE_OCCLUSION => QueryType::Occlusion,
+            vk_sys::VK_QUERY_TYPE_PIPELINE_STATISTICS => QueryType::PipelineStatistics,
+            vk_sys::VK_QUERY_TYPE_TIMESTAMP => QueryType::Timestamp,
+            _ => QueryType::Unknown(query_type),
+        }
+    }
+}
+
+impl From<QueryType> for vk_sys::VkQueryType {
+    fn from(query_type: QueryType) -> Self {
+        match query_type {
+            QueryType::Occlusion => vk_sys::VK_QUERY_TYPE_OCCLUSION,
+            QueryType::PipelineStatistics => vk_sys::VK_QUERY_TYPE_PIPELINE_STATISTICS,
+            QueryType::Timestamp => vk_sys::VK_QUERY_TYPE_TIMESTAMP,
+            QueryType::Unknown(query_type) => query_type,
+        }
+    }
+}
+
+#[derive(Debug, Copy, Clone)]
 pub enum CommandBufferLevel {
     Primary,
     Secondary,
