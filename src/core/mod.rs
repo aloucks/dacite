@@ -1650,6 +1650,42 @@ impl From<SamplerMipmapMode> for vk_sys::VkSamplerMipmapMode {
 }
 
 #[derive(Debug, Copy, Clone)]
+pub enum SamplerAddressMode {
+    Repeat,
+    MirroredRepeat,
+    ClampToEdge,
+    ClampToBorder,
+    MirrorClampToEdge,
+    Unknown(vk_sys::VkSamplerAddressMode),
+}
+
+impl From<vk_sys::VkSamplerAddressMode> for SamplerAddressMode {
+    fn from(mode: vk_sys::VkSamplerAddressMode) -> Self {
+        match mode {
+            vk_sys::VK_SAMPLER_ADDRESS_MODE_REPEAT => SamplerAddressMode::Repeat,
+            vk_sys::VK_SAMPLER_ADDRESS_MODE_MIRRORED_REPEAT => SamplerAddressMode::MirroredRepeat,
+            vk_sys::VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE => SamplerAddressMode::ClampToEdge,
+            vk_sys::VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER => SamplerAddressMode::ClampToBorder,
+            vk_sys::VK_SAMPLER_ADDRESS_MODE_MIRROR_CLAMP_TO_EDGE => SamplerAddressMode::MirrorClampToEdge,
+            _ => SamplerAddressMode::Unknown(mode),
+        }
+    }
+}
+
+impl From<SamplerAddressMode> for vk_sys::VkSamplerAddressMode {
+    fn from(mode: SamplerAddressMode) -> Self {
+        match mode {
+            SamplerAddressMode::Repeat => vk_sys::VK_SAMPLER_ADDRESS_MODE_REPEAT,
+            SamplerAddressMode::MirroredRepeat => vk_sys::VK_SAMPLER_ADDRESS_MODE_MIRRORED_REPEAT,
+            SamplerAddressMode::ClampToEdge => vk_sys::VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE,
+            SamplerAddressMode::ClampToBorder => vk_sys::VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER,
+            SamplerAddressMode::MirrorClampToEdge => vk_sys::VK_SAMPLER_ADDRESS_MODE_MIRROR_CLAMP_TO_EDGE,
+            SamplerAddressMode::Unknown(mode) => mode,
+        }
+    }
+}
+
+#[derive(Debug, Copy, Clone)]
 pub enum CommandBufferLevel {
     Primary,
     Secondary,
