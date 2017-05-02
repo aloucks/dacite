@@ -1725,6 +1725,60 @@ impl From<BorderColor> for vk_sys::VkBorderColor {
 }
 
 #[derive(Debug, Copy, Clone)]
+pub enum DescriptorType {
+    Sampler,
+    CombinedImageSampler,
+    SampledImage,
+    StorageImage,
+    UniformTexelBuffer,
+    StorageTexelBuffer,
+    UniformBuffer,
+    StorageBuffer,
+    UniformBufferDynamic,
+    StorageBufferDynamic,
+    InputAttachment,
+    Unknown(vk_sys::VkDescriptorType),
+}
+
+impl From<vk_sys::VkDescriptorType> for DescriptorType {
+    fn from(descriptor_type: vk_sys::VkDescriptorType) -> Self {
+        match descriptor_type {
+            vk_sys::VK_DESCRIPTOR_TYPE_SAMPLER => DescriptorType::Sampler,
+            vk_sys::VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER => DescriptorType::CombinedImageSampler,
+            vk_sys::VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE => DescriptorType::SampledImage,
+            vk_sys::VK_DESCRIPTOR_TYPE_STORAGE_IMAGE => DescriptorType::StorageImage,
+            vk_sys::VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER => DescriptorType::UniformTexelBuffer,
+            vk_sys::VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER => DescriptorType::StorageTexelBuffer,
+            vk_sys::VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER => DescriptorType::UniformBuffer,
+            vk_sys::VK_DESCRIPTOR_TYPE_STORAGE_BUFFER => DescriptorType::StorageBuffer,
+            vk_sys::VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC => DescriptorType::UniformBufferDynamic,
+            vk_sys::VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC => DescriptorType::StorageBufferDynamic,
+            vk_sys::VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT => DescriptorType::InputAttachment,
+            _ => DescriptorType::Unknown(descriptor_type),
+        }
+    }
+}
+
+impl From<DescriptorType> for vk_sys::VkDescriptorType {
+    fn from(descriptor_type: DescriptorType) -> Self {
+        match descriptor_type {
+            DescriptorType::Sampler => vk_sys::VK_DESCRIPTOR_TYPE_SAMPLER,
+            DescriptorType::CombinedImageSampler => vk_sys::VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
+            DescriptorType::SampledImage => vk_sys::VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE,
+            DescriptorType::StorageImage => vk_sys::VK_DESCRIPTOR_TYPE_STORAGE_IMAGE,
+            DescriptorType::UniformTexelBuffer => vk_sys::VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER,
+            DescriptorType::StorageTexelBuffer => vk_sys::VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER,
+            DescriptorType::UniformBuffer => vk_sys::VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,
+            DescriptorType::StorageBuffer => vk_sys::VK_DESCRIPTOR_TYPE_STORAGE_BUFFER,
+            DescriptorType::UniformBufferDynamic => vk_sys::VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC,
+            DescriptorType::StorageBufferDynamic => vk_sys::VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC,
+            DescriptorType::InputAttachment => vk_sys::VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT,
+            DescriptorType::Unknown(descriptor_type) => descriptor_type,
+        }
+    }
+}
+
+#[derive(Debug, Copy, Clone)]
 pub enum CommandBufferLevel {
     Primary,
     Secondary,
