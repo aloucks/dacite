@@ -1275,6 +1275,51 @@ impl From<FrontFace> for vk_sys::VkFrontFace {
 }
 
 #[derive(Debug, Copy, Clone)]
+pub enum CompareOp {
+    Never,
+    Less,
+    Equal,
+    LessOrEqual,
+    Greater,
+    NotEqual,
+    GreaterOrEqual,
+    Always,
+    Unknown(vk_sys::VkCompareOp),
+}
+
+impl From<vk_sys::VkCompareOp> for CompareOp {
+    fn from(op: vk_sys::VkCompareOp) -> Self {
+        match op {
+            vk_sys::VK_COMPARE_OP_NEVER => CompareOp::Never,
+            vk_sys::VK_COMPARE_OP_LESS => CompareOp::Less,
+            vk_sys::VK_COMPARE_OP_EQUAL => CompareOp::Equal,
+            vk_sys::VK_COMPARE_OP_LESS_OR_EQUAL => CompareOp::LessOrEqual,
+            vk_sys::VK_COMPARE_OP_GREATER => CompareOp::Greater,
+            vk_sys::VK_COMPARE_OP_NOT_EQUAL => CompareOp::NotEqual,
+            vk_sys::VK_COMPARE_OP_GREATER_OR_EQUAL => CompareOp::GreaterOrEqual,
+            vk_sys::VK_COMPARE_OP_ALWAYS => CompareOp::Always,
+            _ => CompareOp::Unknown(op),
+        }
+    }
+}
+
+impl From<CompareOp> for vk_sys::VkCompareOp {
+    fn from(op: CompareOp) -> Self {
+        match op {
+            CompareOp::Never => vk_sys::VK_COMPARE_OP_NEVER,
+            CompareOp::Less => vk_sys::VK_COMPARE_OP_LESS,
+            CompareOp::Equal => vk_sys::VK_COMPARE_OP_EQUAL,
+            CompareOp::LessOrEqual => vk_sys::VK_COMPARE_OP_LESS_OR_EQUAL,
+            CompareOp::Greater => vk_sys::VK_COMPARE_OP_GREATER,
+            CompareOp::NotEqual => vk_sys::VK_COMPARE_OP_NOT_EQUAL,
+            CompareOp::GreaterOrEqual => vk_sys::VK_COMPARE_OP_GREATER_OR_EQUAL,
+            CompareOp::Always => vk_sys::VK_COMPARE_OP_ALWAYS,
+            CompareOp::Unknown(op) => op,
+        }
+    }
+}
+
+#[derive(Debug, Copy, Clone)]
 pub enum CommandBufferLevel {
     Primary,
     Secondary,
