@@ -12,7 +12,7 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-use core::Instance;
+use core::{Instance, Queue};
 use core::allocator_helper::AllocatorHelper;
 use std::ptr;
 use std::sync::Arc;
@@ -55,5 +55,14 @@ impl Device {
             allocator: allocator,
             loader: loader,
         }))
+    }
+
+    pub fn get_queue(&self, queue_family_index: u32, queue_index: u32) -> Queue {
+        let mut queue = ptr::null_mut();
+        unsafe {
+            (self.0.loader.core.vkGetDeviceQueue)(self.0.handle, queue_family_index, queue_index, &mut queue);
+        }
+
+        Queue::new(queue, self.clone())
     }
 }
