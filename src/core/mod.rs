@@ -3953,6 +3953,33 @@ impl<'a> From<&'a ImageSubresourceRange> for vk_sys::VkImageSubresourceRange {
     }
 }
 
+#[derive(Debug, Copy, Clone)]
+pub struct SpecializationMapEntry {
+    pub constant_id: u32,
+    pub offset: u32,
+    pub size: usize,
+}
+
+impl<'a> From<&'a vk_sys::VkSpecializationMapEntry> for SpecializationMapEntry {
+    fn from(entry: &'a vk_sys::VkSpecializationMapEntry) -> Self {
+        SpecializationMapEntry {
+            constant_id: entry.constantID,
+            offset: entry.offset,
+            size: entry.size,
+        }
+    }
+}
+
+impl<'a> From<&'a SpecializationMapEntry> for vk_sys::VkSpecializationMapEntry {
+    fn from(entry: &'a SpecializationMapEntry) -> Self {
+        vk_sys::VkSpecializationMapEntry {
+            constantID: entry.constant_id,
+            offset: entry.offset,
+            size: entry.size,
+        }
+    }
+}
+
 #[derive(Debug, Clone)]
 pub enum CommandPoolCreateInfoChainElement {
 }
