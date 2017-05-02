@@ -4073,6 +4073,30 @@ impl<'a> From<&'a Viewport> for vk_sys::VkViewport {
     }
 }
 
+#[derive(Debug, Copy, Clone)]
+pub struct Offset2D {
+    pub x: i32,
+    pub y: i32,
+}
+
+impl<'a> From<&'a vk_sys::VkOffset2D> for Offset2D {
+    fn from(offset: &'a vk_sys::VkOffset2D) -> Self {
+        Offset2D {
+            x: offset.x,
+            y: offset.y,
+        }
+    }
+}
+
+impl<'a> From<&'a Offset2D> for vk_sys::VkOffset2D {
+    fn from(offset: &'a Offset2D) -> Self {
+        vk_sys::VkOffset2D {
+            x: offset.x,
+            y: offset.y,
+        }
+    }
+}
+
 #[derive(Debug, Clone)]
 pub enum CommandPoolCreateInfoChainElement {
 }
