@@ -20,6 +20,7 @@ mod event;
 mod fence;
 mod instance;
 mod physical_device;
+mod query_pool;
 mod queue;
 mod semaphore;
 
@@ -40,6 +41,7 @@ pub use self::event::Event;
 pub use self::fence::Fence;
 pub use self::instance::Instance;
 pub use self::physical_device::PhysicalDevice;
+pub use self::query_pool::QueryPool;
 pub use self::queue::Queue;
 pub use self::semaphore::Semaphore;
 
