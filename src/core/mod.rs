@@ -4663,3 +4663,27 @@ impl<'a> From<&'a BufferImageCopy> for vk_sys::VkBufferImageCopy {
         }
     }
 }
+
+#[derive(Debug, Copy, Clone)]
+pub struct ClearDepthStencilValue {
+    pub depth: f32,
+    pub stencil: u32,
+}
+
+impl<'a> From<&'a vk_sys::VkClearDepthStencilValue> for ClearDepthStencilValue {
+    fn from(value: &'a vk_sys::VkClearDepthStencilValue) -> Self {
+        ClearDepthStencilValue {
+            depth: value.depth,
+            stencil: value.stencil,
+        }
+    }
+}
+
+impl<'a> From<&'a ClearDepthStencilValue> for vk_sys::VkClearDepthStencilValue {
+    fn from(value: &'a ClearDepthStencilValue) -> Self {
+        vk_sys::VkClearDepthStencilValue {
+            depth: value.depth,
+            stencil: value.stencil,
+        }
+    }
+}
