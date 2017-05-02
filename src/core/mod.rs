@@ -3980,6 +3980,33 @@ impl<'a> From<&'a SpecializationMapEntry> for vk_sys::VkSpecializationMapEntry {
     }
 }
 
+#[derive(Debug, Copy, Clone)]
+pub struct VertexInputBindingDescription {
+    pub binding: u32,
+    pub stride: u32,
+    pub input_rate: VertexInputRate,
+}
+
+impl<'a> From<&'a vk_sys::VkVertexInputBindingDescription> for VertexInputBindingDescription {
+    fn from(description: &'a vk_sys::VkVertexInputBindingDescription) -> Self {
+        VertexInputBindingDescription {
+            binding: description.binding,
+            stride: description.stride,
+            input_rate: description.inputRate.into(),
+        }
+    }
+}
+
+impl<'a> From<&'a VertexInputBindingDescription> for vk_sys::VkVertexInputBindingDescription {
+    fn from(description: &'a VertexInputBindingDescription) -> Self {
+        vk_sys::VkVertexInputBindingDescription {
+            binding: description.binding,
+            stride: description.stride,
+            inputRate: description.input_rate.into(),
+        }
+    }
+}
+
 #[derive(Debug, Clone)]
 pub enum CommandPoolCreateInfoChainElement {
 }
