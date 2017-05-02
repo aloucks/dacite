@@ -1596,6 +1596,33 @@ impl From<DynamicState> for vk_sys::VkDynamicState {
 }
 
 #[derive(Debug, Copy, Clone)]
+pub enum Filter {
+    Nearest,
+    Linear,
+    Unknown(vk_sys::VkFilter),
+}
+
+impl From<vk_sys::VkFilter> for Filter {
+    fn from(filter: vk_sys::VkFilter) -> Self {
+        match filter {
+            vk_sys::VK_FILTER_NEAREST => Filter::Nearest,
+            vk_sys::VK_FILTER_LINEAR => Filter::Linear,
+            _ => Filter::Unknown(filter),
+        }
+    }
+}
+
+impl From<Filter> for vk_sys::VkFilter {
+    fn from(filter: Filter) -> Self {
+        match filter {
+            Filter::Nearest => vk_sys::VK_FILTER_NEAREST,
+            Filter::Linear => vk_sys::VK_FILTER_LINEAR,
+            Filter::Unknown(filter) => filter,
+        }
+    }
+}
+
+#[derive(Debug, Copy, Clone)]
 pub enum CommandBufferLevel {
     Primary,
     Secondary,
