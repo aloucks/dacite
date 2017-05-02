@@ -4714,3 +4714,36 @@ impl<'a> From<&'a ClearRect> for vk_sys::VkClearRect {
         }
     }
 }
+
+#[derive(Debug, Copy, Clone)]
+pub struct ImageResolve {
+    pub src_subresource: ImageSubresourceLayers,
+    pub src_offset: Offset3D,
+    pub dst_subresource: ImageSubresourceLayers,
+    pub dst_offset: Offset3D,
+    pub extent: Extent3D,
+}
+
+impl<'a> From<&'a vk_sys::VkImageResolve> for ImageResolve {
+    fn from(resolve: &'a vk_sys::VkImageResolve) -> Self {
+        ImageResolve {
+            src_subresource: (&resolve.srcSubresource).into(),
+            src_offset: (&resolve.srcOffset).into(),
+            dst_subresource: (&resolve.dstSubresource).into(),
+            dst_offset: (&resolve.dstOffset).into(),
+            extent: (&resolve.extent).into(),
+        }
+    }
+}
+
+impl<'a> From<&'a ImageResolve> for vk_sys::VkImageResolve {
+    fn from(resolve: &'a ImageResolve) -> Self {
+        vk_sys::VkImageResolve {
+            srcSubresource: (&resolve.src_subresource).into(),
+            srcOffset: (&resolve.src_offset).into(),
+            dstSubresource: (&resolve.dst_subresource).into(),
+            dstOffset: (&resolve.dst_offset).into(),
+            extent: (&resolve.extent).into(),
+        }
+    }
+}
