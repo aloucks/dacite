@@ -2442,6 +2442,58 @@ impl<'a> From<&'a SparseImageFormatProperties> for vk_sys::VkSparseImageFormatPr
 }
 
 #[derive(Debug, Clone)]
+pub enum FenceCreateInfoChainElement {
+}
+
+#[derive(Debug, Clone)]
+pub struct FenceCreateInfo {
+    pub chain: Vec<FenceCreateInfoChainElement>,
+    pub flags: vk_sys::VkFenceCreateFlags,
+}
+
+impl<'a> From<&'a vk_sys::VkFenceCreateInfo> for FenceCreateInfo {
+    fn from(create_info: &'a vk_sys::VkFenceCreateInfo) -> Self {
+        debug_assert_eq!(create_info.pNext, ptr::null());
+
+        FenceCreateInfo {
+            chain: vec![],
+            flags: create_info.flags,
+        }
+    }
+}
+
+#[derive(Debug)]
+struct VkFenceCreateInfoWrapper {
+    create_info: vk_sys::VkFenceCreateInfo,
+}
+
+impl Deref for VkFenceCreateInfoWrapper {
+    type Target = vk_sys::VkFenceCreateInfo;
+
+    fn deref(&self) -> &Self::Target {
+        &self.create_info
+    }
+}
+
+impl AsRef<vk_sys::VkFenceCreateInfo> for VkFenceCreateInfoWrapper {
+    fn as_ref(&self) -> &vk_sys::VkFenceCreateInfo {
+        &self.create_info
+    }
+}
+
+impl<'a> From<&'a FenceCreateInfo> for VkFenceCreateInfoWrapper {
+    fn from(create_info: &'a FenceCreateInfo) -> VkFenceCreateInfoWrapper {
+        VkFenceCreateInfoWrapper {
+            create_info: vk_sys::VkFenceCreateInfo {
+                sType: vk_sys::VK_STRUCTURE_TYPE_FENCE_CREATE_INFO,
+                pNext: ptr::null(),
+                flags: create_info.flags,
+            },
+        }
+    }
+}
+
+#[derive(Debug, Clone)]
 pub enum CommandPoolCreateInfoChainElement {
 }
 
