@@ -20,6 +20,7 @@ use core::{
     CommandPool,
     Event,
     Fence,
+    Image,
     Instance,
     QueryPool,
     Queue,
@@ -195,6 +196,25 @@ impl Device {
 
         if res == vk_sys::VK_SUCCESS {
             Ok(Buffer::new(buffer, self.clone(), allocator_helper))
+        }
+        else {
+            Err(res.into())
+        }
+    }
+
+    pub fn create_image(&self, create_info: &core::ImageCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<Image> {
+        let create_info: core::VkImageCreateInfoWrapper = create_info.into();
+
+        let allocator_helper = allocator.map(AllocatorHelper::new);
+        let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), |a| &a.callbacks);
+
+        let mut image = ptr::null_mut();
+        let res = unsafe {
+            (self.loader().core.vkCreateImage)(self.handle(), create_info.as_ref(), allocation_callbacks, &mut image)
+        };
+
+        if res == vk_sys::VK_SUCCESS {
+            Ok(Image::new(image, self.clone(), allocator_helper))
         }
         else {
             Err(res.into())
