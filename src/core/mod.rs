@@ -1248,6 +1248,33 @@ impl From<PolygonMode> for vk_sys::VkPolygonMode {
 }
 
 #[derive(Debug, Copy, Clone)]
+pub enum FrontFace {
+    CounterClockwise,
+    Clockwise,
+    Unknown(vk_sys::VkFrontFace),
+}
+
+impl From<vk_sys::VkFrontFace> for FrontFace {
+    fn from(face: vk_sys::VkFrontFace) -> Self {
+        match face {
+            vk_sys::VK_FRONT_FACE_COUNTER_CLOCKWISE => FrontFace::CounterClockwise,
+            vk_sys::VK_FRONT_FACE_CLOCKWISE => FrontFace::Clockwise,
+            _ => FrontFace::Unknown(face),
+        }
+    }
+}
+
+impl From<FrontFace> for vk_sys::VkFrontFace {
+    fn from(face: FrontFace) -> Self {
+        match face {
+            FrontFace::CounterClockwise => vk_sys::VK_FRONT_FACE_COUNTER_CLOCKWISE,
+            FrontFace::Clockwise => vk_sys::VK_FRONT_FACE_CLOCKWISE,
+            FrontFace::Unknown(face) => face,
+        }
+    }
+}
+
+#[derive(Debug, Copy, Clone)]
 pub enum CommandBufferLevel {
     Primary,
     Secondary,
