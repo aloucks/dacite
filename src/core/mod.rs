@@ -1434,6 +1434,84 @@ impl From<LogicOp> for vk_sys::VkLogicOp {
 }
 
 #[derive(Debug, Copy, Clone)]
+pub enum BlendFactor {
+    Zero,
+    One,
+    SrcColor,
+    OneMinusSrcColor,
+    DstColor,
+    OneMinusDstColor,
+    SrcAlpha,
+    OneMinusSrcAlpha,
+    DstAlpha,
+    OneMinusDstAlpha,
+    ConstantColor,
+    OneMinusConstantColor,
+    ConstantAlpha,
+    OneMinusConstantAlpha,
+    SrcAlphaSaturate,
+    Src1Color,
+    OneMinusSrc1Color,
+    Src1Alpha,
+    OneMinusSrc1Alpha,
+    Unknown(vk_sys::VkBlendFactor),
+}
+
+impl From<vk_sys::VkBlendFactor> for BlendFactor {
+    fn from(factor: vk_sys::VkBlendFactor) -> Self {
+        match factor {
+            vk_sys::VK_BLEND_FACTOR_ZERO => BlendFactor::Zero,
+            vk_sys::VK_BLEND_FACTOR_ONE => BlendFactor::One,
+            vk_sys::VK_BLEND_FACTOR_SRC_COLOR => BlendFactor::SrcColor,
+            vk_sys::VK_BLEND_FACTOR_ONE_MINUS_SRC_COLOR => BlendFactor::OneMinusSrcColor,
+            vk_sys::VK_BLEND_FACTOR_DST_COLOR => BlendFactor::DstColor,
+            vk_sys::VK_BLEND_FACTOR_ONE_MINUS_DST_COLOR => BlendFactor::OneMinusDstColor,
+            vk_sys::VK_BLEND_FACTOR_SRC_ALPHA => BlendFactor::SrcAlpha,
+            vk_sys::VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA => BlendFactor::OneMinusSrcAlpha,
+            vk_sys::VK_BLEND_FACTOR_DST_ALPHA => BlendFactor::DstAlpha,
+            vk_sys::VK_BLEND_FACTOR_ONE_MINUS_DST_ALPHA => BlendFactor::OneMinusDstAlpha,
+            vk_sys::VK_BLEND_FACTOR_CONSTANT_COLOR => BlendFactor::ConstantColor,
+            vk_sys::VK_BLEND_FACTOR_ONE_MINUS_CONSTANT_COLOR => BlendFactor::OneMinusConstantColor,
+            vk_sys::VK_BLEND_FACTOR_CONSTANT_ALPHA => BlendFactor::ConstantAlpha,
+            vk_sys::VK_BLEND_FACTOR_ONE_MINUS_CONSTANT_ALPHA => BlendFactor::OneMinusConstantAlpha,
+            vk_sys::VK_BLEND_FACTOR_SRC_ALPHA_SATURATE => BlendFactor::SrcAlphaSaturate,
+            vk_sys::VK_BLEND_FACTOR_SRC1_COLOR => BlendFactor::Src1Color,
+            vk_sys::VK_BLEND_FACTOR_ONE_MINUS_SRC1_COLOR => BlendFactor::OneMinusSrc1Color,
+            vk_sys::VK_BLEND_FACTOR_SRC1_ALPHA => BlendFactor::Src1Alpha,
+            vk_sys::VK_BLEND_FACTOR_ONE_MINUS_SRC1_ALPHA => BlendFactor::OneMinusSrc1Alpha,
+            _ => BlendFactor::Unknown(factor),
+        }
+    }
+}
+
+impl From<BlendFactor> for vk_sys::VkBlendFactor {
+    fn from(factor: BlendFactor) -> Self {
+        match factor {
+            BlendFactor::Zero => vk_sys::VK_BLEND_FACTOR_ZERO,
+            BlendFactor::One => vk_sys::VK_BLEND_FACTOR_ONE,
+            BlendFactor::SrcColor => vk_sys::VK_BLEND_FACTOR_SRC_COLOR,
+            BlendFactor::OneMinusSrcColor => vk_sys::VK_BLEND_FACTOR_ONE_MINUS_SRC_COLOR,
+            BlendFactor::DstColor => vk_sys::VK_BLEND_FACTOR_DST_COLOR,
+            BlendFactor::OneMinusDstColor => vk_sys::VK_BLEND_FACTOR_ONE_MINUS_DST_COLOR,
+            BlendFactor::SrcAlpha => vk_sys::VK_BLEND_FACTOR_SRC_ALPHA,
+            BlendFactor::OneMinusSrcAlpha => vk_sys::VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
+            BlendFactor::DstAlpha => vk_sys::VK_BLEND_FACTOR_DST_ALPHA,
+            BlendFactor::OneMinusDstAlpha => vk_sys::VK_BLEND_FACTOR_ONE_MINUS_DST_ALPHA,
+            BlendFactor::ConstantColor => vk_sys::VK_BLEND_FACTOR_CONSTANT_COLOR,
+            BlendFactor::OneMinusConstantColor => vk_sys::VK_BLEND_FACTOR_ONE_MINUS_CONSTANT_COLOR,
+            BlendFactor::ConstantAlpha => vk_sys::VK_BLEND_FACTOR_CONSTANT_ALPHA,
+            BlendFactor::OneMinusConstantAlpha => vk_sys::VK_BLEND_FACTOR_ONE_MINUS_CONSTANT_ALPHA,
+            BlendFactor::SrcAlphaSaturate => vk_sys::VK_BLEND_FACTOR_SRC_ALPHA_SATURATE,
+            BlendFactor::Src1Color => vk_sys::VK_BLEND_FACTOR_SRC1_COLOR,
+            BlendFactor::OneMinusSrc1Color => vk_sys::VK_BLEND_FACTOR_ONE_MINUS_SRC1_COLOR,
+            BlendFactor::Src1Alpha => vk_sys::VK_BLEND_FACTOR_SRC1_ALPHA,
+            BlendFactor::OneMinusSrc1Alpha => vk_sys::VK_BLEND_FACTOR_ONE_MINUS_SRC1_ALPHA,
+            BlendFactor::Unknown(factor) => factor,
+        }
+    }
+}
+
+#[derive(Debug, Copy, Clone)]
 pub enum CommandBufferLevel {
     Primary,
     Secondary,
