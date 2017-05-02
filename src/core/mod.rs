@@ -950,7 +950,7 @@ pub struct VkApplicationInfoWrapper {
 impl Deref for VkApplicationInfoWrapper {
     type Target = vk_sys::VkApplicationInfo;
 
-    fn deref(&self) -> &vk_sys::VkApplicationInfo {
+    fn deref(&self) -> &Self::Target {
         &self.application_info
     }
 }
@@ -1048,7 +1048,7 @@ pub struct VkInstanceCreateInfoWrapper {
 impl Deref for VkInstanceCreateInfoWrapper {
     type Target = vk_sys::VkInstanceCreateInfo;
 
-    fn deref(&self) -> &vk_sys::VkInstanceCreateInfo {
+    fn deref(&self) -> &Self::Target {
         &self.create_info
     }
 }
@@ -2006,7 +2006,7 @@ pub struct VkDeviceQueueCreateInfoWrapper {
 impl Deref for VkDeviceQueueCreateInfoWrapper {
     type Target = vk_sys::VkDeviceQueueCreateInfo;
 
-    fn deref(&self) -> &vk_sys::VkDeviceQueueCreateInfo {
+    fn deref(&self) -> &Self::Target {
         &self.create_info
     }
 }
@@ -2113,7 +2113,7 @@ pub struct VkDeviceCreateInfoWrapper {
 impl Deref for VkDeviceCreateInfoWrapper {
     type Target = vk_sys::VkDeviceCreateInfo;
 
-    fn deref(&self) -> &vk_sys::VkDeviceCreateInfo {
+    fn deref(&self) -> &Self::Target {
         &self.create_info
     }
 }
