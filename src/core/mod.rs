@@ -4253,6 +4253,30 @@ impl<'a> From<&'a PushConstantRange> for vk_sys::VkPushConstantRange {
     }
 }
 
+#[derive(Debug, Copy, Clone)]
+pub struct DescriptorPoolSize {
+    pub descriptor_type: DescriptorType,
+    pub descriptor_count: u32,
+}
+
+impl<'a> From<&'a vk_sys::VkDescriptorPoolSize> for DescriptorPoolSize {
+    fn from(size: &'a vk_sys::VkDescriptorPoolSize) -> Self {
+        DescriptorPoolSize {
+            descriptor_type: size.type_.into(),
+            descriptor_count: size.descriptorCount,
+        }
+    }
+}
+
+impl<'a> From<&'a DescriptorPoolSize> for vk_sys::VkDescriptorPoolSize {
+    fn from(size: &'a DescriptorPoolSize) -> Self {
+        vk_sys::VkDescriptorPoolSize {
+            type_: size.descriptor_type.into(),
+            descriptorCount: size.descriptor_count,
+        }
+    }
+}
+
 #[derive(Debug, Clone)]
 pub enum CommandPoolCreateInfoChainElement {
 }
