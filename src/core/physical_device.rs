@@ -34,10 +34,15 @@ impl PhysicalDevice {
         }
     }
 
+    #[inline]
+    pub(crate) fn loader(&self) -> &vk_sys::InstanceProcAddrLoader {
+        &self.instance.0.loader
+    }
+
     pub fn properties(&self) -> core::PhysicalDeviceProperties {
         unsafe {
             let mut properties = mem::uninitialized();
-            (self.instance.0.loader.core.vkGetPhysicalDeviceProperties)(self.handle, &mut properties);
+            (self.loader().core.vkGetPhysicalDeviceProperties)(self.handle, &mut properties);
             (&properties).into()
         }
     }
@@ -45,7 +50,7 @@ impl PhysicalDevice {
     pub fn features(&self) -> core::PhysicalDeviceFeatures {
         unsafe {
             let mut features = mem::uninitialized();
-            (self.instance.0.loader.core.vkGetPhysicalDeviceFeatures)(self.handle, &mut features);
+            (self.loader().core.vkGetPhysicalDeviceFeatures)(self.handle, &mut features);
             (&features).into()
         }
     }
@@ -53,13 +58,13 @@ impl PhysicalDevice {
     pub fn enumerate_device_layer_properties(&self) -> Result<Vec<core::LayerProperties>> {
         unsafe {
             let mut num_layer_properties = 0;
-            let res = (self.instance.0.loader.core.vkEnumerateDeviceLayerProperties)(self.handle, &mut num_layer_properties, ptr::null_mut());
+            let res = (self.loader().core.vkEnumerateDeviceLayerProperties)(self.handle, &mut num_layer_properties, ptr::null_mut());
             if res != vk_sys::VK_SUCCESS {
                 return Err(res.into());
             }
 
             let mut layer_properties = Vec::with_capacity(num_layer_properties as usize);
-            let res = (self.instance.0.loader.core.vkEnumerateDeviceLayerProperties)(self.handle, &mut num_layer_properties, layer_properties.as_mut_ptr());
+            let res = (self.loader().core.vkEnumerateDeviceLayerProperties)(self.handle, &mut num_layer_properties, layer_properties.as_mut_ptr());
             if res != vk_sys::VK_SUCCESS {
                 return Err(res.into());
             }
@@ -74,13 +79,13 @@ impl PhysicalDevice {
             let layer_name_cstr = utils::cstr_from_str(layer_name);
 
             let mut num_extension_properties = 0;
-            let res = (self.instance.0.loader.core.vkEnumerateDeviceExtensionProperties)(self.handle, layer_name_cstr.1, &mut num_extension_properties, ptr::null_mut());
+            let res = (self.loader().core.vkEnumerateDeviceExtensionProperties)(self.handle, layer_name_cstr.1, &mut num_extension_properties, ptr::null_mut());
             if res != vk_sys::VK_SUCCESS {
                 return Err(res.into());
             }
 
             let mut extension_properties = Vec::with_capacity(num_extension_properties as usize);
-            let res = (self.instance.0.loader.core.vkEnumerateDeviceExtensionProperties)(self.handle, layer_name_cstr.1, &mut num_extension_properties, extension_properties.as_mut_ptr());
+            let res = (self.loader().core.vkEnumerateDeviceExtensionProperties)(self.handle, layer_name_cstr.1, &mut num_extension_properties, extension_properties.as_mut_ptr());
             if res != vk_sys::VK_SUCCESS {
                 return Err(res.into());
             }
@@ -94,7 +99,7 @@ impl PhysicalDevice {
         let mut properties = unsafe { mem::uninitialized() };
 
         unsafe {
-            (self.instance.0.loader.core.vkGetPhysicalDeviceFormatProperties)(self.handle, format.into(), &mut properties);
+            (self.loader().core.vkGetPhysicalDeviceFormatProperties)(self.handle, format.into(), &mut properties);
         }
 
         (&properties).into()
@@ -104,7 +109,7 @@ impl PhysicalDevice {
         let mut properties = unsafe { mem::uninitialized() };
 
         let res = unsafe {
-            (self.instance.0.loader.core.vkGetPhysicalDeviceImageFormatProperties)(self.handle, format.into(), image_type.into(), tiling.into(), usage, flags, &mut properties)
+            (self.loader().core.vkGetPhysicalDeviceImageFormatProperties)(self.handle, format.into(), image_type.into(), tiling.into(), usage, flags, &mut properties)
         };
 
         if res == vk_sys::VK_SUCCESS {
@@ -118,12 +123,12 @@ impl PhysicalDevice {
     pub fn sparse_image_format_properties(&self, format: core::Format, image_type: core::ImageType, samples: vk_sys::VkSampleCountFlagBits, usage: vk_sys::VkImageUsageFlags, tiling: core::ImageTiling) -> Vec<core::SparseImageFormatProperties> {
         let mut num_properties = 0;
         unsafe {
-            (self.instance.0.loader.core.vkGetPhysicalDeviceSparseImageFormatProperties)(self.handle, format.into(), image_type.into(), samples, usage, tiling.into(), &mut num_properties, ptr::null_mut());
+            (self.loader().core.vkGetPhysicalDeviceSparseImageFormatProperties)(self.handle, format.into(), image_type.into(), samples, usage, tiling.into(), &mut num_properties, ptr::null_mut());
         }
 
         let mut properties = Vec::with_capacity(num_properties as usize);
         unsafe {
-            (self.instance.0.loader.core.vkGetPhysicalDeviceSparseImageFormatProperties)(self.handle, format.into(), image_type.into(), samples, usage, tiling.into(), &mut num_properties, properties.as_mut_ptr());
+            (self.loader().core.vkGetPhysicalDeviceSparseImageFormatProperties)(self.handle, format.into(), image_type.into(), samples, usage, tiling.into(), &mut num_properties, properties.as_mut_ptr());
             properties.set_len(num_properties as usize);
         }
 
@@ -133,12 +138,12 @@ impl PhysicalDevice {
     pub fn queue_family_properties(&self) -> Vec<core::QueueFamilyProperties> {
         let mut num_properties = 0;
         unsafe {
-            (self.instance.0.loader.core.vkGetPhysicalDeviceQueueFamilyProperties)(self.handle, &mut num_properties, ptr::null_mut());
+            (self.loader().core.vkGetPhysicalDeviceQueueFamilyProperties)(self.handle, &mut num_properties, ptr::null_mut());
         }
 
         let mut properties = Vec::with_capacity(num_properties as usize);
         unsafe {
-            (self.instance.0.loader.core.vkGetPhysicalDeviceQueueFamilyProperties)(self.handle, &mut num_properties, properties.as_mut_ptr());
+            (self.loader().core.vkGetPhysicalDeviceQueueFamilyProperties)(self.handle, &mut num_properties, properties.as_mut_ptr());
             properties.set_len(num_properties as usize);
         }
 
@@ -151,7 +156,7 @@ impl PhysicalDevice {
         let mut properties = unsafe { mem::uninitialized() };
 
         unsafe {
-            (self.instance.0.loader.core.vkGetPhysicalDeviceMemoryProperties)(self.handle, &mut properties);
+            (self.loader().core.vkGetPhysicalDeviceMemoryProperties)(self.handle, &mut properties);
         }
 
         (&properties).into()
@@ -164,7 +169,7 @@ impl PhysicalDevice {
 
         let mut device = ptr::null_mut();
         let res = unsafe {
-            (self.instance.0.loader.core.vkCreateDevice)(self.handle, create_info.as_ref(), allocation_callbacks, &mut device)
+            (self.loader().core.vkCreateDevice)(self.handle, create_info.as_ref(), allocation_callbacks, &mut device)
         };
 
         if res != vk_sys::VK_SUCCESS {
