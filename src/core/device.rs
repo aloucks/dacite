@@ -44,7 +44,7 @@ impl Drop for Inner {
 pub struct Device(Arc<Inner>);
 
 impl Device {
-    pub fn new(handle: vk_sys::VkDevice, instance: Instance, allocator: Option<AllocatorHelper>) -> Self {
+    pub(crate) fn new(handle: vk_sys::VkDevice, instance: Instance, allocator: Option<AllocatorHelper>) -> Self {
         let mut loader = vk_sys::DeviceProcAddrLoader::new(instance.loader().core.vkGetDeviceProcAddr);
         unsafe {
             loader.load_core(handle);
