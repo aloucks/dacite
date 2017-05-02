@@ -58,10 +58,20 @@ impl Device {
         }))
     }
 
+    #[inline]
+    pub(crate) fn handle(&self) -> vk_sys::VkDevice {
+        self.0.handle
+    }
+
+    #[inline]
+    pub(crate) fn loader(&self) -> &vk_sys::DeviceProcAddrLoader {
+        &self.0.loader
+    }
+
     pub fn get_queue(&self, queue_family_index: u32, queue_index: u32) -> Queue {
         let mut queue = ptr::null_mut();
         unsafe {
-            (self.0.loader.core.vkGetDeviceQueue)(self.0.handle, queue_family_index, queue_index, &mut queue);
+            (self.loader().core.vkGetDeviceQueue)(self.handle(), queue_family_index, queue_index, &mut queue);
         }
 
         Queue::new(queue, self.clone())
@@ -75,7 +85,7 @@ impl Device {
 
         let mut command_pool = ptr::null_mut();
         let res = unsafe {
-            (self.0.loader.core.vkCreateCommandPool)(self.0.handle, create_info.as_ref(), allocation_callbacks, &mut command_pool)
+            (self.loader().core.vkCreateCommandPool)(self.handle(), create_info.as_ref(), allocation_callbacks, &mut command_pool)
         };
 
         if res == vk_sys::VK_SUCCESS {
