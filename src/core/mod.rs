@@ -4145,6 +4145,45 @@ impl<'a> From<&'a Rect2D> for vk_sys::VkRect2D {
     }
 }
 
+#[derive(Debug, Copy, Clone)]
+pub struct StencilOpState {
+    pub fail_op: StencilOp,
+    pub pass_op: StencilOp,
+    pub depth_fail_op: StencilOp,
+    pub compare_op: CompareOp,
+    pub compare_mask: u32,
+    pub write_mask: u32,
+    pub reference: u32,
+}
+
+impl<'a> From<&'a vk_sys::VkStencilOpState> for StencilOpState {
+    fn from(state: &'a vk_sys::VkStencilOpState) -> Self {
+        StencilOpState {
+            fail_op: state.failOp.into(),
+            pass_op: state.passOp.into(),
+            depth_fail_op: state.depthFailOp.into(),
+            compare_op: state.compareOp.into(),
+            compare_mask: state.compareMask,
+            write_mask: state.writeMask,
+            reference: state.reference,
+        }
+    }
+}
+
+impl<'a> From<&'a StencilOpState> for vk_sys::VkStencilOpState {
+    fn from(state: &'a StencilOpState) -> Self {
+        vk_sys::VkStencilOpState {
+            failOp: state.fail_op.into(),
+            passOp: state.pass_op.into(),
+            depthFailOp: state.depth_fail_op.into(),
+            compareOp: state.compare_op.into(),
+            compareMask: state.compare_mask,
+            writeMask: state.write_mask,
+            reference: state.reference,
+        }
+    }
+}
+
 #[derive(Debug, Clone)]
 pub enum CommandPoolCreateInfoChainElement {
 }
