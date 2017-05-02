@@ -3471,6 +3471,39 @@ impl<'a> From<&'a SparseImageFormatProperties> for vk_sys::VkSparseImageFormatPr
     }
 }
 
+#[derive(Debug, Copy, Clone)]
+pub struct SparseImageMemoryRequirements {
+    pub format_properties: SparseImageFormatProperties,
+    pub image_mip_tail_first_lod: u32,
+    pub image_mip_tail_size: u64,
+    pub image_mip_tail_offset: u64,
+    pub image_mip_tail_stride: u64,
+}
+
+impl<'a> From<&'a vk_sys::VkSparseImageMemoryRequirements> for SparseImageMemoryRequirements {
+    fn from(requirements: &'a vk_sys::VkSparseImageMemoryRequirements) -> Self {
+        SparseImageMemoryRequirements {
+            format_properties: (&requirements.formatProperties).into(),
+            image_mip_tail_first_lod: requirements.imageMipTailFirstLod,
+            image_mip_tail_size: requirements.imageMipTailSize,
+            image_mip_tail_offset: requirements.imageMipTailOffset,
+            image_mip_tail_stride: requirements.imageMipTailStride,
+        }
+    }
+}
+
+impl<'a> From<&'a SparseImageMemoryRequirements> for vk_sys::VkSparseImageMemoryRequirements {
+    fn from(requirements: &'a SparseImageMemoryRequirements) -> Self {
+        vk_sys::VkSparseImageMemoryRequirements {
+            formatProperties: (&requirements.format_properties).into(),
+            imageMipTailFirstLod: requirements.image_mip_tail_first_lod,
+            imageMipTailSize: requirements.image_mip_tail_size,
+            imageMipTailOffset: requirements.image_mip_tail_offset,
+            imageMipTailStride: requirements.image_mip_tail_stride,
+        }
+    }
+}
+
 #[derive(Debug, Clone)]
 pub enum FenceCreateInfoChainElement {
 }
