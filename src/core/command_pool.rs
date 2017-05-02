@@ -51,9 +51,24 @@ impl CommandPool {
         }))
     }
 
+    #[inline]
+    pub(crate) fn handle(&self) -> vk_sys::VkCommandPool {
+        self.0.handle
+    }
+
+    #[inline]
+    pub(crate) fn loader(&self) -> &vk_sys::DeviceProcAddrLoader {
+        self.0.device.loader()
+    }
+
+    #[inline]
+    pub(crate) fn device_handle(&self) -> vk_sys::VkDevice {
+        self.0.device.handle()
+    }
+
     pub fn reset(&self, flags: vk_sys::VkCommandPoolResetFlags) -> Result<()> {
         let res = unsafe {
-            (self.0.device.0.loader.core.vkResetCommandPool)(self.0.device.0.handle, self.0.handle, flags)
+            (self.loader().core.vkResetCommandPool)(self.device_handle(), self.handle(), flags)
         };
 
         if res == vk_sys::VK_SUCCESS {
