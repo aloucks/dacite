@@ -3920,6 +3920,39 @@ impl<'a> From<&'a ComponentMapping> for vk_sys::VkComponentMapping {
     }
 }
 
+#[derive(Debug, Copy, Clone)]
+pub struct ImageSubresourceRange {
+    pub aspect_mask: vk_sys::VkImageAspectFlags,
+    pub base_mip_level: u32,
+    pub level_count: u32,
+    pub base_array_layer: u32,
+    pub layer_count: u32,
+}
+
+impl<'a> From<&'a vk_sys::VkImageSubresourceRange> for ImageSubresourceRange {
+    fn from(range: &'a vk_sys::VkImageSubresourceRange) -> Self {
+        ImageSubresourceRange {
+            aspect_mask: range.aspectMask,
+            base_mip_level: range.baseMipLevel,
+            level_count: range.levelCount,
+            base_array_layer: range.baseArrayLayer,
+            layer_count: range.layerCount,
+        }
+    }
+}
+
+impl<'a> From<&'a ImageSubresourceRange> for vk_sys::VkImageSubresourceRange {
+    fn from(range: &'a ImageSubresourceRange) -> Self {
+        vk_sys::VkImageSubresourceRange {
+            aspectMask: range.aspect_mask,
+            baseMipLevel: range.base_mip_level,
+            levelCount: range.level_count,
+            baseArrayLayer: range.base_array_layer,
+            layerCount: range.layer_count,
+        }
+    }
+}
+
 #[derive(Debug, Clone)]
 pub enum CommandPoolCreateInfoChainElement {
 }
