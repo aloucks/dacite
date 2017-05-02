@@ -39,6 +39,7 @@ impl Drop for Inner {
     }
 }
 
+#[derive(Debug, Clone)]
 pub struct Device(pub(crate) Arc<Inner>);
 
 impl Device {
