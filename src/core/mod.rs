@@ -1095,6 +1095,48 @@ impl From<ImageViewType> for vk_sys::VkImageViewType {
 }
 
 #[derive(Debug, Copy, Clone)]
+pub enum ComponentSwizzle {
+    Identity,
+    Zero,
+    One,
+    R,
+    G,
+    B,
+    A,
+    Unknown(vk_sys::VkComponentSwizzle),
+}
+
+impl From<vk_sys::VkComponentSwizzle> for ComponentSwizzle {
+    fn from(swizzle: vk_sys::VkComponentSwizzle) -> Self {
+        match swizzle {
+            vk_sys::VK_COMPONENT_SWIZZLE_IDENTITY => ComponentSwizzle::Identity,
+            vk_sys::VK_COMPONENT_SWIZZLE_ZERO => ComponentSwizzle::Zero,
+            vk_sys::VK_COMPONENT_SWIZZLE_ONE => ComponentSwizzle::One,
+            vk_sys::VK_COMPONENT_SWIZZLE_R => ComponentSwizzle::R,
+            vk_sys::VK_COMPONENT_SWIZZLE_G => ComponentSwizzle::G,
+            vk_sys::VK_COMPONENT_SWIZZLE_B => ComponentSwizzle::B,
+            vk_sys::VK_COMPONENT_SWIZZLE_A => ComponentSwizzle::A,
+            _ => ComponentSwizzle::Unknown(swizzle),
+        }
+    }
+}
+
+impl From<ComponentSwizzle> for vk_sys::VkComponentSwizzle {
+    fn from(swizzle: ComponentSwizzle) -> Self {
+        match swizzle {
+            ComponentSwizzle::Identity => vk_sys::VK_COMPONENT_SWIZZLE_IDENTITY,
+            ComponentSwizzle::Zero => vk_sys::VK_COMPONENT_SWIZZLE_ZERO,
+            ComponentSwizzle::One => vk_sys::VK_COMPONENT_SWIZZLE_ONE,
+            ComponentSwizzle::R => vk_sys::VK_COMPONENT_SWIZZLE_R,
+            ComponentSwizzle::G => vk_sys::VK_COMPONENT_SWIZZLE_G,
+            ComponentSwizzle::B => vk_sys::VK_COMPONENT_SWIZZLE_B,
+            ComponentSwizzle::A => vk_sys::VK_COMPONENT_SWIZZLE_A,
+            ComponentSwizzle::Unknown(swizzle) => swizzle,
+        }
+    }
+}
+
+#[derive(Debug, Copy, Clone)]
 pub enum CommandBufferLevel {
     Primary,
     Secondary,
