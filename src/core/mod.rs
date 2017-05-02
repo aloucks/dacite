@@ -4184,6 +4184,48 @@ impl<'a> From<&'a StencilOpState> for vk_sys::VkStencilOpState {
     }
 }
 
+#[derive(Debug, Copy, Clone)]
+pub struct PipelineColorBlendAttachmentState {
+    pub blend_enable: bool,
+    pub src_color_blend_factor: BlendFactor,
+    pub dst_color_blend_factor: BlendFactor,
+    pub color_blend_op: BlendOp,
+    pub src_alpha_blend_factor: BlendFactor,
+    pub dst_alpha_blend_factor: BlendFactor,
+    pub alpha_blend_op: BlendOp,
+    pub color_write_mask: vk_sys::VkColorComponentFlags,
+}
+
+impl<'a> From<&'a vk_sys::VkPipelineColorBlendAttachmentState> for PipelineColorBlendAttachmentState {
+    fn from(state: &'a vk_sys::VkPipelineColorBlendAttachmentState) -> Self {
+        PipelineColorBlendAttachmentState {
+            blend_enable: utils::from_vk_bool(state.blendEnable),
+            src_color_blend_factor: state.srcColorBlendFactor.into(),
+            dst_color_blend_factor: state.dstColorBlendFactor.into(),
+            color_blend_op: state.colorBlendOp.into(),
+            src_alpha_blend_factor: state.srcAlphaBlendFactor.into(),
+            dst_alpha_blend_factor: state.dstAlphaBlendFactor.into(),
+            alpha_blend_op: state.alphaBlendOp.into(),
+            color_write_mask: state.colorWriteMask,
+        }
+    }
+}
+
+impl<'a> From<&'a PipelineColorBlendAttachmentState> for vk_sys::VkPipelineColorBlendAttachmentState {
+    fn from(state: &'a PipelineColorBlendAttachmentState) -> Self {
+        vk_sys::VkPipelineColorBlendAttachmentState {
+            blendEnable: utils::to_vk_bool(state.blend_enable),
+            srcColorBlendFactor: state.src_color_blend_factor.into(),
+            dstColorBlendFactor: state.dst_color_blend_factor.into(),
+            colorBlendOp: state.color_blend_op.into(),
+            srcAlphaBlendFactor: state.src_alpha_blend_factor.into(),
+            dstAlphaBlendFactor: state.dst_alpha_blend_factor.into(),
+            alphaBlendOp: state.alpha_blend_op.into(),
+            colorWriteMask: state.color_write_mask,
+        }
+    }
+}
+
 #[derive(Debug, Clone)]
 pub enum CommandPoolCreateInfoChainElement {
 }
