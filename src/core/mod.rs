@@ -1137,6 +1137,33 @@ impl From<ComponentSwizzle> for vk_sys::VkComponentSwizzle {
 }
 
 #[derive(Debug, Copy, Clone)]
+pub enum VertexInputRate {
+    Vertex,
+    Instance,
+    Unknown(vk_sys::VkVertexInputRate),
+}
+
+impl From<vk_sys::VkVertexInputRate> for VertexInputRate {
+    fn from(rate: vk_sys::VkVertexInputRate) -> Self {
+        match rate {
+            vk_sys::VK_VERTEX_INPUT_RATE_VERTEX => VertexInputRate::Vertex,
+            vk_sys::VK_VERTEX_INPUT_RATE_INSTANCE => VertexInputRate::Instance,
+            _ => VertexInputRate::Unknown(rate),
+        }
+    }
+}
+
+impl From<VertexInputRate> for vk_sys::VkVertexInputRate {
+    fn from(rate: VertexInputRate) -> Self {
+        match rate {
+            VertexInputRate::Vertex => vk_sys::VK_VERTEX_INPUT_RATE_VERTEX,
+            VertexInputRate::Instance => vk_sys::VK_VERTEX_INPUT_RATE_INSTANCE,
+            VertexInputRate::Unknown(rate) => rate,
+        }
+    }
+}
+
+#[derive(Debug, Copy, Clone)]
 pub enum CommandBufferLevel {
     Primary,
     Secondary,
