@@ -1809,6 +1809,33 @@ impl From<AttachmentLoadOp> for vk_sys::VkAttachmentLoadOp {
 }
 
 #[derive(Debug, Copy, Clone)]
+pub enum AttachmentStoreOp {
+    Store,
+    DontCare,
+    Unknown(vk_sys::VkAttachmentStoreOp),
+}
+
+impl From<vk_sys::VkAttachmentStoreOp> for AttachmentStoreOp {
+    fn from(op: vk_sys::VkAttachmentStoreOp) -> Self {
+        match op {
+            vk_sys::VK_ATTACHMENT_STORE_OP_STORE => AttachmentStoreOp::Store,
+            vk_sys::VK_ATTACHMENT_STORE_OP_DONT_CARE => AttachmentStoreOp::DontCare,
+            _ => AttachmentStoreOp::Unknown(op),
+        }
+    }
+}
+
+impl From<AttachmentStoreOp> for vk_sys::VkAttachmentStoreOp {
+    fn from(op: AttachmentStoreOp) -> Self {
+        match op {
+            AttachmentStoreOp::Store => vk_sys::VK_ATTACHMENT_STORE_OP_STORE,
+            AttachmentStoreOp::DontCare => vk_sys::VK_ATTACHMENT_STORE_OP_DONT_CARE,
+            AttachmentStoreOp::Unknown(op) => op,
+        }
+    }
+}
+
+#[derive(Debug, Copy, Clone)]
 pub enum CommandBufferLevel {
     Primary,
     Secondary,
