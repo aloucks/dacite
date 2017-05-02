@@ -1365,6 +1365,75 @@ impl From<StencilOp> for vk_sys::VkStencilOp {
 }
 
 #[derive(Debug, Copy, Clone)]
+pub enum LogicOp {
+    Clear,
+    And,
+    AndReverse,
+    Copy,
+    AndInverted,
+    NoOp,
+    Xor,
+    Or,
+    Nor,
+    Equivalent,
+    Invert,
+    OrReverse,
+    CopyInverted,
+    OrInverted,
+    Nand,
+    Set,
+    Unknown(vk_sys::VkLogicOp),
+}
+
+impl From<vk_sys::VkLogicOp> for LogicOp {
+    fn from(op: vk_sys::VkLogicOp) -> Self {
+        match op {
+            vk_sys::VK_LOGIC_OP_CLEAR => LogicOp::Clear,
+            vk_sys::VK_LOGIC_OP_AND => LogicOp::And,
+            vk_sys::VK_LOGIC_OP_AND_REVERSE => LogicOp::AndReverse,
+            vk_sys::VK_LOGIC_OP_COPY => LogicOp::Copy,
+            vk_sys::VK_LOGIC_OP_AND_INVERTED => LogicOp::AndInverted,
+            vk_sys::VK_LOGIC_OP_NO_OP => LogicOp::NoOp,
+            vk_sys::VK_LOGIC_OP_XOR => LogicOp::Xor,
+            vk_sys::VK_LOGIC_OP_OR => LogicOp::Or,
+            vk_sys::VK_LOGIC_OP_NOR => LogicOp::Nor,
+            vk_sys::VK_LOGIC_OP_EQUIVALENT => LogicOp::Equivalent,
+            vk_sys::VK_LOGIC_OP_INVERT => LogicOp::Invert,
+            vk_sys::VK_LOGIC_OP_OR_REVERSE => LogicOp::OrReverse,
+            vk_sys::VK_LOGIC_OP_COPY_INVERTED => LogicOp::CopyInverted,
+            vk_sys::VK_LOGIC_OP_OR_INVERTED => LogicOp::OrInverted,
+            vk_sys::VK_LOGIC_OP_NAND => LogicOp::Nand,
+            vk_sys::VK_LOGIC_OP_SET => LogicOp::Set,
+            _ => LogicOp::Unknown(op),
+        }
+    }
+}
+
+impl From<LogicOp> for vk_sys::VkLogicOp {
+    fn from(op: LogicOp) -> Self {
+        match op {
+            LogicOp::Clear => vk_sys::VK_LOGIC_OP_CLEAR,
+            LogicOp::And => vk_sys::VK_LOGIC_OP_AND,
+            LogicOp::AndReverse => vk_sys::VK_LOGIC_OP_AND_REVERSE,
+            LogicOp::Copy => vk_sys::VK_LOGIC_OP_COPY,
+            LogicOp::AndInverted => vk_sys::VK_LOGIC_OP_AND_INVERTED,
+            LogicOp::NoOp => vk_sys::VK_LOGIC_OP_NO_OP,
+            LogicOp::Xor => vk_sys::VK_LOGIC_OP_XOR,
+            LogicOp::Or => vk_sys::VK_LOGIC_OP_OR,
+            LogicOp::Nor => vk_sys::VK_LOGIC_OP_NOR,
+            LogicOp::Equivalent => vk_sys::VK_LOGIC_OP_EQUIVALENT,
+            LogicOp::Invert => vk_sys::VK_LOGIC_OP_INVERT,
+            LogicOp::OrReverse => vk_sys::VK_LOGIC_OP_OR_REVERSE,
+            LogicOp::CopyInverted => vk_sys::VK_LOGIC_OP_COPY_INVERTED,
+            LogicOp::OrInverted => vk_sys::VK_LOGIC_OP_OR_INVERTED,
+            LogicOp::Nand => vk_sys::VK_LOGIC_OP_NAND,
+            LogicOp::Set => vk_sys::VK_LOGIC_OP_SET,
+            LogicOp::Unknown(op) => op,
+        }
+    }
+}
+
+#[derive(Debug, Copy, Clone)]
 pub enum CommandBufferLevel {
     Primary,
     Secondary,
