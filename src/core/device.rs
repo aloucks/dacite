@@ -14,7 +14,7 @@
 
 use Result;
 use core::allocator_helper::AllocatorHelper;
-use core::{self, CommandPool, Fence, Instance, Queue};
+use core::{self, CommandPool, Fence, Instance, Queue, Semaphore};
 use std::ptr;
 use std::sync::Arc;
 use vk_sys;
@@ -109,6 +109,25 @@ impl Device {
 
         if res == vk_sys::VK_SUCCESS {
             Ok(Fence::new(fence, self.clone(), allocator_helper))
+        }
+        else {
+            Err(res.into())
+        }
+    }
+
+    pub fn create_semaphore(&self, create_info: &core::SemaphoreCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<Semaphore> {
+        let create_info: core::VkSemaphoreCreateInfoWrapper = create_info.into();
+
+        let allocator_helper = allocator.map(AllocatorHelper::new);
+        let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), |a| &a.callbacks);
+
+        let mut semaphore = ptr::null_mut();
+        let res = unsafe {
+            (self.loader().core.vkCreateSemaphore)(self.handle(), create_info.as_ref(), allocation_callbacks, &mut semaphore)
+        };
+
+        if res == vk_sys::VK_SUCCESS {
+            Ok(Semaphore::new(semaphore, self.clone(), allocator_helper))
         }
         else {
             Err(res.into())
