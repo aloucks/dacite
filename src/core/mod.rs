@@ -4591,3 +4591,39 @@ impl<'a> From<&'a ImageCopy> for vk_sys::VkImageCopy {
         }
     }
 }
+
+#[derive(Debug, Copy, Clone)]
+pub struct ImageBlit {
+    pub src_subresource: ImageSubresourceLayers,
+    pub src_offsets: [Offset3D; 2],
+    pub dst_subresource: ImageSubresourceLayers,
+    pub dst_offsets: [Offset3D; 2],
+}
+
+impl<'a> From<&'a vk_sys::VkImageBlit> for ImageBlit {
+    fn from(blit: &'a vk_sys::VkImageBlit) -> Self {
+        let src_offsets = [(&blit.srcOffsets[0]).into(), (&blit.srcOffsets[1]).into()];
+        let dst_offsets = [(&blit.dstOffsets[0]).into(), (&blit.dstOffsets[1]).into()];
+
+        ImageBlit {
+            src_subresource: (&blit.srcSubresource).into(),
+            src_offsets: src_offsets,
+            dst_subresource: (&blit.dstSubresource).into(),
+            dst_offsets: dst_offsets,
+        }
+    }
+}
+
+impl<'a> From<&'a ImageBlit> for vk_sys::VkImageBlit {
+    fn from(blit: &'a ImageBlit) -> Self {
+        let src_offsets = [(&blit.src_offsets[0]).into(), (&blit.src_offsets[1]).into()];
+        let dst_offsets = [(&blit.dst_offsets[0]).into(), (&blit.dst_offsets[1]).into()];
+
+        vk_sys::VkImageBlit {
+            srcSubresource: (&blit.src_subresource).into(),
+            srcOffsets: src_offsets,
+            dstSubresource: (&blit.dst_subresource).into(),
+            dstOffsets: dst_offsets,
+        }
+    }
+}
