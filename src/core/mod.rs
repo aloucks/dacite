@@ -1218,6 +1218,36 @@ impl From<PrimitiveTopology> for vk_sys::VkPrimitiveTopology {
 }
 
 #[derive(Debug, Copy, Clone)]
+pub enum PolygonMode {
+    Fill,
+    Line,
+    Point,
+    Unknown(vk_sys::VkPolygonMode),
+}
+
+impl From<vk_sys::VkPolygonMode> for PolygonMode {
+    fn from(mode: vk_sys::VkPolygonMode) -> Self {
+        match mode {
+            vk_sys::VK_POLYGON_MODE_FILL => PolygonMode::Fill,
+            vk_sys::VK_POLYGON_MODE_LINE => PolygonMode::Line,
+            vk_sys::VK_POLYGON_MODE_POINT => PolygonMode::Point,
+            _ => PolygonMode::Unknown(mode),
+        }
+    }
+}
+
+impl From<PolygonMode> for vk_sys::VkPolygonMode {
+    fn from(mode: PolygonMode) -> Self {
+        match mode {
+            PolygonMode::Fill => vk_sys::VK_POLYGON_MODE_FILL,
+            PolygonMode::Line => vk_sys::VK_POLYGON_MODE_LINE,
+            PolygonMode::Point => vk_sys::VK_POLYGON_MODE_POINT,
+            PolygonMode::Unknown(mode) => mode,
+        }
+    }
+}
+
+#[derive(Debug, Copy, Clone)]
 pub enum CommandBufferLevel {
     Primary,
     Secondary,
