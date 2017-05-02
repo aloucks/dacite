@@ -3504,6 +3504,33 @@ impl<'a> From<&'a SparseImageMemoryRequirements> for vk_sys::VkSparseImageMemory
     }
 }
 
+#[derive(Debug, Copy, Clone)]
+pub struct ImageSubresource {
+    pub aspect_mask: vk_sys::VkImageAspectFlags,
+    pub mip_level: u32,
+    pub array_layer: u32,
+}
+
+impl<'a> From<&'a vk_sys::VkImageSubresource> for ImageSubresource {
+    fn from(subresource: &'a vk_sys::VkImageSubresource) -> Self {
+        ImageSubresource {
+            aspect_mask: subresource.aspectMask,
+            mip_level: subresource.mipLevel,
+            array_layer: subresource.arrayLayer,
+        }
+    }
+}
+
+impl<'a> From<&'a ImageSubresource> for vk_sys::VkImageSubresource {
+    fn from(subresource: &'a ImageSubresource) -> Self {
+        vk_sys::VkImageSubresource {
+            aspectMask: subresource.aspect_mask,
+            mipLevel: subresource.mip_level,
+            arrayLayer: subresource.array_layer,
+        }
+    }
+}
+
 #[derive(Debug, Clone)]
 pub enum FenceCreateInfoChainElement {
 }
