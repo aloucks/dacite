@@ -1836,6 +1836,33 @@ impl From<AttachmentStoreOp> for vk_sys::VkAttachmentStoreOp {
 }
 
 #[derive(Debug, Copy, Clone)]
+pub enum PipelineBindPoint {
+    Graphics,
+    Compute,
+    Unknown(vk_sys::VkPipelineBindPoint),
+}
+
+impl From<vk_sys::VkPipelineBindPoint> for PipelineBindPoint {
+    fn from(bind_point: vk_sys::VkPipelineBindPoint) -> Self {
+        match bind_point {
+            vk_sys::VK_PIPELINE_BIND_POINT_GRAPHICS => PipelineBindPoint::Graphics,
+            vk_sys::VK_PIPELINE_BIND_POINT_COMPUTE => PipelineBindPoint::Compute,
+            _ => PipelineBindPoint::Unknown(bind_point),
+        }
+    }
+}
+
+impl From<PipelineBindPoint> for vk_sys::VkPipelineBindPoint {
+    fn from(bind_point: PipelineBindPoint) -> Self {
+        match bind_point {
+            PipelineBindPoint::Graphics => vk_sys::VK_PIPELINE_BIND_POINT_GRAPHICS,
+            PipelineBindPoint::Compute => vk_sys::VK_PIPELINE_BIND_POINT_COMPUTE,
+            PipelineBindPoint::Unknown(bind_point) => bind_point,
+        }
+    }
+}
+
+#[derive(Debug, Copy, Clone)]
 pub enum CommandBufferLevel {
     Primary,
     Secondary,
