@@ -1686,6 +1686,45 @@ impl From<SamplerAddressMode> for vk_sys::VkSamplerAddressMode {
 }
 
 #[derive(Debug, Copy, Clone)]
+pub enum BorderColor {
+    FloatTransparentBlack,
+    IntTransparentBlack,
+    FloatOpaqueBlack,
+    IntOpaqueBlack,
+    FloatOpaqueWhite,
+    IntOpaqueWhite,
+    Unknown(vk_sys::VkBorderColor),
+}
+
+impl From<vk_sys::VkBorderColor> for BorderColor {
+    fn from(color: vk_sys::VkBorderColor) -> Self {
+        match color {
+            vk_sys::VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK => BorderColor::FloatTransparentBlack,
+            vk_sys::VK_BORDER_COLOR_INT_TRANSPARENT_BLACK => BorderColor::IntTransparentBlack,
+            vk_sys::VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK => BorderColor::FloatOpaqueBlack,
+            vk_sys::VK_BORDER_COLOR_INT_OPAQUE_BLACK => BorderColor::IntOpaqueBlack,
+            vk_sys::VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE => BorderColor::FloatOpaqueWhite,
+            vk_sys::VK_BORDER_COLOR_INT_OPAQUE_WHITE => BorderColor::IntOpaqueWhite,
+            _ => BorderColor::Unknown(color),
+        }
+    }
+}
+
+impl From<BorderColor> for vk_sys::VkBorderColor {
+    fn from(color: BorderColor) -> Self {
+        match color {
+            BorderColor::FloatTransparentBlack => vk_sys::VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK,
+            BorderColor::IntTransparentBlack => vk_sys::VK_BORDER_COLOR_INT_TRANSPARENT_BLACK,
+            BorderColor::FloatOpaqueBlack => vk_sys::VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK,
+            BorderColor::IntOpaqueBlack => vk_sys::VK_BORDER_COLOR_INT_OPAQUE_BLACK,
+            BorderColor::FloatOpaqueWhite => vk_sys::VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE,
+            BorderColor::IntOpaqueWhite => vk_sys::VK_BORDER_COLOR_INT_OPAQUE_WHITE,
+            BorderColor::Unknown(color) => color,
+        }
+    }
+}
+
+#[derive(Debug, Copy, Clone)]
 pub enum CommandBufferLevel {
     Primary,
     Secondary,
