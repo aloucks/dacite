@@ -4528,3 +4528,33 @@ impl<'a> From<&'a BufferCopy> for vk_sys::VkBufferCopy {
         }
     }
 }
+
+#[derive(Debug, Copy, Clone)]
+pub struct ImageSubresourceLayers {
+    pub aspect_mask: vk_sys::VkImageAspectFlags,
+    pub mip_level: u32,
+    pub base_array_layer: u32,
+    pub layer_count: u32,
+}
+
+impl<'a> From<&'a vk_sys::VkImageSubresourceLayers> for ImageSubresourceLayers {
+    fn from(layers: &'a vk_sys::VkImageSubresourceLayers) -> Self {
+        ImageSubresourceLayers {
+            aspect_mask: layers.aspectMask,
+            mip_level: layers.mipLevel,
+            base_array_layer: layers.baseArrayLayer,
+            layer_count: layers.layerCount,
+        }
+    }
+}
+
+impl<'a> From<&'a ImageSubresourceLayers> for vk_sys::VkImageSubresourceLayers {
+    fn from(layers: &'a ImageSubresourceLayers) -> Self {
+        vk_sys::VkImageSubresourceLayers {
+            aspectMask: layers.aspect_mask,
+            mipLevel: layers.mip_level,
+            baseArrayLayer: layers.base_array_layer,
+            layerCount: layers.layer_count,
+        }
+    }
+}
