@@ -1779,6 +1779,36 @@ impl From<DescriptorType> for vk_sys::VkDescriptorType {
 }
 
 #[derive(Debug, Copy, Clone)]
+pub enum AttachmentLoadOp {
+    Load,
+    Clear,
+    DontCare,
+    Unknown(vk_sys::VkAttachmentLoadOp),
+}
+
+impl From<vk_sys::VkAttachmentLoadOp> for AttachmentLoadOp {
+    fn from(op: vk_sys::VkAttachmentLoadOp) -> Self {
+        match op {
+            vk_sys::VK_ATTACHMENT_LOAD_OP_LOAD => AttachmentLoadOp::Load,
+            vk_sys::VK_ATTACHMENT_LOAD_OP_CLEAR => AttachmentLoadOp::Clear,
+            vk_sys::VK_ATTACHMENT_LOAD_OP_DONT_CARE => AttachmentLoadOp::DontCare,
+            _ => AttachmentLoadOp::Unknown(op),
+        }
+    }
+}
+
+impl From<AttachmentLoadOp> for vk_sys::VkAttachmentLoadOp {
+    fn from(op: AttachmentLoadOp) -> Self {
+        match op {
+            AttachmentLoadOp::Load => vk_sys::VK_ATTACHMENT_LOAD_OP_LOAD,
+            AttachmentLoadOp::Clear => vk_sys::VK_ATTACHMENT_LOAD_OP_CLEAR,
+            AttachmentLoadOp::DontCare => vk_sys::VK_ATTACHMENT_LOAD_OP_DONT_CARE,
+            AttachmentLoadOp::Unknown(op) => op,
+        }
+    }
+}
+
+#[derive(Debug, Copy, Clone)]
 pub enum CommandBufferLevel {
     Primary,
     Secondary,
