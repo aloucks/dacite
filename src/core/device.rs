@@ -12,8 +12,9 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-use core::{Instance, Queue};
+use Result;
 use core::allocator_helper::AllocatorHelper;
+use core::{self, CommandPool, Instance, Queue};
 use std::ptr;
 use std::sync::Arc;
 use vk_sys;
@@ -64,5 +65,24 @@ impl Device {
         }
 
         Queue::new(queue, self.clone())
+    }
+
+    pub fn create_command_pool(&self, create_info: &core::CommandPoolCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<CommandPool> {
+        let create_info: core::VkCommandPoolCreateInfoWrapper = create_info.into();
+
+        let allocator_helper = allocator.map(AllocatorHelper::new);
+        let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), |a| &a.callbacks);
+
+        let mut command_pool = ptr::null_mut();
+        let res = unsafe {
+            (self.0.loader.core.vkCreateCommandPool)(self.0.handle, create_info.as_ref(), allocation_callbacks, &mut command_pool)
+        };
+
+        if res == vk_sys::VK_SUCCESS {
+            Ok(CommandPool::new(command_pool, self.clone(), allocator_helper))
+        }
+        else {
+            Err(res.into())
+        }
     }
 }
