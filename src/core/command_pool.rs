@@ -12,6 +12,7 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
+use Result;
 use core::Device;
 use core::allocator_helper::AllocatorHelper;
 use std::ptr;
@@ -48,5 +49,18 @@ impl CommandPool {
             device: device,
             allocator: allocator,
         }))
+    }
+
+    pub fn reset(&self, flags: vk_sys::VkCommandPoolResetFlags) -> Result<()> {
+        let res = unsafe {
+            (self.0.device.0.loader.core.vkResetCommandPool)(self.0.device.0.handle, self.0.handle, flags)
+        };
+
+        if res == vk_sys::VK_SUCCESS {
+            Ok(())
+        }
+        else {
+            Err(res.into())
+        }
     }
 }
