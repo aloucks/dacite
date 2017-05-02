@@ -4747,3 +4747,30 @@ impl<'a> From<&'a ImageResolve> for vk_sys::VkImageResolve {
         }
     }
 }
+
+#[derive(Debug, Copy, Clone)]
+pub struct DispatchIndirectCommand {
+    pub x: u32,
+    pub y: u32,
+    pub z: u32,
+}
+
+impl<'a> From<&'a vk_sys::VkDispatchIndirectCommand> for DispatchIndirectCommand {
+    fn from(command: &'a vk_sys::VkDispatchIndirectCommand) -> Self {
+        DispatchIndirectCommand {
+            x: command.x,
+            y: command.y,
+            z: command.z,
+        }
+    }
+}
+
+impl<'a> From<&'a DispatchIndirectCommand> for vk_sys::VkDispatchIndirectCommand {
+    fn from(command: &'a DispatchIndirectCommand) -> Self {
+        vk_sys::VkDispatchIndirectCommand {
+            x: command.x,
+            y: command.y,
+            z: command.z,
+        }
+    }
+}
