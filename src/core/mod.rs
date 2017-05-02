@@ -1889,6 +1889,33 @@ impl From<CommandBufferLevel> for vk_sys::VkCommandBufferLevel {
     }
 }
 
+#[derive(Debug, Copy, Clone)]
+pub enum IndexType {
+    UInt16,
+    UInt32,
+    Unknown(vk_sys::VkIndexType),
+}
+
+impl From<vk_sys::VkIndexType> for IndexType {
+    fn from(index_type: vk_sys::VkIndexType) -> Self {
+        match index_type {
+            vk_sys::VK_INDEX_TYPE_UINT16 => IndexType::UInt16,
+            vk_sys::VK_INDEX_TYPE_UINT32 => IndexType::UInt32,
+            _ => IndexType::Unknown(index_type),
+        }
+    }
+}
+
+impl From<IndexType> for vk_sys::VkIndexType {
+    fn from(index_type: IndexType) -> Self {
+        match index_type {
+            IndexType::UInt16 => vk_sys::VK_INDEX_TYPE_UINT16,
+            IndexType::UInt32 => vk_sys::VK_INDEX_TYPE_UINT32,
+            IndexType::Unknown(index_type) => index_type,
+        }
+    }
+}
+
 #[derive(Debug, Clone)]
 pub enum ApplicationInfoChainElement {
 }
