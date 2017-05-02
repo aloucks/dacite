@@ -4277,6 +4277,51 @@ impl<'a> From<&'a DescriptorPoolSize> for vk_sys::VkDescriptorPoolSize {
     }
 }
 
+#[derive(Debug, Copy, Clone)]
+pub struct AttachmentDescription {
+    pub flags: vk_sys::VkAttachmentDescriptionFlags,
+    pub format: Format,
+    pub samples: vk_sys::VkSampleCountFlagBits,
+    pub load_op: AttachmentLoadOp,
+    pub store_op: AttachmentStoreOp,
+    pub stencil_load_op: AttachmentLoadOp,
+    pub stencil_store_op: AttachmentStoreOp,
+    pub initial_layout: ImageLayout,
+    pub final_layout: ImageLayout,
+}
+
+impl<'a> From<&'a vk_sys::VkAttachmentDescription> for AttachmentDescription {
+    fn from(description: &'a vk_sys::VkAttachmentDescription) -> Self {
+        AttachmentDescription {
+            flags: description.flags,
+            format: description.format.into(),
+            samples: description.samples,
+            load_op: description.loadOp.into(),
+            store_op: description.storeOp.into(),
+            stencil_load_op: description.stencilLoadOp.into(),
+            stencil_store_op: description.stencilStoreOp.into(),
+            initial_layout: description.initialLayout.into(),
+            final_layout: description.finalLayout.into(),
+        }
+    }
+}
+
+impl<'a> From<&'a AttachmentDescription> for vk_sys::VkAttachmentDescription {
+    fn from(description: &'a AttachmentDescription) -> Self {
+        vk_sys::VkAttachmentDescription {
+            flags: description.flags,
+            format: description.format.into(),
+            samples: description.samples,
+            loadOp: description.load_op.into(),
+            storeOp: description.store_op.into(),
+            stencilLoadOp: description.stencil_load_op.into(),
+            stencilStoreOp: description.stencil_store_op.into(),
+            initialLayout: description.initial_layout.into(),
+            finalLayout: description.final_layout.into(),
+        }
+    }
+}
+
 #[derive(Debug, Clone)]
 pub enum CommandPoolCreateInfoChainElement {
 }
