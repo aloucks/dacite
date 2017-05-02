@@ -20,6 +20,7 @@ use core::{
     Event,
     Fence,
     Instance,
+    QueryPool,
     Queue,
     Semaphore,
 };
@@ -155,6 +156,25 @@ impl Device {
 
         if res == vk_sys::VK_SUCCESS {
             Ok(Event::new(event, self.clone(), allocator_helper))
+        }
+        else {
+            Err(res.into())
+        }
+    }
+
+    pub fn create_query_pool(&self, create_info: &core::QueryPoolCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<QueryPool> {
+        let create_info: core::VkQueryPoolCreateInfoWrapper = create_info.into();
+
+        let allocator_helper = allocator.map(AllocatorHelper::new);
+        let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), |a| &a.callbacks);
+
+        let mut query_pool = ptr::null_mut();
+        let res = unsafe {
+            (self.loader().core.vkCreateQueryPool)(self.handle(), create_info.as_ref(), allocation_callbacks, &mut query_pool)
+        };
+
+        if res == vk_sys::VK_SUCCESS {
+            Ok(QueryPool::new(query_pool, self.clone(), allocator_helper))
         }
         else {
             Err(res.into())
