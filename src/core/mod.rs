@@ -1005,6 +1005,54 @@ impl From<SharingMode> for vk_sys::VkSharingMode {
 }
 
 #[derive(Debug, Copy, Clone)]
+pub enum ImageLayout {
+    Undefined,
+    General,
+    ColorAttachmentOptimal,
+    DepthStencilAttachmentOptimal,
+    DepthStencilReadOnlyOptimal,
+    ShaderReadOnlyOptimal,
+    TransferSrcOptimal,
+    TransferDstOptimal,
+    Preinitialized,
+    Unknown(vk_sys::VkImageLayout),
+}
+
+impl From<vk_sys::VkImageLayout> for ImageLayout {
+    fn from(layout: vk_sys::VkImageLayout) -> Self {
+        match layout {
+            vk_sys::VK_IMAGE_LAYOUT_UNDEFINED => ImageLayout::Undefined,
+            vk_sys::VK_IMAGE_LAYOUT_GENERAL => ImageLayout::General,
+            vk_sys::VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL => ImageLayout::ColorAttachmentOptimal,
+            vk_sys::VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL => ImageLayout::DepthStencilAttachmentOptimal,
+            vk_sys::VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL => ImageLayout::DepthStencilReadOnlyOptimal,
+            vk_sys::VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL => ImageLayout::ShaderReadOnlyOptimal,
+            vk_sys::VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL => ImageLayout::TransferSrcOptimal,
+            vk_sys::VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL => ImageLayout::TransferDstOptimal,
+            vk_sys::VK_IMAGE_LAYOUT_PREINITIALIZED => ImageLayout::Preinitialized,
+            _ => ImageLayout::Unknown(layout),
+        }
+    }
+}
+
+impl From<ImageLayout> for vk_sys::VkImageLayout {
+    fn from(layout: ImageLayout) -> Self {
+        match layout {
+            ImageLayout::Undefined => vk_sys::VK_IMAGE_LAYOUT_UNDEFINED,
+            ImageLayout::General => vk_sys::VK_IMAGE_LAYOUT_GENERAL,
+            ImageLayout::ColorAttachmentOptimal => vk_sys::VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
+            ImageLayout::DepthStencilAttachmentOptimal => vk_sys::VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
+            ImageLayout::DepthStencilReadOnlyOptimal => vk_sys::VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL,
+            ImageLayout::ShaderReadOnlyOptimal => vk_sys::VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+            ImageLayout::TransferSrcOptimal => vk_sys::VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+            ImageLayout::TransferDstOptimal => vk_sys::VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+            ImageLayout::Preinitialized => vk_sys::VK_IMAGE_LAYOUT_PREINITIALIZED,
+            ImageLayout::Unknown(layout) => layout,
+        }
+    }
+}
+
+#[derive(Debug, Copy, Clone)]
 pub enum CommandBufferLevel {
     Primary,
     Secondary,
