@@ -4627,3 +4627,39 @@ impl<'a> From<&'a ImageBlit> for vk_sys::VkImageBlit {
         }
     }
 }
+
+#[derive(Debug, Copy, Clone)]
+pub struct BufferImageCopy {
+    pub buffer_offset: u64,
+    pub buffer_row_length: u32,
+    pub buffer_image_height: u32,
+    pub image_subresource: ImageSubresourceLayers,
+    pub image_offset: Offset3D,
+    pub image_extent: Extent3D,
+}
+
+impl<'a> From<&'a vk_sys::VkBufferImageCopy> for BufferImageCopy {
+    fn from(copy: &'a vk_sys::VkBufferImageCopy) -> Self {
+        BufferImageCopy {
+            buffer_offset: copy.bufferOffset,
+            buffer_row_length: copy.bufferRowLength,
+            buffer_image_height: copy.bufferImageHeight,
+            image_subresource: (&copy.imageSubresource).into(),
+            image_offset: (&copy.imageOffset).into(),
+            image_extent: (&copy.imageExtent).into(),
+        }
+    }
+}
+
+impl<'a> From<&'a BufferImageCopy> for vk_sys::VkBufferImageCopy {
+    fn from(copy: &'a BufferImageCopy) -> Self {
+        vk_sys::VkBufferImageCopy {
+            bufferOffset: copy.buffer_offset,
+            bufferRowLength: copy.buffer_row_length,
+            bufferImageHeight: copy.buffer_image_height,
+            imageSubresource: (&copy.image_subresource).into(),
+            imageOffset: (&copy.image_offset).into(),
+            imageExtent: (&copy.image_extent).into(),
+        }
+    }
+}
