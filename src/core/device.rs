@@ -14,7 +14,7 @@
 
 use Result;
 use core::allocator_helper::AllocatorHelper;
-use core::{self, CommandPool, Instance, Queue};
+use core::{self, CommandPool, Fence, Instance, Queue};
 use std::ptr;
 use std::sync::Arc;
 use vk_sys;
@@ -90,6 +90,25 @@ impl Device {
 
         if res == vk_sys::VK_SUCCESS {
             Ok(CommandPool::new(command_pool, self.clone(), allocator_helper))
+        }
+        else {
+            Err(res.into())
+        }
+    }
+
+    pub fn create_fence(&self, create_info: &core::FenceCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<Fence> {
+        let create_info: core::VkFenceCreateInfoWrapper = create_info.into();
+
+        let allocator_helper = allocator.map(AllocatorHelper::new);
+        let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), |a| &a.callbacks);
+
+        let mut fence = ptr::null_mut();
+        let res = unsafe {
+            (self.loader().core.vkCreateFence)(self.handle(), create_info.as_ref(), allocation_callbacks, &mut fence)
+        };
+
+        if res == vk_sys::VK_SUCCESS {
+            Ok(Fence::new(fence, self.clone(), allocator_helper))
         }
         else {
             Err(res.into())
