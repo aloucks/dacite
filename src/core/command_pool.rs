@@ -20,10 +20,10 @@ use std::sync::Arc;
 use vk_sys;
 
 #[derive(Debug)]
-pub(crate) struct Inner {
-    pub handle: vk_sys::VkCommandPool,
-    pub device: Device,
-    pub allocator: Option<AllocatorHelper>,
+struct Inner {
+    handle: vk_sys::VkCommandPool,
+    device: Device,
+    allocator: Option<AllocatorHelper>,
 }
 
 impl Drop for Inner {
@@ -40,7 +40,7 @@ impl Drop for Inner {
 }
 
 #[derive(Debug, Clone)]
-pub struct CommandPool(pub(crate) Arc<Inner>);
+pub struct CommandPool(Arc<Inner>);
 
 impl CommandPool {
     pub(crate) fn new(handle: vk_sys::VkCommandPool, device: Device, allocator: Option<AllocatorHelper>) -> Self {

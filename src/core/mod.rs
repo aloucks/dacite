@@ -2532,7 +2532,7 @@ impl<'a> From<&'a CommandBufferAllocateInfo> for VkCommandBufferAllocateInfoWrap
             info: vk_sys::VkCommandBufferAllocateInfo {
                 sType: vk_sys::VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO,
                 pNext: ptr::null(),
-                commandPool: info.command_pool.0.handle,
+                commandPool: info.command_pool.handle(),
                 level: info.level.into(),
                 commandBufferCount: info.command_buffer_count,
             },
