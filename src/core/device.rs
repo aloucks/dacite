@@ -16,6 +16,7 @@ use Result;
 use core::allocator_helper::AllocatorHelper;
 use core::{
     self,
+    Buffer,
     CommandPool,
     Event,
     Fence,
@@ -175,6 +176,25 @@ impl Device {
 
         if res == vk_sys::VK_SUCCESS {
             Ok(QueryPool::new(query_pool, self.clone(), allocator_helper))
+        }
+        else {
+            Err(res.into())
+        }
+    }
+
+    pub fn create_buffer(&self, create_info: &core::BufferCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<Buffer> {
+        let create_info: core::VkBufferCreateInfoWrapper = create_info.into();
+
+        let allocator_helper = allocator.map(AllocatorHelper::new);
+        let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), |a| &a.callbacks);
+
+        let mut buffer = ptr::null_mut();
+        let res = unsafe {
+            (self.loader().core.vkCreateBuffer)(self.handle(), create_info.as_ref(), allocation_callbacks, &mut buffer)
+        };
+
+        if res == vk_sys::VK_SUCCESS {
+            Ok(Buffer::new(buffer, self.clone(), allocator_helper))
         }
         else {
             Err(res.into())
