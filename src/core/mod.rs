@@ -1916,6 +1916,33 @@ impl From<IndexType> for vk_sys::VkIndexType {
     }
 }
 
+#[derive(Debug, Copy, Clone)]
+pub enum SubpassContents {
+    Inline,
+    SecondaryCommandBuffers,
+    Unknown(vk_sys::VkSubpassContents),
+}
+
+impl From<vk_sys::VkSubpassContents> for SubpassContents {
+    fn from(contents: vk_sys::VkSubpassContents) -> Self {
+        match contents {
+            vk_sys::VK_SUBPASS_CONTENTS_INLINE => SubpassContents::Inline,
+            vk_sys::VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS => SubpassContents::SecondaryCommandBuffers,
+            _ => SubpassContents::Unknown(contents),
+        }
+    }
+}
+
+impl From<SubpassContents> for vk_sys::VkSubpassContents {
+    fn from(contents: SubpassContents) -> Self {
+        match contents {
+            SubpassContents::Inline => vk_sys::VK_SUBPASS_CONTENTS_INLINE,
+            SubpassContents::SecondaryCommandBuffers => vk_sys::VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS,
+            SubpassContents::Unknown(contents) => contents,
+        }
+    }
+}
+
 #[derive(Debug, Clone)]
 pub enum ApplicationInfoChainElement {
 }
