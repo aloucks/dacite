@@ -3857,6 +3857,39 @@ impl<'a> From<&'a BufferCreateInfo> for VkBufferCreateInfoWrapper {
     }
 }
 
+#[derive(Debug, Copy, Clone)]
+pub struct SubresourceLayout {
+    pub offset: u64,
+    pub size: u64,
+    pub row_pitch: u64,
+    pub array_pitch: u64,
+    pub depth_pitch: u64,
+}
+
+impl<'a> From<&'a vk_sys::VkSubresourceLayout> for SubresourceLayout {
+    fn from(layout: &'a vk_sys::VkSubresourceLayout) -> Self {
+        SubresourceLayout {
+            offset: layout.offset,
+            size: layout.size,
+            row_pitch: layout.rowPitch,
+            array_pitch: layout.arrayPitch,
+            depth_pitch: layout.depthPitch,
+        }
+    }
+}
+
+impl<'a> From<&'a SubresourceLayout> for vk_sys::VkSubresourceLayout {
+    fn from(layout: &'a SubresourceLayout) -> Self {
+        vk_sys::VkSubresourceLayout {
+            offset: layout.offset,
+            size: layout.size,
+            rowPitch: layout.row_pitch,
+            arrayPitch: layout.array_pitch,
+            depthPitch: layout.depth_pitch,
+        }
+    }
+}
+
 #[derive(Debug, Clone)]
 pub enum CommandPoolCreateInfoChainElement {
 }
