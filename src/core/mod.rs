@@ -4501,3 +4501,30 @@ impl VkCommandBufferAllocateInfoWrapper {
         }
     }
 }
+
+#[derive(Debug, Copy, Clone)]
+pub struct BufferCopy {
+    pub src_offset: u64,
+    pub dst_offset: u64,
+    pub size: u64,
+}
+
+impl<'a> From<&'a vk_sys::VkBufferCopy> for BufferCopy {
+    fn from(copy: &'a vk_sys::VkBufferCopy) -> Self {
+        BufferCopy {
+            src_offset: copy.srcOffset,
+            dst_offset: copy.dstOffset,
+            size: copy.size,
+        }
+    }
+}
+
+impl<'a> From<&'a BufferCopy> for vk_sys::VkBufferCopy {
+    fn from(copy: &'a BufferCopy) -> Self {
+        vk_sys::VkBufferCopy {
+            srcOffset: copy.src_offset,
+            dstOffset: copy.dst_offset,
+            size: copy.size,
+        }
+    }
+}
