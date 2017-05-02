@@ -4712,6 +4712,27 @@ impl<'a> From<&'a ClearDepthStencilValue> for vk_sys::VkClearDepthStencilValue {
 }
 
 #[derive(Debug, Copy, Clone)]
+pub enum ClearValue {
+    Color(ClearColorValue),
+    DepthStencil(ClearDepthStencilValue),
+}
+
+impl<'a> From<&'a ClearValue> for vk_sys::VkClearValue {
+    fn from(value: &'a ClearValue) -> Self {
+        let mut res = vk_sys::VkClearValue::default();
+
+        unsafe {
+            match *value {
+                ClearValue::Color(ref value) => { *res.color.as_mut() = value.into(); }
+                ClearValue::DepthStencil(ref value) => { *res.depthStencil.as_mut() = value.into(); }
+            }
+        }
+
+        res
+    }
+}
+
+#[derive(Debug, Copy, Clone)]
 pub struct ClearRect {
     pub rect: Rect2D,
     pub base_array_layer: u32,
