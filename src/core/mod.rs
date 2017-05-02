@@ -27,6 +27,7 @@ mod pipeline_cache;
 mod pipeline_layout;
 mod query_pool;
 mod queue;
+mod sampler;
 mod semaphore;
 mod shader_module;
 
@@ -54,6 +55,7 @@ pub use self::pipeline_cache::PipelineCache;
 pub use self::pipeline_layout::PipelineLayout;
 pub use self::query_pool::QueryPool;
 pub use self::queue::Queue;
+pub use self::sampler::Sampler;
 pub use self::semaphore::Semaphore;
 pub use self::shader_module::ShaderModule;
 
