@@ -16,6 +16,7 @@ mod allocator_helper;
 mod device;
 mod instance;
 mod physical_device;
+mod queue;
 
 use libc::{c_char, c_void};
 use std::ffi::{CStr, CString};
@@ -30,6 +31,7 @@ use vk_sys;
 pub use self::device::Device;
 pub use self::instance::Instance;
 pub use self::physical_device::PhysicalDevice;
+pub use self::queue::Queue;
 
 #[derive(Debug, Copy, Clone)]
 pub struct Version {
