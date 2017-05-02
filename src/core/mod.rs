@@ -1548,6 +1548,54 @@ impl From<BlendOp> for vk_sys::VkBlendOp {
 }
 
 #[derive(Debug, Copy, Clone)]
+pub enum DynamicState {
+    Viewport,
+    Scissor,
+    LineWidth,
+    DepthBias,
+    BlendConstants,
+    DepthBounds,
+    StencilCompareMask,
+    StencilWriteMask,
+    StencilReference,
+    Unknown(vk_sys::VkDynamicState),
+}
+
+impl From<vk_sys::VkDynamicState> for DynamicState {
+    fn from(state: vk_sys::VkDynamicState) -> Self {
+        match state {
+            vk_sys::VK_DYNAMIC_STATE_VIEWPORT => DynamicState::Viewport,
+            vk_sys::VK_DYNAMIC_STATE_SCISSOR => DynamicState::Scissor,
+            vk_sys::VK_DYNAMIC_STATE_LINE_WIDTH => DynamicState::LineWidth,
+            vk_sys::VK_DYNAMIC_STATE_DEPTH_BIAS => DynamicState::DepthBias,
+            vk_sys::VK_DYNAMIC_STATE_BLEND_CONSTANTS => DynamicState::BlendConstants,
+            vk_sys::VK_DYNAMIC_STATE_DEPTH_BOUNDS => DynamicState::DepthBounds,
+            vk_sys::VK_DYNAMIC_STATE_STENCIL_COMPARE_MASK => DynamicState::StencilCompareMask,
+            vk_sys::VK_DYNAMIC_STATE_STENCIL_WRITE_MASK => DynamicState::StencilWriteMask,
+            vk_sys::VK_DYNAMIC_STATE_STENCIL_REFERENCE => DynamicState::StencilReference,
+            _ => DynamicState::Unknown(state),
+        }
+    }
+}
+
+impl From<DynamicState> for vk_sys::VkDynamicState {
+    fn from(state: DynamicState) -> Self {
+        match state {
+            DynamicState::Viewport => vk_sys::VK_DYNAMIC_STATE_VIEWPORT,
+            DynamicState::Scissor => vk_sys::VK_DYNAMIC_STATE_SCISSOR,
+            DynamicState::LineWidth => vk_sys::VK_DYNAMIC_STATE_LINE_WIDTH,
+            DynamicState::DepthBias => vk_sys::VK_DYNAMIC_STATE_DEPTH_BIAS,
+            DynamicState::BlendConstants => vk_sys::VK_DYNAMIC_STATE_BLEND_CONSTANTS,
+            DynamicState::DepthBounds => vk_sys::VK_DYNAMIC_STATE_DEPTH_BOUNDS,
+            DynamicState::StencilCompareMask => vk_sys::VK_DYNAMIC_STATE_STENCIL_COMPARE_MASK,
+            DynamicState::StencilWriteMask => vk_sys::VK_DYNAMIC_STATE_STENCIL_WRITE_MASK,
+            DynamicState::StencilReference => vk_sys::VK_DYNAMIC_STATE_STENCIL_REFERENCE,
+            DynamicState::Unknown(state) => state,
+        }
+    }
+}
+
+#[derive(Debug, Copy, Clone)]
 pub enum CommandBufferLevel {
     Primary,
     Secondary,
