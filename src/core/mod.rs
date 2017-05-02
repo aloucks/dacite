@@ -4733,6 +4733,23 @@ impl<'a> From<&'a ClearValue> for vk_sys::VkClearValue {
 }
 
 #[derive(Debug, Copy, Clone)]
+pub struct ClearAttachment {
+    pub aspect_mask: vk_sys::VkImageAspectFlags,
+    pub color_attachment: u32,
+    pub clear_value: ClearValue,
+}
+
+impl<'a> From<&'a ClearAttachment> for vk_sys::VkClearAttachment {
+    fn from(foobar: &'a ClearAttachment) -> Self {
+        vk_sys::VkClearAttachment {
+            aspectMask: foobar.aspect_mask,
+            colorAttachment: foobar.color_attachment,
+            clearValue: (&foobar.clear_value).into(),
+        }
+    }
+}
+
+#[derive(Debug, Copy, Clone)]
 pub struct ClearRect {
     pub rect: Rect2D,
     pub base_array_layer: u32,
