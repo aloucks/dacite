@@ -908,7 +908,12 @@ impl From<PhysicalDeviceType> for vk_sys::VkPhysicalDeviceType {
 }
 
 #[derive(Debug, Clone)]
+pub enum ApplicationInfoChainElement {
+}
+
+#[derive(Debug, Clone)]
 pub struct ApplicationInfo {
+    pub chain: Vec<ApplicationInfoChainElement>,
     pub application_name: Option<String>,
     pub application_version: u32,
     pub engine_name: Option<String>,
@@ -918,7 +923,10 @@ pub struct ApplicationInfo {
 
 impl<'a> From<&'a vk_sys::VkApplicationInfo> for ApplicationInfo {
     fn from(info: &'a vk_sys::VkApplicationInfo) -> Self {
+        debug_assert_eq!(info.pNext, ptr::null());
+
         ApplicationInfo {
+            chain: vec![],
             application_name: utils::string_from_cstr(info.pApplicationName),
             application_version: info.applicationVersion,
             engine_name: utils::string_from_cstr(info.pEngineName),
@@ -971,7 +979,12 @@ impl<'a> From<&'a ApplicationInfo> for VkApplicationInfoWrapper {
 }
 
 #[derive(Debug, Clone)]
+pub enum InstanceCreateInfoChainElement {
+}
+
+#[derive(Debug, Clone)]
 pub struct InstanceCreateInfo {
+    pub chain: Vec<InstanceCreateInfoChainElement>,
     pub flags: vk_sys::VkInstanceCreateFlags,
     pub application_info: Option<ApplicationInfo>,
     pub enabled_layers: Vec<String>,
@@ -980,6 +993,8 @@ pub struct InstanceCreateInfo {
 
 impl<'a> From<&'a vk_sys::VkInstanceCreateInfo> for InstanceCreateInfo {
     fn from(create_info: &'a vk_sys::VkInstanceCreateInfo) -> Self {
+        debug_assert_eq!(create_info.pNext, ptr::null());
+
         let application_info = if !create_info.pApplicationInfo.is_null() {
             unsafe {
                 Some((&*create_info.pApplicationInfo).into())
@@ -1007,6 +1022,7 @@ impl<'a> From<&'a vk_sys::VkInstanceCreateInfo> for InstanceCreateInfo {
             .collect();
 
         InstanceCreateInfo {
+            chain: vec![],
             flags: create_info.flags,
             application_info: application_info,
             enabled_layers: enabled_layers,
@@ -1949,7 +1965,12 @@ impl<'a> From<&'a PhysicalDeviceMemoryProperties> for vk_sys::VkPhysicalDeviceMe
 }
 
 #[derive(Debug, Clone)]
+pub enum DeviceQueueCreateInfoChainElement {
+}
+
+#[derive(Debug, Clone)]
 pub struct DeviceQueueCreateInfo {
+    pub chain: Vec<DeviceQueueCreateInfoChainElement>,
     pub flags: vk_sys::VkDeviceQueueCreateFlags,
     pub queue_family_index: u32,
     pub queue_priorities: Vec<f32>,
@@ -1957,11 +1978,14 @@ pub struct DeviceQueueCreateInfo {
 
 impl<'a> From<&'a vk_sys::VkDeviceQueueCreateInfo> for DeviceQueueCreateInfo {
     fn from(create_info: &'a vk_sys::VkDeviceQueueCreateInfo) -> Self {
+        debug_assert_eq!(create_info.pNext, ptr::null());
+
         let queue_priorities_slice = unsafe {
             slice::from_raw_parts(create_info.pQueuePriorities, create_info.queueCount as usize)
         };
 
         DeviceQueueCreateInfo {
+            chain: vec![],
             flags: create_info.flags,
             queue_family_index: create_info.queueFamilyIndex,
             queue_priorities: queue_priorities_slice.to_vec(),
@@ -2008,7 +2032,12 @@ impl<'a> From<&'a DeviceQueueCreateInfo> for VkDeviceQueueCreateInfoWrapper {
 }
 
 #[derive(Debug, Clone)]
+pub enum DeviceCreateInfoChainElement {
+}
+
+#[derive(Debug, Clone)]
 pub struct DeviceCreateInfo {
+    pub chain: Vec<DeviceCreateInfoChainElement>,
     pub flags: vk_sys::VkDeviceCreateFlags,
     pub queue_create_infos: Vec<DeviceQueueCreateInfo>,
     pub enabled_layers: Vec<String>,
@@ -2018,6 +2047,8 @@ pub struct DeviceCreateInfo {
 
 impl<'a> From<&'a vk_sys::VkDeviceCreateInfo> for DeviceCreateInfo {
     fn from(create_info: &'a vk_sys::VkDeviceCreateInfo) -> Self {
+        debug_assert_eq!(create_info.pNext, ptr::null());
+
         let queue_create_infos_slice = unsafe {
             slice::from_raw_parts(create_info.pQueueCreateInfos, create_info.queueCreateInfoCount as usize)
         };
@@ -2053,6 +2084,7 @@ impl<'a> From<&'a vk_sys::VkDeviceCreateInfo> for DeviceCreateInfo {
         };
 
         DeviceCreateInfo {
+            chain: vec![],
             flags: create_info.flags,
             queue_create_infos: queue_create_infos,
             enabled_layers: enabled_layers,

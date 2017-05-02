@@ -50,8 +50,10 @@ fn main() {
     }
 
     let instance_create_info = dacite::core::InstanceCreateInfo {
+        chain: vec![],
         flags: vk_sys::VkInstanceCreateFlags::empty(),
         application_info: Some(dacite::core::ApplicationInfo {
+            chain: vec![],
             application_name: Some("dacite info example".to_owned()),
             application_version: 0,
             engine_name: None,
