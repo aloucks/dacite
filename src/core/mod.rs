@@ -911,6 +911,33 @@ impl From<PhysicalDeviceType> for vk_sys::VkPhysicalDeviceType {
     }
 }
 
+#[derive(Debug, Copy, Clone)]
+pub enum CommandBufferLevel {
+    Primary,
+    Secondary,
+    Unknown(vk_sys::VkCommandBufferLevel),
+}
+
+impl From<vk_sys::VkCommandBufferLevel> for CommandBufferLevel {
+    fn from(level: vk_sys::VkCommandBufferLevel) -> Self {
+        match level {
+            vk_sys::VK_COMMAND_BUFFER_LEVEL_PRIMARY => CommandBufferLevel::Primary,
+            vk_sys::VK_COMMAND_BUFFER_LEVEL_SECONDARY => CommandBufferLevel::Secondary,
+            _ => CommandBufferLevel::Unknown(level),
+        }
+    }
+}
+
+impl From<CommandBufferLevel> for vk_sys::VkCommandBufferLevel {
+    fn from(level: CommandBufferLevel) -> Self {
+        match level {
+            CommandBufferLevel::Primary => vk_sys::VK_COMMAND_BUFFER_LEVEL_PRIMARY,
+            CommandBufferLevel::Secondary => vk_sys::VK_COMMAND_BUFFER_LEVEL_SECONDARY,
+            CommandBufferLevel::Unknown(level) => level,
+        }
+    }
+}
+
 #[derive(Debug, Clone)]
 pub enum ApplicationInfoChainElement {
 }
