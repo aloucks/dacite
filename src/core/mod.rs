@@ -4687,3 +4687,30 @@ impl<'a> From<&'a ClearDepthStencilValue> for vk_sys::VkClearDepthStencilValue {
         }
     }
 }
+
+#[derive(Debug, Copy, Clone)]
+pub struct ClearRect {
+    pub rect: Rect2D,
+    pub base_array_layer: u32,
+    pub layer_count: u32,
+}
+
+impl<'a> From<&'a vk_sys::VkClearRect> for ClearRect {
+    fn from(rect: &'a vk_sys::VkClearRect) -> Self {
+        ClearRect {
+            rect: (&rect.rect).into(),
+            base_array_layer: rect.baseArrayLayer,
+            layer_count: rect.layerCount,
+        }
+    }
+}
+
+impl<'a> From<&'a ClearRect> for vk_sys::VkClearRect {
+    fn from(rect: &'a ClearRect) -> Self {
+        vk_sys::VkClearRect {
+            rect: (&rect.rect).into(),
+            baseArrayLayer: rect.base_array_layer,
+            layerCount: rect.layer_count,
+        }
+    }
+}
