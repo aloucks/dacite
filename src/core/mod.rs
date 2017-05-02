@@ -1512,6 +1512,42 @@ impl From<BlendFactor> for vk_sys::VkBlendFactor {
 }
 
 #[derive(Debug, Copy, Clone)]
+pub enum BlendOp {
+    Add,
+    Subtract,
+    ReverseSubtract,
+    Min,
+    Max,
+    Unknown(vk_sys::VkBlendOp),
+}
+
+impl From<vk_sys::VkBlendOp> for BlendOp {
+    fn from(op: vk_sys::VkBlendOp) -> Self {
+        match op {
+            vk_sys::VK_BLEND_OP_ADD => BlendOp::Add,
+            vk_sys::VK_BLEND_OP_SUBTRACT => BlendOp::Subtract,
+            vk_sys::VK_BLEND_OP_REVERSE_SUBTRACT => BlendOp::ReverseSubtract,
+            vk_sys::VK_BLEND_OP_MIN => BlendOp::Min,
+            vk_sys::VK_BLEND_OP_MAX => BlendOp::Max,
+            _ => BlendOp::Unknown(op),
+        }
+    }
+}
+
+impl From<BlendOp> for vk_sys::VkBlendOp {
+    fn from(op: BlendOp) -> Self {
+        match op {
+            BlendOp::Add => vk_sys::VK_BLEND_OP_ADD,
+            BlendOp::Subtract => vk_sys::VK_BLEND_OP_SUBTRACT,
+            BlendOp::ReverseSubtract => vk_sys::VK_BLEND_OP_REVERSE_SUBTRACT,
+            BlendOp::Min => vk_sys::VK_BLEND_OP_MIN,
+            BlendOp::Max => vk_sys::VK_BLEND_OP_MAX,
+            BlendOp::Unknown(op) => op,
+        }
+    }
+}
+
+#[derive(Debug, Copy, Clone)]
 pub enum CommandBufferLevel {
     Primary,
     Secondary,
