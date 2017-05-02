@@ -978,6 +978,33 @@ impl From<QueryType> for vk_sys::VkQueryType {
 }
 
 #[derive(Debug, Copy, Clone)]
+pub enum SharingMode {
+    Exclusive,
+    Concurrent,
+    Unknown(vk_sys::VkSharingMode),
+}
+
+impl From<vk_sys::VkSharingMode> for SharingMode {
+    fn from(mode: vk_sys::VkSharingMode) -> Self {
+        match mode {
+            vk_sys::VK_SHARING_MODE_EXCLUSIVE => SharingMode::Exclusive,
+            vk_sys::VK_SHARING_MODE_CONCURRENT => SharingMode::Concurrent,
+            _ => SharingMode::Unknown(mode),
+        }
+    }
+}
+
+impl From<SharingMode> for vk_sys::VkSharingMode {
+    fn from(mode: SharingMode) -> Self {
+        match mode {
+            SharingMode::Exclusive => vk_sys::VK_SHARING_MODE_EXCLUSIVE,
+            SharingMode::Concurrent => vk_sys::VK_SHARING_MODE_CONCURRENT,
+            SharingMode::Unknown(mode) => mode,
+        }
+    }
+}
+
+#[derive(Debug, Copy, Clone)]
 pub enum CommandBufferLevel {
     Primary,
     Secondary,
