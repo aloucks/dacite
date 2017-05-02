@@ -1053,6 +1053,48 @@ impl From<ImageLayout> for vk_sys::VkImageLayout {
 }
 
 #[derive(Debug, Copy, Clone)]
+pub enum ImageViewType {
+    Type1D,
+    Type2D,
+    Type3D,
+    TypeCube,
+    Type1DArray,
+    Type2DArray,
+    TypeCubeArray,
+    Unknown(vk_sys::VkImageViewType),
+}
+
+impl From<vk_sys::VkImageViewType> for ImageViewType {
+    fn from(view_type: vk_sys::VkImageViewType) -> Self {
+        match view_type {
+            vk_sys::VK_IMAGE_VIEW_TYPE_1D => ImageViewType::Type1D,
+            vk_sys::VK_IMAGE_VIEW_TYPE_2D => ImageViewType::Type2D,
+            vk_sys::VK_IMAGE_VIEW_TYPE_3D => ImageViewType::Type3D,
+            vk_sys::VK_IMAGE_VIEW_TYPE_CUBE => ImageViewType::TypeCube,
+            vk_sys::VK_IMAGE_VIEW_TYPE_1D_ARRAY => ImageViewType::Type1DArray,
+            vk_sys::VK_IMAGE_VIEW_TYPE_2D_ARRAY => ImageViewType::Type2DArray,
+            vk_sys::VK_IMAGE_VIEW_TYPE_CUBE_ARRAY => ImageViewType::TypeCubeArray,
+            _ => ImageViewType::Unknown(view_type),
+        }
+    }
+}
+
+impl From<ImageViewType> for vk_sys::VkImageViewType {
+    fn from(view_type: ImageViewType) -> Self {
+        match view_type {
+            ImageViewType::Type1D => vk_sys::VK_IMAGE_VIEW_TYPE_1D,
+            ImageViewType::Type2D => vk_sys::VK_IMAGE_VIEW_TYPE_2D,
+            ImageViewType::Type3D => vk_sys::VK_IMAGE_VIEW_TYPE_3D,
+            ImageViewType::TypeCube => vk_sys::VK_IMAGE_VIEW_TYPE_CUBE,
+            ImageViewType::Type1DArray => vk_sys::VK_IMAGE_VIEW_TYPE_1D_ARRAY,
+            ImageViewType::Type2DArray => vk_sys::VK_IMAGE_VIEW_TYPE_2D_ARRAY,
+            ImageViewType::TypeCubeArray => vk_sys::VK_IMAGE_VIEW_TYPE_CUBE_ARRAY,
+            ImageViewType::Unknown(view_type) => view_type,
+        }
+    }
+}
+
+#[derive(Debug, Copy, Clone)]
 pub enum CommandBufferLevel {
     Primary,
     Secondary,
