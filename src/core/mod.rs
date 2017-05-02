@@ -2411,3 +2411,58 @@ impl<'a> From<&'a SparseImageFormatProperties> for vk_sys::VkSparseImageFormatPr
         }
     }
 }
+
+#[derive(Debug, Clone)]
+pub enum CommandPoolCreateInfoChainElement {
+}
+
+#[derive(Debug, Clone)]
+pub struct CommandPoolCreateInfo {
+    pub chain: Vec<CommandPoolCreateInfoChainElement>,
+    pub flags: vk_sys::VkCommandPoolCreateFlags,
+    pub queue_family_index: u32,
+}
+
+impl<'a> From<&'a vk_sys::VkCommandPoolCreateInfo> for CommandPoolCreateInfo {
+    fn from(create_info: &'a vk_sys::VkCommandPoolCreateInfo) -> Self {
+        debug_assert_eq!(create_info.pNext, ptr::null());
+
+        CommandPoolCreateInfo {
+            chain: vec![],
+            flags: create_info.flags,
+            queue_family_index: create_info.queueFamilyIndex,
+        }
+    }
+}
+
+#[derive(Debug)]
+pub struct VkCommandPoolCreateInfoWrapper {
+    create_info: vk_sys::VkCommandPoolCreateInfo,
+}
+
+impl Deref for VkCommandPoolCreateInfoWrapper {
+    type Target = vk_sys::VkCommandPoolCreateInfo;
+
+    fn deref(&self) -> &Self::Target {
+        &self.create_info
+    }
+}
+
+impl AsRef<vk_sys::VkCommandPoolCreateInfo> for VkCommandPoolCreateInfoWrapper {
+    fn as_ref(&self) -> &vk_sys::VkCommandPoolCreateInfo {
+        &self.create_info
+    }
+}
+
+impl<'a> From<&'a CommandPoolCreateInfo> for VkCommandPoolCreateInfoWrapper {
+    fn from(create_info: &'a CommandPoolCreateInfo) -> Self {
+        VkCommandPoolCreateInfoWrapper {
+            create_info: vk_sys::VkCommandPoolCreateInfo {
+                sType: vk_sys::VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO,
+                pNext: ptr::null(),
+                flags: create_info.flags,
+                queueFamilyIndex: create_info.queue_family_index,
+            },
+        }
+    }
+}
