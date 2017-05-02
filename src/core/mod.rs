@@ -2498,6 +2498,58 @@ impl<'a> From<&'a FenceCreateInfo> for VkFenceCreateInfoWrapper {
 }
 
 #[derive(Debug, Clone)]
+pub enum SemaphoreCreateInfoChainElement {
+}
+
+#[derive(Debug, Clone)]
+pub struct SemaphoreCreateInfo {
+    pub chain: Vec<SemaphoreCreateInfoChainElement>,
+    pub flags: vk_sys::VkSemaphoreCreateFlags,
+}
+
+impl<'a> From<&'a vk_sys::VkSemaphoreCreateInfo> for SemaphoreCreateInfo {
+    fn from(create_info: &'a vk_sys::VkSemaphoreCreateInfo) -> Self {
+        debug_assert_eq!(create_info.pNext, ptr::null());
+
+        SemaphoreCreateInfo {
+            chain: vec![],
+            flags: create_info.flags,
+        }
+    }
+}
+
+#[derive(Debug)]
+struct VkSemaphoreCreateInfoWrapper {
+    create_info: vk_sys::VkSemaphoreCreateInfo,
+}
+
+impl Deref for VkSemaphoreCreateInfoWrapper {
+    type Target = vk_sys::VkSemaphoreCreateInfo;
+
+    fn deref(&self) -> &Self::Target {
+        &self.create_info
+    }
+}
+
+impl AsRef<vk_sys::VkSemaphoreCreateInfo> for VkSemaphoreCreateInfoWrapper {
+    fn as_ref(&self) -> &vk_sys::VkSemaphoreCreateInfo {
+        &self.create_info
+    }
+}
+
+impl<'a> From<&'a SemaphoreCreateInfo> for VkSemaphoreCreateInfoWrapper {
+    fn from(create_info: &'a SemaphoreCreateInfo) -> VkSemaphoreCreateInfoWrapper {
+        VkSemaphoreCreateInfoWrapper {
+            create_info: vk_sys::VkSemaphoreCreateInfo {
+                sType: vk_sys::VK_STRUCTURE_TYPE_FENCE_CREATE_INFO,
+                pNext: ptr::null(),
+                flags: create_info.flags,
+            },
+        }
+    }
+}
+
+#[derive(Debug, Clone)]
 pub enum CommandPoolCreateInfoChainElement {
 }
 
