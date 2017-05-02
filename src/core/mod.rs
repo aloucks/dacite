@@ -4665,6 +4665,29 @@ impl<'a> From<&'a BufferImageCopy> for vk_sys::VkBufferImageCopy {
 }
 
 #[derive(Debug, Copy, Clone)]
+pub enum ClearColorValue {
+    Float32([f32; 4]),
+    Int32([i32; 4]),
+    UInt32([u32; 4]),
+}
+
+impl<'a> From<&'a ClearColorValue> for vk_sys::VkClearColorValue {
+    fn from(value: &'a ClearColorValue) -> Self {
+        let mut res = vk_sys::VkClearColorValue::default();
+
+        unsafe {
+            match *value {
+                ClearColorValue::Float32(ref value) => { *res.float32.as_mut() = *value; }
+                ClearColorValue::Int32(ref value) => { *res.int32.as_mut() = *value; }
+                ClearColorValue::UInt32(ref value) => { *res.uint32.as_mut() = *value; }
+            }
+        }
+
+        res
+    }
+}
+
+#[derive(Debug, Copy, Clone)]
 pub struct ClearDepthStencilValue {
     pub depth: f32,
     pub stencil: u32,
