@@ -44,6 +44,16 @@ impl Drop for Inner {
 pub struct Instance(pub(crate) Arc<Inner>);
 
 impl Instance {
+    #[inline]
+    pub(crate) fn handle(&self) -> vk_sys::VkInstance {
+        self.0.handle
+    }
+
+    #[inline]
+    pub(crate) fn loader(&self) -> &vk_sys::InstanceProcAddrLoader {
+        &self.0.loader
+    }
+
     pub fn create(create_info: &core::InstanceCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<Instance> {
         let allocator_helper = allocator.map(AllocatorHelper::new);
         let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), |a| &a.callbacks);
@@ -76,7 +86,7 @@ impl Instance {
     pub fn enumerate_physical_devices(&self) -> Result<Vec<core::PhysicalDevice>> {
         let mut num_physical_devices = 0;
         let res = unsafe {
-            (self.0.loader.core.vkEnumeratePhysicalDevices)(self.0.handle, &mut num_physical_devices, ptr::null_mut())
+            (self.loader().core.vkEnumeratePhysicalDevices)(self.handle(), &mut num_physical_devices, ptr::null_mut())
         };
         if res != vk_sys::VK_SUCCESS {
             return Err(res.into());
@@ -84,7 +94,7 @@ impl Instance {
 
         let mut physical_devices = Vec::with_capacity(num_physical_devices as usize);
         let res = unsafe {
-            (self.0.loader.core.vkEnumeratePhysicalDevices)(self.0.handle, &mut num_physical_devices, physical_devices.as_mut_ptr())
+            (self.loader().core.vkEnumeratePhysicalDevices)(self.handle(), &mut num_physical_devices, physical_devices.as_mut_ptr())
         };
         if res != vk_sys::VK_SUCCESS {
             return Err(res.into());
