@@ -4007,6 +4007,36 @@ impl<'a> From<&'a VertexInputBindingDescription> for vk_sys::VkVertexInputBindin
     }
 }
 
+#[derive(Debug, Copy, Clone)]
+pub struct VertexInputAttributeDescription {
+    pub location: u32,
+    pub binding: u32,
+    pub format: Format,
+    pub offset: u32,
+}
+
+impl<'a> From<&'a vk_sys::VkVertexInputAttributeDescription> for VertexInputAttributeDescription {
+    fn from(description: &'a vk_sys::VkVertexInputAttributeDescription) -> Self {
+        VertexInputAttributeDescription {
+            location: description.location,
+            binding: description.binding,
+            format: description.format.into(),
+            offset: description.offset,
+        }
+    }
+}
+
+impl<'a> From<&'a VertexInputAttributeDescription> for vk_sys::VkVertexInputAttributeDescription {
+    fn from(description: &'a VertexInputAttributeDescription) -> Self {
+        vk_sys::VkVertexInputAttributeDescription {
+            location: description.location,
+            binding: description.binding,
+            format: description.format.into(),
+            offset: description.offset,
+        }
+    }
+}
+
 #[derive(Debug, Clone)]
 pub enum CommandPoolCreateInfoChainElement {
 }
