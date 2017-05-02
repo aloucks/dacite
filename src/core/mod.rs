@@ -4226,6 +4226,33 @@ impl<'a> From<&'a PipelineColorBlendAttachmentState> for vk_sys::VkPipelineColor
     }
 }
 
+#[derive(Debug, Copy, Clone)]
+pub struct PushConstantRange {
+    pub stage_flags: vk_sys::VkShaderStageFlags,
+    pub offset: u32,
+    pub size: u32,
+}
+
+impl<'a> From<&'a vk_sys::VkPushConstantRange> for PushConstantRange {
+    fn from(range: &'a vk_sys::VkPushConstantRange) -> Self {
+        PushConstantRange {
+            stage_flags: range.stageFlags,
+            offset: range.offset,
+            size: range.size,
+        }
+    }
+}
+
+impl<'a> From<&'a PushConstantRange> for vk_sys::VkPushConstantRange {
+    fn from(range: &'a PushConstantRange) -> Self {
+        vk_sys::VkPushConstantRange {
+            stageFlags: range.stage_flags,
+            offset: range.offset,
+            size: range.size,
+        }
+    }
+}
+
 #[derive(Debug, Clone)]
 pub enum CommandPoolCreateInfoChainElement {
 }
