@@ -4807,3 +4807,33 @@ impl<'a> From<&'a DrawIndexedIndirectCommand> for vk_sys::VkDrawIndexedIndirectC
         }
     }
 }
+
+#[derive(Debug, Copy, Clone)]
+pub struct DrawIndirectCommand {
+    pub vertex_count: u32,
+    pub instance_count: u32,
+    pub first_vertex: u32,
+    pub first_instance: u32,
+}
+
+impl<'a> From<&'a vk_sys::VkDrawIndirectCommand> for DrawIndirectCommand {
+    fn from(command: &'a vk_sys::VkDrawIndirectCommand) -> Self {
+        DrawIndirectCommand {
+            vertex_count: command.vertexCount,
+            instance_count: command.instanceCount,
+            first_vertex: command.firstVertex,
+            first_instance: command.firstInstance,
+        }
+    }
+}
+
+impl<'a> From<&'a DrawIndirectCommand> for vk_sys::VkDrawIndirectCommand {
+    fn from(command: &'a DrawIndirectCommand) -> Self {
+        vk_sys::VkDrawIndirectCommand {
+            vertexCount: command.vertex_count,
+            instanceCount: command.instance_count,
+            firstVertex: command.first_vertex,
+            firstInstance: command.first_instance,
+        }
+    }
+}
