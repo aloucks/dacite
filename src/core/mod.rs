@@ -3531,6 +3531,33 @@ impl<'a> From<&'a ImageSubresource> for vk_sys::VkImageSubresource {
     }
 }
 
+#[derive(Debug, Copy, Clone)]
+pub struct Offset3D {
+    pub x: i32,
+    pub y: i32,
+    pub z: i32,
+}
+
+impl<'a> From<&'a vk_sys::VkOffset3D> for Offset3D {
+    fn from(offset: &'a vk_sys::VkOffset3D) -> Self {
+        Offset3D {
+            x: offset.x,
+            y: offset.y,
+            z: offset.z,
+        }
+    }
+}
+
+impl<'a> From<&'a Offset3D> for vk_sys::VkOffset3D {
+    fn from(offset: &'a Offset3D) -> Self {
+        vk_sys::VkOffset3D {
+            x: offset.x,
+            y: offset.y,
+            z: offset.z,
+        }
+    }
+}
+
 #[derive(Debug, Clone)]
 pub enum FenceCreateInfoChainElement {
 }
