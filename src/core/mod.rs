@@ -3890,6 +3890,36 @@ impl<'a> From<&'a SubresourceLayout> for vk_sys::VkSubresourceLayout {
     }
 }
 
+#[derive(Debug, Copy, Clone)]
+pub struct ComponentMapping {
+    pub r: ComponentSwizzle,
+    pub g: ComponentSwizzle,
+    pub b: ComponentSwizzle,
+    pub a: ComponentSwizzle,
+}
+
+impl<'a> From<&'a vk_sys::VkComponentMapping> for ComponentMapping {
+    fn from(mapping: &'a vk_sys::VkComponentMapping) -> Self {
+        ComponentMapping {
+            r: mapping.r.into(),
+            g: mapping.g.into(),
+            b: mapping.b.into(),
+            a: mapping.a.into(),
+        }
+    }
+}
+
+impl<'a> From<&'a ComponentMapping> for vk_sys::VkComponentMapping {
+    fn from(mapping: &'a ComponentMapping) -> Self {
+        vk_sys::VkComponentMapping {
+            r: mapping.r.into(),
+            g: mapping.g.into(),
+            b: mapping.b.into(),
+            a: mapping.a.into(),
+        }
+    }
+}
+
 #[derive(Debug, Clone)]
 pub enum CommandPoolCreateInfoChainElement {
 }
