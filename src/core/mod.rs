@@ -14,6 +14,7 @@
 
 mod allocator_helper;
 mod buffer;
+mod buffer_view;
 mod command_buffer;
 mod command_pool;
 mod descriptor_pool;
@@ -46,6 +47,7 @@ use utils;
 use vk_sys;
 
 pub use self::buffer::Buffer;
+pub use self::buffer_view::BufferView;
 pub use self::command_buffer::CommandBuffer;
 pub use self::command_pool::CommandPool;
 pub use self::descriptor_pool::DescriptorPool;
