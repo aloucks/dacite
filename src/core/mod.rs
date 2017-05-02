@@ -1320,6 +1320,51 @@ impl From<CompareOp> for vk_sys::VkCompareOp {
 }
 
 #[derive(Debug, Copy, Clone)]
+pub enum StencilOp {
+    Keep,
+    Zero,
+    Replace,
+    IncrementAndClamp,
+    DecrementAndClamp,
+    Invert,
+    IncrementAndWrap,
+    DecrementAndWrap,
+    Unknown(vk_sys::VkStencilOp),
+}
+
+impl From<vk_sys::VkStencilOp> for StencilOp {
+    fn from(op: vk_sys::VkStencilOp) -> Self {
+        match op {
+            vk_sys::VK_STENCIL_OP_KEEP => StencilOp::Keep,
+            vk_sys::VK_STENCIL_OP_ZERO => StencilOp::Zero,
+            vk_sys::VK_STENCIL_OP_REPLACE => StencilOp::Replace,
+            vk_sys::VK_STENCIL_OP_INCREMENT_AND_CLAMP => StencilOp::IncrementAndClamp,
+            vk_sys::VK_STENCIL_OP_DECREMENT_AND_CLAMP => StencilOp::DecrementAndClamp,
+            vk_sys::VK_STENCIL_OP_INVERT => StencilOp::Invert,
+            vk_sys::VK_STENCIL_OP_INCREMENT_AND_WRAP => StencilOp::IncrementAndWrap,
+            vk_sys::VK_STENCIL_OP_DECREMENT_AND_WRAP => StencilOp::DecrementAndWrap,
+            _ => StencilOp::Unknown(op),
+        }
+    }
+}
+
+impl From<StencilOp> for vk_sys::VkStencilOp {
+    fn from(op: StencilOp) -> Self {
+        match op {
+            StencilOp::Keep => vk_sys::VK_STENCIL_OP_KEEP,
+            StencilOp::Zero => vk_sys::VK_STENCIL_OP_ZERO,
+            StencilOp::Replace => vk_sys::VK_STENCIL_OP_REPLACE,
+            StencilOp::IncrementAndClamp => vk_sys::VK_STENCIL_OP_INCREMENT_AND_CLAMP,
+            StencilOp::DecrementAndClamp => vk_sys::VK_STENCIL_OP_DECREMENT_AND_CLAMP,
+            StencilOp::Invert => vk_sys::VK_STENCIL_OP_INVERT,
+            StencilOp::IncrementAndWrap => vk_sys::VK_STENCIL_OP_INCREMENT_AND_WRAP,
+            StencilOp::DecrementAndWrap => vk_sys::VK_STENCIL_OP_DECREMENT_AND_WRAP,
+            StencilOp::Unknown(op) => op,
+        }
+    }
+}
+
+#[derive(Debug, Copy, Clone)]
 pub enum CommandBufferLevel {
     Primary,
     Secondary,
