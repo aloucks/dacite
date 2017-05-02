@@ -2750,6 +2750,88 @@ impl<'a> From<&'a QueryPoolCreateInfo> for VkQueryPoolCreateInfoWrapper {
 }
 
 #[derive(Debug, Clone)]
+pub enum BufferCreateInfoChainElement {
+}
+
+#[derive(Debug, Clone)]
+pub struct BufferCreateInfo {
+    pub chain: Vec<BufferCreateInfoChainElement>,
+    pub flags: vk_sys::VkBufferCreateFlags,
+    pub size: u64,
+    pub usage: vk_sys::VkBufferUsageFlags,
+    pub sharing_mode: SharingMode,
+    pub queue_family_indices: Option<Vec<u32>>,
+}
+
+impl<'a> From<&'a vk_sys::VkBufferCreateInfo> for BufferCreateInfo {
+    fn from(create_info: &'a vk_sys::VkBufferCreateInfo) -> Self {
+        debug_assert_eq!(create_info.pNext, ptr::null());
+
+        let queue_family_indices = if !create_info.pQueueFamilyIndices.is_null() {
+            unsafe {
+                Some(slice::from_raw_parts(create_info.pQueueFamilyIndices, create_info.queueFamilyIndexCount as usize).to_vec())
+            }
+        }
+        else {
+            None
+        };
+
+        BufferCreateInfo {
+            chain: vec![],
+            flags: create_info.flags,
+            size: create_info.size,
+            usage: create_info.usage,
+            sharing_mode: create_info.sharingMode.into(),
+            queue_family_indices: queue_family_indices,
+        }
+    }
+}
+
+#[derive(Debug)]
+struct VkBufferCreateInfoWrapper {
+    create_info: vk_sys::VkBufferCreateInfo,
+    queue_family_indices: Option<Vec<u32>>,
+}
+
+impl Deref for VkBufferCreateInfoWrapper {
+    type Target = vk_sys::VkBufferCreateInfo;
+
+    fn deref(&self) -> &Self::Target {
+        &self.create_info
+    }
+}
+
+impl AsRef<vk_sys::VkBufferCreateInfo> for VkBufferCreateInfoWrapper {
+    fn as_ref(&self) -> &vk_sys::VkBufferCreateInfo {
+        &self.create_info
+    }
+}
+
+impl<'a> From<&'a BufferCreateInfo> for VkBufferCreateInfoWrapper {
+    fn from(create_info: &'a BufferCreateInfo) -> Self {
+        let queue_family_indices = create_info.queue_family_indices.clone();
+        let (queue_family_indices_ptr, queue_family_index_count) = match queue_family_indices {
+            Some(ref queue_family_indices) => (queue_family_indices.as_ptr(), queue_family_indices.len() as u32),
+            None => (ptr::null(), 0)
+        };
+
+        VkBufferCreateInfoWrapper {
+            create_info: vk_sys::VkBufferCreateInfo {
+                sType: vk_sys::VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO,
+                pNext: ptr::null(),
+                flags: create_info.flags,
+                size: create_info.size,
+                usage: create_info.usage,
+                sharingMode: create_info.sharing_mode.into(),
+                queueFamilyIndexCount: queue_family_index_count,
+                pQueueFamilyIndices: queue_family_indices_ptr,
+            },
+            queue_family_indices: queue_family_indices,
+        }
+    }
+}
+
+#[derive(Debug, Clone)]
 pub enum CommandPoolCreateInfoChainElement {
 }
 
