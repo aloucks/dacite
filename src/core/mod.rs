@@ -4121,6 +4121,30 @@ impl<'a> From<&'a Extent2D> for vk_sys::VkExtent2D {
     }
 }
 
+#[derive(Debug, Copy, Clone)]
+pub struct Rect2D {
+    pub offset: Offset2D,
+    pub extent: Extent2D,
+}
+
+impl<'a> From<&'a vk_sys::VkRect2D> for Rect2D {
+    fn from(rect: &'a vk_sys::VkRect2D) -> Self {
+        Rect2D {
+            offset: (&rect.offset).into(),
+            extent: (&rect.extent).into(),
+        }
+    }
+}
+
+impl<'a> From<&'a Rect2D> for vk_sys::VkRect2D {
+    fn from(rect: &'a Rect2D) -> Self {
+        vk_sys::VkRect2D {
+            offset: (&rect.offset).into(),
+            extent: (&rect.extent).into(),
+        }
+    }
+}
+
 #[derive(Debug, Clone)]
 pub enum CommandPoolCreateInfoChainElement {
 }
