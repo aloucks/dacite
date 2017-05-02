@@ -20,6 +20,7 @@ mod fence;
 mod instance;
 mod physical_device;
 mod queue;
+mod semaphore;
 
 use libc::{c_char, c_void};
 use std::ffi::{CStr, CString};
@@ -38,6 +39,7 @@ pub use self::fence::Fence;
 pub use self::instance::Instance;
 pub use self::physical_device::PhysicalDevice;
 pub use self::queue::Queue;
+pub use self::semaphore::Semaphore;
 
 #[derive(Debug, Copy, Clone)]
 pub struct Version {
