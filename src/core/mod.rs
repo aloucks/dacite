@@ -1623,6 +1623,33 @@ impl From<Filter> for vk_sys::VkFilter {
 }
 
 #[derive(Debug, Copy, Clone)]
+pub enum SamplerMipmapMode {
+    Nearest,
+    Linear,
+    Unknown(vk_sys::VkSamplerMipmapMode),
+}
+
+impl From<vk_sys::VkSamplerMipmapMode> for SamplerMipmapMode {
+    fn from(mode: vk_sys::VkSamplerMipmapMode) -> Self {
+        match mode {
+            vk_sys::VK_SAMPLER_MIPMAP_MODE_NEAREST => SamplerMipmapMode::Nearest,
+            vk_sys::VK_SAMPLER_MIPMAP_MODE_LINEAR => SamplerMipmapMode::Linear,
+            _ => SamplerMipmapMode::Unknown(mode),
+        }
+    }
+}
+
+impl From<SamplerMipmapMode> for vk_sys::VkSamplerMipmapMode {
+    fn from(mode: SamplerMipmapMode) -> Self {
+        match mode {
+            SamplerMipmapMode::Nearest => vk_sys::VK_SAMPLER_MIPMAP_MODE_NEAREST,
+            SamplerMipmapMode::Linear => vk_sys::VK_SAMPLER_MIPMAP_MODE_LINEAR,
+            SamplerMipmapMode::Unknown(mode) => mode,
+        }
+    }
+}
+
+#[derive(Debug, Copy, Clone)]
 pub enum CommandBufferLevel {
     Primary,
     Secondary,
