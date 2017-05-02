@@ -36,7 +36,7 @@ impl PhysicalDevice {
 
     #[inline]
     pub(crate) fn loader(&self) -> &vk_sys::InstanceProcAddrLoader {
-        &self.instance.0.loader
+        self.instance.loader()
     }
 
     pub fn properties(&self) -> core::PhysicalDeviceProperties {

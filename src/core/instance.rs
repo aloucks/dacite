@@ -21,10 +21,10 @@ use utils;
 use vk_sys;
 
 #[derive(Debug)]
-pub(crate) struct Inner {
-    pub handle: vk_sys::VkInstance,
-    pub allocator: Option<AllocatorHelper>,
-    pub loader: vk_sys::InstanceProcAddrLoader,
+struct Inner {
+    handle: vk_sys::VkInstance,
+    allocator: Option<AllocatorHelper>,
+    loader: vk_sys::InstanceProcAddrLoader,
 }
 
 impl Drop for Inner {
@@ -41,7 +41,7 @@ impl Drop for Inner {
 }
 
 #[derive(Debug, Clone)]
-pub struct Instance(pub(crate) Arc<Inner>);
+pub struct Instance(Arc<Inner>);
 
 impl Instance {
     #[inline]
