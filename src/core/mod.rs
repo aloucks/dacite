@@ -2662,6 +2662,67 @@ impl<'a> From<&'a EventCreateInfo> for VkEventCreateInfoWrapper {
 }
 
 #[derive(Debug, Clone)]
+pub enum QueryPoolCreateInfoChainElement {
+}
+
+#[derive(Debug, Clone)]
+pub struct QueryPoolCreateInfo {
+    pub chain: Vec<QueryPoolCreateInfoChainElement>,
+    pub flags: vk_sys::VkQueryPoolCreateFlags,
+    pub query_type: QueryType,
+    pub query_count: u32,
+    pub pipeline_statistics: vk_sys::VkQueryPipelineStatisticFlags,
+}
+
+impl<'a> From<&'a vk_sys::VkQueryPoolCreateInfo> for QueryPoolCreateInfo {
+    fn from(create_info: &'a vk_sys::VkQueryPoolCreateInfo) -> Self {
+        debug_assert_eq!(create_info.pNext, ptr::null());
+
+        QueryPoolCreateInfo {
+            chain: vec![],
+            flags: create_info.flags,
+            query_type: create_info.queryType.into(),
+            query_count: create_info.queryCount,
+            pipeline_statistics: create_info.pipelineStatistics,
+        }
+    }
+}
+
+#[derive(Debug)]
+struct VkQueryPoolCreateInfoWrapper {
+    create_info: vk_sys::VkQueryPoolCreateInfo,
+}
+
+impl Deref for VkQueryPoolCreateInfoWrapper {
+    type Target = vk_sys::VkQueryPoolCreateInfo;
+
+    fn deref(&self) -> &Self::Target {
+        &self.create_info
+    }
+}
+
+impl AsRef<vk_sys::VkQueryPoolCreateInfo> for VkQueryPoolCreateInfoWrapper {
+    fn as_ref(&self) -> &vk_sys::VkQueryPoolCreateInfo {
+        &self.create_info
+    }
+}
+
+impl<'a> From<&'a QueryPoolCreateInfo> for VkQueryPoolCreateInfoWrapper {
+    fn from(create_info: &'a QueryPoolCreateInfo) -> VkQueryPoolCreateInfoWrapper {
+        VkQueryPoolCreateInfoWrapper {
+            create_info: vk_sys::VkQueryPoolCreateInfo {
+                sType: vk_sys::VK_STRUCTURE_TYPE_QUERY_POOL_CREATE_INFO,
+                pNext: ptr::null(),
+                flags: create_info.flags,
+                queryType: create_info.query_type.into(),
+                queryCount: create_info.query_count,
+                pipelineStatistics: create_info.pipeline_statistics,
+            },
+        }
+    }
+}
+
+#[derive(Debug, Clone)]
 pub enum CommandPoolCreateInfoChainElement {
 }
 
