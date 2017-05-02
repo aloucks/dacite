@@ -2552,6 +2552,58 @@ impl<'a> From<&'a SemaphoreCreateInfo> for VkSemaphoreCreateInfoWrapper {
 }
 
 #[derive(Debug, Clone)]
+pub enum EventCreateInfoChainElement {
+}
+
+#[derive(Debug, Clone)]
+pub struct EventCreateInfo {
+    pub chain: Vec<EventCreateInfoChainElement>,
+    pub flags: vk_sys::VkEventCreateFlags,
+}
+
+impl<'a> From<&'a vk_sys::VkEventCreateInfo> for EventCreateInfo {
+    fn from(create_info: &'a vk_sys::VkEventCreateInfo) -> Self {
+        debug_assert_eq!(create_info.pNext, ptr::null());
+
+        EventCreateInfo {
+            chain: vec![],
+            flags: create_info.flags,
+        }
+    }
+}
+
+#[derive(Debug)]
+struct VkEventCreateInfoWrapper {
+    create_info: vk_sys::VkEventCreateInfo,
+}
+
+impl Deref for VkEventCreateInfoWrapper {
+    type Target = vk_sys::VkEventCreateInfo;
+
+    fn deref(&self) -> &Self::Target {
+        &self.create_info
+    }
+}
+
+impl AsRef<vk_sys::VkEventCreateInfo> for VkEventCreateInfoWrapper {
+    fn as_ref(&self) -> &vk_sys::VkEventCreateInfo {
+        &self.create_info
+    }
+}
+
+impl<'a> From<&'a EventCreateInfo> for VkEventCreateInfoWrapper {
+    fn from(create_info: &'a EventCreateInfo) -> VkEventCreateInfoWrapper {
+        VkEventCreateInfoWrapper {
+            create_info: vk_sys::VkEventCreateInfo {
+                sType: vk_sys::VK_STRUCTURE_TYPE_FENCE_CREATE_INFO,
+                pNext: ptr::null(),
+                flags: create_info.flags,
+            },
+        }
+    }
+}
+
+#[derive(Debug, Clone)]
 pub enum CommandPoolCreateInfoChainElement {
 }
 
