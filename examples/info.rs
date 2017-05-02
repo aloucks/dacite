@@ -71,4 +71,47 @@ fn main() {
 
     println!();
     println!("Found {} physical device(s)", physical_devices.len());
+
+    for physical_device in physical_devices {
+        println!();
+
+        let properties = physical_device.properties();
+        println!("Physical device \"{}\":", properties.device_name);
+        println!("    API version: {}", properties.api_version);
+        println!("    Driver version: {}", properties.driver_version);
+        println!("    Vendor ID: 0x{:04x}", properties.vendor_id);
+        println!("    Device ID: 0x{:04x}", properties.device_id);
+
+        print!("    Device type: ");
+        match properties.device_type {
+            dacite::core::PhysicalDeviceType::Other => println!("other"),
+            dacite::core::PhysicalDeviceType::IntegratedGpu => println!("integrated GPU"),
+            dacite::core::PhysicalDeviceType::DiscreteGpu => println!("discrete GPU"),
+            dacite::core::PhysicalDeviceType::VirtualGpu => println!("virtual GPU"),
+            dacite::core::PhysicalDeviceType::Cpu => println!("CPU"),
+            dacite::core::PhysicalDeviceType::Unknown(device_type) => println!("unknown ({})", device_type.as_raw()),
+        };
+
+        print!("    Pipeline cache UUID: ");
+        for i in 0..4 {
+            print!("{:02x}", properties.pipeline_cache_uuid[i]);
+        }
+        print!("-");
+        for i in 4..6 {
+            print!("{:02x}", properties.pipeline_cache_uuid[i]);
+        }
+        print!("-");
+        for i in 6..8 {
+            print!("{:02x}", properties.pipeline_cache_uuid[i]);
+        }
+        print!("-");
+        for i in 8..10 {
+            print!("{:02x}", properties.pipeline_cache_uuid[i]);
+        }
+        print!("-");
+        for i in 10..16 {
+            print!("{:02x}", properties.pipeline_cache_uuid[i]);
+        }
+        println!();
+    }
 }
