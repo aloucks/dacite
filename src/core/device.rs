@@ -20,11 +20,11 @@ use std::sync::Arc;
 use vk_sys;
 
 #[derive(Debug)]
-pub(crate) struct Inner {
-    pub handle: vk_sys::VkDevice,
-    pub instance: Instance,
-    pub allocator: Option<AllocatorHelper>,
-    pub loader: vk_sys::DeviceProcAddrLoader,
+struct Inner {
+    handle: vk_sys::VkDevice,
+    instance: Instance,
+    allocator: Option<AllocatorHelper>,
+    loader: vk_sys::DeviceProcAddrLoader,
 }
 
 impl Drop for Inner {
@@ -41,7 +41,7 @@ impl Drop for Inner {
 }
 
 #[derive(Debug, Clone)]
-pub struct Device(pub(crate) Arc<Inner>);
+pub struct Device(Arc<Inner>);
 
 impl Device {
     pub fn new(handle: vk_sys::VkDevice, instance: Instance, allocator: Option<AllocatorHelper>) -> Self {

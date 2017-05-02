@@ -34,7 +34,7 @@ impl Drop for Inner {
         };
 
         unsafe {
-            (self.device.0.loader.core.vkDestroyCommandPool)(self.device.0.handle, self.handle, allocator);
+            (self.device.loader().core.vkDestroyCommandPool)(self.device.handle(), self.handle, allocator);
         }
     }
 }
