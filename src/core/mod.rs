@@ -970,7 +970,7 @@ impl<'a> From<&'a vk_sys::VkApplicationInfo> for ApplicationInfo {
 }
 
 #[derive(Debug)]
-pub struct VkApplicationInfoWrapper {
+struct VkApplicationInfoWrapper {
     application_info: vk_sys::VkApplicationInfo,
     application_name_cstr: Option<CString>,
     engine_name_cstr: Option<CString>,
@@ -1065,7 +1065,7 @@ impl<'a> From<&'a vk_sys::VkInstanceCreateInfo> for InstanceCreateInfo {
 }
 
 #[derive(Debug)]
-pub struct VkInstanceCreateInfoWrapper {
+struct VkInstanceCreateInfoWrapper {
     create_info: vk_sys::VkInstanceCreateInfo,
     application_info: Option<Box<VkApplicationInfoWrapper>>,
     enabled_layers: Vec<CString>,
@@ -2027,7 +2027,7 @@ impl<'a> From<&'a vk_sys::VkDeviceQueueCreateInfo> for DeviceQueueCreateInfo {
 }
 
 #[derive(Debug)]
-pub struct VkDeviceQueueCreateInfoWrapper {
+struct VkDeviceQueueCreateInfoWrapper {
     create_info: vk_sys::VkDeviceQueueCreateInfo,
     queue_priorities: Vec<f32>,
 }
@@ -2128,7 +2128,7 @@ impl<'a> From<&'a vk_sys::VkDeviceCreateInfo> for DeviceCreateInfo {
 }
 
 #[derive(Debug)]
-pub struct VkDeviceCreateInfoWrapper {
+struct VkDeviceCreateInfoWrapper {
     create_info: vk_sys::VkDeviceCreateInfo,
     queue_create_infos_wrappers: Vec<VkDeviceQueueCreateInfoWrapper>,
     queue_create_infos: Vec<vk_sys::VkDeviceQueueCreateInfo>,
@@ -2465,7 +2465,7 @@ impl<'a> From<&'a vk_sys::VkCommandPoolCreateInfo> for CommandPoolCreateInfo {
 }
 
 #[derive(Debug)]
-pub struct VkCommandPoolCreateInfoWrapper {
+struct VkCommandPoolCreateInfoWrapper {
     create_info: vk_sys::VkCommandPoolCreateInfo,
 }
 
@@ -2509,7 +2509,7 @@ pub struct CommandBufferAllocateInfo {
 }
 
 #[derive(Debug)]
-pub struct VkCommandBufferAllocateInfoWrapper {
+struct VkCommandBufferAllocateInfoWrapper {
     info: vk_sys::VkCommandBufferAllocateInfo,
     command_pool: CommandPool,
 }
