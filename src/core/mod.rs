@@ -3418,6 +3418,33 @@ impl<'a> From<&'a LayerProperties> for vk_sys::VkLayerProperties {
 }
 
 #[derive(Debug, Copy, Clone)]
+pub struct MemoryRequirements {
+    pub size: u64,
+    pub alignment: u64,
+    pub memory_type_bits: u32,
+}
+
+impl<'a> From<&'a vk_sys::VkMemoryRequirements> for MemoryRequirements {
+    fn from(requirements: &'a vk_sys::VkMemoryRequirements) -> Self {
+        MemoryRequirements {
+            size: requirements.size,
+            alignment: requirements.alignment,
+            memory_type_bits: requirements.memoryTypeBits,
+        }
+    }
+}
+
+impl<'a> From<&'a MemoryRequirements> for vk_sys::VkMemoryRequirements {
+    fn from(requirements: &'a MemoryRequirements) -> Self {
+        vk_sys::VkMemoryRequirements {
+            size: requirements.size,
+            alignment: requirements.alignment,
+            memoryTypeBits: requirements.memory_type_bits,
+        }
+    }
+}
+
+#[derive(Debug, Copy, Clone)]
 pub struct SparseImageFormatProperties {
     pub aspect_mask: vk_sys::VkImageAspectFlags,
     pub image_granularity: Extent3D,
