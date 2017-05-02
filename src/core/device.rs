@@ -14,7 +14,15 @@
 
 use Result;
 use core::allocator_helper::AllocatorHelper;
-use core::{self, CommandPool, Fence, Instance, Queue, Semaphore};
+use core::{
+    self,
+    CommandPool,
+    Event,
+    Fence,
+    Instance,
+    Queue,
+    Semaphore,
+};
 use std::ptr;
 use std::sync::Arc;
 use vk_sys;
@@ -128,6 +136,25 @@ impl Device {
 
         if res == vk_sys::VK_SUCCESS {
             Ok(Semaphore::new(semaphore, self.clone(), allocator_helper))
+        }
+        else {
+            Err(res.into())
+        }
+    }
+
+    pub fn create_event(&self, create_info: &core::EventCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<Event> {
+        let create_info: core::VkEventCreateInfoWrapper = create_info.into();
+
+        let allocator_helper = allocator.map(AllocatorHelper::new);
+        let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), |a| &a.callbacks);
+
+        let mut event = ptr::null_mut();
+        let res = unsafe {
+            (self.loader().core.vkCreateEvent)(self.handle(), create_info.as_ref(), allocation_callbacks, &mut event)
+        };
+
+        if res == vk_sys::VK_SUCCESS {
+            Ok(Event::new(event, self.clone(), allocator_helper))
         }
         else {
             Err(res.into())
