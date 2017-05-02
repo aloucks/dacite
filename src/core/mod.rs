@@ -4037,6 +4037,42 @@ impl<'a> From<&'a VertexInputAttributeDescription> for vk_sys::VkVertexInputAttr
     }
 }
 
+#[derive(Debug, Copy, Clone)]
+pub struct Viewport {
+    pub x: f32,
+    pub y: f32,
+    pub width: f32,
+    pub height: f32,
+    pub min_depth: f32,
+    pub max_depth: f32,
+}
+
+impl<'a> From<&'a vk_sys::VkViewport> for Viewport {
+    fn from(viewport: &'a vk_sys::VkViewport) -> Self {
+        Viewport {
+            x: viewport.x,
+            y: viewport.y,
+            width: viewport.width,
+            height: viewport.height,
+            min_depth: viewport.minDepth,
+            max_depth: viewport.maxDepth,
+        }
+    }
+}
+
+impl<'a> From<&'a Viewport> for vk_sys::VkViewport {
+    fn from(viewport: &'a Viewport) -> Self {
+        vk_sys::VkViewport {
+            x: viewport.x,
+            y: viewport.y,
+            width: viewport.width,
+            height: viewport.height,
+            minDepth: viewport.min_depth,
+            maxDepth: viewport.max_depth,
+        }
+    }
+}
+
 #[derive(Debug, Clone)]
 pub enum CommandPoolCreateInfoChainElement {
 }
