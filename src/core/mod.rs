@@ -3857,6 +3857,108 @@ impl<'a> From<&'a BufferCreateInfo> for VkBufferCreateInfoWrapper {
     }
 }
 
+#[derive(Debug, Clone)]
+pub enum ImageCreateInfoChainElement {
+}
+
+#[derive(Debug, Clone)]
+pub struct ImageCreateInfo {
+    pub chain: Vec<ImageCreateInfoChainElement>,
+    pub flags: vk_sys::VkImageCreateFlags,
+    pub image_type: ImageType,
+    pub format: Format,
+    pub extent: Extent3D,
+    pub mip_levels: u32,
+    pub array_layers: u32,
+    pub samples: vk_sys::VkSampleCountFlagBits,
+    pub tiling: ImageTiling,
+    pub usage: vk_sys::VkImageUsageFlags,
+    pub sharing_mode: SharingMode,
+    pub queue_family_indices: Option<Vec<u32>>,
+    pub initial_layout: ImageLayout,
+}
+
+impl<'a> From<&'a vk_sys::VkImageCreateInfo> for ImageCreateInfo {
+    fn from(create_info: &'a vk_sys::VkImageCreateInfo) -> Self {
+        debug_assert_eq!(create_info.pNext, ptr::null());
+
+        let queue_family_indices = if !create_info.pQueueFamilyIndices.is_null() {
+            unsafe {
+                Some(slice::from_raw_parts(create_info.pQueueFamilyIndices, create_info.queueFamilyIndexCount as usize).to_vec())
+            }
+        }
+        else {
+            None
+        };
+
+        ImageCreateInfo {
+            chain: vec![],
+            flags: create_info.flags,
+            image_type: create_info.imageType.into(),
+            format: create_info.format.into(),
+            extent: (&create_info.extent).into(),
+            mip_levels: create_info.mipLevels,
+            array_layers: create_info.arrayLayers,
+            samples: create_info.samples,
+            tiling: create_info.tiling.into(),
+            usage: create_info.usage,
+            sharing_mode: create_info.sharingMode.into(),
+            queue_family_indices: queue_family_indices,
+            initial_layout: create_info.initialLayout.into(),
+        }
+    }
+}
+
+struct VkImageCreateInfoWrapper {
+    create_info: vk_sys::VkImageCreateInfo,
+    queue_family_indices: Option<Vec<u32>>,
+}
+
+impl Deref for VkImageCreateInfoWrapper {
+    type Target = vk_sys::VkImageCreateInfo;
+
+    fn deref(&self) -> &Self::Target {
+        &self.create_info
+    }
+}
+
+impl AsRef<vk_sys::VkImageCreateInfo> for VkImageCreateInfoWrapper {
+    fn as_ref(&self) -> &vk_sys::VkImageCreateInfo {
+        &self.create_info
+    }
+}
+
+impl<'a> From<&'a ImageCreateInfo> for VkImageCreateInfoWrapper {
+    fn from(create_info: &'a ImageCreateInfo) -> Self {
+        let queue_family_indices = create_info.queue_family_indices.clone();
+        let (queue_family_indices_ptr, queue_family_index_count) = match queue_family_indices {
+            Some(ref queue_family_indices) => (queue_family_indices.as_ptr(), queue_family_indices.len() as u32),
+            None => (ptr::null(), 0)
+        };
+
+        VkImageCreateInfoWrapper {
+            create_info: vk_sys::VkImageCreateInfo {
+                sType: vk_sys::VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO,
+                pNext: ptr::null(),
+                flags: create_info.flags,
+                imageType: create_info.image_type.into(),
+                format: create_info.format.into(),
+                extent: (&create_info.extent).into(),
+                mipLevels: create_info.mip_levels,
+                arrayLayers: create_info.array_layers,
+                samples: create_info.samples,
+                tiling: create_info.tiling.into(),
+                usage: create_info.usage,
+                sharingMode: create_info.sharing_mode.into(),
+                queueFamilyIndexCount: queue_family_index_count,
+                pQueueFamilyIndices: queue_family_indices_ptr,
+                initialLayout: create_info.initial_layout.into(),
+            },
+            queue_family_indices: queue_family_indices,
+        }
+    }
+}
+
 #[derive(Debug, Copy, Clone)]
 pub struct SubresourceLayout {
     pub offset: u64,
