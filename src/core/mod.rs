@@ -13,6 +13,7 @@
 // PERFORMANCE OF THIS SOFTWARE.
 
 mod allocator_helper;
+mod command_buffer;
 mod command_pool;
 mod device;
 mod instance;
@@ -29,6 +30,7 @@ use std::slice;
 use utils;
 use vk_sys;
 
+pub use self::command_buffer::CommandBuffer;
 pub use self::command_pool::CommandPool;
 pub use self::device::Device;
 pub use self::instance::Instance;
