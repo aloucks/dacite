@@ -4097,6 +4097,30 @@ impl<'a> From<&'a Offset2D> for vk_sys::VkOffset2D {
     }
 }
 
+#[derive(Debug, Copy, Clone)]
+pub struct Extent2D {
+    pub width: u32,
+    pub height: u32,
+}
+
+impl<'a> From<&'a vk_sys::VkExtent2D> for Extent2D {
+    fn from(extent: &'a vk_sys::VkExtent2D) -> Self {
+        Extent2D {
+            width: extent.width,
+            height: extent.height,
+        }
+    }
+}
+
+impl<'a> From<&'a Extent2D> for vk_sys::VkExtent2D {
+    fn from(extent: &'a Extent2D) -> Self {
+        vk_sys::VkExtent2D {
+            width: extent.width,
+            height: extent.height,
+        }
+    }
+}
+
 #[derive(Debug, Clone)]
 pub enum CommandPoolCreateInfoChainElement {
 }
