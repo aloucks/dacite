@@ -1164,6 +1164,60 @@ impl From<VertexInputRate> for vk_sys::VkVertexInputRate {
 }
 
 #[derive(Debug, Copy, Clone)]
+pub enum PrimitiveTopology {
+    PointList,
+    LineList,
+    LineStrip,
+    TriangleList,
+    TriangleStrip,
+    TriangleFan,
+    LineListWithAdjacency,
+    LineStripWithAdjacency,
+    TriangleListWithAdjacency,
+    TriangleStripWithAdjacency,
+    PatchList,
+    Unknown(vk_sys::VkPrimitiveTopology)
+}
+
+impl From<vk_sys::VkPrimitiveTopology> for PrimitiveTopology {
+    fn from(topology: vk_sys::VkPrimitiveTopology) -> Self {
+        match topology {
+            vk_sys::VK_PRIMITIVE_TOPOLOGY_POINT_LIST => PrimitiveTopology::PointList,
+            vk_sys::VK_PRIMITIVE_TOPOLOGY_LINE_LIST => PrimitiveTopology::LineList,
+            vk_sys::VK_PRIMITIVE_TOPOLOGY_LINE_STRIP => PrimitiveTopology::LineStrip,
+            vk_sys::VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST => PrimitiveTopology::TriangleList,
+            vk_sys::VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP => PrimitiveTopology::TriangleStrip,
+            vk_sys::VK_PRIMITIVE_TOPOLOGY_TRIANGLE_FAN => PrimitiveTopology::TriangleFan,
+            vk_sys::VK_PRIMITIVE_TOPOLOGY_LINE_LIST_WITH_ADJACENCY => PrimitiveTopology::LineListWithAdjacency,
+            vk_sys::VK_PRIMITIVE_TOPOLOGY_LINE_STRIP_WITH_ADJACENCY => PrimitiveTopology::LineStripWithAdjacency,
+            vk_sys::VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST_WITH_ADJACENCY => PrimitiveTopology::TriangleListWithAdjacency,
+            vk_sys::VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP_WITH_ADJACENCY => PrimitiveTopology::TriangleStripWithAdjacency,
+            vk_sys::VK_PRIMITIVE_TOPOLOGY_PATCH_LIST => PrimitiveTopology::PatchList,
+            _ => PrimitiveTopology::Unknown(topology),
+        }
+    }
+}
+
+impl From<PrimitiveTopology> for vk_sys::VkPrimitiveTopology {
+    fn from(topology: PrimitiveTopology) -> Self {
+        match topology {
+            PrimitiveTopology::PointList => vk_sys::VK_PRIMITIVE_TOPOLOGY_POINT_LIST,
+            PrimitiveTopology::LineList => vk_sys::VK_PRIMITIVE_TOPOLOGY_LINE_LIST,
+            PrimitiveTopology::LineStrip => vk_sys::VK_PRIMITIVE_TOPOLOGY_LINE_STRIP,
+            PrimitiveTopology::TriangleList => vk_sys::VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST,
+            PrimitiveTopology::TriangleStrip => vk_sys::VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP,
+            PrimitiveTopology::TriangleFan => vk_sys::VK_PRIMITIVE_TOPOLOGY_TRIANGLE_FAN,
+            PrimitiveTopology::LineListWithAdjacency => vk_sys::VK_PRIMITIVE_TOPOLOGY_LINE_LIST_WITH_ADJACENCY,
+            PrimitiveTopology::LineStripWithAdjacency => vk_sys::VK_PRIMITIVE_TOPOLOGY_LINE_STRIP_WITH_ADJACENCY,
+            PrimitiveTopology::TriangleListWithAdjacency => vk_sys::VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST_WITH_ADJACENCY,
+            PrimitiveTopology::TriangleStripWithAdjacency => vk_sys::VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP_WITH_ADJACENCY,
+            PrimitiveTopology::PatchList => vk_sys::VK_PRIMITIVE_TOPOLOGY_PATCH_LIST,
+            PrimitiveTopology::Unknown(topology) => topology,
+        }
+    }
+}
+
+#[derive(Debug, Copy, Clone)]
 pub enum CommandBufferLevel {
     Primary,
     Secondary,
