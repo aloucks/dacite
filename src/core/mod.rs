@@ -4322,6 +4322,30 @@ impl<'a> From<&'a AttachmentDescription> for vk_sys::VkAttachmentDescription {
     }
 }
 
+#[derive(Debug, Copy, Clone)]
+pub struct AttachmentReference {
+    pub attachment: u32,
+    pub layout: ImageLayout,
+}
+
+impl<'a> From<&'a vk_sys::VkAttachmentReference> for AttachmentReference {
+    fn from(reference: &'a vk_sys::VkAttachmentReference) -> Self {
+        AttachmentReference {
+            attachment: reference.attachment,
+            layout: reference.layout.into(),
+        }
+    }
+}
+
+impl<'a> From<&'a AttachmentReference> for vk_sys::VkAttachmentReference {
+    fn from(reference: &'a AttachmentReference) -> Self {
+        vk_sys::VkAttachmentReference {
+            attachment: reference.attachment,
+            layout: reference.layout.into(),
+        }
+    }
+}
+
 #[derive(Debug, Clone)]
 pub enum CommandPoolCreateInfoChainElement {
 }
