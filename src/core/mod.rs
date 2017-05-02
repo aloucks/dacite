@@ -4346,6 +4346,45 @@ impl<'a> From<&'a AttachmentReference> for vk_sys::VkAttachmentReference {
     }
 }
 
+#[derive(Debug, Copy, Clone)]
+pub struct SubpassDependency {
+    pub src_subpass: u32,
+    pub dst_subpass: u32,
+    pub src_stage_mask: vk_sys::VkPipelineStageFlags,
+    pub dst_stage_mask: vk_sys::VkPipelineStageFlags,
+    pub src_access_mask: vk_sys::VkAccessFlags,
+    pub dst_access_mask: vk_sys::VkAccessFlags,
+    pub dependency_flags: vk_sys::VkDependencyFlags,
+}
+
+impl<'a> From<&'a vk_sys::VkSubpassDependency> for SubpassDependency {
+    fn from(dependency: &'a vk_sys::VkSubpassDependency) -> Self {
+        SubpassDependency {
+            src_subpass: dependency.srcSubpass,
+            dst_subpass: dependency.dstSubpass,
+            src_stage_mask: dependency.srcStageMask,
+            dst_stage_mask: dependency.dstStageMask,
+            src_access_mask: dependency.srcAccessMask,
+            dst_access_mask: dependency.dstAccessMask,
+            dependency_flags: dependency.dependencyFlags,
+        }
+    }
+}
+
+impl<'a> From<&'a SubpassDependency> for vk_sys::VkSubpassDependency {
+    fn from(dependency: &'a SubpassDependency) -> Self {
+        vk_sys::VkSubpassDependency {
+            srcSubpass: dependency.src_subpass,
+            dstSubpass: dependency.dst_subpass,
+            srcStageMask: dependency.src_stage_mask,
+            dstStageMask: dependency.dst_stage_mask,
+            srcAccessMask: dependency.src_access_mask,
+            dstAccessMask: dependency.dst_access_mask,
+            dependencyFlags: dependency.dependency_flags,
+        }
+    }
+}
+
 #[derive(Debug, Clone)]
 pub enum CommandPoolCreateInfoChainElement {
 }
