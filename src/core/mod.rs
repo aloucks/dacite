@@ -2493,3 +2493,50 @@ impl<'a> From<&'a CommandPoolCreateInfo> for VkCommandPoolCreateInfoWrapper {
         }
     }
 }
+
+#[derive(Debug, Clone)]
+pub enum CommandBufferAllocateInfoChainElement {
+}
+
+#[derive(Debug, Clone)]
+pub struct CommandBufferAllocateInfo {
+    pub chain: Vec<CommandBufferAllocateInfoChainElement>,
+    pub command_pool: CommandPool,
+    pub level: CommandBufferLevel,
+    pub command_buffer_count: u32,
+}
+
+#[derive(Debug)]
+pub struct VkCommandBufferAllocateInfoWrapper {
+    info: vk_sys::VkCommandBufferAllocateInfo,
+    command_pool: CommandPool,
+}
+
+impl Deref for VkCommandBufferAllocateInfoWrapper {
+    type Target = vk_sys::VkCommandBufferAllocateInfo;
+
+    fn deref(&self) -> &Self::Target {
+        &self.info
+    }
+}
+
+impl AsRef<vk_sys::VkCommandBufferAllocateInfo> for VkCommandBufferAllocateInfoWrapper {
+    fn as_ref(&self) -> &vk_sys::VkCommandBufferAllocateInfo {
+        &self.info
+    }
+}
+
+impl<'a> From<&'a CommandBufferAllocateInfo> for VkCommandBufferAllocateInfoWrapper {
+    fn from(info: &'a CommandBufferAllocateInfo) -> Self {
+        VkCommandBufferAllocateInfoWrapper {
+            info: vk_sys::VkCommandBufferAllocateInfo {
+                sType: vk_sys::VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO,
+                pNext: ptr::null(),
+                commandPool: info.command_pool.0.handle,
+                level: info.level.into(),
+                commandBufferCount: info.command_buffer_count,
+            },
+            command_pool: info.command_pool.clone(),
+        }
+    }
+}
