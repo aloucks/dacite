@@ -4558,3 +4558,36 @@ impl<'a> From<&'a ImageSubresourceLayers> for vk_sys::VkImageSubresourceLayers {
         }
     }
 }
+
+#[derive(Debug, Copy, Clone)]
+pub struct ImageCopy {
+    pub src_subresource: ImageSubresourceLayers,
+    pub src_offset: Offset3D,
+    pub dst_subresource: ImageSubresourceLayers,
+    pub dst_offset: Offset3D,
+    pub extent: Extent3D,
+}
+
+impl<'a> From<&'a vk_sys::VkImageCopy> for ImageCopy {
+    fn from(copy: &'a vk_sys::VkImageCopy) -> Self {
+        ImageCopy {
+            src_subresource: (&copy.srcSubresource).into(),
+            src_offset: (&copy.srcOffset).into(),
+            dst_subresource: (&copy.dstSubresource).into(),
+            dst_offset: (&copy.dstOffset).into(),
+            extent: (&copy.extent).into(),
+        }
+    }
+}
+
+impl<'a> From<&'a ImageCopy> for vk_sys::VkImageCopy {
+    fn from(copy: &'a ImageCopy) -> Self {
+        vk_sys::VkImageCopy {
+            srcSubresource: (&copy.src_subresource).into(),
+            srcOffset: (&copy.src_offset).into(),
+            dstSubresource: (&copy.dst_subresource).into(),
+            dstOffset: (&copy.dst_offset).into(),
+            extent: (&copy.extent).into(),
+        }
+    }
+}
