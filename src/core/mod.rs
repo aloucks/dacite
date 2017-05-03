@@ -4163,6 +4163,75 @@ impl<'a> From<&'a ImageViewCreateInfo> for VkImageViewCreateInfoWrapper {
     }
 }
 
+#[derive(Debug, Clone)]
+pub enum ShaderModuleCreateInfoChainElement {
+}
+
+#[derive(Debug, Clone)]
+pub struct ShaderModuleCreateInfo {
+    pub chain: Vec<ShaderModuleCreateInfoChainElement>,
+    pub flags: vk_sys::VkShaderModuleCreateFlags,
+    pub code_size: usize,
+    pub code: Vec<u32>,
+}
+
+impl<'a> From<&'a vk_sys::VkShaderModuleCreateInfo> for ShaderModuleCreateInfo {
+    fn from(create_info: &'a vk_sys::VkShaderModuleCreateInfo) -> Self {
+        debug_assert_eq!(create_info.pNext, ptr::null());
+
+        let code_size_u32 = (create_info.codeSize / 4) + 1;
+        let mut code = Vec::with_capacity(code_size_u32);
+        unsafe {
+            code.set_len(code_size_u32);
+            ptr::copy_nonoverlapping(create_info.pCode as *const u8, code.as_mut_ptr() as *mut u8, create_info.codeSize);
+        }
+
+        ShaderModuleCreateInfo {
+            chain: vec![],
+            flags: create_info.flags,
+            code_size: create_info.codeSize,
+            code: code,
+        }
+    }
+}
+
+#[derive(Debug)]
+struct VkShaderModuleCreateInfoWrapper {
+    create_info: vk_sys::VkShaderModuleCreateInfo,
+    code: Vec<u32>,
+}
+
+impl Deref for VkShaderModuleCreateInfoWrapper {
+    type Target = vk_sys::VkShaderModuleCreateInfo;
+
+    fn deref(&self) -> &Self::Target {
+        &self.create_info
+    }
+}
+
+impl AsRef<vk_sys::VkShaderModuleCreateInfo> for VkShaderModuleCreateInfoWrapper {
+    fn as_ref(&self) -> &vk_sys::VkShaderModuleCreateInfo {
+        &self.create_info
+    }
+}
+
+impl<'a> From<&'a ShaderModuleCreateInfo> for VkShaderModuleCreateInfoWrapper {
+    fn from(create_info: &'a ShaderModuleCreateInfo) -> Self {
+        let code = create_info.code.clone();
+
+        VkShaderModuleCreateInfoWrapper {
+            create_info: vk_sys::VkShaderModuleCreateInfo {
+                sType: vk_sys::VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO,
+                pNext: ptr::null(),
+                flags: create_info.flags,
+                codeSize: create_info.code_size,
+                pCode: code.as_ptr(),
+            },
+            code: code,
+        }
+    }
+}
+
 #[derive(Debug, Copy, Clone)]
 pub struct SpecializationMapEntry {
     pub constant_id: u32,
