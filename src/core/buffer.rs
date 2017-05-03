@@ -49,4 +49,9 @@ impl Buffer {
             allocator: allocator,
         }))
     }
+
+    #[inline]
+    pub(crate) fn handle(&self) -> vk_sys::VkBuffer {
+        self.0.handle
+    }
 }
