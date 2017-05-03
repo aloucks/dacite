@@ -12,8 +12,8 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-use core::Device;
 use core::allocator_helper::AllocatorHelper;
+use core::{Buffer, Device};
 use std::ptr;
 use std::sync::Arc;
 use vk_sys;
@@ -23,6 +23,7 @@ struct Inner {
     handle: vk_sys::VkBufferView,
     device: Device,
     allocator: Option<AllocatorHelper>,
+    buffer: Buffer,
 }
 
 impl Drop for Inner {
@@ -42,11 +43,12 @@ impl Drop for Inner {
 pub struct BufferView(Arc<Inner>);
 
 impl BufferView {
-    pub(crate) fn new(handle: vk_sys::VkBufferView, device: Device, allocator: Option<AllocatorHelper>) -> Self {
+    pub(crate) fn new(handle: vk_sys::VkBufferView, device: Device, allocator: Option<AllocatorHelper>, buffer: Buffer) -> Self {
         BufferView(Arc::new(Inner {
             handle: handle,
             device: device,
             allocator: allocator,
+            buffer: buffer
         }))
     }
 }
