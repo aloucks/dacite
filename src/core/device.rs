@@ -24,6 +24,7 @@ use core::{
     Image,
     ImageView,
     Instance,
+    PipelineCache,
     QueryPool,
     Queue,
     Semaphore,
@@ -275,6 +276,25 @@ impl Device {
 
         if res == vk_sys::VK_SUCCESS {
             Ok(ShaderModule::new(shader_module, self.clone(), allocator_helper))
+        }
+        else {
+            Err(res.into())
+        }
+    }
+
+    pub fn create_pipeline_cache(&self, create_info: &core::PipelineCacheCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<PipelineCache> {
+        let create_info: core::VkPipelineCacheCreateInfoWrapper = create_info.into();
+
+        let allocator_helper = allocator.map(AllocatorHelper::new);
+        let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), |a| &a.callbacks);
+
+        let mut pipeline_cache = ptr::null_mut();
+        let res = unsafe {
+            (self.loader().core.vkCreatePipelineCache)(self.handle(), create_info.as_ref(), allocation_callbacks, &mut pipeline_cache)
+        };
+
+        if res == vk_sys::VK_SUCCESS {
+            Ok(PipelineCache::new(pipeline_cache, self.clone(), allocator_helper))
         }
         else {
             Err(res.into())
