@@ -4232,6 +4232,84 @@ impl<'a> From<&'a ShaderModuleCreateInfo> for VkShaderModuleCreateInfoWrapper {
     }
 }
 
+#[derive(Debug, Clone)]
+pub enum PipelineCacheCreateInfoChainElement {
+}
+
+#[derive(Debug, Clone)]
+pub struct PipelineCacheCreateInfo {
+    pub chain: Vec<PipelineCacheCreateInfoChainElement>,
+    pub flags: vk_sys::VkPipelineCacheCreateFlags,
+    pub initial_data: Option<Vec<u8>>,
+}
+
+impl<'a> From<&'a vk_sys::VkPipelineCacheCreateInfo> for PipelineCacheCreateInfo {
+    fn from(create_info: &'a vk_sys::VkPipelineCacheCreateInfo) -> Self {
+        debug_assert_eq!(create_info.pNext, ptr::null());
+
+        let initial_data = if create_info.initialDataSize > 0 {
+            unsafe {
+                Some(slice::from_raw_parts(create_info.pInitialData as *const u8, create_info.initialDataSize).to_vec())
+            }
+        }
+        else {
+            None
+        };
+
+        PipelineCacheCreateInfo {
+            chain: vec![],
+            flags: create_info.flags,
+            initial_data: initial_data,
+        }
+    }
+}
+
+#[derive(Debug)]
+struct VkPipelineCacheCreateInfoWrapper {
+    create_info: vk_sys::VkPipelineCacheCreateInfo,
+    initial_data: Option<Vec<u8>>,
+}
+
+impl Deref for VkPipelineCacheCreateInfoWrapper {
+    type Target = vk_sys::VkPipelineCacheCreateInfo;
+
+    fn deref(&self) -> &Self::Target {
+        &self.create_info
+    }
+}
+
+impl AsRef<vk_sys::VkPipelineCacheCreateInfo> for VkPipelineCacheCreateInfoWrapper {
+    fn as_ref(&self) -> &vk_sys::VkPipelineCacheCreateInfo {
+        &self.create_info
+    }
+}
+
+impl<'a> From<&'a PipelineCacheCreateInfo> for VkPipelineCacheCreateInfoWrapper {
+    fn from(create_info: &'a PipelineCacheCreateInfo) -> Self {
+        let (initial_data, initial_data_size, initial_data_ptr) = match create_info.initial_data {
+            Some(ref initial_data) => {
+                let initial_data = initial_data.clone();
+                let initial_data_size = initial_data.len();
+                let initial_data_ptr = initial_data.as_ptr() as *const c_void;
+                (Some(initial_data), initial_data_size, initial_data_ptr)
+            }
+
+            None => (None, 0, ptr::null()),
+        };
+
+        VkPipelineCacheCreateInfoWrapper {
+            create_info: vk_sys::VkPipelineCacheCreateInfo {
+                sType: vk_sys::VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO,
+                pNext: ptr::null(),
+                flags: create_info.flags,
+                initialDataSize: initial_data_size,
+                pInitialData: initial_data_ptr,
+            },
+            initial_data: initial_data,
+        }
+    }
+}
+
 #[derive(Debug, Copy, Clone)]
 pub struct SpecializationMapEntry {
     pub constant_id: u32,
