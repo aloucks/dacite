@@ -22,6 +22,7 @@ use core::{
     Event,
     Fence,
     Image,
+    ImageView,
     Instance,
     QueryPool,
     Queue,
@@ -235,6 +236,25 @@ impl Device {
 
         if res == vk_sys::VK_SUCCESS {
             Ok(BufferView::new(buffer_view, self.clone(), allocator_helper, create_info.buffer.clone()))
+        }
+        else {
+            Err(res.into())
+        }
+    }
+
+    pub fn create_image_view(&self, create_info: &core::ImageViewCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<ImageView> {
+        let create_info_wrapper: core::VkImageViewCreateInfoWrapper = create_info.into();
+
+        let allocator_helper = allocator.map(AllocatorHelper::new);
+        let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), |a| &a.callbacks);
+
+        let mut image_view = ptr::null_mut();
+        let res = unsafe {
+            (self.loader().core.vkCreateImageView)(self.handle(), create_info_wrapper.as_ref(), allocation_callbacks, &mut image_view)
+        };
+
+        if res == vk_sys::VK_SUCCESS {
+            Ok(ImageView::new(image_view, self.clone(), allocator_helper, create_info.image.clone()))
         }
         else {
             Err(res.into())
