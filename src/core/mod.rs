@@ -2125,7 +2125,7 @@ impl<'a> From<&'a InstanceCreateInfo> for VkInstanceCreateInfoWrapper {
 
         let enabled_extensions: Vec<_> = create_info.enabled_extensions.iter()
             .cloned()
-            .map(<String as From<_>>::from)
+            .map(String::from)
             .map(CString::new)
             .map(Result::unwrap)
             .collect();
@@ -3189,7 +3189,7 @@ impl<'a> From<&'a DeviceCreateInfo> for VkDeviceCreateInfoWrapper {
         let enabled_extensions: Vec<_> = create_info.enabled_extensions
             .iter()
             .cloned()
-            .map(<String as From<_>>::from)
+            .map(String::from)
             .map(CString::new)
             .map(Result::unwrap)
             .collect();
