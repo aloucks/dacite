@@ -12,8 +12,8 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-use core::Device;
 use core::allocator_helper::AllocatorHelper;
+use core::{Device, Image};
 use std::ptr;
 use std::sync::Arc;
 use vk_sys;
@@ -23,6 +23,7 @@ struct Inner {
     handle: vk_sys::VkImageView,
     device: Device,
     allocator: Option<AllocatorHelper>,
+    image: Image,
 }
 
 impl Drop for Inner {
@@ -42,11 +43,12 @@ impl Drop for Inner {
 pub struct ImageView(Arc<Inner>);
 
 impl ImageView {
-    pub(crate) fn new(handle: vk_sys::VkImageView, device: Device, allocator: Option<AllocatorHelper>) -> Self {
+    pub(crate) fn new(handle: vk_sys::VkImageView, device: Device, allocator: Option<AllocatorHelper>, image: Image) -> Self {
         ImageView(Arc::new(Inner {
             handle: handle,
             device: device,
             allocator: allocator,
+            image: image,
         }))
     }
 }
