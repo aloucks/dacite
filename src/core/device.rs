@@ -27,6 +27,7 @@ use core::{
     QueryPool,
     Queue,
     Semaphore,
+    ShaderModule,
 };
 use std::ptr;
 use std::sync::Arc;
@@ -255,6 +256,25 @@ impl Device {
 
         if res == vk_sys::VK_SUCCESS {
             Ok(ImageView::new(image_view, self.clone(), allocator_helper, create_info.image.clone()))
+        }
+        else {
+            Err(res.into())
+        }
+    }
+
+    pub fn create_shader_module(&self, create_info: &core::ShaderModuleCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<ShaderModule> {
+        let create_info: core::VkShaderModuleCreateInfoWrapper = create_info.into();
+
+        let allocator_helper = allocator.map(AllocatorHelper::new);
+        let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), |a| &a.callbacks);
+
+        let mut shader_module = ptr::null_mut();
+        let res = unsafe {
+            (self.loader().core.vkCreateShaderModule)(self.handle(), create_info.as_ref(), allocation_callbacks, &mut shader_module)
+        };
+
+        if res == vk_sys::VK_SUCCESS {
+            Ok(ShaderModule::new(shader_module, self.clone(), allocator_helper))
         }
         else {
             Err(res.into())
