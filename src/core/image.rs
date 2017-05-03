@@ -49,4 +49,9 @@ impl Image {
             allocator: allocator,
         }))
     }
+
+    #[inline]
+    pub(crate) fn handle(&self) -> vk_sys::VkImage {
+        self.0.handle
+    }
 }
