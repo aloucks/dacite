@@ -17,6 +17,7 @@ use core::allocator_helper::AllocatorHelper;
 use core::{
     self,
     Buffer,
+    BufferView,
     CommandPool,
     Event,
     Fence,
@@ -215,6 +216,25 @@ impl Device {
 
         if res == vk_sys::VK_SUCCESS {
             Ok(Image::new(image, self.clone(), allocator_helper))
+        }
+        else {
+            Err(res.into())
+        }
+    }
+
+    pub fn create_buffer_view(&self, create_info: &core::BufferViewCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<BufferView> {
+        let create_info_wrapper: core::VkBufferViewCreateInfoWrapper = create_info.into();
+
+        let allocator_helper = allocator.map(AllocatorHelper::new);
+        let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), |a| &a.callbacks);
+
+        let mut buffer_view = ptr::null_mut();
+        let res = unsafe {
+            (self.loader().core.vkCreateBufferView)(self.handle(), create_info_wrapper.as_ref(), allocation_callbacks, &mut buffer_view)
+        };
+
+        if res == vk_sys::VK_SUCCESS {
+            Ok(BufferView::new(buffer_view, self.clone(), allocator_helper, create_info.buffer.clone()))
         }
         else {
             Err(res.into())
