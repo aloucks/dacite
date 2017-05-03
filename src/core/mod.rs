@@ -4110,6 +4110,59 @@ impl<'a> From<&'a ImageSubresourceRange> for vk_sys::VkImageSubresourceRange {
     }
 }
 
+#[derive(Debug, Clone)]
+pub enum ImageViewCreateInfoChainElement {
+}
+
+#[derive(Debug, Clone)]
+pub struct ImageViewCreateInfo {
+    pub chain: Vec<ImageViewCreateInfoChainElement>,
+    pub flags: vk_sys::VkImageViewCreateFlags,
+    pub image: Image,
+    pub view_type: ImageViewType,
+    pub format: Format,
+    pub components: ComponentMapping,
+    pub subresource_range: ImageSubresourceRange,
+}
+
+#[derive(Debug)]
+struct VkImageViewCreateInfoWrapper {
+    create_info: vk_sys::VkImageViewCreateInfo,
+    image: Image,
+}
+
+impl Deref for VkImageViewCreateInfoWrapper {
+    type Target = vk_sys::VkImageViewCreateInfo;
+
+    fn deref(&self) -> &Self::Target {
+        &self.create_info
+    }
+}
+
+impl AsRef<vk_sys::VkImageViewCreateInfo> for VkImageViewCreateInfoWrapper {
+    fn as_ref(&self) -> &vk_sys::VkImageViewCreateInfo {
+        &self.create_info
+    }
+}
+
+impl<'a> From<&'a ImageViewCreateInfo> for VkImageViewCreateInfoWrapper {
+    fn from(create_info: &'a ImageViewCreateInfo) -> Self {
+        VkImageViewCreateInfoWrapper {
+            create_info: vk_sys::VkImageViewCreateInfo {
+                sType: vk_sys::VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO,
+                pNext: ptr::null(),
+                flags: create_info.flags,
+                image: create_info.image.handle(),
+                viewType: create_info.view_type.into(),
+                format: create_info.format.into(),
+                components: (&create_info.components).into(),
+                subresourceRange: (&create_info.subresource_range).into(),
+            },
+            image: create_info.image.clone(),
+        }
+    }
+}
+
 #[derive(Debug, Copy, Clone)]
 pub struct SpecializationMapEntry {
     pub constant_id: u32,
