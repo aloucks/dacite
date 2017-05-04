@@ -27,6 +27,7 @@ use core::{
     PipelineCache,
     QueryPool,
     Queue,
+    Sampler,
     Semaphore,
     ShaderModule,
 };
@@ -295,6 +296,25 @@ impl Device {
 
         if res == vk_sys::VK_SUCCESS {
             Ok(PipelineCache::new(pipeline_cache, self.clone(), allocator_helper))
+        }
+        else {
+            Err(res.into())
+        }
+    }
+
+    pub fn create_sampler(&self, create_info: &core::SamplerCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<Sampler> {
+        let create_info: core::VkSamplerCreateInfoWrapper = create_info.into();
+
+        let allocator_helper = allocator.map(AllocatorHelper::new);
+        let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), |a| &a.callbacks);
+
+        let mut sampler = ptr::null_mut();
+        let res = unsafe {
+            (self.loader().core.vkCreateSampler)(self.handle(), create_info.as_ref(), allocation_callbacks, &mut sampler)
+        };
+
+        if res == vk_sys::VK_SUCCESS {
+            Ok(Sampler::new(sampler, self.clone(), allocator_helper))
         }
         else {
             Err(res.into())
