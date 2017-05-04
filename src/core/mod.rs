@@ -4731,6 +4731,79 @@ impl<'a> From<&'a DescriptorPoolSize> for vk_sys::VkDescriptorPoolSize {
     }
 }
 
+#[derive(Debug, Clone)]
+pub enum DescriptorPoolCreateInfoChainElement {
+}
+
+#[derive(Debug, Clone)]
+pub struct DescriptorPoolCreateInfo {
+    pub chain: Vec<DescriptorPoolCreateInfoChainElement>,
+    pub flags: vk_sys::VkDescriptorPoolCreateFlags,
+    pub max_sets: u32,
+    pub pool_sizes: Vec<DescriptorPoolSize>,
+}
+
+impl<'a> From<&'a vk_sys::VkDescriptorPoolCreateInfo> for DescriptorPoolCreateInfo {
+    fn from(create_info: &'a vk_sys::VkDescriptorPoolCreateInfo) -> Self {
+        debug_assert_eq!(create_info.pNext, ptr::null());
+
+        let pool_sizes = unsafe {
+            slice::from_raw_parts(create_info.pPoolSizes, create_info.poolSizeCount as usize)
+                .iter()
+                .map(From::from)
+                .collect()
+        };
+
+        DescriptorPoolCreateInfo {
+            chain: vec![],
+            flags: create_info.flags,
+            max_sets: create_info.maxSets,
+            pool_sizes: pool_sizes,
+        }
+    }
+}
+
+#[derive(Debug)]
+struct VkDescriptorPoolCreateInfoWrapper {
+    create_info: vk_sys::VkDescriptorPoolCreateInfo,
+    pool_sizes: Vec<vk_sys::VkDescriptorPoolSize>,
+}
+
+impl Deref for VkDescriptorPoolCreateInfoWrapper {
+    type Target = vk_sys::VkDescriptorPoolCreateInfo;
+
+    fn deref(&self) -> &Self::Target {
+        &self.create_info
+    }
+}
+
+impl AsRef<vk_sys::VkDescriptorPoolCreateInfo> for VkDescriptorPoolCreateInfoWrapper {
+    fn as_ref(&self) -> &vk_sys::VkDescriptorPoolCreateInfo {
+        &self.create_info
+    }
+}
+
+impl<'a> From<&'a DescriptorPoolCreateInfo> for VkDescriptorPoolCreateInfoWrapper {
+    fn from(create_info: &'a DescriptorPoolCreateInfo) -> Self {
+        let pool_sizes: Vec<_> = create_info.pool_sizes
+            .iter()
+            .map(From::from)
+            .collect();
+
+        VkDescriptorPoolCreateInfoWrapper {
+            create_info: vk_sys::VkDescriptorPoolCreateInfo {
+                sType: vk_sys::VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO,
+                pNext: ptr::null(),
+                flags: create_info.flags,
+                maxSets: create_info.max_sets,
+                poolSizeCount: pool_sizes.len() as u32,
+                pPoolSizes: pool_sizes.as_ptr(),
+            },
+            pool_sizes: pool_sizes,
+        }
+    }
+}
+
 #[derive(Debug, Copy, Clone)]
 pub struct AttachmentDescription {
     pub flags: vk_sys::VkAttachmentDescriptionFlags,
