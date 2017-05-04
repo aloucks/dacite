@@ -12,8 +12,8 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-use core::Device;
 use core::allocator_helper::AllocatorHelper;
+use core::{Device, Sampler};
 use std::ptr;
 use std::sync::Arc;
 use vk_sys;
@@ -23,6 +23,7 @@ struct Inner {
     handle: vk_sys::VkDescriptorSetLayout,
     device: Device,
     allocator: Option<AllocatorHelper>,
+    samplers: Vec<Sampler>,
 }
 
 impl Drop for Inner {
@@ -42,11 +43,12 @@ impl Drop for Inner {
 pub struct DescriptorSetLayout(Arc<Inner>);
 
 impl DescriptorSetLayout {
-    pub(crate) fn new(handle: vk_sys::VkDescriptorSetLayout, device: Device, allocator: Option<AllocatorHelper>) -> Self {
+    pub(crate) fn new(handle: vk_sys::VkDescriptorSetLayout, device: Device, allocator: Option<AllocatorHelper>, samplers: Vec<Sampler>) -> Self {
         DescriptorSetLayout(Arc::new(Inner {
             handle: handle,
             device: device,
             allocator: allocator,
+            samplers: samplers,
         }))
     }
 }
