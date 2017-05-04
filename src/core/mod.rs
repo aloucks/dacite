@@ -4610,6 +4610,103 @@ impl<'a> From<&'a PushConstantRange> for vk_sys::VkPushConstantRange {
     }
 }
 
+#[derive(Debug, Clone)]
+pub enum SamplerCreateInfoChainElement {
+}
+
+#[derive(Debug, Clone)]
+pub struct SamplerCreateInfo {
+    pub chain: Vec<SamplerCreateInfoChainElement>,
+    pub flags: vk_sys::VkSamplerCreateFlags,
+    pub mag_filter: Filter,
+    pub min_filter: Filter,
+    pub mipmap_mode: SamplerMipmapMode,
+    pub address_mode_u: SamplerAddressMode,
+    pub address_mode_v: SamplerAddressMode,
+    pub address_mode_w: SamplerAddressMode,
+    pub mip_lod_bias: f32,
+    pub anisotropy_enable: bool,
+    pub max_anisotropy: f32,
+    pub compare_enable: bool,
+    pub compare_op: CompareOp,
+    pub min_lod: f32,
+    pub max_lod: f32,
+    pub border_color: BorderColor,
+    pub unnormalized_coordinates: bool,
+}
+
+impl<'a> From<&'a vk_sys::VkSamplerCreateInfo> for SamplerCreateInfo {
+    fn from(create_info: &'a vk_sys::VkSamplerCreateInfo) -> Self {
+        debug_assert_eq!(create_info.pNext, ptr::null());
+
+        SamplerCreateInfo {
+            chain: vec![],
+            flags: create_info.flags,
+            mag_filter: create_info.magFilter.into(),
+            min_filter: create_info.minFilter.into(),
+            mipmap_mode: create_info.mipmapMode.into(),
+            address_mode_u: create_info.addressModeU.into(),
+            address_mode_v: create_info.addressModeV.into(),
+            address_mode_w: create_info.addressModeW.into(),
+            mip_lod_bias: create_info.mipLodBias,
+            anisotropy_enable: utils::from_vk_bool(create_info.anisotropyEnable),
+            max_anisotropy: create_info.maxAnisotropy,
+            compare_enable: utils::from_vk_bool(create_info.compareEnable),
+            compare_op: create_info.compareOp.into(),
+            min_lod: create_info.minLod,
+            max_lod: create_info.maxLod,
+            border_color: create_info.borderColor.into(),
+            unnormalized_coordinates: utils::from_vk_bool(create_info.unnormalizedCoordinates),
+        }
+    }
+}
+
+#[derive(Debug)]
+struct VkSamplerCreateInfoWrapper {
+    create_info: vk_sys::VkSamplerCreateInfo,
+}
+
+impl Deref for VkSamplerCreateInfoWrapper {
+    type Target = vk_sys::VkSamplerCreateInfo;
+
+    fn deref(&self) -> &Self::Target {
+        &self.create_info
+    }
+}
+
+impl AsRef<vk_sys::VkSamplerCreateInfo> for VkSamplerCreateInfoWrapper {
+    fn as_ref(&self) -> &vk_sys::VkSamplerCreateInfo {
+        &self.create_info
+    }
+}
+
+impl<'a> From<&'a SamplerCreateInfo> for VkSamplerCreateInfoWrapper {
+    fn from(create_info: &'a SamplerCreateInfo) -> Self {
+        VkSamplerCreateInfoWrapper {
+            create_info: vk_sys::VkSamplerCreateInfo {
+                sType: vk_sys::VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO,
+                pNext: ptr::null(),
+                flags: create_info.flags,
+                magFilter: create_info.mag_filter.into(),
+                minFilter: create_info.min_filter.into(),
+                mipmapMode: create_info.mipmap_mode.into(),
+                addressModeU: create_info.address_mode_u.into(),
+                addressModeV: create_info.address_mode_v.into(),
+                addressModeW: create_info.address_mode_w.into(),
+                mipLodBias: create_info.mip_lod_bias,
+                anisotropyEnable: utils::to_vk_bool(create_info.anisotropy_enable),
+                maxAnisotropy: create_info.max_anisotropy,
+                compareEnable: utils::to_vk_bool(create_info.compare_enable),
+                compareOp: create_info.compare_op.into(),
+                minLod: create_info.min_lod,
+                maxLod: create_info.max_lod,
+                borderColor: create_info.border_color.into(),
+                unnormalizedCoordinates: utils::to_vk_bool(create_info.unnormalized_coordinates),
+            },
+        }
+    }
+}
+
 #[derive(Debug, Copy, Clone)]
 pub struct DescriptorPoolSize {
     pub descriptor_type: DescriptorType,
