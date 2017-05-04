@@ -72,6 +72,32 @@ pub use self::semaphore::Semaphore;
 pub use self::shader_module::ShaderModule;
 
 #[derive(Debug, Copy, Clone)]
+pub enum OptionalDeviceSize {
+    Size(u64),
+    WholeSize,
+}
+
+impl From<u64> for OptionalDeviceSize {
+    fn from(size: u64) -> Self {
+        if size != vk_sys::VK_WHOLE_SIZE {
+            OptionalDeviceSize::Size(size)
+        }
+        else {
+            OptionalDeviceSize::WholeSize
+        }
+    }
+}
+
+impl From<OptionalDeviceSize> for u64 {
+    fn from(size: OptionalDeviceSize) -> Self {
+        match size {
+            OptionalDeviceSize::Size(size) => size,
+            OptionalDeviceSize::WholeSize => vk_sys::VK_WHOLE_SIZE,
+        }
+    }
+}
+
+#[derive(Debug, Copy, Clone)]
 pub struct Version {
     pub major: u32,
     pub minor: u32,
