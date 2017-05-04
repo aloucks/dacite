@@ -4762,6 +4762,64 @@ impl<'a> From<&'a DescriptorSetLayoutBinding> for VkDescriptorSetLayoutBindingWr
     }
 }
 
+#[derive(Debug, Clone)]
+pub enum DescriptorSetLayoutCreateInfoChainElement {
+}
+
+#[derive(Debug, Clone)]
+pub struct DescriptorSetLayoutCreateInfo {
+    pub chain: Vec<DescriptorSetLayoutCreateInfoChainElement>,
+    pub flags: vk_sys::VkDescriptorSetLayoutCreateFlags,
+    pub bindings: Option<Vec<DescriptorSetLayoutBinding>>,
+}
+
+#[derive(Debug)]
+struct VkDescriptorSetLayoutCreateInfoWrapper {
+    create_info: vk_sys::VkDescriptorSetLayoutCreateInfo,
+    bindings: Option<Vec<VkDescriptorSetLayoutBindingWrapper>>,
+    vk_bindings: Option<Vec<vk_sys::VkDescriptorSetLayoutBinding>>,
+}
+
+impl Deref for VkDescriptorSetLayoutCreateInfoWrapper {
+    type Target = vk_sys::VkDescriptorSetLayoutCreateInfo;
+
+    fn deref(&self) -> &Self::Target {
+        &self.create_info
+    }
+}
+
+impl AsRef<vk_sys::VkDescriptorSetLayoutCreateInfo> for VkDescriptorSetLayoutCreateInfoWrapper {
+    fn as_ref(&self) -> &vk_sys::VkDescriptorSetLayoutCreateInfo {
+        &self.create_info
+    }
+}
+
+impl<'a> From<&'a DescriptorSetLayoutCreateInfo> for VkDescriptorSetLayoutCreateInfoWrapper {
+    fn from(create_info: &'a DescriptorSetLayoutCreateInfo) -> Self {
+        let (vk_bindings_ptr, binding_count, bindings, vk_bindings) = match create_info.bindings {
+            Some(ref bindings) => {
+                let bindings: Vec<_> = bindings.iter().map(From::from).collect();
+                let vk_bindings: Vec<_> = bindings.iter().map(AsRef::as_ref).cloned().collect();
+                (vk_bindings.as_ptr(), bindings.len() as u32, Some(bindings), Some(vk_bindings))
+            }
+
+            None => (ptr::null(), 0, None, None),
+        };
+
+        VkDescriptorSetLayoutCreateInfoWrapper {
+            create_info: vk_sys::VkDescriptorSetLayoutCreateInfo {
+                sType: vk_sys::VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO,
+                pNext: ptr::null(),
+                flags: create_info.flags,
+                bindingCount: binding_count,
+                pBindings: vk_bindings_ptr,
+            },
+            bindings: bindings,
+            vk_bindings: vk_bindings,
+        }
+    }
+}
+
 #[derive(Debug, Copy, Clone)]
 pub struct DescriptorPoolSize {
     pub descriptor_type: DescriptorType,
