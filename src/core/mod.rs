@@ -4707,6 +4707,61 @@ impl<'a> From<&'a SamplerCreateInfo> for VkSamplerCreateInfoWrapper {
     }
 }
 
+#[derive(Debug, Clone)]
+pub struct DescriptorSetLayoutBinding {
+    pub binding: u32,
+    pub descriptor_type: DescriptorType,
+    pub descriptor_count: u32,
+    pub stage_flags: vk_sys::VkShaderStageFlags,
+    pub immutable_samplers: Option<Vec<Sampler>>,
+}
+
+#[derive(Debug)]
+struct VkDescriptorSetLayoutBindingWrapper {
+    binding: vk_sys::VkDescriptorSetLayoutBinding,
+    immutable_samplers: Option<Vec<Sampler>>,
+    immutable_vk_samplers: Option<Vec<vk_sys::VkSampler>>,
+}
+
+impl Deref for VkDescriptorSetLayoutBindingWrapper {
+    type Target = vk_sys::VkDescriptorSetLayoutBinding;
+
+    fn deref(&self) -> &Self::Target {
+        &self.binding
+    }
+}
+
+impl AsRef<vk_sys::VkDescriptorSetLayoutBinding> for VkDescriptorSetLayoutBindingWrapper {
+    fn as_ref(&self) -> &vk_sys::VkDescriptorSetLayoutBinding {
+        &self.binding
+    }
+}
+
+impl<'a> From<&'a DescriptorSetLayoutBinding> for VkDescriptorSetLayoutBindingWrapper {
+    fn from(binding: &'a DescriptorSetLayoutBinding) -> Self {
+        let immutable_samplers = binding.immutable_samplers.clone();
+
+        let mut immutable_vk_samplers_ptr = ptr::null();
+        let immutable_vk_samplers = immutable_samplers.as_ref().map(|s| {
+            let immutable_vk_samplers: Vec<_> = s.iter().map(Sampler::handle).collect();
+            immutable_vk_samplers_ptr = immutable_vk_samplers.as_ptr();
+            immutable_vk_samplers
+        });
+
+        VkDescriptorSetLayoutBindingWrapper {
+            binding: vk_sys::VkDescriptorSetLayoutBinding {
+                binding: binding.binding,
+                descriptorType: binding.descriptor_type.into(),
+                descriptorCount: binding.descriptor_count,
+                stageFlags: binding.stage_flags,
+                pImmutableSamplers: immutable_vk_samplers_ptr,
+            },
+            immutable_samplers: immutable_samplers,
+            immutable_vk_samplers: immutable_vk_samplers,
+        }
+    }
+}
+
 #[derive(Debug, Copy, Clone)]
 pub struct DescriptorPoolSize {
     pub descriptor_type: DescriptorType,
