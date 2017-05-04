@@ -19,6 +19,7 @@ use core::{
     Buffer,
     BufferView,
     CommandPool,
+    DescriptorPool,
     Event,
     Fence,
     Image,
@@ -315,6 +316,25 @@ impl Device {
 
         if res == vk_sys::VK_SUCCESS {
             Ok(Sampler::new(sampler, self.clone(), allocator_helper))
+        }
+        else {
+            Err(res.into())
+        }
+    }
+
+    pub fn create_descriptor_pool(&self, create_info: &core::DescriptorPoolCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<DescriptorPool> {
+        let create_info: core::VkDescriptorPoolCreateInfoWrapper = create_info.into();
+
+        let allocator_helper = allocator.map(AllocatorHelper::new);
+        let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), |a| &a.callbacks);
+
+        let mut descriptor_pool = ptr::null_mut();
+        let res = unsafe {
+            (self.loader().core.vkCreateDescriptorPool)(self.handle(), create_info.as_ref(), allocation_callbacks, &mut descriptor_pool)
+        };
+
+        if res == vk_sys::VK_SUCCESS {
+            Ok(DescriptorPool::new(descriptor_pool, self.clone(), allocator_helper))
         }
         else {
             Err(res.into())
