@@ -20,6 +20,7 @@ use core::{
     BufferView,
     CommandPool,
     DescriptorPool,
+    DescriptorSetLayout,
     Event,
     Fence,
     Image,
@@ -335,6 +336,34 @@ impl Device {
 
         if res == vk_sys::VK_SUCCESS {
             Ok(DescriptorPool::new(descriptor_pool, self.clone(), allocator_helper))
+        }
+        else {
+            Err(res.into())
+        }
+    }
+
+    pub fn create_descriptor_set_layout(&self, create_info: &core::DescriptorSetLayoutCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<DescriptorSetLayout> {
+        let create_info_wrapper: core::VkDescriptorSetLayoutCreateInfoWrapper = create_info.into();
+
+        let allocator_helper = allocator.map(AllocatorHelper::new);
+        let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), |a| &a.callbacks);
+
+        let mut descriptor_set_layout = ptr::null_mut();
+        let res = unsafe {
+            (self.loader().core.vkCreateDescriptorSetLayout)(self.handle(), create_info_wrapper.as_ref(), allocation_callbacks, &mut descriptor_set_layout)
+        };
+
+        if res == vk_sys::VK_SUCCESS {
+            let mut samplers = Vec::new();
+            if let Some(ref bindings) = create_info.bindings {
+                for binding in bindings {
+                    if let Some(ref immutable_samplers) = binding.immutable_samplers {
+                        samplers.extend_from_slice(immutable_samplers);
+                    }
+                }
+            }
+
+            Ok(DescriptorSetLayout::new(descriptor_set_layout, self.clone(), allocator_helper, samplers))
         }
         else {
             Err(res.into())
