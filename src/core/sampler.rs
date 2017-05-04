@@ -49,4 +49,8 @@ impl Sampler {
             allocator: allocator,
         }))
     }
+
+    pub(crate) fn handle(&self) -> vk_sys::VkSampler {
+        self.0.handle
+    }
 }
