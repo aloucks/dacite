@@ -3417,6 +3417,61 @@ impl<'a> From<&'a LayerProperties> for vk_sys::VkLayerProperties {
     }
 }
 
+#[derive(Debug, Clone)]
+pub enum MemoryAllocateInfoChainElement {
+}
+
+#[derive(Debug, Clone)]
+pub struct MemoryAllocateInfo {
+    pub chain: Vec<MemoryAllocateInfoChainElement>,
+    pub allocation_size: u64,
+    pub memory_type_index: u32,
+}
+
+impl<'a> From<&'a vk_sys::VkMemoryAllocateInfo> for MemoryAllocateInfo {
+    fn from(info: &'a vk_sys::VkMemoryAllocateInfo) -> Self {
+        debug_assert_eq!(info.pNext, ptr::null());
+
+        MemoryAllocateInfo {
+            chain: vec![],
+            allocation_size: info.allocationSize,
+            memory_type_index: info.memoryTypeIndex,
+        }
+    }
+}
+
+#[derive(Debug)]
+struct VkMemoryAllocateInfoWrapper {
+    info: vk_sys::VkMemoryAllocateInfo,
+}
+
+impl Deref for VkMemoryAllocateInfoWrapper {
+    type Target = vk_sys::VkMemoryAllocateInfo;
+
+    fn deref(&self) -> &Self::Target {
+        &self.info
+    }
+}
+
+impl AsRef<vk_sys::VkMemoryAllocateInfo> for VkMemoryAllocateInfoWrapper {
+    fn as_ref(&self) -> &vk_sys::VkMemoryAllocateInfo {
+        &self.info
+    }
+}
+
+impl<'a> From<&'a MemoryAllocateInfo> for VkMemoryAllocateInfoWrapper {
+    fn from(info: &'a MemoryAllocateInfo) -> Self {
+        VkMemoryAllocateInfoWrapper {
+            info: vk_sys::VkMemoryAllocateInfo {
+                sType: vk_sys::VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO,
+                pNext: ptr::null(),
+                allocationSize: info.allocation_size,
+                memoryTypeIndex: info.memory_type_index,
+            },
+        }
+    }
+}
+
 #[derive(Debug, Copy, Clone)]
 pub struct MemoryRequirements {
     pub size: u64,
