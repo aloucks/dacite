@@ -3949,7 +3949,7 @@ pub struct BufferViewCreateInfo {
     pub buffer: Buffer,
     pub format: Format,
     pub offset: u64,
-    pub range: u64,
+    pub range: OptionalDeviceSize,
 }
 
 #[derive(Debug)]
@@ -3982,7 +3982,7 @@ impl<'a> From<&'a BufferViewCreateInfo> for VkBufferViewCreateInfoWrapper {
                 buffer: create_info.buffer.handle(),
                 format: create_info.format.into(),
                 offset: create_info.offset,
-                range: create_info.range,
+                range: create_info.range.into(),
             },
             buffer: create_info.buffer.clone(),
         }
