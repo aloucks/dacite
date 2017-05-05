@@ -49,4 +49,8 @@ impl DeviceMemory {
             allocator: allocator,
         }))
     }
+
+    pub(crate) fn handle(&self) -> vk_sys::VkDeviceMemory {
+        self.0.handle
+    }
 }
