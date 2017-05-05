@@ -43,4 +43,9 @@ impl DescriptorSet {
             descriptor_pool: descriptor_pool,
         }))
     }
+
+    #[inline]
+    pub(crate) fn handle(&self) -> vk_sys::VkDescriptorSet {
+        self.0.handle
+    }
 }
