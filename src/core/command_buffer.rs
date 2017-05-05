@@ -41,6 +41,7 @@ impl CommandBuffer {
         }))
     }
 
+    #[inline]
     pub(crate) fn handle(&self) -> vk_sys::VkCommandBuffer {
         self.0.handle
     }
