@@ -49,4 +49,9 @@ impl PipelineCache {
             allocator: allocator,
         }))
     }
+
+    #[inline]
+    pub(crate) fn handle(&self) -> vk_sys::VkPipelineCache {
+        self.0.handle
+    }
 }
