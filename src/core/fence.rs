@@ -49,4 +49,9 @@ impl Fence {
             allocator: allocator,
         }))
     }
+
+    #[inline]
+    pub(crate) fn handle(&self) -> vk_sys::VkFence {
+        self.0.handle
+    }
 }
