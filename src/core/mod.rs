@@ -5519,6 +5519,87 @@ impl<'a> From<&'a Rect2D> for vk_sys::VkRect2D {
     }
 }
 
+#[derive(Debug, Clone)]
+pub enum PipelineViewportStateCreateInfoChainElement {
+}
+
+#[derive(Debug, Clone)]
+pub struct PipelineViewportStateCreateInfo {
+    pub chain: Vec<PipelineViewportStateCreateInfoChainElement>,
+    pub flags: vk_sys::VkPipelineViewportStateCreateFlags,
+    pub viewports: Vec<Viewport>,
+    pub scissors: Vec<Rect2D>,
+}
+
+impl<'a> From<&'a vk_sys::VkPipelineViewportStateCreateInfo> for PipelineViewportStateCreateInfo {
+    fn from(create_info: &'a vk_sys::VkPipelineViewportStateCreateInfo) -> Self {
+        debug_assert!(create_info.pNext.is_null());
+
+        let viewports = unsafe {
+            slice::from_raw_parts(create_info.pViewports, create_info.viewportCount as usize)
+                .iter()
+                .map(From::from)
+                .collect()
+        };
+
+        let scissors = unsafe {
+            slice::from_raw_parts(create_info.pScissors, create_info.scissorCount as usize)
+                .iter()
+                .map(From::from)
+                .collect()
+        };
+
+        PipelineViewportStateCreateInfo {
+            chain: vec![],
+            flags: create_info.flags,
+            viewports: viewports,
+            scissors: scissors,
+        }
+    }
+}
+
+#[derive(Debug)]
+struct VkPipelineViewportStateCreateInfoWrapper {
+    create_info: vk_sys::VkPipelineViewportStateCreateInfo,
+    viewports: Vec<vk_sys::VkViewport>,
+    scissors: Vec<vk_sys::VkRect2D>,
+}
+
+impl Deref for VkPipelineViewportStateCreateInfoWrapper {
+    type Target = vk_sys::VkPipelineViewportStateCreateInfo;
+
+    fn deref(&self) -> &Self::Target {
+        &self.create_info
+    }
+}
+
+impl AsRef<vk_sys::VkPipelineViewportStateCreateInfo> for VkPipelineViewportStateCreateInfoWrapper {
+    fn as_ref(&self) -> &vk_sys::VkPipelineViewportStateCreateInfo {
+        &self.create_info
+    }
+}
+
+impl<'a> From<&'a PipelineViewportStateCreateInfo> for VkPipelineViewportStateCreateInfoWrapper {
+    fn from(create_info: &'a PipelineViewportStateCreateInfo) -> Self {
+        let viewports: Vec<_> = create_info.viewports.iter().map(From::from).collect();
+        let scissors: Vec<_> = create_info.scissors.iter().map(From::from).collect();
+
+        VkPipelineViewportStateCreateInfoWrapper {
+            create_info: vk_sys::VkPipelineViewportStateCreateInfo {
+                sType: vk_sys::VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO,
+                pNext: ptr::null(),
+                flags: create_info.flags,
+                viewportCount: viewports.len() as u32,
+                pViewports: viewports.as_ptr(),
+                scissorCount: scissors.len() as u32,
+                pScissors: scissors.as_ptr(),
+            },
+            viewports: viewports,
+            scissors: scissors,
+        }
+    }
+}
+
 #[derive(Debug, Copy, Clone)]
 pub struct StencilOpState {
     pub fail_op: StencilOp,
