@@ -51,4 +51,9 @@ impl BufferView {
             buffer: buffer
         }))
     }
+
+    #[inline]
+    pub(crate) fn handle(&self) -> vk_sys::VkBufferView {
+        self.0.handle
+    }
 }
