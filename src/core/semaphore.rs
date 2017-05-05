@@ -50,6 +50,7 @@ impl Semaphore {
         }))
     }
 
+    #[inline]
     pub(crate) fn handle(&self) -> vk_sys::VkSemaphore {
         self.0.handle
     }
