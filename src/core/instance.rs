@@ -12,6 +12,7 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
+use AsNativeVkObject;
 use Result;
 use core::allocator_helper::AllocatorHelper;
 use core;
@@ -42,6 +43,15 @@ impl Drop for Inner {
 
 #[derive(Debug, Clone)]
 pub struct Instance(Arc<Inner>);
+
+impl AsNativeVkObject for Instance {
+    type NativeVkObject = vk_sys::VkInstance;
+
+    #[inline]
+    fn as_native_vk_object(&self) -> Self::NativeVkObject {
+        self.handle()
+    }
+}
 
 impl Instance {
     #[inline]
