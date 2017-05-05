@@ -49,4 +49,8 @@ impl DescriptorPool {
             allocator: allocator,
         }))
     }
+
+    pub(crate) fn handle(&self) -> vk_sys::VkDescriptorPool {
+        self.0.handle
+    }
 }
