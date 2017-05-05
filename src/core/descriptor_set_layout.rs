@@ -12,6 +12,7 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
+use AsNativeVkObject;
 use core::allocator_helper::AllocatorHelper;
 use core::{Device, Sampler};
 use std::ptr;
@@ -41,6 +42,15 @@ impl Drop for Inner {
 
 #[derive(Debug, Clone)]
 pub struct DescriptorSetLayout(Arc<Inner>);
+
+impl AsNativeVkObject for DescriptorSetLayout {
+    type NativeVkObject = vk_sys::VkDescriptorSetLayout;
+
+    #[inline]
+    fn as_native_vk_object(&self) -> Self::NativeVkObject {
+        self.handle()
+    }
+}
 
 impl DescriptorSetLayout {
     pub(crate) fn new(handle: vk_sys::VkDescriptorSetLayout, device: Device, allocator: Option<AllocatorHelper>, samplers: Vec<Sampler>) -> Self {
