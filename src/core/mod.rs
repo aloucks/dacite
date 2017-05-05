@@ -5600,6 +5600,88 @@ impl<'a> From<&'a PipelineViewportStateCreateInfo> for VkPipelineViewportStateCr
     }
 }
 
+#[derive(Debug, Clone)]
+pub enum PipelineRasterizationStateCreateInfoChainElement {
+}
+
+#[derive(Debug, Clone)]
+pub struct PipelineRasterizationStateCreateInfo {
+    pub chain: Vec<PipelineRasterizationStateCreateInfoChainElement>,
+    pub flags: vk_sys::VkPipelineRasterizationStateCreateFlags,
+    pub depth_clamp_enable: bool,
+    pub rasterizer_discard_enable: bool,
+    pub polygon_mode: PolygonMode,
+    pub cull_mode: vk_sys::VkCullModeFlags,
+    pub front_face: FrontFace,
+    pub depth_bias_enable: bool,
+    pub depth_bias_constant_factor: f32,
+    pub depth_bias_clamp: f32,
+    pub depth_bias_slope_factor: f32,
+    pub line_width: f32,
+}
+
+impl<'a> From<&'a vk_sys::VkPipelineRasterizationStateCreateInfo> for PipelineRasterizationStateCreateInfo {
+    fn from(create_info: &'a vk_sys::VkPipelineRasterizationStateCreateInfo) -> Self {
+        assert!(create_info.pNext.is_null());
+
+        PipelineRasterizationStateCreateInfo {
+            chain: vec![],
+            flags: create_info.flags,
+            depth_clamp_enable: utils::from_vk_bool(create_info.depthClampEnable),
+            rasterizer_discard_enable: utils::from_vk_bool(create_info.rasterizerDiscardEnable),
+            polygon_mode: create_info.polygonMode.into(),
+            cull_mode: create_info.cullMode,
+            front_face: create_info.frontFace.into(),
+            depth_bias_enable: utils::from_vk_bool(create_info.depthBiasEnable),
+            depth_bias_constant_factor: create_info.depthBiasConstantFactor,
+            depth_bias_clamp: create_info.depthBiasClamp,
+            depth_bias_slope_factor: create_info.depthBiasSlopeFactor,
+            line_width: create_info.lineWidth,
+        }
+    }
+}
+
+#[derive(Debug)]
+struct VkPipelineRasterizationStateCreateInfoWrapper {
+    create_info: vk_sys::VkPipelineRasterizationStateCreateInfo,
+}
+
+impl Deref for VkPipelineRasterizationStateCreateInfoWrapper {
+    type Target = vk_sys::VkPipelineRasterizationStateCreateInfo;
+
+    fn deref(&self) -> &Self::Target {
+        &self.create_info
+    }
+}
+
+impl AsRef<vk_sys::VkPipelineRasterizationStateCreateInfo> for VkPipelineRasterizationStateCreateInfoWrapper {
+    fn as_ref(&self) -> &vk_sys::VkPipelineRasterizationStateCreateInfo {
+        &self.create_info
+    }
+}
+
+impl<'a> From<&'a PipelineRasterizationStateCreateInfo> for VkPipelineRasterizationStateCreateInfoWrapper {
+    fn from(create_info: &'a PipelineRasterizationStateCreateInfo) -> Self {
+        VkPipelineRasterizationStateCreateInfoWrapper {
+            create_info: vk_sys::VkPipelineRasterizationStateCreateInfo {
+                sType: vk_sys::VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO,
+                pNext: ptr::null(),
+                flags: create_info.flags,
+                depthClampEnable: utils::to_vk_bool(create_info.depth_clamp_enable),
+                rasterizerDiscardEnable: utils::to_vk_bool(create_info.rasterizer_discard_enable),
+                polygonMode: create_info.polygon_mode.into(),
+                cullMode: create_info.cull_mode,
+                frontFace: create_info.front_face.into(),
+                depthBiasEnable: utils::to_vk_bool(create_info.depth_bias_enable),
+                depthBiasConstantFactor: create_info.depth_bias_constant_factor,
+                depthBiasClamp: create_info.depth_bias_clamp,
+                depthBiasSlopeFactor: create_info.depth_bias_slope_factor,
+                lineWidth: create_info.line_width,
+            },
+        }
+    }
+}
+
 #[derive(Debug, Copy, Clone)]
 pub struct StencilOpState {
     pub fail_op: StencilOp,
