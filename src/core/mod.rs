@@ -3448,6 +3448,109 @@ impl<'a> From<&'a LayerProperties> for vk_sys::VkLayerProperties {
 }
 
 #[derive(Debug, Clone)]
+pub enum SubmitInfoChainElement {
+}
+
+#[derive(Debug, Clone)]
+pub struct SubmitInfo {
+    pub chain: Vec<SubmitInfoChainElement>,
+    pub wait_semaphores: Option<Vec<Semaphore>>,
+    pub wait_dst_stage_mask: Option<Vec<vk_sys::VkPipelineStageFlags>>,
+    pub command_buffers: Option<Vec<CommandBuffer>>,
+    pub signal_semaphores: Option<Vec<Semaphore>>,
+}
+
+#[derive(Debug)]
+struct VkSubmitInfoWrapper {
+    info: vk_sys::VkSubmitInfo,
+    wait_semaphores: Option<Vec<Semaphore>>,
+    wait_vk_semaphores: Option<Vec<vk_sys::VkSemaphore>>,
+    wait_dst_stage_mask: Option<Vec<vk_sys::VkPipelineStageFlags>>,
+    command_buffers: Option<Vec<CommandBuffer>>,
+    vk_command_buffers: Option<Vec<vk_sys::VkCommandBuffer>>,
+    signal_semaphores: Option<Vec<Semaphore>>,
+    signal_vk_semaphores: Option<Vec<vk_sys::VkSemaphore>>,
+}
+
+impl Deref for VkSubmitInfoWrapper {
+    type Target = vk_sys::VkSubmitInfo;
+
+    fn deref(&self) -> &Self::Target {
+        &self.info
+    }
+}
+
+impl AsRef<vk_sys::VkSubmitInfo> for VkSubmitInfoWrapper {
+    fn as_ref(&self) -> &vk_sys::VkSubmitInfo {
+        &self.info
+    }
+}
+
+impl<'a> From<&'a SubmitInfo> for VkSubmitInfoWrapper {
+    fn from(info: &'a SubmitInfo) -> Self {
+        let (wait_semaphores_count, wait_vk_semaphores_ptr, wait_semaphores, wait_vk_semaphores) = match info.wait_semaphores {
+            Some(ref wait_semaphores) => {
+                let wait_semaphores = wait_semaphores.clone();
+                let wait_vk_semaphores: Vec<_> = wait_semaphores.iter().map(Semaphore::handle).collect();
+                (wait_semaphores.len() as u32, wait_vk_semaphores.as_ptr(), Some(wait_semaphores), Some(wait_vk_semaphores))
+            }
+
+            None => (0, ptr::null(), None, None),
+        };
+
+        let (wait_dst_stage_mask_ptr, wait_dst_stage_mask) = match info.wait_dst_stage_mask {
+            Some(ref wait_dst_stage_mask) => {
+                let wait_dst_stage_mask = wait_dst_stage_mask.clone();
+                (wait_dst_stage_mask.as_ptr(), Some(wait_dst_stage_mask))
+            }
+
+            None => (ptr::null(), None),
+        };
+
+        let (command_buffers_count, vk_command_buffers_ptr, command_buffers, vk_command_buffers) = match info.command_buffers {
+            Some(ref command_buffers) => {
+                let command_buffers = command_buffers.clone();
+                let vk_command_buffers: Vec<_> = command_buffers.iter().map(CommandBuffer::handle).collect();
+                (command_buffers.len() as u32, vk_command_buffers.as_ptr(), Some(command_buffers), Some(vk_command_buffers))
+            }
+
+            None => (0, ptr::null(), None, None),
+        };
+
+        let (signal_semaphores_count, signal_vk_semaphores_ptr, signal_semaphores, signal_vk_semaphores) = match info.signal_semaphores {
+            Some(ref signal_semaphores) => {
+                let signal_semaphores = signal_semaphores.clone();
+                let signal_vk_semaphores: Vec<_> = signal_semaphores.iter().map(Semaphore::handle).collect();
+                (signal_semaphores.len() as u32, signal_vk_semaphores.as_ptr(), Some(signal_semaphores), Some(signal_vk_semaphores))
+            }
+
+            None => (0, ptr::null(), None, None),
+        };
+
+        VkSubmitInfoWrapper {
+            info: vk_sys::VkSubmitInfo {
+                sType: vk_sys::VK_STRUCTURE_TYPE_SUBMIT_INFO,
+                pNext: ptr::null(),
+                waitSemaphoreCount: wait_semaphores_count,
+                pWaitSemaphores: wait_vk_semaphores_ptr,
+                pWaitDstStageMask: wait_dst_stage_mask_ptr,
+                commandBufferCount: command_buffers_count,
+                pCommandBuffers: vk_command_buffers_ptr,
+                signalSemaphoreCount: signal_semaphores_count,
+                pSignalSemaphores: signal_vk_semaphores_ptr,
+            },
+            wait_semaphores: wait_semaphores,
+            wait_vk_semaphores: wait_vk_semaphores,
+            wait_dst_stage_mask: wait_dst_stage_mask,
+            command_buffers: command_buffers,
+            vk_command_buffers: vk_command_buffers,
+            signal_semaphores: signal_semaphores,
+            signal_vk_semaphores: signal_vk_semaphores,
+        }
+    }
+}
+
+#[derive(Debug, Clone)]
 pub enum MemoryAllocateInfoChainElement {
 }
 
