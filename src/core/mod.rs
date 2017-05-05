@@ -4934,6 +4934,93 @@ impl<'a> From<&'a SpecializationMapEntry> for vk_sys::VkSpecializationMapEntry {
     }
 }
 
+#[derive(Debug, Clone)]
+pub struct SpecializationInfo {
+    pub map_entries: Option<Vec<SpecializationMapEntry>>,
+    pub data: Option<Vec<u8>>,
+}
+
+impl<'a> From<&'a vk_sys::VkSpecializationInfo> for SpecializationInfo {
+    fn from(info: &'a vk_sys::VkSpecializationInfo) -> Self {
+        let map_entries = if !info.pMapEntries.is_null() {
+            unsafe {
+                Some(slice::from_raw_parts(info.pMapEntries, info.mapEntryCount as usize).iter().map(From::from).collect())
+            }
+        }
+        else {
+            None
+        };
+
+        let data = if !info.pData.is_null() {
+            unsafe {
+                Some(slice::from_raw_parts(info.pData as *const u8, info.dataSize).to_vec())
+            }
+        }
+        else {
+            None
+        };
+
+        SpecializationInfo {
+            map_entries: map_entries,
+            data: data,
+        }
+    }
+}
+
+#[derive(Debug)]
+struct VkSpecializationInfoWrapper {
+    info: vk_sys::VkSpecializationInfo,
+    map_entries: Option<Vec<vk_sys::VkSpecializationMapEntry>>,
+    data: Option<Vec<u8>>,
+}
+
+impl Deref for VkSpecializationInfoWrapper {
+    type Target = vk_sys::VkSpecializationInfo;
+
+    fn deref(&self) -> &Self::Target {
+        &self.info
+    }
+}
+
+impl AsRef<vk_sys::VkSpecializationInfo> for VkSpecializationInfoWrapper {
+    fn as_ref(&self) -> &vk_sys::VkSpecializationInfo {
+        &self.info
+    }
+}
+
+impl<'a> From<&'a SpecializationInfo> for VkSpecializationInfoWrapper {
+    fn from(info: &'a SpecializationInfo) -> Self {
+        let (map_entries_count, map_entries_ptr, map_entries) = match info.map_entries {
+            Some(ref map_entries) => {
+                let map_entries: Vec<_> = map_entries.iter().map(From::from).collect();
+                (map_entries.len() as u32, map_entries.as_ptr(), Some(map_entries))
+            }
+
+            None => (0, ptr::null(), None),
+        };
+
+        let (data_size, data_ptr, data) = match info.data {
+            Some(ref data) => {
+                let data = data.clone();
+                (data.len(), data.as_ptr() as *const c_void, Some(data))
+            }
+
+            None => (0, ptr::null(), None),
+        };
+
+        VkSpecializationInfoWrapper {
+            info: vk_sys::VkSpecializationInfo {
+                mapEntryCount: map_entries_count,
+                pMapEntries: map_entries_ptr,
+                dataSize: data_size,
+                pData: data_ptr,
+            },
+            map_entries: map_entries,
+            data: data,
+        }
+    }
+}
+
 #[derive(Debug, Copy, Clone)]
 pub struct VertexInputBindingDescription {
     pub binding: u32,
