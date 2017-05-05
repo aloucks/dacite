@@ -60,6 +60,7 @@ impl DescriptorPool {
         }))
     }
 
+    #[inline]
     pub(crate) fn handle(&self) -> vk_sys::VkDescriptorPool {
         self.0.handle
     }
