@@ -49,4 +49,9 @@ impl Framebuffer {
             allocator: allocator,
         }))
     }
+
+    #[inline]
+    pub(crate) fn handle(&self) -> vk_sys::VkFramebuffer {
+        self.0.handle
+    }
 }
