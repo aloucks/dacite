@@ -5298,6 +5298,64 @@ impl<'a> From<&'a PipelineVertexInputStateCreateInfo> for VkPipelineVertexInputS
     }
 }
 
+#[derive(Debug, Clone)]
+pub enum PipelineInputAssemblyStateCreateInfoChainElement {
+}
+
+#[derive(Debug, Clone)]
+pub struct PipelineInputAssemblyStateCreateInfo {
+    pub chain: Vec<PipelineInputAssemblyStateCreateInfoChainElement>,
+    pub flags: vk_sys::VkPipelineInputAssemblyStateCreateFlags,
+    pub topology: PrimitiveTopology,
+    pub primitive_restart_enable: bool,
+}
+
+impl<'a> From<&'a vk_sys::VkPipelineInputAssemblyStateCreateInfo> for PipelineInputAssemblyStateCreateInfo {
+    fn from(create_info: &'a vk_sys::VkPipelineInputAssemblyStateCreateInfo) -> Self {
+        debug_assert!(create_info.pNext.is_null());
+
+        PipelineInputAssemblyStateCreateInfo {
+            chain: vec![],
+            flags: create_info.flags,
+            topology: create_info.topology.into(),
+            primitive_restart_enable: utils::from_vk_bool(create_info.primitiveRestartEnable),
+        }
+    }
+}
+
+#[derive(Debug)]
+struct VkPipelineInputAssemblyStateCreateInfoWrapper {
+    create_info: vk_sys::VkPipelineInputAssemblyStateCreateInfo,
+}
+
+impl Deref for VkPipelineInputAssemblyStateCreateInfoWrapper {
+    type Target = vk_sys::VkPipelineInputAssemblyStateCreateInfo;
+
+    fn deref(&self) -> &Self::Target {
+        &self.create_info
+    }
+}
+
+impl AsRef<vk_sys::VkPipelineInputAssemblyStateCreateInfo> for VkPipelineInputAssemblyStateCreateInfoWrapper {
+    fn as_ref(&self) -> &vk_sys::VkPipelineInputAssemblyStateCreateInfo {
+        &self.create_info
+    }
+}
+
+impl<'a> From<&'a PipelineInputAssemblyStateCreateInfo> for VkPipelineInputAssemblyStateCreateInfoWrapper {
+    fn from(create_info: &'a PipelineInputAssemblyStateCreateInfo) -> Self {
+        VkPipelineInputAssemblyStateCreateInfoWrapper {
+            create_info: vk_sys::VkPipelineInputAssemblyStateCreateInfo {
+                sType: vk_sys::VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO,
+                pNext: ptr::null(),
+                flags: create_info.flags,
+                topology: create_info.topology.into(),
+                primitiveRestartEnable: utils::to_vk_bool(create_info.primitive_restart_enable),
+            },
+        }
+    }
+}
+
 #[derive(Debug, Copy, Clone)]
 pub struct Viewport {
     pub x: f32,
