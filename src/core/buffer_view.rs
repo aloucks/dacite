@@ -12,6 +12,7 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
+use AsNativeVkObject;
 use core::allocator_helper::AllocatorHelper;
 use core::{Buffer, Device};
 use std::ptr;
@@ -41,6 +42,15 @@ impl Drop for Inner {
 
 #[derive(Debug, Clone)]
 pub struct BufferView(Arc<Inner>);
+
+impl AsNativeVkObject for BufferView {
+    type NativeVkObject = vk_sys::VkBufferView;
+
+    #[inline]
+    fn as_native_vk_object(&self) -> Self::NativeVkObject {
+        self.handle()
+    }
+}
 
 impl BufferView {
     pub(crate) fn new(handle: vk_sys::VkBufferView, device: Device, allocator: Option<AllocatorHelper>, buffer: Buffer) -> Self {
