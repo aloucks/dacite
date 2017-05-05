@@ -3749,7 +3749,7 @@ pub struct SparseMemoryBind {
 }
 
 #[derive(Debug)]
-pub struct VkSparseMemoryBindWrapper {
+struct VkSparseMemoryBindWrapper {
     bind: vk_sys::VkSparseMemoryBind,
     memory: Option<DeviceMemory>,
 }
