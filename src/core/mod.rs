@@ -4967,6 +4967,54 @@ impl<'a> From<&'a vk_sys::VkSpecializationInfo> for SpecializationInfo {
     }
 }
 
+#[derive(Debug, Clone)]
+pub struct SpecializationInfoBuilder {
+    map_entries: Vec<SpecializationMapEntry>,
+    data: Vec<u8>,
+}
+
+impl SpecializationInfoBuilder {
+    pub fn new() -> Self {
+        SpecializationInfoBuilder {
+            map_entries: Vec::new(),
+            data: Vec::new(),
+        }
+    }
+
+    pub fn entry<T: Copy>(&mut self, constant_id: u32, value: T) -> &mut Self {
+        let entry = SpecializationMapEntry {
+            constant_id: constant_id,
+            offset: self.data.len() as u32,
+            size: mem::size_of::<T>(),
+        };
+
+        self.data.reserve(entry.size);
+        unsafe {
+            self.data.set_len(entry.offset as usize + entry.size);
+            ptr::copy_nonoverlapping(&value as *const T as *const u8, self.data.as_mut_ptr().offset(entry.offset as isize), entry.size);
+        }
+
+        self.map_entries.push(entry);
+
+        self
+    }
+
+    pub fn done(self) -> SpecializationInfo {
+        if !self.map_entries.is_empty() {
+            SpecializationInfo {
+                map_entries: Some(self.map_entries),
+                data: Some(self.data),
+            }
+        }
+        else {
+            SpecializationInfo {
+                map_entries: None,
+                data: None,
+            }
+        }
+    }
+}
+
 #[derive(Debug)]
 struct VkSpecializationInfoWrapper {
     info: vk_sys::VkSpecializationInfo,
