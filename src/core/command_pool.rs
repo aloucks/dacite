@@ -12,6 +12,7 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
+use AsNativeVkObject;
 use Result;
 use core::allocator_helper::AllocatorHelper;
 use core::{self, CommandBuffer, Device};
@@ -41,6 +42,15 @@ impl Drop for Inner {
 
 #[derive(Debug, Clone)]
 pub struct CommandPool(Arc<Inner>);
+
+impl AsNativeVkObject for CommandPool {
+    type NativeVkObject = vk_sys::VkCommandPool;
+
+    #[inline]
+    fn as_native_vk_object(&self) -> Self::NativeVkObject {
+        self.handle()
+    }
+}
 
 impl CommandPool {
     pub(crate) fn new(handle: vk_sys::VkCommandPool, device: Device, allocator: Option<AllocatorHelper>) -> Self {
