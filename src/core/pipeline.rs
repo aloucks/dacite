@@ -49,4 +49,9 @@ impl Pipeline {
             allocator: allocator,
         }))
     }
+
+    #[inline]
+    pub(crate) fn handle(&self) -> vk_sys::VkPipeline {
+        self.0.handle
+    }
 }
