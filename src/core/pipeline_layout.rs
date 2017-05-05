@@ -49,4 +49,9 @@ impl PipelineLayout {
             allocator: allocator,
         }))
     }
+
+    #[inline]
+    pub(crate) fn handle(&self) -> vk_sys::VkPipelineLayout {
+        self.0.handle
+    }
 }
