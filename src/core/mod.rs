@@ -4032,6 +4032,130 @@ impl<'a> From<&'a SparseImageMemoryBindInfo> for VkSparseImageMemoryBindInfoWrap
 }
 
 #[derive(Debug, Clone)]
+pub enum BindSparseInfoChainElement {
+}
+
+#[derive(Debug, Clone)]
+pub struct BindSparseInfo {
+    pub chain: Vec<BindSparseInfoChainElement>,
+    pub wait_semaphores: Option<Vec<Semaphore>>,
+    pub buffer_binds: Option<Vec<SparseBufferMemoryBindInfo>>,
+    pub image_opaque_binds: Option<Vec<SparseImageOpaqueMemoryBindInfo>>,
+    pub image_binds: Option<Vec<SparseImageMemoryBindInfo>>,
+    pub signal_semaphores: Option<Vec<Semaphore>>,
+}
+
+#[derive(Debug)]
+struct VkBindSparseInfoWrapper {
+    info: vk_sys::VkBindSparseInfo,
+    wait_semaphores: Option<Vec<Semaphore>>,
+    wait_vk_semaphores: Option<Vec<vk_sys::VkSemaphore>>,
+    buffer_binds: Option<Vec<VkSparseBufferMemoryBindInfoWrapper>>,
+    vk_buffer_binds: Option<Vec<vk_sys::VkSparseBufferMemoryBindInfo>>,
+    image_opaque_binds: Option<Vec<VkSparseImageOpaqueMemoryBindInfoWrapper>>,
+    vk_image_opaque_binds: Option<Vec<vk_sys::VkSparseImageOpaqueMemoryBindInfo>>,
+    image_binds: Option<Vec<VkSparseImageMemoryBindInfoWrapper>>,
+    vk_image_binds: Option<Vec<vk_sys::VkSparseImageMemoryBindInfo>>,
+    signal_semaphores: Option<Vec<Semaphore>>,
+    signal_vk_semaphores: Option<Vec<vk_sys::VkSemaphore>>,
+}
+
+impl Deref for VkBindSparseInfoWrapper {
+    type Target = vk_sys::VkBindSparseInfo;
+
+    fn deref(&self) -> &Self::Target {
+        &self.info
+    }
+}
+
+impl AsRef<vk_sys::VkBindSparseInfo> for VkBindSparseInfoWrapper {
+    fn as_ref(&self) -> &vk_sys::VkBindSparseInfo {
+        &self.info
+    }
+}
+
+impl<'a> From<&'a BindSparseInfo> for VkBindSparseInfoWrapper {
+    fn from(info: &'a BindSparseInfo) -> Self {
+        let (wait_semaphores_count, wait_vk_semaphores_ptr, wait_semaphores, wait_vk_semaphores) = match info.wait_semaphores {
+            Some(ref wait_semaphores) => {
+                let wait_semaphores = wait_semaphores.clone();
+                let wait_vk_semaphores: Vec<_> = wait_semaphores.iter().map(Semaphore::handle).collect();
+                (wait_semaphores.len() as u32, wait_vk_semaphores.as_ptr(), Some(wait_semaphores), Some(wait_vk_semaphores))
+            }
+
+            None => (0, ptr::null(), None, None),
+        };
+
+        let (buffer_binds_count, vk_buffer_binds_ptr, buffer_binds, vk_buffer_binds) = match info.buffer_binds {
+            Some(ref buffer_binds) => {
+                let buffer_binds: Vec<_> = buffer_binds.iter().map(From::from).collect();
+                let vk_buffer_binds: Vec<_> = buffer_binds.iter().map(AsRef::as_ref).cloned().collect();
+                (buffer_binds.len() as u32, vk_buffer_binds.as_ptr(), Some(buffer_binds), Some(vk_buffer_binds))
+            }
+
+            None => (0, ptr::null(), None, None),
+        };
+
+        let (image_opaque_binds_count, vk_image_opaque_binds_ptr, image_opaque_binds, vk_image_opaque_binds) = match info.image_opaque_binds {
+            Some(ref image_opaque_binds) => {
+                let image_opaque_binds: Vec<_> = image_opaque_binds.iter().map(From::from).collect();
+                let vk_image_opaque_binds: Vec<_> = image_opaque_binds.iter().map(AsRef::as_ref).cloned().collect();
+                (image_opaque_binds.len() as u32, vk_image_opaque_binds.as_ptr(), Some(image_opaque_binds), Some(vk_image_opaque_binds))
+            }
+
+            None => (0, ptr::null(), None, None),
+        };
+
+        let (image_binds_count, vk_image_binds_ptr, image_binds, vk_image_binds) = match info.image_binds {
+            Some(ref image_binds) => {
+                let image_binds: Vec<_> = image_binds.iter().map(From::from).collect();
+                let vk_image_binds: Vec<_> = image_binds.iter().map(AsRef::as_ref).cloned().collect();
+                (image_binds.len() as u32, vk_image_binds.as_ptr(), Some(image_binds), Some(vk_image_binds))
+            }
+
+            None => (0, ptr::null(), None, None),
+        };
+
+        let (signal_semaphores_count, signal_vk_semaphores_ptr, signal_semaphores, signal_vk_semaphores) = match info.signal_semaphores {
+            Some(ref signal_semaphores) => {
+                let signal_semaphores = signal_semaphores.clone();
+                let signal_vk_semaphores: Vec<_> = signal_semaphores.iter().map(Semaphore::handle).collect();
+                (signal_semaphores.len() as u32, signal_vk_semaphores.as_ptr(), Some(signal_semaphores), Some(signal_vk_semaphores))
+            }
+
+            None => (0, ptr::null(), None, None),
+        };
+
+        VkBindSparseInfoWrapper {
+            info: vk_sys::VkBindSparseInfo {
+                sType: vk_sys::VK_STRUCTURE_TYPE_BIND_SPARSE_INFO,
+                pNext: ptr::null(),
+                waitSemaphoreCount: wait_semaphores_count,
+                pWaitSemaphores: wait_vk_semaphores_ptr,
+                bufferBindCount: buffer_binds_count,
+                pBufferBinds: vk_buffer_binds_ptr,
+                imageOpaqueBindCount: image_opaque_binds_count,
+                pImageOpaqueBinds: vk_image_opaque_binds_ptr,
+                imageBindCount: image_binds_count,
+                pImageBinds: vk_image_binds_ptr,
+                signalSemaphoreCount: signal_semaphores_count,
+                pSignalSemaphores: signal_vk_semaphores_ptr,
+            },
+            wait_semaphores: wait_semaphores,
+            wait_vk_semaphores: wait_vk_semaphores,
+            buffer_binds: buffer_binds,
+            vk_buffer_binds: vk_buffer_binds,
+            image_opaque_binds: image_opaque_binds,
+            vk_image_opaque_binds: vk_image_opaque_binds,
+            image_binds: image_binds,
+            vk_image_binds: vk_image_binds,
+            signal_semaphores: signal_semaphores,
+            signal_vk_semaphores: signal_vk_semaphores,
+        }
+    }
+}
+
+#[derive(Debug, Clone)]
 pub enum FenceCreateInfoChainElement {
 }
 
