@@ -12,6 +12,7 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
+use AsNativeVkObject;
 use core::Device;
 use vk_sys;
 
@@ -19,6 +20,15 @@ use vk_sys;
 pub struct Queue {
     handle: vk_sys::VkQueue,
     device: Device,
+}
+
+impl AsNativeVkObject for Queue {
+    type NativeVkObject = vk_sys::VkQueue;
+
+    #[inline]
+    fn as_native_vk_object(&self) -> Self::NativeVkObject {
+        self.handle
+    }
 }
 
 impl Queue {
