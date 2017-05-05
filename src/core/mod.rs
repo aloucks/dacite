@@ -5356,6 +5356,61 @@ impl<'a> From<&'a PipelineInputAssemblyStateCreateInfo> for VkPipelineInputAssem
     }
 }
 
+#[derive(Debug, Clone)]
+pub enum PipelineTessellationStateCreateInfoChainElement {
+}
+
+#[derive(Debug, Clone)]
+pub struct PipelineTessellationStateCreateInfo {
+    pub chain: Vec<PipelineTessellationStateCreateInfoChainElement>,
+    pub flags: vk_sys::VkPipelineTessellationStateCreateFlags,
+    pub patch_control_points: u32,
+}
+
+impl<'a> From<&'a vk_sys::VkPipelineTessellationStateCreateInfo> for PipelineTessellationStateCreateInfo {
+    fn from(create_info: &'a vk_sys::VkPipelineTessellationStateCreateInfo) -> Self {
+        debug_assert!(create_info.pNext.is_null());
+
+        PipelineTessellationStateCreateInfo {
+            chain: vec![],
+            flags: create_info.flags,
+            patch_control_points: create_info.patchControlPoints,
+        }
+    }
+}
+
+#[derive(Debug)]
+pub struct VkPipelineTessellationStateCreateInfoWrapper {
+    create_info: vk_sys::VkPipelineTessellationStateCreateInfo,
+}
+
+impl Deref for VkPipelineTessellationStateCreateInfoWrapper {
+    type Target = vk_sys::VkPipelineTessellationStateCreateInfo;
+
+    fn deref(&self) -> &Self::Target {
+        &self.create_info
+    }
+}
+
+impl AsRef<vk_sys::VkPipelineTessellationStateCreateInfo> for VkPipelineTessellationStateCreateInfoWrapper {
+    fn as_ref(&self) -> &vk_sys::VkPipelineTessellationStateCreateInfo {
+        &self.create_info
+    }
+}
+
+impl<'a> From<&'a PipelineTessellationStateCreateInfo> for VkPipelineTessellationStateCreateInfoWrapper {
+    fn from(create_info: &'a PipelineTessellationStateCreateInfo) -> Self {
+        VkPipelineTessellationStateCreateInfoWrapper {
+            create_info: vk_sys::VkPipelineTessellationStateCreateInfo {
+                sType: vk_sys::VK_STRUCTURE_TYPE_PIPELINE_TESSELLATION_STATE_CREATE_INFO,
+                pNext: ptr::null(),
+                flags: create_info.flags,
+                patchControlPoints: create_info.patch_control_points,
+            },
+        }
+    }
+}
+
 #[derive(Debug, Copy, Clone)]
 pub struct Viewport {
     pub x: f32,
