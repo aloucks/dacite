@@ -5682,6 +5682,97 @@ impl<'a> From<&'a PipelineRasterizationStateCreateInfo> for VkPipelineRasterizat
     }
 }
 
+#[derive(Debug, Clone)]
+pub enum PipelineMultisampleStateCreateInfoChainElement {
+}
+
+#[derive(Debug, Clone)]
+pub struct PipelineMultisampleStateCreateInfo {
+    pub chain: Vec<PipelineMultisampleStateCreateInfoChainElement>,
+    pub flags: vk_sys::VkPipelineMultisampleStateCreateFlags,
+    pub rasterization_samples: vk_sys::VkSampleCountFlagBits,
+    pub sample_shading_enable: bool,
+    pub min_sample_shading: f32,
+    pub sample_mask: Option<Vec<u32>>,
+    pub alpha_to_coverage_enable: bool,
+    pub alpha_to_one_enable: bool,
+}
+
+impl<'a> From<&'a vk_sys::VkPipelineMultisampleStateCreateInfo> for PipelineMultisampleStateCreateInfo {
+    fn from(create_info: &'a vk_sys::VkPipelineMultisampleStateCreateInfo) -> Self {
+        debug_assert!(create_info.pNext.is_null());
+
+        let sample_mask = if !create_info.pSampleMask.is_null() {
+            let sample_mask_len = (create_info.rasterizationSamples.bits() as usize + 31) / 32;
+            unsafe {
+                Some(slice::from_raw_parts(create_info.pSampleMask, sample_mask_len).to_vec())
+            }
+        }
+        else {
+            None
+        };
+
+        PipelineMultisampleStateCreateInfo {
+            chain: vec![],
+            flags: create_info.flags,
+            rasterization_samples: create_info.rasterizationSamples,
+            sample_shading_enable: utils::from_vk_bool(create_info.sampleShadingEnable),
+            min_sample_shading: create_info.minSampleShading,
+            sample_mask: sample_mask,
+            alpha_to_coverage_enable: utils::from_vk_bool(create_info.alphaToCoverageEnable),
+            alpha_to_one_enable: utils::from_vk_bool(create_info.alphaToOneEnable),
+        }
+    }
+}
+
+#[derive(Debug)]
+struct VkPipelineMultisampleStateCreateInfoWrapper {
+    create_info: vk_sys::VkPipelineMultisampleStateCreateInfo,
+    sample_mask: Option<Vec<u32>>,
+}
+
+impl Deref for VkPipelineMultisampleStateCreateInfoWrapper {
+    type Target = vk_sys::VkPipelineMultisampleStateCreateInfo;
+
+    fn deref(&self) -> &Self::Target {
+        &self.create_info
+    }
+}
+
+impl AsRef<vk_sys::VkPipelineMultisampleStateCreateInfo> for VkPipelineMultisampleStateCreateInfoWrapper {
+    fn as_ref(&self) -> &vk_sys::VkPipelineMultisampleStateCreateInfo {
+        &self.create_info
+    }
+}
+
+impl<'a> From<&'a PipelineMultisampleStateCreateInfo> for VkPipelineMultisampleStateCreateInfoWrapper {
+    fn from(create_info: &'a PipelineMultisampleStateCreateInfo) -> Self {
+        let (sample_mask_ptr, sample_mask) = match create_info.sample_mask {
+            Some(ref sample_mask) => {
+                let sample_mask = sample_mask.clone();
+                (sample_mask.as_ptr(), Some(sample_mask))
+            }
+
+            None => (ptr::null(), None),
+        };
+
+        VkPipelineMultisampleStateCreateInfoWrapper {
+            create_info: vk_sys::VkPipelineMultisampleStateCreateInfo {
+                sType: vk_sys::VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO,
+                pNext: ptr::null(),
+                flags: create_info.flags,
+                rasterizationSamples: create_info.rasterization_samples,
+                sampleShadingEnable: utils::to_vk_bool(create_info.sample_shading_enable),
+                minSampleShading: create_info.min_sample_shading,
+                pSampleMask: sample_mask_ptr,
+                alphaToCoverageEnable: utils::to_vk_bool(create_info.alpha_to_coverage_enable),
+                alphaToOneEnable: utils::to_vk_bool(create_info.alpha_to_one_enable),
+            },
+            sample_mask: sample_mask,
+        }
+    }
+}
+
 #[derive(Debug, Copy, Clone)]
 pub struct StencilOpState {
     pub fail_op: StencilOp,
