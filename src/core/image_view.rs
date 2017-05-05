@@ -51,4 +51,9 @@ impl ImageView {
             image: image,
         }))
     }
+
+    #[inline]
+    pub(crate) fn handle(&self) -> vk_sys::VkImageView {
+        self.0.handle
+    }
 }
