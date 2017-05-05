@@ -49,4 +49,9 @@ impl Event {
             allocator: allocator,
         }))
     }
+
+    #[inline]
+    pub(crate) fn handle(&self) -> vk_sys::VkEvent {
+        self.0.handle
+    }
 }
