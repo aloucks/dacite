@@ -12,6 +12,7 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
+use AsNativeVkObject;
 use core::CommandPool;
 use std::sync::Arc;
 use vk_sys;
@@ -32,6 +33,15 @@ impl Drop for Inner {
 
 #[derive(Debug, Clone)]
 pub struct CommandBuffer(Arc<Inner>);
+
+impl AsNativeVkObject for CommandBuffer {
+    type NativeVkObject = vk_sys::VkCommandBuffer;
+
+    #[inline]
+    fn as_native_vk_object(&self) -> Self::NativeVkObject {
+        self.handle()
+    }
+}
 
 impl CommandBuffer {
     pub(crate) fn new(handle: vk_sys::VkCommandBuffer, command_pool: CommandPool) -> Self {
