@@ -3986,6 +3986,52 @@ impl<'a> From<&'a SparseImageMemoryBind> for VkSparseImageMemoryBindWrapper {
 }
 
 #[derive(Debug, Clone)]
+pub struct SparseImageMemoryBindInfo {
+    pub image: Image,
+    pub binds: Vec<SparseImageMemoryBind>,
+}
+
+#[derive(Debug)]
+struct VkSparseImageMemoryBindInfoWrapper {
+    info: vk_sys::VkSparseImageMemoryBindInfo,
+    image: Image,
+    binds: Vec<VkSparseImageMemoryBindWrapper>,
+    binds_vk: Vec<vk_sys::VkSparseImageMemoryBind>,
+}
+
+impl Deref for VkSparseImageMemoryBindInfoWrapper {
+    type Target = vk_sys::VkSparseImageMemoryBindInfo;
+
+    fn deref(&self) -> &Self::Target {
+        &self.info
+    }
+}
+
+impl AsRef<vk_sys::VkSparseImageMemoryBindInfo> for VkSparseImageMemoryBindInfoWrapper {
+    fn as_ref(&self) -> &vk_sys::VkSparseImageMemoryBindInfo {
+        &self.info
+    }
+}
+
+impl<'a> From<&'a SparseImageMemoryBindInfo> for VkSparseImageMemoryBindInfoWrapper {
+    fn from(info: &'a SparseImageMemoryBindInfo) -> Self {
+        let binds: Vec<_> = info.binds.iter().map(From::from).collect();
+        let binds_vk: Vec<_> = binds.iter().map(AsRef::as_ref).cloned().collect();
+
+        VkSparseImageMemoryBindInfoWrapper {
+            info: vk_sys::VkSparseImageMemoryBindInfo {
+                image: info.image.handle(),
+                bindCount: binds.len() as u32,
+                pBinds: binds_vk.as_ptr(),
+            },
+            image: info.image.clone(),
+            binds: binds,
+            binds_vk: binds_vk,
+        }
+    }
+}
+
+#[derive(Debug, Clone)]
 pub enum FenceCreateInfoChainElement {
 }
 
