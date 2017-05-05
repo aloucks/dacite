@@ -49,4 +49,9 @@ impl ShaderModule {
             allocator: allocator,
         }))
     }
+
+    #[inline]
+    pub(crate) fn handle(&self) -> vk_sys::VkShaderModule {
+        self.0.handle
+    }
 }
