@@ -5192,6 +5192,112 @@ impl<'a> From<&'a VertexInputAttributeDescription> for vk_sys::VkVertexInputAttr
     }
 }
 
+#[derive(Debug, Clone)]
+pub enum PipelineVertexInputStateCreateInfoChainElement {
+}
+
+#[derive(Debug, Clone)]
+pub struct PipelineVertexInputStateCreateInfo {
+    pub chain: Vec<PipelineVertexInputStateCreateInfoChainElement>,
+    pub flags: vk_sys::VkPipelineVertexInputStateCreateFlags,
+    pub vertex_binding_descriptions: Option<Vec<VertexInputBindingDescription>>,
+    pub vertex_attribute_descriptions: Option<Vec<VertexInputAttributeDescription>>,
+}
+
+impl<'a> From<&'a vk_sys::VkPipelineVertexInputStateCreateInfo> for PipelineVertexInputStateCreateInfo {
+    fn from(create_info: &'a vk_sys::VkPipelineVertexInputStateCreateInfo) -> Self {
+        debug_assert_eq!(create_info.pNext, ptr::null());
+
+        let vertex_binding_descriptions = if !create_info.pVertexBindingDescriptions.is_null() {
+            unsafe {
+                Some(slice::from_raw_parts(create_info.pVertexBindingDescriptions, create_info.vertexBindingDescriptionCount as usize)
+                     .iter()
+                     .map(From::from)
+                     .collect())
+            }
+        }
+        else {
+            None
+        };
+
+        let vertex_attribute_descriptions = if !create_info.pVertexAttributeDescriptions.is_null() {
+            unsafe {
+                Some(slice::from_raw_parts(create_info.pVertexAttributeDescriptions, create_info.vertexAttributeDescriptionCount as usize)
+                     .iter()
+                     .map(From::from)
+                     .collect())
+            }
+        }
+        else {
+            None
+        };
+
+        PipelineVertexInputStateCreateInfo {
+            chain: vec![],
+            flags: create_info.flags,
+            vertex_binding_descriptions: vertex_binding_descriptions,
+            vertex_attribute_descriptions: vertex_attribute_descriptions,
+        }
+    }
+}
+
+#[derive(Debug)]
+struct VkPipelineVertexInputStateCreateInfoWrapper {
+    create_info: vk_sys::VkPipelineVertexInputStateCreateInfo,
+    vertex_binding_descriptions: Option<Vec<vk_sys::VkVertexInputBindingDescription>>,
+    vertex_attribute_descriptions: Option<Vec<vk_sys::VkVertexInputAttributeDescription>>,
+}
+
+impl Deref for VkPipelineVertexInputStateCreateInfoWrapper {
+    type Target = vk_sys::VkPipelineVertexInputStateCreateInfo;
+
+    fn deref(&self) -> &Self::Target {
+        &self.create_info
+    }
+}
+
+impl AsRef<vk_sys::VkPipelineVertexInputStateCreateInfo> for VkPipelineVertexInputStateCreateInfoWrapper {
+    fn as_ref(&self) -> &vk_sys::VkPipelineVertexInputStateCreateInfo {
+        &self.create_info
+    }
+}
+
+impl<'a> From<&'a PipelineVertexInputStateCreateInfo> for VkPipelineVertexInputStateCreateInfoWrapper {
+    fn from(create_info: &'a PipelineVertexInputStateCreateInfo) -> Self {
+        let (vertex_binding_descriptions_count, vertex_binding_descriptions_ptr, vertex_binding_descriptions) = match create_info.vertex_binding_descriptions {
+            Some(ref vertex_binding_descriptions) => {
+                let vertex_binding_descriptions: Vec<_> = vertex_binding_descriptions.iter().map(From::from).collect();
+                (vertex_binding_descriptions.len() as u32, vertex_binding_descriptions.as_ptr(), Some(vertex_binding_descriptions))
+            }
+
+            None => (0, ptr::null(), None),
+        };
+
+        let (vertex_attribute_descriptions_count, vertex_attribute_descriptions_ptr, vertex_attribute_descriptions) = match create_info.vertex_attribute_descriptions {
+            Some(ref vertex_attribute_descriptions) => {
+                let vertex_attribute_descriptions: Vec<_> = vertex_attribute_descriptions.iter().map(From::from).collect();
+                (vertex_attribute_descriptions.len() as u32, vertex_attribute_descriptions.as_ptr(), Some(vertex_attribute_descriptions))
+            }
+
+            None => (0, ptr::null(), None),
+        };
+
+        VkPipelineVertexInputStateCreateInfoWrapper {
+            create_info: vk_sys::VkPipelineVertexInputStateCreateInfo {
+                sType: vk_sys::VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO,
+                pNext: ptr::null(),
+                flags: create_info.flags,
+                vertexBindingDescriptionCount: vertex_binding_descriptions_count,
+                pVertexBindingDescriptions: vertex_binding_descriptions_ptr,
+                vertexAttributeDescriptionCount: vertex_attribute_descriptions_count,
+                pVertexAttributeDescriptions: vertex_attribute_descriptions_ptr,
+            },
+            vertex_binding_descriptions: vertex_binding_descriptions,
+            vertex_attribute_descriptions: vertex_attribute_descriptions,
+        }
+    }
+}
+
 #[derive(Debug, Copy, Clone)]
 pub struct Viewport {
     pub x: f32,
