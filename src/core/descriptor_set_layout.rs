@@ -51,4 +51,9 @@ impl DescriptorSetLayout {
             samplers: samplers,
         }))
     }
+
+    #[inline]
+    pub(crate) fn handle(&self) -> vk_sys::VkDescriptorSetLayout {
+        self.0.handle
+    }
 }
