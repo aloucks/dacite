@@ -49,4 +49,9 @@ impl RenderPass {
             allocator: allocator,
         }))
     }
+
+    #[inline]
+    pub(crate) fn handle(&self) -> vk_sys::VkRenderPass {
+        self.0.handle
+    }
 }
