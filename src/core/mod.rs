@@ -5069,6 +5069,72 @@ impl<'a> From<&'a SpecializationInfo> for VkSpecializationInfoWrapper {
     }
 }
 
+#[derive(Debug, Clone)]
+pub enum PipelineShaderStageCreateInfoChainElement {
+}
+
+#[derive(Debug, Clone)]
+pub struct PipelineShaderStageCreateInfo {
+    pub chain: Vec<PipelineShaderStageCreateInfoChainElement>,
+    pub flags: vk_sys::VkPipelineShaderStageCreateFlags,
+    pub stage: vk_sys::VkShaderStageFlagBits,
+    pub module: ShaderModule,
+    pub name: String,
+    pub specialization_info: Option<SpecializationInfo>,
+}
+
+#[derive(Debug)]
+struct VkPipelineShaderStageCreateInfoWrapper {
+    create_info: vk_sys::VkPipelineShaderStageCreateInfo,
+    module: ShaderModule,
+    name: CString,
+    specialization_info: Option<Box<VkSpecializationInfoWrapper>>,
+}
+
+impl Deref for VkPipelineShaderStageCreateInfoWrapper {
+    type Target = vk_sys::VkPipelineShaderStageCreateInfo;
+
+    fn deref(&self) -> &Self::Target {
+        &self.create_info
+    }
+}
+
+impl AsRef<vk_sys::VkPipelineShaderStageCreateInfo> for VkPipelineShaderStageCreateInfoWrapper {
+    fn as_ref(&self) -> &vk_sys::VkPipelineShaderStageCreateInfo {
+        &self.create_info
+    }
+}
+
+impl<'a> From<&'a PipelineShaderStageCreateInfo> for VkPipelineShaderStageCreateInfoWrapper {
+    fn from(create_info: &'a PipelineShaderStageCreateInfo) -> Self {
+        let name = CString::new(create_info.name.clone()).unwrap();
+
+        let (specialization_info_ptr, specialization_info) = match create_info.specialization_info {
+            Some(ref specialization_info) => {
+                let specialization_info: Box<VkSpecializationInfoWrapper> = Box::new(specialization_info.into());
+                (&**specialization_info as *const _, Some(specialization_info))
+            }
+
+            None => (ptr::null(), None),
+        };
+
+        VkPipelineShaderStageCreateInfoWrapper {
+            create_info: vk_sys::VkPipelineShaderStageCreateInfo {
+                sType: vk_sys::VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
+                pNext: ptr::null(),
+                flags: create_info.flags,
+                stage: create_info.stage,
+                module: create_info.module.handle(),
+                pName: name.as_ptr(),
+                pSpecializationInfo: specialization_info_ptr,
+            },
+            module: create_info.module.clone(),
+            name: name,
+            specialization_info: specialization_info,
+        }
+    }
+}
+
 #[derive(Debug, Copy, Clone)]
 pub struct VertexInputBindingDescription {
     pub binding: u32,
