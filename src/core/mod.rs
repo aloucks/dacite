@@ -3935,6 +3935,57 @@ impl<'a> From<&'a Offset3D> for vk_sys::VkOffset3D {
 }
 
 #[derive(Debug, Clone)]
+pub struct SparseImageMemoryBind {
+    pub subresource: ImageSubresource,
+    pub offset: Offset3D,
+    pub extent: Extent3D,
+    pub memory: Option<DeviceMemory>,
+    pub memory_offset: u64,
+    pub flags: vk_sys::VkSparseMemoryBindFlags,
+}
+
+#[derive(Debug)]
+pub struct VkSparseImageMemoryBindWrapper {
+    bind: vk_sys::VkSparseImageMemoryBind,
+    memory: Option<DeviceMemory>,
+}
+
+impl Deref for VkSparseImageMemoryBindWrapper {
+    type Target = vk_sys::VkSparseImageMemoryBind;
+
+    fn deref(&self) -> &Self::Target {
+        &self.bind
+    }
+}
+
+impl AsRef<vk_sys::VkSparseImageMemoryBind> for VkSparseImageMemoryBindWrapper {
+    fn as_ref(&self) -> &vk_sys::VkSparseImageMemoryBind {
+        &self.bind
+    }
+}
+
+impl<'a> From<&'a SparseImageMemoryBind> for VkSparseImageMemoryBindWrapper {
+    fn from(bind: &'a SparseImageMemoryBind) -> Self {
+        let (vk_memory, memory) = match bind.memory {
+            Some(ref memory) => (memory.handle(), Some(memory.clone())),
+            None => (ptr::null_mut(), None),
+        };
+
+        VkSparseImageMemoryBindWrapper {
+            bind: vk_sys::VkSparseImageMemoryBind {
+                subresource: (&bind.subresource).into(),
+                offset: (&bind.offset).into(),
+                extent: (&bind.extent).into(),
+                memory: vk_memory,
+                memoryOffset: bind.memory_offset,
+                flags: bind.flags,
+            },
+            memory: memory,
+        }
+    }
+}
+
+#[derive(Debug, Clone)]
 pub enum FenceCreateInfoChainElement {
 }
 
