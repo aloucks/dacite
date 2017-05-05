@@ -3502,6 +3502,53 @@ impl<'a> From<&'a MemoryAllocateInfo> for VkMemoryAllocateInfoWrapper {
     }
 }
 
+#[derive(Debug, Clone)]
+pub enum MappedMemoryRangeChainElement {
+}
+
+#[derive(Debug, Clone)]
+pub struct MappedMemoryRange {
+    pub chain: Vec<MappedMemoryRangeChainElement>,
+    pub memory: DeviceMemory,
+    pub offset: u64,
+    pub size: OptionalDeviceSize,
+}
+
+#[derive(Debug)]
+struct VkMappedMemoryRangeWrapper {
+    range: vk_sys::VkMappedMemoryRange,
+    memory: DeviceMemory,
+}
+
+impl Deref for VkMappedMemoryRangeWrapper {
+    type Target = vk_sys::VkMappedMemoryRange;
+
+    fn deref(&self) -> &Self::Target {
+        &self.range
+    }
+}
+
+impl AsRef<vk_sys::VkMappedMemoryRange> for VkMappedMemoryRangeWrapper {
+    fn as_ref(&self) -> &vk_sys::VkMappedMemoryRange {
+        &self.range
+    }
+}
+
+impl<'a> From<&'a MappedMemoryRange> for VkMappedMemoryRangeWrapper {
+    fn from(range: &'a MappedMemoryRange) -> Self {
+        VkMappedMemoryRangeWrapper {
+            range: vk_sys::VkMappedMemoryRange {
+                sType: vk_sys::VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE,
+                pNext: ptr::null(),
+                memory: range.memory.handle(),
+                offset: range.offset,
+                size: range.size.into(),
+            },
+            memory: range.memory.clone(),
+        }
+    }
+}
+
 #[derive(Debug, Copy, Clone)]
 pub struct MemoryRequirements {
     pub size: u64,
