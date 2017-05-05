@@ -13,7 +13,6 @@
 // PERFORMANCE OF THIS SOFTWARE.
 
 use core::{DescriptorPool, Device};
-use std::ptr;
 use std::sync::Arc;
 use vk_sys;
 
