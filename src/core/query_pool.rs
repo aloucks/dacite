@@ -49,4 +49,9 @@ impl QueryPool {
             allocator: allocator,
         }))
     }
+
+    #[inline]
+    pub(crate) fn handle(&self) -> vk_sys::VkQueryPool {
+        self.0.handle
+    }
 }
