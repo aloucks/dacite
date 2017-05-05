@@ -3739,6 +3739,55 @@ impl<'a> From<&'a SparseImageMemoryRequirements> for vk_sys::VkSparseImageMemory
     }
 }
 
+#[derive(Debug, Clone)]
+pub struct SparseMemoryBind {
+    pub resource_offset: u64,
+    pub size: u64,
+    pub memory: Option<DeviceMemory>,
+    pub memory_offset: u64,
+    pub flags: vk_sys::VkSparseMemoryBindFlags,
+}
+
+#[derive(Debug)]
+pub struct VkSparseMemoryBindWrapper {
+    bind: vk_sys::VkSparseMemoryBind,
+    memory: Option<DeviceMemory>,
+}
+
+impl Deref for VkSparseMemoryBindWrapper {
+    type Target = vk_sys::VkSparseMemoryBind;
+
+    fn deref(&self) -> &Self::Target {
+        &self.bind
+    }
+}
+
+impl AsRef<vk_sys::VkSparseMemoryBind> for VkSparseMemoryBindWrapper {
+    fn as_ref(&self) -> &vk_sys::VkSparseMemoryBind {
+        &self.bind
+    }
+}
+
+impl<'a> From<&'a SparseMemoryBind> for VkSparseMemoryBindWrapper {
+    fn from(bind: &'a SparseMemoryBind) -> Self {
+        let (vk_memory, memory) = match bind.memory {
+            Some(ref memory) => (memory.handle(), Some(memory.clone())),
+            None => (ptr::null_mut(), None),
+        };
+
+        VkSparseMemoryBindWrapper {
+            bind: vk_sys::VkSparseMemoryBind {
+                resourceOffset: bind.resource_offset,
+                size: bind.size,
+                memory: vk_memory,
+                memoryOffset: bind.memory_offset,
+                flags: bind.flags,
+            },
+            memory: memory,
+        }
+    }
+}
+
 #[derive(Debug, Copy, Clone)]
 pub struct ImageSubresource {
     pub aspect_mask: vk_sys::VkImageAspectFlags,
