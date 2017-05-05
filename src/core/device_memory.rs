@@ -60,6 +60,7 @@ impl DeviceMemory {
         }))
     }
 
+    #[inline]
     pub(crate) fn handle(&self) -> vk_sys::VkDeviceMemory {
         self.0.handle
     }
