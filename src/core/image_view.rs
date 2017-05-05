@@ -12,6 +12,7 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
+use AsNativeVkObject;
 use core::allocator_helper::AllocatorHelper;
 use core::{Device, Image};
 use std::ptr;
@@ -41,6 +42,15 @@ impl Drop for Inner {
 
 #[derive(Debug, Clone)]
 pub struct ImageView(Arc<Inner>);
+
+impl AsNativeVkObject for ImageView {
+    type NativeVkObject = vk_sys::VkImageView;
+
+    #[inline]
+    fn as_native_vk_object(&self) -> Self::NativeVkObject {
+        self.handle()
+    }
+}
 
 impl ImageView {
     pub(crate) fn new(handle: vk_sys::VkImageView, device: Device, allocator: Option<AllocatorHelper>, image: Image) -> Self {
