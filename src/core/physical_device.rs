@@ -12,6 +12,7 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
+use AsNativeVkObject;
 use Result;
 use core::allocator_helper::AllocatorHelper;
 use core::{self, Device, Instance};
@@ -24,6 +25,15 @@ use vk_sys;
 pub struct PhysicalDevice {
     handle: vk_sys::VkPhysicalDevice,
     instance: Instance,
+}
+
+impl AsNativeVkObject for PhysicalDevice {
+    type NativeVkObject = vk_sys::VkPhysicalDevice;
+
+    #[inline]
+    fn as_native_vk_object(&self) -> Self::NativeVkObject {
+        self.handle
+    }
 }
 
 impl PhysicalDevice {
