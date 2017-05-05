@@ -3788,6 +3788,52 @@ impl<'a> From<&'a SparseMemoryBind> for VkSparseMemoryBindWrapper {
     }
 }
 
+#[derive(Debug, Clone)]
+pub struct SparseBufferMemoryBindInfo {
+    pub buffer: Buffer,
+    pub binds: Vec<SparseMemoryBind>,
+}
+
+#[derive(Debug)]
+struct VkSparseBufferMemoryBindInfoWrapper {
+    info: vk_sys::VkSparseBufferMemoryBindInfo,
+    buffer: Buffer,
+    binds: Vec<VkSparseMemoryBindWrapper>,
+    binds_vk: Vec<vk_sys::VkSparseMemoryBind>,
+}
+
+impl Deref for VkSparseBufferMemoryBindInfoWrapper {
+    type Target = vk_sys::VkSparseBufferMemoryBindInfo;
+
+    fn deref(&self) -> &Self::Target {
+        &self.info
+    }
+}
+
+impl AsRef<vk_sys::VkSparseBufferMemoryBindInfo> for VkSparseBufferMemoryBindInfoWrapper {
+    fn as_ref(&self) -> &vk_sys::VkSparseBufferMemoryBindInfo {
+        &self.info
+    }
+}
+
+impl<'a> From<&'a SparseBufferMemoryBindInfo> for VkSparseBufferMemoryBindInfoWrapper {
+    fn from(info: &'a SparseBufferMemoryBindInfo) -> Self {
+        let binds: Vec<_> = info.binds.iter().map(From::from).collect();
+        let binds_vk: Vec<_> = binds.iter().map(AsRef::as_ref).cloned().collect();
+
+        VkSparseBufferMemoryBindInfoWrapper {
+            info: vk_sys::VkSparseBufferMemoryBindInfo {
+                buffer: info.buffer.handle(),
+                bindCount: binds.len() as u32,
+                pBinds: binds_vk.as_ptr(),
+            },
+            buffer: info.buffer.clone(),
+            binds: binds,
+            binds_vk: binds_vk,
+        }
+    }
+}
+
 #[derive(Debug, Copy, Clone)]
 pub struct ImageSubresource {
     pub aspect_mask: vk_sys::VkImageAspectFlags,
