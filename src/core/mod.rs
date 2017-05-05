@@ -3945,7 +3945,7 @@ pub struct SparseImageMemoryBind {
 }
 
 #[derive(Debug)]
-pub struct VkSparseImageMemoryBindWrapper {
+struct VkSparseImageMemoryBindWrapper {
     bind: vk_sys::VkSparseImageMemoryBind,
     memory: Option<DeviceMemory>,
 }
