@@ -50,6 +50,7 @@ impl Sampler {
         }))
     }
 
+    #[inline]
     pub(crate) fn handle(&self) -> vk_sys::VkSampler {
         self.0.handle
     }
