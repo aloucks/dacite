@@ -22,15 +22,15 @@ use vk_sys;
 
 #[derive(Debug, Clone)]
 pub struct PhysicalDevice {
-    instance: Instance,
     handle: vk_sys::VkPhysicalDevice,
+    instance: Instance,
 }
 
 impl PhysicalDevice {
-    pub(crate) fn new(instance: Instance, physical_device: vk_sys::VkPhysicalDevice) -> Self {
+    pub(crate) fn new(handle: vk_sys::VkPhysicalDevice, instance: Instance) -> Self {
         PhysicalDevice {
+            handle: handle,
             instance: instance,
-            handle: physical_device,
         }
     }
 

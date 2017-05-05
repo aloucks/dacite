@@ -115,7 +115,7 @@ impl Instance {
 
         let physical_devices: Vec<_> = physical_devices
             .iter()
-            .map(|&d| core::PhysicalDevice::new(self.clone(), d))
+            .map(|&d| core::PhysicalDevice::new(d, self.clone()))
             .collect();
 
         Ok(physical_devices)
