@@ -49,4 +49,8 @@ impl Semaphore {
             allocator: allocator,
         }))
     }
+
+    pub(crate) fn handle(&self) -> vk_sys::VkSemaphore {
+        self.0.handle
+    }
 }
