@@ -6881,6 +6881,108 @@ impl<'a> From<&'a DescriptorBufferInfo> for VkDescriptorBufferInfoWrapper {
     }
 }
 
+#[derive(Debug, Clone)]
+pub enum WriteDescriptorSetChainElement {
+}
+
+#[derive(Debug, Clone)]
+pub enum WriteDescriptorSetElements {
+    ImageInfo(Vec<DescriptorImageInfo>),
+    BufferInfo(Vec<DescriptorBufferInfo>),
+    TexelBufferView(Vec<BufferView>),
+}
+
+#[derive(Debug, Clone)]
+pub struct WriteDescriptorSet {
+    pub chain: Vec<WriteDescriptorSetChainElement>,
+    pub dst_set: DescriptorSet,
+    pub dst_binding: u32,
+    pub dst_array_element: u32,
+    pub descriptor_type: DescriptorType,
+    pub elements: WriteDescriptorSetElements,
+}
+
+#[derive(Debug)]
+struct VkWriteDescriptorSetWrapper {
+    write: vk_sys::VkWriteDescriptorSet,
+    dst_set: DescriptorSet,
+    image_info: Option<Vec<VkDescriptorImageInfoWrapper>>,
+    vk_image_info: Option<Vec<vk_sys::VkDescriptorImageInfo>>,
+    buffer_info: Option<Vec<VkDescriptorBufferInfoWrapper>>,
+    vk_buffer_info: Option<Vec<vk_sys::VkDescriptorBufferInfo>>,
+    texel_buffer_view: Option<Vec<BufferView>>,
+    vk_texel_buffer_view: Option<Vec<vk_sys::VkBufferView>>,
+}
+
+impl Deref for VkWriteDescriptorSetWrapper {
+    type Target = vk_sys::VkWriteDescriptorSet;
+
+    fn deref(&self) -> &Self::Target {
+        &self.write
+    }
+}
+
+impl AsRef<vk_sys::VkWriteDescriptorSet> for VkWriteDescriptorSetWrapper {
+    fn as_ref(&self) -> &vk_sys::VkWriteDescriptorSet {
+        &self.write
+    }
+}
+
+impl<'a> From<&'a WriteDescriptorSet> for VkWriteDescriptorSetWrapper {
+    fn from(write: &'a WriteDescriptorSet) -> Self {
+        let (count,
+             vk_image_info_ptr,
+             vk_image_info,
+             image_info,
+             vk_buffer_info_ptr,
+             vk_buffer_info,
+             buffer_info,
+             vk_texel_buffer_view_ptr,
+             vk_texel_buffer_view,
+             texel_buffer_view) = match write.elements {
+            WriteDescriptorSetElements::ImageInfo(ref image_info) => {
+                let image_info: Vec<VkDescriptorImageInfoWrapper> = image_info.iter().map(From::from).collect();
+                let vk_image_info: Vec<_> = image_info.iter().map(AsRef::as_ref).cloned().collect();
+                (image_info.len() as u32, vk_image_info.as_ptr(), Some(vk_image_info), Some(image_info), ptr::null(), None, None, ptr::null(), None, None)
+            },
+
+            WriteDescriptorSetElements::BufferInfo(ref buffer_info) => {
+                let buffer_info: Vec<VkDescriptorBufferInfoWrapper> = buffer_info.iter().map(From::from).collect();
+                let vk_buffer_info: Vec<_> = buffer_info.iter().map(AsRef::as_ref).cloned().collect();
+                (buffer_info.len() as u32, ptr::null(), None, None, vk_buffer_info.as_ptr(), Some(vk_buffer_info), Some(buffer_info), ptr::null(), None, None)
+            },
+
+            WriteDescriptorSetElements::TexelBufferView(ref texel_buffer_view) => {
+                let texel_buffer_view = texel_buffer_view.clone();
+                let vk_texel_buffer_view: Vec<_> = texel_buffer_view.iter().map(BufferView::handle).collect();
+                (texel_buffer_view.len() as u32, ptr::null(), None, None, ptr::null(), None, None, vk_texel_buffer_view.as_ptr(), Some(vk_texel_buffer_view), Some(texel_buffer_view))
+            },
+        };
+
+        VkWriteDescriptorSetWrapper {
+            write: vk_sys::VkWriteDescriptorSet {
+                sType: vk_sys::VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET,
+                pNext: ptr::null(),
+                dstSet: write.dst_set.handle(),
+                dstBinding: write.dst_binding,
+                dstArrayElement: write.dst_array_element,
+                descriptorCount: count,
+                descriptorType: write.descriptor_type.into(),
+                pImageInfo: vk_image_info_ptr,
+                pBufferInfo: vk_buffer_info_ptr,
+                pTexelBufferView: vk_texel_buffer_view_ptr,
+            },
+            dst_set: write.dst_set.clone(),
+            image_info: image_info,
+            vk_image_info: vk_image_info,
+            buffer_info: buffer_info,
+            vk_buffer_info: vk_buffer_info,
+            texel_buffer_view: texel_buffer_view,
+            vk_texel_buffer_view: vk_texel_buffer_view,
+        }
+    }
+}
+
 #[derive(Debug, Copy, Clone)]
 pub struct AttachmentDescription {
     pub flags: vk_sys::VkAttachmentDescriptionFlags,
