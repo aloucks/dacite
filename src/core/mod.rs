@@ -6983,6 +6983,63 @@ impl<'a> From<&'a WriteDescriptorSet> for VkWriteDescriptorSetWrapper {
     }
 }
 
+#[derive(Debug, Clone)]
+pub enum CopyDescriptorSetChainElement {
+}
+
+#[derive(Debug, Clone)]
+pub struct CopyDescriptorSet {
+    pub chain: Vec<CopyDescriptorSetChainElement>,
+    pub src_set: DescriptorSet,
+    pub src_binding: u32,
+    pub src_array_element: u32,
+    pub dst_set: DescriptorSet,
+    pub dst_binding: u32,
+    pub dst_array_element: u32,
+    pub descriptor_count: u32,
+}
+
+#[derive(Debug)]
+struct VkCopyDescriptorSetWrapper {
+    copy: vk_sys::VkCopyDescriptorSet,
+    src_set: DescriptorSet,
+    dst_set: DescriptorSet,
+}
+
+impl Deref for VkCopyDescriptorSetWrapper {
+    type Target = vk_sys::VkCopyDescriptorSet;
+
+    fn deref(&self) -> &Self::Target {
+        &self.copy
+    }
+}
+
+impl AsRef<vk_sys::VkCopyDescriptorSet> for VkCopyDescriptorSetWrapper {
+    fn as_ref(&self) -> &vk_sys::VkCopyDescriptorSet {
+        &self.copy
+    }
+}
+
+impl<'a> From<&'a CopyDescriptorSet> for VkCopyDescriptorSetWrapper {
+    fn from(copy: &'a CopyDescriptorSet) -> Self {
+        VkCopyDescriptorSetWrapper {
+            copy: vk_sys::VkCopyDescriptorSet {
+                sType: vk_sys::VK_STRUCTURE_TYPE_COPY_DESCRIPTOR_SET,
+                pNext: ptr::null(),
+                srcSet: copy.src_set.handle(),
+                srcBinding: copy.src_binding,
+                srcArrayElement: copy.src_array_element,
+                dstSet: copy.dst_set.handle(),
+                dstBinding: copy.dst_binding,
+                dstArrayElement: copy.dst_array_element,
+                descriptorCount: copy.descriptor_count,
+            },
+            src_set: copy.src_set.clone(),
+            dst_set: copy.dst_set.clone(),
+        }
+    }
+}
+
 #[derive(Debug, Copy, Clone)]
 pub struct AttachmentDescription {
     pub flags: vk_sys::VkAttachmentDescriptionFlags,
