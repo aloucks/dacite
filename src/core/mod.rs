@@ -7389,6 +7389,130 @@ impl<'a> From<&'a SubpassDependency> for vk_sys::VkSubpassDependency {
 }
 
 #[derive(Debug, Clone)]
+pub enum RenderPassCreateInfoChainElement {
+}
+
+#[derive(Debug, Clone)]
+pub struct RenderPassCreateInfo {
+    pub chain: Vec<RenderPassCreateInfoChainElement>,
+    pub flags: vk_sys::VkRenderPassCreateFlags,
+    pub attachments: Option<Vec<AttachmentDescription>>,
+    pub subpasses: Vec<SubpassDescription>,
+    pub dependencies: Option<Vec<SubpassDependency>>,
+}
+
+impl<'a> From<&'a vk_sys::VkRenderPassCreateInfo> for RenderPassCreateInfo {
+    fn from(create_info: &'a vk_sys::VkRenderPassCreateInfo) -> Self {
+        assert!(create_info.pNext.is_null());
+
+        let attachments = if !create_info.pAttachments.is_null() {
+            unsafe {
+                Some(slice::from_raw_parts(create_info.pAttachments, create_info.attachmentCount as usize)
+                     .iter()
+                     .map(From::from)
+                     .collect())
+            }
+        }
+        else {
+            None
+        };
+
+        let subpasses = unsafe {
+            slice::from_raw_parts(create_info.pSubpasses, create_info.subpassCount as usize)
+                .iter()
+                .map(From::from)
+                .collect()
+        };
+
+        let dependencies = if !create_info.pDependencies.is_null() {
+            unsafe {
+                Some(slice::from_raw_parts(create_info.pDependencies, create_info.dependencyCount as usize)
+                     .iter()
+                     .map(From::from)
+                     .collect())
+            }
+        }
+        else {
+            None
+        };
+
+        RenderPassCreateInfo {
+            chain: vec![],
+            flags: create_info.flags,
+            attachments: attachments,
+            subpasses: subpasses,
+            dependencies: dependencies,
+        }
+    }
+}
+
+#[derive(Debug)]
+struct VkRenderPassCreateInfoWrapper {
+    create_info: vk_sys::VkRenderPassCreateInfo,
+    attachments: Option<Vec<vk_sys::VkAttachmentDescription>>,
+    subpasses: Vec<VkSubpassDescriptionWrapper>,
+    vk_subpasses: Vec<vk_sys::VkSubpassDescription>,
+    dependencies: Option<Vec<vk_sys::VkSubpassDependency>>,
+}
+
+impl Deref for VkRenderPassCreateInfoWrapper {
+    type Target = vk_sys::VkRenderPassCreateInfo;
+
+    fn deref(&self) -> &Self::Target {
+        &self.create_info
+    }
+}
+
+impl AsRef<vk_sys::VkRenderPassCreateInfo> for VkRenderPassCreateInfoWrapper {
+    fn as_ref(&self) -> &vk_sys::VkRenderPassCreateInfo {
+        &self.create_info
+    }
+}
+
+impl<'a> From<&'a RenderPassCreateInfo> for VkRenderPassCreateInfoWrapper {
+    fn from(create_info: &'a RenderPassCreateInfo) -> VkRenderPassCreateInfoWrapper {
+        let (attachments_count, attachments_ptr, attachments) = match create_info.attachments {
+            Some(ref attachments) => {
+                let attachments: Vec<_> = attachments.iter().map(From::from).collect();
+                (attachments.len() as u32, attachments.as_ptr(), Some(attachments))
+            }
+
+            None => (0, ptr::null(), None),
+        };
+
+        let subpasses: Vec<VkSubpassDescriptionWrapper> = create_info.subpasses.iter().map(From::from).collect();
+        let vk_subpasses: Vec<vk_sys::VkSubpassDescription> = subpasses.iter().map(AsRef::as_ref).cloned().collect();
+
+        let (dependencies_count, dependencies_ptr, dependencies) = match create_info.dependencies {
+            Some(ref dependencies) => {
+                let dependencies: Vec<_> = dependencies.iter().map(From::from).collect();
+                (dependencies.len() as u32, dependencies.as_ptr(), Some(dependencies))
+            }
+
+            None => (0, ptr::null(), None),
+        };
+
+        VkRenderPassCreateInfoWrapper {
+            create_info: vk_sys::VkRenderPassCreateInfo {
+                sType: vk_sys::VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO,
+                pNext: ptr::null(),
+                flags: create_info.flags,
+                attachmentCount: attachments_count,
+                pAttachments: attachments_ptr,
+                subpassCount: subpasses.len() as u32,
+                pSubpasses: vk_subpasses.as_ptr(),
+                dependencyCount: dependencies_count,
+                pDependencies: dependencies_ptr,
+            },
+            attachments: attachments,
+            subpasses: subpasses,
+            vk_subpasses: vk_subpasses,
+            dependencies: dependencies,
+        }
+    }
+}
+
+#[derive(Debug, Clone)]
 pub enum CommandPoolCreateInfoChainElement {
 }
 
