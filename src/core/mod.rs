@@ -8222,6 +8222,69 @@ impl<'a> From<&'a ImageMemoryBarrier> for VkImageMemoryBarrierWrapper {
     }
 }
 
+#[derive(Debug, Clone)]
+pub enum RenderPassBeginInfoChainElement {
+}
+
+#[derive(Debug, Clone)]
+pub struct RenderPassBeginInfo {
+    pub chain: Vec<RenderPassBeginInfoChainElement>,
+    pub render_pass: RenderPass,
+    pub framebuffer: Framebuffer,
+    pub render_area: Rect2D,
+    pub clear_values: Option<Vec<ClearValue>>,
+}
+
+#[derive(Debug)]
+struct VkRenderPassBeginInfoWrapper {
+    begin_info: vk_sys::VkRenderPassBeginInfo,
+    render_pass: RenderPass,
+    framebuffer: Framebuffer,
+    clear_values: Option<Vec<vk_sys::VkClearValue>>,
+}
+
+impl Deref for VkRenderPassBeginInfoWrapper {
+    type Target = vk_sys::VkRenderPassBeginInfo;
+
+    fn deref(&self) -> &Self::Target {
+        &self.begin_info
+    }
+}
+
+impl AsRef<vk_sys::VkRenderPassBeginInfo> for VkRenderPassBeginInfoWrapper {
+    fn as_ref(&self) -> &vk_sys::VkRenderPassBeginInfo {
+        &self.begin_info
+    }
+}
+
+impl<'a> From<&'a RenderPassBeginInfo> for VkRenderPassBeginInfoWrapper {
+    fn from(begin_info: &'a RenderPassBeginInfo) -> Self {
+        let (clear_values_count, clear_values_ptr, clear_values) = match begin_info.clear_values {
+            Some(ref clear_values) => {
+                let clear_values: Vec<_> = clear_values.iter().map(From::from).collect();
+                (clear_values.len() as u32, clear_values.as_ptr(), Some(clear_values))
+            }
+
+            None => (0, ptr::null(), None),
+        };
+
+        VkRenderPassBeginInfoWrapper {
+            begin_info: vk_sys::VkRenderPassBeginInfo {
+                sType: vk_sys::VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO,
+                pNext: ptr::null(),
+                renderPass: begin_info.render_pass.handle(),
+                framebuffer: begin_info.framebuffer.handle(),
+                renderArea: (&begin_info.render_area).into(),
+                clearValueCount: clear_values_count,
+                pClearValues: clear_values_ptr,
+            },
+            render_pass: begin_info.render_pass.clone(),
+            framebuffer: begin_info.framebuffer.clone(),
+            clear_values: clear_values,
+        }
+    }
+}
+
 #[derive(Debug, Copy, Clone)]
 pub struct DispatchIndirectCommand {
     pub x: u32,
