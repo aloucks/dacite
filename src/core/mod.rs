@@ -422,6 +422,32 @@ impl From<OptionalDeviceSize> for u64 {
 }
 
 #[derive(Debug, Copy, Clone)]
+pub enum OptionalMipLevels {
+    MipLevels(u32),
+    Remaining,
+}
+
+impl From<u32> for OptionalMipLevels {
+    fn from(mip_levels: u32) -> Self {
+        if mip_levels != vk_sys::VK_REMAINING_MIP_LEVELS {
+            OptionalMipLevels::MipLevels(mip_levels)
+        }
+        else {
+            OptionalMipLevels::Remaining
+        }
+    }
+}
+
+impl From<OptionalMipLevels> for u32 {
+    fn from(mip_levels: OptionalMipLevels) -> Self {
+        match mip_levels {
+            OptionalMipLevels::MipLevels(mip_levels) => mip_levels,
+            OptionalMipLevels::Remaining => vk_sys::VK_REMAINING_MIP_LEVELS,
+        }
+    }
+}
+
+#[derive(Debug, Copy, Clone)]
 pub struct Version {
     pub major: u32,
     pub minor: u32,
@@ -4995,7 +5021,7 @@ impl<'a> From<&'a ComponentMapping> for vk_sys::VkComponentMapping {
 pub struct ImageSubresourceRange {
     pub aspect_mask: ImageAspectFlags,
     pub base_mip_level: u32,
-    pub level_count: u32,
+    pub level_count: OptionalMipLevels,
     pub base_array_layer: u32,
     pub layer_count: u32,
 }
@@ -5005,7 +5031,7 @@ impl<'a> From<&'a vk_sys::VkImageSubresourceRange> for ImageSubresourceRange {
         ImageSubresourceRange {
             aspect_mask: range.aspectMask,
             base_mip_level: range.baseMipLevel,
-            level_count: range.levelCount,
+            level_count: range.levelCount.into(),
             base_array_layer: range.baseArrayLayer,
             layer_count: range.layerCount,
         }
@@ -5017,7 +5043,7 @@ impl<'a> From<&'a ImageSubresourceRange> for vk_sys::VkImageSubresourceRange {
         vk_sys::VkImageSubresourceRange {
             aspectMask: range.aspect_mask,
             baseMipLevel: range.base_mip_level,
-            levelCount: range.level_count,
+            levelCount: range.level_count.into(),
             baseArrayLayer: range.base_array_layer,
             layerCount: range.layer_count,
         }
