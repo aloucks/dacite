@@ -8165,6 +8165,63 @@ impl<'a> From<&'a BufferMemoryBarrier> for VkBufferMemoryBarrierWrapper {
     }
 }
 
+#[derive(Debug, Clone)]
+pub enum ImageMemoryBarrierChainElement {
+}
+
+#[derive(Debug, Clone)]
+pub struct ImageMemoryBarrier {
+    pub chain: Vec<ImageMemoryBarrierChainElement>,
+    pub src_access_mask: vk_sys::VkAccessFlags,
+    pub dst_access_mask: vk_sys::VkAccessFlags,
+    pub old_layout: ImageLayout,
+    pub new_layout: ImageLayout,
+    pub src_queue_family_index: u32,
+    pub dst_queue_family_index: u32,
+    pub image: Image,
+    pub subresource_range: ImageSubresourceRange,
+}
+
+#[derive(Debug)]
+struct VkImageMemoryBarrierWrapper {
+    barrier: vk_sys::VkImageMemoryBarrier,
+    image: Image,
+}
+
+impl Deref for VkImageMemoryBarrierWrapper {
+    type Target = vk_sys::VkImageMemoryBarrier;
+
+    fn deref(&self) -> &Self::Target {
+        &self.barrier
+    }
+}
+
+impl AsRef<vk_sys::VkImageMemoryBarrier> for VkImageMemoryBarrierWrapper {
+    fn as_ref(&self) -> &vk_sys::VkImageMemoryBarrier {
+        &self.barrier
+    }
+}
+
+impl<'a> From<&'a ImageMemoryBarrier> for VkImageMemoryBarrierWrapper {
+    fn from(barrier: &'a ImageMemoryBarrier) -> Self {
+        VkImageMemoryBarrierWrapper {
+            barrier: vk_sys::VkImageMemoryBarrier {
+                sType: vk_sys::VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER,
+                pNext: ptr::null(),
+                srcAccessMask: barrier.src_access_mask,
+                dstAccessMask: barrier.dst_access_mask,
+                oldLayout: barrier.old_layout.into(),
+                newLayout: barrier.new_layout.into(),
+                srcQueueFamilyIndex: barrier.src_queue_family_index,
+                dstQueueFamilyIndex: barrier.dst_queue_family_index,
+                image: barrier.image.handle(),
+                subresourceRange: (&barrier.subresource_range).into(),
+            },
+            image: barrier.image.clone(),
+        }
+    }
+}
+
 #[derive(Debug, Copy, Clone)]
 pub struct DispatchIndirectCommand {
     pub x: u32,
