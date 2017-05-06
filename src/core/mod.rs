@@ -526,6 +526,32 @@ impl From<QueueFamilyIndex> for u32 {
 }
 
 #[derive(Debug, Copy, Clone)]
+pub enum SubpassIndex {
+    Index(u32),
+    External,
+}
+
+impl From<u32> for SubpassIndex {
+    fn from(index: u32) -> Self {
+        if index != vk_sys::VK_SUBPASS_EXTERNAL {
+            SubpassIndex::Index(index)
+        }
+        else {
+            SubpassIndex::External
+        }
+    }
+}
+
+impl From<SubpassIndex> for u32 {
+    fn from(index: SubpassIndex) -> Self {
+        match index {
+            SubpassIndex::Index(index) => index,
+            SubpassIndex::External => vk_sys::VK_SUBPASS_EXTERNAL,
+        }
+    }
+}
+
+#[derive(Debug, Copy, Clone)]
 pub struct Version {
     pub major: u32,
     pub minor: u32,
@@ -7772,8 +7798,8 @@ impl<'a> From<&'a SubpassDescription> for VkSubpassDescriptionWrapper {
 
 #[derive(Debug, Copy, Clone)]
 pub struct SubpassDependency {
-    pub src_subpass: u32,
-    pub dst_subpass: u32,
+    pub src_subpass: SubpassIndex,
+    pub dst_subpass: SubpassIndex,
     pub src_stage_mask: PipelineStageFlags,
     pub dst_stage_mask: PipelineStageFlags,
     pub src_access_mask: AccessFlags,
@@ -7784,8 +7810,8 @@ pub struct SubpassDependency {
 impl<'a> From<&'a vk_sys::VkSubpassDependency> for SubpassDependency {
     fn from(dependency: &'a vk_sys::VkSubpassDependency) -> Self {
         SubpassDependency {
-            src_subpass: dependency.srcSubpass,
-            dst_subpass: dependency.dstSubpass,
+            src_subpass: dependency.srcSubpass.into(),
+            dst_subpass: dependency.dstSubpass.into(),
             src_stage_mask: dependency.srcStageMask,
             dst_stage_mask: dependency.dstStageMask,
             src_access_mask: dependency.srcAccessMask,
@@ -7798,8 +7824,8 @@ impl<'a> From<&'a vk_sys::VkSubpassDependency> for SubpassDependency {
 impl<'a> From<&'a SubpassDependency> for vk_sys::VkSubpassDependency {
     fn from(dependency: &'a SubpassDependency) -> Self {
         vk_sys::VkSubpassDependency {
-            srcSubpass: dependency.src_subpass,
-            dstSubpass: dependency.dst_subpass,
+            srcSubpass: dependency.src_subpass.into(),
+            dstSubpass: dependency.dst_subpass.into(),
             srcStageMask: dependency.src_stage_mask,
             dstStageMask: dependency.dst_stage_mask,
             srcAccessMask: dependency.src_access_mask,
