@@ -5812,6 +5812,85 @@ impl<'a> From<&'a StencilOpState> for vk_sys::VkStencilOpState {
     }
 }
 
+#[derive(Debug, Clone)]
+pub enum PipelineDepthStencilStateCreateInfoChainElement {
+}
+
+#[derive(Debug, Clone)]
+pub struct PipelineDepthStencilStateCreateInfo {
+    pub chain: Vec<PipelineDepthStencilStateCreateInfoChainElement>,
+    pub flags: vk_sys::VkPipelineDepthStencilStateCreateFlags,
+    pub depth_test_enable: bool,
+    pub depth_write_enable: bool,
+    pub depth_compare_op: CompareOp,
+    pub depth_bounds_test_enable: bool,
+    pub stencil_test_enable: bool,
+    pub front: StencilOpState,
+    pub back: StencilOpState,
+    pub min_depth_bounds: f32,
+    pub max_depth_bounds: f32,
+}
+
+impl<'a> From<&'a vk_sys::VkPipelineDepthStencilStateCreateInfo> for PipelineDepthStencilStateCreateInfo {
+    fn from(create_info: &'a vk_sys::VkPipelineDepthStencilStateCreateInfo) -> Self {
+        assert!(create_info.pNext.is_null());
+
+        PipelineDepthStencilStateCreateInfo {
+            chain: vec![],
+            flags: create_info.flags,
+            depth_test_enable: utils::from_vk_bool(create_info.depthTestEnable),
+            depth_write_enable: utils::from_vk_bool(create_info.depthWriteEnable),
+            depth_compare_op: create_info.depthCompareOp.into(),
+            depth_bounds_test_enable: utils::from_vk_bool(create_info.depthBoundsTestEnable),
+            stencil_test_enable: utils::from_vk_bool(create_info.stencilTestEnable),
+            front: (&create_info.front).into(),
+            back: (&create_info.back).into(),
+            min_depth_bounds: create_info.minDepthBounds,
+            max_depth_bounds: create_info.maxDepthBounds,
+        }
+    }
+}
+
+#[derive(Debug)]
+struct VkPipelineDepthStencilStateCreateInfoWrapper {
+    create_info: vk_sys::VkPipelineDepthStencilStateCreateInfo,
+}
+
+impl Deref for VkPipelineDepthStencilStateCreateInfoWrapper {
+    type Target = vk_sys::VkPipelineDepthStencilStateCreateInfo;
+
+    fn deref(&self) -> &Self::Target {
+        &self.create_info
+    }
+}
+
+impl AsRef<vk_sys::VkPipelineDepthStencilStateCreateInfo> for VkPipelineDepthStencilStateCreateInfoWrapper {
+    fn as_ref(&self) -> &vk_sys::VkPipelineDepthStencilStateCreateInfo {
+        &self.create_info
+    }
+}
+
+impl<'a> From<&'a PipelineDepthStencilStateCreateInfo> for VkPipelineDepthStencilStateCreateInfoWrapper {
+    fn from(create_info: &'a PipelineDepthStencilStateCreateInfo) -> Self {
+        VkPipelineDepthStencilStateCreateInfoWrapper {
+            create_info: vk_sys::VkPipelineDepthStencilStateCreateInfo {
+                sType: vk_sys::VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO,
+                pNext: ptr::null(),
+                flags: create_info.flags,
+                depthTestEnable: utils::to_vk_bool(create_info.depth_test_enable),
+                depthWriteEnable: utils::to_vk_bool(create_info.depth_write_enable),
+                depthCompareOp: create_info.depth_compare_op.into(),
+                depthBoundsTestEnable: utils::to_vk_bool(create_info.depth_bounds_test_enable),
+                stencilTestEnable: utils::to_vk_bool(create_info.stencil_test_enable),
+                front: (&create_info.front).into(),
+                back: (&create_info.back).into(),
+                minDepthBounds: create_info.min_depth_bounds,
+                maxDepthBounds: create_info.max_depth_bounds,
+            },
+        }
+    }
+}
+
 #[derive(Debug, Copy, Clone)]
 pub struct PipelineColorBlendAttachmentState {
     pub blend_enable: bool,
