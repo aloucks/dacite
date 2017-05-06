@@ -474,6 +474,32 @@ impl From<OptionalArrayLayers> for u32 {
 }
 
 #[derive(Debug, Copy, Clone)]
+pub enum AttachmentIndex {
+    Index(u32),
+    Unused,
+}
+
+impl From<u32> for AttachmentIndex {
+    fn from(index: u32) -> Self {
+        if index != vk_sys::VK_ATTACHMENT_UNUSED {
+            AttachmentIndex::Index(index)
+        }
+        else {
+            AttachmentIndex::Unused
+        }
+    }
+}
+
+impl From<AttachmentIndex> for u32 {
+    fn from(index: AttachmentIndex) -> Self {
+        match index {
+            AttachmentIndex::Index(index) => index,
+            AttachmentIndex::Unused => vk_sys::VK_ATTACHMENT_UNUSED
+        }
+    }
+}
+
+#[derive(Debug, Copy, Clone)]
 pub struct Version {
     pub major: u32,
     pub minor: u32,
@@ -7524,14 +7550,14 @@ impl<'a> From<&'a AttachmentDescription> for vk_sys::VkAttachmentDescription {
 
 #[derive(Debug, Copy, Clone)]
 pub struct AttachmentReference {
-    pub attachment: u32,
+    pub attachment: AttachmentIndex,
     pub layout: ImageLayout,
 }
 
 impl<'a> From<&'a vk_sys::VkAttachmentReference> for AttachmentReference {
     fn from(reference: &'a vk_sys::VkAttachmentReference) -> Self {
         AttachmentReference {
-            attachment: reference.attachment,
+            attachment: reference.attachment.into(),
             layout: reference.layout.into(),
         }
     }
@@ -7540,7 +7566,7 @@ impl<'a> From<&'a vk_sys::VkAttachmentReference> for AttachmentReference {
 impl<'a> From<&'a AttachmentReference> for vk_sys::VkAttachmentReference {
     fn from(reference: &'a AttachmentReference) -> Self {
         vk_sys::VkAttachmentReference {
-            attachment: reference.attachment,
+            attachment: reference.attachment.into(),
             layout: reference.layout.into(),
         }
     }
@@ -8350,7 +8376,7 @@ impl<'a> From<&'a ClearValue> for vk_sys::VkClearValue {
 #[derive(Debug, Copy, Clone)]
 pub struct ClearAttachment {
     pub aspect_mask: ImageAspectFlags,
-    pub color_attachment: u32,
+    pub color_attachment: AttachmentIndex,
     pub clear_value: ClearValue,
 }
 
@@ -8358,7 +8384,7 @@ impl<'a> From<&'a ClearAttachment> for vk_sys::VkClearAttachment {
     fn from(foobar: &'a ClearAttachment) -> Self {
         vk_sys::VkClearAttachment {
             aspectMask: foobar.aspect_mask,
-            colorAttachment: foobar.color_attachment,
+            colorAttachment: foobar.color_attachment.into(),
             clearValue: (&foobar.clear_value).into(),
         }
     }
