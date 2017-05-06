@@ -7040,6 +7040,74 @@ impl<'a> From<&'a CopyDescriptorSet> for VkCopyDescriptorSetWrapper {
     }
 }
 
+#[derive(Debug, Clone)]
+pub enum FramebufferCreateInfoChainElement {
+}
+
+#[derive(Debug, Clone)]
+pub struct FramebufferCreateInfo {
+    pub chain: Vec<FramebufferCreateInfoChainElement>,
+    pub flags: vk_sys::VkFramebufferCreateFlags,
+    pub render_pass: RenderPass,
+    pub attachments: Option<Vec<ImageView>>,
+    pub width: u32,
+    pub height: u32,
+    pub layers: u32,
+}
+
+#[derive(Debug)]
+struct VkFramebufferCreateInfoWrapper {
+    create_info: vk_sys::VkFramebufferCreateInfo,
+    render_pass: RenderPass,
+    attachments: Option<Vec<ImageView>>,
+    vk_attachments: Option<Vec<vk_sys::VkImageView>>,
+}
+
+impl Deref for VkFramebufferCreateInfoWrapper {
+    type Target = vk_sys::VkFramebufferCreateInfo;
+
+    fn deref(&self) -> &Self::Target {
+        &self.create_info
+    }
+}
+
+impl AsRef<vk_sys::VkFramebufferCreateInfo> for VkFramebufferCreateInfoWrapper {
+    fn as_ref(&self) -> &vk_sys::VkFramebufferCreateInfo {
+        &self.create_info
+    }
+}
+
+impl<'a> From<&'a FramebufferCreateInfo> for VkFramebufferCreateInfoWrapper {
+    fn from(create_info: &'a FramebufferCreateInfo) -> Self {
+        let (attachments_count, vk_attachments_ptr, attachments, vk_attachments) = match create_info.attachments {
+            Some(ref attachments) => {
+                let attachments = attachments.clone();
+                let vk_attachments: Vec<_> = attachments.iter().map(ImageView::handle).collect();
+                (attachments.len() as u32, vk_attachments.as_ptr(), Some(attachments), Some(vk_attachments))
+            }
+
+            None => (0, ptr::null(), None, None),
+        };
+
+        VkFramebufferCreateInfoWrapper {
+            create_info: vk_sys::VkFramebufferCreateInfo {
+                sType: vk_sys::VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO,
+                pNext: ptr::null(),
+                flags: create_info.flags,
+                renderPass: create_info.render_pass.handle(),
+                attachmentCount: attachments_count,
+                pAttachments: vk_attachments_ptr,
+                width: create_info.width,
+                height: create_info.height,
+                layers: create_info.layers,
+            },
+            render_pass: create_info.render_pass.clone(),
+            attachments: attachments,
+            vk_attachments: vk_attachments,
+        }
+    }
+}
+
 #[derive(Debug, Copy, Clone)]
 pub struct AttachmentDescription {
     pub flags: vk_sys::VkAttachmentDescriptionFlags,
