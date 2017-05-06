@@ -6021,6 +6021,78 @@ impl<'a> From<&'a PipelineColorBlendStateCreateInfo> for VkPipelineColorBlendSta
     }
 }
 
+#[derive(Debug, Clone)]
+pub enum PipelineDynamicStateCreateInfoChainElement {
+}
+
+#[derive(Debug, Clone)]
+pub struct PipelineDynamicStateCreateInfo {
+    pub chain: Vec<PipelineDynamicStateCreateInfoChainElement>,
+    pub flags: vk_sys::VkPipelineDynamicStateCreateFlags,
+    pub dynamic_states: Vec<DynamicState>,
+}
+
+impl<'a> From<&'a vk_sys::VkPipelineDynamicStateCreateInfo> for PipelineDynamicStateCreateInfo {
+    fn from(create_info: &'a vk_sys::VkPipelineDynamicStateCreateInfo) -> Self {
+        assert!(create_info.pNext.is_null());
+
+        let dynamic_states = unsafe {
+            slice::from_raw_parts(create_info.pDynamicStates, create_info.dynamicStateCount as usize)
+                .iter()
+                .cloned()
+                .map(From::from)
+                .collect()
+        };
+
+        PipelineDynamicStateCreateInfo {
+            chain: vec![],
+            flags: create_info.flags,
+            dynamic_states: dynamic_states,
+        }
+    }
+}
+
+#[derive(Debug)]
+struct VkPipelineDynamicStateCreateInfoWrapper {
+    create_info: vk_sys::VkPipelineDynamicStateCreateInfo,
+    dynamic_states: Vec<vk_sys::VkDynamicState>,
+}
+
+impl Deref for VkPipelineDynamicStateCreateInfoWrapper {
+    type Target = vk_sys::VkPipelineDynamicStateCreateInfo;
+
+    fn deref(&self) -> &Self::Target {
+        &self.create_info
+    }
+}
+
+impl AsRef<vk_sys::VkPipelineDynamicStateCreateInfo> for VkPipelineDynamicStateCreateInfoWrapper {
+    fn as_ref(&self) -> &vk_sys::VkPipelineDynamicStateCreateInfo {
+        &self.create_info
+    }
+}
+
+impl<'a> From<&'a PipelineDynamicStateCreateInfo> for VkPipelineDynamicStateCreateInfoWrapper {
+    fn from(create_info: &'a PipelineDynamicStateCreateInfo) -> Self {
+        let dynamic_states: Vec<_> = create_info.dynamic_states
+            .iter()
+            .cloned()
+            .map(From::from)
+            .collect();
+
+        VkPipelineDynamicStateCreateInfoWrapper {
+            create_info: vk_sys::VkPipelineDynamicStateCreateInfo {
+                sType: vk_sys::VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO,
+                pNext: ptr::null(),
+                flags: create_info.flags,
+                dynamicStateCount: dynamic_states.len() as u32,
+                pDynamicStates: dynamic_states.as_ptr(),
+            },
+            dynamic_states: dynamic_states,
+        }
+    }
+}
+
 #[derive(Debug, Copy, Clone)]
 pub struct PushConstantRange {
     pub stage_flags: vk_sys::VkShaderStageFlags,
