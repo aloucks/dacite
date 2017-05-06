@@ -448,6 +448,32 @@ impl From<OptionalMipLevels> for u32 {
 }
 
 #[derive(Debug, Copy, Clone)]
+pub enum OptionalArrayLayers {
+    ArrayLayers(u32),
+    Remaining,
+}
+
+impl From<u32> for OptionalArrayLayers {
+    fn from(array_layers: u32) -> Self {
+        if array_layers != vk_sys::VK_REMAINING_ARRAY_LAYERS {
+            OptionalArrayLayers::ArrayLayers(array_layers)
+        }
+        else {
+            OptionalArrayLayers::Remaining
+        }
+    }
+}
+
+impl From<OptionalArrayLayers> for u32 {
+    fn from(array_layers: OptionalArrayLayers) -> Self {
+        match array_layers {
+            OptionalArrayLayers::ArrayLayers(array_layers) => array_layers,
+            OptionalArrayLayers::Remaining => vk_sys::VK_REMAINING_ARRAY_LAYERS,
+        }
+    }
+}
+
+#[derive(Debug, Copy, Clone)]
 pub struct Version {
     pub major: u32,
     pub minor: u32,
@@ -5023,7 +5049,7 @@ pub struct ImageSubresourceRange {
     pub base_mip_level: u32,
     pub level_count: OptionalMipLevels,
     pub base_array_layer: u32,
-    pub layer_count: u32,
+    pub layer_count: OptionalArrayLayers,
 }
 
 impl<'a> From<&'a vk_sys::VkImageSubresourceRange> for ImageSubresourceRange {
@@ -5033,7 +5059,7 @@ impl<'a> From<&'a vk_sys::VkImageSubresourceRange> for ImageSubresourceRange {
             base_mip_level: range.baseMipLevel,
             level_count: range.levelCount.into(),
             base_array_layer: range.baseArrayLayer,
-            layer_count: range.layerCount,
+            layer_count: range.layerCount.into(),
         }
     }
 }
@@ -5045,7 +5071,7 @@ impl<'a> From<&'a ImageSubresourceRange> for vk_sys::VkImageSubresourceRange {
             baseMipLevel: range.base_mip_level,
             levelCount: range.level_count.into(),
             baseArrayLayer: range.base_array_layer,
-            layerCount: range.layer_count,
+            layerCount: range.layer_count.into(),
         }
     }
 }
