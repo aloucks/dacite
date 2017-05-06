@@ -7694,6 +7694,60 @@ impl<'a> From<&'a CommandBufferInheritanceInfo> for VkCommandBufferInheritanceIn
     }
 }
 
+#[derive(Debug, Clone)]
+pub enum CommandBufferBeginInfoChainElement {
+}
+
+#[derive(Debug, Clone)]
+pub struct CommandBufferBeginInfo {
+    pub chain: Vec<CommandBufferBeginInfoChainElement>,
+    pub flags: vk_sys::VkCommandBufferUsageFlags,
+    pub inheritance_info: Option<CommandBufferInheritanceInfo>,
+}
+
+#[derive(Debug)]
+struct VkCommandBufferBeginInfoWrapper {
+    begin_info: vk_sys::VkCommandBufferBeginInfo,
+    inheritance_info: Option<Box<VkCommandBufferInheritanceInfoWrapper>>,
+}
+
+impl Deref for VkCommandBufferBeginInfoWrapper {
+    type Target = vk_sys::VkCommandBufferBeginInfo;
+
+    fn deref(&self) -> &Self::Target {
+        &self.begin_info
+    }
+}
+
+impl AsRef<vk_sys::VkCommandBufferBeginInfo> for VkCommandBufferBeginInfoWrapper {
+    fn as_ref(&self) -> &vk_sys::VkCommandBufferBeginInfo {
+        &self.begin_info
+    }
+}
+
+impl<'a> From<&'a CommandBufferBeginInfo> for VkCommandBufferBeginInfoWrapper {
+    fn from(begin_info: &'a CommandBufferBeginInfo) -> Self {
+        let (inheritance_info_ptr, inheritance_info) = match begin_info.inheritance_info {
+            Some(ref inheritance_info) => {
+                let inheritance_info: Box<VkCommandBufferInheritanceInfoWrapper> = Box::new(inheritance_info.into());
+                (&**inheritance_info as *const _, Some(inheritance_info))
+            }
+
+            None => (ptr::null(), None),
+        };
+
+        VkCommandBufferBeginInfoWrapper {
+            begin_info: vk_sys::VkCommandBufferBeginInfo {
+                sType: vk_sys::VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO,
+                pNext: ptr::null(),
+                flags: begin_info.flags,
+                pInheritanceInfo: inheritance_info_ptr,
+            },
+            inheritance_info: inheritance_info,
+        }
+    }
+}
+
 #[derive(Debug, Copy, Clone)]
 pub struct BufferCopy {
     pub src_offset: u64,
