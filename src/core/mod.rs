@@ -6841,6 +6841,46 @@ impl<'a> From<&'a DescriptorImageInfo> for VkDescriptorImageInfoWrapper {
     }
 }
 
+#[derive(Debug, Clone)]
+pub struct DescriptorBufferInfo {
+    pub buffer: Buffer,
+    pub offset: u64,
+    pub range: OptionalDeviceSize,
+}
+
+#[derive(Debug)]
+struct VkDescriptorBufferInfoWrapper {
+    info: vk_sys::VkDescriptorBufferInfo,
+    buffer: Buffer,
+}
+
+impl Deref for VkDescriptorBufferInfoWrapper {
+    type Target = vk_sys::VkDescriptorBufferInfo;
+
+    fn deref(&self) -> &Self::Target {
+        &self.info
+    }
+}
+
+impl AsRef<vk_sys::VkDescriptorBufferInfo> for VkDescriptorBufferInfoWrapper {
+    fn as_ref(&self) -> &vk_sys::VkDescriptorBufferInfo {
+        &self.info
+    }
+}
+
+impl<'a> From<&'a DescriptorBufferInfo> for VkDescriptorBufferInfoWrapper {
+    fn from(info: &'a DescriptorBufferInfo) -> Self {
+        VkDescriptorBufferInfoWrapper {
+            info: vk_sys::VkDescriptorBufferInfo {
+                buffer: info.buffer.handle(),
+                offset: info.offset,
+                range: info.range.into(),
+            },
+            buffer: info.buffer.clone(),
+        }
+    }
+}
+
 #[derive(Debug, Copy, Clone)]
 pub struct AttachmentDescription {
     pub flags: vk_sys::VkAttachmentDescriptionFlags,
