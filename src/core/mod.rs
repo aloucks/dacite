@@ -8055,6 +8055,61 @@ impl<'a> From<&'a ImageResolve> for vk_sys::VkImageResolve {
     }
 }
 
+#[derive(Debug, Clone)]
+pub enum MemoryBarrierChainElement {
+}
+
+#[derive(Debug, Clone)]
+pub struct MemoryBarrier {
+    pub chain: Vec<MemoryBarrierChainElement>,
+    pub src_access_mask: vk_sys::VkAccessFlags,
+    pub dst_access_mask: vk_sys::VkAccessFlags,
+}
+
+impl<'a> From<&'a vk_sys::VkMemoryBarrier> for MemoryBarrier {
+    fn from(barrier: &'a vk_sys::VkMemoryBarrier) -> Self {
+        assert!(barrier.pNext.is_null());
+
+        MemoryBarrier {
+            chain: vec![],
+            src_access_mask: barrier.srcAccessMask,
+            dst_access_mask: barrier.dstAccessMask,
+        }
+    }
+}
+
+#[derive(Debug)]
+struct VkMemoryBarrierWrapper {
+    barrier: vk_sys::VkMemoryBarrier,
+}
+
+impl Deref for VkMemoryBarrierWrapper {
+    type Target = vk_sys::VkMemoryBarrier;
+
+    fn deref(&self) -> &Self::Target {
+        &self.barrier
+    }
+}
+
+impl AsRef<vk_sys::VkMemoryBarrier> for VkMemoryBarrierWrapper {
+    fn as_ref(&self) -> &vk_sys::VkMemoryBarrier {
+        &self.barrier
+    }
+}
+
+impl<'a> From<&'a MemoryBarrier> for VkMemoryBarrierWrapper {
+    fn from(barrier: &'a MemoryBarrier) -> Self {
+        VkMemoryBarrierWrapper {
+            barrier: vk_sys::VkMemoryBarrier {
+                sType: vk_sys::VK_STRUCTURE_TYPE_MEMORY_BARRIER,
+                pNext: ptr::null(),
+                srcAccessMask: barrier.src_access_mask,
+                dstAccessMask: barrier.dst_access_mask,
+            },
+        }
+    }
+}
+
 #[derive(Debug, Copy, Clone)]
 pub struct DispatchIndirectCommand {
     pub x: u32,
