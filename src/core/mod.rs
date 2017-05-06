@@ -5380,7 +5380,7 @@ impl<'a> From<&'a vk_sys::VkPipelineTessellationStateCreateInfo> for PipelineTes
 }
 
 #[derive(Debug)]
-pub struct VkPipelineTessellationStateCreateInfoWrapper {
+struct VkPipelineTessellationStateCreateInfoWrapper {
     create_info: vk_sys::VkPipelineTessellationStateCreateInfo,
 }
 
