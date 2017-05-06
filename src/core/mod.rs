@@ -75,6 +75,326 @@ pub use self::sampler::Sampler;
 pub use self::semaphore::Semaphore;
 pub use self::shader_module::ShaderModule;
 
+pub type InstanceCreateFlags = vk_sys::VkInstanceCreateFlags;
+// pub type InstanceCreateFlagBits = vk_sys::VkInstanceCreateFlagBits;
+
+pub type FormatFeatureFlags = vk_sys::VkFormatFeatureFlags;
+pub type FormatFeatureFlagBits = vk_sys::VkFormatFeatureFlagBits;
+pub const FORMAT_FEATURE_SAMPLED_IMAGE_BIT: FormatFeatureFlagBits = vk_sys::VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT;
+pub const FORMAT_FEATURE_STORAGE_IMAGE_BIT: FormatFeatureFlagBits = vk_sys::VK_FORMAT_FEATURE_STORAGE_IMAGE_BIT;
+pub const FORMAT_FEATURE_STORAGE_IMAGE_ATOMIC_BIT: FormatFeatureFlagBits = vk_sys::VK_FORMAT_FEATURE_STORAGE_IMAGE_ATOMIC_BIT;
+pub const FORMAT_FEATURE_UNIFORM_TEXEL_BUFFER_BIT: FormatFeatureFlagBits = vk_sys::VK_FORMAT_FEATURE_UNIFORM_TEXEL_BUFFER_BIT;
+pub const FORMAT_FEATURE_STORAGE_TEXEL_BUFFER_BIT: FormatFeatureFlagBits = vk_sys::VK_FORMAT_FEATURE_STORAGE_TEXEL_BUFFER_BIT;
+pub const FORMAT_FEATURE_STORAGE_TEXEL_BUFFER_ATOMIC_BIT: FormatFeatureFlagBits = vk_sys::VK_FORMAT_FEATURE_STORAGE_TEXEL_BUFFER_ATOMIC_BIT;
+pub const FORMAT_FEATURE_VERTEX_BUFFER_BIT: FormatFeatureFlagBits = vk_sys::VK_FORMAT_FEATURE_VERTEX_BUFFER_BIT;
+pub const FORMAT_FEATURE_COLOR_ATTACHMENT_BIT: FormatFeatureFlagBits = vk_sys::VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT;
+pub const FORMAT_FEATURE_COLOR_ATTACHMENT_BLEND_BIT: FormatFeatureFlagBits = vk_sys::VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BLEND_BIT;
+pub const FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT: FormatFeatureFlagBits = vk_sys::VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT;
+pub const FORMAT_FEATURE_BLIT_SRC_BIT: FormatFeatureFlagBits = vk_sys::VK_FORMAT_FEATURE_BLIT_SRC_BIT;
+pub const FORMAT_FEATURE_BLIT_DST_BIT: FormatFeatureFlagBits = vk_sys::VK_FORMAT_FEATURE_BLIT_DST_BIT;
+pub const FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_LINEAR_BIT: FormatFeatureFlagBits = vk_sys::VK_FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_LINEAR_BIT;
+
+pub type ImageUsageFlags = vk_sys::VkImageUsageFlags;
+pub type ImageUsageFlagBits = vk_sys::VkImageUsageFlagBits;
+pub const IMAGE_USAGE_TRANSFER_SRC_BIT: ImageUsageFlagBits = vk_sys::VK_IMAGE_USAGE_TRANSFER_SRC_BIT;
+pub const IMAGE_USAGE_TRANSFER_DST_BIT: ImageUsageFlagBits = vk_sys::VK_IMAGE_USAGE_TRANSFER_DST_BIT;
+pub const IMAGE_USAGE_SAMPLED_BIT: ImageUsageFlagBits = vk_sys::VK_IMAGE_USAGE_SAMPLED_BIT;
+pub const IMAGE_USAGE_STORAGE_BIT: ImageUsageFlagBits = vk_sys::VK_IMAGE_USAGE_STORAGE_BIT;
+pub const IMAGE_USAGE_COLOR_ATTACHMENT_BIT: ImageUsageFlagBits = vk_sys::VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+pub const IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT: ImageUsageFlagBits = vk_sys::VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT;
+pub const IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT: ImageUsageFlagBits = vk_sys::VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT;
+pub const IMAGE_USAGE_INPUT_ATTACHMENT_BIT: ImageUsageFlagBits = vk_sys::VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT;
+
+pub type ImageCreateFlags = vk_sys::VkImageCreateFlags;
+pub type ImageCreateFlagBits = vk_sys::VkImageCreateFlagBits;
+pub const IMAGE_CREATE_SPARSE_BINDING_BIT: ImageCreateFlagBits = vk_sys::VK_IMAGE_CREATE_SPARSE_BINDING_BIT;
+pub const IMAGE_CREATE_SPARSE_RESIDENCY_BIT: ImageCreateFlagBits = vk_sys::VK_IMAGE_CREATE_SPARSE_RESIDENCY_BIT;
+pub const IMAGE_CREATE_SPARSE_ALIASED_BIT: ImageCreateFlagBits = vk_sys::VK_IMAGE_CREATE_SPARSE_ALIASED_BIT;
+pub const IMAGE_CREATE_MUTABLE_FORMAT_BIT: ImageCreateFlagBits = vk_sys::VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT;
+pub const IMAGE_CREATE_CUBE_COMPATIBLE_BIT: ImageCreateFlagBits = vk_sys::VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT;
+
+pub type SampleCountFlags = vk_sys::VkSampleCountFlags;
+pub type SampleCountFlagBits = vk_sys::VkSampleCountFlagBits;
+pub const SAMPLE_COUNT_1_BIT: SampleCountFlagBits = vk_sys::VK_SAMPLE_COUNT_1_BIT;
+pub const SAMPLE_COUNT_2_BIT: SampleCountFlagBits = vk_sys::VK_SAMPLE_COUNT_2_BIT;
+pub const SAMPLE_COUNT_4_BIT: SampleCountFlagBits = vk_sys::VK_SAMPLE_COUNT_4_BIT;
+pub const SAMPLE_COUNT_8_BIT: SampleCountFlagBits = vk_sys::VK_SAMPLE_COUNT_8_BIT;
+pub const SAMPLE_COUNT_16_BIT: SampleCountFlagBits = vk_sys::VK_SAMPLE_COUNT_16_BIT;
+pub const SAMPLE_COUNT_32_BIT: SampleCountFlagBits = vk_sys::VK_SAMPLE_COUNT_32_BIT;
+pub const SAMPLE_COUNT_64_BIT: SampleCountFlagBits = vk_sys::VK_SAMPLE_COUNT_64_BIT;
+
+pub type QueueFlags = vk_sys::VkQueueFlags;
+pub type QueueFlagBits = vk_sys::VkQueueFlagBits;
+pub const QUEUE_GRAPHICS_BIT: QueueFlagBits = vk_sys::VK_QUEUE_GRAPHICS_BIT;
+pub const QUEUE_COMPUTE_BIT: QueueFlagBits = vk_sys::VK_QUEUE_COMPUTE_BIT;
+pub const QUEUE_TRANSFER_BIT: QueueFlagBits = vk_sys::VK_QUEUE_TRANSFER_BIT;
+pub const QUEUE_SPARSE_BINDING_BIT: QueueFlagBits = vk_sys::VK_QUEUE_SPARSE_BINDING_BIT;
+
+pub type MemoryPropertyFlags = vk_sys::VkMemoryPropertyFlags;
+pub type MemoryPropertyFlagBits = vk_sys::VkMemoryPropertyFlagBits;
+pub const MEMORY_PROPERTY_DEVICE_LOCAL_BIT: MemoryPropertyFlagBits = vk_sys::VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
+pub const MEMORY_PROPERTY_HOST_VISIBLE_BIT: MemoryPropertyFlagBits = vk_sys::VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT;
+pub const MEMORY_PROPERTY_HOST_COHERENT_BIT: MemoryPropertyFlagBits = vk_sys::VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
+pub const MEMORY_PROPERTY_HOST_CACHED_BIT: MemoryPropertyFlagBits = vk_sys::VK_MEMORY_PROPERTY_HOST_CACHED_BIT;
+pub const MEMORY_PROPERTY_LAZILY_ALLOCATED_BIT: MemoryPropertyFlagBits = vk_sys::VK_MEMORY_PROPERTY_LAZILY_ALLOCATED_BIT;
+
+pub type MemoryHeapFlags = vk_sys::VkMemoryHeapFlags;
+pub type MemoryHeapFlagBits = vk_sys::VkMemoryHeapFlagBits;
+pub const MEMORY_HEAP_DEVICE_LOCAL_BIT: MemoryHeapFlagBits = vk_sys::VK_MEMORY_HEAP_DEVICE_LOCAL_BIT;
+
+pub type DeviceCreateFlags = vk_sys::VkDeviceCreateFlags;
+pub type DeviceCreateFlagBits = vk_sys::VkDeviceCreateFlagBits;
+
+pub type DeviceQueueCreateFlags = vk_sys::VkDeviceQueueCreateFlags;
+pub type DeviceQueueCreateFlagBits = vk_sys::VkDeviceQueueCreateFlagBits;
+
+pub type PipelineStageFlags = vk_sys::VkPipelineStageFlags;
+pub type PipelineStageFlagBits = vk_sys::VkPipelineStageFlagBits;
+pub const PIPELINE_STAGE_TOP_OF_PIPE_BIT: PipelineStageFlagBits = vk_sys::VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT;
+pub const PIPELINE_STAGE_DRAW_INDIRECT_BIT: PipelineStageFlagBits = vk_sys::VK_PIPELINE_STAGE_DRAW_INDIRECT_BIT;
+pub const PIPELINE_STAGE_VERTEX_INPUT_BIT: PipelineStageFlagBits = vk_sys::VK_PIPELINE_STAGE_VERTEX_INPUT_BIT;
+pub const PIPELINE_STAGE_VERTEX_SHADER_BIT: PipelineStageFlagBits = vk_sys::VK_PIPELINE_STAGE_VERTEX_SHADER_BIT;
+pub const PIPELINE_STAGE_TESSELLATION_CONTROL_SHADER_BIT: PipelineStageFlagBits = vk_sys::VK_PIPELINE_STAGE_TESSELLATION_CONTROL_SHADER_BIT;
+pub const PIPELINE_STAGE_TESSELLATION_EVALUATION_SHADER_BIT: PipelineStageFlagBits = vk_sys::VK_PIPELINE_STAGE_TESSELLATION_EVALUATION_SHADER_BIT;
+pub const PIPELINE_STAGE_GEOMETRY_SHADER_BIT: PipelineStageFlagBits = vk_sys::VK_PIPELINE_STAGE_GEOMETRY_SHADER_BIT;
+pub const PIPELINE_STAGE_FRAGMENT_SHADER_BIT: PipelineStageFlagBits = vk_sys::VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
+pub const PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT: PipelineStageFlagBits = vk_sys::VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT;
+pub const PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT: PipelineStageFlagBits = vk_sys::VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT;
+pub const PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT: PipelineStageFlagBits = vk_sys::VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+pub const PIPELINE_STAGE_COMPUTE_SHADER_BIT: PipelineStageFlagBits = vk_sys::VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT;
+pub const PIPELINE_STAGE_TRANSFER_BIT: PipelineStageFlagBits = vk_sys::VK_PIPELINE_STAGE_TRANSFER_BIT;
+pub const PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT: PipelineStageFlagBits = vk_sys::VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT;
+pub const PIPELINE_STAGE_HOST_BIT: PipelineStageFlagBits = vk_sys::VK_PIPELINE_STAGE_HOST_BIT;
+pub const PIPELINE_STAGE_ALL_GRAPHICS_BIT: PipelineStageFlagBits = vk_sys::VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT;
+pub const PIPELINE_STAGE_ALL_COMMANDS_BIT: PipelineStageFlagBits = vk_sys::VK_PIPELINE_STAGE_ALL_COMMANDS_BIT;
+
+pub type MemoryMapFlags = vk_sys::VkMemoryMapFlags;
+pub type MemoryMapFlagBits = vk_sys::VkMemoryMapFlagBits;
+
+pub type ImageAspectFlags = vk_sys::VkImageAspectFlags;
+pub type ImageAspectFlagBits = vk_sys::VkImageAspectFlagBits;
+pub const IMAGE_ASPECT_COLOR_BIT: ImageAspectFlagBits = vk_sys::VK_IMAGE_ASPECT_COLOR_BIT;
+pub const IMAGE_ASPECT_DEPTH_BIT: ImageAspectFlagBits = vk_sys::VK_IMAGE_ASPECT_DEPTH_BIT;
+pub const IMAGE_ASPECT_STENCIL_BIT: ImageAspectFlagBits = vk_sys::VK_IMAGE_ASPECT_STENCIL_BIT;
+pub const IMAGE_ASPECT_METADATA_BIT: ImageAspectFlagBits = vk_sys::VK_IMAGE_ASPECT_METADATA_BIT;
+
+pub type SparseImageFormatFlags = vk_sys::VkSparseImageFormatFlags;
+pub type SparseImageFormatFlagBits = vk_sys::VkSparseImageFormatFlagBits;
+pub const SPARSE_IMAGE_FORMAT_SINGLE_MIPTAIL_BIT: SparseImageFormatFlagBits = vk_sys::VK_SPARSE_IMAGE_FORMAT_SINGLE_MIPTAIL_BIT;
+pub const SPARSE_IMAGE_FORMAT_ALIGNED_MIP_SIZE_BIT: SparseImageFormatFlagBits = vk_sys::VK_SPARSE_IMAGE_FORMAT_ALIGNED_MIP_SIZE_BIT;
+pub const SPARSE_IMAGE_FORMAT_NONSTANDARD_BLOCK_SIZE_BIT: SparseImageFormatFlagBits = vk_sys::VK_SPARSE_IMAGE_FORMAT_NONSTANDARD_BLOCK_SIZE_BIT;
+
+pub type SparseMemoryBindFlags = vk_sys::VkSparseMemoryBindFlags;
+pub type SparseMemoryBindFlagBits = vk_sys::VkSparseMemoryBindFlagBits;
+pub const SPARSE_MEMORY_BIND_METADATA_BIT: SparseMemoryBindFlagBits = vk_sys::VK_SPARSE_MEMORY_BIND_METADATA_BIT;
+
+pub type FenceCreateFlags = vk_sys::VkFenceCreateFlags;
+pub type FenceCreateFlagBits = vk_sys::VkFenceCreateFlagBits;
+pub const FENCE_CREATE_SIGNALED_BIT: FenceCreateFlagBits = vk_sys::VK_FENCE_CREATE_SIGNALED_BIT;
+
+pub type SemaphoreCreateFlags = vk_sys::VkSemaphoreCreateFlags;
+pub type SemaphoreCreateFlagBits = vk_sys::VkSemaphoreCreateFlagBits;
+
+pub type EventCreateFlags = vk_sys::VkEventCreateFlags;
+pub type EventCreateFlagBits = vk_sys::VkEventCreateFlagBits;
+
+pub type QueryPoolCreateFlags = vk_sys::VkQueryPoolCreateFlags;
+pub type QueryPoolCreateFlagBits = vk_sys::VkQueryPoolCreateFlagBits;
+
+pub type QueryPipelineStatisticFlags = vk_sys::VkQueryPipelineStatisticFlags;
+pub type QueryPipelineStatisticFlagBits = vk_sys::VkQueryPipelineStatisticFlagBits;
+pub const QUERY_PIPELINE_STATISTIC_INPUT_ASSEMBLY_VERTICES_BIT: QueryPipelineStatisticFlagBits = vk_sys::VK_QUERY_PIPELINE_STATISTIC_INPUT_ASSEMBLY_VERTICES_BIT;
+pub const QUERY_PIPELINE_STATISTIC_INPUT_ASSEMBLY_PRIMITIVES_BIT: QueryPipelineStatisticFlagBits = vk_sys::VK_QUERY_PIPELINE_STATISTIC_INPUT_ASSEMBLY_PRIMITIVES_BIT;
+pub const QUERY_PIPELINE_STATISTIC_VERTEX_SHADER_INVOCATIONS_BIT: QueryPipelineStatisticFlagBits = vk_sys::VK_QUERY_PIPELINE_STATISTIC_VERTEX_SHADER_INVOCATIONS_BIT;
+pub const QUERY_PIPELINE_STATISTIC_GEOMETRY_SHADER_INVOCATIONS_BIT: QueryPipelineStatisticFlagBits = vk_sys::VK_QUERY_PIPELINE_STATISTIC_GEOMETRY_SHADER_INVOCATIONS_BIT;
+pub const QUERY_PIPELINE_STATISTIC_GEOMETRY_SHADER_PRIMITIVES_BIT: QueryPipelineStatisticFlagBits = vk_sys::VK_QUERY_PIPELINE_STATISTIC_GEOMETRY_SHADER_PRIMITIVES_BIT;
+pub const QUERY_PIPELINE_STATISTIC_CLIPPING_INVOCATIONS_BIT: QueryPipelineStatisticFlagBits = vk_sys::VK_QUERY_PIPELINE_STATISTIC_CLIPPING_INVOCATIONS_BIT;
+pub const QUERY_PIPELINE_STATISTIC_CLIPPING_PRIMITIVES_BIT: QueryPipelineStatisticFlagBits = vk_sys::VK_QUERY_PIPELINE_STATISTIC_CLIPPING_PRIMITIVES_BIT;
+pub const QUERY_PIPELINE_STATISTIC_FRAGMENT_SHADER_INVOCATIONS_BIT: QueryPipelineStatisticFlagBits = vk_sys::VK_QUERY_PIPELINE_STATISTIC_FRAGMENT_SHADER_INVOCATIONS_BIT;
+pub const QUERY_PIPELINE_STATISTIC_TESSELLATION_CONTROL_SHADER_PATCHES_BIT: QueryPipelineStatisticFlagBits = vk_sys::VK_QUERY_PIPELINE_STATISTIC_TESSELLATION_CONTROL_SHADER_PATCHES_BIT;
+pub const QUERY_PIPELINE_STATISTIC_TESSELLATION_EVALUATION_SHADER_INVOCATIONS_BIT: QueryPipelineStatisticFlagBits = vk_sys::VK_QUERY_PIPELINE_STATISTIC_TESSELLATION_EVALUATION_SHADER_INVOCATIONS_BIT;
+pub const QUERY_PIPELINE_STATISTIC_COMPUTE_SHADER_INVOCATIONS_BIT: QueryPipelineStatisticFlagBits = vk_sys::VK_QUERY_PIPELINE_STATISTIC_COMPUTE_SHADER_INVOCATIONS_BIT;
+
+pub type QueryResultFlags = vk_sys::VkQueryResultFlags;
+pub type QueryResultFlagBits = vk_sys::VkQueryResultFlagBits;
+pub const QUERY_RESULT_64_BIT: QueryResultFlagBits = vk_sys::VK_QUERY_RESULT_64_BIT;
+pub const QUERY_RESULT_WAIT_BIT: QueryResultFlagBits = vk_sys::VK_QUERY_RESULT_WAIT_BIT;
+pub const QUERY_RESULT_WITH_AVAILABILITY_BIT: QueryResultFlagBits = vk_sys::VK_QUERY_RESULT_WITH_AVAILABILITY_BIT;
+pub const QUERY_RESULT_PARTIAL_BIT: QueryResultFlagBits = vk_sys::VK_QUERY_RESULT_PARTIAL_BIT;
+
+pub type BufferCreateFlags = vk_sys::VkBufferCreateFlags;
+pub type BufferCreateFlagBits = vk_sys::VkBufferCreateFlagBits;
+pub const BUFFER_CREATE_SPARSE_BINDING_BIT: BufferCreateFlagBits = vk_sys::VK_BUFFER_CREATE_SPARSE_BINDING_BIT;
+pub const BUFFER_CREATE_SPARSE_RESIDENCY_BIT: BufferCreateFlagBits = vk_sys::VK_BUFFER_CREATE_SPARSE_RESIDENCY_BIT;
+pub const BUFFER_CREATE_SPARSE_ALIASED_BIT: BufferCreateFlagBits = vk_sys::VK_BUFFER_CREATE_SPARSE_ALIASED_BIT;
+
+pub type BufferUsageFlags = vk_sys::VkBufferUsageFlags;
+pub type BufferUsageFlagBits = vk_sys::VkBufferUsageFlagBits;
+pub const BUFFER_USAGE_TRANSFER_SRC_BIT: BufferUsageFlagBits = vk_sys::VK_BUFFER_USAGE_TRANSFER_SRC_BIT;
+pub const BUFFER_USAGE_TRANSFER_DST_BIT: BufferUsageFlagBits = vk_sys::VK_BUFFER_USAGE_TRANSFER_DST_BIT;
+pub const BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT: BufferUsageFlagBits = vk_sys::VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT;
+pub const BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT: BufferUsageFlagBits = vk_sys::VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT;
+pub const BUFFER_USAGE_UNIFORM_BUFFER_BIT: BufferUsageFlagBits = vk_sys::VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT;
+pub const BUFFER_USAGE_STORAGE_BUFFER_BIT: BufferUsageFlagBits = vk_sys::VK_BUFFER_USAGE_STORAGE_BUFFER_BIT;
+pub const BUFFER_USAGE_INDEX_BUFFER_BIT: BufferUsageFlagBits = vk_sys::VK_BUFFER_USAGE_INDEX_BUFFER_BIT;
+pub const BUFFER_USAGE_VERTEX_BUFFER_BIT: BufferUsageFlagBits = vk_sys::VK_BUFFER_USAGE_VERTEX_BUFFER_BIT;
+
+pub type BufferViewCreateFlags = vk_sys::VkBufferViewCreateFlags;
+pub type BufferViewCreateFlagBits = vk_sys::VkBufferViewCreateFlagBits;
+
+pub type ImageViewCreateFlags = vk_sys::VkImageViewCreateFlags;
+pub type ImageViewCreateFlagBits = vk_sys::VkImageViewCreateFlagBits;
+
+pub type ShaderModuleCreateFlags = vk_sys::VkShaderModuleCreateFlags;
+pub type ShaderModuleCreateFlagBits = vk_sys::VkShaderModuleCreateFlagBits;
+
+pub type PipelineCacheCreateFlags = vk_sys::VkPipelineCacheCreateFlags;
+pub type PipelineCacheCreateFlagBits = vk_sys::VkPipelineCacheCreateFlagBits;
+
+pub type PipelineCreateFlags = vk_sys::VkPipelineCreateFlags;
+pub type PipelineCreateFlagBits = vk_sys::VkPipelineCreateFlagBits;
+pub const PIPELINE_CREATE_DISABLE_OPTIMIZATION_BIT: PipelineCreateFlagBits = vk_sys::VK_PIPELINE_CREATE_DISABLE_OPTIMIZATION_BIT;
+pub const PIPELINE_CREATE_ALLOW_DERIVATIVES_BIT: PipelineCreateFlagBits = vk_sys::VK_PIPELINE_CREATE_ALLOW_DERIVATIVES_BIT;
+pub const PIPELINE_CREATE_DERIVATIVE_BIT: PipelineCreateFlagBits = vk_sys::VK_PIPELINE_CREATE_DERIVATIVE_BIT;
+
+pub type PipelineShaderStageCreateFlags = vk_sys::VkPipelineShaderStageCreateFlags;
+pub type PipelineShaderStageCreateFlagBits = vk_sys::VkPipelineShaderStageCreateFlagBits;
+
+pub type ShaderStageFlags = vk_sys::VkShaderStageFlags;
+pub type ShaderStageFlagBits = vk_sys::VkShaderStageFlagBits;
+pub const SHADER_STAGE_VERTEX_BIT: ShaderStageFlagBits = vk_sys::VK_SHADER_STAGE_VERTEX_BIT;
+pub const SHADER_STAGE_TESSELLATION_CONTROL_BIT: ShaderStageFlagBits = vk_sys::VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT;
+pub const SHADER_STAGE_TESSELLATION_EVALUATION_BIT: ShaderStageFlagBits = vk_sys::VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT;
+pub const SHADER_STAGE_GEOMETRY_BIT: ShaderStageFlagBits = vk_sys::VK_SHADER_STAGE_GEOMETRY_BIT;
+pub const SHADER_STAGE_FRAGMENT_BIT: ShaderStageFlagBits = vk_sys::VK_SHADER_STAGE_FRAGMENT_BIT;
+pub const SHADER_STAGE_COMPUTE_BIT: ShaderStageFlagBits = vk_sys::VK_SHADER_STAGE_COMPUTE_BIT;
+pub const SHADER_STAGE_ALL_GRAPHICS: ShaderStageFlagBits = vk_sys::VK_SHADER_STAGE_ALL_GRAPHICS;
+pub const SHADER_STAGE_ALL: ShaderStageFlagBits = vk_sys::VK_SHADER_STAGE_ALL;
+
+pub type PipelineVertexInputStateCreateFlags = vk_sys::VkPipelineVertexInputStateCreateFlags;
+pub type PipelineVertexInputStateCreateFlagBits = vk_sys::VkPipelineVertexInputStateCreateFlagBits;
+
+pub type PipelineInputAssemblyStateCreateFlags = vk_sys::VkPipelineInputAssemblyStateCreateFlags;
+pub type PipelineInputAssemblyStateCreateFlagBits = vk_sys::VkPipelineInputAssemblyStateCreateFlagBits;
+
+pub type PipelineTessellationStateCreateFlags = vk_sys::VkPipelineTessellationStateCreateFlags;
+pub type PipelineTessellationStateCreateFlagBits = vk_sys::VkPipelineTessellationStateCreateFlagBits;
+
+pub type PipelineViewportStateCreateFlags = vk_sys::VkPipelineViewportStateCreateFlags;
+pub type PipelineViewportStateCreateFlagBits = vk_sys::VkPipelineViewportStateCreateFlagBits;
+
+pub type PipelineRasterizationStateCreateFlags = vk_sys::VkPipelineRasterizationStateCreateFlags;
+pub type PipelineRasterizationStateCreateFlagBits = vk_sys::VkPipelineRasterizationStateCreateFlagBits;
+
+pub type CullModeFlags = vk_sys::VkCullModeFlags;
+pub type CullModeFlagBits = vk_sys::VkCullModeFlagBits;
+pub const CULL_MODE_NONE: CullModeFlagBits = vk_sys::VK_CULL_MODE_NONE;
+pub const CULL_MODE_FRONT_BIT: CullModeFlagBits = vk_sys::VK_CULL_MODE_FRONT_BIT;
+pub const CULL_MODE_BACK_BIT: CullModeFlagBits = vk_sys::VK_CULL_MODE_BACK_BIT;
+pub const CULL_MODE_FRONT_AND_BACK: CullModeFlagBits = vk_sys::VK_CULL_MODE_FRONT_AND_BACK;
+
+pub type PipelineMultisampleStateCreateFlags = vk_sys::VkPipelineMultisampleStateCreateFlags;
+pub type PipelineMultisampleStateCreateFlagBits = vk_sys::VkPipelineMultisampleStateCreateFlagBits;
+
+pub type PipelineDepthStencilStateCreateFlags = vk_sys::VkPipelineDepthStencilStateCreateFlags;
+pub type PipelineDepthStencilStateCreateFlagBits = vk_sys::VkPipelineDepthStencilStateCreateFlagBits;
+
+pub type PipelineColorBlendStateCreateFlags = vk_sys::VkPipelineColorBlendStateCreateFlags;
+pub type PipelineColorBlendStateCreateFlagBits = vk_sys::VkPipelineColorBlendStateCreateFlagBits;
+pub const PIPELINE_COLOR_BLEND_STATE_CREATE_DUMMY: PipelineColorBlendStateCreateFlagBits = vk_sys::VK_PIPELINE_COLOR_BLEND_STATE_CREATE_DUMMY;
+
+pub type ColorComponentFlags = vk_sys::VkColorComponentFlags;
+pub type ColorComponentFlagBits = vk_sys::VkColorComponentFlagBits;
+pub const COLOR_COMPONENT_R_BIT: ColorComponentFlagBits = vk_sys::VK_COLOR_COMPONENT_R_BIT;
+pub const COLOR_COMPONENT_G_BIT: ColorComponentFlagBits = vk_sys::VK_COLOR_COMPONENT_G_BIT;
+pub const COLOR_COMPONENT_B_BIT: ColorComponentFlagBits = vk_sys::VK_COLOR_COMPONENT_B_BIT;
+pub const COLOR_COMPONENT_A_BIT: ColorComponentFlagBits = vk_sys::VK_COLOR_COMPONENT_A_BIT;
+
+pub type PipelineDynamicStateCreateFlags = vk_sys::VkPipelineDynamicStateCreateFlags;
+pub type PipelineDynamicStateCreateFlagBits = vk_sys::VkPipelineDynamicStateCreateFlagBits;
+
+pub type PipelineLayoutCreateFlags = vk_sys::VkPipelineLayoutCreateFlags;
+pub type PipelineLayoutCreateFlagBits = vk_sys::VkPipelineLayoutCreateFlagBits;
+
+pub type SamplerCreateFlags = vk_sys::VkSamplerCreateFlags;
+pub type SamplerCreateFlagBits = vk_sys::VkSamplerCreateFlagBits;
+
+pub type DescriptorSetLayoutCreateFlags = vk_sys::VkDescriptorSetLayoutCreateFlags;
+pub type DescriptorSetLayoutCreateFlagBits = vk_sys::VkDescriptorSetLayoutCreateFlagBits;
+
+pub type DescriptorPoolCreateFlags = vk_sys::VkDescriptorPoolCreateFlags;
+pub type DescriptorPoolCreateFlagBits = vk_sys::VkDescriptorPoolCreateFlagBits;
+pub const DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT: DescriptorPoolCreateFlagBits = vk_sys::VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;
+
+pub type DescriptorPoolResetFlags = vk_sys::VkDescriptorPoolResetFlags;
+pub type DescriptorPoolResetFlagBits = vk_sys::VkDescriptorPoolResetFlagBits;
+
+pub type FramebufferCreateFlags = vk_sys::VkFramebufferCreateFlags;
+pub type FramebufferCreateFlagBits = vk_sys::VkFramebufferCreateFlagBits;
+
+pub type RenderPassCreateFlags = vk_sys::VkRenderPassCreateFlags;
+pub type RenderPassCreateFlagBits = vk_sys::VkRenderPassCreateFlagBits;
+
+pub type AttachmentDescriptionFlags = vk_sys::VkAttachmentDescriptionFlags;
+pub type AttachmentDescriptionFlagBits = vk_sys::VkAttachmentDescriptionFlagBits;
+pub const ATTACHMENT_DESCRIPTION_MAY_ALIAS_BIT: AttachmentDescriptionFlagBits = vk_sys::VK_ATTACHMENT_DESCRIPTION_MAY_ALIAS_BIT;
+
+pub type SubpassDescriptionFlags = vk_sys::VkSubpassDescriptionFlags;
+pub type SubpassDescriptionFlagBits = vk_sys::VkSubpassDescriptionFlagBits;
+
+pub type AccessFlags = vk_sys::VkAccessFlags;
+pub type AccessFlagBits = vk_sys::VkAccessFlagBits;
+pub const ACCESS_INDIRECT_COMMAND_READ_BIT: AccessFlagBits = vk_sys::VK_ACCESS_INDIRECT_COMMAND_READ_BIT;
+pub const ACCESS_INDEX_READ_BIT: AccessFlagBits = vk_sys::VK_ACCESS_INDEX_READ_BIT;
+pub const ACCESS_VERTEX_ATTRIBUTE_READ_BIT: AccessFlagBits = vk_sys::VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT;
+pub const ACCESS_UNIFORM_READ_BIT: AccessFlagBits = vk_sys::VK_ACCESS_UNIFORM_READ_BIT;
+pub const ACCESS_INPUT_ATTACHMENT_READ_BIT: AccessFlagBits = vk_sys::VK_ACCESS_INPUT_ATTACHMENT_READ_BIT;
+pub const ACCESS_SHADER_READ_BIT: AccessFlagBits = vk_sys::VK_ACCESS_SHADER_READ_BIT;
+pub const ACCESS_SHADER_WRITE_BIT: AccessFlagBits = vk_sys::VK_ACCESS_SHADER_WRITE_BIT;
+pub const ACCESS_COLOR_ATTACHMENT_READ_BIT: AccessFlagBits = vk_sys::VK_ACCESS_COLOR_ATTACHMENT_READ_BIT;
+pub const ACCESS_COLOR_ATTACHMENT_WRITE_BIT: AccessFlagBits = vk_sys::VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+pub const ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT: AccessFlagBits = vk_sys::VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT;
+pub const ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT: AccessFlagBits = vk_sys::VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
+pub const ACCESS_TRANSFER_READ_BIT: AccessFlagBits = vk_sys::VK_ACCESS_TRANSFER_READ_BIT;
+pub const ACCESS_TRANSFER_WRITE_BIT: AccessFlagBits = vk_sys::VK_ACCESS_TRANSFER_WRITE_BIT;
+pub const ACCESS_HOST_READ_BIT: AccessFlagBits = vk_sys::VK_ACCESS_HOST_READ_BIT;
+pub const ACCESS_HOST_WRITE_BIT: AccessFlagBits = vk_sys::VK_ACCESS_HOST_WRITE_BIT;
+pub const ACCESS_MEMORY_READ_BIT: AccessFlagBits = vk_sys::VK_ACCESS_MEMORY_READ_BIT;
+pub const ACCESS_MEMORY_WRITE_BIT: AccessFlagBits = vk_sys::VK_ACCESS_MEMORY_WRITE_BIT;
+
+pub type DependencyFlags = vk_sys::VkDependencyFlags;
+pub type DependencyFlagBits = vk_sys::VkDependencyFlagBits;
+pub const DEPENDENCY_BY_REGION_BIT: DependencyFlagBits = vk_sys::VK_DEPENDENCY_BY_REGION_BIT;
+
+pub type CommandPoolCreateFlags = vk_sys::VkCommandPoolCreateFlags;
+pub type CommandPoolCreateFlagBits = vk_sys::VkCommandPoolCreateFlagBits;
+pub const COMMAND_POOL_CREATE_TRANSIENT_BIT: CommandPoolCreateFlagBits = vk_sys::VK_COMMAND_POOL_CREATE_TRANSIENT_BIT;
+pub const COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT: CommandPoolCreateFlagBits = vk_sys::VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
+
+pub type CommandPoolResetFlags = vk_sys::VkCommandPoolResetFlags;
+pub type CommandPoolResetFlagBits = vk_sys::VkCommandPoolResetFlagBits;
+pub const COMMAND_POOL_RESET_RELEASE_RESOURCES_BIT: CommandPoolResetFlagBits = vk_sys::VK_COMMAND_POOL_RESET_RELEASE_RESOURCES_BIT;
+
+pub type CommandBufferUsageFlags = vk_sys::VkCommandBufferUsageFlags;
+pub type CommandBufferUsageFlagBits = vk_sys::VkCommandBufferUsageFlagBits;
+pub const COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT: CommandBufferUsageFlagBits = vk_sys::VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+pub const COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT: CommandBufferUsageFlagBits = vk_sys::VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT;
+pub const COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT: CommandBufferUsageFlagBits = vk_sys::VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT;
+
+pub type QueryControlFlags = vk_sys::VkQueryControlFlags;
+pub type QueryControlFlagBits = vk_sys::VkQueryControlFlagBits;
+pub const QUERY_CONTROL_PRECISE_BIT: QueryControlFlagBits = vk_sys::VK_QUERY_CONTROL_PRECISE_BIT;
+
+pub type CommandBufferResetFlags = vk_sys::VkCommandBufferResetFlags;
+pub type CommandBufferResetFlagBits = vk_sys::VkCommandBufferResetFlagBits;
+pub const COMMAND_BUFFER_RESET_RELEASE_RESOURCES_BIT: CommandBufferResetFlagBits = vk_sys::VK_COMMAND_BUFFER_RESET_RELEASE_RESOURCES_BIT;
+
+pub type StencilFaceFlags = vk_sys::VkStencilFaceFlags;
+pub type StencilFaceFlagBits = vk_sys::VkStencilFaceFlagBits;
+pub const STENCIL_FACE_FRONT_BIT: StencilFaceFlagBits = vk_sys::VK_STENCIL_FACE_FRONT_BIT;
+pub const STENCIL_FACE_BACK_BIT: StencilFaceFlagBits = vk_sys::VK_STENCIL_FACE_BACK_BIT;
+pub const STENCIL_FRONT_AND_BACK: StencilFaceFlagBits = vk_sys::VK_STENCIL_FRONT_AND_BACK;
+
 #[derive(Debug, Copy, Clone)]
 pub enum OptionalDeviceSize {
     Size(u64),
