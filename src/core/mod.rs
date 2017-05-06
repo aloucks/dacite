@@ -4557,12 +4557,9 @@ impl<'a> From<&'a vk_sys::VkImageCreateInfo> for ImageCreateInfo {
     }
 }
 
+#[derive(Debug)]
 struct VkImageCreateInfoWrapper {
     create_info: vk_sys::VkImageCreateInfo,
-
-    // Rust complains about this field, even though it doesn't do it for all the other unused
-    // fields in other Wrapper structs. No idea why.
-    #[allow(dead_code)]
     queue_family_indices: Option<Vec<u32>>,
 }
 
