@@ -6789,6 +6789,58 @@ impl<'a> From<&'a DescriptorSetAllocateInfo> for VkDescriptorSetAllocateInfoWrap
     }
 }
 
+#[derive(Debug, Clone)]
+pub struct DescriptorImageInfo {
+    pub sampler: Option<Sampler>,
+    pub image_view: Option<ImageView>,
+    pub image_layout: ImageLayout,
+}
+
+#[derive(Debug)]
+struct VkDescriptorImageInfoWrapper {
+    info: vk_sys::VkDescriptorImageInfo,
+    sampler: Option<Sampler>,
+    image_view: Option<ImageView>,
+}
+
+impl Deref for VkDescriptorImageInfoWrapper {
+    type Target = vk_sys::VkDescriptorImageInfo;
+
+    fn deref(&self) -> &Self::Target {
+        &self.info
+    }
+}
+
+impl AsRef<vk_sys::VkDescriptorImageInfo> for VkDescriptorImageInfoWrapper {
+    fn as_ref(&self) -> &vk_sys::VkDescriptorImageInfo {
+        &self.info
+    }
+}
+
+impl<'a> From<&'a DescriptorImageInfo> for VkDescriptorImageInfoWrapper {
+    fn from(info: &'a DescriptorImageInfo) -> Self {
+        let (vk_sampler, sampler) = match info.sampler {
+            Some(ref sampler) => (sampler.handle(), Some(sampler.clone())),
+            None => (ptr::null_mut(), None),
+        };
+
+        let (vk_image_view, image_view) = match info.image_view {
+            Some(ref image_view) => (image_view.handle(), Some(image_view.clone())),
+            None => (ptr::null_mut(), None),
+        };
+
+        VkDescriptorImageInfoWrapper {
+            info: vk_sys::VkDescriptorImageInfo {
+                sampler: vk_sampler,
+                imageView: vk_image_view,
+                imageLayout: info.image_layout.into(),
+            },
+            sampler: sampler,
+            image_view: image_view,
+        }
+    }
+}
+
 #[derive(Debug, Copy, Clone)]
 pub struct AttachmentDescription {
     pub flags: vk_sys::VkAttachmentDescriptionFlags,
