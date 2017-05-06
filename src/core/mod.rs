@@ -7629,6 +7629,71 @@ impl VkCommandBufferAllocateInfoWrapper {
     }
 }
 
+#[derive(Debug, Clone)]
+pub enum CommandBufferInheritanceInfoChainElement {
+}
+
+#[derive(Debug, Clone)]
+pub struct CommandBufferInheritanceInfo {
+    pub chain: Vec<CommandBufferInheritanceInfoChainElement>,
+    pub render_pass: Option<RenderPass>,
+    pub subpass: u32,
+    pub framebuffer: Option<Framebuffer>,
+    pub occlusion_query_enable: bool,
+    pub query_flags: vk_sys::VkQueryControlFlags,
+    pub pipeline_statistics: vk_sys::VkQueryPipelineStatisticFlags,
+}
+
+#[derive(Debug)]
+struct VkCommandBufferInheritanceInfoWrapper {
+    info: vk_sys::VkCommandBufferInheritanceInfo,
+    render_pass: Option<RenderPass>,
+    framebuffer: Option<Framebuffer>,
+}
+
+impl Deref for VkCommandBufferInheritanceInfoWrapper {
+    type Target = vk_sys::VkCommandBufferInheritanceInfo;
+
+    fn deref(&self) -> &Self::Target {
+        &self.info
+    }
+}
+
+impl AsRef<vk_sys::VkCommandBufferInheritanceInfo> for VkCommandBufferInheritanceInfoWrapper {
+    fn as_ref(&self) -> &vk_sys::VkCommandBufferInheritanceInfo {
+        &self.info
+    }
+}
+
+impl<'a> From<&'a CommandBufferInheritanceInfo> for VkCommandBufferInheritanceInfoWrapper {
+    fn from(info: &'a CommandBufferInheritanceInfo) -> Self {
+        let (render_pass_handle, render_pass) = match info.render_pass {
+            Some(ref render_pass) => (render_pass.handle(), Some(render_pass.clone())),
+            None => (ptr::null_mut(), None),
+        };
+
+        let (framebuffer_handle, framebuffer) = match info.framebuffer {
+            Some(ref framebuffer) => (framebuffer.handle(), Some(framebuffer.clone())),
+            None => (ptr::null_mut(), None),
+        };
+
+        VkCommandBufferInheritanceInfoWrapper {
+            info: vk_sys::VkCommandBufferInheritanceInfo {
+                sType: vk_sys::VK_STRUCTURE_TYPE_COMMAND_BUFFER_INHERITANCE_INFO,
+                pNext: ptr::null(),
+                renderPass: render_pass_handle,
+                subpass: info.subpass,
+                framebuffer: framebuffer_handle,
+                occlusionQueryEnable: utils::to_vk_bool(info.occlusion_query_enable),
+                queryFlags: info.query_flags,
+                pipelineStatistics: info.pipeline_statistics,
+            },
+            render_pass: render_pass,
+            framebuffer: framebuffer,
+        }
+    }
+}
+
 #[derive(Debug, Copy, Clone)]
 pub struct BufferCopy {
     pub src_offset: u64,
