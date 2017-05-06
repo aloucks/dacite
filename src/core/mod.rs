@@ -594,6 +594,20 @@ impl Version {
     }
 }
 
+pub const LOD_CLAMP_NONE: f32 = vk_sys::VK_LOD_CLAMP_NONE;
+pub const REMAINING_MIP_LEVELS: u32 = vk_sys::VK_REMAINING_MIP_LEVELS;
+pub const REMAINING_ARRAY_LAYERS: u32 = vk_sys::VK_REMAINING_ARRAY_LAYERS;
+pub const WHOLE_SIZE: u64 = vk_sys::VK_WHOLE_SIZE;
+pub const ATTACHMENT_UNUSED: u32 = vk_sys::VK_ATTACHMENT_UNUSED;
+pub const QUEUE_FAMILY_IGNORED: u32 = vk_sys::VK_QUEUE_FAMILY_IGNORED;
+pub const SUBPASS_EXTERNAL: u32 = vk_sys::VK_SUBPASS_EXTERNAL;
+pub const MAX_PHYSICAL_DEVICE_NAME_SIZE: usize = vk_sys::VK_MAX_PHYSICAL_DEVICE_NAME_SIZE;
+pub const UUID_SIZE: usize = vk_sys::VK_UUID_SIZE;
+pub const MAX_MEMORY_TYPES: usize = vk_sys::VK_MAX_MEMORY_TYPES;
+pub const MAX_MEMORY_HEAPS: usize = vk_sys::VK_MAX_MEMORY_HEAPS;
+pub const MAX_EXTENSION_NAME_SIZE: usize = vk_sys::VK_MAX_EXTENSION_NAME_SIZE;
+pub const MAX_DESCRIPTION_SIZE: usize = vk_sys::VK_MAX_DESCRIPTION_SIZE;
+
 pub enum PipelineCacheHeaderVersion {
     One,
     Unknown(vk_sys::VkPipelineCacheHeaderVersion),
