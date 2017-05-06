@@ -6093,6 +6093,177 @@ impl<'a> From<&'a PipelineDynamicStateCreateInfo> for VkPipelineDynamicStateCrea
     }
 }
 
+#[derive(Debug, Clone)]
+pub enum GraphicsPipelineCreateInfoChainElement {
+}
+
+#[derive(Debug, Clone)]
+pub struct GraphicsPipelineCreateInfo {
+    pub chain: Vec<GraphicsPipelineCreateInfoChainElement>,
+    pub flags: vk_sys::VkPipelineCreateFlags,
+    pub stages: Vec<PipelineShaderStageCreateInfo>,
+    pub vertex_input_state: PipelineVertexInputStateCreateInfo,
+    pub input_assembly_state: PipelineInputAssemblyStateCreateInfo,
+    pub tessellation_state: Option<PipelineTessellationStateCreateInfo>,
+    pub viewport_state: Option<PipelineViewportStateCreateInfo>,
+    pub rasterization_state: PipelineRasterizationStateCreateInfo,
+    pub multisample_state: Option<PipelineMultisampleStateCreateInfo>,
+    pub depth_stencil_state: Option<PipelineDepthStencilStateCreateInfo>,
+    pub color_blend_state: Option<PipelineColorBlendStateCreateInfo>,
+    pub dynamic_state: Option<PipelineDynamicStateCreateInfo>,
+    pub layout: PipelineLayout,
+    pub render_pass: RenderPass,
+    pub subpass: u32,
+    pub base_pipeline: Option<Pipeline>,
+    pub base_pipeline_index: Option<u32>,
+}
+
+#[derive(Debug)]
+struct VkGraphicsPipelineCreateInfoWrapper {
+    create_info: vk_sys::VkGraphicsPipelineCreateInfo,
+    stages: Vec<VkPipelineShaderStageCreateInfoWrapper>,
+    vk_stages: Vec<vk_sys::VkPipelineShaderStageCreateInfo>,
+    vertex_input_state: Box<VkPipelineVertexInputStateCreateInfoWrapper>,
+    input_assembly_state: Box<VkPipelineInputAssemblyStateCreateInfoWrapper>,
+    tessellation_state: Option<Box<VkPipelineTessellationStateCreateInfoWrapper>>,
+    viewport_state: Option<Box<VkPipelineViewportStateCreateInfoWrapper>>,
+    rasterization_state: Box<VkPipelineRasterizationStateCreateInfoWrapper>,
+    multisample_state: Option<Box<VkPipelineMultisampleStateCreateInfoWrapper>>,
+    depth_stencil_state: Option<Box<VkPipelineDepthStencilStateCreateInfoWrapper>>,
+    color_blend_state: Option<Box<VkPipelineColorBlendStateCreateInfoWrapper>>,
+    dynamic_state: Option<Box<VkPipelineDynamicStateCreateInfoWrapper>>,
+    layout: PipelineLayout,
+    render_pass: RenderPass,
+    base_pipeline: Option<Pipeline>,
+}
+
+impl Deref for VkGraphicsPipelineCreateInfoWrapper {
+    type Target = vk_sys::VkGraphicsPipelineCreateInfo;
+
+    fn deref(&self) -> &Self::Target {
+        &self.create_info
+    }
+}
+
+impl AsRef<vk_sys::VkGraphicsPipelineCreateInfo> for VkGraphicsPipelineCreateInfoWrapper {
+    fn as_ref(&self) -> &vk_sys::VkGraphicsPipelineCreateInfo {
+        &self.create_info
+    }
+}
+
+impl<'a> From<&'a GraphicsPipelineCreateInfo> for VkGraphicsPipelineCreateInfoWrapper {
+    fn from(create_info: &'a GraphicsPipelineCreateInfo) -> Self {
+        let stages: Vec<_> = create_info.stages.iter().map(From::from).collect();
+        let vk_stages: Vec<_> = stages.iter().map(AsRef::as_ref).cloned().collect();
+        let vertex_input_state: Box<VkPipelineVertexInputStateCreateInfoWrapper> = Box::new((&create_info.vertex_input_state).into());
+        let input_assembly_state: Box<VkPipelineInputAssemblyStateCreateInfoWrapper> = Box::new((&create_info.input_assembly_state).into());
+
+        let (tessellation_state_ptr, tessellation_state) = match create_info.tessellation_state {
+            Some(ref tessellation_state) => {
+                let tessellation_state: Box<VkPipelineTessellationStateCreateInfoWrapper> = Box::new(tessellation_state.into());
+                (&**tessellation_state as *const _, Some(tessellation_state))
+            }
+
+            None => (ptr::null(), None),
+        };
+
+        let (viewport_state_ptr, viewport_state) = match create_info.viewport_state {
+            Some(ref viewport_state) => {
+                let viewport_state: Box<VkPipelineViewportStateCreateInfoWrapper> = Box::new(viewport_state.into());
+                (&**viewport_state as *const _, Some(viewport_state))
+            }
+
+            None => (ptr::null(), None),
+        };
+
+        let rasterization_state: Box<VkPipelineRasterizationStateCreateInfoWrapper> = Box::new((&create_info.rasterization_state).into());
+
+        let (multisample_state_ptr, multisample_state) = match create_info.multisample_state {
+            Some(ref multisample_state) => {
+                let multisample_state: Box<VkPipelineMultisampleStateCreateInfoWrapper> = Box::new(multisample_state.into());
+                (&**multisample_state as *const _, Some(multisample_state))
+            }
+
+            None => (ptr::null(), None),
+        };
+
+        let (depth_stencil_state_ptr, depth_stencil_state) = match create_info.depth_stencil_state {
+            Some(ref depth_stencil_state) => {
+                let depth_stencil_state: Box<VkPipelineDepthStencilStateCreateInfoWrapper> = Box::new(depth_stencil_state.into());
+                (&**depth_stencil_state as *const _, Some(depth_stencil_state))
+            }
+
+            None => (ptr::null(), None),
+        };
+
+        let (color_blend_state_ptr, color_blend_state) = match create_info.color_blend_state {
+            Some(ref color_blend_state) => {
+                let color_blend_state: Box<VkPipelineColorBlendStateCreateInfoWrapper> = Box::new(color_blend_state.into());
+                (&**color_blend_state as *const _, Some(color_blend_state))
+            }
+
+            None => (ptr::null(), None),
+        };
+
+        let (dynamic_state_ptr, dynamic_state) = match create_info.dynamic_state {
+            Some(ref dynamic_state) => {
+                let dynamic_state: Box<VkPipelineDynamicStateCreateInfoWrapper> = Box::new(dynamic_state.into());
+                (&**dynamic_state as *const _, Some(dynamic_state))
+            }
+
+            None => (ptr::null(), None),
+        };
+
+        let (base_pipeline_handle, base_pipeline) = match create_info.base_pipeline {
+            Some(ref base_pipeline) => (base_pipeline.handle(), Some(base_pipeline.clone())),
+            None => (ptr::null_mut(), None),
+        };
+
+        let base_pipeline_index = match create_info.base_pipeline_index {
+            Some(base_pipeline_index) => base_pipeline_index as i32,
+            None => -1,
+        };
+
+        VkGraphicsPipelineCreateInfoWrapper {
+            create_info: vk_sys::VkGraphicsPipelineCreateInfo {
+                sType: vk_sys::VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO,
+                pNext: ptr::null(),
+                flags: create_info.flags,
+                stageCount: stages.len() as u32,
+                pStages: vk_stages.as_ptr(),
+                pVertexInputState: &**vertex_input_state,
+                pInputAssemblyState: &**input_assembly_state,
+                pTessellationState: tessellation_state_ptr,
+                pViewportState: viewport_state_ptr,
+                pRasterizationState: &**rasterization_state,
+                pMultisampleState: multisample_state_ptr,
+                pDepthStencilState: depth_stencil_state_ptr,
+                pColorBlendState: color_blend_state_ptr,
+                pDynamicState: dynamic_state_ptr,
+                layout: create_info.layout.handle(),
+                renderPass: create_info.render_pass.handle(),
+                subpass: create_info.subpass,
+                basePipelineHandle: base_pipeline_handle,
+                basePipelineIndex: base_pipeline_index,
+            },
+            stages: stages,
+            vk_stages: vk_stages,
+            vertex_input_state: vertex_input_state,
+            input_assembly_state: input_assembly_state,
+            tessellation_state: tessellation_state,
+            viewport_state: viewport_state,
+            rasterization_state: rasterization_state,
+            multisample_state: multisample_state,
+            depth_stencil_state: depth_stencil_state,
+            color_blend_state: color_blend_state,
+            dynamic_state: dynamic_state,
+            layout: create_info.layout.clone(),
+            render_pass: create_info.render_pass.clone(),
+            base_pipeline: base_pipeline,
+        }
+    }
+}
+
 #[derive(Debug, Copy, Clone)]
 pub struct PushConstantRange {
     pub stage_flags: vk_sys::VkShaderStageFlags,
