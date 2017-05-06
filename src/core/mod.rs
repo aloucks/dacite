@@ -2371,7 +2371,7 @@ pub enum InstanceCreateInfoChainElement {
 #[derive(Debug, Clone)]
 pub struct InstanceCreateInfo {
     pub chain: Vec<InstanceCreateInfoChainElement>,
-    pub flags: vk_sys::VkInstanceCreateFlags,
+    pub flags: InstanceCreateFlags,
     pub application_info: Option<ApplicationInfo>,
     pub enabled_layers: Vec<String>,
     pub enabled_extensions: Vec<InstanceExtension>,
@@ -2715,9 +2715,9 @@ impl<'a> From<&'a PhysicalDeviceFeatures> for vk_sys::VkPhysicalDeviceFeatures {
 
 #[derive(Debug, Copy, Clone)]
 pub struct FormatProperties {
-    pub linear_tiling_features: vk_sys::VkFormatFeatureFlags,
-    pub optimal_tiling_features: vk_sys::VkFormatFeatureFlags,
-    pub buffer_features: vk_sys::VkFormatFeatureFlags,
+    pub linear_tiling_features: FormatFeatureFlags,
+    pub optimal_tiling_features: FormatFeatureFlags,
+    pub buffer_features: FormatFeatureFlags,
 }
 
 impl<'a> From<&'a vk_sys::VkFormatProperties> for FormatProperties {
@@ -2772,7 +2772,7 @@ pub struct ImageFormatProperties {
     pub max_extent: Extent3D,
     pub max_mip_levels: u32,
     pub max_array_layers: u32,
-    pub sample_counts: vk_sys::VkSampleCountFlags,
+    pub sample_counts: SampleCountFlags,
     pub max_resource_size: u64,
 }
 
@@ -2882,16 +2882,16 @@ pub struct PhysicalDeviceLimits {
     pub max_framebuffer_width: u32,
     pub max_framebuffer_height: u32,
     pub max_framebuffer_layers: u32,
-    pub framebuffer_color_sample_counts: vk_sys::VkSampleCountFlags,
-    pub framebuffer_depth_sample_counts: vk_sys::VkSampleCountFlags,
-    pub framebuffer_stencil_sample_counts: vk_sys::VkSampleCountFlags,
-    pub framebuffer_no_attachments_sample_counts: vk_sys::VkSampleCountFlags,
+    pub framebuffer_color_sample_counts: SampleCountFlags,
+    pub framebuffer_depth_sample_counts: SampleCountFlags,
+    pub framebuffer_stencil_sample_counts: SampleCountFlags,
+    pub framebuffer_no_attachments_sample_counts: SampleCountFlags,
     pub max_color_attachments: u32,
-    pub sampled_image_color_sample_counts: vk_sys::VkSampleCountFlags,
-    pub sampled_image_integer_sample_counts: vk_sys::VkSampleCountFlags,
-    pub sampled_image_depth_sample_counts: vk_sys::VkSampleCountFlags,
-    pub sampled_image_stencil_sample_counts: vk_sys::VkSampleCountFlags,
-    pub storage_image_sample_counts: vk_sys::VkSampleCountFlags,
+    pub sampled_image_color_sample_counts: SampleCountFlags,
+    pub sampled_image_integer_sample_counts: SampleCountFlags,
+    pub sampled_image_depth_sample_counts: SampleCountFlags,
+    pub sampled_image_stencil_sample_counts: SampleCountFlags,
+    pub storage_image_sample_counts: SampleCountFlags,
     pub max_sample_mask_words: u32,
     pub timestamp_compute_and_graphics: bool,
     pub timestamp_period: f32,
@@ -3228,7 +3228,7 @@ impl<'a> From<&'a PhysicalDeviceProperties> for vk_sys::VkPhysicalDeviceProperti
 
 #[derive(Debug, Copy, Clone)]
 pub struct QueueFamilyProperties {
-    pub queue_flags: vk_sys::VkQueueFlags,
+    pub queue_flags: QueueFlags,
     pub queue_count: u32,
     pub timestamp_valid_bits: u32,
     pub min_image_transfer_granularity: Extent3D,
@@ -3258,7 +3258,7 @@ impl<'a> From<&'a QueueFamilyProperties> for vk_sys::VkQueueFamilyProperties {
 
 #[derive(Debug, Copy, Clone)]
 pub struct MemoryType {
-    pub property_flags: vk_sys::VkMemoryPropertyFlags,
+    pub property_flags: MemoryPropertyFlags,
     pub heap_index: u32,
 }
 
@@ -3283,7 +3283,7 @@ impl<'a> From<&'a MemoryType> for vk_sys::VkMemoryType {
 #[derive(Debug, Copy, Clone)]
 pub struct MemoryHeap {
     pub size: u64,
-    pub flags: vk_sys::VkMemoryHeapFlags,
+    pub flags: MemoryHeapFlags,
 }
 
 impl<'a> From<&'a vk_sys::VkMemoryHeap> for MemoryHeap {
@@ -3357,7 +3357,7 @@ pub enum DeviceQueueCreateInfoChainElement {
 #[derive(Debug, Clone)]
 pub struct DeviceQueueCreateInfo {
     pub chain: Vec<DeviceQueueCreateInfoChainElement>,
-    pub flags: vk_sys::VkDeviceQueueCreateFlags,
+    pub flags: DeviceQueueCreateFlags,
     pub queue_family_index: u32,
     pub queue_priorities: Vec<f32>,
 }
@@ -3424,7 +3424,7 @@ pub enum DeviceCreateInfoChainElement {
 #[derive(Debug, Clone)]
 pub struct DeviceCreateInfo {
     pub chain: Vec<DeviceCreateInfoChainElement>,
-    pub flags: vk_sys::VkDeviceCreateFlags,
+    pub flags: DeviceCreateFlags,
     pub queue_create_infos: Vec<DeviceQueueCreateInfo>,
     pub enabled_layers: Vec<String>,
     pub enabled_extensions: Vec<DeviceExtension>,
@@ -3775,7 +3775,7 @@ pub enum SubmitInfoChainElement {
 pub struct SubmitInfo {
     pub chain: Vec<SubmitInfoChainElement>,
     pub wait_semaphores: Option<Vec<Semaphore>>,
-    pub wait_dst_stage_mask: Option<Vec<vk_sys::VkPipelineStageFlags>>,
+    pub wait_dst_stage_mask: Option<Vec<PipelineStageFlags>>,
     pub command_buffers: Option<Vec<CommandBuffer>>,
     pub signal_semaphores: Option<Vec<Semaphore>>,
 }
@@ -4001,9 +4001,9 @@ impl<'a> From<&'a MemoryRequirements> for vk_sys::VkMemoryRequirements {
 
 #[derive(Debug, Copy, Clone)]
 pub struct SparseImageFormatProperties {
-    pub aspect_mask: vk_sys::VkImageAspectFlags,
+    pub aspect_mask: ImageAspectFlags,
     pub image_granularity: Extent3D,
-    pub flags: vk_sys::VkSparseImageFormatFlags,
+    pub flags: SparseImageFormatFlags,
 }
 
 impl<'a> From<&'a vk_sys::VkSparseImageFormatProperties> for SparseImageFormatProperties {
@@ -4065,7 +4065,7 @@ pub struct SparseMemoryBind {
     pub size: u64,
     pub memory: Option<DeviceMemory>,
     pub memory_offset: u64,
-    pub flags: vk_sys::VkSparseMemoryBindFlags,
+    pub flags: SparseMemoryBindFlags,
 }
 
 #[derive(Debug)]
@@ -4202,7 +4202,7 @@ impl<'a> From<&'a SparseImageOpaqueMemoryBindInfo> for VkSparseImageOpaqueMemory
 
 #[derive(Debug, Copy, Clone)]
 pub struct ImageSubresource {
-    pub aspect_mask: vk_sys::VkImageAspectFlags,
+    pub aspect_mask: ImageAspectFlags,
     pub mip_level: u32,
     pub array_layer: u32,
 }
@@ -4261,7 +4261,7 @@ pub struct SparseImageMemoryBind {
     pub extent: Extent3D,
     pub memory: Option<DeviceMemory>,
     pub memory_offset: u64,
-    pub flags: vk_sys::VkSparseMemoryBindFlags,
+    pub flags: SparseMemoryBindFlags,
 }
 
 #[derive(Debug)]
@@ -4482,7 +4482,7 @@ pub enum FenceCreateInfoChainElement {
 #[derive(Debug, Clone)]
 pub struct FenceCreateInfo {
     pub chain: Vec<FenceCreateInfoChainElement>,
-    pub flags: vk_sys::VkFenceCreateFlags,
+    pub flags: FenceCreateFlags,
 }
 
 impl<'a> From<&'a vk_sys::VkFenceCreateInfo> for FenceCreateInfo {
@@ -4534,7 +4534,7 @@ pub enum SemaphoreCreateInfoChainElement {
 #[derive(Debug, Clone)]
 pub struct SemaphoreCreateInfo {
     pub chain: Vec<SemaphoreCreateInfoChainElement>,
-    pub flags: vk_sys::VkSemaphoreCreateFlags,
+    pub flags: SemaphoreCreateFlags,
 }
 
 impl<'a> From<&'a vk_sys::VkSemaphoreCreateInfo> for SemaphoreCreateInfo {
@@ -4586,7 +4586,7 @@ pub enum EventCreateInfoChainElement {
 #[derive(Debug, Clone)]
 pub struct EventCreateInfo {
     pub chain: Vec<EventCreateInfoChainElement>,
-    pub flags: vk_sys::VkEventCreateFlags,
+    pub flags: EventCreateFlags,
 }
 
 impl<'a> From<&'a vk_sys::VkEventCreateInfo> for EventCreateInfo {
@@ -4638,10 +4638,10 @@ pub enum QueryPoolCreateInfoChainElement {
 #[derive(Debug, Clone)]
 pub struct QueryPoolCreateInfo {
     pub chain: Vec<QueryPoolCreateInfoChainElement>,
-    pub flags: vk_sys::VkQueryPoolCreateFlags,
+    pub flags: QueryPoolCreateFlags,
     pub query_type: QueryType,
     pub query_count: u32,
-    pub pipeline_statistics: vk_sys::VkQueryPipelineStatisticFlags,
+    pub pipeline_statistics: QueryPipelineStatisticFlags,
 }
 
 impl<'a> From<&'a vk_sys::VkQueryPoolCreateInfo> for QueryPoolCreateInfo {
@@ -4699,9 +4699,9 @@ pub enum BufferCreateInfoChainElement {
 #[derive(Debug, Clone)]
 pub struct BufferCreateInfo {
     pub chain: Vec<BufferCreateInfoChainElement>,
-    pub flags: vk_sys::VkBufferCreateFlags,
+    pub flags: BufferCreateFlags,
     pub size: u64,
-    pub usage: vk_sys::VkBufferUsageFlags,
+    pub usage: BufferUsageFlags,
     pub sharing_mode: SharingMode,
     pub queue_family_indices: Option<Vec<u32>>,
 }
@@ -4781,7 +4781,7 @@ pub enum BufferViewCreateInfoChainElement {
 #[derive(Debug, Clone)]
 pub struct BufferViewCreateInfo {
     pub chain: Vec<BufferViewCreateInfoChainElement>,
-    pub flags: vk_sys::VkBufferViewCreateFlags,
+    pub flags: BufferViewCreateFlags,
     pub buffer: Buffer,
     pub format: Format,
     pub offset: u64,
@@ -4832,15 +4832,15 @@ pub enum ImageCreateInfoChainElement {
 #[derive(Debug, Clone)]
 pub struct ImageCreateInfo {
     pub chain: Vec<ImageCreateInfoChainElement>,
-    pub flags: vk_sys::VkImageCreateFlags,
+    pub flags: ImageCreateFlags,
     pub image_type: ImageType,
     pub format: Format,
     pub extent: Extent3D,
     pub mip_levels: u32,
     pub array_layers: u32,
-    pub samples: vk_sys::VkSampleCountFlagBits,
+    pub samples: SampleCountFlagBits,
     pub tiling: ImageTiling,
-    pub usage: vk_sys::VkImageUsageFlags,
+    pub usage: ImageUsageFlags,
     pub sharing_mode: SharingMode,
     pub queue_family_indices: Option<Vec<u32>>,
     pub initial_layout: ImageLayout,
@@ -4993,7 +4993,7 @@ impl<'a> From<&'a ComponentMapping> for vk_sys::VkComponentMapping {
 
 #[derive(Debug, Copy, Clone)]
 pub struct ImageSubresourceRange {
-    pub aspect_mask: vk_sys::VkImageAspectFlags,
+    pub aspect_mask: ImageAspectFlags,
     pub base_mip_level: u32,
     pub level_count: u32,
     pub base_array_layer: u32,
@@ -5031,7 +5031,7 @@ pub enum ImageViewCreateInfoChainElement {
 #[derive(Debug, Clone)]
 pub struct ImageViewCreateInfo {
     pub chain: Vec<ImageViewCreateInfoChainElement>,
-    pub flags: vk_sys::VkImageViewCreateFlags,
+    pub flags: ImageViewCreateFlags,
     pub image: Image,
     pub view_type: ImageViewType,
     pub format: Format,
@@ -5084,7 +5084,7 @@ pub enum ShaderModuleCreateInfoChainElement {
 #[derive(Debug, Clone)]
 pub struct ShaderModuleCreateInfo {
     pub chain: Vec<ShaderModuleCreateInfoChainElement>,
-    pub flags: vk_sys::VkShaderModuleCreateFlags,
+    pub flags: ShaderModuleCreateFlags,
     pub code_size: usize,
     pub code: Vec<u32>,
 }
@@ -5153,7 +5153,7 @@ pub enum PipelineCacheCreateInfoChainElement {
 #[derive(Debug, Clone)]
 pub struct PipelineCacheCreateInfo {
     pub chain: Vec<PipelineCacheCreateInfoChainElement>,
-    pub flags: vk_sys::VkPipelineCacheCreateFlags,
+    pub flags: PipelineCacheCreateFlags,
     pub initial_data: Option<Vec<u8>>,
 }
 
@@ -5393,8 +5393,8 @@ pub enum PipelineShaderStageCreateInfoChainElement {
 #[derive(Debug, Clone)]
 pub struct PipelineShaderStageCreateInfo {
     pub chain: Vec<PipelineShaderStageCreateInfoChainElement>,
-    pub flags: vk_sys::VkPipelineShaderStageCreateFlags,
-    pub stage: vk_sys::VkShaderStageFlagBits,
+    pub flags: PipelineShaderStageCreateFlags,
+    pub stage: ShaderStageFlagBits,
     pub module: ShaderModule,
     pub name: String,
     pub specialization_info: Option<SpecializationInfo>,
@@ -5516,7 +5516,7 @@ pub enum PipelineVertexInputStateCreateInfoChainElement {
 #[derive(Debug, Clone)]
 pub struct PipelineVertexInputStateCreateInfo {
     pub chain: Vec<PipelineVertexInputStateCreateInfoChainElement>,
-    pub flags: vk_sys::VkPipelineVertexInputStateCreateFlags,
+    pub flags: PipelineVertexInputStateCreateFlags,
     pub vertex_binding_descriptions: Option<Vec<VertexInputBindingDescription>>,
     pub vertex_attribute_descriptions: Option<Vec<VertexInputAttributeDescription>>,
 }
@@ -5622,7 +5622,7 @@ pub enum PipelineInputAssemblyStateCreateInfoChainElement {
 #[derive(Debug, Clone)]
 pub struct PipelineInputAssemblyStateCreateInfo {
     pub chain: Vec<PipelineInputAssemblyStateCreateInfoChainElement>,
-    pub flags: vk_sys::VkPipelineInputAssemblyStateCreateFlags,
+    pub flags: PipelineInputAssemblyStateCreateFlags,
     pub topology: PrimitiveTopology,
     pub primitive_restart_enable: bool,
 }
@@ -5680,7 +5680,7 @@ pub enum PipelineTessellationStateCreateInfoChainElement {
 #[derive(Debug, Clone)]
 pub struct PipelineTessellationStateCreateInfo {
     pub chain: Vec<PipelineTessellationStateCreateInfoChainElement>,
-    pub flags: vk_sys::VkPipelineTessellationStateCreateFlags,
+    pub flags: PipelineTessellationStateCreateFlags,
     pub patch_control_points: u32,
 }
 
@@ -5843,7 +5843,7 @@ pub enum PipelineViewportStateCreateInfoChainElement {
 #[derive(Debug, Clone)]
 pub struct PipelineViewportStateCreateInfo {
     pub chain: Vec<PipelineViewportStateCreateInfoChainElement>,
-    pub flags: vk_sys::VkPipelineViewportStateCreateFlags,
+    pub flags: PipelineViewportStateCreateFlags,
     pub viewports: Vec<Viewport>,
     pub scissors: Vec<Rect2D>,
 }
@@ -5924,11 +5924,11 @@ pub enum PipelineRasterizationStateCreateInfoChainElement {
 #[derive(Debug, Clone)]
 pub struct PipelineRasterizationStateCreateInfo {
     pub chain: Vec<PipelineRasterizationStateCreateInfoChainElement>,
-    pub flags: vk_sys::VkPipelineRasterizationStateCreateFlags,
+    pub flags: PipelineRasterizationStateCreateFlags,
     pub depth_clamp_enable: bool,
     pub rasterizer_discard_enable: bool,
     pub polygon_mode: PolygonMode,
-    pub cull_mode: vk_sys::VkCullModeFlags,
+    pub cull_mode: CullModeFlags,
     pub front_face: FrontFace,
     pub depth_bias_enable: bool,
     pub depth_bias_constant_factor: f32,
@@ -6006,8 +6006,8 @@ pub enum PipelineMultisampleStateCreateInfoChainElement {
 #[derive(Debug, Clone)]
 pub struct PipelineMultisampleStateCreateInfo {
     pub chain: Vec<PipelineMultisampleStateCreateInfoChainElement>,
-    pub flags: vk_sys::VkPipelineMultisampleStateCreateFlags,
-    pub rasterization_samples: vk_sys::VkSampleCountFlagBits,
+    pub flags: PipelineMultisampleStateCreateFlags,
+    pub rasterization_samples: SampleCountFlagBits,
     pub sample_shading_enable: bool,
     pub min_sample_shading: f32,
     pub sample_mask: Option<Vec<u32>>,
@@ -6136,7 +6136,7 @@ pub enum PipelineDepthStencilStateCreateInfoChainElement {
 #[derive(Debug, Clone)]
 pub struct PipelineDepthStencilStateCreateInfo {
     pub chain: Vec<PipelineDepthStencilStateCreateInfoChainElement>,
-    pub flags: vk_sys::VkPipelineDepthStencilStateCreateFlags,
+    pub flags: PipelineDepthStencilStateCreateFlags,
     pub depth_test_enable: bool,
     pub depth_write_enable: bool,
     pub depth_compare_op: CompareOp,
@@ -6217,7 +6217,7 @@ pub struct PipelineColorBlendAttachmentState {
     pub src_alpha_blend_factor: BlendFactor,
     pub dst_alpha_blend_factor: BlendFactor,
     pub alpha_blend_op: BlendOp,
-    pub color_write_mask: vk_sys::VkColorComponentFlags,
+    pub color_write_mask: ColorComponentFlags,
 }
 
 impl<'a> From<&'a vk_sys::VkPipelineColorBlendAttachmentState> for PipelineColorBlendAttachmentState {
@@ -6257,7 +6257,7 @@ pub enum PipelineColorBlendStateCreateInfoChainElement {
 #[derive(Debug, Clone)]
 pub struct PipelineColorBlendStateCreateInfo {
     pub chain: Vec<PipelineColorBlendStateCreateInfoChainElement>,
-    pub flags: vk_sys::VkPipelineColorBlendStateCreateFlags,
+    pub flags: PipelineColorBlendStateCreateFlags,
     pub logic_op_enable: bool,
     pub logic_op: LogicOp,
     pub attachments: Option<Vec<PipelineColorBlendAttachmentState>>,
@@ -6345,7 +6345,7 @@ pub enum PipelineDynamicStateCreateInfoChainElement {
 #[derive(Debug, Clone)]
 pub struct PipelineDynamicStateCreateInfo {
     pub chain: Vec<PipelineDynamicStateCreateInfoChainElement>,
-    pub flags: vk_sys::VkPipelineDynamicStateCreateFlags,
+    pub flags: PipelineDynamicStateCreateFlags,
     pub dynamic_states: Vec<DynamicState>,
 }
 
@@ -6417,7 +6417,7 @@ pub enum GraphicsPipelineCreateInfoChainElement {
 #[derive(Debug, Clone)]
 pub struct GraphicsPipelineCreateInfo {
     pub chain: Vec<GraphicsPipelineCreateInfoChainElement>,
-    pub flags: vk_sys::VkPipelineCreateFlags,
+    pub flags: PipelineCreateFlags,
     pub stages: Vec<PipelineShaderStageCreateInfo>,
     pub vertex_input_state: PipelineVertexInputStateCreateInfo,
     pub input_assembly_state: PipelineInputAssemblyStateCreateInfo,
@@ -6588,7 +6588,7 @@ pub enum ComputePipelineCreateInfoChainElement {
 #[derive(Debug, Clone)]
 pub struct ComputePipelineCreateInfo {
     pub chain: Vec<ComputePipelineCreateInfoChainElement>,
-    pub flags: vk_sys::VkPipelineCreateFlags,
+    pub flags: PipelineCreateFlags,
     pub stage: PipelineShaderStageCreateInfo,
     pub layout: PipelineLayout,
     pub base_pipeline: Option<Pipeline>,
@@ -6650,7 +6650,7 @@ impl<'a> From<&'a ComputePipelineCreateInfo> for VkComputePipelineCreateInfoWrap
 
 #[derive(Debug, Copy, Clone)]
 pub struct PushConstantRange {
-    pub stage_flags: vk_sys::VkShaderStageFlags,
+    pub stage_flags: ShaderStageFlags,
     pub offset: u32,
     pub size: u32,
 }
@@ -6682,7 +6682,7 @@ pub enum PipelineLayoutCreateInfoChainElement {
 #[derive(Debug, Clone)]
 pub struct PipelineLayoutCreateInfo {
     pub chain: Vec<PipelineLayoutCreateInfoChainElement>,
-    pub flags: vk_sys::VkPipelineLayoutCreateFlags,
+    pub flags: PipelineLayoutCreateFlags,
     pub set_layouts: Option<Vec<DescriptorSetLayout>>,
     pub push_constant_ranges: Option<Vec<PushConstantRange>>,
 }
@@ -6754,7 +6754,7 @@ pub enum SamplerCreateInfoChainElement {
 #[derive(Debug, Clone)]
 pub struct SamplerCreateInfo {
     pub chain: Vec<SamplerCreateInfoChainElement>,
-    pub flags: vk_sys::VkSamplerCreateFlags,
+    pub flags: SamplerCreateFlags,
     pub mag_filter: Filter,
     pub min_filter: Filter,
     pub mipmap_mode: SamplerMipmapMode,
@@ -6849,7 +6849,7 @@ pub struct DescriptorSetLayoutBinding {
     pub binding: u32,
     pub descriptor_type: DescriptorType,
     pub descriptor_count: u32,
-    pub stage_flags: vk_sys::VkShaderStageFlags,
+    pub stage_flags: ShaderStageFlags,
     pub immutable_samplers: Option<Vec<Sampler>>,
 }
 
@@ -6906,7 +6906,7 @@ pub enum DescriptorSetLayoutCreateInfoChainElement {
 #[derive(Debug, Clone)]
 pub struct DescriptorSetLayoutCreateInfo {
     pub chain: Vec<DescriptorSetLayoutCreateInfoChainElement>,
-    pub flags: vk_sys::VkDescriptorSetLayoutCreateFlags,
+    pub flags: DescriptorSetLayoutCreateFlags,
     pub bindings: Option<Vec<DescriptorSetLayoutBinding>>,
 }
 
@@ -6988,7 +6988,7 @@ pub enum DescriptorPoolCreateInfoChainElement {
 #[derive(Debug, Clone)]
 pub struct DescriptorPoolCreateInfo {
     pub chain: Vec<DescriptorPoolCreateInfoChainElement>,
-    pub flags: vk_sys::VkDescriptorPoolCreateFlags,
+    pub flags: DescriptorPoolCreateFlags,
     pub max_sets: u32,
     pub pool_sizes: Vec<DescriptorPoolSize>,
 }
@@ -7364,7 +7364,7 @@ pub enum FramebufferCreateInfoChainElement {
 #[derive(Debug, Clone)]
 pub struct FramebufferCreateInfo {
     pub chain: Vec<FramebufferCreateInfoChainElement>,
-    pub flags: vk_sys::VkFramebufferCreateFlags,
+    pub flags: FramebufferCreateFlags,
     pub render_pass: RenderPass,
     pub attachments: Option<Vec<ImageView>>,
     pub width: u32,
@@ -7427,9 +7427,9 @@ impl<'a> From<&'a FramebufferCreateInfo> for VkFramebufferCreateInfoWrapper {
 
 #[derive(Debug, Copy, Clone)]
 pub struct AttachmentDescription {
-    pub flags: vk_sys::VkAttachmentDescriptionFlags,
+    pub flags: AttachmentDescriptionFlags,
     pub format: Format,
-    pub samples: vk_sys::VkSampleCountFlagBits,
+    pub samples: SampleCountFlagBits,
     pub load_op: AttachmentLoadOp,
     pub store_op: AttachmentStoreOp,
     pub stencil_load_op: AttachmentLoadOp,
@@ -7496,7 +7496,7 @@ impl<'a> From<&'a AttachmentReference> for vk_sys::VkAttachmentReference {
 
 #[derive(Debug, Clone)]
 pub struct SubpassDescription {
-    pub flags: vk_sys::VkSubpassDescriptionFlags,
+    pub flags: SubpassDescriptionFlags,
     pub pipeline_bind_point: PipelineBindPoint,
     pub input_attachments: Option<Vec<AttachmentReference>>,
     pub color_attachments: Option<Vec<AttachmentReference>>,
@@ -7670,11 +7670,11 @@ impl<'a> From<&'a SubpassDescription> for VkSubpassDescriptionWrapper {
 pub struct SubpassDependency {
     pub src_subpass: u32,
     pub dst_subpass: u32,
-    pub src_stage_mask: vk_sys::VkPipelineStageFlags,
-    pub dst_stage_mask: vk_sys::VkPipelineStageFlags,
-    pub src_access_mask: vk_sys::VkAccessFlags,
-    pub dst_access_mask: vk_sys::VkAccessFlags,
-    pub dependency_flags: vk_sys::VkDependencyFlags,
+    pub src_stage_mask: PipelineStageFlags,
+    pub dst_stage_mask: PipelineStageFlags,
+    pub src_access_mask: AccessFlags,
+    pub dst_access_mask: AccessFlags,
+    pub dependency_flags: DependencyFlags,
 }
 
 impl<'a> From<&'a vk_sys::VkSubpassDependency> for SubpassDependency {
@@ -7712,7 +7712,7 @@ pub enum RenderPassCreateInfoChainElement {
 #[derive(Debug, Clone)]
 pub struct RenderPassCreateInfo {
     pub chain: Vec<RenderPassCreateInfoChainElement>,
-    pub flags: vk_sys::VkRenderPassCreateFlags,
+    pub flags: RenderPassCreateFlags,
     pub attachments: Option<Vec<AttachmentDescription>>,
     pub subpasses: Vec<SubpassDescription>,
     pub dependencies: Option<Vec<SubpassDependency>>,
@@ -7836,7 +7836,7 @@ pub enum CommandPoolCreateInfoChainElement {
 #[derive(Debug, Clone)]
 pub struct CommandPoolCreateInfo {
     pub chain: Vec<CommandPoolCreateInfoChainElement>,
-    pub flags: vk_sys::VkCommandPoolCreateFlags,
+    pub flags: CommandPoolCreateFlags,
     pub queue_family_index: u32,
 }
 
@@ -7957,8 +7957,8 @@ pub struct CommandBufferInheritanceInfo {
     pub subpass: u32,
     pub framebuffer: Option<Framebuffer>,
     pub occlusion_query_enable: bool,
-    pub query_flags: vk_sys::VkQueryControlFlags,
-    pub pipeline_statistics: vk_sys::VkQueryPipelineStatisticFlags,
+    pub query_flags: QueryControlFlags,
+    pub pipeline_statistics: QueryPipelineStatisticFlags,
 }
 
 #[derive(Debug)]
@@ -8018,7 +8018,7 @@ pub enum CommandBufferBeginInfoChainElement {
 #[derive(Debug, Clone)]
 pub struct CommandBufferBeginInfo {
     pub chain: Vec<CommandBufferBeginInfoChainElement>,
-    pub flags: vk_sys::VkCommandBufferUsageFlags,
+    pub flags: CommandBufferUsageFlags,
     pub inheritance_info: Option<CommandBufferInheritanceInfo>,
 }
 
@@ -8094,7 +8094,7 @@ impl<'a> From<&'a BufferCopy> for vk_sys::VkBufferCopy {
 
 #[derive(Debug, Copy, Clone)]
 pub struct ImageSubresourceLayers {
-    pub aspect_mask: vk_sys::VkImageAspectFlags,
+    pub aspect_mask: ImageAspectFlags,
     pub mip_level: u32,
     pub base_array_layer: u32,
     pub layer_count: u32,
@@ -8297,7 +8297,7 @@ impl<'a> From<&'a ClearValue> for vk_sys::VkClearValue {
 
 #[derive(Debug, Copy, Clone)]
 pub struct ClearAttachment {
-    pub aspect_mask: vk_sys::VkImageAspectFlags,
+    pub aspect_mask: ImageAspectFlags,
     pub color_attachment: u32,
     pub clear_value: ClearValue,
 }
@@ -8379,8 +8379,8 @@ pub enum MemoryBarrierChainElement {
 #[derive(Debug, Clone)]
 pub struct MemoryBarrier {
     pub chain: Vec<MemoryBarrierChainElement>,
-    pub src_access_mask: vk_sys::VkAccessFlags,
-    pub dst_access_mask: vk_sys::VkAccessFlags,
+    pub src_access_mask: AccessFlags,
+    pub dst_access_mask: AccessFlags,
 }
 
 impl<'a> From<&'a vk_sys::VkMemoryBarrier> for MemoryBarrier {
@@ -8434,8 +8434,8 @@ pub enum BufferMemoryBarrierChainElement {
 #[derive(Debug, Clone)]
 pub struct BufferMemoryBarrier {
     pub chain: Vec<BufferMemoryBarrierChainElement>,
-    pub src_access_mask: vk_sys::VkAccessFlags,
-    pub dst_access_mask: vk_sys::VkAccessFlags,
+    pub src_access_mask: AccessFlags,
+    pub dst_access_mask: AccessFlags,
     pub src_queue_family_index: u32,
     pub dst_queue_family_index: u32,
     pub buffer: Buffer,
@@ -8489,8 +8489,8 @@ pub enum ImageMemoryBarrierChainElement {
 #[derive(Debug, Clone)]
 pub struct ImageMemoryBarrier {
     pub chain: Vec<ImageMemoryBarrierChainElement>,
-    pub src_access_mask: vk_sys::VkAccessFlags,
-    pub dst_access_mask: vk_sys::VkAccessFlags,
+    pub src_access_mask: AccessFlags,
+    pub dst_access_mask: AccessFlags,
     pub old_layout: ImageLayout,
     pub new_layout: ImageLayout,
     pub src_queue_family_index: u32,

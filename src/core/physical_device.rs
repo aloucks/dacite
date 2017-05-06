@@ -115,7 +115,7 @@ impl PhysicalDevice {
         (&properties).into()
     }
 
-    pub fn image_format_properties(&self, format: core::Format, image_type: core::ImageType, tiling: core::ImageTiling, usage: vk_sys::VkImageUsageFlags, flags: vk_sys::VkImageCreateFlags) -> Result<core::ImageFormatProperties> {
+    pub fn image_format_properties(&self, format: core::Format, image_type: core::ImageType, tiling: core::ImageTiling, usage: core::ImageUsageFlags, flags: core::ImageCreateFlags) -> Result<core::ImageFormatProperties> {
         let mut properties = unsafe { mem::uninitialized() };
 
         let res = unsafe {
@@ -130,7 +130,7 @@ impl PhysicalDevice {
         }
     }
 
-    pub fn sparse_image_format_properties(&self, format: core::Format, image_type: core::ImageType, samples: vk_sys::VkSampleCountFlagBits, usage: vk_sys::VkImageUsageFlags, tiling: core::ImageTiling) -> Vec<core::SparseImageFormatProperties> {
+    pub fn sparse_image_format_properties(&self, format: core::Format, image_type: core::ImageType, samples: core::SampleCountFlagBits, usage: core::ImageUsageFlags, tiling: core::ImageTiling) -> Vec<core::SparseImageFormatProperties> {
         let mut num_properties = 0;
         unsafe {
             (self.loader().core.vkGetPhysicalDeviceSparseImageFormatProperties)(self.handle, format.into(), image_type.into(), samples, usage, tiling.into(), &mut num_properties, ptr::null_mut());

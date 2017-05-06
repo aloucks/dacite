@@ -76,7 +76,7 @@ impl CommandPool {
         self.0.device.handle()
     }
 
-    pub fn reset(&self, flags: vk_sys::VkCommandPoolResetFlags) -> Result<()> {
+    pub fn reset(&self, flags: core::CommandPoolResetFlags) -> Result<()> {
         let res = unsafe {
             (self.loader().core.vkResetCommandPool)(self.device_handle(), self.handle(), flags)
         };
