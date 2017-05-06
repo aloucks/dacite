@@ -6737,6 +6737,58 @@ impl<'a> From<&'a DescriptorPoolCreateInfo> for VkDescriptorPoolCreateInfoWrappe
     }
 }
 
+#[derive(Debug, Clone)]
+pub enum DescriptorSetAllocateInfoChainInfo {
+}
+
+#[derive(Debug, Clone)]
+pub struct DescriptorSetAllocateInfo {
+    pub chain: Vec<DescriptorSetAllocateInfoChainInfo>,
+    pub descriptor_pool: DescriptorPool,
+    pub set_layouts: Vec<DescriptorSetLayout>,
+}
+
+#[derive(Debug)]
+struct VkDescriptorSetAllocateInfoWrapper {
+    allocate_info: vk_sys::VkDescriptorSetAllocateInfo,
+    descriptor_pool: DescriptorPool,
+    set_layouts: Vec<DescriptorSetLayout>,
+    vk_set_layouts: Vec<vk_sys::VkDescriptorSetLayout>,
+}
+
+impl Deref for VkDescriptorSetAllocateInfoWrapper {
+    type Target = vk_sys::VkDescriptorSetAllocateInfo;
+
+    fn deref(&self) -> &Self::Target {
+        &self.allocate_info
+    }
+}
+
+impl AsRef<vk_sys::VkDescriptorSetAllocateInfo> for VkDescriptorSetAllocateInfoWrapper {
+    fn as_ref(&self) -> &vk_sys::VkDescriptorSetAllocateInfo {
+        &self.allocate_info
+    }
+}
+
+impl<'a> From<&'a DescriptorSetAllocateInfo> for VkDescriptorSetAllocateInfoWrapper {
+    fn from(allocate_info: &'a DescriptorSetAllocateInfo) -> Self {
+        let vk_set_layouts: Vec<_> = allocate_info.set_layouts.iter().map(DescriptorSetLayout::handle).collect();
+
+        VkDescriptorSetAllocateInfoWrapper {
+            allocate_info: vk_sys::VkDescriptorSetAllocateInfo {
+                sType: vk_sys::VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO,
+                pNext: ptr::null(),
+                descriptorPool: allocate_info.descriptor_pool.handle(),
+                descriptorSetCount: vk_set_layouts.len() as u32,
+                pSetLayouts: vk_set_layouts.as_ptr(),
+            },
+            descriptor_pool: allocate_info.descriptor_pool.clone(),
+            set_layouts: allocate_info.set_layouts.clone(),
+            vk_set_layouts: vk_set_layouts,
+        }
+    }
+}
+
 #[derive(Debug, Copy, Clone)]
 pub struct AttachmentDescription {
     pub flags: vk_sys::VkAttachmentDescriptionFlags,
