@@ -500,6 +500,32 @@ impl From<AttachmentIndex> for u32 {
 }
 
 #[derive(Debug, Copy, Clone)]
+pub enum QueueFamilyIndex {
+    Index(u32),
+    Ignored,
+}
+
+impl From<u32> for QueueFamilyIndex {
+    fn from(index: u32) -> Self {
+        if index != vk_sys::VK_QUEUE_FAMILY_IGNORED {
+            QueueFamilyIndex::Index(index)
+        }
+        else {
+            QueueFamilyIndex::Ignored
+        }
+    }
+}
+
+impl From<QueueFamilyIndex> for u32 {
+    fn from(index: QueueFamilyIndex) -> Self {
+        match index {
+            QueueFamilyIndex::Index(index) => index,
+            QueueFamilyIndex::Ignored => vk_sys::VK_QUEUE_FAMILY_IGNORED,
+        }
+    }
+}
+
+#[derive(Debug, Copy, Clone)]
 pub struct Version {
     pub major: u32,
     pub minor: u32,
@@ -8514,8 +8540,8 @@ pub struct BufferMemoryBarrier {
     pub chain: Vec<BufferMemoryBarrierChainElement>,
     pub src_access_mask: AccessFlags,
     pub dst_access_mask: AccessFlags,
-    pub src_queue_family_index: u32,
-    pub dst_queue_family_index: u32,
+    pub src_queue_family_index: QueueFamilyIndex,
+    pub dst_queue_family_index: QueueFamilyIndex,
     pub buffer: Buffer,
     pub offset: u64,
     pub size: OptionalDeviceSize,
@@ -8549,8 +8575,8 @@ impl<'a> From<&'a BufferMemoryBarrier> for VkBufferMemoryBarrierWrapper {
                 pNext: ptr::null(),
                 srcAccessMask: barrier.src_access_mask,
                 dstAccessMask: barrier.dst_access_mask,
-                srcQueueFamilyIndex: barrier.src_queue_family_index,
-                dstQueueFamilyIndex: barrier.dst_queue_family_index,
+                srcQueueFamilyIndex: barrier.src_queue_family_index.into(),
+                dstQueueFamilyIndex: barrier.dst_queue_family_index.into(),
                 buffer: barrier.buffer.handle(),
                 offset: barrier.offset,
                 size: barrier.size.into(),
@@ -8571,8 +8597,8 @@ pub struct ImageMemoryBarrier {
     pub dst_access_mask: AccessFlags,
     pub old_layout: ImageLayout,
     pub new_layout: ImageLayout,
-    pub src_queue_family_index: u32,
-    pub dst_queue_family_index: u32,
+    pub src_queue_family_index: QueueFamilyIndex,
+    pub dst_queue_family_index: QueueFamilyIndex,
     pub image: Image,
     pub subresource_range: ImageSubresourceRange,
 }
@@ -8607,8 +8633,8 @@ impl<'a> From<&'a ImageMemoryBarrier> for VkImageMemoryBarrierWrapper {
                 dstAccessMask: barrier.dst_access_mask,
                 oldLayout: barrier.old_layout.into(),
                 newLayout: barrier.new_layout.into(),
-                srcQueueFamilyIndex: barrier.src_queue_family_index,
-                dstQueueFamilyIndex: barrier.dst_queue_family_index,
+                srcQueueFamilyIndex: barrier.src_queue_family_index.into(),
+                dstQueueFamilyIndex: barrier.dst_queue_family_index.into(),
                 image: barrier.image.handle(),
                 subresourceRange: (&barrier.subresource_range).into(),
             },
