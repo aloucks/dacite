@@ -8110,6 +8110,61 @@ impl<'a> From<&'a MemoryBarrier> for VkMemoryBarrierWrapper {
     }
 }
 
+#[derive(Debug, Clone)]
+pub enum BufferMemoryBarrierChainElement {
+}
+
+#[derive(Debug, Clone)]
+pub struct BufferMemoryBarrier {
+    pub chain: Vec<BufferMemoryBarrierChainElement>,
+    pub src_access_mask: vk_sys::VkAccessFlags,
+    pub dst_access_mask: vk_sys::VkAccessFlags,
+    pub src_queue_family_index: u32,
+    pub dst_queue_family_index: u32,
+    pub buffer: Buffer,
+    pub offset: u64,
+    pub size: OptionalDeviceSize,
+}
+
+#[derive(Debug)]
+struct VkBufferMemoryBarrierWrapper {
+    barrier: vk_sys::VkBufferMemoryBarrier,
+    buffer: Buffer,
+}
+
+impl Deref for VkBufferMemoryBarrierWrapper {
+    type Target = vk_sys::VkBufferMemoryBarrier;
+
+    fn deref(&self) -> &Self::Target {
+        &self.barrier
+    }
+}
+
+impl AsRef<vk_sys::VkBufferMemoryBarrier> for VkBufferMemoryBarrierWrapper {
+    fn as_ref(&self) -> &vk_sys::VkBufferMemoryBarrier {
+        &self.barrier
+    }
+}
+
+impl<'a> From<&'a BufferMemoryBarrier> for VkBufferMemoryBarrierWrapper {
+    fn from(barrier: &'a BufferMemoryBarrier) -> Self {
+        VkBufferMemoryBarrierWrapper {
+            barrier: vk_sys::VkBufferMemoryBarrier {
+                sType: vk_sys::VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER,
+                pNext: ptr::null(),
+                srcAccessMask: barrier.src_access_mask,
+                dstAccessMask: barrier.dst_access_mask,
+                srcQueueFamilyIndex: barrier.src_queue_family_index,
+                dstQueueFamilyIndex: barrier.dst_queue_family_index,
+                buffer: barrier.buffer.handle(),
+                offset: barrier.offset,
+                size: barrier.size.into(),
+            },
+            buffer: barrier.buffer.clone(),
+        }
+    }
+}
+
 #[derive(Debug, Copy, Clone)]
 pub struct DispatchIndirectCommand {
     pub x: u32,
