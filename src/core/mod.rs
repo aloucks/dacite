@@ -6264,6 +6264,73 @@ impl<'a> From<&'a GraphicsPipelineCreateInfo> for VkGraphicsPipelineCreateInfoWr
     }
 }
 
+#[derive(Debug, Clone)]
+pub enum ComputePipelineCreateInfoChainElement {
+}
+
+#[derive(Debug, Clone)]
+pub struct ComputePipelineCreateInfo {
+    pub chain: Vec<ComputePipelineCreateInfoChainElement>,
+    pub flags: vk_sys::VkPipelineCreateFlags,
+    pub stage: PipelineShaderStageCreateInfo,
+    pub layout: PipelineLayout,
+    pub base_pipeline: Option<Pipeline>,
+    pub base_pipeline_index: Option<u32>,
+}
+
+#[derive(Debug)]
+struct VkComputePipelineCreateInfoWrapper {
+    create_info: vk_sys::VkComputePipelineCreateInfo,
+    stage: VkPipelineShaderStageCreateInfoWrapper,
+    layout: PipelineLayout,
+    base_pipeline: Option<Pipeline>,
+}
+
+impl Deref for VkComputePipelineCreateInfoWrapper {
+    type Target = vk_sys::VkComputePipelineCreateInfo;
+
+    fn deref(&self) -> &Self::Target {
+        &self.create_info
+    }
+}
+
+impl AsRef<vk_sys::VkComputePipelineCreateInfo> for VkComputePipelineCreateInfoWrapper {
+    fn as_ref(&self) -> &vk_sys::VkComputePipelineCreateInfo {
+        &self.create_info
+    }
+}
+
+impl<'a> From<&'a ComputePipelineCreateInfo> for VkComputePipelineCreateInfoWrapper {
+    fn from(create_info: &'a ComputePipelineCreateInfo) -> Self {
+        let stage: VkPipelineShaderStageCreateInfoWrapper = (&create_info.stage).into();
+
+        let (base_pipeline_handle, base_pipeline) = match create_info.base_pipeline {
+            Some(ref base_pipeline) => (base_pipeline.handle(), Some(base_pipeline.clone())),
+            None => (ptr::null_mut(), None),
+        };
+
+        let base_pipeline_index = match create_info.base_pipeline_index {
+            Some(base_pipeline_index) => base_pipeline_index as i32,
+            None => -1,
+        };
+
+        VkComputePipelineCreateInfoWrapper {
+            create_info: vk_sys::VkComputePipelineCreateInfo {
+                sType: vk_sys::VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO,
+                pNext: ptr::null(),
+                flags: create_info.flags,
+                stage: (&*stage).clone(),
+                layout: create_info.layout.handle(),
+                basePipelineHandle: base_pipeline_handle,
+                basePipelineIndex: base_pipeline_index,
+            },
+            stage: stage,
+            layout: create_info.layout.clone(),
+            base_pipeline: base_pipeline,
+        }
+    }
+}
+
 #[derive(Debug, Copy, Clone)]
 pub struct PushConstantRange {
     pub stage_flags: vk_sys::VkShaderStageFlags,
