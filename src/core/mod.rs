@@ -5933,6 +5933,94 @@ impl<'a> From<&'a PipelineColorBlendAttachmentState> for vk_sys::VkPipelineColor
     }
 }
 
+#[derive(Debug, Clone)]
+pub enum PipelineColorBlendStateCreateInfoChainElement {
+}
+
+#[derive(Debug, Clone)]
+pub struct PipelineColorBlendStateCreateInfo {
+    pub chain: Vec<PipelineColorBlendStateCreateInfoChainElement>,
+    pub flags: vk_sys::VkPipelineColorBlendStateCreateFlags,
+    pub logic_op_enable: bool,
+    pub logic_op: LogicOp,
+    pub attachments: Option<Vec<PipelineColorBlendAttachmentState>>,
+    pub blend_constants: [f32; 4],
+}
+
+impl<'a> From<&'a vk_sys::VkPipelineColorBlendStateCreateInfo> for PipelineColorBlendStateCreateInfo {
+    fn from(create_info: &'a vk_sys::VkPipelineColorBlendStateCreateInfo) -> Self {
+        assert!(create_info.pNext.is_null());
+
+        let attachments = if !create_info.pAttachments.is_null() {
+            unsafe {
+                Some(slice::from_raw_parts(create_info.pAttachments, create_info.attachmentCount as usize)
+                     .iter()
+                     .map(From::from)
+                     .collect())
+            }
+        }
+        else {
+            None
+        };
+
+        PipelineColorBlendStateCreateInfo {
+            chain: vec![],
+            flags: create_info.flags,
+            logic_op_enable: utils::from_vk_bool(create_info.logicOpEnable),
+            logic_op: create_info.logicOp.into(),
+            attachments: attachments,
+            blend_constants: create_info.blendConstants,
+        }
+    }
+}
+
+#[derive(Debug)]
+struct VkPipelineColorBlendStateCreateInfoWrapper {
+    create_info: vk_sys::VkPipelineColorBlendStateCreateInfo,
+    attachments: Option<Vec<vk_sys::VkPipelineColorBlendAttachmentState>>,
+}
+
+impl Deref for VkPipelineColorBlendStateCreateInfoWrapper {
+    type Target = vk_sys::VkPipelineColorBlendStateCreateInfo;
+
+    fn deref(&self) -> &Self::Target {
+        &self.create_info
+    }
+}
+
+impl AsRef<vk_sys::VkPipelineColorBlendStateCreateInfo> for VkPipelineColorBlendStateCreateInfoWrapper {
+    fn as_ref(&self) -> &vk_sys::VkPipelineColorBlendStateCreateInfo {
+        &self.create_info
+    }
+}
+
+impl<'a> From<&'a PipelineColorBlendStateCreateInfo> for VkPipelineColorBlendStateCreateInfoWrapper {
+    fn from(create_info: &'a PipelineColorBlendStateCreateInfo) -> Self {
+        let (attachments_count, attachments_ptr, attachments) = match create_info.attachments {
+            Some(ref attachments) => {
+                let attachments: Vec<_> = attachments.iter().map(From::from).collect();
+                (attachments.len() as u32, attachments.as_ptr(), Some(attachments))
+            }
+
+            None => (0, ptr::null(), None),
+        };
+
+        VkPipelineColorBlendStateCreateInfoWrapper {
+            create_info: vk_sys::VkPipelineColorBlendStateCreateInfo {
+                sType: vk_sys::VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO,
+                pNext: ptr::null(),
+                flags: create_info.flags,
+                logicOpEnable: utils::to_vk_bool(create_info.logic_op_enable),
+                logicOp: create_info.logic_op.into(),
+                attachmentCount: attachments_count,
+                pAttachments: attachments_ptr,
+                blendConstants: create_info.blend_constants,
+            },
+            attachments: attachments,
+        }
+    }
+}
+
 #[derive(Debug, Copy, Clone)]
 pub struct PushConstantRange {
     pub stage_flags: vk_sys::VkShaderStageFlags,
