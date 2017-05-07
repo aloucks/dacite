@@ -12,7 +12,7 @@ license = "ISC"
 gitlab = { repository = "https://gitlab.com/dennis-hamester/dacite" }
 
 [dependencies]
-libc = "0.2.22"
+libc = "0.2"
 
 [dependencies.vk-sys]
 git = "https://dennis-hamester@gitlab.com/dennis-hamester/vk-sys.git"
