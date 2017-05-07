@@ -13,7 +13,7 @@
 // PERFORMANCE OF THIS SOFTWARE.
 
 extern crate libc;
-extern crate vk_sys;
+extern crate vks;
 
 pub trait AsNativeVkObject {
     type NativeVkObject;

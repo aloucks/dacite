@@ -17,11 +17,11 @@ use core::allocator_helper::AllocatorHelper;
 use core::{Device, Sampler};
 use std::ptr;
 use std::sync::Arc;
-use vk_sys;
+use vks;
 
 #[derive(Debug)]
 struct Inner {
-    handle: vk_sys::VkDescriptorSetLayout,
+    handle: vks::VkDescriptorSetLayout,
     device: Device,
     allocator: Option<AllocatorHelper>,
     samplers: Vec<Sampler>,
@@ -44,7 +44,7 @@ impl Drop for Inner {
 pub struct DescriptorSetLayout(Arc<Inner>);
 
 impl AsNativeVkObject for DescriptorSetLayout {
-    type NativeVkObject = vk_sys::VkDescriptorSetLayout;
+    type NativeVkObject = vks::VkDescriptorSetLayout;
 
     #[inline]
     fn as_native_vk_object(&self) -> Self::NativeVkObject {
@@ -53,7 +53,7 @@ impl AsNativeVkObject for DescriptorSetLayout {
 }
 
 impl DescriptorSetLayout {
-    pub(crate) fn new(handle: vk_sys::VkDescriptorSetLayout, device: Device, allocator: Option<AllocatorHelper>, samplers: Vec<Sampler>) -> Self {
+    pub(crate) fn new(handle: vks::VkDescriptorSetLayout, device: Device, allocator: Option<AllocatorHelper>, samplers: Vec<Sampler>) -> Self {
         DescriptorSetLayout(Arc::new(Inner {
             handle: handle,
             device: device,
@@ -63,7 +63,7 @@ impl DescriptorSetLayout {
     }
 
     #[inline]
-    pub(crate) fn handle(&self) -> vk_sys::VkDescriptorSetLayout {
+    pub(crate) fn handle(&self) -> vks::VkDescriptorSetLayout {
         self.0.handle
     }
 }

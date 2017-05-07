@@ -17,11 +17,11 @@ use core::Device;
 use core::allocator_helper::AllocatorHelper;
 use std::ptr;
 use std::sync::Arc;
-use vk_sys;
+use vks;
 
 #[derive(Debug)]
 struct Inner {
-    handle: vk_sys::VkImage,
+    handle: vks::VkImage,
     device: Device,
     allocator: Option<AllocatorHelper>,
 }
@@ -43,7 +43,7 @@ impl Drop for Inner {
 pub struct Image(Arc<Inner>);
 
 impl AsNativeVkObject for Image {
-    type NativeVkObject = vk_sys::VkImage;
+    type NativeVkObject = vks::VkImage;
 
     #[inline]
     fn as_native_vk_object(&self) -> Self::NativeVkObject {
@@ -52,7 +52,7 @@ impl AsNativeVkObject for Image {
 }
 
 impl Image {
-    pub(crate) fn new(handle: vk_sys::VkImage, device: Device, allocator: Option<AllocatorHelper>) -> Self {
+    pub(crate) fn new(handle: vks::VkImage, device: Device, allocator: Option<AllocatorHelper>) -> Self {
         Image(Arc::new(Inner {
             handle: handle,
             device: device,
@@ -61,7 +61,7 @@ impl Image {
     }
 
     #[inline]
-    pub(crate) fn handle(&self) -> vk_sys::VkImage {
+    pub(crate) fn handle(&self) -> vks::VkImage {
         self.0.handle
     }
 }

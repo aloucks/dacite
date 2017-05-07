@@ -13,7 +13,6 @@
 // PERFORMANCE OF THIS SOFTWARE.
 
 extern crate dacite;
-extern crate vk_sys;
 
 fn main() {
     let instance_extensions = dacite::core::Instance::enumerate_instance_extension_properties(None).unwrap();
@@ -51,7 +50,7 @@ fn main() {
 
     let instance_create_info = dacite::core::InstanceCreateInfo {
         chain: vec![],
-        flags: vk_sys::VkInstanceCreateFlags::empty(),
+        flags: dacite::core::InstanceCreateFlags::empty(),
         application_info: Some(dacite::core::ApplicationInfo {
             chain: vec![],
             application_name: Some("dacite info example".to_owned()),

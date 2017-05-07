@@ -17,11 +17,11 @@ use core::Device;
 use core::allocator_helper::AllocatorHelper;
 use std::ptr;
 use std::sync::Arc;
-use vk_sys;
+use vks;
 
 #[derive(Debug)]
 struct Inner {
-    handle: vk_sys::VkQueryPool,
+    handle: vks::VkQueryPool,
     device: Device,
     allocator: Option<AllocatorHelper>,
 }
@@ -43,7 +43,7 @@ impl Drop for Inner {
 pub struct QueryPool(Arc<Inner>);
 
 impl AsNativeVkObject for QueryPool {
-    type NativeVkObject = vk_sys::VkQueryPool;
+    type NativeVkObject = vks::VkQueryPool;
 
     #[inline]
     fn as_native_vk_object(&self) -> Self::NativeVkObject {
@@ -52,7 +52,7 @@ impl AsNativeVkObject for QueryPool {
 }
 
 impl QueryPool {
-    pub(crate) fn new(handle: vk_sys::VkQueryPool, device: Device, allocator: Option<AllocatorHelper>) -> Self {
+    pub(crate) fn new(handle: vks::VkQueryPool, device: Device, allocator: Option<AllocatorHelper>) -> Self {
         QueryPool(Arc::new(Inner {
             handle: handle,
             device: device,
@@ -61,7 +61,7 @@ impl QueryPool {
     }
 
     #[inline]
-    pub(crate) fn handle(&self) -> vk_sys::VkQueryPool {
+    pub(crate) fn handle(&self) -> vks::VkQueryPool {
         self.0.handle
     }
 }

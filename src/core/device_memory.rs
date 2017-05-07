@@ -17,11 +17,11 @@ use core::Device;
 use core::allocator_helper::AllocatorHelper;
 use std::ptr;
 use std::sync::Arc;
-use vk_sys;
+use vks;
 
 #[derive(Debug)]
 struct Inner {
-    handle: vk_sys::VkDeviceMemory,
+    handle: vks::VkDeviceMemory,
     device: Device,
     allocator: Option<AllocatorHelper>,
 }
@@ -43,7 +43,7 @@ impl Drop for Inner {
 pub struct DeviceMemory(Arc<Inner>);
 
 impl AsNativeVkObject for DeviceMemory {
-    type NativeVkObject = vk_sys::VkDeviceMemory;
+    type NativeVkObject = vks::VkDeviceMemory;
 
     #[inline]
     fn as_native_vk_object(&self) -> Self::NativeVkObject {
@@ -52,7 +52,7 @@ impl AsNativeVkObject for DeviceMemory {
 }
 
 impl DeviceMemory {
-    pub(crate) fn new(handle: vk_sys::VkDeviceMemory, device: Device, allocator: Option<AllocatorHelper>) -> Self {
+    pub(crate) fn new(handle: vks::VkDeviceMemory, device: Device, allocator: Option<AllocatorHelper>) -> Self {
         DeviceMemory(Arc::new(Inner {
             handle: handle,
             device: device,
@@ -61,7 +61,7 @@ impl DeviceMemory {
     }
 
     #[inline]
-    pub(crate) fn handle(&self) -> vk_sys::VkDeviceMemory {
+    pub(crate) fn handle(&self) -> vks::VkDeviceMemory {
         self.0.handle
     }
 }

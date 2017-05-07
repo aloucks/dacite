@@ -15,20 +15,20 @@
 use libc::c_char;
 use std::ffi::{CStr, CString};
 use std::ptr;
-use vk_sys;
+use vks;
 
 #[inline]
-pub fn from_vk_bool(v: vk_sys::VkBool32) -> bool {
-    v != vk_sys::VK_FALSE
+pub fn from_vk_bool(v: vks::VkBool32) -> bool {
+    v != vks::VK_FALSE
 }
 
 #[inline]
-pub fn to_vk_bool(v: bool) -> vk_sys::VkBool32 {
+pub fn to_vk_bool(v: bool) -> vks::VkBool32 {
     if v {
-        vk_sys::VK_TRUE
+        vks::VK_TRUE
     }
     else {
-        vk_sys::VK_FALSE
+        vks::VK_FALSE
     }
 }
 

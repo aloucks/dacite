@@ -17,11 +17,11 @@ use core::Device;
 use core::allocator_helper::AllocatorHelper;
 use std::ptr;
 use std::sync::Arc;
-use vk_sys;
+use vks;
 
 #[derive(Debug)]
 struct Inner {
-    handle: vk_sys::VkShaderModule,
+    handle: vks::VkShaderModule,
     device: Device,
     allocator: Option<AllocatorHelper>,
 }
@@ -43,7 +43,7 @@ impl Drop for Inner {
 pub struct ShaderModule(Arc<Inner>);
 
 impl AsNativeVkObject for ShaderModule {
-    type NativeVkObject = vk_sys::VkShaderModule;
+    type NativeVkObject = vks::VkShaderModule;
 
     #[inline]
     fn as_native_vk_object(&self) -> Self::NativeVkObject {
@@ -52,7 +52,7 @@ impl AsNativeVkObject for ShaderModule {
 }
 
 impl ShaderModule {
-    pub(crate) fn new(handle: vk_sys::VkShaderModule, device: Device, allocator: Option<AllocatorHelper>) -> Self {
+    pub(crate) fn new(handle: vks::VkShaderModule, device: Device, allocator: Option<AllocatorHelper>) -> Self {
         ShaderModule(Arc::new(Inner {
             handle: handle,
             device: device,
@@ -61,7 +61,7 @@ impl ShaderModule {
     }
 
     #[inline]
-    pub(crate) fn handle(&self) -> vk_sys::VkShaderModule {
+    pub(crate) fn handle(&self) -> vks::VkShaderModule {
         self.0.handle
     }
 }

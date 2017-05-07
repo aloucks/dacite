@@ -14,16 +14,16 @@
 
 use AsNativeVkObject;
 use core::Device;
-use vk_sys;
+use vks;
 
 #[derive(Debug, Clone)]
 pub struct Queue {
-    handle: vk_sys::VkQueue,
+    handle: vks::VkQueue,
     device: Device,
 }
 
 impl AsNativeVkObject for Queue {
-    type NativeVkObject = vk_sys::VkQueue;
+    type NativeVkObject = vks::VkQueue;
 
     #[inline]
     fn as_native_vk_object(&self) -> Self::NativeVkObject {
@@ -32,7 +32,7 @@ impl AsNativeVkObject for Queue {
 }
 
 impl Queue {
-    pub(crate) fn new(handle: vk_sys::VkQueue, device: Device) -> Self {
+    pub(crate) fn new(handle: vks::VkQueue, device: Device) -> Self {
         Queue {
             handle: handle,
             device: device,

@@ -15,11 +15,11 @@
 use AsNativeVkObject;
 use core::CommandPool;
 use std::sync::Arc;
-use vk_sys;
+use vks;
 
 #[derive(Debug)]
 struct Inner {
-    handle: vk_sys::VkCommandBuffer,
+    handle: vks::VkCommandBuffer,
     command_pool: CommandPool,
 }
 
@@ -35,7 +35,7 @@ impl Drop for Inner {
 pub struct CommandBuffer(Arc<Inner>);
 
 impl AsNativeVkObject for CommandBuffer {
-    type NativeVkObject = vk_sys::VkCommandBuffer;
+    type NativeVkObject = vks::VkCommandBuffer;
 
     #[inline]
     fn as_native_vk_object(&self) -> Self::NativeVkObject {
@@ -44,7 +44,7 @@ impl AsNativeVkObject for CommandBuffer {
 }
 
 impl CommandBuffer {
-    pub(crate) fn new(handle: vk_sys::VkCommandBuffer, command_pool: CommandPool) -> Self {
+    pub(crate) fn new(handle: vks::VkCommandBuffer, command_pool: CommandPool) -> Self {
         CommandBuffer(Arc::new(Inner {
             handle: handle,
             command_pool: command_pool,
@@ -52,7 +52,7 @@ impl CommandBuffer {
     }
 
     #[inline]
-    pub(crate) fn handle(&self) -> vk_sys::VkCommandBuffer {
+    pub(crate) fn handle(&self) -> vks::VkCommandBuffer {
         self.0.handle
     }
 }

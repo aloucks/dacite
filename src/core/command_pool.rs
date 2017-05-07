@@ -18,11 +18,11 @@ use core::allocator_helper::AllocatorHelper;
 use core::{self, CommandBuffer, Device};
 use std::ptr;
 use std::sync::Arc;
-use vk_sys;
+use vks;
 
 #[derive(Debug)]
 struct Inner {
-    handle: vk_sys::VkCommandPool,
+    handle: vks::VkCommandPool,
     device: Device,
     allocator: Option<AllocatorHelper>,
 }
@@ -44,7 +44,7 @@ impl Drop for Inner {
 pub struct CommandPool(Arc<Inner>);
 
 impl AsNativeVkObject for CommandPool {
-    type NativeVkObject = vk_sys::VkCommandPool;
+    type NativeVkObject = vks::VkCommandPool;
 
     #[inline]
     fn as_native_vk_object(&self) -> Self::NativeVkObject {
@@ -53,7 +53,7 @@ impl AsNativeVkObject for CommandPool {
 }
 
 impl CommandPool {
-    pub(crate) fn new(handle: vk_sys::VkCommandPool, device: Device, allocator: Option<AllocatorHelper>) -> Self {
+    pub(crate) fn new(handle: vks::VkCommandPool, device: Device, allocator: Option<AllocatorHelper>) -> Self {
         CommandPool(Arc::new(Inner {
             handle: handle,
             device: device,
@@ -62,17 +62,17 @@ impl CommandPool {
     }
 
     #[inline]
-    pub(crate) fn handle(&self) -> vk_sys::VkCommandPool {
+    pub(crate) fn handle(&self) -> vks::VkCommandPool {
         self.0.handle
     }
 
     #[inline]
-    pub(crate) fn loader(&self) -> &vk_sys::DeviceProcAddrLoader {
+    pub(crate) fn loader(&self) -> &vks::DeviceProcAddrLoader {
         self.0.device.loader()
     }
 
     #[inline]
-    pub(crate) fn device_handle(&self) -> vk_sys::VkDevice {
+    pub(crate) fn device_handle(&self) -> vks::VkDevice {
         self.0.device.handle()
     }
 
@@ -81,7 +81,7 @@ impl CommandPool {
             (self.loader().core.vkResetCommandPool)(self.device_handle(), self.handle(), flags)
         };
 
-        if res == vk_sys::VK_SUCCESS {
+        if res == vks::VK_SUCCESS {
             Ok(())
         }
         else {
@@ -102,7 +102,7 @@ impl CommandPool {
             (self.loader().core.vkAllocateCommandBuffers)(self.device_handle(), allocate_info.as_ref(), command_buffers.as_mut_ptr())
         };
 
-        if res == vk_sys::VK_SUCCESS {
+        if res == vks::VK_SUCCESS {
             Ok(command_buffers.iter().map(|&c| CommandBuffer::new(c, self.clone())).collect())
         }
         else {

@@ -17,11 +17,11 @@ use core::Device;
 use core::allocator_helper::AllocatorHelper;
 use std::ptr;
 use std::sync::Arc;
-use vk_sys;
+use vks;
 
 #[derive(Debug)]
 struct Inner {
-    handle: vk_sys::VkDescriptorPool,
+    handle: vks::VkDescriptorPool,
     device: Device,
     allocator: Option<AllocatorHelper>,
 }
@@ -43,7 +43,7 @@ impl Drop for Inner {
 pub struct DescriptorPool(Arc<Inner>);
 
 impl AsNativeVkObject for DescriptorPool {
-    type NativeVkObject = vk_sys::VkDescriptorPool;
+    type NativeVkObject = vks::VkDescriptorPool;
 
     #[inline]
     fn as_native_vk_object(&self) -> Self::NativeVkObject {
@@ -52,7 +52,7 @@ impl AsNativeVkObject for DescriptorPool {
 }
 
 impl DescriptorPool {
-    pub(crate) fn new(handle: vk_sys::VkDescriptorPool, device: Device, allocator: Option<AllocatorHelper>) -> Self {
+    pub(crate) fn new(handle: vks::VkDescriptorPool, device: Device, allocator: Option<AllocatorHelper>) -> Self {
         DescriptorPool(Arc::new(Inner {
             handle: handle,
             device: device,
@@ -61,7 +61,7 @@ impl DescriptorPool {
     }
 
     #[inline]
-    pub(crate) fn handle(&self) -> vk_sys::VkDescriptorPool {
+    pub(crate) fn handle(&self) -> vks::VkDescriptorPool {
         self.0.handle
     }
 }

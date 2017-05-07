@@ -19,13 +19,13 @@ use core;
 use std::ptr;
 use std::sync::Arc;
 use utils;
-use vk_sys;
+use vks;
 
 #[derive(Debug)]
 struct Inner {
-    handle: vk_sys::VkInstance,
+    handle: vks::VkInstance,
     allocator: Option<AllocatorHelper>,
-    loader: vk_sys::InstanceProcAddrLoader,
+    loader: vks::InstanceProcAddrLoader,
 }
 
 impl Drop for Inner {
@@ -45,7 +45,7 @@ impl Drop for Inner {
 pub struct Instance(Arc<Inner>);
 
 impl AsNativeVkObject for Instance {
-    type NativeVkObject = vk_sys::VkInstance;
+    type NativeVkObject = vks::VkInstance;
 
     #[inline]
     fn as_native_vk_object(&self) -> Self::NativeVkObject {
@@ -55,12 +55,12 @@ impl AsNativeVkObject for Instance {
 
 impl Instance {
     #[inline]
-    pub(crate) fn handle(&self) -> vk_sys::VkInstance {
+    pub(crate) fn handle(&self) -> vks::VkInstance {
         self.0.handle
     }
 
     #[inline]
-    pub(crate) fn loader(&self) -> &vk_sys::InstanceProcAddrLoader {
+    pub(crate) fn loader(&self) -> &vks::InstanceProcAddrLoader {
         &self.0.loader
     }
 
@@ -68,7 +68,7 @@ impl Instance {
         let allocator_helper = allocator.map(AllocatorHelper::new);
         let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), |a| &a.callbacks);
 
-        let mut loader = vk_sys::InstanceProcAddrLoader::new(vk_sys::vkGetInstanceProcAddr);
+        let mut loader = vks::InstanceProcAddrLoader::from_get_instance_proc_addr(vks::vkGetInstanceProcAddr);
         unsafe {
             loader.load_core_null_instance();
         }
@@ -78,7 +78,7 @@ impl Instance {
         let res = unsafe {
             (loader.core_null_instance.vkCreateInstance)(create_info.as_ref(), allocation_callbacks, &mut instance)
         };
-        if res != vk_sys::VK_SUCCESS {
+        if res != vks::VK_SUCCESS {
             return Err(res.into());
         }
 
@@ -98,7 +98,7 @@ impl Instance {
         let res = unsafe {
             (self.loader().core.vkEnumeratePhysicalDevices)(self.handle(), &mut num_physical_devices, ptr::null_mut())
         };
-        if res != vk_sys::VK_SUCCESS {
+        if res != vks::VK_SUCCESS {
             return Err(res.into());
         }
 
@@ -106,7 +106,7 @@ impl Instance {
         let res = unsafe {
             (self.loader().core.vkEnumeratePhysicalDevices)(self.handle(), &mut num_physical_devices, physical_devices.as_mut_ptr())
         };
-        if res != vk_sys::VK_SUCCESS {
+        if res != vks::VK_SUCCESS {
             return Err(res.into());
         }
         unsafe {
@@ -123,18 +123,18 @@ impl Instance {
 
     pub fn enumerate_instance_layer_properties() -> Result<Vec<core::LayerProperties>> {
         unsafe {
-            let mut loader = vk_sys::instance_proc_addr_loader::CoreNullInstance::new();
-            loader.load(vk_sys::vkGetInstanceProcAddr, ptr::null_mut());
+            let mut loader = vks::instance_proc_addr_loader::CoreNullInstance::new();
+            loader.load(vks::vkGetInstanceProcAddr, ptr::null_mut());
 
             let mut num_layer_properties = 0;
             let res = (loader.vkEnumerateInstanceLayerProperties)(&mut num_layer_properties, ptr::null_mut());
-            if res != vk_sys::VK_SUCCESS {
+            if res != vks::VK_SUCCESS {
                 return Err(res.into());
             }
 
             let mut layer_properties = Vec::with_capacity(num_layer_properties as usize);
             let res = (loader.vkEnumerateInstanceLayerProperties)(&mut num_layer_properties, layer_properties.as_mut_ptr());
-            if res != vk_sys::VK_SUCCESS {
+            if res != vks::VK_SUCCESS {
                 return Err(res.into());
             }
             layer_properties.set_len(num_layer_properties as usize);
@@ -145,20 +145,20 @@ impl Instance {
 
     pub fn enumerate_instance_extension_properties(layer_name: Option<&str>) -> Result<Vec<core::InstanceExtensionProperties>> {
         unsafe {
-            let mut loader = vk_sys::instance_proc_addr_loader::CoreNullInstance::new();
-            loader.load(vk_sys::vkGetInstanceProcAddr, ptr::null_mut());
+            let mut loader = vks::instance_proc_addr_loader::CoreNullInstance::new();
+            loader.load(vks::vkGetInstanceProcAddr, ptr::null_mut());
 
             let layer_name_cstr = utils::cstr_from_str(layer_name);
 
             let mut num_extension_properties = 0;
             let res = (loader.vkEnumerateInstanceExtensionProperties)(layer_name_cstr.1, &mut num_extension_properties, ptr::null_mut());
-            if res != vk_sys::VK_SUCCESS {
+            if res != vks::VK_SUCCESS {
                 return Err(res.into());
             }
 
             let mut extension_properties = Vec::with_capacity(num_extension_properties as usize);
             let res = (loader.vkEnumerateInstanceExtensionProperties)(layer_name_cstr.1, &mut num_extension_properties, extension_properties.as_mut_ptr());
-            if res != vk_sys::VK_SUCCESS {
+            if res != vks::VK_SUCCESS {
                 return Err(res.into());
             }
             extension_properties.set_len(num_extension_properties as usize);

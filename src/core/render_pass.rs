@@ -17,11 +17,11 @@ use core::Device;
 use core::allocator_helper::AllocatorHelper;
 use std::ptr;
 use std::sync::Arc;
-use vk_sys;
+use vks;
 
 #[derive(Debug)]
 struct Inner {
-    handle: vk_sys::VkRenderPass,
+    handle: vks::VkRenderPass,
     device: Device,
     allocator: Option<AllocatorHelper>,
 }
@@ -43,7 +43,7 @@ impl Drop for Inner {
 pub struct RenderPass(Arc<Inner>);
 
 impl AsNativeVkObject for RenderPass {
-    type NativeVkObject = vk_sys::VkRenderPass;
+    type NativeVkObject = vks::VkRenderPass;
 
     #[inline]
     fn as_native_vk_object(&self) -> Self::NativeVkObject {
@@ -52,7 +52,7 @@ impl AsNativeVkObject for RenderPass {
 }
 
 impl RenderPass {
-    pub(crate) fn new(handle: vk_sys::VkRenderPass, device: Device, allocator: Option<AllocatorHelper>) -> Self {
+    pub(crate) fn new(handle: vks::VkRenderPass, device: Device, allocator: Option<AllocatorHelper>) -> Self {
         RenderPass(Arc::new(Inner {
             handle: handle,
             device: device,
@@ -61,7 +61,7 @@ impl RenderPass {
     }
 
     #[inline]
-    pub(crate) fn handle(&self) -> vk_sys::VkRenderPass {
+    pub(crate) fn handle(&self) -> vks::VkRenderPass {
         self.0.handle
     }
 }

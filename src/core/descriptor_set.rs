@@ -15,11 +15,11 @@
 use AsNativeVkObject;
 use core::{DescriptorPool, Device};
 use std::sync::Arc;
-use vk_sys;
+use vks;
 
 #[derive(Debug)]
 struct Inner {
-    handle: vk_sys::VkDescriptorSet,
+    handle: vks::VkDescriptorSet,
     device: Device,
     descriptor_pool: DescriptorPool,
 }
@@ -28,7 +28,7 @@ impl Drop for Inner {
     fn drop(&mut self) {
         unsafe {
             let res = (self.device.loader().core.vkFreeDescriptorSets)(self.device.handle(), self.descriptor_pool.handle(), 1, &self.handle);
-            assert_eq!(res, vk_sys::VK_SUCCESS);
+            assert_eq!(res, vks::VK_SUCCESS);
         }
     }
 }
@@ -37,7 +37,7 @@ impl Drop for Inner {
 pub struct DescriptorSet(Arc<Inner>);
 
 impl AsNativeVkObject for DescriptorSet {
-    type NativeVkObject = vk_sys::VkDescriptorSet;
+    type NativeVkObject = vks::VkDescriptorSet;
 
     #[inline]
     fn as_native_vk_object(&self) -> Self::NativeVkObject {
@@ -46,7 +46,7 @@ impl AsNativeVkObject for DescriptorSet {
 }
 
 impl DescriptorSet {
-    pub(crate) fn new(handle: vk_sys::VkDescriptorSet, device: Device, descriptor_pool: DescriptorPool) -> Self {
+    pub(crate) fn new(handle: vks::VkDescriptorSet, device: Device, descriptor_pool: DescriptorPool) -> Self {
         DescriptorSet(Arc::new(Inner {
             handle: handle,
             device: device,
@@ -55,7 +55,7 @@ impl DescriptorSet {
     }
 
     #[inline]
-    pub(crate) fn handle(&self) -> vk_sys::VkDescriptorSet {
+    pub(crate) fn handle(&self) -> vks::VkDescriptorSet {
         self.0.handle
     }
 }

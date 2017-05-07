@@ -17,11 +17,11 @@ use core::Device;
 use core::allocator_helper::AllocatorHelper;
 use std::ptr;
 use std::sync::Arc;
-use vk_sys;
+use vks;
 
 #[derive(Debug)]
 struct Inner {
-    handle: vk_sys::VkSemaphore,
+    handle: vks::VkSemaphore,
     device: Device,
     allocator: Option<AllocatorHelper>,
 }
@@ -43,7 +43,7 @@ impl Drop for Inner {
 pub struct Semaphore(Arc<Inner>);
 
 impl AsNativeVkObject for Semaphore {
-    type NativeVkObject = vk_sys::VkSemaphore;
+    type NativeVkObject = vks::VkSemaphore;
 
     #[inline]
     fn as_native_vk_object(&self) -> Self::NativeVkObject {
@@ -52,7 +52,7 @@ impl AsNativeVkObject for Semaphore {
 }
 
 impl Semaphore {
-    pub(crate) fn new(handle: vk_sys::VkSemaphore, device: Device, allocator: Option<AllocatorHelper>) -> Self {
+    pub(crate) fn new(handle: vks::VkSemaphore, device: Device, allocator: Option<AllocatorHelper>) -> Self {
         Semaphore(Arc::new(Inner {
             handle: handle,
             device: device,
@@ -61,7 +61,7 @@ impl Semaphore {
     }
 
     #[inline]
-    pub(crate) fn handle(&self) -> vk_sys::VkSemaphore {
+    pub(crate) fn handle(&self) -> vks::VkSemaphore {
         self.0.handle
     }
 }

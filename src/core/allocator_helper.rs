@@ -15,14 +15,14 @@
 use core;
 use libc::c_void;
 use std::mem;
-use vk_sys;
+use vks;
 
-unsafe extern "system" fn alloc(user_data: *mut c_void, size: usize, alignment: usize, allocation_scope: vk_sys::VkSystemAllocationScope) -> *mut c_void {
+unsafe extern "system" fn alloc(user_data: *mut c_void, size: usize, alignment: usize, allocation_scope: vks::VkSystemAllocationScope) -> *mut c_void {
     let allocator = &mut **(user_data as *mut *mut core::Allocator);
     allocator.alloc(size, alignment, allocation_scope.into())
 }
 
-unsafe extern "system" fn realloc(user_data: *mut c_void, original: *mut c_void, size: usize, alignment: usize, allocation_scope: vk_sys::VkSystemAllocationScope) -> *mut c_void {
+unsafe extern "system" fn realloc(user_data: *mut c_void, original: *mut c_void, size: usize, alignment: usize, allocation_scope: vks::VkSystemAllocationScope) -> *mut c_void {
     let allocator = &mut **(user_data as *mut *mut core::Allocator);
     allocator.realloc(original, size, alignment, allocation_scope.into())
 }
@@ -32,19 +32,19 @@ unsafe extern "system" fn free(user_data: *mut c_void, memory: *mut c_void) {
     allocator.free(memory);
 }
 
-unsafe extern "system" fn internal_alloc(user_data: *mut c_void, size: usize, allocation_type: vk_sys::VkInternalAllocationType, allocation_scope: vk_sys::VkSystemAllocationScope) {
+unsafe extern "system" fn internal_alloc(user_data: *mut c_void, size: usize, allocation_type: vks::VkInternalAllocationType, allocation_scope: vks::VkSystemAllocationScope) {
     let allocator = &mut **(user_data as *mut *mut core::Allocator);
     allocator.internal_alloc(size, allocation_type.into(), allocation_scope.into())
 }
 
-unsafe extern "system" fn internal_free(user_data: *mut c_void, size: usize, allocation_type: vk_sys::VkInternalAllocationType, allocation_scope: vk_sys::VkSystemAllocationScope) {
+unsafe extern "system" fn internal_free(user_data: *mut c_void, size: usize, allocation_type: vks::VkInternalAllocationType, allocation_scope: vks::VkSystemAllocationScope) {
     let allocator = &mut **(user_data as *mut *mut core::Allocator);
     allocator.internal_free(size, allocation_type.into(), allocation_scope.into())
 }
 
 #[derive(Debug)]
 pub struct AllocatorHelper {
-    pub callbacks: vk_sys::VkAllocationCallbacks,
+    pub callbacks: vks::VkAllocationCallbacks,
     allocator: *mut *mut core::Allocator,
 }
 
@@ -61,7 +61,7 @@ impl AllocatorHelper {
         let has_internal_alloc = allocator.has_internal_alloc();
         let allocator = Box::into_raw(Box::new(Box::into_raw(allocator)));
 
-        let mut allocation_callbacks = vk_sys::VkAllocationCallbacks {
+        let mut allocation_callbacks = vks::VkAllocationCallbacks {
             pUserData: allocator as *mut c_void,
             pfnAllocation: alloc,
             pfnReallocation: realloc,

@@ -19,16 +19,16 @@ use core::{self, Device, Instance};
 use std::mem;
 use std::ptr;
 use utils;
-use vk_sys;
+use vks;
 
 #[derive(Debug, Clone)]
 pub struct PhysicalDevice {
-    handle: vk_sys::VkPhysicalDevice,
+    handle: vks::VkPhysicalDevice,
     instance: Instance,
 }
 
 impl AsNativeVkObject for PhysicalDevice {
-    type NativeVkObject = vk_sys::VkPhysicalDevice;
+    type NativeVkObject = vks::VkPhysicalDevice;
 
     #[inline]
     fn as_native_vk_object(&self) -> Self::NativeVkObject {
@@ -37,7 +37,7 @@ impl AsNativeVkObject for PhysicalDevice {
 }
 
 impl PhysicalDevice {
-    pub(crate) fn new(handle: vk_sys::VkPhysicalDevice, instance: Instance) -> Self {
+    pub(crate) fn new(handle: vks::VkPhysicalDevice, instance: Instance) -> Self {
         PhysicalDevice {
             handle: handle,
             instance: instance,
@@ -45,7 +45,7 @@ impl PhysicalDevice {
     }
 
     #[inline]
-    pub(crate) fn loader(&self) -> &vk_sys::InstanceProcAddrLoader {
+    pub(crate) fn loader(&self) -> &vks::InstanceProcAddrLoader {
         self.instance.loader()
     }
 
@@ -69,13 +69,13 @@ impl PhysicalDevice {
         unsafe {
             let mut num_layer_properties = 0;
             let res = (self.loader().core.vkEnumerateDeviceLayerProperties)(self.handle, &mut num_layer_properties, ptr::null_mut());
-            if res != vk_sys::VK_SUCCESS {
+            if res != vks::VK_SUCCESS {
                 return Err(res.into());
             }
 
             let mut layer_properties = Vec::with_capacity(num_layer_properties as usize);
             let res = (self.loader().core.vkEnumerateDeviceLayerProperties)(self.handle, &mut num_layer_properties, layer_properties.as_mut_ptr());
-            if res != vk_sys::VK_SUCCESS {
+            if res != vks::VK_SUCCESS {
                 return Err(res.into());
             }
             layer_properties.set_len(num_layer_properties as usize);
@@ -90,13 +90,13 @@ impl PhysicalDevice {
 
             let mut num_extension_properties = 0;
             let res = (self.loader().core.vkEnumerateDeviceExtensionProperties)(self.handle, layer_name_cstr.1, &mut num_extension_properties, ptr::null_mut());
-            if res != vk_sys::VK_SUCCESS {
+            if res != vks::VK_SUCCESS {
                 return Err(res.into());
             }
 
             let mut extension_properties = Vec::with_capacity(num_extension_properties as usize);
             let res = (self.loader().core.vkEnumerateDeviceExtensionProperties)(self.handle, layer_name_cstr.1, &mut num_extension_properties, extension_properties.as_mut_ptr());
-            if res != vk_sys::VK_SUCCESS {
+            if res != vks::VK_SUCCESS {
                 return Err(res.into());
             }
             extension_properties.set_len(num_extension_properties as usize);
@@ -122,7 +122,7 @@ impl PhysicalDevice {
             (self.loader().core.vkGetPhysicalDeviceImageFormatProperties)(self.handle, format.into(), image_type.into(), tiling.into(), usage, flags, &mut properties)
         };
 
-        if res == vk_sys::VK_SUCCESS {
+        if res == vks::VK_SUCCESS {
             Ok((&properties).into())
         }
         else {
@@ -182,7 +182,7 @@ impl PhysicalDevice {
             (self.loader().core.vkCreateDevice)(self.handle, create_info.as_ref(), allocation_callbacks, &mut device)
         };
 
-        if res != vk_sys::VK_SUCCESS {
+        if res != vks::VK_SUCCESS {
             return Err(res.into());
         }
 

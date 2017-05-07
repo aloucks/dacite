@@ -14,12 +14,11 @@ gitlab = { repository = "https://gitlab.com/dennis-hamester/dacite" }
 [dependencies]
 libc = "0.2"
 
-[dependencies.vk-sys]
-git = "https://dennis-hamester@gitlab.com/dennis-hamester/vk-sys.git"
-tag = "0.12.0"
+[dependencies.vks]
+version = "0.13"
 default-features = false
 
 [features]
 default = [ "core_1_0_3" ]
 
-core_1_0_3 = [ "vk-sys/core_1_0_3" ]
+core_1_0_3 = [ "vks/core_1_0_3" ]

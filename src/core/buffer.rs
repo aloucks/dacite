@@ -17,11 +17,11 @@ use core::Device;
 use core::allocator_helper::AllocatorHelper;
 use std::ptr;
 use std::sync::Arc;
-use vk_sys;
+use vks;
 
 #[derive(Debug)]
 struct Inner {
-    handle: vk_sys::VkBuffer,
+    handle: vks::VkBuffer,
     device: Device,
     allocator: Option<AllocatorHelper>,
 }
@@ -43,7 +43,7 @@ impl Drop for Inner {
 pub struct Buffer(Arc<Inner>);
 
 impl AsNativeVkObject for Buffer {
-    type NativeVkObject = vk_sys::VkBuffer;
+    type NativeVkObject = vks::VkBuffer;
 
     #[inline]
     fn as_native_vk_object(&self) -> Self::NativeVkObject {
@@ -52,7 +52,7 @@ impl AsNativeVkObject for Buffer {
 }
 
 impl Buffer {
-    pub(crate) fn new(handle: vk_sys::VkBuffer, device: Device, allocator: Option<AllocatorHelper>) -> Self {
+    pub(crate) fn new(handle: vks::VkBuffer, device: Device, allocator: Option<AllocatorHelper>) -> Self {
         Buffer(Arc::new(Inner {
             handle: handle,
             device: device,
@@ -61,7 +61,7 @@ impl Buffer {
     }
 
     #[inline]
-    pub(crate) fn handle(&self) -> vk_sys::VkBuffer {
+    pub(crate) fn handle(&self) -> vks::VkBuffer {
         self.0.handle
     }
 }

@@ -17,11 +17,11 @@ use core::Device;
 use core::allocator_helper::AllocatorHelper;
 use std::ptr;
 use std::sync::Arc;
-use vk_sys;
+use vks;
 
 #[derive(Debug)]
 struct Inner {
-    handle: vk_sys::VkPipelineCache,
+    handle: vks::VkPipelineCache,
     device: Device,
     allocator: Option<AllocatorHelper>,
 }
@@ -43,7 +43,7 @@ impl Drop for Inner {
 pub struct PipelineCache(Arc<Inner>);
 
 impl AsNativeVkObject for PipelineCache {
-    type NativeVkObject = vk_sys::VkPipelineCache;
+    type NativeVkObject = vks::VkPipelineCache;
 
     #[inline]
     fn as_native_vk_object(&self) -> Self::NativeVkObject {
@@ -52,7 +52,7 @@ impl AsNativeVkObject for PipelineCache {
 }
 
 impl PipelineCache {
-    pub(crate) fn new(handle: vk_sys::VkPipelineCache, device: Device, allocator: Option<AllocatorHelper>) -> Self {
+    pub(crate) fn new(handle: vks::VkPipelineCache, device: Device, allocator: Option<AllocatorHelper>) -> Self {
         PipelineCache(Arc::new(Inner {
             handle: handle,
             device: device,
@@ -61,7 +61,7 @@ impl PipelineCache {
     }
 
     #[inline]
-    pub(crate) fn handle(&self) -> vk_sys::VkPipelineCache {
+    pub(crate) fn handle(&self) -> vks::VkPipelineCache {
         self.0.handle
     }
 }

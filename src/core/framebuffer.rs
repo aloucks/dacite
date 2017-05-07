@@ -17,11 +17,11 @@ use core::Device;
 use core::allocator_helper::AllocatorHelper;
 use std::ptr;
 use std::sync::Arc;
-use vk_sys;
+use vks;
 
 #[derive(Debug)]
 struct Inner {
-    handle: vk_sys::VkFramebuffer,
+    handle: vks::VkFramebuffer,
     device: Device,
     allocator: Option<AllocatorHelper>,
 }
@@ -43,7 +43,7 @@ impl Drop for Inner {
 pub struct Framebuffer(Arc<Inner>);
 
 impl AsNativeVkObject for Framebuffer {
-    type NativeVkObject = vk_sys::VkFramebuffer;
+    type NativeVkObject = vks::VkFramebuffer;
 
     #[inline]
     fn as_native_vk_object(&self) -> Self::NativeVkObject {
@@ -52,7 +52,7 @@ impl AsNativeVkObject for Framebuffer {
 }
 
 impl Framebuffer {
-    pub(crate) fn new(handle: vk_sys::VkFramebuffer, device: Device, allocator: Option<AllocatorHelper>) -> Self {
+    pub(crate) fn new(handle: vks::VkFramebuffer, device: Device, allocator: Option<AllocatorHelper>) -> Self {
         Framebuffer(Arc::new(Inner {
             handle: handle,
             device: device,
@@ -61,7 +61,7 @@ impl Framebuffer {
     }
 
     #[inline]
-    pub(crate) fn handle(&self) -> vk_sys::VkFramebuffer {
+    pub(crate) fn handle(&self) -> vks::VkFramebuffer {
         self.0.handle
     }
 }
