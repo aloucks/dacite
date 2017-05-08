@@ -861,7 +861,7 @@ pub const STENCIL_FACE_BACK_BIT: StencilFaceFlagBits = vks::VK_STENCIL_FACE_BACK
 /// See [`VkStencilFaceFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkStencilFaceFlagBits)
 pub const STENCIL_FRONT_AND_BACK: StencilFaceFlagBits = vks::VK_STENCIL_FRONT_AND_BACK;
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum OptionalDeviceSize {
     Size(u64),
     WholeSize,
@@ -887,7 +887,7 @@ impl From<OptionalDeviceSize> for u64 {
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum OptionalMipLevels {
     MipLevels(u32),
     Remaining,
@@ -913,7 +913,7 @@ impl From<OptionalMipLevels> for u32 {
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum OptionalArrayLayers {
     ArrayLayers(u32),
     Remaining,
@@ -939,7 +939,7 @@ impl From<OptionalArrayLayers> for u32 {
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum AttachmentIndex {
     Index(u32),
     Unused,
@@ -965,7 +965,7 @@ impl From<AttachmentIndex> for u32 {
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum QueueFamilyIndex {
     Index(u32),
     Ignored,
@@ -991,7 +991,7 @@ impl From<QueueFamilyIndex> for u32 {
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum SubpassIndex {
     Index(u32),
     External,
@@ -1017,7 +1017,7 @@ impl From<SubpassIndex> for u32 {
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct Version {
     pub major: u32,
     pub minor: u32,
@@ -1074,6 +1074,7 @@ pub const MAX_MEMORY_HEAPS: usize = vks::VK_MAX_MEMORY_HEAPS;
 pub const MAX_EXTENSION_NAME_SIZE: usize = vks::VK_MAX_EXTENSION_NAME_SIZE;
 pub const MAX_DESCRIPTION_SIZE: usize = vks::VK_MAX_DESCRIPTION_SIZE;
 
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum PipelineCacheHeaderVersion {
     One,
     Unknown(vks::VkPipelineCacheHeaderVersion),
@@ -1097,7 +1098,7 @@ impl From<PipelineCacheHeaderVersion> for vks::VkPipelineCacheHeaderVersion {
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum Error {
     OutOfHostMemory,
     OutOfDeviceMemory,
@@ -1178,7 +1179,7 @@ impl From<Error> for vks::VkResult {
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum SystemAllocationSope {
     Command,
     Object,
@@ -1214,6 +1215,7 @@ impl From<SystemAllocationSope> for vks::VkSystemAllocationScope {
     }
 }
 
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum InternalAllocationType {
     Executable,
     Unknown(vks::VkInternalAllocationType),
@@ -1238,7 +1240,7 @@ impl From<InternalAllocationType> for vks::VkInternalAllocationType {
 }
 
 #[allow(non_camel_case_types)]
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum Format {
     Undefined,
     R4G4_UNorm_Pack8,
@@ -1814,7 +1816,7 @@ impl From<Format> for vks::VkFormat {
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum ImageType {
     Type1D,
     Type2D,
@@ -1844,7 +1846,7 @@ impl From<ImageType> for vks::VkImageType {
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum ImageTiling {
     Optimal,
     Linear,
@@ -1871,7 +1873,7 @@ impl From<ImageTiling> for vks::VkImageTiling {
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum PhysicalDeviceType {
     Other,
     IntegratedGpu,
@@ -1907,7 +1909,7 @@ impl From<PhysicalDeviceType> for vks::VkPhysicalDeviceType {
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum QueryType {
     Occlusion,
     PipelineStatistics,
@@ -1937,7 +1939,7 @@ impl From<QueryType> for vks::VkQueryType {
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum SharingMode {
     Exclusive,
     Concurrent,
@@ -1964,7 +1966,7 @@ impl From<SharingMode> for vks::VkSharingMode {
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum ImageLayout {
     Undefined,
     General,
@@ -2012,7 +2014,7 @@ impl From<ImageLayout> for vks::VkImageLayout {
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum ImageViewType {
     Type1D,
     Type2D,
@@ -2054,7 +2056,7 @@ impl From<ImageViewType> for vks::VkImageViewType {
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum ComponentSwizzle {
     Identity,
     Zero,
@@ -2096,7 +2098,7 @@ impl From<ComponentSwizzle> for vks::VkComponentSwizzle {
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum VertexInputRate {
     Vertex,
     Instance,
@@ -2123,7 +2125,7 @@ impl From<VertexInputRate> for vks::VkVertexInputRate {
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum PrimitiveTopology {
     PointList,
     LineList,
@@ -2177,7 +2179,7 @@ impl From<PrimitiveTopology> for vks::VkPrimitiveTopology {
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum PolygonMode {
     Fill,
     Line,
@@ -2207,7 +2209,7 @@ impl From<PolygonMode> for vks::VkPolygonMode {
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum FrontFace {
     CounterClockwise,
     Clockwise,
@@ -2234,7 +2236,7 @@ impl From<FrontFace> for vks::VkFrontFace {
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum CompareOp {
     Never,
     Less,
@@ -2279,7 +2281,7 @@ impl From<CompareOp> for vks::VkCompareOp {
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum StencilOp {
     Keep,
     Zero,
@@ -2324,7 +2326,7 @@ impl From<StencilOp> for vks::VkStencilOp {
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum LogicOp {
     Clear,
     And,
@@ -2393,7 +2395,7 @@ impl From<LogicOp> for vks::VkLogicOp {
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum BlendFactor {
     Zero,
     One,
@@ -2471,7 +2473,7 @@ impl From<BlendFactor> for vks::VkBlendFactor {
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum BlendOp {
     Add,
     Subtract,
@@ -2507,7 +2509,7 @@ impl From<BlendOp> for vks::VkBlendOp {
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum DynamicState {
     Viewport,
     Scissor,
@@ -2555,7 +2557,7 @@ impl From<DynamicState> for vks::VkDynamicState {
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum Filter {
     Nearest,
     Linear,
@@ -2582,7 +2584,7 @@ impl From<Filter> for vks::VkFilter {
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum SamplerMipmapMode {
     Nearest,
     Linear,
@@ -2609,7 +2611,7 @@ impl From<SamplerMipmapMode> for vks::VkSamplerMipmapMode {
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum SamplerAddressMode {
     Repeat,
     MirroredRepeat,
@@ -2645,7 +2647,7 @@ impl From<SamplerAddressMode> for vks::VkSamplerAddressMode {
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum BorderColor {
     FloatTransparentBlack,
     IntTransparentBlack,
@@ -2684,7 +2686,7 @@ impl From<BorderColor> for vks::VkBorderColor {
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum DescriptorType {
     Sampler,
     CombinedImageSampler,
@@ -2738,7 +2740,7 @@ impl From<DescriptorType> for vks::VkDescriptorType {
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum AttachmentLoadOp {
     Load,
     Clear,
@@ -2768,7 +2770,7 @@ impl From<AttachmentLoadOp> for vks::VkAttachmentLoadOp {
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum AttachmentStoreOp {
     Store,
     DontCare,
@@ -2795,7 +2797,7 @@ impl From<AttachmentStoreOp> for vks::VkAttachmentStoreOp {
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum PipelineBindPoint {
     Graphics,
     Compute,
@@ -2822,7 +2824,7 @@ impl From<PipelineBindPoint> for vks::VkPipelineBindPoint {
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum CommandBufferLevel {
     Primary,
     Secondary,
@@ -2849,7 +2851,7 @@ impl From<CommandBufferLevel> for vks::VkCommandBufferLevel {
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum IndexType {
     UInt16,
     UInt32,
@@ -2876,7 +2878,7 @@ impl From<IndexType> for vks::VkIndexType {
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum SubpassContents {
     Inline,
     SecondaryCommandBuffers,
@@ -2903,11 +2905,11 @@ impl From<SubpassContents> for vks::VkSubpassContents {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum ApplicationInfoChainElement {
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct ApplicationInfo {
     pub chain: Vec<ApplicationInfoChainElement>,
     pub application_name: Option<String>,
@@ -2974,11 +2976,11 @@ impl<'a> From<&'a ApplicationInfo> for VkApplicationInfoWrapper {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum InstanceCreateInfoChainElement {
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct InstanceCreateInfo {
     pub chain: Vec<InstanceCreateInfoChainElement>,
     pub flags: InstanceCreateFlags,
@@ -3140,7 +3142,7 @@ pub trait Allocator: Send {
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq)]
 pub struct PhysicalDeviceFeatures {
     pub robust_buffer_access: bool,
     pub full_draw_index_uint32: bool,
@@ -3323,7 +3325,7 @@ impl<'a> From<&'a PhysicalDeviceFeatures> for vks::VkPhysicalDeviceFeatures {
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct FormatProperties {
     pub linear_tiling_features: FormatFeatureFlags,
     pub optimal_tiling_features: FormatFeatureFlags,
@@ -3350,7 +3352,7 @@ impl<'a> From<&'a FormatProperties> for vks::VkFormatProperties {
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct Extent3D {
     pub width: u32,
     pub height: u32,
@@ -3377,7 +3379,7 @@ impl<'a> From<&'a Extent3D> for vks::VkExtent3D {
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct ImageFormatProperties {
     pub max_extent: Extent3D,
     pub max_mip_levels: u32,
@@ -3410,7 +3412,7 @@ impl<'a> From<&'a ImageFormatProperties> for vks::VkImageFormatProperties {
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq)]
 pub struct PhysicalDeviceLimits {
     pub max_image_dimension_1d: u32,
     pub max_image_dimension_2d: u32,
@@ -3746,7 +3748,7 @@ impl<'a> From<&'a PhysicalDeviceLimits> for vks::VkPhysicalDeviceLimits {
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct PhysicalDeviceSparseProperties {
     pub residency_standard_2d_block_shape: bool,
     pub residency_standard_2d_multisample_block_shape: bool,
@@ -3779,7 +3781,7 @@ impl<'a> From<&'a PhysicalDeviceSparseProperties> for vks::VkPhysicalDeviceSpars
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct PhysicalDeviceProperties {
     pub api_version: Version,
     pub driver_version: u32,
@@ -3836,7 +3838,7 @@ impl<'a> From<&'a PhysicalDeviceProperties> for vks::VkPhysicalDeviceProperties 
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct QueueFamilyProperties {
     pub queue_flags: QueueFlags,
     pub queue_count: u32,
@@ -3866,7 +3868,7 @@ impl<'a> From<&'a QueueFamilyProperties> for vks::VkQueueFamilyProperties {
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct MemoryType {
     pub property_flags: MemoryPropertyFlags,
     pub heap_index: u32,
@@ -3890,7 +3892,7 @@ impl<'a> From<&'a MemoryType> for vks::VkMemoryType {
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct MemoryHeap {
     pub size: u64,
     pub flags: MemoryHeapFlags,
@@ -3914,7 +3916,7 @@ impl<'a> From<&'a MemoryHeap> for vks::VkMemoryHeap {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct PhysicalDeviceMemoryProperties {
     pub memory_types: Vec<MemoryType>,
     pub memory_heaps: Vec<MemoryHeap>,
@@ -3960,11 +3962,11 @@ impl<'a> From<&'a PhysicalDeviceMemoryProperties> for vks::VkPhysicalDeviceMemor
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum DeviceQueueCreateInfoChainElement {
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct DeviceQueueCreateInfo {
     pub chain: Vec<DeviceQueueCreateInfoChainElement>,
     pub flags: DeviceQueueCreateFlags,
@@ -4027,11 +4029,11 @@ impl<'a> From<&'a DeviceQueueCreateInfo> for VkDeviceQueueCreateInfoWrapper {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum DeviceCreateInfoChainElement {
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct DeviceCreateInfo {
     pub chain: Vec<DeviceCreateInfoChainElement>,
     pub flags: DeviceCreateFlags,
@@ -4202,7 +4204,7 @@ impl<'a> From<&'a DeviceCreateInfo> for VkDeviceCreateInfoWrapper {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub enum InstanceExtension {
     Unknown(String),
 }
@@ -4235,7 +4237,7 @@ impl<'a> From<&'a InstanceExtension> for &'a str {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct InstanceExtensionProperties {
     pub extension: InstanceExtension,
     pub spec_version: u32,
@@ -4268,7 +4270,7 @@ impl<'a> From<&'a InstanceExtensionProperties> for vks::VkExtensionProperties {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub enum DeviceExtension {
     Unknown(String),
 }
@@ -4301,7 +4303,7 @@ impl<'a> From<&'a DeviceExtension> for &'a str {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct DeviceExtensionProperties {
     pub extension: DeviceExtension,
     pub spec_version: u32,
@@ -4334,7 +4336,7 @@ impl<'a> From<&'a DeviceExtensionProperties> for vks::VkExtensionProperties {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct LayerProperties {
     pub layer_name: String,
     pub spec_version: Version,
@@ -4377,11 +4379,11 @@ impl<'a> From<&'a LayerProperties> for vks::VkLayerProperties {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum SubmitInfoChainElement {
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct SubmitInfo {
     pub chain: Vec<SubmitInfoChainElement>,
     pub wait_semaphores: Option<Vec<Semaphore>>,
@@ -4480,11 +4482,11 @@ impl<'a> From<&'a SubmitInfo> for VkSubmitInfoWrapper {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum MemoryAllocateInfoChainElement {
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct MemoryAllocateInfo {
     pub chain: Vec<MemoryAllocateInfoChainElement>,
     pub allocation_size: u64,
@@ -4535,11 +4537,11 @@ impl<'a> From<&'a MemoryAllocateInfo> for VkMemoryAllocateInfoWrapper {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum MappedMemoryRangeChainElement {
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct MappedMemoryRange {
     pub chain: Vec<MappedMemoryRangeChainElement>,
     pub memory: DeviceMemory,
@@ -4582,7 +4584,7 @@ impl<'a> From<&'a MappedMemoryRange> for VkMappedMemoryRangeWrapper {
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct MemoryRequirements {
     pub size: u64,
     pub alignment: u64,
@@ -4609,7 +4611,7 @@ impl<'a> From<&'a MemoryRequirements> for vks::VkMemoryRequirements {
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct SparseImageFormatProperties {
     pub aspect_mask: ImageAspectFlags,
     pub image_granularity: Extent3D,
@@ -4636,7 +4638,7 @@ impl<'a> From<&'a SparseImageFormatProperties> for vks::VkSparseImageFormatPrope
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct SparseImageMemoryRequirements {
     pub format_properties: SparseImageFormatProperties,
     pub image_mip_tail_first_lod: u32,
@@ -4669,7 +4671,7 @@ impl<'a> From<&'a SparseImageMemoryRequirements> for vks::VkSparseImageMemoryReq
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct SparseMemoryBind {
     pub resource_offset: u64,
     pub size: u64,
@@ -4718,7 +4720,7 @@ impl<'a> From<&'a SparseMemoryBind> for VkSparseMemoryBindWrapper {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct SparseBufferMemoryBindInfo {
     pub buffer: Buffer,
     pub binds: Vec<SparseMemoryBind>,
@@ -4764,7 +4766,7 @@ impl<'a> From<&'a SparseBufferMemoryBindInfo> for VkSparseBufferMemoryBindInfoWr
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct SparseImageOpaqueMemoryBindInfo {
     pub image: Image,
     pub binds: Vec<SparseMemoryBind>,
@@ -4810,7 +4812,7 @@ impl<'a> From<&'a SparseImageOpaqueMemoryBindInfo> for VkSparseImageOpaqueMemory
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct ImageSubresource {
     pub aspect_mask: ImageAspectFlags,
     pub mip_level: u32,
@@ -4837,7 +4839,7 @@ impl<'a> From<&'a ImageSubresource> for vks::VkImageSubresource {
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct Offset3D {
     pub x: i32,
     pub y: i32,
@@ -4864,7 +4866,7 @@ impl<'a> From<&'a Offset3D> for vks::VkOffset3D {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct SparseImageMemoryBind {
     pub subresource: ImageSubresource,
     pub offset: Offset3D,
@@ -4915,7 +4917,7 @@ impl<'a> From<&'a SparseImageMemoryBind> for VkSparseImageMemoryBindWrapper {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct SparseImageMemoryBindInfo {
     pub image: Image,
     pub binds: Vec<SparseImageMemoryBind>,
@@ -4961,11 +4963,11 @@ impl<'a> From<&'a SparseImageMemoryBindInfo> for VkSparseImageMemoryBindInfoWrap
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum BindSparseInfoChainElement {
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct BindSparseInfo {
     pub chain: Vec<BindSparseInfoChainElement>,
     pub wait_semaphores: Option<Vec<Semaphore>>,
@@ -5085,11 +5087,11 @@ impl<'a> From<&'a BindSparseInfo> for VkBindSparseInfoWrapper {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum FenceCreateInfoChainElement {
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct FenceCreateInfo {
     pub chain: Vec<FenceCreateInfoChainElement>,
     pub flags: FenceCreateFlags,
@@ -5137,11 +5139,11 @@ impl<'a> From<&'a FenceCreateInfo> for VkFenceCreateInfoWrapper {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum SemaphoreCreateInfoChainElement {
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct SemaphoreCreateInfo {
     pub chain: Vec<SemaphoreCreateInfoChainElement>,
     pub flags: SemaphoreCreateFlags,
@@ -5189,11 +5191,11 @@ impl<'a> From<&'a SemaphoreCreateInfo> for VkSemaphoreCreateInfoWrapper {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum EventCreateInfoChainElement {
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct EventCreateInfo {
     pub chain: Vec<EventCreateInfoChainElement>,
     pub flags: EventCreateFlags,
@@ -5241,11 +5243,11 @@ impl<'a> From<&'a EventCreateInfo> for VkEventCreateInfoWrapper {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum QueryPoolCreateInfoChainElement {
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct QueryPoolCreateInfo {
     pub chain: Vec<QueryPoolCreateInfoChainElement>,
     pub flags: QueryPoolCreateFlags,
@@ -5302,11 +5304,11 @@ impl<'a> From<&'a QueryPoolCreateInfo> for VkQueryPoolCreateInfoWrapper {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum BufferCreateInfoChainElement {
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct BufferCreateInfo {
     pub chain: Vec<BufferCreateInfoChainElement>,
     pub flags: BufferCreateFlags,
@@ -5384,11 +5386,11 @@ impl<'a> From<&'a BufferCreateInfo> for VkBufferCreateInfoWrapper {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum BufferViewCreateInfoChainElement {
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct BufferViewCreateInfo {
     pub chain: Vec<BufferViewCreateInfoChainElement>,
     pub flags: BufferViewCreateFlags,
@@ -5435,11 +5437,11 @@ impl<'a> From<&'a BufferViewCreateInfo> for VkBufferViewCreateInfoWrapper {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum ImageCreateInfoChainElement {
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct ImageCreateInfo {
     pub chain: Vec<ImageCreateInfoChainElement>,
     pub flags: ImageCreateFlags,
@@ -5538,7 +5540,7 @@ impl<'a> From<&'a ImageCreateInfo> for VkImageCreateInfoWrapper {
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct SubresourceLayout {
     pub offset: u64,
     pub size: u64,
@@ -5571,7 +5573,7 @@ impl<'a> From<&'a SubresourceLayout> for vks::VkSubresourceLayout {
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct ComponentMapping {
     pub r: ComponentSwizzle,
     pub g: ComponentSwizzle,
@@ -5601,7 +5603,7 @@ impl<'a> From<&'a ComponentMapping> for vks::VkComponentMapping {
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct ImageSubresourceRange {
     pub aspect_mask: ImageAspectFlags,
     pub base_mip_level: u32,
@@ -5634,11 +5636,11 @@ impl<'a> From<&'a ImageSubresourceRange> for vks::VkImageSubresourceRange {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum ImageViewCreateInfoChainElement {
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct ImageViewCreateInfo {
     pub chain: Vec<ImageViewCreateInfoChainElement>,
     pub flags: ImageViewCreateFlags,
@@ -5687,11 +5689,11 @@ impl<'a> From<&'a ImageViewCreateInfo> for VkImageViewCreateInfoWrapper {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum ShaderModuleCreateInfoChainElement {
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct ShaderModuleCreateInfo {
     pub chain: Vec<ShaderModuleCreateInfoChainElement>,
     pub flags: ShaderModuleCreateFlags,
@@ -5756,11 +5758,11 @@ impl<'a> From<&'a ShaderModuleCreateInfo> for VkShaderModuleCreateInfoWrapper {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum PipelineCacheCreateInfoChainElement {
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct PipelineCacheCreateInfo {
     pub chain: Vec<PipelineCacheCreateInfoChainElement>,
     pub flags: PipelineCacheCreateFlags,
@@ -5834,7 +5836,7 @@ impl<'a> From<&'a PipelineCacheCreateInfo> for VkPipelineCacheCreateInfoWrapper 
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct SpecializationMapEntry {
     pub constant_id: u32,
     pub offset: u32,
@@ -5861,7 +5863,7 @@ impl<'a> From<&'a SpecializationMapEntry> for vks::VkSpecializationMapEntry {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct SpecializationInfo {
     pub map_entries: Option<Vec<SpecializationMapEntry>>,
     pub data: Option<Vec<u8>>,
@@ -5996,11 +5998,11 @@ impl<'a> From<&'a SpecializationInfo> for VkSpecializationInfoWrapper {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum PipelineShaderStageCreateInfoChainElement {
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct PipelineShaderStageCreateInfo {
     pub chain: Vec<PipelineShaderStageCreateInfoChainElement>,
     pub flags: PipelineShaderStageCreateFlags,
@@ -6062,7 +6064,7 @@ impl<'a> From<&'a PipelineShaderStageCreateInfo> for VkPipelineShaderStageCreate
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct VertexInputBindingDescription {
     pub binding: u32,
     pub stride: u32,
@@ -6089,7 +6091,7 @@ impl<'a> From<&'a VertexInputBindingDescription> for vks::VkVertexInputBindingDe
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct VertexInputAttributeDescription {
     pub location: u32,
     pub binding: u32,
@@ -6119,11 +6121,11 @@ impl<'a> From<&'a VertexInputAttributeDescription> for vks::VkVertexInputAttribu
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum PipelineVertexInputStateCreateInfoChainElement {
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct PipelineVertexInputStateCreateInfo {
     pub chain: Vec<PipelineVertexInputStateCreateInfoChainElement>,
     pub flags: PipelineVertexInputStateCreateFlags,
@@ -6225,11 +6227,11 @@ impl<'a> From<&'a PipelineVertexInputStateCreateInfo> for VkPipelineVertexInputS
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum PipelineInputAssemblyStateCreateInfoChainElement {
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct PipelineInputAssemblyStateCreateInfo {
     pub chain: Vec<PipelineInputAssemblyStateCreateInfoChainElement>,
     pub flags: PipelineInputAssemblyStateCreateFlags,
@@ -6283,11 +6285,11 @@ impl<'a> From<&'a PipelineInputAssemblyStateCreateInfo> for VkPipelineInputAssem
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum PipelineTessellationStateCreateInfoChainElement {
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct PipelineTessellationStateCreateInfo {
     pub chain: Vec<PipelineTessellationStateCreateInfoChainElement>,
     pub flags: PipelineTessellationStateCreateFlags,
@@ -6338,7 +6340,7 @@ impl<'a> From<&'a PipelineTessellationStateCreateInfo> for VkPipelineTessellatio
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq)]
 pub struct Viewport {
     pub x: f32,
     pub y: f32,
@@ -6374,7 +6376,7 @@ impl<'a> From<&'a Viewport> for vks::VkViewport {
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct Offset2D {
     pub x: i32,
     pub y: i32,
@@ -6398,7 +6400,7 @@ impl<'a> From<&'a Offset2D> for vks::VkOffset2D {
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct Extent2D {
     pub width: u32,
     pub height: u32,
@@ -6422,7 +6424,7 @@ impl<'a> From<&'a Extent2D> for vks::VkExtent2D {
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct Rect2D {
     pub offset: Offset2D,
     pub extent: Extent2D,
@@ -6446,11 +6448,11 @@ impl<'a> From<&'a Rect2D> for vks::VkRect2D {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum PipelineViewportStateCreateInfoChainElement {
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct PipelineViewportStateCreateInfo {
     pub chain: Vec<PipelineViewportStateCreateInfoChainElement>,
     pub flags: PipelineViewportStateCreateFlags,
@@ -6527,11 +6529,11 @@ impl<'a> From<&'a PipelineViewportStateCreateInfo> for VkPipelineViewportStateCr
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum PipelineRasterizationStateCreateInfoChainElement {
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct PipelineRasterizationStateCreateInfo {
     pub chain: Vec<PipelineRasterizationStateCreateInfoChainElement>,
     pub flags: PipelineRasterizationStateCreateFlags,
@@ -6609,11 +6611,11 @@ impl<'a> From<&'a PipelineRasterizationStateCreateInfo> for VkPipelineRasterizat
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum PipelineMultisampleStateCreateInfoChainElement {
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct PipelineMultisampleStateCreateInfo {
     pub chain: Vec<PipelineMultisampleStateCreateInfoChainElement>,
     pub flags: PipelineMultisampleStateCreateFlags,
@@ -6700,7 +6702,7 @@ impl<'a> From<&'a PipelineMultisampleStateCreateInfo> for VkPipelineMultisampleS
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct StencilOpState {
     pub fail_op: StencilOp,
     pub pass_op: StencilOp,
@@ -6739,11 +6741,11 @@ impl<'a> From<&'a StencilOpState> for vks::VkStencilOpState {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum PipelineDepthStencilStateCreateInfoChainElement {
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct PipelineDepthStencilStateCreateInfo {
     pub chain: Vec<PipelineDepthStencilStateCreateInfoChainElement>,
     pub flags: PipelineDepthStencilStateCreateFlags,
@@ -6818,7 +6820,7 @@ impl<'a> From<&'a PipelineDepthStencilStateCreateInfo> for VkPipelineDepthStenci
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct PipelineColorBlendAttachmentState {
     pub blend_enable: bool,
     pub src_color_blend_factor: BlendFactor,
@@ -6860,11 +6862,11 @@ impl<'a> From<&'a PipelineColorBlendAttachmentState> for vks::VkPipelineColorBle
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum PipelineColorBlendStateCreateInfoChainElement {
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct PipelineColorBlendStateCreateInfo {
     pub chain: Vec<PipelineColorBlendStateCreateInfoChainElement>,
     pub flags: PipelineColorBlendStateCreateFlags,
@@ -6948,11 +6950,11 @@ impl<'a> From<&'a PipelineColorBlendStateCreateInfo> for VkPipelineColorBlendSta
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum PipelineDynamicStateCreateInfoChainElement {
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct PipelineDynamicStateCreateInfo {
     pub chain: Vec<PipelineDynamicStateCreateInfoChainElement>,
     pub flags: PipelineDynamicStateCreateFlags,
@@ -7020,11 +7022,11 @@ impl<'a> From<&'a PipelineDynamicStateCreateInfo> for VkPipelineDynamicStateCrea
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum GraphicsPipelineCreateInfoChainElement {
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct GraphicsPipelineCreateInfo {
     pub chain: Vec<GraphicsPipelineCreateInfoChainElement>,
     pub flags: PipelineCreateFlags,
@@ -7191,11 +7193,11 @@ impl<'a> From<&'a GraphicsPipelineCreateInfo> for VkGraphicsPipelineCreateInfoWr
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum ComputePipelineCreateInfoChainElement {
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct ComputePipelineCreateInfo {
     pub chain: Vec<ComputePipelineCreateInfoChainElement>,
     pub flags: PipelineCreateFlags,
@@ -7258,7 +7260,7 @@ impl<'a> From<&'a ComputePipelineCreateInfo> for VkComputePipelineCreateInfoWrap
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct PushConstantRange {
     pub stage_flags: ShaderStageFlags,
     pub offset: u32,
@@ -7285,11 +7287,11 @@ impl<'a> From<&'a PushConstantRange> for vks::VkPushConstantRange {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum PipelineLayoutCreateInfoChainElement {
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct PipelineLayoutCreateInfo {
     pub chain: Vec<PipelineLayoutCreateInfoChainElement>,
     pub flags: PipelineLayoutCreateFlags,
@@ -7357,11 +7359,11 @@ impl<'a> From<&'a PipelineLayoutCreateInfo> for VkPipelineLayoutCreateInfoWrappe
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum SamplerCreateInfoChainElement {
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct SamplerCreateInfo {
     pub chain: Vec<SamplerCreateInfoChainElement>,
     pub flags: SamplerCreateFlags,
@@ -7454,7 +7456,7 @@ impl<'a> From<&'a SamplerCreateInfo> for VkSamplerCreateInfoWrapper {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct DescriptorSetLayoutBinding {
     pub binding: u32,
     pub descriptor_type: DescriptorType,
@@ -7509,11 +7511,11 @@ impl<'a> From<&'a DescriptorSetLayoutBinding> for VkDescriptorSetLayoutBindingWr
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum DescriptorSetLayoutCreateInfoChainElement {
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct DescriptorSetLayoutCreateInfo {
     pub chain: Vec<DescriptorSetLayoutCreateInfoChainElement>,
     pub flags: DescriptorSetLayoutCreateFlags,
@@ -7567,7 +7569,7 @@ impl<'a> From<&'a DescriptorSetLayoutCreateInfo> for VkDescriptorSetLayoutCreate
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct DescriptorPoolSize {
     pub descriptor_type: DescriptorType,
     pub descriptor_count: u32,
@@ -7591,11 +7593,11 @@ impl<'a> From<&'a DescriptorPoolSize> for vks::VkDescriptorPoolSize {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum DescriptorPoolCreateInfoChainElement {
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct DescriptorPoolCreateInfo {
     pub chain: Vec<DescriptorPoolCreateInfoChainElement>,
     pub flags: DescriptorPoolCreateFlags,
@@ -7664,11 +7666,11 @@ impl<'a> From<&'a DescriptorPoolCreateInfo> for VkDescriptorPoolCreateInfoWrappe
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum DescriptorSetAllocateInfoChainInfo {
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct DescriptorSetAllocateInfo {
     pub chain: Vec<DescriptorSetAllocateInfoChainInfo>,
     pub descriptor_pool: DescriptorPool,
@@ -7716,7 +7718,7 @@ impl<'a> From<&'a DescriptorSetAllocateInfo> for VkDescriptorSetAllocateInfoWrap
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct DescriptorImageInfo {
     pub sampler: Option<Sampler>,
     pub image_view: Option<ImageView>,
@@ -7768,7 +7770,7 @@ impl<'a> From<&'a DescriptorImageInfo> for VkDescriptorImageInfoWrapper {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct DescriptorBufferInfo {
     pub buffer: Buffer,
     pub offset: u64,
@@ -7808,18 +7810,18 @@ impl<'a> From<&'a DescriptorBufferInfo> for VkDescriptorBufferInfoWrapper {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum WriteDescriptorSetChainElement {
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub enum WriteDescriptorSetElements {
     ImageInfo(Vec<DescriptorImageInfo>),
     BufferInfo(Vec<DescriptorBufferInfo>),
     TexelBufferView(Vec<BufferView>),
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct WriteDescriptorSet {
     pub chain: Vec<WriteDescriptorSetChainElement>,
     pub dst_set: DescriptorSet,
@@ -7910,11 +7912,11 @@ impl<'a> From<&'a WriteDescriptorSet> for VkWriteDescriptorSetWrapper {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum CopyDescriptorSetChainElement {
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct CopyDescriptorSet {
     pub chain: Vec<CopyDescriptorSetChainElement>,
     pub src_set: DescriptorSet,
@@ -7967,11 +7969,11 @@ impl<'a> From<&'a CopyDescriptorSet> for VkCopyDescriptorSetWrapper {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum FramebufferCreateInfoChainElement {
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct FramebufferCreateInfo {
     pub chain: Vec<FramebufferCreateInfoChainElement>,
     pub flags: FramebufferCreateFlags,
@@ -8035,7 +8037,7 @@ impl<'a> From<&'a FramebufferCreateInfo> for VkFramebufferCreateInfoWrapper {
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct AttachmentDescription {
     pub flags: AttachmentDescriptionFlags,
     pub format: Format,
@@ -8080,7 +8082,7 @@ impl<'a> From<&'a AttachmentDescription> for vks::VkAttachmentDescription {
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct AttachmentReference {
     pub attachment: AttachmentIndex,
     pub layout: ImageLayout,
@@ -8104,7 +8106,7 @@ impl<'a> From<&'a AttachmentReference> for vks::VkAttachmentReference {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct SubpassDescription {
     pub flags: SubpassDescriptionFlags,
     pub pipeline_bind_point: PipelineBindPoint,
@@ -8276,7 +8278,7 @@ impl<'a> From<&'a SubpassDescription> for VkSubpassDescriptionWrapper {
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct SubpassDependency {
     pub src_subpass: SubpassIndex,
     pub dst_subpass: SubpassIndex,
@@ -8315,11 +8317,11 @@ impl<'a> From<&'a SubpassDependency> for vks::VkSubpassDependency {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum RenderPassCreateInfoChainElement {
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct RenderPassCreateInfo {
     pub chain: Vec<RenderPassCreateInfoChainElement>,
     pub flags: RenderPassCreateFlags,
@@ -8439,11 +8441,11 @@ impl<'a> From<&'a RenderPassCreateInfo> for VkRenderPassCreateInfoWrapper {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum CommandPoolCreateInfoChainElement {
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct CommandPoolCreateInfo {
     pub chain: Vec<CommandPoolCreateInfoChainElement>,
     pub flags: CommandPoolCreateFlags,
@@ -8494,11 +8496,11 @@ impl<'a> From<&'a CommandPoolCreateInfo> for VkCommandPoolCreateInfoWrapper {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum CommandBufferAllocateInfoChainElement {
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct CommandBufferAllocateInfo {
     pub chain: Vec<CommandBufferAllocateInfoChainElement>,
     pub level: CommandBufferLevel,
@@ -8556,11 +8558,11 @@ impl VkCommandBufferAllocateInfoWrapper {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum CommandBufferInheritanceInfoChainElement {
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct CommandBufferInheritanceInfo {
     pub chain: Vec<CommandBufferInheritanceInfoChainElement>,
     pub render_pass: Option<RenderPass>,
@@ -8621,11 +8623,11 @@ impl<'a> From<&'a CommandBufferInheritanceInfo> for VkCommandBufferInheritanceIn
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum CommandBufferBeginInfoChainElement {
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct CommandBufferBeginInfo {
     pub chain: Vec<CommandBufferBeginInfoChainElement>,
     pub flags: CommandBufferUsageFlags,
@@ -8675,7 +8677,7 @@ impl<'a> From<&'a CommandBufferBeginInfo> for VkCommandBufferBeginInfoWrapper {
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct BufferCopy {
     pub src_offset: u64,
     pub dst_offset: u64,
@@ -8702,7 +8704,7 @@ impl<'a> From<&'a BufferCopy> for vks::VkBufferCopy {
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct ImageSubresourceLayers {
     pub aspect_mask: ImageAspectFlags,
     pub mip_level: u32,
@@ -8732,7 +8734,7 @@ impl<'a> From<&'a ImageSubresourceLayers> for vks::VkImageSubresourceLayers {
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct ImageCopy {
     pub src_subresource: ImageSubresourceLayers,
     pub src_offset: Offset3D,
@@ -8765,7 +8767,7 @@ impl<'a> From<&'a ImageCopy> for vks::VkImageCopy {
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct ImageBlit {
     pub src_subresource: ImageSubresourceLayers,
     pub src_offsets: [Offset3D; 2],
@@ -8801,7 +8803,7 @@ impl<'a> From<&'a ImageBlit> for vks::VkImageBlit {
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct BufferImageCopy {
     pub buffer_offset: u64,
     pub buffer_row_length: u32,
@@ -8837,7 +8839,7 @@ impl<'a> From<&'a BufferImageCopy> for vks::VkBufferImageCopy {
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq)]
 pub enum ClearColorValue {
     Float32([f32; 4]),
     Int32([i32; 4]),
@@ -8860,7 +8862,7 @@ impl<'a> From<&'a ClearColorValue> for vks::VkClearColorValue {
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq)]
 pub struct ClearDepthStencilValue {
     pub depth: f32,
     pub stencil: u32,
@@ -8884,7 +8886,7 @@ impl<'a> From<&'a ClearDepthStencilValue> for vks::VkClearDepthStencilValue {
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq)]
 pub enum ClearValue {
     Color(ClearColorValue),
     DepthStencil(ClearDepthStencilValue),
@@ -8905,7 +8907,7 @@ impl<'a> From<&'a ClearValue> for vks::VkClearValue {
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq)]
 pub struct ClearAttachment {
     pub aspect_mask: ImageAspectFlags,
     pub color_attachment: AttachmentIndex,
@@ -8922,7 +8924,7 @@ impl<'a> From<&'a ClearAttachment> for vks::VkClearAttachment {
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct ClearRect {
     pub rect: Rect2D,
     pub base_array_layer: u32,
@@ -8949,7 +8951,7 @@ impl<'a> From<&'a ClearRect> for vks::VkClearRect {
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct ImageResolve {
     pub src_subresource: ImageSubresourceLayers,
     pub src_offset: Offset3D,
@@ -8982,11 +8984,11 @@ impl<'a> From<&'a ImageResolve> for vks::VkImageResolve {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum MemoryBarrierChainElement {
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct MemoryBarrier {
     pub chain: Vec<MemoryBarrierChainElement>,
     pub src_access_mask: AccessFlags,
@@ -9037,11 +9039,11 @@ impl<'a> From<&'a MemoryBarrier> for VkMemoryBarrierWrapper {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum BufferMemoryBarrierChainElement {
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct BufferMemoryBarrier {
     pub chain: Vec<BufferMemoryBarrierChainElement>,
     pub src_access_mask: AccessFlags,
@@ -9092,11 +9094,11 @@ impl<'a> From<&'a BufferMemoryBarrier> for VkBufferMemoryBarrierWrapper {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum ImageMemoryBarrierChainElement {
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct ImageMemoryBarrier {
     pub chain: Vec<ImageMemoryBarrierChainElement>,
     pub src_access_mask: AccessFlags,
@@ -9149,11 +9151,11 @@ impl<'a> From<&'a ImageMemoryBarrier> for VkImageMemoryBarrierWrapper {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum RenderPassBeginInfoChainElement {
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct RenderPassBeginInfo {
     pub chain: Vec<RenderPassBeginInfoChainElement>,
     pub render_pass: RenderPass,
@@ -9212,7 +9214,7 @@ impl<'a> From<&'a RenderPassBeginInfo> for VkRenderPassBeginInfoWrapper {
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct DispatchIndirectCommand {
     pub x: u32,
     pub y: u32,
@@ -9239,7 +9241,7 @@ impl<'a> From<&'a DispatchIndirectCommand> for vks::VkDispatchIndirectCommand {
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct DrawIndexedIndirectCommand {
     pub index_count: u32,
     pub instance_count: u32,
@@ -9272,7 +9274,7 @@ impl<'a> From<&'a DrawIndexedIndirectCommand> for vks::VkDrawIndexedIndirectComm
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct DrawIndirectCommand {
     pub vertex_count: u32,
     pub instance_count: u32,
