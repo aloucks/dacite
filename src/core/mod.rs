@@ -7664,12 +7664,12 @@ impl<'a> From<&'a DescriptorPoolCreateInfo> for VkDescriptorPoolCreateInfoWrappe
 }
 
 #[derive(Debug, Clone, PartialEq)]
-pub enum DescriptorSetAllocateInfoChainInfo {
+pub enum DescriptorSetAllocateInfoChainElement {
 }
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct DescriptorSetAllocateInfo {
-    pub chain: Vec<DescriptorSetAllocateInfoChainInfo>,
+    pub chain: Vec<DescriptorSetAllocateInfoChainElement>,
     pub descriptor_pool: DescriptorPool,
     pub set_layouts: Vec<DescriptorSetLayout>,
 }
