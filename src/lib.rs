@@ -32,6 +32,3 @@ mod version;
 
 #[cfg(feature = "core_1_0_3")]
 pub use version::{DACITE_API_VERSION_MAJOR, DACITE_API_VERSION_MINOR, DACITE_API_VERSION_PATCH};
-
-#[cfg(feature = "core_1_0_3")]
-pub type Result<T> = ::std::result::Result<T, core::Error>;

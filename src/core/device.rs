@@ -13,7 +13,6 @@
 // PERFORMANCE OF THIS SOFTWARE.
 
 use AsNativeVkObject;
-use Result;
 use core::allocator_helper::AllocatorHelper;
 use core::{
     self,
@@ -105,7 +104,7 @@ impl Device {
         Queue::new(queue, self.clone())
     }
 
-    pub fn create_command_pool(&self, create_info: &core::CommandPoolCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<CommandPool> {
+    pub fn create_command_pool(&self, create_info: &core::CommandPoolCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<CommandPool, core::Error> {
         let create_info: core::VkCommandPoolCreateInfoWrapper = create_info.into();
 
         let allocator_helper = allocator.map(AllocatorHelper::new);
@@ -124,7 +123,7 @@ impl Device {
         }
     }
 
-    pub fn create_fence(&self, create_info: &core::FenceCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<Fence> {
+    pub fn create_fence(&self, create_info: &core::FenceCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<Fence, core::Error> {
         let create_info: core::VkFenceCreateInfoWrapper = create_info.into();
 
         let allocator_helper = allocator.map(AllocatorHelper::new);
@@ -143,7 +142,7 @@ impl Device {
         }
     }
 
-    pub fn create_semaphore(&self, create_info: &core::SemaphoreCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<Semaphore> {
+    pub fn create_semaphore(&self, create_info: &core::SemaphoreCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<Semaphore, core::Error> {
         let create_info: core::VkSemaphoreCreateInfoWrapper = create_info.into();
 
         let allocator_helper = allocator.map(AllocatorHelper::new);
@@ -162,7 +161,7 @@ impl Device {
         }
     }
 
-    pub fn create_event(&self, create_info: &core::EventCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<Event> {
+    pub fn create_event(&self, create_info: &core::EventCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<Event, core::Error> {
         let create_info: core::VkEventCreateInfoWrapper = create_info.into();
 
         let allocator_helper = allocator.map(AllocatorHelper::new);
@@ -181,7 +180,7 @@ impl Device {
         }
     }
 
-    pub fn create_query_pool(&self, create_info: &core::QueryPoolCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<QueryPool> {
+    pub fn create_query_pool(&self, create_info: &core::QueryPoolCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<QueryPool, core::Error> {
         let create_info: core::VkQueryPoolCreateInfoWrapper = create_info.into();
 
         let allocator_helper = allocator.map(AllocatorHelper::new);
@@ -200,7 +199,7 @@ impl Device {
         }
     }
 
-    pub fn create_buffer(&self, create_info: &core::BufferCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<Buffer> {
+    pub fn create_buffer(&self, create_info: &core::BufferCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<Buffer, core::Error> {
         let create_info: core::VkBufferCreateInfoWrapper = create_info.into();
 
         let allocator_helper = allocator.map(AllocatorHelper::new);
@@ -219,7 +218,7 @@ impl Device {
         }
     }
 
-    pub fn create_image(&self, create_info: &core::ImageCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<Image> {
+    pub fn create_image(&self, create_info: &core::ImageCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<Image, core::Error> {
         let create_info: core::VkImageCreateInfoWrapper = create_info.into();
 
         let allocator_helper = allocator.map(AllocatorHelper::new);
@@ -238,7 +237,7 @@ impl Device {
         }
     }
 
-    pub fn create_buffer_view(&self, create_info: &core::BufferViewCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<BufferView> {
+    pub fn create_buffer_view(&self, create_info: &core::BufferViewCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<BufferView, core::Error> {
         let create_info_wrapper: core::VkBufferViewCreateInfoWrapper = create_info.into();
 
         let allocator_helper = allocator.map(AllocatorHelper::new);
@@ -257,7 +256,7 @@ impl Device {
         }
     }
 
-    pub fn create_image_view(&self, create_info: &core::ImageViewCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<ImageView> {
+    pub fn create_image_view(&self, create_info: &core::ImageViewCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<ImageView, core::Error> {
         let create_info_wrapper: core::VkImageViewCreateInfoWrapper = create_info.into();
 
         let allocator_helper = allocator.map(AllocatorHelper::new);
@@ -276,7 +275,7 @@ impl Device {
         }
     }
 
-    pub fn create_shader_module(&self, create_info: &core::ShaderModuleCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<ShaderModule> {
+    pub fn create_shader_module(&self, create_info: &core::ShaderModuleCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<ShaderModule, core::Error> {
         let create_info: core::VkShaderModuleCreateInfoWrapper = create_info.into();
 
         let allocator_helper = allocator.map(AllocatorHelper::new);
@@ -295,7 +294,7 @@ impl Device {
         }
     }
 
-    pub fn create_pipeline_cache(&self, create_info: &core::PipelineCacheCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<PipelineCache> {
+    pub fn create_pipeline_cache(&self, create_info: &core::PipelineCacheCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<PipelineCache, core::Error> {
         let create_info: core::VkPipelineCacheCreateInfoWrapper = create_info.into();
 
         let allocator_helper = allocator.map(AllocatorHelper::new);
@@ -314,7 +313,7 @@ impl Device {
         }
     }
 
-    pub fn create_sampler(&self, create_info: &core::SamplerCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<Sampler> {
+    pub fn create_sampler(&self, create_info: &core::SamplerCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<Sampler, core::Error> {
         let create_info: core::VkSamplerCreateInfoWrapper = create_info.into();
 
         let allocator_helper = allocator.map(AllocatorHelper::new);
@@ -333,7 +332,7 @@ impl Device {
         }
     }
 
-    pub fn create_descriptor_pool(&self, create_info: &core::DescriptorPoolCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<DescriptorPool> {
+    pub fn create_descriptor_pool(&self, create_info: &core::DescriptorPoolCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<DescriptorPool, core::Error> {
         let create_info: core::VkDescriptorPoolCreateInfoWrapper = create_info.into();
 
         let allocator_helper = allocator.map(AllocatorHelper::new);
@@ -352,7 +351,7 @@ impl Device {
         }
     }
 
-    pub fn create_descriptor_set_layout(&self, create_info: &core::DescriptorSetLayoutCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<DescriptorSetLayout> {
+    pub fn create_descriptor_set_layout(&self, create_info: &core::DescriptorSetLayoutCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<DescriptorSetLayout, core::Error> {
         let create_info_wrapper: core::VkDescriptorSetLayoutCreateInfoWrapper = create_info.into();
 
         let allocator_helper = allocator.map(AllocatorHelper::new);

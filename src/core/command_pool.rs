@@ -13,7 +13,6 @@
 // PERFORMANCE OF THIS SOFTWARE.
 
 use AsNativeVkObject;
-use Result;
 use core::allocator_helper::AllocatorHelper;
 use core::{self, CommandBuffer, Device};
 use std::ptr;
@@ -76,7 +75,7 @@ impl CommandPool {
         self.0.device.handle()
     }
 
-    pub fn reset(&self, flags: core::CommandPoolResetFlags) -> Result<()> {
+    pub fn reset(&self, flags: core::CommandPoolResetFlags) -> Result<(), core::Error> {
         let res = unsafe {
             (self.loader().core.vkResetCommandPool)(self.device_handle(), self.handle(), flags)
         };
@@ -89,7 +88,7 @@ impl CommandPool {
         }
     }
 
-    pub fn allocate_command_buffers(&self, allocate_info: &core::CommandBufferAllocateInfo) -> Result<Vec<CommandBuffer>> {
+    pub fn allocate_command_buffers(&self, allocate_info: &core::CommandBufferAllocateInfo) -> Result<Vec<CommandBuffer>, core::Error> {
         let mut command_buffers = Vec::with_capacity(allocate_info.command_buffer_count as usize);
         unsafe {
             command_buffers.set_len(allocate_info.command_buffer_count as usize);

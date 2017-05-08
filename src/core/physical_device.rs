@@ -13,7 +13,6 @@
 // PERFORMANCE OF THIS SOFTWARE.
 
 use AsNativeVkObject;
-use Result;
 use core::allocator_helper::AllocatorHelper;
 use core::{self, Device, Instance};
 use std::mem;
@@ -65,7 +64,7 @@ impl PhysicalDevice {
         }
     }
 
-    pub fn enumerate_device_layer_properties(&self) -> Result<Vec<core::LayerProperties>> {
+    pub fn enumerate_device_layer_properties(&self) -> Result<Vec<core::LayerProperties>, core::Error> {
         unsafe {
             let mut num_layer_properties = 0;
             let res = (self.loader().core.vkEnumerateDeviceLayerProperties)(self.handle, &mut num_layer_properties, ptr::null_mut());
@@ -84,7 +83,7 @@ impl PhysicalDevice {
         }
     }
 
-    pub fn enumerate_device_extension_properties(&self, layer_name: Option<&str>) -> Result<Vec<core::InstanceExtensionProperties>> {
+    pub fn enumerate_device_extension_properties(&self, layer_name: Option<&str>) -> Result<Vec<core::InstanceExtensionProperties>, core::Error> {
         unsafe {
             let layer_name_cstr = utils::cstr_from_str(layer_name);
 
@@ -115,7 +114,7 @@ impl PhysicalDevice {
         (&properties).into()
     }
 
-    pub fn image_format_properties(&self, format: core::Format, image_type: core::ImageType, tiling: core::ImageTiling, usage: core::ImageUsageFlags, flags: core::ImageCreateFlags) -> Result<core::ImageFormatProperties> {
+    pub fn image_format_properties(&self, format: core::Format, image_type: core::ImageType, tiling: core::ImageTiling, usage: core::ImageUsageFlags, flags: core::ImageCreateFlags) -> Result<core::ImageFormatProperties, core::Error> {
         let mut properties = unsafe { mem::uninitialized() };
 
         let res = unsafe {
@@ -172,7 +171,7 @@ impl PhysicalDevice {
         (&properties).into()
     }
 
-    pub fn create_device(&self, create_info: &core::DeviceCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<core::Device> {
+    pub fn create_device(&self, create_info: &core::DeviceCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<Device, core::Error> {
         let allocator_helper = allocator.map(AllocatorHelper::new);
         let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), |a| &a.callbacks);
         let create_info: core::VkDeviceCreateInfoWrapper = create_info.into();

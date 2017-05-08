@@ -13,7 +13,7 @@
 // PERFORMANCE OF THIS SOFTWARE.
 
 use AsNativeVkObject;
-use Result;
+use core::PhysicalDevice;
 use core::allocator_helper::AllocatorHelper;
 use core;
 use std::ptr;
@@ -64,7 +64,7 @@ impl Instance {
         &self.0.loader
     }
 
-    pub fn create(create_info: &core::InstanceCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<Instance> {
+    pub fn create(create_info: &core::InstanceCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<Instance, core::Error> {
         let allocator_helper = allocator.map(AllocatorHelper::new);
         let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), |a| &a.callbacks);
 
@@ -93,7 +93,7 @@ impl Instance {
         })))
     }
 
-    pub fn enumerate_physical_devices(&self) -> Result<Vec<core::PhysicalDevice>> {
+    pub fn enumerate_physical_devices(&self) -> Result<Vec<PhysicalDevice>, core::Error> {
         let mut num_physical_devices = 0;
         let res = unsafe {
             (self.loader().core.vkEnumeratePhysicalDevices)(self.handle(), &mut num_physical_devices, ptr::null_mut())
@@ -121,7 +121,7 @@ impl Instance {
         Ok(physical_devices)
     }
 
-    pub fn enumerate_instance_layer_properties() -> Result<Vec<core::LayerProperties>> {
+    pub fn enumerate_instance_layer_properties() -> Result<Vec<core::LayerProperties>, core::Error> {
         unsafe {
             let mut loader = vks::instance_proc_addr_loader::CoreNullInstance::new();
             loader.load(vks::vkGetInstanceProcAddr, ptr::null_mut());
@@ -143,7 +143,7 @@ impl Instance {
         }
     }
 
-    pub fn enumerate_instance_extension_properties(layer_name: Option<&str>) -> Result<Vec<core::InstanceExtensionProperties>> {
+    pub fn enumerate_instance_extension_properties(layer_name: Option<&str>) -> Result<Vec<core::InstanceExtensionProperties>, core::Error> {
         unsafe {
             let mut loader = vks::instance_proc_addr_loader::CoreNullInstance::new();
             loader.load(vks::vkGetInstanceProcAddr, ptr::null_mut());
