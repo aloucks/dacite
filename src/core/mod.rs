@@ -5896,7 +5896,7 @@ impl<'a> From<&'a vks::VkSpecializationInfo> for SpecializationInfo {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Default)]
 pub struct SpecializationInfoBuilder {
     map_entries: Vec<SpecializationMapEntry>,
     data: Vec<u8>,
@@ -5904,10 +5904,7 @@ pub struct SpecializationInfoBuilder {
 
 impl SpecializationInfoBuilder {
     pub fn new() -> Self {
-        SpecializationInfoBuilder {
-            map_entries: Vec::new(),
-            data: Vec::new(),
-        }
+        Default::default()
     }
 
     pub fn entry<T: Copy>(&mut self, constant_id: u32, value: T) -> &mut Self {
@@ -7248,7 +7245,7 @@ impl<'a> From<&'a ComputePipelineCreateInfo> for VkComputePipelineCreateInfoWrap
                 sType: vks::VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO,
                 pNext: ptr::null(),
                 flags: create_info.flags,
-                stage: (&*stage).clone(),
+                stage: *stage,
                 layout: create_info.layout.handle(),
                 basePipelineHandle: base_pipeline_handle,
                 basePipelineIndex: base_pipeline_index,
