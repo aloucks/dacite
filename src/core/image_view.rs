@@ -12,8 +12,8 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
+use core::Device;
 use core::allocator_helper::AllocatorHelper;
-use core::{Device, Image};
 use std::cmp::Ordering;
 use std::hash::{Hash, Hasher};
 use std::ptr;
@@ -45,12 +45,11 @@ impl VulkanObject for ImageView {
 }
 
 impl ImageView {
-    pub(crate) fn new(handle: vks::VkImageView, device: Device, allocator: Option<AllocatorHelper>, image: Image) -> Self {
+    pub(crate) fn new(handle: vks::VkImageView, device: Device, allocator: Option<AllocatorHelper>) -> Self {
         ImageView(Arc::new(Inner {
             handle: handle,
             device: device,
             allocator: allocator,
-            image: image,
         }))
     }
 
@@ -65,7 +64,6 @@ struct Inner {
     handle: vks::VkImageView,
     device: Device,
     allocator: Option<AllocatorHelper>,
-    image: Image,
 }
 
 impl Drop for Inner {

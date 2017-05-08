@@ -241,7 +241,7 @@ impl Device {
         };
 
         if res == vks::VK_SUCCESS {
-            Ok(BufferView::new(buffer_view, self.clone(), allocator_helper, create_info.buffer.clone()))
+            Ok(BufferView::new(buffer_view, self.clone(), allocator_helper))
         }
         else {
             Err(res.into())
@@ -260,7 +260,7 @@ impl Device {
         };
 
         if res == vks::VK_SUCCESS {
-            Ok(ImageView::new(image_view, self.clone(), allocator_helper, create_info.image.clone()))
+            Ok(ImageView::new(image_view, self.clone(), allocator_helper))
         }
         else {
             Err(res.into())
@@ -355,16 +355,7 @@ impl Device {
         };
 
         if res == vks::VK_SUCCESS {
-            let mut samplers = Vec::new();
-            if let Some(ref bindings) = create_info.bindings {
-                for binding in bindings {
-                    if let Some(ref immutable_samplers) = binding.immutable_samplers {
-                        samplers.extend_from_slice(immutable_samplers);
-                    }
-                }
-            }
-
-            Ok(DescriptorSetLayout::new(descriptor_set_layout, self.clone(), allocator_helper, samplers))
+            Ok(DescriptorSetLayout::new(descriptor_set_layout, self.clone(), allocator_helper))
         }
         else {
             Err(res.into())

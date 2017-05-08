@@ -12,8 +12,8 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
+use core::Device;
 use core::allocator_helper::AllocatorHelper;
-use core::{Device, Sampler};
 use std::cmp::Ordering;
 use std::hash::{Hash, Hasher};
 use std::ptr;
@@ -45,12 +45,11 @@ impl VulkanObject for DescriptorSetLayout {
 }
 
 impl DescriptorSetLayout {
-    pub(crate) fn new(handle: vks::VkDescriptorSetLayout, device: Device, allocator: Option<AllocatorHelper>, samplers: Vec<Sampler>) -> Self {
+    pub(crate) fn new(handle: vks::VkDescriptorSetLayout, device: Device, allocator: Option<AllocatorHelper>) -> Self {
         DescriptorSetLayout(Arc::new(Inner {
             handle: handle,
             device: device,
             allocator: allocator,
-            samplers: samplers,
         }))
     }
 
@@ -65,7 +64,6 @@ struct Inner {
     handle: vks::VkDescriptorSetLayout,
     device: Device,
     allocator: Option<AllocatorHelper>,
-    samplers: Vec<Sampler>,
 }
 
 impl Drop for Inner {

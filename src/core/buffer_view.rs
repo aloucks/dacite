@@ -12,8 +12,8 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
+use core::Device;
 use core::allocator_helper::AllocatorHelper;
-use core::{Buffer, Device};
 use std::cmp::Ordering;
 use std::hash::{Hash, Hasher};
 use std::ptr;
@@ -45,12 +45,11 @@ impl VulkanObject for BufferView {
 }
 
 impl BufferView {
-    pub(crate) fn new(handle: vks::VkBufferView, device: Device, allocator: Option<AllocatorHelper>, buffer: Buffer) -> Self {
+    pub(crate) fn new(handle: vks::VkBufferView, device: Device, allocator: Option<AllocatorHelper>) -> Self {
         BufferView(Arc::new(Inner {
             handle: handle,
             device: device,
             allocator: allocator,
-            buffer: buffer
         }))
     }
 
@@ -65,7 +64,6 @@ struct Inner {
     handle: vks::VkBufferView,
     device: Device,
     allocator: Option<AllocatorHelper>,
-    buffer: Buffer,
 }
 
 impl Drop for Inner {
