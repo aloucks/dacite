@@ -21,6 +21,7 @@ use std::sync::Arc;
 use vks;
 use {TryDestroyError, TryDestroyErrorKind, VulkanObject};
 
+/// See [`VkPipelineLayout`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineLayout)
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct PipelineLayout(Arc<Inner>);
 

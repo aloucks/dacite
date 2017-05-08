@@ -1017,6 +1017,7 @@ impl From<SubpassIndex> for u32 {
     }
 }
 
+/// See [API Version Numbers](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#fundamentals-versionnum)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct Version {
     pub major: u32,
@@ -1074,6 +1075,7 @@ pub const MAX_MEMORY_HEAPS: usize = vks::VK_MAX_MEMORY_HEAPS;
 pub const MAX_EXTENSION_NAME_SIZE: usize = vks::VK_MAX_EXTENSION_NAME_SIZE;
 pub const MAX_DESCRIPTION_SIZE: usize = vks::VK_MAX_DESCRIPTION_SIZE;
 
+/// See [`VkPipelineCacheHeaderVersion`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineCacheHeaderVersion)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum PipelineCacheHeaderVersion {
     One,
@@ -1098,6 +1100,7 @@ impl From<PipelineCacheHeaderVersion> for vks::VkPipelineCacheHeaderVersion {
     }
 }
 
+/// See [`VkResult`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkResult)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum Error {
     OutOfHostMemory,
@@ -1179,6 +1182,7 @@ impl From<Error> for vks::VkResult {
     }
 }
 
+/// See [`VkSystemAllocationSope`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSystemAllocationSope)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum SystemAllocationSope {
     Command,
@@ -1215,6 +1219,7 @@ impl From<SystemAllocationSope> for vks::VkSystemAllocationScope {
     }
 }
 
+/// See [`VkInternalAllocationType`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkInternalAllocationType)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum InternalAllocationType {
     Executable,
@@ -1239,6 +1244,7 @@ impl From<InternalAllocationType> for vks::VkInternalAllocationType {
     }
 }
 
+/// See [`VkFormat`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkFormat)
 #[allow(non_camel_case_types)]
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum Format {
@@ -1816,6 +1822,7 @@ impl From<Format> for vks::VkFormat {
     }
 }
 
+/// See [`VkImageType`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageType)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum ImageType {
     Type1D,
@@ -1846,6 +1853,7 @@ impl From<ImageType> for vks::VkImageType {
     }
 }
 
+/// See [`VkImageTiling`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageTiling)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum ImageTiling {
     Optimal,
@@ -1873,6 +1881,7 @@ impl From<ImageTiling> for vks::VkImageTiling {
     }
 }
 
+/// See [`VkPhysicalDeviceType`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPhysicalDeviceType)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum PhysicalDeviceType {
     Other,
@@ -1909,6 +1918,7 @@ impl From<PhysicalDeviceType> for vks::VkPhysicalDeviceType {
     }
 }
 
+/// See [`VkQueryType`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueryType)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum QueryType {
     Occlusion,
@@ -1939,6 +1949,7 @@ impl From<QueryType> for vks::VkQueryType {
     }
 }
 
+/// See [`VkSharingMode`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSharingMode)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum SharingMode {
     Exclusive,
@@ -1966,6 +1977,7 @@ impl From<SharingMode> for vks::VkSharingMode {
     }
 }
 
+/// See [`VkImageLayout`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageLayout)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum ImageLayout {
     Undefined,
@@ -2014,6 +2026,7 @@ impl From<ImageLayout> for vks::VkImageLayout {
     }
 }
 
+/// See [`VkImageViewType`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageViewType)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum ImageViewType {
     Type1D,
@@ -2056,6 +2069,7 @@ impl From<ImageViewType> for vks::VkImageViewType {
     }
 }
 
+/// See [`VkComponentSwizzle`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkComponentSwizzle)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum ComponentSwizzle {
     Identity,
@@ -2098,6 +2112,7 @@ impl From<ComponentSwizzle> for vks::VkComponentSwizzle {
     }
 }
 
+/// See [`VkVertexInputRate`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkVertexInputRate)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum VertexInputRate {
     Vertex,
@@ -2125,6 +2140,7 @@ impl From<VertexInputRate> for vks::VkVertexInputRate {
     }
 }
 
+/// See [`VkPrimitiveTopology`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPrimitiveTopology)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum PrimitiveTopology {
     PointList,
@@ -2179,6 +2195,7 @@ impl From<PrimitiveTopology> for vks::VkPrimitiveTopology {
     }
 }
 
+/// See [`VkPolygonMode`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPolygonMode)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum PolygonMode {
     Fill,
@@ -2209,6 +2226,7 @@ impl From<PolygonMode> for vks::VkPolygonMode {
     }
 }
 
+/// See [`VkFrontFace`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkFrontFace)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum FrontFace {
     CounterClockwise,
@@ -2236,6 +2254,7 @@ impl From<FrontFace> for vks::VkFrontFace {
     }
 }
 
+/// See [`VkCompareOp`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCompareOp)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum CompareOp {
     Never,
@@ -2281,6 +2300,7 @@ impl From<CompareOp> for vks::VkCompareOp {
     }
 }
 
+/// See [`VkStencilOp`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkStencilOp)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum StencilOp {
     Keep,
@@ -2326,6 +2346,7 @@ impl From<StencilOp> for vks::VkStencilOp {
     }
 }
 
+/// See [`VkLogicOp`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkLogicOp)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum LogicOp {
     Clear,
@@ -2395,6 +2416,7 @@ impl From<LogicOp> for vks::VkLogicOp {
     }
 }
 
+/// See [`VkBlendFactor`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkBlendFactor)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum BlendFactor {
     Zero,
@@ -2473,6 +2495,7 @@ impl From<BlendFactor> for vks::VkBlendFactor {
     }
 }
 
+/// See [`VkBlendOp`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkBlendOp)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum BlendOp {
     Add,
@@ -2509,6 +2532,7 @@ impl From<BlendOp> for vks::VkBlendOp {
     }
 }
 
+/// See [`VkDynamicState`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDynamicState)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum DynamicState {
     Viewport,
@@ -2557,6 +2581,7 @@ impl From<DynamicState> for vks::VkDynamicState {
     }
 }
 
+/// See [`VkFilter`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkFilter)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum Filter {
     Nearest,
@@ -2584,6 +2609,7 @@ impl From<Filter> for vks::VkFilter {
     }
 }
 
+/// See [`VkSamplerMipmapMode`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSamplerMipmapMode)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum SamplerMipmapMode {
     Nearest,
@@ -2611,6 +2637,7 @@ impl From<SamplerMipmapMode> for vks::VkSamplerMipmapMode {
     }
 }
 
+/// See [`VkSamplerAddressMode`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSamplerAddressMode)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum SamplerAddressMode {
     Repeat,
@@ -2647,6 +2674,7 @@ impl From<SamplerAddressMode> for vks::VkSamplerAddressMode {
     }
 }
 
+/// See [`VkBorderColor`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkBorderColor)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum BorderColor {
     FloatTransparentBlack,
@@ -2686,6 +2714,7 @@ impl From<BorderColor> for vks::VkBorderColor {
     }
 }
 
+/// See [`VkDescriptorType`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDescriptorType)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum DescriptorType {
     Sampler,
@@ -2740,6 +2769,7 @@ impl From<DescriptorType> for vks::VkDescriptorType {
     }
 }
 
+/// See [`VkAttachmentLoadOp`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkAttachmentLoadOp)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum AttachmentLoadOp {
     Load,
@@ -2770,6 +2800,7 @@ impl From<AttachmentLoadOp> for vks::VkAttachmentLoadOp {
     }
 }
 
+/// See [`VkAttachmentStoreOp`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkAttachmentStoreOp)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum AttachmentStoreOp {
     Store,
@@ -2797,6 +2828,7 @@ impl From<AttachmentStoreOp> for vks::VkAttachmentStoreOp {
     }
 }
 
+/// See [`VkPipelineBindPoint`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineBindPoint)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum PipelineBindPoint {
     Graphics,
@@ -2824,6 +2856,7 @@ impl From<PipelineBindPoint> for vks::VkPipelineBindPoint {
     }
 }
 
+/// See [`VkCommandBufferLevel`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCommandBufferLevel)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum CommandBufferLevel {
     Primary,
@@ -2851,6 +2884,7 @@ impl From<CommandBufferLevel> for vks::VkCommandBufferLevel {
     }
 }
 
+/// See [`VkIndexType`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkIndexType)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum IndexType {
     UInt16,
@@ -2878,6 +2912,7 @@ impl From<IndexType> for vks::VkIndexType {
     }
 }
 
+/// See [`VkSubpassContents`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSubpassContents)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum SubpassContents {
     Inline,
@@ -2905,10 +2940,12 @@ impl From<SubpassContents> for vks::VkSubpassContents {
     }
 }
 
+/// See [`VkApplicationInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkApplicationInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub enum ApplicationInfoChainElement {
 }
 
+/// See [`VkApplicationInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkApplicationInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct ApplicationInfo {
     pub chain: Vec<ApplicationInfoChainElement>,
@@ -2976,10 +3013,12 @@ impl<'a> From<&'a ApplicationInfo> for VkApplicationInfoWrapper {
     }
 }
 
+/// See [`VkInstanceCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkInstanceCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub enum InstanceCreateInfoChainElement {
 }
 
+/// See [`VkInstanceCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkInstanceCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct InstanceCreateInfo {
     pub chain: Vec<InstanceCreateInfoChainElement>,
@@ -3142,6 +3181,7 @@ pub trait Allocator: Send {
     }
 }
 
+/// See [`VkPhysicalDeviceFeatures`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPhysicalDeviceFeatures)
 #[derive(Debug, Copy, Clone, PartialEq)]
 pub struct PhysicalDeviceFeatures {
     pub robust_buffer_access: bool,
@@ -3325,6 +3365,7 @@ impl<'a> From<&'a PhysicalDeviceFeatures> for vks::VkPhysicalDeviceFeatures {
     }
 }
 
+/// See [`VkFormatProperties`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkFormatProperties)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct FormatProperties {
     pub linear_tiling_features: FormatFeatureFlags,
@@ -3352,6 +3393,7 @@ impl<'a> From<&'a FormatProperties> for vks::VkFormatProperties {
     }
 }
 
+/// See [`VkExtent3D`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkExtent3D)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct Extent3D {
     pub width: u32,
@@ -3379,6 +3421,7 @@ impl<'a> From<&'a Extent3D> for vks::VkExtent3D {
     }
 }
 
+/// See [`VkImageFormatProperties`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageFormatProperties)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct ImageFormatProperties {
     pub max_extent: Extent3D,
@@ -3412,6 +3455,7 @@ impl<'a> From<&'a ImageFormatProperties> for vks::VkImageFormatProperties {
     }
 }
 
+/// See [`VkPhysicalDeviceLimits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPhysicalDeviceLimits)
 #[derive(Debug, Copy, Clone, PartialEq)]
 pub struct PhysicalDeviceLimits {
     pub max_image_dimension_1d: u32,
@@ -3748,6 +3792,7 @@ impl<'a> From<&'a PhysicalDeviceLimits> for vks::VkPhysicalDeviceLimits {
     }
 }
 
+/// See [`VkPhysicalDeviceSparseProperties`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPhysicalDeviceSparseProperties)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct PhysicalDeviceSparseProperties {
     pub residency_standard_2d_block_shape: bool,
@@ -3781,6 +3826,7 @@ impl<'a> From<&'a PhysicalDeviceSparseProperties> for vks::VkPhysicalDeviceSpars
     }
 }
 
+/// See [`VkPhysicalDeviceProperties`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPhysicalDeviceProperties)
 #[derive(Debug, Clone, PartialEq)]
 pub struct PhysicalDeviceProperties {
     pub api_version: Version,
@@ -3838,6 +3884,7 @@ impl<'a> From<&'a PhysicalDeviceProperties> for vks::VkPhysicalDeviceProperties 
     }
 }
 
+/// See [`VkQueueFamilyProperties`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueueFamilyProperties)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct QueueFamilyProperties {
     pub queue_flags: QueueFlags,
@@ -3868,6 +3915,7 @@ impl<'a> From<&'a QueueFamilyProperties> for vks::VkQueueFamilyProperties {
     }
 }
 
+/// See [`VkMemoryType`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkMemoryType)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct MemoryType {
     pub property_flags: MemoryPropertyFlags,
@@ -3892,6 +3940,7 @@ impl<'a> From<&'a MemoryType> for vks::VkMemoryType {
     }
 }
 
+/// See [`VkMemoryHeap`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkMemoryHeap)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct MemoryHeap {
     pub size: u64,
@@ -3916,6 +3965,7 @@ impl<'a> From<&'a MemoryHeap> for vks::VkMemoryHeap {
     }
 }
 
+/// See [`VkPhysicalDeviceMemoryProperties`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPhysicalDeviceMemoryProperties)
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct PhysicalDeviceMemoryProperties {
     pub memory_types: Vec<MemoryType>,
@@ -3962,10 +4012,12 @@ impl<'a> From<&'a PhysicalDeviceMemoryProperties> for vks::VkPhysicalDeviceMemor
     }
 }
 
+/// See [`VkDeviceQueueCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDeviceQueueCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub enum DeviceQueueCreateInfoChainElement {
 }
 
+/// See [`VkDeviceQueueCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDeviceQueueCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct DeviceQueueCreateInfo {
     pub chain: Vec<DeviceQueueCreateInfoChainElement>,
@@ -4029,10 +4081,12 @@ impl<'a> From<&'a DeviceQueueCreateInfo> for VkDeviceQueueCreateInfoWrapper {
     }
 }
 
+/// See [`VkDeviceCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDeviceCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub enum DeviceCreateInfoChainElement {
 }
 
+/// See [`VkDeviceCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDeviceCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct DeviceCreateInfo {
     pub chain: Vec<DeviceCreateInfoChainElement>,
@@ -4237,6 +4291,7 @@ impl<'a> From<&'a InstanceExtension> for &'a str {
     }
 }
 
+/// See [`VkExtensionProperties`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkExtensionProperties)
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct InstanceExtensionProperties {
     pub extension: InstanceExtension,
@@ -4303,6 +4358,7 @@ impl<'a> From<&'a DeviceExtension> for &'a str {
     }
 }
 
+/// See [`VkExtensionProperties`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkExtensionProperties)
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct DeviceExtensionProperties {
     pub extension: DeviceExtension,
@@ -4336,6 +4392,7 @@ impl<'a> From<&'a DeviceExtensionProperties> for vks::VkExtensionProperties {
     }
 }
 
+/// See [`VkLayerProperties`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkLayerProperties)
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct LayerProperties {
     pub layer_name: String,
@@ -4379,10 +4436,12 @@ impl<'a> From<&'a LayerProperties> for vks::VkLayerProperties {
     }
 }
 
+/// See [`VkSubmitInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSubmitInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub enum SubmitInfoChainElement {
 }
 
+/// See [`VkSubmitInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSubmitInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct SubmitInfo {
     pub chain: Vec<SubmitInfoChainElement>,
@@ -4482,10 +4541,12 @@ impl<'a> From<&'a SubmitInfo> for VkSubmitInfoWrapper {
     }
 }
 
+/// See [`VkMemoryAllocateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkMemoryAllocateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub enum MemoryAllocateInfoChainElement {
 }
 
+/// See [`VkMemoryAllocateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkMemoryAllocateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct MemoryAllocateInfo {
     pub chain: Vec<MemoryAllocateInfoChainElement>,
@@ -4537,10 +4598,12 @@ impl<'a> From<&'a MemoryAllocateInfo> for VkMemoryAllocateInfoWrapper {
     }
 }
 
+/// See [`VkMappedMemoryRange`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkMappedMemoryRange)
 #[derive(Debug, Clone, PartialEq)]
 pub enum MappedMemoryRangeChainElement {
 }
 
+/// See [`VkMappedMemoryRange`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkMappedMemoryRange)
 #[derive(Debug, Clone, PartialEq)]
 pub struct MappedMemoryRange {
     pub chain: Vec<MappedMemoryRangeChainElement>,
@@ -4584,6 +4647,7 @@ impl<'a> From<&'a MappedMemoryRange> for VkMappedMemoryRangeWrapper {
     }
 }
 
+/// See [`VkMemoryRequirements`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkMemoryRequirements)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct MemoryRequirements {
     pub size: u64,
@@ -4611,6 +4675,7 @@ impl<'a> From<&'a MemoryRequirements> for vks::VkMemoryRequirements {
     }
 }
 
+/// See [`VkSparseImageFormatProperties`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSparseImageFormatProperties)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct SparseImageFormatProperties {
     pub aspect_mask: ImageAspectFlags,
@@ -4638,6 +4703,7 @@ impl<'a> From<&'a SparseImageFormatProperties> for vks::VkSparseImageFormatPrope
     }
 }
 
+/// See [`VkSparseImageMemoryRequirements`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSparseImageMemoryRequirements)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct SparseImageMemoryRequirements {
     pub format_properties: SparseImageFormatProperties,
@@ -4671,6 +4737,7 @@ impl<'a> From<&'a SparseImageMemoryRequirements> for vks::VkSparseImageMemoryReq
     }
 }
 
+/// See [`VkSparseMemoryBind`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSparseMemoryBind)
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct SparseMemoryBind {
     pub resource_offset: u64,
@@ -4720,6 +4787,7 @@ impl<'a> From<&'a SparseMemoryBind> for VkSparseMemoryBindWrapper {
     }
 }
 
+/// See [`VkSparseBufferMemoryBindInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSparseBufferMemoryBindInfo)
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct SparseBufferMemoryBindInfo {
     pub buffer: Buffer,
@@ -4766,6 +4834,7 @@ impl<'a> From<&'a SparseBufferMemoryBindInfo> for VkSparseBufferMemoryBindInfoWr
     }
 }
 
+/// See [`VkSparseImageOpaqueMemoryBindInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSparseImageOpaqueMemoryBindInfo)
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct SparseImageOpaqueMemoryBindInfo {
     pub image: Image,
@@ -4812,6 +4881,7 @@ impl<'a> From<&'a SparseImageOpaqueMemoryBindInfo> for VkSparseImageOpaqueMemory
     }
 }
 
+/// See [`VkImageSubresource`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageSubresource)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct ImageSubresource {
     pub aspect_mask: ImageAspectFlags,
@@ -4839,6 +4909,7 @@ impl<'a> From<&'a ImageSubresource> for vks::VkImageSubresource {
     }
 }
 
+/// See [`VkOffset3D`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkOffset3D)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct Offset3D {
     pub x: i32,
@@ -4866,6 +4937,7 @@ impl<'a> From<&'a Offset3D> for vks::VkOffset3D {
     }
 }
 
+/// See [`VkSparseImageMemoryBind`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSparseImageMemoryBind)
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct SparseImageMemoryBind {
     pub subresource: ImageSubresource,
@@ -4917,6 +4989,7 @@ impl<'a> From<&'a SparseImageMemoryBind> for VkSparseImageMemoryBindWrapper {
     }
 }
 
+/// See [`VkSparseImageMemoryBindInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSparseImageMemoryBindInfo)
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct SparseImageMemoryBindInfo {
     pub image: Image,
@@ -4963,10 +5036,12 @@ impl<'a> From<&'a SparseImageMemoryBindInfo> for VkSparseImageMemoryBindInfoWrap
     }
 }
 
+/// See [`VkBindSparseInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkBindSparseInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub enum BindSparseInfoChainElement {
 }
 
+/// See [`VkBindSparseInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkBindSparseInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct BindSparseInfo {
     pub chain: Vec<BindSparseInfoChainElement>,
@@ -5087,10 +5162,12 @@ impl<'a> From<&'a BindSparseInfo> for VkBindSparseInfoWrapper {
     }
 }
 
+/// See [`VkFenceCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkFenceCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub enum FenceCreateInfoChainElement {
 }
 
+/// See [`VkFenceCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkFenceCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct FenceCreateInfo {
     pub chain: Vec<FenceCreateInfoChainElement>,
@@ -5139,10 +5216,12 @@ impl<'a> From<&'a FenceCreateInfo> for VkFenceCreateInfoWrapper {
     }
 }
 
+/// See [`VkSemaphoreCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSemaphoreCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub enum SemaphoreCreateInfoChainElement {
 }
 
+/// See [`VkSemaphoreCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSemaphoreCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct SemaphoreCreateInfo {
     pub chain: Vec<SemaphoreCreateInfoChainElement>,
@@ -5191,10 +5270,12 @@ impl<'a> From<&'a SemaphoreCreateInfo> for VkSemaphoreCreateInfoWrapper {
     }
 }
 
+/// See [`VkEventCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkEventCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub enum EventCreateInfoChainElement {
 }
 
+/// See [`VkEventCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkEventCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct EventCreateInfo {
     pub chain: Vec<EventCreateInfoChainElement>,
@@ -5243,10 +5324,12 @@ impl<'a> From<&'a EventCreateInfo> for VkEventCreateInfoWrapper {
     }
 }
 
+/// See [`VkQueryPoolCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueryPoolCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub enum QueryPoolCreateInfoChainElement {
 }
 
+/// See [`VkQueryPoolCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueryPoolCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct QueryPoolCreateInfo {
     pub chain: Vec<QueryPoolCreateInfoChainElement>,
@@ -5304,10 +5387,12 @@ impl<'a> From<&'a QueryPoolCreateInfo> for VkQueryPoolCreateInfoWrapper {
     }
 }
 
+/// See [`VkBufferCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkBufferCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub enum BufferCreateInfoChainElement {
 }
 
+/// See [`VkBufferCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkBufferCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct BufferCreateInfo {
     pub chain: Vec<BufferCreateInfoChainElement>,
@@ -5386,10 +5471,12 @@ impl<'a> From<&'a BufferCreateInfo> for VkBufferCreateInfoWrapper {
     }
 }
 
+/// See [`VkBufferViewCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkBufferViewCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub enum BufferViewCreateInfoChainElement {
 }
 
+/// See [`VkBufferViewCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkBufferViewCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct BufferViewCreateInfo {
     pub chain: Vec<BufferViewCreateInfoChainElement>,
@@ -5437,10 +5524,12 @@ impl<'a> From<&'a BufferViewCreateInfo> for VkBufferViewCreateInfoWrapper {
     }
 }
 
+/// See [`VkImageCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub enum ImageCreateInfoChainElement {
 }
 
+/// See [`VkImageCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct ImageCreateInfo {
     pub chain: Vec<ImageCreateInfoChainElement>,
@@ -5540,6 +5629,7 @@ impl<'a> From<&'a ImageCreateInfo> for VkImageCreateInfoWrapper {
     }
 }
 
+/// See [`VkSubresourceLayout`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSubresourceLayout)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct SubresourceLayout {
     pub offset: u64,
@@ -5573,6 +5663,7 @@ impl<'a> From<&'a SubresourceLayout> for vks::VkSubresourceLayout {
     }
 }
 
+/// See [`VkComponentMapping`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkComponentMapping)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct ComponentMapping {
     pub r: ComponentSwizzle,
@@ -5603,6 +5694,7 @@ impl<'a> From<&'a ComponentMapping> for vks::VkComponentMapping {
     }
 }
 
+/// See [`VkImageSubresourceRange`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageSubresourceRange)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct ImageSubresourceRange {
     pub aspect_mask: ImageAspectFlags,
@@ -5636,10 +5728,12 @@ impl<'a> From<&'a ImageSubresourceRange> for vks::VkImageSubresourceRange {
     }
 }
 
+/// See [`VkImageViewCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageViewCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub enum ImageViewCreateInfoChainElement {
 }
 
+/// See [`VkImageViewCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageViewCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct ImageViewCreateInfo {
     pub chain: Vec<ImageViewCreateInfoChainElement>,
@@ -5689,10 +5783,12 @@ impl<'a> From<&'a ImageViewCreateInfo> for VkImageViewCreateInfoWrapper {
     }
 }
 
+/// See [`VkShaderModuleCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkShaderModuleCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub enum ShaderModuleCreateInfoChainElement {
 }
 
+/// See [`VkShaderModuleCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkShaderModuleCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct ShaderModuleCreateInfo {
     pub chain: Vec<ShaderModuleCreateInfoChainElement>,
@@ -5758,10 +5854,12 @@ impl<'a> From<&'a ShaderModuleCreateInfo> for VkShaderModuleCreateInfoWrapper {
     }
 }
 
+/// See [`VkPipelineCacheCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineCacheCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub enum PipelineCacheCreateInfoChainElement {
 }
 
+/// See [`VkPipelineCacheCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineCacheCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct PipelineCacheCreateInfo {
     pub chain: Vec<PipelineCacheCreateInfoChainElement>,
@@ -5836,6 +5934,7 @@ impl<'a> From<&'a PipelineCacheCreateInfo> for VkPipelineCacheCreateInfoWrapper 
     }
 }
 
+/// See [`VkSpecializationMapEntry`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSpecializationMapEntry)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct SpecializationMapEntry {
     pub constant_id: u32,
@@ -5863,6 +5962,7 @@ impl<'a> From<&'a SpecializationMapEntry> for vks::VkSpecializationMapEntry {
     }
 }
 
+/// See [`VkSpecializationInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSpecializationInfo)
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct SpecializationInfo {
     pub map_entries: Option<Vec<SpecializationMapEntry>>,
@@ -5896,6 +5996,7 @@ impl<'a> From<&'a vks::VkSpecializationInfo> for SpecializationInfo {
     }
 }
 
+/// See [`VkSpecializationInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSpecializationInfo)
 #[derive(Debug, Clone, Default)]
 pub struct SpecializationInfoBuilder {
     map_entries: Vec<SpecializationMapEntry>,
@@ -5995,10 +6096,12 @@ impl<'a> From<&'a SpecializationInfo> for VkSpecializationInfoWrapper {
     }
 }
 
+/// See [`VkPipelineShaderStageCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineShaderStageCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub enum PipelineShaderStageCreateInfoChainElement {
 }
 
+/// See [`VkPipelineShaderStageCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineShaderStageCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct PipelineShaderStageCreateInfo {
     pub chain: Vec<PipelineShaderStageCreateInfoChainElement>,
@@ -6061,6 +6164,7 @@ impl<'a> From<&'a PipelineShaderStageCreateInfo> for VkPipelineShaderStageCreate
     }
 }
 
+/// See [`VkVertexInputBindingDescription`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkVertexInputBindingDescription)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct VertexInputBindingDescription {
     pub binding: u32,
@@ -6088,6 +6192,7 @@ impl<'a> From<&'a VertexInputBindingDescription> for vks::VkVertexInputBindingDe
     }
 }
 
+/// See [`VkVertexInputAttributeDescription`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkVertexInputAttributeDescription)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct VertexInputAttributeDescription {
     pub location: u32,
@@ -6118,10 +6223,12 @@ impl<'a> From<&'a VertexInputAttributeDescription> for vks::VkVertexInputAttribu
     }
 }
 
+/// See [`VkPipelineVertexInputStateCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineVertexInputStateCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub enum PipelineVertexInputStateCreateInfoChainElement {
 }
 
+/// See [`VkPipelineVertexInputStateCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineVertexInputStateCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct PipelineVertexInputStateCreateInfo {
     pub chain: Vec<PipelineVertexInputStateCreateInfoChainElement>,
@@ -6224,10 +6331,12 @@ impl<'a> From<&'a PipelineVertexInputStateCreateInfo> for VkPipelineVertexInputS
     }
 }
 
+/// See [`VkPipelineInputAssemblyStateCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineInputAssemblyStateCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub enum PipelineInputAssemblyStateCreateInfoChainElement {
 }
 
+/// See [`VkPipelineInputAssemblyStateCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineInputAssemblyStateCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct PipelineInputAssemblyStateCreateInfo {
     pub chain: Vec<PipelineInputAssemblyStateCreateInfoChainElement>,
@@ -6282,10 +6391,12 @@ impl<'a> From<&'a PipelineInputAssemblyStateCreateInfo> for VkPipelineInputAssem
     }
 }
 
+/// See [`VkPipelineTessellationStateCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineTessellationStateCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub enum PipelineTessellationStateCreateInfoChainElement {
 }
 
+/// See [`VkPipelineTessellationStateCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineTessellationStateCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct PipelineTessellationStateCreateInfo {
     pub chain: Vec<PipelineTessellationStateCreateInfoChainElement>,
@@ -6337,6 +6448,7 @@ impl<'a> From<&'a PipelineTessellationStateCreateInfo> for VkPipelineTessellatio
     }
 }
 
+/// See [`VkViewport`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkViewport)
 #[derive(Debug, Copy, Clone, PartialEq)]
 pub struct Viewport {
     pub x: f32,
@@ -6373,6 +6485,7 @@ impl<'a> From<&'a Viewport> for vks::VkViewport {
     }
 }
 
+/// See [`VkOffset2D`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkOffset2D)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct Offset2D {
     pub x: i32,
@@ -6397,6 +6510,7 @@ impl<'a> From<&'a Offset2D> for vks::VkOffset2D {
     }
 }
 
+/// See [`VkExtent2D`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkExtent2D)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct Extent2D {
     pub width: u32,
@@ -6421,6 +6535,7 @@ impl<'a> From<&'a Extent2D> for vks::VkExtent2D {
     }
 }
 
+/// See [`VkRect2D`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkRect2D)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct Rect2D {
     pub offset: Offset2D,
@@ -6445,10 +6560,12 @@ impl<'a> From<&'a Rect2D> for vks::VkRect2D {
     }
 }
 
+/// See [`VkPipelineViewportStateCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineViewportStateCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub enum PipelineViewportStateCreateInfoChainElement {
 }
 
+/// See [`VkPipelineViewportStateCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineViewportStateCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct PipelineViewportStateCreateInfo {
     pub chain: Vec<PipelineViewportStateCreateInfoChainElement>,
@@ -6526,10 +6643,12 @@ impl<'a> From<&'a PipelineViewportStateCreateInfo> for VkPipelineViewportStateCr
     }
 }
 
+/// See [`VkPipelineRasterizationStateCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineRasterizationStateCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub enum PipelineRasterizationStateCreateInfoChainElement {
 }
 
+/// See [`VkPipelineRasterizationStateCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineRasterizationStateCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct PipelineRasterizationStateCreateInfo {
     pub chain: Vec<PipelineRasterizationStateCreateInfoChainElement>,
@@ -6608,10 +6727,12 @@ impl<'a> From<&'a PipelineRasterizationStateCreateInfo> for VkPipelineRasterizat
     }
 }
 
+/// See [`VkPipelineMultisampleStateCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineMultisampleStateCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub enum PipelineMultisampleStateCreateInfoChainElement {
 }
 
+/// See [`VkPipelineMultisampleStateCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineMultisampleStateCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct PipelineMultisampleStateCreateInfo {
     pub chain: Vec<PipelineMultisampleStateCreateInfoChainElement>,
@@ -6699,6 +6820,7 @@ impl<'a> From<&'a PipelineMultisampleStateCreateInfo> for VkPipelineMultisampleS
     }
 }
 
+/// See [`VkStencilOpState`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkStencilOpState)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct StencilOpState {
     pub fail_op: StencilOp,
@@ -6738,10 +6860,12 @@ impl<'a> From<&'a StencilOpState> for vks::VkStencilOpState {
     }
 }
 
+/// See [`VkPipelineDepthStencilStateCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineDepthStencilStateCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub enum PipelineDepthStencilStateCreateInfoChainElement {
 }
 
+/// See [`VkPipelineDepthStencilStateCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineDepthStencilStateCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct PipelineDepthStencilStateCreateInfo {
     pub chain: Vec<PipelineDepthStencilStateCreateInfoChainElement>,
@@ -6817,6 +6941,7 @@ impl<'a> From<&'a PipelineDepthStencilStateCreateInfo> for VkPipelineDepthStenci
     }
 }
 
+/// See [`VkPipelineColorBlendAttachmentState`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineColorBlendAttachmentState)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct PipelineColorBlendAttachmentState {
     pub blend_enable: bool,
@@ -6859,10 +6984,12 @@ impl<'a> From<&'a PipelineColorBlendAttachmentState> for vks::VkPipelineColorBle
     }
 }
 
+/// See [`VkPipelineColorBlendStateCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineColorBlendStateCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub enum PipelineColorBlendStateCreateInfoChainElement {
 }
 
+/// See [`VkPipelineColorBlendStateCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineColorBlendStateCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct PipelineColorBlendStateCreateInfo {
     pub chain: Vec<PipelineColorBlendStateCreateInfoChainElement>,
@@ -6947,10 +7074,12 @@ impl<'a> From<&'a PipelineColorBlendStateCreateInfo> for VkPipelineColorBlendSta
     }
 }
 
+/// See [`VkPipelineDynamicStateCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineDynamicStateCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub enum PipelineDynamicStateCreateInfoChainElement {
 }
 
+/// See [`VkPipelineDynamicStateCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineDynamicStateCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct PipelineDynamicStateCreateInfo {
     pub chain: Vec<PipelineDynamicStateCreateInfoChainElement>,
@@ -7019,10 +7148,12 @@ impl<'a> From<&'a PipelineDynamicStateCreateInfo> for VkPipelineDynamicStateCrea
     }
 }
 
+/// See [`VkGraphicsPipelineCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkGraphicsPipelineCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub enum GraphicsPipelineCreateInfoChainElement {
 }
 
+/// See [`VkGraphicsPipelineCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkGraphicsPipelineCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct GraphicsPipelineCreateInfo {
     pub chain: Vec<GraphicsPipelineCreateInfoChainElement>,
@@ -7190,10 +7321,12 @@ impl<'a> From<&'a GraphicsPipelineCreateInfo> for VkGraphicsPipelineCreateInfoWr
     }
 }
 
+/// See [`VkComputePipelineCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkComputePipelineCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub enum ComputePipelineCreateInfoChainElement {
 }
 
+/// See [`VkComputePipelineCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkComputePipelineCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct ComputePipelineCreateInfo {
     pub chain: Vec<ComputePipelineCreateInfoChainElement>,
@@ -7257,6 +7390,7 @@ impl<'a> From<&'a ComputePipelineCreateInfo> for VkComputePipelineCreateInfoWrap
     }
 }
 
+/// See [`VkPushConstantRange`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPushConstantRange)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct PushConstantRange {
     pub stage_flags: ShaderStageFlags,
@@ -7284,10 +7418,12 @@ impl<'a> From<&'a PushConstantRange> for vks::VkPushConstantRange {
     }
 }
 
+/// See [`VkPipelineLayoutCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineLayoutCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub enum PipelineLayoutCreateInfoChainElement {
 }
 
+/// See [`VkPipelineLayoutCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineLayoutCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct PipelineLayoutCreateInfo {
     pub chain: Vec<PipelineLayoutCreateInfoChainElement>,
@@ -7356,10 +7492,12 @@ impl<'a> From<&'a PipelineLayoutCreateInfo> for VkPipelineLayoutCreateInfoWrappe
     }
 }
 
+/// See [`VkSamplerCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSamplerCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub enum SamplerCreateInfoChainElement {
 }
 
+/// See [`VkSamplerCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSamplerCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct SamplerCreateInfo {
     pub chain: Vec<SamplerCreateInfoChainElement>,
@@ -7453,6 +7591,7 @@ impl<'a> From<&'a SamplerCreateInfo> for VkSamplerCreateInfoWrapper {
     }
 }
 
+/// See [`VkDescriptorSetLayoutBinding`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDescriptorSetLayoutBinding)
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct DescriptorSetLayoutBinding {
     pub binding: u32,
@@ -7508,10 +7647,12 @@ impl<'a> From<&'a DescriptorSetLayoutBinding> for VkDescriptorSetLayoutBindingWr
     }
 }
 
+/// See [`VkDescriptorSetLayoutCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDescriptorSetLayoutCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub enum DescriptorSetLayoutCreateInfoChainElement {
 }
 
+/// See [`VkDescriptorSetLayoutCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDescriptorSetLayoutCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct DescriptorSetLayoutCreateInfo {
     pub chain: Vec<DescriptorSetLayoutCreateInfoChainElement>,
@@ -7566,6 +7707,7 @@ impl<'a> From<&'a DescriptorSetLayoutCreateInfo> for VkDescriptorSetLayoutCreate
     }
 }
 
+/// See [`VkDescriptorPoolSize`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDescriptorPoolSize)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct DescriptorPoolSize {
     pub descriptor_type: DescriptorType,
@@ -7590,10 +7732,12 @@ impl<'a> From<&'a DescriptorPoolSize> for vks::VkDescriptorPoolSize {
     }
 }
 
+/// See [`VkDescriptorPoolCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDescriptorPoolCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub enum DescriptorPoolCreateInfoChainElement {
 }
 
+/// See [`VkDescriptorPoolCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDescriptorPoolCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct DescriptorPoolCreateInfo {
     pub chain: Vec<DescriptorPoolCreateInfoChainElement>,
@@ -7663,10 +7807,12 @@ impl<'a> From<&'a DescriptorPoolCreateInfo> for VkDescriptorPoolCreateInfoWrappe
     }
 }
 
+/// See [`VkDescriptorSetAllocateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDescriptorSetAllocateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub enum DescriptorSetAllocateInfoChainElement {
 }
 
+/// See [`VkDescriptorSetAllocateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDescriptorSetAllocateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct DescriptorSetAllocateInfo {
     pub chain: Vec<DescriptorSetAllocateInfoChainElement>,
@@ -7715,6 +7861,7 @@ impl<'a> From<&'a DescriptorSetAllocateInfo> for VkDescriptorSetAllocateInfoWrap
     }
 }
 
+/// See [`VkDescriptorImageInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDescriptorImageInfo)
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct DescriptorImageInfo {
     pub sampler: Option<Sampler>,
@@ -7767,6 +7914,7 @@ impl<'a> From<&'a DescriptorImageInfo> for VkDescriptorImageInfoWrapper {
     }
 }
 
+/// See [`VkDescriptorBufferInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDescriptorBufferInfo)
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct DescriptorBufferInfo {
     pub buffer: Buffer,
@@ -7807,10 +7955,12 @@ impl<'a> From<&'a DescriptorBufferInfo> for VkDescriptorBufferInfoWrapper {
     }
 }
 
+/// See [`VkWriteDescriptorSet`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkWriteDescriptorSet)
 #[derive(Debug, Clone, PartialEq)]
 pub enum WriteDescriptorSetChainElement {
 }
 
+/// See [`VkWriteDescriptorSet`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkWriteDescriptorSet)
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub enum WriteDescriptorSetElements {
     ImageInfo(Vec<DescriptorImageInfo>),
@@ -7818,6 +7968,7 @@ pub enum WriteDescriptorSetElements {
     TexelBufferView(Vec<BufferView>),
 }
 
+/// See [`VkWriteDescriptorSet`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkWriteDescriptorSet)
 #[derive(Debug, Clone, PartialEq)]
 pub struct WriteDescriptorSet {
     pub chain: Vec<WriteDescriptorSetChainElement>,
@@ -7909,10 +8060,12 @@ impl<'a> From<&'a WriteDescriptorSet> for VkWriteDescriptorSetWrapper {
     }
 }
 
+/// See [`VkCopyDescriptorSet`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCopyDescriptorSet)
 #[derive(Debug, Clone, PartialEq)]
 pub enum CopyDescriptorSetChainElement {
 }
 
+/// See [`VkCopyDescriptorSet`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCopyDescriptorSet)
 #[derive(Debug, Clone, PartialEq)]
 pub struct CopyDescriptorSet {
     pub chain: Vec<CopyDescriptorSetChainElement>,
@@ -7966,10 +8119,12 @@ impl<'a> From<&'a CopyDescriptorSet> for VkCopyDescriptorSetWrapper {
     }
 }
 
+/// See [`VkFramebufferCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkFramebufferCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub enum FramebufferCreateInfoChainElement {
 }
 
+/// See [`VkFramebufferCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkFramebufferCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct FramebufferCreateInfo {
     pub chain: Vec<FramebufferCreateInfoChainElement>,
@@ -8034,6 +8189,7 @@ impl<'a> From<&'a FramebufferCreateInfo> for VkFramebufferCreateInfoWrapper {
     }
 }
 
+/// See [`VkAttachmentDescription`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkAttachmentDescription)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct AttachmentDescription {
     pub flags: AttachmentDescriptionFlags,
@@ -8079,6 +8235,7 @@ impl<'a> From<&'a AttachmentDescription> for vks::VkAttachmentDescription {
     }
 }
 
+/// See [`VkAttachmentReference`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkAttachmentReference)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct AttachmentReference {
     pub attachment: AttachmentIndex,
@@ -8103,6 +8260,7 @@ impl<'a> From<&'a AttachmentReference> for vks::VkAttachmentReference {
     }
 }
 
+/// See [`VkSubpassDescription`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSubpassDescription)
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct SubpassDescription {
     pub flags: SubpassDescriptionFlags,
@@ -8275,6 +8433,7 @@ impl<'a> From<&'a SubpassDescription> for VkSubpassDescriptionWrapper {
     }
 }
 
+/// See [`VkSubpassDependency`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSubpassDependency)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct SubpassDependency {
     pub src_subpass: SubpassIndex,
@@ -8314,10 +8473,12 @@ impl<'a> From<&'a SubpassDependency> for vks::VkSubpassDependency {
     }
 }
 
+/// See [`VkRenderPassCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkRenderPassCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub enum RenderPassCreateInfoChainElement {
 }
 
+/// See [`VkRenderPassCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkRenderPassCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct RenderPassCreateInfo {
     pub chain: Vec<RenderPassCreateInfoChainElement>,
@@ -8438,10 +8599,12 @@ impl<'a> From<&'a RenderPassCreateInfo> for VkRenderPassCreateInfoWrapper {
     }
 }
 
+/// See [`VkCommandPoolCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCommandPoolCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub enum CommandPoolCreateInfoChainElement {
 }
 
+/// See [`VkCommandPoolCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCommandPoolCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct CommandPoolCreateInfo {
     pub chain: Vec<CommandPoolCreateInfoChainElement>,
@@ -8493,10 +8656,12 @@ impl<'a> From<&'a CommandPoolCreateInfo> for VkCommandPoolCreateInfoWrapper {
     }
 }
 
+/// See [`VkCommandBufferAllocateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCommandBufferAllocateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub enum CommandBufferAllocateInfoChainElement {
 }
 
+/// See [`VkCommandBufferAllocateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCommandBufferAllocateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct CommandBufferAllocateInfo {
     pub chain: Vec<CommandBufferAllocateInfoChainElement>,
@@ -8555,10 +8720,12 @@ impl VkCommandBufferAllocateInfoWrapper {
     }
 }
 
+/// See [`VkCommandBufferInheritanceInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCommandBufferInheritanceInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub enum CommandBufferInheritanceInfoChainElement {
 }
 
+/// See [`VkCommandBufferInheritanceInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCommandBufferInheritanceInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct CommandBufferInheritanceInfo {
     pub chain: Vec<CommandBufferInheritanceInfoChainElement>,
@@ -8620,10 +8787,12 @@ impl<'a> From<&'a CommandBufferInheritanceInfo> for VkCommandBufferInheritanceIn
     }
 }
 
+/// See [`VkCommandBufferBeginInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCommandBufferBeginInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub enum CommandBufferBeginInfoChainElement {
 }
 
+/// See [`VkCommandBufferBeginInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCommandBufferBeginInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct CommandBufferBeginInfo {
     pub chain: Vec<CommandBufferBeginInfoChainElement>,
@@ -8674,6 +8843,7 @@ impl<'a> From<&'a CommandBufferBeginInfo> for VkCommandBufferBeginInfoWrapper {
     }
 }
 
+/// See [`VkBufferCopy`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkBufferCopy)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct BufferCopy {
     pub src_offset: u64,
@@ -8701,6 +8871,7 @@ impl<'a> From<&'a BufferCopy> for vks::VkBufferCopy {
     }
 }
 
+/// See [`VkImageSubresourceLayers`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageSubresourceLayers)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct ImageSubresourceLayers {
     pub aspect_mask: ImageAspectFlags,
@@ -8731,6 +8902,7 @@ impl<'a> From<&'a ImageSubresourceLayers> for vks::VkImageSubresourceLayers {
     }
 }
 
+/// See [`VkImageCopy`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageCopy)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct ImageCopy {
     pub src_subresource: ImageSubresourceLayers,
@@ -8764,6 +8936,7 @@ impl<'a> From<&'a ImageCopy> for vks::VkImageCopy {
     }
 }
 
+/// See [`VkImageBlit`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageBlit)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct ImageBlit {
     pub src_subresource: ImageSubresourceLayers,
@@ -8800,6 +8973,7 @@ impl<'a> From<&'a ImageBlit> for vks::VkImageBlit {
     }
 }
 
+/// See [`VkBufferImageCopy`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkBufferImageCopy)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct BufferImageCopy {
     pub buffer_offset: u64,
@@ -8836,6 +9010,7 @@ impl<'a> From<&'a BufferImageCopy> for vks::VkBufferImageCopy {
     }
 }
 
+/// See [`VkClearColorValue`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkClearValue)
 #[derive(Debug, Copy, Clone, PartialEq)]
 pub enum ClearColorValue {
     Float32([f32; 4]),
@@ -8859,6 +9034,7 @@ impl<'a> From<&'a ClearColorValue> for vks::VkClearColorValue {
     }
 }
 
+/// See [`VkClearDepthStencilValue`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkClearDepthStencilValue)
 #[derive(Debug, Copy, Clone, PartialEq)]
 pub struct ClearDepthStencilValue {
     pub depth: f32,
@@ -8883,6 +9059,7 @@ impl<'a> From<&'a ClearDepthStencilValue> for vks::VkClearDepthStencilValue {
     }
 }
 
+/// See [`VkClearValue`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkClearValue)
 #[derive(Debug, Copy, Clone, PartialEq)]
 pub enum ClearValue {
     Color(ClearColorValue),
@@ -8904,6 +9081,7 @@ impl<'a> From<&'a ClearValue> for vks::VkClearValue {
     }
 }
 
+/// See [`VkClearAttachment`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkClearAttachment)
 #[derive(Debug, Copy, Clone, PartialEq)]
 pub struct ClearAttachment {
     pub aspect_mask: ImageAspectFlags,
@@ -8921,6 +9099,7 @@ impl<'a> From<&'a ClearAttachment> for vks::VkClearAttachment {
     }
 }
 
+/// See [`VkClearRect`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkClearRect)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct ClearRect {
     pub rect: Rect2D,
@@ -8948,6 +9127,7 @@ impl<'a> From<&'a ClearRect> for vks::VkClearRect {
     }
 }
 
+/// See [`VkImageResolve`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageResolve)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct ImageResolve {
     pub src_subresource: ImageSubresourceLayers,
@@ -8981,10 +9161,12 @@ impl<'a> From<&'a ImageResolve> for vks::VkImageResolve {
     }
 }
 
+/// See [`VkMemoryBarrier`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkMemoryBarrier)
 #[derive(Debug, Clone, PartialEq)]
 pub enum MemoryBarrierChainElement {
 }
 
+/// See [`VkMemoryBarrier`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkMemoryBarrier)
 #[derive(Debug, Clone, PartialEq)]
 pub struct MemoryBarrier {
     pub chain: Vec<MemoryBarrierChainElement>,
@@ -9036,10 +9218,12 @@ impl<'a> From<&'a MemoryBarrier> for VkMemoryBarrierWrapper {
     }
 }
 
+/// See [`VkBufferMemoryBarrier`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkBufferMemoryBarrier)
 #[derive(Debug, Clone, PartialEq)]
 pub enum BufferMemoryBarrierChainElement {
 }
 
+/// See [`VkBufferMemoryBarrier`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkBufferMemoryBarrier)
 #[derive(Debug, Clone, PartialEq)]
 pub struct BufferMemoryBarrier {
     pub chain: Vec<BufferMemoryBarrierChainElement>,
@@ -9091,10 +9275,12 @@ impl<'a> From<&'a BufferMemoryBarrier> for VkBufferMemoryBarrierWrapper {
     }
 }
 
+/// See [`VkImageMemoryBarrier`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageMemoryBarrier)
 #[derive(Debug, Clone, PartialEq)]
 pub enum ImageMemoryBarrierChainElement {
 }
 
+/// See [`VkImageMemoryBarrier`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageMemoryBarrier)
 #[derive(Debug, Clone, PartialEq)]
 pub struct ImageMemoryBarrier {
     pub chain: Vec<ImageMemoryBarrierChainElement>,
@@ -9148,10 +9334,12 @@ impl<'a> From<&'a ImageMemoryBarrier> for VkImageMemoryBarrierWrapper {
     }
 }
 
+/// See [`VkRenderPassBeginInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkRenderPassBeginInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub enum RenderPassBeginInfoChainElement {
 }
 
+/// See [`VkRenderPassBeginInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkRenderPassBeginInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct RenderPassBeginInfo {
     pub chain: Vec<RenderPassBeginInfoChainElement>,
@@ -9211,6 +9399,7 @@ impl<'a> From<&'a RenderPassBeginInfo> for VkRenderPassBeginInfoWrapper {
     }
 }
 
+/// See [`VkDispatchIndirectCommand`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDispatchIndirectCommand)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct DispatchIndirectCommand {
     pub x: u32,
@@ -9238,6 +9427,7 @@ impl<'a> From<&'a DispatchIndirectCommand> for vks::VkDispatchIndirectCommand {
     }
 }
 
+/// See [`VkDrawIndexedIndirectCommand`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDrawIndexedIndirectCommand)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct DrawIndexedIndirectCommand {
     pub index_count: u32,
@@ -9271,6 +9461,7 @@ impl<'a> From<&'a DrawIndexedIndirectCommand> for vks::VkDrawIndexedIndirectComm
     }
 }
 
+/// See [`VkDrawIndirectCommand`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDrawIndirectCommand)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct DrawIndirectCommand {
     pub vertex_count: u32,

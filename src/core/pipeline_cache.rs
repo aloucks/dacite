@@ -21,6 +21,7 @@ use std::sync::Arc;
 use vks;
 use {TryDestroyError, TryDestroyErrorKind, VulkanObject};
 
+/// See [`VkPipelineCache`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineCache)
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct PipelineCache(Arc<Inner>);
 

@@ -23,6 +23,7 @@ use utils;
 use vks;
 use {TryDestroyError, TryDestroyErrorKind, VulkanObject};
 
+/// See [`VkInstance`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkInstance)
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct Instance(Arc<Inner>);
 

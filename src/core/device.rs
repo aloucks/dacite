@@ -39,6 +39,7 @@ use std::sync::Arc;
 use vks;
 use {TryDestroyError, TryDestroyErrorKind, VulkanObject};
 
+/// See [`VkDevice`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDevice)
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct Device(Arc<Inner>);
 

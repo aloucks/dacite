@@ -18,6 +18,7 @@ use std::hash::{Hash, Hasher};
 use vks;
 use {TryDestroyError, TryDestroyErrorKind, VulkanObject};
 
+/// See [`VkQueue`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueue)
 #[derive(Debug, Clone)]
 pub struct Queue {
     handle: vks::VkQueue,

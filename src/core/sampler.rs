@@ -21,6 +21,7 @@ use std::sync::Arc;
 use vks;
 use {TryDestroyError, TryDestroyErrorKind, VulkanObject};
 
+/// See [`VkSampler`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSampler)
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct Sampler(Arc<Inner>);
 
