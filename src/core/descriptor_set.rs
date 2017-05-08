@@ -12,22 +12,32 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-use AsNativeVkObject;
 use core::{DescriptorPool, Device};
 use std::cmp::Ordering;
 use std::hash::{Hash, Hasher};
 use std::sync::Arc;
 use vks;
+use {TryDestroyError, TryDestroyErrorKind, VulkanObject};
 
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct DescriptorSet(Arc<Inner>);
 
-impl AsNativeVkObject for DescriptorSet {
-    type NativeVkObject = vks::VkDescriptorSet;
+impl VulkanObject for DescriptorSet {
+    type NativeVulkanObject = vks::VkDescriptorSet;
 
     #[inline]
-    fn as_native_vk_object(&self) -> Self::NativeVkObject {
+    fn as_native_vulkan_object(&self) -> Self::NativeVulkanObject {
         self.handle()
+    }
+
+    fn try_destroy(self) -> Result<(), TryDestroyError<Self>> {
+        let strong_count = Arc::strong_count(&self.0);
+        if strong_count == 1 {
+            Ok(())
+        }
+        else {
+            Err(TryDestroyError::new(self, TryDestroyErrorKind::InUse(Some(strong_count))))
+        }
     }
 }
 

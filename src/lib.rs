@@ -15,11 +15,12 @@
 extern crate libc;
 extern crate vks;
 
-pub trait AsNativeVkObject {
-    type NativeVkObject;
-
-    fn as_native_vk_object(&self) -> Self::NativeVkObject;
-}
+mod vulkan_object;
+pub use vulkan_object::{
+    TryDestroyError,
+    TryDestroyErrorKind,
+    VulkanObject,
+};
 
 #[cfg(feature = "core_1_0_3")]
 mod utils;

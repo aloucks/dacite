@@ -12,7 +12,6 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-use AsNativeVkObject;
 use core::PhysicalDevice;
 use core::allocator_helper::AllocatorHelper;
 use core;
@@ -22,16 +21,27 @@ use std::ptr;
 use std::sync::Arc;
 use utils;
 use vks;
+use {TryDestroyError, TryDestroyErrorKind, VulkanObject};
 
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct Instance(Arc<Inner>);
 
-impl AsNativeVkObject for Instance {
-    type NativeVkObject = vks::VkInstance;
+impl VulkanObject for Instance {
+    type NativeVulkanObject = vks::VkInstance;
 
     #[inline]
-    fn as_native_vk_object(&self) -> Self::NativeVkObject {
+    fn as_native_vulkan_object(&self) -> Self::NativeVulkanObject {
         self.handle()
+    }
+
+    fn try_destroy(self) -> Result<(), TryDestroyError<Self>> {
+        let strong_count = Arc::strong_count(&self.0);
+        if strong_count == 1 {
+            Ok(())
+        }
+        else {
+            Err(TryDestroyError::new(self, TryDestroyErrorKind::InUse(Some(strong_count))))
+        }
     }
 }
 

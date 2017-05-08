@@ -12,7 +12,6 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-use AsNativeVkObject;
 use core::allocator_helper::AllocatorHelper;
 use core::{self, Device, Instance};
 use std::cmp::Ordering;
@@ -21,6 +20,7 @@ use std::mem;
 use std::ptr;
 use utils;
 use vks;
+use {TryDestroyError, TryDestroyErrorKind, VulkanObject};
 
 #[derive(Debug, Clone)]
 pub struct PhysicalDevice {
@@ -58,12 +58,16 @@ impl Hash for PhysicalDevice {
     }
 }
 
-impl AsNativeVkObject for PhysicalDevice {
-    type NativeVkObject = vks::VkPhysicalDevice;
+impl VulkanObject for PhysicalDevice {
+    type NativeVulkanObject = vks::VkPhysicalDevice;
 
     #[inline]
-    fn as_native_vk_object(&self) -> Self::NativeVkObject {
+    fn as_native_vulkan_object(&self) -> Self::NativeVulkanObject {
         self.handle
+    }
+
+    fn try_destroy(self) -> Result<(), TryDestroyError<Self>> {
+        Err(TryDestroyError::new(self, TryDestroyErrorKind::Unsupported))
     }
 }
 

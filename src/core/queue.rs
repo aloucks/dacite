@@ -12,11 +12,11 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-use AsNativeVkObject;
 use core::Device;
 use std::cmp::Ordering;
 use std::hash::{Hash, Hasher};
 use vks;
+use {TryDestroyError, TryDestroyErrorKind, VulkanObject};
 
 #[derive(Debug, Clone)]
 pub struct Queue {
@@ -54,12 +54,16 @@ impl Hash for Queue {
     }
 }
 
-impl AsNativeVkObject for Queue {
-    type NativeVkObject = vks::VkQueue;
+impl VulkanObject for Queue {
+    type NativeVulkanObject = vks::VkQueue;
 
     #[inline]
-    fn as_native_vk_object(&self) -> Self::NativeVkObject {
+    fn as_native_vulkan_object(&self) -> Self::NativeVulkanObject {
         self.handle
+    }
+
+    fn try_destroy(self) -> Result<(), TryDestroyError<Self>> {
+        Err(TryDestroyError::new(self, TryDestroyErrorKind::Unsupported))
     }
 }
 
