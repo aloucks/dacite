@@ -15,31 +15,13 @@
 use AsNativeVkObject;
 use core::Device;
 use core::allocator_helper::AllocatorHelper;
+use std::cmp::Ordering;
+use std::hash::{Hash, Hasher};
 use std::ptr;
 use std::sync::Arc;
 use vks;
 
-#[derive(Debug)]
-struct Inner {
-    handle: vks::VkSampler,
-    device: Device,
-    allocator: Option<AllocatorHelper>,
-}
-
-impl Drop for Inner {
-    fn drop(&mut self) {
-        let allocator = match self.allocator {
-            Some(ref allocator) => &allocator.callbacks,
-            None => ptr::null(),
-        };
-
-        unsafe {
-            (self.device.loader().core.vkDestroySampler)(self.device.handle(), self.handle, allocator);
-        }
-    }
-}
-
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct Sampler(Arc<Inner>);
 
 impl AsNativeVkObject for Sampler {
@@ -63,5 +45,55 @@ impl Sampler {
     #[inline]
     pub(crate) fn handle(&self) -> vks::VkSampler {
         self.0.handle
+    }
+}
+
+#[derive(Debug)]
+struct Inner {
+    handle: vks::VkSampler,
+    device: Device,
+    allocator: Option<AllocatorHelper>,
+}
+
+impl Drop for Inner {
+    fn drop(&mut self) {
+        let allocator = match self.allocator {
+            Some(ref allocator) => &allocator.callbacks,
+            None => ptr::null(),
+        };
+
+        unsafe {
+            (self.device.loader().core.vkDestroySampler)(self.device.handle(), self.handle, allocator);
+        }
+    }
+}
+
+impl PartialEq for Inner {
+    #[inline]
+    fn eq(&self, other: &Self) -> bool {
+        self.handle == other.handle
+    }
+}
+
+impl Eq for Inner { }
+
+impl PartialOrd for Inner {
+    #[inline]
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        self.handle.partial_cmp(&other.handle)
+    }
+}
+
+impl Ord for Inner {
+    #[inline]
+    fn cmp(&self, other: &Self) -> Ordering {
+        self.handle.cmp(&other.handle)
+    }
+}
+
+impl Hash for Inner {
+    #[inline]
+    fn hash<H: Hasher>(&self, state: &mut H) {
+        self.handle.hash(state);
     }
 }

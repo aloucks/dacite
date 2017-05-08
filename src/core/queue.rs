@@ -14,12 +14,44 @@
 
 use AsNativeVkObject;
 use core::Device;
+use std::cmp::Ordering;
+use std::hash::{Hash, Hasher};
 use vks;
 
 #[derive(Debug, Clone)]
 pub struct Queue {
     handle: vks::VkQueue,
     device: Device,
+}
+
+impl PartialEq for Queue {
+    #[inline]
+    fn eq(&self, other: &Self) -> bool {
+        self.handle == other.handle
+    }
+}
+
+impl Eq for Queue { }
+
+impl PartialOrd for Queue {
+    #[inline]
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        self.handle.partial_cmp(&other.handle)
+    }
+}
+
+impl Ord for Queue {
+    #[inline]
+    fn cmp(&self, other: &Self) -> Ordering {
+        self.handle.cmp(&other.handle)
+    }
+}
+
+impl Hash for Queue {
+    #[inline]
+    fn hash<H: Hasher>(&self, state: &mut H) {
+        self.handle.hash(state);
+    }
 }
 
 impl AsNativeVkObject for Queue {

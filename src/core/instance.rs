@@ -16,32 +16,14 @@ use AsNativeVkObject;
 use core::PhysicalDevice;
 use core::allocator_helper::AllocatorHelper;
 use core;
+use std::cmp::Ordering;
+use std::hash::{Hash, Hasher};
 use std::ptr;
 use std::sync::Arc;
 use utils;
 use vks;
 
-#[derive(Debug)]
-struct Inner {
-    handle: vks::VkInstance,
-    allocator: Option<AllocatorHelper>,
-    loader: vks::InstanceProcAddrLoader,
-}
-
-impl Drop for Inner {
-    fn drop(&mut self) {
-        let allocator = match self.allocator {
-            Some(ref allocator) => &allocator.callbacks,
-            None => ptr::null(),
-        };
-
-        unsafe {
-            (self.loader.core.vkDestroyInstance)(self.handle, allocator);
-        }
-    }
-}
-
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct Instance(Arc<Inner>);
 
 impl AsNativeVkObject for Instance {
@@ -165,5 +147,55 @@ impl Instance {
 
             Ok(extension_properties.iter().map(|p| p.into()).collect())
         }
+    }
+}
+
+#[derive(Debug)]
+struct Inner {
+    handle: vks::VkInstance,
+    allocator: Option<AllocatorHelper>,
+    loader: vks::InstanceProcAddrLoader,
+}
+
+impl Drop for Inner {
+    fn drop(&mut self) {
+        let allocator = match self.allocator {
+            Some(ref allocator) => &allocator.callbacks,
+            None => ptr::null(),
+        };
+
+        unsafe {
+            (self.loader.core.vkDestroyInstance)(self.handle, allocator);
+        }
+    }
+}
+
+impl PartialEq for Inner {
+    #[inline]
+    fn eq(&self, other: &Self) -> bool {
+        self.handle == other.handle
+    }
+}
+
+impl Eq for Inner { }
+
+impl PartialOrd for Inner {
+    #[inline]
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        self.handle.partial_cmp(&other.handle)
+    }
+}
+
+impl Ord for Inner {
+    #[inline]
+    fn cmp(&self, other: &Self) -> Ordering {
+        self.handle.cmp(&other.handle)
+    }
+}
+
+impl Hash for Inner {
+    #[inline]
+    fn hash<H: Hasher>(&self, state: &mut H) {
+        self.handle.hash(state);
     }
 }

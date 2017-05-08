@@ -15,6 +15,8 @@
 use AsNativeVkObject;
 use core::allocator_helper::AllocatorHelper;
 use core::{self, Device, Instance};
+use std::cmp::Ordering;
+use std::hash::{Hash, Hasher};
 use std::mem;
 use std::ptr;
 use utils;
@@ -24,6 +26,36 @@ use vks;
 pub struct PhysicalDevice {
     handle: vks::VkPhysicalDevice,
     instance: Instance,
+}
+
+impl PartialEq for PhysicalDevice {
+    #[inline]
+    fn eq(&self, other: &Self) -> bool {
+        self.handle == other.handle
+    }
+}
+
+impl Eq for PhysicalDevice { }
+
+impl PartialOrd for PhysicalDevice {
+    #[inline]
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        self.handle.partial_cmp(&other.handle)
+    }
+}
+
+impl Ord for PhysicalDevice {
+    #[inline]
+    fn cmp(&self, other: &Self) -> Ordering {
+        self.handle.cmp(&other.handle)
+    }
+}
+
+impl Hash for PhysicalDevice {
+    #[inline]
+    fn hash<H: Hasher>(&self, state: &mut H) {
+        self.handle.hash(state);
+    }
 }
 
 impl AsNativeVkObject for PhysicalDevice {
