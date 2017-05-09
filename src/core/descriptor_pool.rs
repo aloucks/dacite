@@ -12,8 +12,8 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-use core::Device;
 use core::allocator_helper::AllocatorHelper;
+use core::{self, DescriptorSet, Device};
 use std::cmp::Ordering;
 use std::hash::{Hash, Hasher};
 use std::ptr;
@@ -66,6 +66,24 @@ impl DescriptorPool {
     #[inline]
     pub(crate) fn device_handle(&self) -> vks::VkDevice {
         self.0.device.handle()
+    }
+
+    /// See [`vkAllocateDescriptorSets`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkAllocateDescriptorSets)
+    pub fn allocate_descriptor_sets(&self, allocate_info: &core::DescriptorSetAllocateInfo) -> Result<Vec<DescriptorSet>, core::Error> {
+        let mut allocate_info_wrapper: core::VkDescriptorSetAllocateInfoWrapper = allocate_info.into();
+        allocate_info_wrapper.set_descriptor_pool(Some(self.clone()));
+
+        let mut descriptor_sets = Vec::with_capacity(allocate_info.set_layouts.len());
+        let res = unsafe {
+            (self.loader().core.vkAllocateDescriptorSets)(self.device_handle(), allocate_info_wrapper.as_ref(), descriptor_sets.as_mut_ptr())
+        };
+
+        if res == vks::VK_SUCCESS {
+            Ok(descriptor_sets.iter().map(|s| DescriptorSet::new(*s, self.clone())).collect())
+        }
+        else {
+            Err(res.into())
+        }
     }
 }
 
