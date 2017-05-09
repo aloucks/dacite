@@ -20,6 +20,7 @@ use core::{
     CommandPool,
     DescriptorPool,
     DescriptorSetLayout,
+    DeviceMemory,
     Event,
     Fence,
     Image,
@@ -371,6 +372,26 @@ impl Device {
 
         if res == vks::VK_SUCCESS {
             Ok(DescriptorSetLayout::new(descriptor_set_layout, self.clone(), allocator_helper))
+        }
+        else {
+            Err(res.into())
+        }
+    }
+
+    /// See [`vkAllocateMemory`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkAllocateMemory)
+    pub fn allocate_memory(&self, allocate_info: &core::MemoryAllocateInfo, allocator: Option<Box<core::Allocator>>) -> Result<DeviceMemory, core::Error> {
+        let allocate_info_wrapper: core::VkMemoryAllocateInfoWrapper = allocate_info.into();
+
+        let allocator_helper = allocator.map(AllocatorHelper::new);
+        let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), |a| &a.callbacks);
+
+        let mut memory = ptr::null_mut();
+        let res = unsafe {
+            (self.loader().core.vkAllocateMemory)(self.handle(), allocate_info_wrapper.as_ref(), allocation_callbacks, &mut memory)
+        };
+
+        if res == vks::VK_SUCCESS {
+            Ok(DeviceMemory::new(memory, self.clone(), allocator_helper))
         }
         else {
             Err(res.into())
