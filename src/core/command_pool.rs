@@ -68,6 +68,7 @@ impl CommandPool {
         self.0.device.handle()
     }
 
+    /// See [`vkResetCommandPool`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkResetCommandPool)
     pub fn reset(&self, flags: core::CommandPoolResetFlags) -> Result<(), core::Error> {
         let res = unsafe {
             (self.loader().core.vkResetCommandPool)(self.device_handle(), self.handle(), flags)
@@ -81,6 +82,7 @@ impl CommandPool {
         }
     }
 
+    /// See [`vkAllocateCommandBuffers`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkAllocateCommandBuffers)
     pub fn allocate_command_buffers(&self, allocate_info: &core::CommandBufferAllocateInfo) -> Result<Vec<CommandBuffer>, core::Error> {
         let mut command_buffers = Vec::with_capacity(allocate_info.command_buffer_count as usize);
         unsafe {

@@ -57,6 +57,7 @@ impl Instance {
         &self.0.loader
     }
 
+    /// See [`vkCreateInstance`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCreateInstance)
     pub fn create(create_info: &core::InstanceCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<Instance, core::Error> {
         let allocator_helper = allocator.map(AllocatorHelper::new);
         let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), |a| &a.callbacks);
@@ -86,6 +87,7 @@ impl Instance {
         })))
     }
 
+    /// See [`vkEnumeratePhysicalDevices`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkEnumeratePhysicalDevices)
     pub fn enumerate_physical_devices(&self) -> Result<Vec<PhysicalDevice>, core::Error> {
         let mut num_physical_devices = 0;
         let res = unsafe {
@@ -114,6 +116,7 @@ impl Instance {
         Ok(physical_devices)
     }
 
+    /// See [`vkEnumerateInstanceLayerProperties`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkEnumerateInstanceLayerProperties)
     pub fn enumerate_instance_layer_properties() -> Result<Vec<core::LayerProperties>, core::Error> {
         unsafe {
             let mut loader = vks::instance_proc_addr_loader::CoreNullInstance::new();
@@ -136,6 +139,7 @@ impl Instance {
         }
     }
 
+    /// See [`vkEnumerateInstanceExtensionProperties`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkEnumerateInstanceExtensionProperties)
     pub fn enumerate_instance_extension_properties(layer_name: Option<&str>) -> Result<Vec<core::InstanceExtensionProperties>, core::Error> {
         unsafe {
             let mut loader = vks::instance_proc_addr_loader::CoreNullInstance::new();

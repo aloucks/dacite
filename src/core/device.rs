@@ -87,6 +87,7 @@ impl Device {
         &self.0.loader
     }
 
+    /// See [`vkGetDeviceQueue`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetDeviceQueue)
     pub fn get_queue(&self, queue_family_index: u32, queue_index: u32) -> Queue {
         let mut queue = ptr::null_mut();
         unsafe {
@@ -96,6 +97,7 @@ impl Device {
         Queue::new(queue, self.clone())
     }
 
+    /// See [`vkCreateCommandPool`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCreateCommandPool)
     pub fn create_command_pool(&self, create_info: &core::CommandPoolCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<CommandPool, core::Error> {
         let create_info: core::VkCommandPoolCreateInfoWrapper = create_info.into();
 
@@ -115,6 +117,7 @@ impl Device {
         }
     }
 
+    /// See [`vkCreateFence`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCreateFence)
     pub fn create_fence(&self, create_info: &core::FenceCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<Fence, core::Error> {
         let create_info: core::VkFenceCreateInfoWrapper = create_info.into();
 
@@ -134,6 +137,7 @@ impl Device {
         }
     }
 
+    /// See [`vkCreateSemaphore`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCreateSemaphore)
     pub fn create_semaphore(&self, create_info: &core::SemaphoreCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<Semaphore, core::Error> {
         let create_info: core::VkSemaphoreCreateInfoWrapper = create_info.into();
 
@@ -153,6 +157,7 @@ impl Device {
         }
     }
 
+    /// See [`vkCreateEvent`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCreateEvent)
     pub fn create_event(&self, create_info: &core::EventCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<Event, core::Error> {
         let create_info: core::VkEventCreateInfoWrapper = create_info.into();
 
@@ -172,6 +177,7 @@ impl Device {
         }
     }
 
+    /// See [`vkCreateQueryPool`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCreateQueryPool)
     pub fn create_query_pool(&self, create_info: &core::QueryPoolCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<QueryPool, core::Error> {
         let create_info: core::VkQueryPoolCreateInfoWrapper = create_info.into();
 
@@ -191,6 +197,7 @@ impl Device {
         }
     }
 
+    /// See [`vkCreateBuffer`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCreateBuffer)
     pub fn create_buffer(&self, create_info: &core::BufferCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<Buffer, core::Error> {
         let create_info: core::VkBufferCreateInfoWrapper = create_info.into();
 
@@ -210,6 +217,7 @@ impl Device {
         }
     }
 
+    /// See [`vkCreateImage`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCreateImage)
     pub fn create_image(&self, create_info: &core::ImageCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<Image, core::Error> {
         let create_info: core::VkImageCreateInfoWrapper = create_info.into();
 
@@ -229,6 +237,7 @@ impl Device {
         }
     }
 
+    /// See [`vkCreateBufferView`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCreateBufferView)
     pub fn create_buffer_view(&self, create_info: &core::BufferViewCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<BufferView, core::Error> {
         let create_info_wrapper: core::VkBufferViewCreateInfoWrapper = create_info.into();
 
@@ -248,6 +257,7 @@ impl Device {
         }
     }
 
+    /// See [`vkCreateImageView`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCreateImageView)
     pub fn create_image_view(&self, create_info: &core::ImageViewCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<ImageView, core::Error> {
         let create_info_wrapper: core::VkImageViewCreateInfoWrapper = create_info.into();
 
@@ -267,6 +277,7 @@ impl Device {
         }
     }
 
+    /// See [`vkCreateShaderModule`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCreateShaderModule)
     pub fn create_shader_module(&self, create_info: &core::ShaderModuleCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<ShaderModule, core::Error> {
         let create_info: core::VkShaderModuleCreateInfoWrapper = create_info.into();
 
@@ -286,6 +297,7 @@ impl Device {
         }
     }
 
+    /// See [`vkCreatePipelineCache`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCreatePipelineCache)
     pub fn create_pipeline_cache(&self, create_info: &core::PipelineCacheCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<PipelineCache, core::Error> {
         let create_info: core::VkPipelineCacheCreateInfoWrapper = create_info.into();
 
@@ -305,6 +317,7 @@ impl Device {
         }
     }
 
+    /// See [`vkCreateSampler`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCreateSampler)
     pub fn create_sampler(&self, create_info: &core::SamplerCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<Sampler, core::Error> {
         let create_info: core::VkSamplerCreateInfoWrapper = create_info.into();
 
@@ -324,6 +337,7 @@ impl Device {
         }
     }
 
+    /// See [`vkCreateDescriptorPool`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCreateDescriptorPool)
     pub fn create_descriptor_pool(&self, create_info: &core::DescriptorPoolCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<DescriptorPool, core::Error> {
         let create_info: core::VkDescriptorPoolCreateInfoWrapper = create_info.into();
 
@@ -343,6 +357,7 @@ impl Device {
         }
     }
 
+    /// See [`vkCreateDescriptorSetLayout`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCreateDescriptorSetLayout)
     pub fn create_descriptor_set_layout(&self, create_info: &core::DescriptorSetLayoutCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<DescriptorSetLayout, core::Error> {
         let create_info_wrapper: core::VkDescriptorSetLayoutCreateInfoWrapper = create_info.into();
 

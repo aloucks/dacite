@@ -85,6 +85,7 @@ impl PhysicalDevice {
         self.instance.loader()
     }
 
+    /// See [`vkGetPhysicalDeviceProperties`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetPhysicalDeviceProperties)
     pub fn properties(&self) -> core::PhysicalDeviceProperties {
         unsafe {
             let mut properties = mem::uninitialized();
@@ -93,6 +94,7 @@ impl PhysicalDevice {
         }
     }
 
+    /// See [`vkGetPhysicalDeviceFeatures`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetPhysicalDeviceFeatures)
     pub fn features(&self) -> core::PhysicalDeviceFeatures {
         unsafe {
             let mut features = mem::uninitialized();
@@ -101,6 +103,7 @@ impl PhysicalDevice {
         }
     }
 
+    /// See [`vkEnumerateDeviceLayerProperties`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkEnumerateDeviceLayerProperties)
     pub fn enumerate_device_layer_properties(&self) -> Result<Vec<core::LayerProperties>, core::Error> {
         unsafe {
             let mut num_layer_properties = 0;
@@ -120,6 +123,7 @@ impl PhysicalDevice {
         }
     }
 
+    /// See [`vkEnumerateDeviceExtensionProperties`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkEnumerateDeviceExtensionProperties)
     pub fn enumerate_device_extension_properties(&self, layer_name: Option<&str>) -> Result<Vec<core::InstanceExtensionProperties>, core::Error> {
         unsafe {
             let layer_name_cstr = utils::cstr_from_str(layer_name);
@@ -141,6 +145,7 @@ impl PhysicalDevice {
         }
     }
 
+    /// See [`vkGetPhysicalDeviceFormatProperties`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetPhysicalDeviceFormatProperties)
     pub fn format_properties(&self, format: core::Format) -> core::FormatProperties {
         let mut properties = unsafe { mem::uninitialized() };
 
@@ -151,6 +156,7 @@ impl PhysicalDevice {
         (&properties).into()
     }
 
+    /// See [`vkGetPhysicalDeviceImageFormatProperties`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetPhysicalDeviceImageFormatProperties)
     pub fn image_format_properties(&self, format: core::Format, image_type: core::ImageType, tiling: core::ImageTiling, usage: core::ImageUsageFlags, flags: core::ImageCreateFlags) -> Result<core::ImageFormatProperties, core::Error> {
         let mut properties = unsafe { mem::uninitialized() };
 
@@ -166,6 +172,7 @@ impl PhysicalDevice {
         }
     }
 
+    /// See [`vkGetPhysicalDeviceSparseImageFormatProperties`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetPhysicalDeviceSparseImageFormatProperties)
     pub fn sparse_image_format_properties(&self, format: core::Format, image_type: core::ImageType, samples: core::SampleCountFlagBits, usage: core::ImageUsageFlags, tiling: core::ImageTiling) -> Vec<core::SparseImageFormatProperties> {
         let mut num_properties = 0;
         unsafe {
@@ -181,6 +188,7 @@ impl PhysicalDevice {
         properties.iter().map(From::from).collect()
     }
 
+    /// See [`vkGetPhysicalDeviceQueueFamilyProperties`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetPhysicalDeviceQueueFamilyProperties)
     pub fn queue_family_properties(&self) -> Vec<core::QueueFamilyProperties> {
         let mut num_properties = 0;
         unsafe {
@@ -198,6 +206,7 @@ impl PhysicalDevice {
             .collect()
     }
 
+    /// See [`vkGetPhysicalDeviceMemoryProperties`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetPhysicalDeviceMemoryProperties)
     pub fn memory_properties(&self) -> core::PhysicalDeviceMemoryProperties {
         let mut properties = unsafe { mem::uninitialized() };
 
@@ -208,6 +217,7 @@ impl PhysicalDevice {
         (&properties).into()
     }
 
+    /// See [`vkCreateDevice`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCreateDevice)
     pub fn create_device(&self, create_info: &core::DeviceCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<Device, core::Error> {
         let allocator_helper = allocator.map(AllocatorHelper::new);
         let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), |a| &a.callbacks);
