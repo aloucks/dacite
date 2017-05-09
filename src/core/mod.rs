@@ -3161,6 +3161,7 @@ impl<'a> From<&'a InstanceCreateInfo> for VkInstanceCreateInfoWrapper {
     }
 }
 
+/// See [`VkAllocationCallbacks`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkAllocationCallbacks)
 pub trait Allocator: Send {
     fn alloc(&mut self, size: usize, alignment: usize, allocation_scope: SystemAllocationSope) -> *mut c_void;
     fn realloc(&mut self, original: *mut c_void, size: usize, alignment: usize, allocation_scope: SystemAllocationSope) -> *mut c_void;
