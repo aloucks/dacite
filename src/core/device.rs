@@ -26,6 +26,7 @@ use core::{
     Image,
     ImageView,
     Instance,
+    Pipeline,
     PipelineCache,
     QueryPool,
     Queue,
@@ -395,6 +396,40 @@ impl Device {
         }
         else {
             Err(res.into())
+        }
+    }
+
+    /// See [`vkCreateGraphicsPipelines`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCreateGraphicsPipelines)
+    pub fn create_graphics_pipelines(&self, pipeline_cache: Option<PipelineCache>, create_infos: &[core::GraphicsPipelineCreateInfo], allocator: Option<Box<core::Allocator>>) -> Result<Vec<Pipeline>, (core::Error, Vec<Option<Pipeline>>)> {
+        let pipeline_cache_handle = match pipeline_cache {
+            Some(ref pipeline_cache) => pipeline_cache.handle(),
+            None => ptr::null_mut(),
+        };
+
+        let create_info_wrappers: Vec<core::VkGraphicsPipelineCreateInfoWrapper> = create_infos.iter().map(From::from).collect();
+        let vk_create_infos: Vec<vks::VkGraphicsPipelineCreateInfo> = create_info_wrappers.iter().map(AsRef::as_ref).cloned().collect();
+
+        let allocator_helper = allocator.map(AllocatorHelper::new);
+        let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), AllocatorHelper::callbacks);
+
+        let mut pipelines = Vec::with_capacity(create_infos.len());
+        let res = unsafe {
+            (self.loader().core.vkCreateGraphicsPipelines)(self.handle(), pipeline_cache_handle, create_infos.len() as u32, vk_create_infos.as_ptr(), allocation_callbacks, pipelines.as_mut_ptr())
+        };
+
+        if res == vks::VK_SUCCESS {
+            Ok(pipelines.iter().map(|p| Pipeline::new(*p, self.clone(), allocator_helper.clone())).collect())
+        }
+        else {
+            let pipelines = pipelines.iter().map(|p| {
+                if !p.is_null() {
+                    Some(Pipeline::new(*p, self.clone(), allocator_helper.clone()))
+                }
+                else {
+                    None
+                }
+            }).collect();
+            Err((res.into(), pipelines))
         }
     }
 }
