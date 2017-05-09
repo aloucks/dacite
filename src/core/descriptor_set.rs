@@ -12,7 +12,7 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-use core::{DescriptorPool, Device};
+use core::DescriptorPool;
 use std::cmp::Ordering;
 use std::hash::{Hash, Hasher};
 use std::sync::Arc;
@@ -43,10 +43,9 @@ impl VulkanObject for DescriptorSet {
 }
 
 impl DescriptorSet {
-    pub(crate) fn new(handle: vks::VkDescriptorSet, device: Device, descriptor_pool: DescriptorPool) -> Self {
+    pub(crate) fn new(handle: vks::VkDescriptorSet, descriptor_pool: DescriptorPool) -> Self {
         DescriptorSet(Arc::new(Inner {
             handle: handle,
-            device: device,
             descriptor_pool: descriptor_pool,
         }))
     }
@@ -60,14 +59,13 @@ impl DescriptorSet {
 #[derive(Debug)]
 struct Inner {
     handle: vks::VkDescriptorSet,
-    device: Device,
     descriptor_pool: DescriptorPool,
 }
 
 impl Drop for Inner {
     fn drop(&mut self) {
         unsafe {
-            let res = (self.device.loader().core.vkFreeDescriptorSets)(self.device.handle(), self.descriptor_pool.handle(), 1, &self.handle);
+            let res = (self.descriptor_pool.loader().core.vkFreeDescriptorSets)(self.descriptor_pool.device_handle(), self.descriptor_pool.handle(), 1, &self.handle);
             assert_eq!(res, vks::VK_SUCCESS);
         }
     }
