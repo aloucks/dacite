@@ -29,6 +29,10 @@ pub struct PhysicalDevice {
     instance: Instance,
 }
 
+unsafe impl Send for PhysicalDevice { }
+
+unsafe impl Sync for PhysicalDevice { }
+
 impl PartialEq for PhysicalDevice {
     #[inline]
     fn eq(&self, other: &Self) -> bool {

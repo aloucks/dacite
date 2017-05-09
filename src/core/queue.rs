@@ -25,6 +25,10 @@ pub struct Queue {
     device: Device,
 }
 
+unsafe impl Send for Queue { }
+
+unsafe impl Sync for Queue { }
+
 impl PartialEq for Queue {
     #[inline]
     fn eq(&self, other: &Self) -> bool {

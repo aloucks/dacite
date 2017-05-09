@@ -15,7 +15,7 @@
 use std::error::Error;
 use std::fmt;
 
-pub trait VulkanObject: Sized {
+pub trait VulkanObject: Sized + Send + Sync + Clone + fmt::Debug {
     type NativeVulkanObject;
 
     fn as_native_vulkan_object(&self) -> Self::NativeVulkanObject;

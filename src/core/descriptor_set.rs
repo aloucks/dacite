@@ -71,6 +71,10 @@ impl Drop for Inner {
     }
 }
 
+unsafe impl Send for Inner { }
+
+unsafe impl Sync for Inner { }
+
 impl PartialEq for Inner {
     #[inline]
     fn eq(&self, other: &Self) -> bool {
