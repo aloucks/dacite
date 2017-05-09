@@ -69,7 +69,7 @@ struct Inner {
 impl Drop for Inner {
     fn drop(&mut self) {
         let allocator = match self.allocator {
-            Some(ref allocator) => &allocator.callbacks,
+            Some(ref allocator) => allocator.callbacks(),
             None => ptr::null(),
         };
 

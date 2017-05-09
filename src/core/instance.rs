@@ -60,7 +60,7 @@ impl Instance {
     /// See [`vkCreateInstance`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCreateInstance)
     pub fn create(create_info: &core::InstanceCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<Instance, core::Error> {
         let allocator_helper = allocator.map(AllocatorHelper::new);
-        let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), |a| &a.callbacks);
+        let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), AllocatorHelper::callbacks);
 
         let mut loader = vks::InstanceProcAddrLoader::from_get_instance_proc_addr(vks::vkGetInstanceProcAddr);
         unsafe {
@@ -175,7 +175,7 @@ struct Inner {
 impl Drop for Inner {
     fn drop(&mut self) {
         let allocator = match self.allocator {
-            Some(ref allocator) => &allocator.callbacks,
+            Some(ref allocator) => allocator.callbacks(),
             None => ptr::null(),
         };
 

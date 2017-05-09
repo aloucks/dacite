@@ -103,7 +103,7 @@ impl Device {
         let create_info: core::VkCommandPoolCreateInfoWrapper = create_info.into();
 
         let allocator_helper = allocator.map(AllocatorHelper::new);
-        let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), |a| &a.callbacks);
+        let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), AllocatorHelper::callbacks);
 
         let mut command_pool = ptr::null_mut();
         let res = unsafe {
@@ -123,7 +123,7 @@ impl Device {
         let create_info: core::VkFenceCreateInfoWrapper = create_info.into();
 
         let allocator_helper = allocator.map(AllocatorHelper::new);
-        let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), |a| &a.callbacks);
+        let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), AllocatorHelper::callbacks);
 
         let mut fence = ptr::null_mut();
         let res = unsafe {
@@ -143,7 +143,7 @@ impl Device {
         let create_info: core::VkSemaphoreCreateInfoWrapper = create_info.into();
 
         let allocator_helper = allocator.map(AllocatorHelper::new);
-        let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), |a| &a.callbacks);
+        let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), AllocatorHelper::callbacks);
 
         let mut semaphore = ptr::null_mut();
         let res = unsafe {
@@ -163,7 +163,7 @@ impl Device {
         let create_info: core::VkEventCreateInfoWrapper = create_info.into();
 
         let allocator_helper = allocator.map(AllocatorHelper::new);
-        let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), |a| &a.callbacks);
+        let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), AllocatorHelper::callbacks);
 
         let mut event = ptr::null_mut();
         let res = unsafe {
@@ -183,7 +183,7 @@ impl Device {
         let create_info: core::VkQueryPoolCreateInfoWrapper = create_info.into();
 
         let allocator_helper = allocator.map(AllocatorHelper::new);
-        let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), |a| &a.callbacks);
+        let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), AllocatorHelper::callbacks);
 
         let mut query_pool = ptr::null_mut();
         let res = unsafe {
@@ -203,7 +203,7 @@ impl Device {
         let create_info: core::VkBufferCreateInfoWrapper = create_info.into();
 
         let allocator_helper = allocator.map(AllocatorHelper::new);
-        let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), |a| &a.callbacks);
+        let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), AllocatorHelper::callbacks);
 
         let mut buffer = ptr::null_mut();
         let res = unsafe {
@@ -223,7 +223,7 @@ impl Device {
         let create_info: core::VkImageCreateInfoWrapper = create_info.into();
 
         let allocator_helper = allocator.map(AllocatorHelper::new);
-        let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), |a| &a.callbacks);
+        let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), AllocatorHelper::callbacks);
 
         let mut image = ptr::null_mut();
         let res = unsafe {
@@ -243,7 +243,7 @@ impl Device {
         let create_info_wrapper: core::VkBufferViewCreateInfoWrapper = create_info.into();
 
         let allocator_helper = allocator.map(AllocatorHelper::new);
-        let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), |a| &a.callbacks);
+        let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), AllocatorHelper::callbacks);
 
         let mut buffer_view = ptr::null_mut();
         let res = unsafe {
@@ -263,7 +263,7 @@ impl Device {
         let create_info_wrapper: core::VkImageViewCreateInfoWrapper = create_info.into();
 
         let allocator_helper = allocator.map(AllocatorHelper::new);
-        let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), |a| &a.callbacks);
+        let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), AllocatorHelper::callbacks);
 
         let mut image_view = ptr::null_mut();
         let res = unsafe {
@@ -283,7 +283,7 @@ impl Device {
         let create_info: core::VkShaderModuleCreateInfoWrapper = create_info.into();
 
         let allocator_helper = allocator.map(AllocatorHelper::new);
-        let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), |a| &a.callbacks);
+        let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), AllocatorHelper::callbacks);
 
         let mut shader_module = ptr::null_mut();
         let res = unsafe {
@@ -303,7 +303,7 @@ impl Device {
         let create_info: core::VkPipelineCacheCreateInfoWrapper = create_info.into();
 
         let allocator_helper = allocator.map(AllocatorHelper::new);
-        let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), |a| &a.callbacks);
+        let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), AllocatorHelper::callbacks);
 
         let mut pipeline_cache = ptr::null_mut();
         let res = unsafe {
@@ -323,7 +323,7 @@ impl Device {
         let create_info: core::VkSamplerCreateInfoWrapper = create_info.into();
 
         let allocator_helper = allocator.map(AllocatorHelper::new);
-        let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), |a| &a.callbacks);
+        let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), AllocatorHelper::callbacks);
 
         let mut sampler = ptr::null_mut();
         let res = unsafe {
@@ -343,7 +343,7 @@ impl Device {
         let create_info: core::VkDescriptorPoolCreateInfoWrapper = create_info.into();
 
         let allocator_helper = allocator.map(AllocatorHelper::new);
-        let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), |a| &a.callbacks);
+        let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), AllocatorHelper::callbacks);
 
         let mut descriptor_pool = ptr::null_mut();
         let res = unsafe {
@@ -363,7 +363,7 @@ impl Device {
         let create_info_wrapper: core::VkDescriptorSetLayoutCreateInfoWrapper = create_info.into();
 
         let allocator_helper = allocator.map(AllocatorHelper::new);
-        let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), |a| &a.callbacks);
+        let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), AllocatorHelper::callbacks);
 
         let mut descriptor_set_layout = ptr::null_mut();
         let res = unsafe {
@@ -383,7 +383,7 @@ impl Device {
         let allocate_info_wrapper: core::VkMemoryAllocateInfoWrapper = allocate_info.into();
 
         let allocator_helper = allocator.map(AllocatorHelper::new);
-        let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), |a| &a.callbacks);
+        let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), AllocatorHelper::callbacks);
 
         let mut memory = ptr::null_mut();
         let res = unsafe {
@@ -410,7 +410,7 @@ struct Inner {
 impl Drop for Inner {
     fn drop(&mut self) {
         let allocator = match self.allocator {
-            Some(ref allocator) => &allocator.callbacks,
+            Some(ref allocator) => allocator.callbacks(),
             None => ptr::null(),
         };
 

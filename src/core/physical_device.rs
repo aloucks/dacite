@@ -224,7 +224,7 @@ impl PhysicalDevice {
     /// See [`vkCreateDevice`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCreateDevice)
     pub fn create_device(&self, create_info: &core::DeviceCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<Device, core::Error> {
         let allocator_helper = allocator.map(AllocatorHelper::new);
-        let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), |a| &a.callbacks);
+        let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), AllocatorHelper::callbacks);
         let create_info: core::VkDeviceCreateInfoWrapper = create_info.into();
 
         let mut device = ptr::null_mut();

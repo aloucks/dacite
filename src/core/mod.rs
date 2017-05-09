@@ -3162,7 +3162,7 @@ impl<'a> From<&'a InstanceCreateInfo> for VkInstanceCreateInfoWrapper {
 }
 
 /// See [`VkAllocationCallbacks`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkAllocationCallbacks)
-pub trait Allocator: Send {
+pub trait Allocator: Send + Sync + fmt::Debug {
     fn alloc(&self, size: usize, alignment: usize, allocation_scope: SystemAllocationSope) -> *mut c_void;
     fn realloc(&self, original: *mut c_void, size: usize, alignment: usize, allocation_scope: SystemAllocationSope) -> *mut c_void;
     fn free(&self, memory: *mut c_void);
