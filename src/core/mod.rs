@@ -3163,22 +3163,22 @@ impl<'a> From<&'a InstanceCreateInfo> for VkInstanceCreateInfoWrapper {
 
 /// See [`VkAllocationCallbacks`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkAllocationCallbacks)
 pub trait Allocator: Send {
-    fn alloc(&mut self, size: usize, alignment: usize, allocation_scope: SystemAllocationSope) -> *mut c_void;
-    fn realloc(&mut self, original: *mut c_void, size: usize, alignment: usize, allocation_scope: SystemAllocationSope) -> *mut c_void;
-    fn free(&mut self, memory: *mut c_void);
+    fn alloc(&self, size: usize, alignment: usize, allocation_scope: SystemAllocationSope) -> *mut c_void;
+    fn realloc(&self, original: *mut c_void, size: usize, alignment: usize, allocation_scope: SystemAllocationSope) -> *mut c_void;
+    fn free(&self, memory: *mut c_void);
 
     fn has_internal_alloc(&self) -> bool {
         false
     }
 
     #[allow(unused_variables)]
-    fn internal_alloc(&mut self, size: usize, allocation_type: InternalAllocationType, allocation_scope: SystemAllocationSope) {
-        panic!();
+    fn internal_alloc(&self, size: usize, allocation_type: InternalAllocationType, allocation_scope: SystemAllocationSope) {
+        panic!("Default dummy implementation of Allocator::internal_alloc called. Make sure to either implement all three of has_internal_alloc, internal_alloc, and internal_free, or none of them.");
     }
 
     #[allow(unused_variables)]
-    fn internal_free(&mut self, size: usize, allocation_type: InternalAllocationType, allocation_scope: SystemAllocationSope) {
-        panic!();
+    fn internal_free(&self, size: usize, allocation_type: InternalAllocationType, allocation_scope: SystemAllocationSope) {
+        panic!("Default dummy implementation of Allocator::internal_free called. Make sure to either implement all three of has_internal_alloc, internal_alloc, and internal_free, or none of them.");
     }
 }
 
