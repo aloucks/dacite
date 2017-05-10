@@ -121,6 +121,19 @@ impl Fence {
     pub fn reset(&self) -> Result<(), core::Error> {
         Fence::reset_fences(&[self.clone()])
     }
+
+    /// See [`vkGetFenceStatus`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetFenceStatus)
+    pub fn get_status(&self) -> Result<bool, core::Error> {
+        let res = unsafe {
+            (self.loader().core.vkGetFenceStatus)(self.device_handle(), self.handle())
+        };
+
+        match res {
+            vks::VK_SUCCESS => Ok(true),
+            vks::VK_NOT_READY => Ok(false),
+            _ => Err(res.into()),
+        }
+    }
 }
 
 #[derive(Debug)]
