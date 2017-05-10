@@ -57,6 +57,16 @@ impl Fence {
     pub(crate) fn handle(&self) -> vks::VkFence {
         self.0.handle
     }
+
+    #[inline]
+    pub(crate) fn loader(&self) -> &vks::DeviceProcAddrLoader {
+        self.0.device.loader()
+    }
+
+    #[inline]
+    pub(crate) fn device_handle(&self) -> vks::VkDevice {
+        self.0.device.handle()
+    }
 }
 
 #[derive(Debug)]
