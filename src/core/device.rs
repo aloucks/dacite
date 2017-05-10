@@ -432,6 +432,40 @@ impl Device {
             Err((res.into(), pipelines))
         }
     }
+
+    /// See [`vkCreateComputePipelines`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCreateComputePipelines)
+    pub fn create_compute_pipelines(&self, pipeline_cache: Option<PipelineCache>, create_infos: &[core::ComputePipelineCreateInfo], allocator: Option<Box<core::Allocator>>) -> Result<Vec<Pipeline>, (core::Error, Vec<Option<Pipeline>>)> {
+        let pipeline_cache_handle = match pipeline_cache {
+            Some(ref pipeline_cache) => pipeline_cache.handle(),
+            None => ptr::null_mut(),
+        };
+
+        let create_info_wrappers: Vec<core::VkComputePipelineCreateInfoWrapper> = create_infos.iter().map(From::from).collect();
+        let vk_create_infos: Vec<vks::VkComputePipelineCreateInfo> = create_info_wrappers.iter().map(AsRef::as_ref).cloned().collect();
+
+        let allocator_helper = allocator.map(AllocatorHelper::new);
+        let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), AllocatorHelper::callbacks);
+
+        let mut pipelines = Vec::with_capacity(create_infos.len());
+        let res = unsafe {
+            (self.loader().core.vkCreateComputePipelines)(self.handle(), pipeline_cache_handle, create_infos.len() as u32, vk_create_infos.as_ptr(), allocation_callbacks, pipelines.as_mut_ptr())
+        };
+
+        if res == vks::VK_SUCCESS {
+            Ok(pipelines.iter().map(|p| Pipeline::new(*p, self.clone(), allocator_helper.clone())).collect())
+        }
+        else {
+            let pipelines = pipelines.iter().map(|p| {
+                if !p.is_null() {
+                    Some(Pipeline::new(*p, self.clone(), allocator_helper.clone()))
+                }
+                else {
+                    None
+                }
+            }).collect();
+            Err((res.into(), pipelines))
+        }
+    }
 }
 
 #[derive(Debug)]
