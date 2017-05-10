@@ -80,6 +80,20 @@ impl Event {
             _ => Err(res.into()),
         }
     }
+
+    /// See [`vkSetEvent`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkSetEvent)
+    pub fn set(&self) -> Result<(), core::Error> {
+        let res = unsafe {
+            (self.loader().core.vkSetEvent)(self.device_handle(), self.handle())
+        };
+
+        if res == vks::VK_SUCCESS {
+            Ok(())
+        }
+        else {
+            Err(res.into())
+        }
+    }
 }
 
 #[derive(Debug)]
