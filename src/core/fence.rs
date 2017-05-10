@@ -97,6 +97,30 @@ impl Fence {
     pub fn wait_for(&self, wait_all: bool, timeout: Option<Duration>) -> Result<bool, core::Error> {
         Fence::wait_for_fences(&[self.clone()], wait_all, timeout)
     }
+
+    /// See [`vkResetFences`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkResetFences)
+    pub fn reset_fences(fences: &[Self]) -> Result<(), core::Error> {
+        let loader = fences[0].loader();
+        let device = fences[0].device_handle();
+        let fences: Vec<_> = fences.iter().map(Fence::handle).collect();
+
+        let res = unsafe {
+            (loader.core.vkResetFences)(device, fences.len() as u32, fences.as_ptr())
+        };
+
+        if res == vks::VK_SUCCESS {
+            Ok(())
+        }
+        else {
+            Err(res.into())
+        }
+    }
+
+    /// See [`vkResetFences`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkResetFences)
+    #[inline]
+    pub fn reset(&self) -> Result<(), core::Error> {
+        Fence::reset_fences(&[self.clone()])
+    }
 }
 
 #[derive(Debug)]
