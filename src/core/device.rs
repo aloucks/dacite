@@ -32,6 +32,7 @@ use core::{
     PipelineLayout,
     QueryPool,
     Queue,
+    RenderPass,
     Sampler,
     Semaphore,
     ShaderModule,
@@ -503,6 +504,26 @@ impl Device {
 
         if res == vks::VK_SUCCESS {
             Ok(Framebuffer::new(framebuffer, self.clone(), allocator_helper))
+        }
+        else {
+            Err(res.into())
+        }
+    }
+
+    /// See [`vkCreateRenderPass`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCreateRenderPass)
+    pub fn create_render_pass(&self, create_info: &core::RenderPassCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<RenderPass, core::Error> {
+        let create_info_wrapper: core::VkRenderPassCreateInfoWrapper = create_info.into();
+
+        let allocator_helper = allocator.map(AllocatorHelper::new);
+        let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), AllocatorHelper::callbacks);
+
+        let mut render_pass = ptr::null_mut();
+        let res = unsafe {
+            (self.loader().core.vkCreateRenderPass)(self.handle(), create_info_wrapper.as_ref(), allocation_callbacks, &mut render_pass)
+        };
+
+        if res == vks::VK_SUCCESS {
+            Ok(RenderPass::new(render_pass, self.clone(), allocator_helper))
         }
         else {
             Err(res.into())
