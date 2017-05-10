@@ -12,8 +12,8 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-use core::Device;
 use core::allocator_helper::AllocatorHelper;
+use core::{self, Device};
 use std::cmp::Ordering;
 use std::hash::{Hash, Hasher};
 use std::ptr;
@@ -66,6 +66,19 @@ impl Event {
     #[inline]
     pub(crate) fn device_handle(&self) -> vks::VkDevice {
         self.0.device.handle()
+    }
+
+    /// See [`vkGetEventStatus`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetEventStatus)
+    pub fn get_status(&self) -> Result<bool, core::Error> {
+        let res = unsafe {
+            (self.loader().core.vkGetEventStatus)(self.device_handle(), self.handle())
+        };
+
+        match res {
+            vks::VK_EVENT_SET => Ok(true),
+            vks::VK_EVENT_RESET => Ok(false),
+            _ => Err(res.into()),
+        }
     }
 }
 
