@@ -12,12 +12,14 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-use core::Device;
 use core::allocator_helper::AllocatorHelper;
+use core::{self, Device};
 use std::cmp::Ordering;
 use std::hash::{Hash, Hasher};
 use std::ptr;
 use std::sync::Arc;
+use std::time::Duration;
+use utils;
 use vks;
 use {TryDestroyError, TryDestroyErrorKind, VulkanObject};
 
@@ -66,6 +68,34 @@ impl Fence {
     #[inline]
     pub(crate) fn device_handle(&self) -> vks::VkDevice {
         self.0.device.handle()
+    }
+
+    /// See [`vkWaitForFences`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkWaitForFences)
+    pub fn wait_for_fences(fences: &[Self], wait_all: bool, timeout: Option<Duration>) -> Result<bool, core::Error> {
+        let loader = fences[0].loader();
+        let device = fences[0].device_handle();
+        let fences: Vec<_> = fences.iter().map(Fence::handle).collect();
+
+        let timeout = match timeout {
+            Some(timeout) => 1000000000u64 * timeout.as_secs() + timeout.subsec_nanos() as u64,
+            None => 0,
+        };
+
+        let res = unsafe {
+            (loader.core.vkWaitForFences)(device, fences.len() as u32, fences.as_ptr(), utils::to_vk_bool(wait_all), timeout)
+        };
+
+        match res {
+            vks::VK_SUCCESS => Ok(true),
+            vks::VK_TIMEOUT => Ok(false),
+            _ => Err(res.into()),
+        }
+    }
+
+    /// See [`vkWaitForFences`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkWaitForFences)
+    #[inline]
+    pub fn wait_for(&self, wait_all: bool, timeout: Option<Duration>) -> Result<bool, core::Error> {
+        Fence::wait_for_fences(&[self.clone()], wait_all, timeout)
     }
 }
 
