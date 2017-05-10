@@ -23,6 +23,7 @@ use core::{
     DeviceMemory,
     Event,
     Fence,
+    Framebuffer,
     Image,
     ImageView,
     Instance,
@@ -482,6 +483,26 @@ impl Device {
 
         if res == vks::VK_SUCCESS {
             Ok(PipelineLayout::new(pipeline_layout, self.clone(), allocator_helper))
+        }
+        else {
+            Err(res.into())
+        }
+    }
+
+    /// See [`vkCreateFramebuffer`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCreateFramebuffer)
+    pub fn create_framebuffer(&self, create_info: &core::FramebufferCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<Framebuffer, core::Error> {
+        let create_info_wrapper: core::VkFramebufferCreateInfoWrapper = create_info.into();
+
+        let allocator_helper = allocator.map(AllocatorHelper::new);
+        let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), AllocatorHelper::callbacks);
+
+        let mut framebuffer = ptr::null_mut();
+        let res = unsafe {
+            (self.loader().core.vkCreateFramebuffer)(self.handle(), create_info_wrapper.as_ref(), allocation_callbacks, &mut framebuffer)
+        };
+
+        if res == vks::VK_SUCCESS {
+            Ok(Framebuffer::new(framebuffer, self.clone(), allocator_helper))
         }
         else {
             Err(res.into())
