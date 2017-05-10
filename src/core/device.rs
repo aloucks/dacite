@@ -28,6 +28,7 @@ use core::{
     Instance,
     Pipeline,
     PipelineCache,
+    PipelineLayout,
     QueryPool,
     Queue,
     Sampler,
@@ -464,6 +465,26 @@ impl Device {
                 }
             }).collect();
             Err((res.into(), pipelines))
+        }
+    }
+
+    /// See [`vkCreatePipelineLayout`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCreatePipelineLayout)
+    pub fn create_pipeline_layout(&self, create_info: &core::PipelineLayoutCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<PipelineLayout, core::Error> {
+        let create_info_wrapper: core::VkPipelineLayoutCreateInfoWrapper = create_info.into();
+
+        let allocator_helper = allocator.map(AllocatorHelper::new);
+        let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), AllocatorHelper::callbacks);
+
+        let mut pipeline_layout = ptr::null_mut();
+        let res = unsafe {
+            (self.loader().core.vkCreatePipelineLayout)(self.handle(), create_info_wrapper.as_ref(), allocation_callbacks, &mut pipeline_layout)
+        };
+
+        if res == vks::VK_SUCCESS {
+            Ok(PipelineLayout::new(pipeline_layout, self.clone(), allocator_helper))
+        }
+        else {
+            Err(res.into())
         }
     }
 }
