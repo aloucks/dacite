@@ -94,6 +94,20 @@ impl Event {
             Err(res.into())
         }
     }
+
+    /// See [`vkResetEvent`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkResetEvent)
+    pub fn reset(&self) -> Result<(), core::Error> {
+        let res = unsafe {
+            (self.loader().core.vkResetEvent)(self.device_handle(), self.handle())
+        };
+
+        if res == vks::VK_SUCCESS {
+            Ok(())
+        }
+        else {
+            Err(res.into())
+        }
+    }
 }
 
 #[derive(Debug)]
