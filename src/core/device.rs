@@ -529,6 +529,20 @@ impl Device {
             Err(res.into())
         }
     }
+
+    /// See [`vkDeviceWaitIdle`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkDeviceWaitIdle)
+    pub fn wait_idle(&self) -> Result<(), core::Error> {
+        let res = unsafe {
+            (self.loader().core.vkDeviceWaitIdle)(self.handle())
+        };
+
+        if res == vks::VK_SUCCESS {
+            Ok(())
+        }
+        else {
+            Err(res.into())
+        }
+    }
 }
 
 #[derive(Debug)]
