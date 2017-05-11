@@ -16,6 +16,7 @@ use core::allocator_helper::AllocatorHelper;
 use core::{self, Device, DeviceMemory};
 use std::cmp::Ordering;
 use std::hash::{Hash, Hasher};
+use std::mem;
 use std::ptr;
 use std::sync::Arc;
 use vks;
@@ -79,6 +80,15 @@ impl Image {
         }
         else {
             Err(res.into())
+        }
+    }
+
+    /// See [`vkGetImageMemoryRequirements`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetImageMemoryRequirements)
+    pub fn get_memory_requirements(&self) -> core::MemoryRequirements {
+        unsafe {
+            let mut requirements = mem::uninitialized();
+            (self.loader().core.vkGetImageMemoryRequirements)(self.device_handle(), self.handle(), &mut requirements);
+            (&requirements).into()
         }
     }
 }
