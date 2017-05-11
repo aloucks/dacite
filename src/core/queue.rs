@@ -12,9 +12,10 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-use core::Device;
+use core::{self, Device, Fence};
 use std::cmp::Ordering;
 use std::hash::{Hash, Hasher};
+use std::ptr;
 use vks;
 use {TryDestroyError, TryDestroyErrorKind, VulkanObject};
 
@@ -82,5 +83,31 @@ impl Queue {
 
     pub(crate) fn loader(&self) -> &vks::DeviceProcAddrLoader {
         self.device.loader()
+    }
+
+    /// See [`vkQueueSubmit`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkQueueSubmit)
+    pub fn submit(&self, submits: Option<&[core::SubmitInfo]>, fence: Option<Fence>) -> Result<(), core::Error> {
+        let (submits_count, vk_submits_ptr, _, _) = match submits {
+            Some(submits) => {
+                let submits_wrappers: Vec<core::VkSubmitInfoWrapper> = submits.iter().map(From::from).collect();
+                let vk_submits: Vec<vks::VkSubmitInfo> = submits_wrappers.iter().map(AsRef::as_ref).cloned().collect();
+                (submits.len() as u32, vk_submits.as_ptr(), Some(vk_submits), Some(submits_wrappers))
+            }
+
+            None => (0, ptr::null(), None, None),
+        };
+
+        let fence = fence.as_ref().map_or(ptr::null_mut(), Fence::handle);
+
+        let res = unsafe {
+            (self.loader().core.vkQueueSubmit)(self.handle, submits_count, vk_submits_ptr, fence)
+        };
+
+        if res == vks::VK_SUCCESS {
+            Ok(())
+        }
+        else {
+            Err(res.into())
+        }
     }
 }
