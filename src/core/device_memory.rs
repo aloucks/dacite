@@ -67,6 +67,16 @@ impl DeviceMemory {
     pub(crate) fn device_handle(&self) -> vks::VkDevice {
         self.0.device.handle()
     }
+
+    /// See [`vkGetDeviceMemoryCommitment`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetDeviceMemoryCommitment)
+    pub fn get_commitment(&self) -> u64 {
+        let mut commitment = 0;
+        unsafe {
+            (self.loader().core.vkGetDeviceMemoryCommitment)(self.device_handle(), self.handle(), &mut commitment)
+        };
+
+        commitment
+    }
 }
 
 #[derive(Debug)]
