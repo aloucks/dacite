@@ -124,4 +124,30 @@ impl Queue {
             Err(res.into())
         }
     }
+
+    /// See [`vkQueueBindSparse`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkQueueBindSparse)
+    pub fn bind_sparse(&self, bind_infos: Option<&[core::BindSparseInfo]>, fence: Option<Fence>) -> Result<(), core::Error> {
+        let (bind_infos_count, vk_bind_infos_ptr, _, _) = match bind_infos {
+            Some(bind_infos) => {
+                let bind_infos_wrappers: Vec<core::VkBindSparseInfoWrapper> = bind_infos.iter().map(From::from).collect();
+                let vk_bind_infos: Vec<vks::VkBindSparseInfo> = bind_infos_wrappers.iter().map(AsRef::as_ref).cloned().collect();
+                (bind_infos.len() as u32, vk_bind_infos.as_ptr(), Some(vk_bind_infos), Some(bind_infos_wrappers))
+            }
+
+            None => (0, ptr::null(), None, None),
+        };
+
+        let fence = fence.as_ref().map_or(ptr::null_mut(), Fence::handle);
+
+        let res = unsafe {
+            (self.loader().core.vkQueueBindSparse)(self.handle, bind_infos_count, vk_bind_infos_ptr, fence)
+        };
+
+        if res == vks::VK_SUCCESS {
+            Ok(())
+        }
+        else {
+            Err(res.into())
+        }
+    }
 }
