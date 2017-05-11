@@ -79,4 +79,8 @@ impl Queue {
             device: device,
         }
     }
+
+    pub(crate) fn loader(&self) -> &vks::DeviceProcAddrLoader {
+        self.device.loader()
+    }
 }
