@@ -91,6 +91,22 @@ impl Image {
             (&requirements).into()
         }
     }
+
+    /// See [`vkGetImageSparseMemoryRequirements`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetImageSparseMemoryRequirements)
+    pub fn get_sparse_memory_requirements(&self) -> Vec<core::SparseImageMemoryRequirements> {
+        let mut num_requirements = 0;
+        unsafe {
+            (self.loader().core.vkGetImageSparseMemoryRequirements)(self.device_handle(), self.handle(), &mut num_requirements, ptr::null_mut());
+        }
+
+        let mut requirements = Vec::with_capacity(num_requirements as usize);
+        unsafe {
+            requirements.set_len(num_requirements as usize);
+            (self.loader().core.vkGetImageSparseMemoryRequirements)(self.device_handle(), self.handle(), &mut num_requirements, requirements.as_mut_ptr());
+        }
+
+        requirements.iter().map(From::from).collect()
+    }
 }
 
 #[derive(Debug)]
