@@ -107,6 +107,17 @@ impl Image {
 
         requirements.iter().map(From::from).collect()
     }
+
+    /// See [`vkGetImageSubresourceLayout`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetImageSubresourceLayout)
+    pub fn get_subresource_layout(&self, subresource: &core::ImageSubresource) -> core::SubresourceLayout {
+        let subresource = subresource.into();
+
+        unsafe {
+            let mut layout = mem::uninitialized();
+            (self.loader().core.vkGetImageSubresourceLayout)(self.device_handle(), self.handle(), &subresource, &mut layout);
+            (&layout).into()
+        }
+    }
 }
 
 #[derive(Debug)]
