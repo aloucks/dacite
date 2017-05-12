@@ -12,8 +12,8 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-use core::Device;
 use core::allocator_helper::AllocatorHelper;
+use core::{self, Device};
 use std::cmp::Ordering;
 use std::hash::{Hash, Hasher};
 use std::ptr;
@@ -66,6 +66,22 @@ impl PipelineCache {
     #[inline]
     pub(crate) fn device_handle(&self) -> vks::VkDevice {
         self.0.device.handle()
+    }
+
+    /// See [`vkMergePipelineCaches`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkMergePipelineCaches)
+    pub fn merge(&self, caches: &[Self]) -> Result<(), core::Error> {
+        let caches: Vec<_> = caches.iter().map(PipelineCache::handle).collect();
+
+        let res = unsafe {
+            (self.loader().core.vkMergePipelineCaches)(self.device_handle(), self.handle(), caches.len() as u32, caches.as_ptr())
+        };
+
+        if res == vks::VK_SUCCESS {
+            Ok(())
+        }
+        else {
+            Err(res.into())
+        }
     }
 }
 
