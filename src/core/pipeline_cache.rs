@@ -14,6 +14,7 @@
 
 use core::allocator_helper::AllocatorHelper;
 use core::{self, Device};
+use libc::c_void;
 use std::cmp::Ordering;
 use std::hash::{Hash, Hasher};
 use std::ptr;
@@ -81,6 +82,47 @@ impl PipelineCache {
         }
         else {
             Err(res.into())
+        }
+    }
+
+    /// See [`vkGetPipelineCacheData`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetPipelineCacheData)
+    pub fn get_data(&self, max_size: Option<usize>) -> Result<Vec<u8>, core::Error> {
+        if let Some(mut max_size) = max_size {
+            let mut data: Vec<u8> = Vec::with_capacity(max_size);
+            let res = unsafe {
+                data.set_len(max_size);
+                (self.loader().core.vkGetPipelineCacheData)(self.device_handle(), self.handle(), &mut max_size, data.as_mut_ptr() as *mut c_void)
+            };
+
+            if (res == vks::VK_SUCCESS) || (res == vks::VK_INCOMPLETE) {
+                Ok(data)
+            }
+            else {
+                Err(res.into())
+            }
+        }
+        else {
+            let mut size = 0;
+            let res = unsafe {
+                (self.loader().core.vkGetPipelineCacheData)(self.device_handle(), self.handle(), &mut size, ptr::null_mut())
+            };
+
+            if (res != vks::VK_SUCCESS) && (res != vks::VK_INCOMPLETE) {
+                return Err(res.into());
+            }
+
+            let mut data: Vec<u8> = Vec::with_capacity(size);
+            let res = unsafe {
+                data.set_len(size);
+                (self.loader().core.vkGetPipelineCacheData)(self.device_handle(), self.handle(), &mut size, data.as_mut_ptr() as *mut c_void)
+            };
+
+            if (res == vks::VK_SUCCESS) || (res == vks::VK_INCOMPLETE) {
+                Ok(data)
+            }
+            else {
+                Err(res.into())
+            }
         }
     }
 }
