@@ -493,6 +493,14 @@ impl CommandBuffer {
             (self.loader().core.vkCmdEndRenderPass)(self.handle());
         }
     }
+
+    /// See [`vkCmdExecuteCommands`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCmdExecuteCommands)
+    pub fn execute_commands(&self, command_buffers: &[CommandBuffer]) {
+        let command_buffers: Vec<_> = command_buffers.iter().map(CommandBuffer::handle).collect();
+        unsafe {
+            (self.loader().core.vkCmdExecuteCommands)(self.handle(), command_buffers.len() as u32, command_buffers.as_ptr());
+        }
+    }
 }
 
 #[derive(Debug)]
