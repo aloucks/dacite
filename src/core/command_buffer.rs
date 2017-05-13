@@ -226,6 +226,13 @@ impl CommandBuffer {
             (self.loader().core.vkCmdDrawIndexed)(self.handle(), index_count, instance_count, first_index, vertex_offset, first_instance);
         }
     }
+
+    /// See [`vkCmdDrawIndirect`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCmdDrawIndirect)
+    pub fn draw_indirect(&self, buffer: &Buffer, offset: u64, draw_count: u32, stride: u32) {
+        unsafe {
+            (self.loader().core.vkCmdDrawIndirect)(self.handle(), buffer.handle(), offset, draw_count, stride);
+        }
+    }
 }
 
 #[derive(Debug)]
