@@ -108,6 +108,26 @@ impl DeviceMemory {
             Err(res.into())
         }
     }
+
+    /// See [`vkFlushMappedMemoryRanges`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkFlushMappedMemoryRanges)
+    pub fn flush(ranges: &[core::MappedMemoryRange]) -> Result<(), core::Error> {
+        let loader = ranges[0].memory.loader();
+        let device_handle = ranges[0].memory.device_handle();
+
+        let ranges_wrappers: Vec<core::VkMappedMemoryRangeWrapper> = ranges.iter().map(From::from).collect();
+        let ranges: Vec<_> = ranges_wrappers.iter().map(AsRef::as_ref).cloned().collect();
+
+        let res = unsafe {
+            (loader.core.vkFlushMappedMemoryRanges)(device_handle, ranges.len() as u32, ranges.as_ptr())
+        };
+
+        if res == vks::VK_SUCCESS {
+            Ok(())
+        }
+        else {
+            Err(res.into())
+        }
+    }
 }
 
 #[derive(Debug)]
