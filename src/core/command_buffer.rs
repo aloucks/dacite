@@ -471,6 +471,14 @@ impl CommandBuffer {
             (self.loader().core.vkCmdCopyQueryPoolResults)(self.handle(), query_pool.handle(), first_query, query_count, dst_buffer.handle(), dst_offset, stride, flags);
         }
     }
+
+    /// See [`vkCmdBeginRenderPass`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCmdBeginRenderPass)
+    pub fn begin_render_pass(&self, render_pass_begin: &core::RenderPassBeginInfo, contents: core::SubpassContents) {
+        let render_pass_begin_wrapper: core::VkRenderPassBeginInfoWrapper = render_pass_begin.into();
+        unsafe {
+            (self.loader().core.vkCmdBeginRenderPass)(self.handle(), render_pass_begin_wrapper.as_ref(), contents.into());
+        }
+    }
 }
 
 #[derive(Debug)]
