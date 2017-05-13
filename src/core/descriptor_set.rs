@@ -12,9 +12,10 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-use core::DescriptorPool;
+use core::{self, DescriptorPool};
 use std::cmp::Ordering;
 use std::hash::{Hash, Hasher};
+use std::ptr;
 use std::sync::Arc;
 use vks;
 use {TryDestroyError, TryDestroyErrorKind, VulkanObject};
@@ -63,6 +64,39 @@ impl DescriptorSet {
     #[inline]
     pub(crate) fn device_handle(&self) -> vks::VkDevice {
         self.0.descriptor_pool.device_handle()
+    }
+
+    /// See [`vkUpdateDescriptorSets`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkUpdateDescriptorSets)
+    pub fn update(writes: Option<&[core::WriteDescriptorSet]>, copies: Option<&[core::CopyDescriptorSet]>) {
+        let (loader, device_handle) = match (writes, copies) {
+            (Some(writes), _) if !writes.is_empty() => (writes[0].dst_set.loader(), writes[0].dst_set.device_handle()),
+            (_, Some(copies)) if !copies.is_empty() => (copies[0].src_set.loader(), copies[0].src_set.device_handle()),
+            _ => return,
+        };
+
+        let (writes_count, writes_ptr, _, _) = match writes {
+            Some(writes) => {
+                let writes_wrappers: Vec<core::VkWriteDescriptorSetWrapper> = writes.iter().map(From::from).collect();
+                let writes: Vec<_> = writes_wrappers.iter().map(AsRef::as_ref).cloned().collect();
+                (writes.len() as u32, writes.as_ptr(), Some(writes), Some(writes_wrappers))
+            }
+
+            None => (0, ptr::null(), None, None),
+        };
+
+        let (copies_count, copies_ptr, _, _) = match copies {
+            Some(copies) => {
+                let copies_wrappers: Vec<core::VkCopyDescriptorSetWrapper> = copies.iter().map(From::from).collect();
+                let copies: Vec<_> = copies_wrappers.iter().map(AsRef::as_ref).cloned().collect();
+                (copies.len() as u32, copies.as_ptr(), Some(copies), Some(copies_wrappers))
+            }
+
+            None => (0, ptr::null(), None, None),
+        };
+
+        unsafe {
+            (loader.core.vkUpdateDescriptorSets)(device_handle, writes_count, writes_ptr, copies_count, copies_ptr);
+        }
     }
 }
 
