@@ -219,6 +219,13 @@ impl CommandBuffer {
             (self.loader().core.vkCmdDraw)(self.handle(), vertex_count, instance_count, first_vertex, first_instance);
         }
     }
+
+    /// See [`vkCmdDrawIndexed`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCmdDrawIndexed)
+    pub fn draw_indexed(&self, index_count: u32, instance_count: u32, first_index: u32, vertex_offset: i32, first_instance: u32) {
+        unsafe {
+            (self.loader().core.vkCmdDrawIndexed)(self.handle(), index_count, instance_count, first_index, vertex_offset, first_instance);
+        }
+    }
 }
 
 #[derive(Debug)]
