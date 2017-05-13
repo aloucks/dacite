@@ -118,6 +118,14 @@ impl CommandBuffer {
             (self.loader().core.vkCmdSetViewport)(self.handle(), first_viewport, viewports.len() as u32, viewports.as_ptr());
         }
     }
+
+    /// See [`vkCmdSetScissor`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCmdSetScissor)
+    pub fn set_scissor(&self, first_scissor: u32, scissors: &[core::Rect2D]) {
+        let scissors: Vec<_> = scissors.iter().map(From::from).collect();
+        unsafe {
+            (self.loader().core.vkCmdSetScissor)(self.handle(), first_scissor, scissors.len() as u32, scissors.as_ptr());
+        }
+    }
 }
 
 #[derive(Debug)]
