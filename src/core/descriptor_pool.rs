@@ -86,6 +86,22 @@ impl DescriptorPool {
             Err(res.into())
         }
     }
+
+    /// See [`vkFreeDescriptorSets`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkFreeDescriptorSets)
+    pub fn free_descriptor_sets(&self, descriptor_sets: &[DescriptorSet]) -> Result<(), core::Error> {
+        let descriptor_sets: Vec<_> = descriptor_sets.iter().map(DescriptorSet::handle).collect();
+
+        let res = unsafe {
+            (self.loader().core.vkFreeDescriptorSets)(self.device_handle(), self.handle(), descriptor_sets.len() as u32, descriptor_sets.as_ptr())
+        };
+
+        if res == vks::VK_SUCCESS {
+            Ok(())
+        }
+        else {
+            Err(res.into())
+        }
+    }
 }
 
 #[derive(Debug)]
