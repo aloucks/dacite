@@ -247,6 +247,13 @@ impl CommandBuffer {
             (self.loader().core.vkCmdDispatch)(self.handle(), group_count_x, group_count_y, group_count_z);
         }
     }
+
+    /// See [`vkCmdDispatchIndirect`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCmdDispatchIndirect)
+    pub fn dispatch_indirect(&self, buffer: &Buffer, offset: u64) {
+        unsafe {
+            (self.loader().core.vkCmdDispatchIndirect)(self.handle(), buffer.handle(), offset);
+        }
+    }
 }
 
 #[derive(Debug)]
