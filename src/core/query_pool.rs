@@ -12,10 +12,12 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-use core::Device;
 use core::allocator_helper::AllocatorHelper;
+use core::{self, Device};
+use libc::c_void;
 use std::cmp::Ordering;
 use std::hash::{Hash, Hasher};
+use std::mem;
 use std::ptr;
 use std::sync::Arc;
 use vks;
@@ -66,6 +68,56 @@ impl QueryPool {
     #[inline]
     pub(crate) fn device_handle(&self) -> vks::VkDevice {
         self.0.device.handle()
+    }
+
+    /// See [`vkGetQueryPoolResults`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetQueryPoolResults)
+    pub fn get_results(&self, first_query: u32, query_count: u32, stride: usize, flags: core::QueryResultFlags, results: &mut [core::QueryResult]) -> Result<bool, core::Error> {
+        if flags.contains(core::QUERY_RESULT_64_BIT) {
+            let mut data: Vec<u64> = Vec::with_capacity(results.len());
+            let data_size = results.len() * mem::size_of::<u64>();
+            let stride_u64 = (stride * mem::size_of::<u64>()) as u64;
+
+            let res = unsafe {
+                data.set_len(results.len());
+                (self.loader().core.vkGetQueryPoolResults)(self.device_handle(), self.handle(), first_query, query_count, data_size, data.as_mut_ptr() as *mut c_void, stride_u64, flags)
+            };
+
+            match res {
+                vks::VK_SUCCESS => {
+                    for (&src, dst) in data.iter().zip(results.iter_mut()) {
+                        *dst = core::QueryResult::U64(src);
+                    }
+
+                    Ok(true)
+                }
+
+                vks::VK_NOT_READY => Ok(false),
+                _ => Err(res.into()),
+            }
+        }
+        else {
+            let mut data: Vec<u32> = Vec::with_capacity(results.len());
+            let data_size = results.len() * mem::size_of::<u32>();
+            let stride_u32 = (stride * mem::size_of::<u32>()) as u64;
+
+            let res = unsafe {
+                data.set_len(results.len());
+                (self.loader().core.vkGetQueryPoolResults)(self.device_handle(), self.handle(), first_query, query_count, data_size, data.as_mut_ptr() as *mut c_void, stride_u32, flags)
+            };
+
+            match res {
+                vks::VK_SUCCESS => {
+                    for (&src, dst) in data.iter().zip(results.iter_mut()) {
+                        *dst = core::QueryResult::U32(src);
+                    }
+
+                    Ok(true)
+                }
+
+                vks::VK_NOT_READY => Ok(false),
+                _ => Err(res.into()),
+            }
+        }
     }
 }
 

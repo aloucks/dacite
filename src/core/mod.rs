@@ -1017,6 +1017,12 @@ impl From<SubpassIndex> for u32 {
     }
 }
 
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
+pub enum QueryResult {
+    U32(u32),
+    U64(u64),
+}
+
 /// See [API Version Numbers](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#fundamentals-versionnum)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct Version {
