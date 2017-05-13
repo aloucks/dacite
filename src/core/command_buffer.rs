@@ -327,6 +327,15 @@ impl CommandBuffer {
             (self.loader().core.vkCmdClearDepthStencilImage)(self.handle(), image.handle(), image_layout.into(), &depth_stencil, ranges.len() as u32, ranges.as_ptr());
         }
     }
+
+    /// See [`vkCmdClearAttachments`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCmdClearAttachments)
+    pub fn clear_attachments(&self, attachments: &[core::ClearAttachment], rects: &[core::ClearRect]) {
+        let attachments: Vec<_> = attachments.iter().map(From::from).collect();
+        let rects: Vec<_> = rects.iter().map(From::from).collect();
+        unsafe {
+            (self.loader().core.vkCmdClearAttachments)(self.handle(), attachments.len() as u32, attachments.as_ptr(), rects.len() as u32, rects.as_ptr());
+        }
+    }
 }
 
 #[derive(Debug)]
