@@ -23,6 +23,7 @@ use core::{
     PipelineLayout,
     QueryPool,
 };
+use libc::c_void;
 use std::cmp::Ordering;
 use std::hash::{Hash, Hasher};
 use std::ptr;
@@ -469,6 +470,13 @@ impl CommandBuffer {
     pub fn copy_query_pool_results(&self, query_pool: &QueryPool, first_query: u32, query_count: u32, dst_buffer: &Buffer, dst_offset: u64, stride: u64, flags: core::QueryResultFlags) {
         unsafe {
             (self.loader().core.vkCmdCopyQueryPoolResults)(self.handle(), query_pool.handle(), first_query, query_count, dst_buffer.handle(), dst_offset, stride, flags);
+        }
+    }
+
+    /// See [`vkCmdPushConstants`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCmdPushConstants)
+    pub fn push_constants(&self, layout: &PipelineLayout, stage_flags: core::ShaderStageFlags, offset: u32, values: &[u8]) {
+        unsafe {
+            (self.loader().core.vkCmdPushConstants)(self.handle(), layout.handle(), stage_flags, offset, values.len() as u32, values.as_ptr() as *const c_void);
         }
     }
 
