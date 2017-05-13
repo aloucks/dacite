@@ -12,10 +12,11 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-use core::Device;
 use core::allocator_helper::AllocatorHelper;
+use core::{self, Device};
 use std::cmp::Ordering;
 use std::hash::{Hash, Hasher};
+use std::mem;
 use std::ptr;
 use std::sync::Arc;
 use vks;
@@ -68,6 +69,14 @@ impl RenderPass {
         self.0.device.handle()
     }
 
+    /// See [`vkGetRenderAreaGranularity`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetRenderAreaGranularity)
+    pub fn get_render_area_granularity(&self) -> core::Extent2D {
+        unsafe {
+            let mut granularity = mem::uninitialized();
+            (self.loader().core.vkGetRenderAreaGranularity)(self.device_handle(), self.handle(), &mut granularity);
+            (&granularity).into()
+        }
+    }
 }
 
 #[derive(Debug)]
