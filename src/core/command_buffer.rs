@@ -168,6 +168,13 @@ impl CommandBuffer {
             (self.loader().core.vkCmdSetStencilWriteMask)(self.handle(), face_mask, write_mask);
         }
     }
+
+    /// See [`vkCmdSetStencilReference`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCmdSetStencilReference)
+    pub fn set_stencil_reference(&self, face_mask: core::StencilFaceFlags, reference: u32) {
+        unsafe {
+            (self.loader().core.vkCmdSetStencilReference)(self.handle(), face_mask, reference);
+        }
+    }
 }
 
 #[derive(Debug)]
