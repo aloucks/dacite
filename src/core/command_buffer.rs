@@ -126,6 +126,13 @@ impl CommandBuffer {
             (self.loader().core.vkCmdSetScissor)(self.handle(), first_scissor, scissors.len() as u32, scissors.as_ptr());
         }
     }
+
+    /// See [`vkCmdSetLineWidth`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCmdSetLineWidth)
+    pub fn set_line_width(&self, line_width: f32) {
+        unsafe {
+            (self.loader().core.vkCmdSetLineWidth)(self.handle(), line_width);
+        }
+    }
 }
 
 #[derive(Debug)]
