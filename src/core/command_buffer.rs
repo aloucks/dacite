@@ -287,6 +287,14 @@ impl CommandBuffer {
             (self.loader().core.vkCmdCopyBufferToImage)(self.handle(), src_buffer.handle(), dst_image.handle(), dst_image_layout.into(), regions.len() as u32, regions.as_ptr());
         }
     }
+
+    /// See [`vkCmdCopyImageToBuffer`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCmdCopyImageToBuffer)
+    pub fn copy_image_to_buffer(&self, src_image: &Image, src_image_layout: core::ImageLayout, dst_buffer: &Buffer, regions: &[core::BufferImageCopy]) {
+        let regions: Vec<_> = regions.iter().map(From::from).collect();
+        unsafe {
+            (self.loader().core.vkCmdCopyImageToBuffer)(self.handle(), src_image.handle(), src_image_layout.into(), dst_buffer.handle(), regions.len() as u32, regions.as_ptr());
+        }
+    }
 }
 
 #[derive(Debug)]
