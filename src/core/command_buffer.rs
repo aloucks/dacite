@@ -161,6 +161,13 @@ impl CommandBuffer {
             (self.loader().core.vkCmdSetStencilCompareMask)(self.handle(), face_mask, compare_mask);
         }
     }
+
+    /// See [`vkCmdSetStencilWriteMask`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCmdSetStencilWriteMask)
+    pub fn set_stencil_write_mask(&self, face_mask: core::StencilFaceFlags, write_mask: u32) {
+        unsafe {
+            (self.loader().core.vkCmdSetStencilWriteMask)(self.handle(), face_mask, write_mask);
+        }
+    }
 }
 
 #[derive(Debug)]
