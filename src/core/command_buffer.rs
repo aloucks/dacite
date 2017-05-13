@@ -12,9 +12,16 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-use core::{self, CommandPool, Pipeline};
+use core::{
+    self,
+    CommandPool,
+    DescriptorSet,
+    Pipeline,
+    PipelineLayout,
+};
 use std::cmp::Ordering;
 use std::hash::{Hash, Hasher};
+use std::ptr;
 use std::sync::Arc;
 use vks;
 use {TryDestroyError, TryDestroyErrorKind, VulkanObject};
@@ -173,6 +180,20 @@ impl CommandBuffer {
     pub fn set_stencil_reference(&self, face_mask: core::StencilFaceFlags, reference: u32) {
         unsafe {
             (self.loader().core.vkCmdSetStencilReference)(self.handle(), face_mask, reference);
+        }
+    }
+
+    /// See [`vkCmdBindDescriptorSets`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCmdBindDescriptorSets)
+    pub fn bind_descriptor_sets(&self, pipeline_bind_point: core::PipelineBindPoint, layout: &PipelineLayout, first_set: u32, descriptor_sets: &[DescriptorSet], dynamic_offsets: Option<&[u32]>) {
+        let descriptor_sets: Vec<_> = descriptor_sets.iter().map(DescriptorSet::handle).collect();
+
+        let (dynamic_offsets_count, dynamic_offsets_ptr) = match dynamic_offsets {
+            Some(dynamic_offsets) => (dynamic_offsets.len() as u32, dynamic_offsets.as_ptr()),
+            None => (0, ptr::null()),
+        };
+
+        unsafe {
+            (self.loader().core.vkCmdBindDescriptorSets)(self.handle(), pipeline_bind_point.into(), layout.handle(), first_set, descriptor_sets.len() as u32, descriptor_sets.as_ptr(), dynamic_offsets_count, dynamic_offsets_ptr);
         }
     }
 }
