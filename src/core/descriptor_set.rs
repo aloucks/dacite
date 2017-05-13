@@ -54,6 +54,16 @@ impl DescriptorSet {
     pub(crate) fn handle(&self) -> vks::VkDescriptorSet {
         self.0.handle
     }
+
+    #[inline]
+    pub(crate) fn loader(&self) -> &vks::DeviceProcAddrLoader {
+        self.0.descriptor_pool.loader()
+    }
+
+    #[inline]
+    pub(crate) fn device_handle(&self) -> vks::VkDevice {
+        self.0.descriptor_pool.device_handle()
+    }
 }
 
 #[derive(Debug)]
