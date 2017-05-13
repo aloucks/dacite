@@ -14,6 +14,7 @@
 
 use core::{
     self,
+    Buffer,
     CommandPool,
     DescriptorSet,
     Pipeline,
@@ -194,6 +195,13 @@ impl CommandBuffer {
 
         unsafe {
             (self.loader().core.vkCmdBindDescriptorSets)(self.handle(), pipeline_bind_point.into(), layout.handle(), first_set, descriptor_sets.len() as u32, descriptor_sets.as_ptr(), dynamic_offsets_count, dynamic_offsets_ptr);
+        }
+    }
+
+    /// See [`vkCmdBindIndexBuffer`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCmdBindIndexBuffer)
+    pub fn bind_index_buffer(&self, buffer: &Buffer, offset: u64, index_type: core::IndexType) {
+        unsafe {
+            (self.loader().core.vkCmdBindIndexBuffer)(self.handle(), buffer.handle(), offset, index_type.into());
         }
     }
 }
