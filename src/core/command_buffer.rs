@@ -147,6 +147,13 @@ impl CommandBuffer {
             (self.loader().core.vkCmdSetBlendConstants)(self.handle(), blend_constants.as_ptr());
         }
     }
+
+    /// See [`vkCmdSetDepthBounds`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCmdSetDepthBounds)
+    pub fn set_depth_bounds(&self, min_depth_bounds: f32, max_depth_bounds: f32) {
+        unsafe {
+            (self.loader().core.vkCmdSetDepthBounds)(self.handle(), min_depth_bounds, max_depth_bounds);
+        }
+    }
 }
 
 #[derive(Debug)]
