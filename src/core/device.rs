@@ -395,7 +395,7 @@ impl Device {
         };
 
         if res == vks::VK_SUCCESS {
-            Ok(DeviceMemory::new(memory, self.clone(), allocator_helper))
+            Ok(DeviceMemory::new(memory, self.clone(), allocator_helper, allocate_info.allocation_size))
         }
         else {
             Err(res.into())

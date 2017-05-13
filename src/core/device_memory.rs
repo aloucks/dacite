@@ -46,11 +46,12 @@ impl VulkanObject for DeviceMemory {
 }
 
 impl DeviceMemory {
-    pub(crate) fn new(handle: vks::VkDeviceMemory, device: Device, allocator: Option<AllocatorHelper>) -> Self {
+    pub(crate) fn new(handle: vks::VkDeviceMemory, device: Device, allocator: Option<AllocatorHelper>, size: u64) -> Self {
         DeviceMemory(Arc::new(Inner {
             handle: handle,
             device: device,
             allocator: allocator,
+            size: size,
         }))
     }
 
@@ -67,6 +68,10 @@ impl DeviceMemory {
     #[inline]
     pub(crate) fn device_handle(&self) -> vks::VkDevice {
         self.0.device.handle()
+    }
+
+    pub fn size(&self) -> u64 {
+        self.0.size
     }
 
     /// See [`vkGetDeviceMemoryCommitment`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetDeviceMemoryCommitment)
@@ -123,6 +128,7 @@ struct Inner {
     handle: vks::VkDeviceMemory,
     device: Device,
     allocator: Option<AllocatorHelper>,
+    size: u64,
 }
 
 impl Drop for Inner {
