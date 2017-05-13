@@ -352,6 +352,13 @@ impl CommandBuffer {
             (self.loader().core.vkCmdSetEvent)(self.handle(), event.handle(), stage_mask);
         }
     }
+
+    /// See [`vkCmdResetEvent`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCmdResetEvent)
+    pub fn reset_event(&self, event: &Event, stage_mask: core::PipelineStageFlags) {
+        unsafe {
+            (self.loader().core.vkCmdResetEvent)(self.handle(), event.handle(), stage_mask);
+        }
+    }
 }
 
 #[derive(Debug)]
