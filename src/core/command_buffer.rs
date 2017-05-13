@@ -450,6 +450,13 @@ impl CommandBuffer {
             (self.loader().core.vkCmdEndQuery)(self.handle(), query_pool.handle(), query);
         }
     }
+
+    /// See [`vkCmdResetQueryPool`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCmdResetQueryPool)
+    pub fn reset_query_pool(&self, query_pool: &QueryPool, first_query: u32, query_count: u32) {
+        unsafe {
+            (self.loader().core.vkCmdResetQueryPool)(self.handle(), query_pool.handle(), first_query, query_count);
+        }
+    }
 }
 
 #[derive(Debug)]
