@@ -12,7 +12,7 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-use core::{self, CommandPool};
+use core::{self, CommandPool, Pipeline};
 use std::cmp::Ordering;
 use std::hash::{Hash, Hasher};
 use std::sync::Arc;
@@ -101,6 +101,13 @@ impl CommandBuffer {
         }
         else {
             Err(res.into())
+        }
+    }
+
+    /// See [`vkCmdBindPipeline`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCmdBindPipeline)
+    pub fn bind_pipeline(&self, pipeline_bind_point: core::PipelineBindPoint, pipeline: &Pipeline) {
+        unsafe {
+            (self.loader().core.vkCmdBindPipeline)(self.handle(), pipeline_bind_point.into(), pipeline.handle());
         }
     }
 }
