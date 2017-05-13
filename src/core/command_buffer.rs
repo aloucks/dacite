@@ -133,6 +133,13 @@ impl CommandBuffer {
             (self.loader().core.vkCmdSetLineWidth)(self.handle(), line_width);
         }
     }
+
+    /// See [`vkCmdSetDepthBias`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCmdSetDepthBias)
+    pub fn set_depth_bias(&self, depth_bias_constant_factor: f32, depth_bias_clamp: f32, depth_bias_slope_factor: f32) {
+        unsafe {
+            (self.loader().core.vkCmdSetDepthBias)(self.handle(), depth_bias_constant_factor, depth_bias_clamp, depth_bias_slope_factor);
+        }
+    }
 }
 
 #[derive(Debug)]
