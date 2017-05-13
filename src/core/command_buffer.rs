@@ -443,6 +443,13 @@ impl CommandBuffer {
             (self.loader().core.vkCmdBeginQuery)(self.handle(), query_pool.handle(), query, flags);
         }
     }
+
+    /// See [`vkCmdEndQuery`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCmdEndQuery)
+    pub fn end_query(&self, query_pool: &QueryPool, query: u32) {
+        unsafe {
+            (self.loader().core.vkCmdEndQuery)(self.handle(), query_pool.handle(), query);
+        }
+    }
 }
 
 #[derive(Debug)]
