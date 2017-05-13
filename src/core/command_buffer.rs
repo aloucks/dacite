@@ -17,6 +17,7 @@ use core::{
     Buffer,
     CommandPool,
     DescriptorSet,
+    Event,
     Image,
     Pipeline,
     PipelineLayout,
@@ -342,6 +343,13 @@ impl CommandBuffer {
         let regions: Vec<_> = regions.iter().map(From::from).collect();
         unsafe {
             (self.loader().core.vkCmdResolveImage)(self.handle(), src_image.handle(), src_image_layout.into(), dst_image.handle(), dst_image_layout.into(), regions.len() as u32, regions.as_ptr());
+        }
+    }
+
+    /// See [`vkCmdSetEvent`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCmdSetEvent)
+    pub fn set_event(&self, event: &Event, stage_mask: core::PipelineStageFlags) {
+        unsafe {
+            (self.loader().core.vkCmdSetEvent)(self.handle(), event.handle(), stage_mask);
         }
     }
 }
