@@ -254,6 +254,14 @@ impl CommandBuffer {
             (self.loader().core.vkCmdDispatchIndirect)(self.handle(), buffer.handle(), offset);
         }
     }
+
+    /// See [`vkCmdCopyBuffer`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCmdCopyBuffer)
+    pub fn copy_buffer(&self, src_buffer: &Buffer, dst_buffer: &Buffer, regions: &[core::BufferCopy]) {
+        let regions: Vec<_> = regions.iter().map(From::from).collect();
+        unsafe {
+            (self.loader().core.vkCmdCopyBuffer)(self.handle(), src_buffer.handle(), dst_buffer.handle(), regions.len() as u32, regions.as_ptr());
+        }
+    }
 }
 
 #[derive(Debug)]
