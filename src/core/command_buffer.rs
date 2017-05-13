@@ -110,6 +110,14 @@ impl CommandBuffer {
             (self.loader().core.vkCmdBindPipeline)(self.handle(), pipeline_bind_point.into(), pipeline.handle());
         }
     }
+
+    /// See [`vkCmdSetViewport`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCmdSetViewport)
+    pub fn set_viewport(&self, first_viewport: u32, viewports: &[core::Viewport]) {
+        let viewports: Vec<_> = viewports.iter().map(From::from).collect();
+        unsafe {
+            (self.loader().core.vkCmdSetViewport)(self.handle(), first_viewport, viewports.len() as u32, viewports.as_ptr());
+        }
+    }
 }
 
 #[derive(Debug)]
