@@ -212,6 +212,13 @@ impl CommandBuffer {
             (self.loader().core.vkCmdBindVertexBuffers)(self.handle(), first_binding, buffers.len() as u32, buffers.as_ptr(), offsets.as_ptr());
         }
     }
+
+    /// See [`vkCmdDraw`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCmdDraw)
+    pub fn draw(&self, vertex_count: u32, instance_count: u32, first_vertex: u32, first_instance: u32) {
+        unsafe {
+            (self.loader().core.vkCmdDraw)(self.handle(), vertex_count, instance_count, first_vertex, first_instance);
+        }
+    }
 }
 
 #[derive(Debug)]
