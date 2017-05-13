@@ -309,6 +309,15 @@ impl CommandBuffer {
             (self.loader().core.vkCmdFillBuffer)(self.handle(), dst_buffer.handle(), dst_offset, size.into(), data);
         }
     }
+
+    /// See [`vkCmdClearColorImage`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCmdClearColorImage)
+    pub fn clear_color_image(&self, image: &Image, image_layout: core::ImageLayout, color: &core::ClearColorValue, ranges: &[core::ImageSubresourceRange]) {
+        let color = color.into();
+        let ranges: Vec<_> = ranges.iter().map(From::from).collect();
+        unsafe {
+            (self.loader().core.vkCmdClearColorImage)(self.handle(), image.handle(), image_layout.into(), &color, ranges.len() as u32, ranges.as_ptr());
+        }
+    }
 }
 
 #[derive(Debug)]
