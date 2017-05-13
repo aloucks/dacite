@@ -204,6 +204,14 @@ impl CommandBuffer {
             (self.loader().core.vkCmdBindIndexBuffer)(self.handle(), buffer.handle(), offset, index_type.into());
         }
     }
+
+    /// See [`vkCmdBindVertexBuffers`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCmdBindVertexBuffers)
+    pub fn bind_vertex_buffers(&self, first_binding: u32, buffers: &[Buffer], offsets: &[u64]) {
+        let buffers: Vec<_> = buffers.iter().map(Buffer::handle).collect();
+        unsafe {
+            (self.loader().core.vkCmdBindVertexBuffers)(self.handle(), first_binding, buffers.len() as u32, buffers.as_ptr(), offsets.as_ptr());
+        }
+    }
 }
 
 #[derive(Debug)]
