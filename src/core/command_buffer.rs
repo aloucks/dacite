@@ -486,6 +486,13 @@ impl CommandBuffer {
             (self.loader().core.vkCmdNextSubpass)(self.handle(), contents.into());
         }
     }
+
+    /// See [`vkCmdEndRenderPass`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCmdEndRenderPass)
+    pub fn end_render_pass(&self) {
+        unsafe {
+            (self.loader().core.vkCmdEndRenderPass)(self.handle());
+        }
+    }
 }
 
 #[derive(Debug)]
