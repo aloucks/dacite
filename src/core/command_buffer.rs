@@ -479,6 +479,13 @@ impl CommandBuffer {
             (self.loader().core.vkCmdBeginRenderPass)(self.handle(), render_pass_begin_wrapper.as_ref(), contents.into());
         }
     }
+
+    /// See [`vkCmdNextSubpass`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCmdNextSubpass)
+    pub fn next_subpass(&self, contents: core::SubpassContents) {
+        unsafe {
+            (self.loader().core.vkCmdNextSubpass)(self.handle(), contents.into());
+        }
+    }
 }
 
 #[derive(Debug)]
