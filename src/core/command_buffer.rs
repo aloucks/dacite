@@ -89,6 +89,20 @@ impl CommandBuffer {
             Err(res.into())
         }
     }
+
+    /// See [`vkResetCommandBuffer`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkResetCommandBuffer)
+    pub fn reset(&self, flags: core::CommandBufferResetFlags) -> Result<(), core::Error> {
+        let res = unsafe {
+            (self.loader().core.vkResetCommandBuffer)(self.handle(), flags)
+        };
+
+        if res == vks::VK_SUCCESS {
+            Ok(())
+        }
+        else {
+            Err(res.into())
+        }
+    }
 }
 
 #[derive(Debug)]
