@@ -54,6 +54,11 @@ impl CommandBuffer {
     pub(crate) fn handle(&self) -> vks::VkCommandBuffer {
         self.0.handle
     }
+
+    #[inline]
+    pub(crate) fn loader(&self) -> &vks::DeviceProcAddrLoader {
+        self.0.command_pool.loader()
+    }
 }
 
 #[derive(Debug)]
