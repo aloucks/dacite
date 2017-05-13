@@ -12,7 +12,7 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-use core::CommandPool;
+use core::{self, CommandPool};
 use std::cmp::Ordering;
 use std::hash::{Hash, Hasher};
 use std::sync::Arc;
@@ -58,6 +58,22 @@ impl CommandBuffer {
     #[inline]
     pub(crate) fn loader(&self) -> &vks::DeviceProcAddrLoader {
         self.0.command_pool.loader()
+    }
+
+    /// See [`vkBeginCommandBuffer`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkBeginCommandBuffer)
+    pub fn begin(&self, begin_info: &core::CommandBufferBeginInfo) -> Result<(), core::Error> {
+        let begin_info_wrapper: core::VkCommandBufferBeginInfoWrapper = begin_info.into();
+
+        let res = unsafe {
+            (self.loader().core.vkBeginCommandBuffer)(self.handle(), begin_info_wrapper.as_ref())
+        };
+
+        if res == vks::VK_SUCCESS {
+            Ok(())
+        }
+        else {
+            Err(res.into())
+        }
     }
 }
 
