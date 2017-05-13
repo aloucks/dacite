@@ -102,6 +102,20 @@ impl DescriptorPool {
             Err(res.into())
         }
     }
+
+    /// See [`vkResetDescriptorPool`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkResetDescriptorPool)
+    pub fn reset(&self, flags: core::DescriptorPoolResetFlags) -> Result<(), core::Error> {
+        let res = unsafe {
+            (self.loader().core.vkResetDescriptorPool)(self.device_handle(), self.handle(), flags)
+        };
+
+        if res == vks::VK_SUCCESS {
+            Ok(())
+        }
+        else {
+            Err(res.into())
+        }
+    }
 }
 
 #[derive(Debug)]
