@@ -398,6 +398,43 @@ impl CommandBuffer {
             (self.loader().core.vkCmdWaitEvents)(self.handle(), events.len() as u32, events.as_ptr(), src_stage_mask, dst_stage_mask, memory_barriers_count, memory_barriers_ptr, buffer_memory_barriers_count, buffer_memory_barriers_ptr, image_memory_barriers_count, image_memory_barriers_ptr);
         }
     }
+
+    /// See [`vkCmdPipelineBarrier`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCmdPipelineBarrier)
+    pub fn pipeline_barrier(&self, src_stage_mask: core::PipelineStageFlags, dst_stage_mask: core::PipelineStageFlags, dependency_flags: core::DependencyFlags, memory_barriers: Option<&[core::MemoryBarrier]>, buffer_memory_barriers: Option<&[core::BufferMemoryBarrier]>, image_memory_barriers: Option<&[core::ImageMemoryBarrier]>) {
+        let (memory_barriers_count, memory_barriers_ptr, _, _) = match memory_barriers {
+            Some(memory_barriers) => {
+                let memory_barriers_wrappers: Vec<core::VkMemoryBarrierWrapper> = memory_barriers.iter().map(From::from).collect();
+                let vk_memory_barriers: Vec<_> = memory_barriers_wrappers.iter().map(AsRef::as_ref).cloned().collect();
+                (memory_barriers.len() as u32, vk_memory_barriers.as_ptr(), Some(vk_memory_barriers), Some(memory_barriers_wrappers))
+            }
+
+            None => (0, ptr::null(), None, None),
+        };
+
+        let (buffer_memory_barriers_count, buffer_memory_barriers_ptr, _, _) = match buffer_memory_barriers {
+            Some(buffer_memory_barriers) => {
+                let buffer_memory_barriers_wrappers: Vec<core::VkBufferMemoryBarrierWrapper> = buffer_memory_barriers.iter().map(From::from).collect();
+                let vk_buffer_memory_barriers: Vec<_> = buffer_memory_barriers_wrappers.iter().map(AsRef::as_ref).cloned().collect();
+                (buffer_memory_barriers.len() as u32, vk_buffer_memory_barriers.as_ptr(), Some(vk_buffer_memory_barriers), Some(buffer_memory_barriers_wrappers))
+            }
+
+            None => (0, ptr::null(), None, None),
+        };
+
+        let (image_memory_barriers_count, image_memory_barriers_ptr, _, _) = match image_memory_barriers {
+            Some(image_memory_barriers) => {
+                let image_memory_barriers_wrappers: Vec<core::VkImageMemoryBarrierWrapper> = image_memory_barriers.iter().map(From::from).collect();
+                let vk_image_memory_barriers: Vec<_> = image_memory_barriers_wrappers.iter().map(AsRef::as_ref).cloned().collect();
+                (image_memory_barriers.len() as u32, vk_image_memory_barriers.as_ptr(), Some(vk_image_memory_barriers), Some(image_memory_barriers_wrappers))
+            }
+
+            None => (0, ptr::null(), None, None),
+        };
+
+        unsafe {
+            (self.loader().core.vkCmdPipelineBarrier)(self.handle(), src_stage_mask, dst_stage_mask, dependency_flags, memory_barriers_count, memory_barriers_ptr, buffer_memory_barriers_count, buffer_memory_barriers_ptr, image_memory_barriers_count, image_memory_barriers_ptr);
+        }
+    }
 }
 
 #[derive(Debug)]
