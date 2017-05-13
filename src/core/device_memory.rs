@@ -178,6 +178,28 @@ impl MappedMemory {
     pub fn size(&self) -> u64 {
         self.size
     }
+
+    /// See [`vkFlushMappedMemoryRanges`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkFlushMappedMemoryRanges)
+    pub fn flush(&self) -> Result<(), core::Error> {
+        let range = vks::VkMappedMemoryRange {
+            sType: vks::VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE,
+            pNext: ptr::null(),
+            memory: self.memory.handle(),
+            offset: self.offset,
+            size: vks::VK_WHOLE_SIZE,
+        };
+
+        let res = unsafe {
+            (self.memory.loader().core.vkFlushMappedMemoryRanges)(self.memory.device_handle(), 1, &range)
+        };
+
+        if res == vks::VK_SUCCESS {
+            Ok(())
+        }
+        else {
+            Err(res.into())
+        }
+    }
 }
 
 #[derive(Debug)]
