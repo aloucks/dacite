@@ -12,8 +12,9 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-use core::Device;
 use core::allocator_helper::AllocatorHelper;
+use core::{self, Device};
+use libc::c_void;
 use std::cmp::Ordering;
 use std::hash::{Hash, Hasher};
 use std::ptr;
@@ -76,6 +77,44 @@ impl DeviceMemory {
         };
 
         commitment
+    }
+
+    /// See [`vkMapMemory`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkMapMemory)
+    pub fn map(&self, offset: u64, size: core::OptionalDeviceSize, flags: core::MemoryMapFlags) -> Result<MappedMemory, core::Error> {
+        let mut mapped = ptr::null_mut();
+        let res = unsafe {
+            (self.loader().core.vkMapMemory)(self.device_handle(), self.handle(), offset, size.into(), flags, &mut mapped)
+        };
+
+        if res == vks::VK_SUCCESS {
+            Ok(MappedMemory {
+                memory: self.clone(),
+                mapped: mapped,
+            })
+        }
+        else {
+            Err(res.into())
+        }
+    }
+}
+
+#[derive(Debug)]
+pub struct MappedMemory {
+    memory: DeviceMemory,
+    mapped: *mut c_void,
+}
+
+impl Drop for MappedMemory {
+    fn drop(&mut self) {
+        unsafe {
+            (self.memory.loader().core.vkUnmapMemory)(self.memory.device_handle(), self.memory.handle());
+        }
+    }
+}
+
+impl MappedMemory {
+    pub fn as_ptr(&self) -> *mut c_void {
+        self.mapped
     }
 }
 

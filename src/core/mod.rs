@@ -57,7 +57,7 @@ pub use self::descriptor_pool::DescriptorPool;
 pub use self::descriptor_set::DescriptorSet;
 pub use self::descriptor_set_layout::DescriptorSetLayout;
 pub use self::device::Device;
-pub use self::device_memory::DeviceMemory;
+pub use self::device_memory::{DeviceMemory, MappedMemory};
 pub use self::event::Event;
 pub use self::fence::Fence;
 pub use self::framebuffer::Framebuffer;
