@@ -16,54 +16,84 @@ use core::{self, DescriptorPool};
 use std::cmp::Ordering;
 use std::hash::{Hash, Hasher};
 use std::ptr;
-use std::sync::Arc;
 use vks;
 use {TryDestroyError, TryDestroyErrorKind, VulkanObject};
 
 /// See [`VkDescriptorSet`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDescriptorSet)
-#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
-pub struct DescriptorSet(Arc<Inner>);
+#[derive(Debug, Clone)]
+pub struct DescriptorSet {
+    handle: vks::VkDescriptorSet,
+    descriptor_pool: DescriptorPool,
+}
 
 impl VulkanObject for DescriptorSet {
     type NativeVulkanObject = vks::VkDescriptorSet;
 
     #[inline]
     fn as_native_vulkan_object(&self) -> Self::NativeVulkanObject {
-        self.handle()
+        self.handle
     }
 
     fn try_destroy(self) -> Result<(), TryDestroyError<Self>> {
-        let strong_count = Arc::strong_count(&self.0);
-        if strong_count == 1 {
-            Ok(())
-        }
-        else {
-            Err(TryDestroyError::new(self, TryDestroyErrorKind::InUse(Some(strong_count))))
-        }
+        self.free().map_err(|e| TryDestroyError::new(self, TryDestroyErrorKind::VulkanError(e)))
+    }
+}
+
+unsafe impl Send for DescriptorSet { }
+
+unsafe impl Sync for DescriptorSet { }
+
+impl PartialEq for DescriptorSet {
+    #[inline]
+    fn eq(&self, other: &Self) -> bool {
+        self.handle == other.handle
+    }
+}
+
+impl Eq for DescriptorSet { }
+
+impl PartialOrd for DescriptorSet {
+    #[inline]
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        self.handle.partial_cmp(&other.handle)
+    }
+}
+
+impl Ord for DescriptorSet {
+    #[inline]
+    fn cmp(&self, other: &Self) -> Ordering {
+        self.handle.cmp(&other.handle)
+    }
+}
+
+impl Hash for DescriptorSet {
+    #[inline]
+    fn hash<H: Hasher>(&self, state: &mut H) {
+        self.handle.hash(state);
     }
 }
 
 impl DescriptorSet {
     pub(crate) fn new(handle: vks::VkDescriptorSet, descriptor_pool: DescriptorPool) -> Self {
-        DescriptorSet(Arc::new(Inner {
+        DescriptorSet {
             handle: handle,
             descriptor_pool: descriptor_pool,
-        }))
+        }
     }
 
     #[inline]
     pub(crate) fn handle(&self) -> vks::VkDescriptorSet {
-        self.0.handle
+        self.handle
     }
 
     #[inline]
     pub(crate) fn loader(&self) -> &vks::DeviceProcAddrLoader {
-        self.0.descriptor_pool.loader()
+        self.descriptor_pool.loader()
     }
 
     #[inline]
     pub(crate) fn device_handle(&self) -> vks::VkDevice {
-        self.0.descriptor_pool.device_handle()
+        self.descriptor_pool.device_handle()
     }
 
     /// See [`vkUpdateDescriptorSets`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkUpdateDescriptorSets)
@@ -98,53 +128,18 @@ impl DescriptorSet {
             (loader.core.vkUpdateDescriptorSets)(device_handle, writes_count, writes_ptr, copies_count, copies_ptr);
         }
     }
-}
 
-#[derive(Debug)]
-struct Inner {
-    handle: vks::VkDescriptorSet,
-    descriptor_pool: DescriptorPool,
-}
+    /// See [`vkFreeDescriptorSets`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkFreeDescriptorSets)
+    pub fn free(&self) -> Result<(), core::Error> {
+        let res = unsafe {
+            (self.loader().core.vkFreeDescriptorSets)(self.device_handle(), self.descriptor_pool.handle(), 1, &self.handle)
+        };
 
-impl Drop for Inner {
-    fn drop(&mut self) {
-        unsafe {
-            let res = (self.descriptor_pool.loader().core.vkFreeDescriptorSets)(self.descriptor_pool.device_handle(), self.descriptor_pool.handle(), 1, &self.handle);
-            assert_eq!(res, vks::VK_SUCCESS);
+        if res == vks::VK_SUCCESS {
+            Ok(())
         }
-    }
-}
-
-unsafe impl Send for Inner { }
-
-unsafe impl Sync for Inner { }
-
-impl PartialEq for Inner {
-    #[inline]
-    fn eq(&self, other: &Self) -> bool {
-        self.handle == other.handle
-    }
-}
-
-impl Eq for Inner { }
-
-impl PartialOrd for Inner {
-    #[inline]
-    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
-        self.handle.partial_cmp(&other.handle)
-    }
-}
-
-impl Ord for Inner {
-    #[inline]
-    fn cmp(&self, other: &Self) -> Ordering {
-        self.handle.cmp(&other.handle)
-    }
-}
-
-impl Hash for Inner {
-    #[inline]
-    fn hash<H: Hasher>(&self, state: &mut H) {
-        self.handle.hash(state);
+        else {
+            Err(res.into())
+        }
     }
 }
