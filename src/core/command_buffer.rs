@@ -464,6 +464,13 @@ impl CommandBuffer {
             (self.loader().core.vkCmdWriteTimestamp)(self.handle(), pipeline_stage, query_pool.handle(), query);
         }
     }
+
+    /// See [`vkCmdCopyQueryPoolResults`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCmdCopyQueryPoolResults)
+    pub fn copy_query_pool_results(&self, query_pool: &QueryPool, first_query: u32, query_count: u32, dst_buffer: &Buffer, dst_offset: u64, stride: u64, flags: core::QueryResultFlags) {
+        unsafe {
+            (self.loader().core.vkCmdCopyQueryPoolResults)(self.handle(), query_pool.handle(), first_query, query_count, dst_buffer.handle(), dst_offset, stride, flags);
+        }
+    }
 }
 
 #[derive(Debug)]
