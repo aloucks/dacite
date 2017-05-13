@@ -318,6 +318,15 @@ impl CommandBuffer {
             (self.loader().core.vkCmdClearColorImage)(self.handle(), image.handle(), image_layout.into(), &color, ranges.len() as u32, ranges.as_ptr());
         }
     }
+
+    /// See [`vkCmdClearDepthStencilImage`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCmdClearDepthStencilImage)
+    pub fn clear_depth_stencil_image(&self, image: &Image, image_layout: core::ImageLayout, depth_stencil: &core::ClearDepthStencilValue, ranges: &[core::ImageSubresourceRange]) {
+        let depth_stencil = depth_stencil.into();
+        let ranges: Vec<_> = ranges.iter().map(From::from).collect();
+        unsafe {
+            (self.loader().core.vkCmdClearDepthStencilImage)(self.handle(), image.handle(), image_layout.into(), &depth_stencil, ranges.len() as u32, ranges.as_ptr());
+        }
+    }
 }
 
 #[derive(Debug)]
