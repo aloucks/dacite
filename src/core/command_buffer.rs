@@ -140,6 +140,13 @@ impl CommandBuffer {
             (self.loader().core.vkCmdSetDepthBias)(self.handle(), depth_bias_constant_factor, depth_bias_clamp, depth_bias_slope_factor);
         }
     }
+
+    /// See [`vkCmdSetBlendConstants`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCmdSetBlendConstants)
+    pub fn set_blend_constants(&self, blend_constants: &[f32]) {
+        unsafe {
+            (self.loader().core.vkCmdSetBlendConstants)(self.handle(), blend_constants.as_ptr());
+        }
+    }
 }
 
 #[derive(Debug)]
