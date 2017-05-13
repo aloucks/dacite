@@ -240,6 +240,13 @@ impl CommandBuffer {
             (self.loader().core.vkCmdDrawIndexedIndirect)(self.handle(), buffer.handle(), offset, draw_count, stride);
         }
     }
+
+    /// See [`vkCmdDispatch`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCmdDispatch)
+    pub fn dispatch(&self, group_count_x: u32, group_count_y: u32, group_count_z: u32) {
+        unsafe {
+            (self.loader().core.vkCmdDispatch)(self.handle(), group_count_x, group_count_y, group_count_z);
+        }
+    }
 }
 
 #[derive(Debug)]
