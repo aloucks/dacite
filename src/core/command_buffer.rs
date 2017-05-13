@@ -154,6 +154,13 @@ impl CommandBuffer {
             (self.loader().core.vkCmdSetDepthBounds)(self.handle(), min_depth_bounds, max_depth_bounds);
         }
     }
+
+    /// See [`vkCmdSetStencilCompareMask`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCmdSetStencilCompareMask)
+    pub fn set_stencil_compare_mask(&self, face_mask: core::StencilFaceFlags, compare_mask: u32) {
+        unsafe {
+            (self.loader().core.vkCmdSetStencilCompareMask)(self.handle(), face_mask, compare_mask);
+        }
+    }
 }
 
 #[derive(Debug)]
