@@ -302,6 +302,13 @@ impl CommandBuffer {
             (self.loader().core.vkCmdUpdateBuffer)(self.handle(), dst_buffer.handle(), dst_offset, data.len() as u64, data.as_ptr() as *const u32);
         }
     }
+
+    /// See [`vkCmdFillBuffer`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCmdFillBuffer)
+    pub fn fill_buffer(&self, dst_buffer: &Buffer, dst_offset: u64, size: core::OptionalDeviceSize, data: u32) {
+        unsafe {
+            (self.loader().core.vkCmdFillBuffer)(self.handle(), dst_buffer.handle(), dst_offset, size.into(), data);
+        }
+    }
 }
 
 #[derive(Debug)]
