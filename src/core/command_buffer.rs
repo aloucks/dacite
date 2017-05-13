@@ -336,6 +336,14 @@ impl CommandBuffer {
             (self.loader().core.vkCmdClearAttachments)(self.handle(), attachments.len() as u32, attachments.as_ptr(), rects.len() as u32, rects.as_ptr());
         }
     }
+
+    /// See [`vkCmdResolveImage`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCmdResolveImage)
+    pub fn resolve_image(&self, src_image: &Image, src_image_layout: core::ImageLayout, dst_image: &Image, dst_image_layout: core::ImageLayout, regions: &[core::ImageResolve]) {
+        let regions: Vec<_> = regions.iter().map(From::from).collect();
+        unsafe {
+            (self.loader().core.vkCmdResolveImage)(self.handle(), src_image.handle(), src_image_layout.into(), dst_image.handle(), dst_image_layout.into(), regions.len() as u32, regions.as_ptr());
+        }
+    }
 }
 
 #[derive(Debug)]
