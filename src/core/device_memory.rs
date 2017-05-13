@@ -92,9 +92,16 @@ impl DeviceMemory {
         };
 
         if res == vks::VK_SUCCESS {
+            let size = match size {
+                core::OptionalDeviceSize::Size(size) => size,
+                core::OptionalDeviceSize::WholeSize => self.0.size - offset,
+            };
+
             Ok(MappedMemory {
                 memory: self.clone(),
                 mapped: mapped,
+                offset: offset,
+                size: size,
             })
         }
         else {
@@ -107,6 +114,8 @@ impl DeviceMemory {
 pub struct MappedMemory {
     memory: DeviceMemory,
     mapped: *mut c_void,
+    offset: u64,
+    size: u64,
 }
 
 impl Drop for MappedMemory {
@@ -120,6 +129,14 @@ impl Drop for MappedMemory {
 impl MappedMemory {
     pub fn as_ptr(&self) -> *mut c_void {
         self.mapped
+    }
+
+    pub fn offset(&self) -> u64 {
+        self.offset
+    }
+
+    pub fn size(&self) -> u64 {
+        self.size
     }
 }
 
