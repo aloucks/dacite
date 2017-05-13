@@ -15,6 +15,9 @@
 use std::error::Error;
 use std::fmt;
 
+#[cfg(feature = "core_1_0_3")]
+use core;
+
 pub trait VulkanObject: Sized + Send + Sync + Clone + fmt::Debug {
     type NativeVulkanObject;
 
@@ -50,6 +53,9 @@ impl<T: VulkanObject> Error for TryDestroyError<T> {
         match self.kind {
             TryDestroyErrorKind::Unsupported => "This Vulkan object can not be destroyed explicitly",
             TryDestroyErrorKind::InUse(_) => "This Vulkan object is referenced elsewhere",
+
+            #[cfg(feature = "core_1_0_3")]
+            TryDestroyErrorKind::VulkanError(_) => "A Vulkan error occurred while trying to destroy the object",
         }
     }
 }
@@ -85,4 +91,8 @@ pub enum TryDestroyErrorKind {
     ///
     /// The optional usize value indicates the current reference counter.
     InUse(Option<usize>),
+
+    #[cfg(feature = "core_1_0_3")]
+    /// A Vulkan error occurred at runtime.
+    VulkanError(core::Error),
 }
