@@ -21,6 +21,7 @@ use core::{
     Image,
     Pipeline,
     PipelineLayout,
+    QueryPool,
 };
 use std::cmp::Ordering;
 use std::hash::{Hash, Hasher};
@@ -433,6 +434,13 @@ impl CommandBuffer {
 
         unsafe {
             (self.loader().core.vkCmdPipelineBarrier)(self.handle(), src_stage_mask, dst_stage_mask, dependency_flags, memory_barriers_count, memory_barriers_ptr, buffer_memory_barriers_count, buffer_memory_barriers_ptr, image_memory_barriers_count, image_memory_barriers_ptr);
+        }
+    }
+
+    /// See [`vkCmdBeginQuery`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCmdBeginQuery)
+    pub fn begin_query(&self, query_pool: &QueryPool, query: u32, flags: core::QueryControlFlags) {
+        unsafe {
+            (self.loader().core.vkCmdBeginQuery)(self.handle(), query_pool.handle(), query, flags);
         }
     }
 }
