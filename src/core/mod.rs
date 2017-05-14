@@ -4426,6 +4426,33 @@ impl<'a> From<&'a DeviceExtensionProperties> for vks::VkExtensionProperties {
     }
 }
 
+#[derive(Debug, Clone)]
+pub struct DeviceExtensionPropertiesIterator(::std::vec::IntoIter<vks::VkExtensionProperties>);
+
+impl Iterator for DeviceExtensionPropertiesIterator {
+    type Item = DeviceExtensionProperties;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        self.0.next().as_ref().map(From::from)
+    }
+
+    fn size_hint(&self) -> (usize, Option<usize>) {
+        self.0.size_hint()
+    }
+}
+
+impl DoubleEndedIterator for DeviceExtensionPropertiesIterator {
+    fn next_back(&mut self) -> Option<Self::Item> {
+        self.0.next_back().as_ref().map(From::from)
+    }
+}
+
+impl ExactSizeIterator for DeviceExtensionPropertiesIterator {
+    fn len(&self) -> usize {
+        self.0.len()
+    }
+}
+
 /// See [`VkLayerProperties`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkLayerProperties)
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct LayerProperties {
