@@ -193,7 +193,7 @@ impl PhysicalDevice {
     }
 
     /// See [`vkGetPhysicalDeviceQueueFamilyProperties`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetPhysicalDeviceQueueFamilyProperties)
-    pub fn queue_family_properties(&self) -> Vec<core::QueueFamilyProperties> {
+    pub fn queue_family_properties(&self) -> core::QueueFamilyPropertiesIterator {
         let mut num_properties = 0;
         unsafe {
             (self.loader().core.vkGetPhysicalDeviceQueueFamilyProperties)(self.handle, &mut num_properties, ptr::null_mut());
@@ -205,9 +205,7 @@ impl PhysicalDevice {
             properties.set_len(num_properties as usize);
         }
 
-        properties.iter()
-            .map(From::from)
-            .collect()
+        core::QueueFamilyPropertiesIterator(properties.into_iter())
     }
 
     /// See [`vkGetPhysicalDeviceMemoryProperties`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetPhysicalDeviceMemoryProperties)
