@@ -93,7 +93,7 @@ impl Image {
     }
 
     /// See [`vkGetImageSparseMemoryRequirements`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetImageSparseMemoryRequirements)
-    pub fn get_sparse_memory_requirements(&self) -> Vec<core::SparseImageMemoryRequirements> {
+    pub fn get_sparse_memory_requirements(&self) -> core::SparseImageMemoryRequirementsIterator {
         let mut num_requirements = 0;
         unsafe {
             (self.loader().core.vkGetImageSparseMemoryRequirements)(self.device_handle(), self.handle(), &mut num_requirements, ptr::null_mut());
@@ -105,7 +105,7 @@ impl Image {
             (self.loader().core.vkGetImageSparseMemoryRequirements)(self.device_handle(), self.handle(), &mut num_requirements, requirements.as_mut_ptr());
         }
 
-        requirements.iter().map(From::from).collect()
+        core::SparseImageMemoryRequirementsIterator(requirements.into_iter())
     }
 
     /// See [`vkGetImageSubresourceLayout`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetImageSubresourceLayout)
