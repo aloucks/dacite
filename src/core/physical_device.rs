@@ -128,7 +128,7 @@ impl PhysicalDevice {
     }
 
     /// See [`vkEnumerateDeviceExtensionProperties`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkEnumerateDeviceExtensionProperties)
-    pub fn enumerate_device_extension_properties(&self, layer_name: Option<&str>) -> Result<Vec<core::InstanceExtensionProperties>, core::Error> {
+    pub fn enumerate_device_extension_properties(&self, layer_name: Option<&str>) -> Result<Vec<core::DeviceExtensionProperties>, core::Error> {
         unsafe {
             let layer_name_cstr = utils::cstr_from_str(layer_name);
 
