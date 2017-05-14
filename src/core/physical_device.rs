@@ -108,7 +108,7 @@ impl PhysicalDevice {
     }
 
     /// See [`vkEnumerateDeviceLayerProperties`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkEnumerateDeviceLayerProperties)
-    pub fn enumerate_device_layer_properties(&self) -> Result<Vec<core::LayerProperties>, core::Error> {
+    pub fn enumerate_device_layer_properties(&self) -> Result<core::LayerPropertiesIterator, core::Error> {
         unsafe {
             let mut num_layer_properties = 0;
             let res = (self.loader().core.vkEnumerateDeviceLayerProperties)(self.handle, &mut num_layer_properties, ptr::null_mut());
@@ -123,7 +123,7 @@ impl PhysicalDevice {
             }
             layer_properties.set_len(num_layer_properties as usize);
 
-            Ok(layer_properties.iter().map(|p| p.into()).collect())
+            Ok(core::LayerPropertiesIterator(layer_properties.into_iter()))
         }
     }
 
