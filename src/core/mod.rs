@@ -4443,6 +4443,33 @@ impl<'a> From<&'a LayerProperties> for vks::VkLayerProperties {
     }
 }
 
+#[derive(Debug, Clone)]
+pub struct LayerPropertiesIterator(::std::vec::IntoIter<vks::VkLayerProperties>);
+
+impl Iterator for LayerPropertiesIterator {
+    type Item = LayerProperties;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        self.0.next().as_ref().map(From::from)
+    }
+
+    fn size_hint(&self) -> (usize, Option<usize>) {
+        self.0.size_hint()
+    }
+}
+
+impl DoubleEndedIterator for LayerPropertiesIterator {
+    fn next_back(&mut self) -> Option<Self::Item> {
+        self.0.next_back().as_ref().map(From::from)
+    }
+}
+
+impl ExactSizeIterator for LayerPropertiesIterator {
+    fn len(&self) -> usize {
+        self.0.len()
+    }
+}
+
 /// See [`VkSubmitInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSubmitInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub enum SubmitInfoChainElement {
