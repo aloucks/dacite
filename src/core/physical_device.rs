@@ -177,7 +177,7 @@ impl PhysicalDevice {
     }
 
     /// See [`vkGetPhysicalDeviceSparseImageFormatProperties`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetPhysicalDeviceSparseImageFormatProperties)
-    pub fn sparse_image_format_properties(&self, format: core::Format, image_type: core::ImageType, samples: core::SampleCountFlagBits, usage: core::ImageUsageFlags, tiling: core::ImageTiling) -> Vec<core::SparseImageFormatProperties> {
+    pub fn sparse_image_format_properties(&self, format: core::Format, image_type: core::ImageType, samples: core::SampleCountFlagBits, usage: core::ImageUsageFlags, tiling: core::ImageTiling) -> core::SparseImageFormatPropertiesIterator {
         let mut num_properties = 0;
         unsafe {
             (self.loader().core.vkGetPhysicalDeviceSparseImageFormatProperties)(self.handle, format.into(), image_type.into(), samples, usage, tiling.into(), &mut num_properties, ptr::null_mut());
@@ -189,7 +189,7 @@ impl PhysicalDevice {
             properties.set_len(num_properties as usize);
         }
 
-        properties.iter().map(From::from).collect()
+        core::SparseImageFormatPropertiesIterator(properties.into_iter())
     }
 
     /// See [`vkGetPhysicalDeviceQueueFamilyProperties`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetPhysicalDeviceQueueFamilyProperties)
