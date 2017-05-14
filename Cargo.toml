@@ -19,7 +19,9 @@ version = "0.14"
 default-features = false
 
 [features]
-default = [ "core_1_0_3" ]
+default = [ "vk_1_0_3" ]
+
+vk_1_0_3 = [ "core_1_0_3", "khr_surface_25" ]
 
 core = [ "core_1_0_3" ]
 core_1_0_3 = [ "vks/core_1_0_3" ]
