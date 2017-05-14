@@ -27,7 +27,7 @@ fn main() {
     }
 
     println!();
-    let instance_layers = dacite::core::Instance::enumerate_instance_layer_properties().unwrap();
+    let instance_layers: Vec<_> = dacite::core::Instance::enumerate_instance_layer_properties().unwrap().collect();
     println!("Instance layer(s) ({}):", instance_layers.len());
     if !instance_layers.is_empty() {
         for layer in instance_layers {

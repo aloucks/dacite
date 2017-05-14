@@ -117,7 +117,7 @@ impl Instance {
     }
 
     /// See [`vkEnumerateInstanceLayerProperties`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkEnumerateInstanceLayerProperties)
-    pub fn enumerate_instance_layer_properties() -> Result<Vec<core::LayerProperties>, core::Error> {
+    pub fn enumerate_instance_layer_properties() -> Result<core::LayerPropertiesIterator, core::Error> {
         unsafe {
             let mut loader = vks::instance_proc_addr_loader::CoreNullInstance::new();
             loader.load(vks::vkGetInstanceProcAddr, ptr::null_mut());
@@ -135,7 +135,7 @@ impl Instance {
             }
             layer_properties.set_len(num_layer_properties as usize);
 
-            Ok(layer_properties.iter().map(|p| p.into()).collect())
+            Ok(core::LayerPropertiesIterator(layer_properties.into_iter()))
         }
     }
 
