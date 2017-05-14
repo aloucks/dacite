@@ -15,7 +15,7 @@
 extern crate dacite;
 
 fn main() {
-    let instance_extensions = dacite::core::Instance::enumerate_instance_extension_properties(None).unwrap();
+    let instance_extensions: Vec<_> = dacite::core::Instance::enumerate_instance_extension_properties(None).unwrap().collect();
     println!("Instance extension(s) ({}):", instance_extensions.len());
     if !instance_extensions.is_empty() {
         for extension in instance_extensions {

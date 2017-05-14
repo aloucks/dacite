@@ -140,7 +140,7 @@ impl Instance {
     }
 
     /// See [`vkEnumerateInstanceExtensionProperties`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkEnumerateInstanceExtensionProperties)
-    pub fn enumerate_instance_extension_properties(layer_name: Option<&str>) -> Result<Vec<core::InstanceExtensionProperties>, core::Error> {
+    pub fn enumerate_instance_extension_properties(layer_name: Option<&str>) -> Result<core::InstanceExtensionPropertiesIterator, core::Error> {
         unsafe {
             let mut loader = vks::instance_proc_addr_loader::CoreNullInstance::new();
             loader.load(vks::vkGetInstanceProcAddr, ptr::null_mut());
@@ -160,7 +160,7 @@ impl Instance {
             }
             extension_properties.set_len(num_extension_properties as usize);
 
-            Ok(extension_properties.iter().map(|p| p.into()).collect())
+            Ok(core::InstanceExtensionPropertiesIterator(extension_properties.into_iter()))
         }
     }
 }
