@@ -22,6 +22,9 @@ use utils;
 use vks;
 use {TryDestroyError, TryDestroyErrorKind, VulkanObject};
 
+#[cfg(feature = "khr_surface_25")]
+use khr_surface;
+
 /// See [`VkPhysicalDevice`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPhysicalDevice)
 #[derive(Debug, Clone)]
 pub struct PhysicalDevice {
@@ -235,5 +238,99 @@ impl PhysicalDevice {
         }
 
         Ok(Device::new(device, self.instance.clone(), allocator_helper))
+    }
+
+    #[cfg(feature = "khr_surface_25")]
+    /// See [`vkGetPhysicalDeviceSurfaceSupportKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetPhysicalDeviceSurfaceSupportKHR)
+    /// and extension [`VK_KHR_surface`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_surface)
+    pub fn get_surface_support_khr(&self, queue_family_index: u32, surface: &khr_surface::SurfaceKHR) -> Result<bool, core::Error> {
+        let mut supported = vks::VK_FALSE;
+        let res = unsafe {
+            (self.loader().khr_surface.vkGetPhysicalDeviceSurfaceSupportKHR)(self.handle, queue_family_index, surface.handle(), &mut supported)
+        };
+
+        if res == vks::VK_SUCCESS {
+            Ok(utils::from_vk_bool(supported))
+        }
+        else {
+            Err(res.into())
+        }
+    }
+
+    #[cfg(feature = "khr_surface_25")]
+    /// See [`vkGetPhysicalDeviceSurfaceCapabilitiesKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetPhysicalDeviceSurfaceCapabilitiesKHR)
+    /// and extension [`VK_KHR_surface`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_surface)
+    pub fn get_surface_capabilities_khr(&self, surface: &khr_surface::SurfaceKHR) -> Result<khr_surface::SurfaceCapabilitiesKHR, core::Error> {
+        unsafe {
+            let mut capabilities = mem::uninitialized();
+            let res = (self.loader().khr_surface.vkGetPhysicalDeviceSurfaceCapabilitiesKHR)(self.handle, surface.handle(), &mut capabilities);
+
+            if res == vks::VK_SUCCESS {
+                Ok((&capabilities).into())
+            }
+            else {
+                Err(res.into())
+            }
+        }
+    }
+
+    #[cfg(feature = "khr_surface_25")]
+    /// See [`vkGetPhysicalDeviceSurfaceFormatsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetPhysicalDeviceSurfaceFormatsKHR)
+    /// and extension [`VK_KHR_surface`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_surface)
+    pub fn get_surface_formats_khr(&self, surface: &khr_surface::SurfaceKHR) -> Result<khr_surface::SurfaceFormatKHRIterator, core::Error> {
+        let mut num_formats = 0;
+        let res = unsafe {
+            (self.loader().khr_surface.vkGetPhysicalDeviceSurfaceFormatsKHR)(self.handle, surface.handle(), &mut num_formats, ptr::null_mut())
+        };
+
+        if (res != vks::VK_SUCCESS) && (res != vks::VK_INCOMPLETE) {
+            return Err(res.into());
+        }
+
+        let mut formats = Vec::with_capacity(num_formats as usize);
+        let res = unsafe {
+            (self.loader().khr_surface.vkGetPhysicalDeviceSurfaceFormatsKHR)(self.handle, surface.handle(), &mut num_formats, formats.as_mut_ptr())
+        };
+
+        if res == vks::VK_SUCCESS {
+            unsafe {
+                formats.set_len(num_formats as usize);
+            }
+
+            Ok(khr_surface::SurfaceFormatKHRIterator(formats.into_iter()))
+        }
+        else {
+            Err(res.into())
+        }
+    }
+
+    #[cfg(feature = "khr_surface_25")]
+    /// See [`vkGetPhysicalDeviceSurfacePresentModesKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetPhysicalDeviceSurfacePresentModesKHR)
+    /// and extension [`VK_KHR_surface`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_surface)
+    pub fn get_surface_present_modes_khr(&self, surface: &khr_surface::SurfaceKHR) -> Result<khr_surface::PresentModeKHRIterator, core::Error> {
+        let mut num_modes = 0;
+        let res = unsafe {
+            (self.loader().khr_surface.vkGetPhysicalDeviceSurfacePresentModesKHR)(self.handle, surface.handle(), &mut num_modes, ptr::null_mut())
+        };
+
+        if (res != vks::VK_SUCCESS) && (res != vks::VK_INCOMPLETE) {
+            return Err(res.into());
+        }
+
+        let mut modes = Vec::with_capacity(num_modes as usize);
+        let res = unsafe {
+            (self.loader().khr_surface.vkGetPhysicalDeviceSurfacePresentModesKHR)(self.handle, surface.handle(), &mut num_modes, modes.as_mut_ptr())
+        };
+
+        if res == vks::VK_SUCCESS {
+            unsafe {
+                modes.set_len(num_modes as usize);
+            }
+
+            Ok(khr_surface::PresentModeKHRIterator(modes.into_iter()))
+        }
+        else {
+            Err(res.into())
+        }
     }
 }

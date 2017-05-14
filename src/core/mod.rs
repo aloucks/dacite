@@ -12,7 +12,6 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-mod allocator_helper;
 mod buffer;
 mod buffer_view;
 mod command_buffer;
@@ -38,6 +37,8 @@ mod render_pass;
 mod sampler;
 mod semaphore;
 mod shader_module;
+
+pub(crate) mod allocator_helper;
 
 use libc::{c_char, c_void};
 use std::ffi::{CStr, CString};
@@ -1120,6 +1121,15 @@ pub enum Error {
     IncompatibleDriver,
     TooManyObjects,
     FormatNotSupported,
+
+    #[cfg(feature = "khr_surface_25")]
+    /// See extension [`VK_KHR_surface`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_surface)
+    SurfaceLostKHR,
+
+    #[cfg(feature = "khr_surface_25")]
+    /// See extension [`VK_KHR_surface`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_surface)
+    NativeWindowInUseKHR,
+
     Unknown(vks::VkResult),
 }
 
@@ -1143,6 +1153,13 @@ impl ::std::error::Error for Error {
             Error::IncompatibleDriver => "IncompatibleDriver",
             Error::TooManyObjects => "TooManyObjects",
             Error::FormatNotSupported => "FormatNotSupported",
+
+            #[cfg(feature = "khr_surface_25")]
+            Error::SurfaceLostKHR => "SurfaceLost",
+
+            #[cfg(feature = "khr_surface_25")]
+            Error::NativeWindowInUseKHR => "NativeWindowInUse",
+
             Error::Unknown(_) => "unknown error",
         }
     }
@@ -1164,6 +1181,13 @@ impl From<vks::VkResult> for Error {
             vks::VK_ERROR_INCOMPATIBLE_DRIVER => Error::IncompatibleDriver,
             vks::VK_ERROR_TOO_MANY_OBJECTS => Error::TooManyObjects,
             vks::VK_ERROR_FORMAT_NOT_SUPPORTED => Error::FormatNotSupported,
+
+            #[cfg(feature = "khr_surface_25")]
+            vks::VK_ERROR_SURFACE_LOST_KHR => Error::SurfaceLostKHR,
+
+            #[cfg(feature = "khr_surface_25")]
+            vks::VK_ERROR_NATIVE_WINDOW_IN_USE_KHR => Error::NativeWindowInUseKHR,
+
             _ => Error::Unknown(res),
         }
     }
@@ -1183,6 +1207,13 @@ impl From<Error> for vks::VkResult {
             Error::IncompatibleDriver => vks::VK_ERROR_INCOMPATIBLE_DRIVER,
             Error::TooManyObjects => vks::VK_ERROR_TOO_MANY_OBJECTS,
             Error::FormatNotSupported => vks::VK_ERROR_FORMAT_NOT_SUPPORTED,
+
+            #[cfg(feature = "khr_surface_25")]
+            Error::SurfaceLostKHR => vks::VK_ERROR_SURFACE_LOST_KHR,
+
+            #[cfg(feature = "khr_surface_25")]
+            Error::NativeWindowInUseKHR => vks::VK_ERROR_NATIVE_WINDOW_IN_USE_KHR,
+
             Error::Unknown(res) => res,
         }
     }
@@ -4295,23 +4326,39 @@ impl<'a> From<&'a DeviceCreateInfo> for VkDeviceCreateInfoWrapper {
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub enum InstanceExtension {
     Unknown(String),
+
+    #[cfg(feature = "khr_surface_25")]
+    KHRSurface,
 }
 
 impl From<String> for InstanceExtension {
     fn from(name: String) -> Self {
-        InstanceExtension::Unknown(name)
+        match name.as_str() {
+            #[cfg(feature = "khr_surface_25")]
+            vks::VK_KHR_SURFACE_EXTENSION_NAME_STR => InstanceExtension::KHRSurface,
+
+            _ => InstanceExtension::Unknown(name)
+        }
     }
 }
 
 impl<'a> From<&'a str> for InstanceExtension {
     fn from(name: &'a str) -> Self {
-        InstanceExtension::Unknown(name.to_owned())
+        match name {
+            #[cfg(feature = "khr_surface_25")]
+            vks::VK_KHR_SURFACE_EXTENSION_NAME_STR => InstanceExtension::KHRSurface,
+
+            _ => InstanceExtension::Unknown(name.to_owned())
+        }
     }
 }
 
 impl From<InstanceExtension> for String {
     fn from(extension: InstanceExtension) -> Self {
         match extension {
+            #[cfg(feature = "khr_surface_25")]
+            InstanceExtension::KHRSurface => vks::VK_KHR_SURFACE_EXTENSION_NAME_STR.to_owned(),
+
             InstanceExtension::Unknown(name) => name,
         }
     }
@@ -4320,6 +4367,9 @@ impl From<InstanceExtension> for String {
 impl<'a> From<&'a InstanceExtension> for &'a str {
     fn from(extension: &'a InstanceExtension) -> Self {
         match *extension {
+            #[cfg(feature = "khr_surface_25")]
+            InstanceExtension::KHRSurface => vks::VK_KHR_SURFACE_EXTENSION_NAME_STR,
+
             InstanceExtension::Unknown(ref name) => name,
         }
     }

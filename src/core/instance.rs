@@ -67,10 +67,10 @@ impl Instance {
             loader.load_core_null_instance();
         }
 
-        let create_info: core::VkInstanceCreateInfoWrapper = create_info.into();
+        let create_info_wrapper: core::VkInstanceCreateInfoWrapper = create_info.into();
         let mut instance = ptr::null_mut();
         let res = unsafe {
-            (loader.core_null_instance.vkCreateInstance)(create_info.as_ref(), allocation_callbacks, &mut instance)
+            (loader.core_null_instance.vkCreateInstance)(create_info_wrapper.as_ref(), allocation_callbacks, &mut instance)
         };
         if res != vks::VK_SUCCESS {
             return Err(res.into());
@@ -78,6 +78,15 @@ impl Instance {
 
         unsafe {
             loader.load_core(instance);
+
+            for instance_extension in &create_info.enabled_extensions {
+                match *instance_extension {
+                    #[cfg(feature = "khr_surface_25")]
+                    core::InstanceExtension::KHRSurface => loader.load_khr_surface(instance),
+
+                    _ => {}
+                }
+            }
         }
 
         Ok(Instance(Arc::new(Inner {

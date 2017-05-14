@@ -23,3 +23,6 @@ default = [ "core_1_0_3" ]
 
 core = [ "core_1_0_3" ]
 core_1_0_3 = [ "vks/core_1_0_3" ]
+
+khr_surface = [ "khr_surface_25" ]
+khr_surface_25 = [ "core_1_0_3", "vks/khr_surface_25" ]
