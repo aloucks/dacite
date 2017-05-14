@@ -3922,6 +3922,33 @@ impl<'a> From<&'a QueueFamilyProperties> for vks::VkQueueFamilyProperties {
     }
 }
 
+#[derive(Debug, Clone)]
+pub struct QueueFamilyPropertiesIterator(::std::vec::IntoIter<vks::VkQueueFamilyProperties>);
+
+impl Iterator for QueueFamilyPropertiesIterator {
+    type Item = QueueFamilyProperties;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        self.0.next().as_ref().map(From::from)
+    }
+
+    fn size_hint(&self) -> (usize, Option<usize>) {
+        self.0.size_hint()
+    }
+}
+
+impl DoubleEndedIterator for QueueFamilyPropertiesIterator {
+    fn next_back(&mut self) -> Option<Self::Item> {
+        self.0.next_back().as_ref().map(From::from)
+    }
+}
+
+impl ExactSizeIterator for QueueFamilyPropertiesIterator {
+    fn len(&self) -> usize {
+        self.0.len()
+    }
+}
+
 /// See [`VkMemoryType`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkMemoryType)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct MemoryType {
