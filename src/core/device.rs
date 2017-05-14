@@ -417,6 +417,7 @@ impl Device {
 
         let mut pipelines = Vec::with_capacity(create_infos.len());
         let res = unsafe {
+            pipelines.set_len(create_infos.len());
             (self.loader().core.vkCreateGraphicsPipelines)(self.handle(), pipeline_cache_handle, create_infos.len() as u32, vk_create_infos.as_ptr(), allocation_callbacks, pipelines.as_mut_ptr())
         };
 
@@ -451,6 +452,7 @@ impl Device {
 
         let mut pipelines = Vec::with_capacity(create_infos.len());
         let res = unsafe {
+            pipelines.set_len(create_infos.len());
             (self.loader().core.vkCreateComputePipelines)(self.handle(), pipeline_cache_handle, create_infos.len() as u32, vk_create_infos.as_ptr(), allocation_callbacks, pipelines.as_mut_ptr())
         };
 
