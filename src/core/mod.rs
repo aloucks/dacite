@@ -7823,13 +7823,14 @@ pub enum DescriptorSetAllocateInfoChainElement {
 #[derive(Debug, Clone, PartialEq)]
 pub struct DescriptorSetAllocateInfo {
     pub chain: Vec<DescriptorSetAllocateInfoChainElement>,
+    pub descriptor_pool: DescriptorPool,
     pub set_layouts: Vec<DescriptorSetLayout>,
 }
 
 #[derive(Debug)]
 struct VkDescriptorSetAllocateInfoWrapper {
     allocate_info: vks::VkDescriptorSetAllocateInfo,
-    descriptor_pool: Option<DescriptorPool>,
+    descriptor_pool: DescriptorPool,
     set_layouts: Vec<DescriptorSetLayout>,
     vk_set_layouts: Vec<vks::VkDescriptorSetLayout>,
 }
@@ -7856,29 +7857,13 @@ impl<'a> From<&'a DescriptorSetAllocateInfo> for VkDescriptorSetAllocateInfoWrap
             allocate_info: vks::VkDescriptorSetAllocateInfo {
                 sType: vks::VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO,
                 pNext: ptr::null(),
-                descriptorPool: ptr::null_mut(),
+                descriptorPool: allocate_info.descriptor_pool.handle(),
                 descriptorSetCount: vk_set_layouts.len() as u32,
                 pSetLayouts: vk_set_layouts.as_ptr(),
             },
-            descriptor_pool: None,
+            descriptor_pool: allocate_info.descriptor_pool.clone(),
             set_layouts: allocate_info.set_layouts.clone(),
             vk_set_layouts: vk_set_layouts,
-        }
-    }
-}
-
-impl VkDescriptorSetAllocateInfoWrapper {
-    fn set_descriptor_pool(&mut self, descriptor_pool: Option<DescriptorPool>) {
-        match descriptor_pool {
-            Some(descriptor_pool) => {
-                self.allocate_info.descriptorPool = descriptor_pool.handle();
-                self.descriptor_pool = Some(descriptor_pool);
-            }
-
-            None => {
-                self.allocate_info.descriptorPool = ptr::null_mut();
-                self.descriptor_pool = None;
-            }
         }
     }
 }
