@@ -4879,6 +4879,33 @@ impl<'a> From<&'a SparseImageMemoryRequirements> for vks::VkSparseImageMemoryReq
     }
 }
 
+#[derive(Debug, Clone)]
+pub struct SparseImageMemoryRequirementsIterator(::std::vec::IntoIter<vks::VkSparseImageMemoryRequirements>);
+
+impl Iterator for SparseImageMemoryRequirementsIterator {
+    type Item = SparseImageMemoryRequirements;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        self.0.next().as_ref().map(From::from)
+    }
+
+    fn size_hint(&self) -> (usize, Option<usize>) {
+        self.0.size_hint()
+    }
+}
+
+impl DoubleEndedIterator for SparseImageMemoryRequirementsIterator {
+    fn next_back(&mut self) -> Option<Self::Item> {
+        self.0.next_back().as_ref().map(From::from)
+    }
+}
+
+impl ExactSizeIterator for SparseImageMemoryRequirementsIterator {
+    fn len(&self) -> usize {
+        self.0.len()
+    }
+}
+
 /// See [`VkSparseMemoryBind`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSparseMemoryBind)
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct SparseMemoryBind {
