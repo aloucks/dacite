@@ -4332,6 +4332,33 @@ impl<'a> From<&'a InstanceExtensionProperties> for vks::VkExtensionProperties {
     }
 }
 
+#[derive(Debug, Clone)]
+pub struct InstanceExtensionPropertiesIterator(::std::vec::IntoIter<vks::VkExtensionProperties>);
+
+impl Iterator for InstanceExtensionPropertiesIterator {
+    type Item = InstanceExtensionProperties;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        self.0.next().as_ref().map(From::from)
+    }
+
+    fn size_hint(&self) -> (usize, Option<usize>) {
+        self.0.size_hint()
+    }
+}
+
+impl DoubleEndedIterator for InstanceExtensionPropertiesIterator {
+    fn next_back(&mut self) -> Option<Self::Item> {
+        self.0.next_back().as_ref().map(From::from)
+    }
+}
+
+impl ExactSizeIterator for InstanceExtensionPropertiesIterator {
+    fn len(&self) -> usize {
+        self.0.len()
+    }
+}
+
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub enum DeviceExtension {
     Unknown(String),
