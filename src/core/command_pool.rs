@@ -83,21 +83,18 @@ impl CommandPool {
     }
 
     /// See [`vkAllocateCommandBuffers`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkAllocateCommandBuffers)
-    pub fn allocate_command_buffers(&self, allocate_info: &core::CommandBufferAllocateInfo) -> Result<Vec<CommandBuffer>, core::Error> {
+    pub fn allocate_command_buffers(allocate_info: &core::CommandBufferAllocateInfo) -> Result<Vec<CommandBuffer>, core::Error> {
+        let command_pool = &allocate_info.command_pool;
+        let allocate_info_wrapper: core::VkCommandBufferAllocateInfoWrapper = allocate_info.into();
+
         let mut command_buffers = Vec::with_capacity(allocate_info.command_buffer_count as usize);
-        unsafe {
-            command_buffers.set_len(allocate_info.command_buffer_count as usize);
-        }
-
-        let mut allocate_info: core::VkCommandBufferAllocateInfoWrapper = allocate_info.into();
-        allocate_info.set_command_pool(Some(self.clone()));
-
         let res = unsafe {
-            (self.loader().core.vkAllocateCommandBuffers)(self.device_handle(), allocate_info.as_ref(), command_buffers.as_mut_ptr())
+            command_buffers.set_len(allocate_info.command_buffer_count as usize);
+            (command_pool.loader().core.vkAllocateCommandBuffers)(command_pool.device_handle(), allocate_info_wrapper.as_ref(), command_buffers.as_mut_ptr())
         };
 
         if res == vks::VK_SUCCESS {
-            Ok(command_buffers.iter().map(|&c| CommandBuffer::new(c, self.clone())).collect())
+            Ok(command_buffers.iter().map(|&c| CommandBuffer::new(c, command_pool.clone())).collect())
         }
         else {
             Err(res.into())

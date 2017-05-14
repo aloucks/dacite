@@ -8672,6 +8672,7 @@ pub enum CommandBufferAllocateInfoChainElement {
 #[derive(Debug, Clone, PartialEq)]
 pub struct CommandBufferAllocateInfo {
     pub chain: Vec<CommandBufferAllocateInfoChainElement>,
+    pub command_pool: CommandPool,
     pub level: CommandBufferLevel,
     pub command_buffer_count: u32,
 }
@@ -8679,7 +8680,7 @@ pub struct CommandBufferAllocateInfo {
 #[derive(Debug)]
 struct VkCommandBufferAllocateInfoWrapper {
     info: vks::VkCommandBufferAllocateInfo,
-    command_pool: Option<CommandPool>,
+    command_pool: CommandPool,
 }
 
 impl Deref for VkCommandBufferAllocateInfoWrapper {
@@ -8702,27 +8703,11 @@ impl<'a> From<&'a CommandBufferAllocateInfo> for VkCommandBufferAllocateInfoWrap
             info: vks::VkCommandBufferAllocateInfo {
                 sType: vks::VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO,
                 pNext: ptr::null(),
-                commandPool: ptr::null_mut(),
+                commandPool: info.command_pool.handle(),
                 level: info.level.into(),
                 commandBufferCount: info.command_buffer_count,
             },
-            command_pool: None,
-        }
-    }
-}
-
-impl VkCommandBufferAllocateInfoWrapper {
-    fn set_command_pool(&mut self, command_pool: Option<CommandPool>) {
-        match command_pool {
-            Some(command_pool) => {
-                self.info.commandPool = command_pool.handle();
-                self.command_pool = Some(command_pool);
-            }
-
-            None => {
-                self.info.commandPool = ptr::null_mut();
-                self.command_pool = None;
-            }
+            command_pool: info.command_pool.clone(),
         }
     }
 }
