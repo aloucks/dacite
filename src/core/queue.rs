@@ -90,7 +90,7 @@ impl Queue {
         let (submits_count, vk_submits_ptr, _, _) = match submits {
             Some(submits) => {
                 let submits_wrappers: Vec<core::VkSubmitInfoWrapper> = submits.iter().map(From::from).collect();
-                let vk_submits: Vec<vks::VkSubmitInfo> = submits_wrappers.iter().map(AsRef::as_ref).cloned().collect();
+                let vk_submits: Vec<vks::VkSubmitInfo> = submits_wrappers.iter().map(|s| s.vks_struct).collect();
                 (submits.len() as u32, vk_submits.as_ptr(), Some(vk_submits), Some(submits_wrappers))
             }
 
@@ -130,7 +130,7 @@ impl Queue {
         let (bind_infos_count, vk_bind_infos_ptr, _, _) = match bind_infos {
             Some(bind_infos) => {
                 let bind_infos_wrappers: Vec<core::VkBindSparseInfoWrapper> = bind_infos.iter().map(From::from).collect();
-                let vk_bind_infos: Vec<vks::VkBindSparseInfo> = bind_infos_wrappers.iter().map(AsRef::as_ref).cloned().collect();
+                let vk_bind_infos: Vec<vks::VkBindSparseInfo> = bind_infos_wrappers.iter().map(|b| b.vks_struct).collect();
                 (bind_infos.len() as u32, vk_bind_infos.as_ptr(), Some(vk_bind_infos), Some(bind_infos_wrappers))
             }
 

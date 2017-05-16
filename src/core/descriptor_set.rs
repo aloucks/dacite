@@ -107,7 +107,7 @@ impl DescriptorSet {
         let (writes_count, writes_ptr, _, _) = match writes {
             Some(writes) => {
                 let writes_wrappers: Vec<core::VkWriteDescriptorSetWrapper> = writes.iter().map(From::from).collect();
-                let writes: Vec<_> = writes_wrappers.iter().map(AsRef::as_ref).cloned().collect();
+                let writes: Vec<_> = writes_wrappers.iter().map(|w| w.vks_struct).collect();
                 (writes.len() as u32, writes.as_ptr(), Some(writes), Some(writes_wrappers))
             }
 
@@ -117,7 +117,7 @@ impl DescriptorSet {
         let (copies_count, copies_ptr, _, _) = match copies {
             Some(copies) => {
                 let copies_wrappers: Vec<core::VkCopyDescriptorSetWrapper> = copies.iter().map(From::from).collect();
-                let copies: Vec<_> = copies_wrappers.iter().map(AsRef::as_ref).cloned().collect();
+                let copies: Vec<_> = copies_wrappers.iter().map(|c| c.vks_struct).collect();
                 (copies.len() as u32, copies.as_ptr(), Some(copies), Some(copies_wrappers))
             }
 

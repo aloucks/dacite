@@ -44,7 +44,6 @@ use libc::{c_char, c_void};
 use std::ffi::{CStr, CString};
 use std::fmt;
 use std::mem;
-use std::ops::Deref;
 use std::ptr;
 use std::slice;
 use utils;
@@ -3010,23 +3009,9 @@ impl<'a> From<&'a vks::VkApplicationInfo> for ApplicationInfo {
 
 #[derive(Debug)]
 struct VkApplicationInfoWrapper {
-    application_info: vks::VkApplicationInfo,
+    pub vks_struct: vks::VkApplicationInfo,
     application_name_cstr: Option<CString>,
     engine_name_cstr: Option<CString>,
-}
-
-impl Deref for VkApplicationInfoWrapper {
-    type Target = vks::VkApplicationInfo;
-
-    fn deref(&self) -> &Self::Target {
-        &self.application_info
-    }
-}
-
-impl AsRef<vks::VkApplicationInfo> for VkApplicationInfoWrapper {
-    fn as_ref(&self) -> &vks::VkApplicationInfo {
-        &self.application_info
-    }
 }
 
 impl<'a> From<&'a ApplicationInfo> for VkApplicationInfoWrapper {
@@ -3035,7 +3020,7 @@ impl<'a> From<&'a ApplicationInfo> for VkApplicationInfoWrapper {
         let engine_name_cstr = utils::cstr_from_string(info.engine_name.clone());
 
         VkApplicationInfoWrapper {
-            application_info: vks::VkApplicationInfo {
+            vks_struct: vks::VkApplicationInfo {
                 sType: vks::VK_STRUCTURE_TYPE_APPLICATION_INFO,
                 pNext: ptr::null(),
                 pApplicationName: application_name_cstr.1,
@@ -3107,7 +3092,7 @@ impl<'a> From<&'a vks::VkInstanceCreateInfo> for InstanceCreateInfo {
 
 #[derive(Debug)]
 struct VkInstanceCreateInfoWrapper {
-    create_info: vks::VkInstanceCreateInfo,
+    pub vks_struct: vks::VkInstanceCreateInfo,
     application_info: Option<Box<VkApplicationInfoWrapper>>,
     enabled_layers: Vec<CString>,
     enabled_layers_ptrs: Vec<*const c_char>,
@@ -3115,34 +3100,15 @@ struct VkInstanceCreateInfoWrapper {
     enabled_extensions_ptrs: Vec<*const c_char>,
 }
 
-impl Deref for VkInstanceCreateInfoWrapper {
-    type Target = vks::VkInstanceCreateInfo;
-
-    fn deref(&self) -> &Self::Target {
-        &self.create_info
-    }
-}
-
-impl AsRef<vks::VkInstanceCreateInfo> for VkInstanceCreateInfoWrapper {
-    fn as_ref(&self) -> &vks::VkInstanceCreateInfo {
-        &self.create_info
-    }
-}
-
 impl<'a> From<&'a InstanceCreateInfo> for VkInstanceCreateInfoWrapper {
     fn from(create_info: &'a InstanceCreateInfo) -> Self {
-        let application_info_ptr;
-        let application_info = match create_info.application_info {
+        let (application_info_ptr, application_info) = match create_info.application_info {
             Some(ref application_info) => {
                 let application_info: Box<VkApplicationInfoWrapper> = Box::new(application_info.into());
-                application_info_ptr = &**application_info as *const _;
-                Some(application_info)
+                (&application_info.vks_struct as *const _, Some(application_info))
             }
 
-            None => {
-                application_info_ptr = ptr::null();
-                None
-            }
+            None => (ptr::null(), None),
         };
 
         let enabled_layers: Vec<_> = create_info.enabled_layers.iter()
@@ -3179,7 +3145,7 @@ impl<'a> From<&'a InstanceCreateInfo> for VkInstanceCreateInfoWrapper {
         };
 
         VkInstanceCreateInfoWrapper {
-            create_info: vks::VkInstanceCreateInfo {
+            vks_struct: vks::VkInstanceCreateInfo {
                 sType: vks::VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO,
                 pNext: ptr::null(),
                 flags: create_info.flags,
@@ -4110,22 +4076,8 @@ impl<'a> From<&'a vks::VkDeviceQueueCreateInfo> for DeviceQueueCreateInfo {
 
 #[derive(Debug)]
 struct VkDeviceQueueCreateInfoWrapper {
-    create_info: vks::VkDeviceQueueCreateInfo,
+    pub vks_struct: vks::VkDeviceQueueCreateInfo,
     queue_priorities: Vec<f32>,
-}
-
-impl Deref for VkDeviceQueueCreateInfoWrapper {
-    type Target = vks::VkDeviceQueueCreateInfo;
-
-    fn deref(&self) -> &Self::Target {
-        &self.create_info
-    }
-}
-
-impl AsRef<vks::VkDeviceQueueCreateInfo> for VkDeviceQueueCreateInfoWrapper {
-    fn as_ref(&self) -> &vks::VkDeviceQueueCreateInfo {
-        &self.create_info
-    }
 }
 
 impl<'a> From<&'a DeviceQueueCreateInfo> for VkDeviceQueueCreateInfoWrapper {
@@ -4133,7 +4085,7 @@ impl<'a> From<&'a DeviceQueueCreateInfo> for VkDeviceQueueCreateInfoWrapper {
         let queue_priorities = create_info.queue_priorities.clone();
 
         VkDeviceQueueCreateInfoWrapper {
-            create_info: vks::VkDeviceQueueCreateInfo {
+            vks_struct: vks::VkDeviceQueueCreateInfo {
                 sType: vks::VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO,
                 pNext: ptr::null(),
                 flags: create_info.flags,
@@ -4213,7 +4165,7 @@ impl<'a> From<&'a vks::VkDeviceCreateInfo> for DeviceCreateInfo {
 
 #[derive(Debug)]
 struct VkDeviceCreateInfoWrapper {
-    create_info: vks::VkDeviceCreateInfo,
+    pub vks_struct: vks::VkDeviceCreateInfo,
     queue_create_infos_wrappers: Vec<VkDeviceQueueCreateInfoWrapper>,
     queue_create_infos: Vec<vks::VkDeviceQueueCreateInfo>,
     enabled_layers: Vec<CString>,
@@ -4221,20 +4173,6 @@ struct VkDeviceCreateInfoWrapper {
     enabled_extensions: Vec<CString>,
     enabled_extensions_ptrs: Vec<*const c_char>,
     enabled_features: Option<Box<vks::VkPhysicalDeviceFeatures>>,
-}
-
-impl Deref for VkDeviceCreateInfoWrapper {
-    type Target = vks::VkDeviceCreateInfo;
-
-    fn deref(&self) -> &Self::Target {
-        &self.create_info
-    }
-}
-
-impl AsRef<vks::VkDeviceCreateInfo> for VkDeviceCreateInfoWrapper {
-    fn as_ref(&self) -> &vks::VkDeviceCreateInfo {
-        &self.create_info
-    }
 }
 
 impl<'a> From<&'a DeviceCreateInfo> for VkDeviceCreateInfoWrapper {
@@ -4246,8 +4184,7 @@ impl<'a> From<&'a DeviceCreateInfo> for VkDeviceCreateInfoWrapper {
 
         let queue_create_infos: Vec<vks::VkDeviceQueueCreateInfo> = queue_create_infos_wrappers
             .iter()
-            .map(AsRef::as_ref)
-            .cloned()
+            .map(|q| q.vks_struct)
             .collect();
 
         let enabled_layers: Vec<_> = create_info.enabled_layers
@@ -4300,7 +4237,7 @@ impl<'a> From<&'a DeviceCreateInfo> for VkDeviceCreateInfoWrapper {
         };
 
         VkDeviceCreateInfoWrapper {
-            create_info: vks::VkDeviceCreateInfo {
+            vks_struct: vks::VkDeviceCreateInfo {
                 sType: vks::VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO,
                 pNext: ptr::null(),
                 flags: create_info.flags,
@@ -4618,7 +4555,7 @@ pub struct SubmitInfo {
 
 #[derive(Debug)]
 struct VkSubmitInfoWrapper {
-    info: vks::VkSubmitInfo,
+    pub vks_struct: vks::VkSubmitInfo,
     wait_semaphores: Option<Vec<Semaphore>>,
     wait_vk_semaphores: Option<Vec<vks::VkSemaphore>>,
     wait_dst_stage_mask: Option<Vec<vks::VkPipelineStageFlags>>,
@@ -4626,20 +4563,6 @@ struct VkSubmitInfoWrapper {
     vk_command_buffers: Option<Vec<vks::VkCommandBuffer>>,
     signal_semaphores: Option<Vec<Semaphore>>,
     signal_vk_semaphores: Option<Vec<vks::VkSemaphore>>,
-}
-
-impl Deref for VkSubmitInfoWrapper {
-    type Target = vks::VkSubmitInfo;
-
-    fn deref(&self) -> &Self::Target {
-        &self.info
-    }
-}
-
-impl AsRef<vks::VkSubmitInfo> for VkSubmitInfoWrapper {
-    fn as_ref(&self) -> &vks::VkSubmitInfo {
-        &self.info
-    }
 }
 
 impl<'a> From<&'a SubmitInfo> for VkSubmitInfoWrapper {
@@ -4684,7 +4607,7 @@ impl<'a> From<&'a SubmitInfo> for VkSubmitInfoWrapper {
         };
 
         VkSubmitInfoWrapper {
-            info: vks::VkSubmitInfo {
+            vks_struct: vks::VkSubmitInfo {
                 sType: vks::VK_STRUCTURE_TYPE_SUBMIT_INFO,
                 pNext: ptr::null(),
                 waitSemaphoreCount: wait_semaphores_count,
@@ -4733,27 +4656,13 @@ impl<'a> From<&'a vks::VkMemoryAllocateInfo> for MemoryAllocateInfo {
 
 #[derive(Debug)]
 struct VkMemoryAllocateInfoWrapper {
-    info: vks::VkMemoryAllocateInfo,
-}
-
-impl Deref for VkMemoryAllocateInfoWrapper {
-    type Target = vks::VkMemoryAllocateInfo;
-
-    fn deref(&self) -> &Self::Target {
-        &self.info
-    }
-}
-
-impl AsRef<vks::VkMemoryAllocateInfo> for VkMemoryAllocateInfoWrapper {
-    fn as_ref(&self) -> &vks::VkMemoryAllocateInfo {
-        &self.info
-    }
+    pub vks_struct: vks::VkMemoryAllocateInfo,
 }
 
 impl<'a> From<&'a MemoryAllocateInfo> for VkMemoryAllocateInfoWrapper {
     fn from(info: &'a MemoryAllocateInfo) -> Self {
         VkMemoryAllocateInfoWrapper {
-            info: vks::VkMemoryAllocateInfo {
+            vks_struct: vks::VkMemoryAllocateInfo {
                 sType: vks::VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO,
                 pNext: ptr::null(),
                 allocationSize: info.allocation_size,
@@ -4779,28 +4688,14 @@ pub struct MappedMemoryRange {
 
 #[derive(Debug)]
 struct VkMappedMemoryRangeWrapper {
-    range: vks::VkMappedMemoryRange,
+    pub vks_struct: vks::VkMappedMemoryRange,
     memory: DeviceMemory,
-}
-
-impl Deref for VkMappedMemoryRangeWrapper {
-    type Target = vks::VkMappedMemoryRange;
-
-    fn deref(&self) -> &Self::Target {
-        &self.range
-    }
-}
-
-impl AsRef<vks::VkMappedMemoryRange> for VkMappedMemoryRangeWrapper {
-    fn as_ref(&self) -> &vks::VkMappedMemoryRange {
-        &self.range
-    }
 }
 
 impl<'a> From<&'a MappedMemoryRange> for VkMappedMemoryRangeWrapper {
     fn from(range: &'a MappedMemoryRange) -> Self {
         VkMappedMemoryRangeWrapper {
-            range: vks::VkMappedMemoryRange {
+            vks_struct: vks::VkMappedMemoryRange {
                 sType: vks::VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE,
                 pNext: ptr::null(),
                 memory: range.memory.handle(),
@@ -4968,22 +4863,8 @@ pub struct SparseMemoryBind {
 
 #[derive(Debug)]
 struct VkSparseMemoryBindWrapper {
-    bind: vks::VkSparseMemoryBind,
+    pub vks_struct: vks::VkSparseMemoryBind,
     memory: Option<DeviceMemory>,
-}
-
-impl Deref for VkSparseMemoryBindWrapper {
-    type Target = vks::VkSparseMemoryBind;
-
-    fn deref(&self) -> &Self::Target {
-        &self.bind
-    }
-}
-
-impl AsRef<vks::VkSparseMemoryBind> for VkSparseMemoryBindWrapper {
-    fn as_ref(&self) -> &vks::VkSparseMemoryBind {
-        &self.bind
-    }
 }
 
 impl<'a> From<&'a SparseMemoryBind> for VkSparseMemoryBindWrapper {
@@ -4994,7 +4875,7 @@ impl<'a> From<&'a SparseMemoryBind> for VkSparseMemoryBindWrapper {
         };
 
         VkSparseMemoryBindWrapper {
-            bind: vks::VkSparseMemoryBind {
+            vks_struct: vks::VkSparseMemoryBind {
                 resourceOffset: bind.resource_offset,
                 size: bind.size,
                 memory: vk_memory,
@@ -5015,33 +4896,19 @@ pub struct SparseBufferMemoryBindInfo {
 
 #[derive(Debug)]
 struct VkSparseBufferMemoryBindInfoWrapper {
-    info: vks::VkSparseBufferMemoryBindInfo,
+    pub vks_struct: vks::VkSparseBufferMemoryBindInfo,
     buffer: Buffer,
     binds: Vec<VkSparseMemoryBindWrapper>,
     binds_vk: Vec<vks::VkSparseMemoryBind>,
 }
 
-impl Deref for VkSparseBufferMemoryBindInfoWrapper {
-    type Target = vks::VkSparseBufferMemoryBindInfo;
-
-    fn deref(&self) -> &Self::Target {
-        &self.info
-    }
-}
-
-impl AsRef<vks::VkSparseBufferMemoryBindInfo> for VkSparseBufferMemoryBindInfoWrapper {
-    fn as_ref(&self) -> &vks::VkSparseBufferMemoryBindInfo {
-        &self.info
-    }
-}
-
 impl<'a> From<&'a SparseBufferMemoryBindInfo> for VkSparseBufferMemoryBindInfoWrapper {
     fn from(info: &'a SparseBufferMemoryBindInfo) -> Self {
-        let binds: Vec<_> = info.binds.iter().map(From::from).collect();
-        let binds_vk: Vec<_> = binds.iter().map(AsRef::as_ref).cloned().collect();
+        let binds: Vec<VkSparseMemoryBindWrapper> = info.binds.iter().map(From::from).collect();
+        let binds_vk: Vec<_> = binds.iter().map(|b| b.vks_struct).collect();
 
         VkSparseBufferMemoryBindInfoWrapper {
-            info: vks::VkSparseBufferMemoryBindInfo {
+            vks_struct: vks::VkSparseBufferMemoryBindInfo {
                 buffer: info.buffer.handle(),
                 bindCount: binds.len() as u32,
                 pBinds: binds_vk.as_ptr(),
@@ -5062,33 +4929,19 @@ pub struct SparseImageOpaqueMemoryBindInfo {
 
 #[derive(Debug)]
 struct VkSparseImageOpaqueMemoryBindInfoWrapper {
-    info: vks::VkSparseImageOpaqueMemoryBindInfo,
+    pub vks_struct: vks::VkSparseImageOpaqueMemoryBindInfo,
     image: Image,
     binds: Vec<VkSparseMemoryBindWrapper>,
     binds_vk: Vec<vks::VkSparseMemoryBind>,
 }
 
-impl Deref for VkSparseImageOpaqueMemoryBindInfoWrapper {
-    type Target = vks::VkSparseImageOpaqueMemoryBindInfo;
-
-    fn deref(&self) -> &Self::Target {
-        &self.info
-    }
-}
-
-impl AsRef<vks::VkSparseImageOpaqueMemoryBindInfo> for VkSparseImageOpaqueMemoryBindInfoWrapper {
-    fn as_ref(&self) -> &vks::VkSparseImageOpaqueMemoryBindInfo {
-        &self.info
-    }
-}
-
 impl<'a> From<&'a SparseImageOpaqueMemoryBindInfo> for VkSparseImageOpaqueMemoryBindInfoWrapper {
     fn from(info: &'a SparseImageOpaqueMemoryBindInfo) -> Self {
-        let binds: Vec<_> = info.binds.iter().map(From::from).collect();
-        let binds_vk: Vec<_> = binds.iter().map(AsRef::as_ref).cloned().collect();
+        let binds: Vec<VkSparseMemoryBindWrapper> = info.binds.iter().map(From::from).collect();
+        let binds_vk: Vec<_> = binds.iter().map(|b| b.vks_struct).collect();
 
         VkSparseImageOpaqueMemoryBindInfoWrapper {
-            info: vks::VkSparseImageOpaqueMemoryBindInfo {
+            vks_struct: vks::VkSparseImageOpaqueMemoryBindInfo {
                 image: info.image.handle(),
                 bindCount: binds.len() as u32,
                 pBinds: binds_vk.as_ptr(),
@@ -5169,22 +5022,8 @@ pub struct SparseImageMemoryBind {
 
 #[derive(Debug)]
 struct VkSparseImageMemoryBindWrapper {
-    bind: vks::VkSparseImageMemoryBind,
+    pub vks_struct: vks::VkSparseImageMemoryBind,
     memory: Option<DeviceMemory>,
-}
-
-impl Deref for VkSparseImageMemoryBindWrapper {
-    type Target = vks::VkSparseImageMemoryBind;
-
-    fn deref(&self) -> &Self::Target {
-        &self.bind
-    }
-}
-
-impl AsRef<vks::VkSparseImageMemoryBind> for VkSparseImageMemoryBindWrapper {
-    fn as_ref(&self) -> &vks::VkSparseImageMemoryBind {
-        &self.bind
-    }
 }
 
 impl<'a> From<&'a SparseImageMemoryBind> for VkSparseImageMemoryBindWrapper {
@@ -5195,7 +5034,7 @@ impl<'a> From<&'a SparseImageMemoryBind> for VkSparseImageMemoryBindWrapper {
         };
 
         VkSparseImageMemoryBindWrapper {
-            bind: vks::VkSparseImageMemoryBind {
+            vks_struct: vks::VkSparseImageMemoryBind {
                 subresource: (&bind.subresource).into(),
                 offset: (&bind.offset).into(),
                 extent: (&bind.extent).into(),
@@ -5217,33 +5056,19 @@ pub struct SparseImageMemoryBindInfo {
 
 #[derive(Debug)]
 struct VkSparseImageMemoryBindInfoWrapper {
-    info: vks::VkSparseImageMemoryBindInfo,
+    pub vks_struct: vks::VkSparseImageMemoryBindInfo,
     image: Image,
     binds: Vec<VkSparseImageMemoryBindWrapper>,
     binds_vk: Vec<vks::VkSparseImageMemoryBind>,
 }
 
-impl Deref for VkSparseImageMemoryBindInfoWrapper {
-    type Target = vks::VkSparseImageMemoryBindInfo;
-
-    fn deref(&self) -> &Self::Target {
-        &self.info
-    }
-}
-
-impl AsRef<vks::VkSparseImageMemoryBindInfo> for VkSparseImageMemoryBindInfoWrapper {
-    fn as_ref(&self) -> &vks::VkSparseImageMemoryBindInfo {
-        &self.info
-    }
-}
-
 impl<'a> From<&'a SparseImageMemoryBindInfo> for VkSparseImageMemoryBindInfoWrapper {
     fn from(info: &'a SparseImageMemoryBindInfo) -> Self {
-        let binds: Vec<_> = info.binds.iter().map(From::from).collect();
-        let binds_vk: Vec<_> = binds.iter().map(AsRef::as_ref).cloned().collect();
+        let binds: Vec<VkSparseImageMemoryBindWrapper> = info.binds.iter().map(From::from).collect();
+        let binds_vk: Vec<_> = binds.iter().map(|b| b.vks_struct).collect();
 
         VkSparseImageMemoryBindInfoWrapper {
-            info: vks::VkSparseImageMemoryBindInfo {
+            vks_struct: vks::VkSparseImageMemoryBindInfo {
                 image: info.image.handle(),
                 bindCount: binds.len() as u32,
                 pBinds: binds_vk.as_ptr(),
@@ -5273,7 +5098,7 @@ pub struct BindSparseInfo {
 
 #[derive(Debug)]
 struct VkBindSparseInfoWrapper {
-    info: vks::VkBindSparseInfo,
+    pub vks_struct: vks::VkBindSparseInfo,
     wait_semaphores: Option<Vec<Semaphore>>,
     wait_vk_semaphores: Option<Vec<vks::VkSemaphore>>,
     buffer_binds: Option<Vec<VkSparseBufferMemoryBindInfoWrapper>>,
@@ -5284,20 +5109,6 @@ struct VkBindSparseInfoWrapper {
     vk_image_binds: Option<Vec<vks::VkSparseImageMemoryBindInfo>>,
     signal_semaphores: Option<Vec<Semaphore>>,
     signal_vk_semaphores: Option<Vec<vks::VkSemaphore>>,
-}
-
-impl Deref for VkBindSparseInfoWrapper {
-    type Target = vks::VkBindSparseInfo;
-
-    fn deref(&self) -> &Self::Target {
-        &self.info
-    }
-}
-
-impl AsRef<vks::VkBindSparseInfo> for VkBindSparseInfoWrapper {
-    fn as_ref(&self) -> &vks::VkBindSparseInfo {
-        &self.info
-    }
 }
 
 impl<'a> From<&'a BindSparseInfo> for VkBindSparseInfoWrapper {
@@ -5314,8 +5125,8 @@ impl<'a> From<&'a BindSparseInfo> for VkBindSparseInfoWrapper {
 
         let (buffer_binds_count, vk_buffer_binds_ptr, buffer_binds, vk_buffer_binds) = match info.buffer_binds {
             Some(ref buffer_binds) => {
-                let buffer_binds: Vec<_> = buffer_binds.iter().map(From::from).collect();
-                let vk_buffer_binds: Vec<_> = buffer_binds.iter().map(AsRef::as_ref).cloned().collect();
+                let buffer_binds: Vec<VkSparseBufferMemoryBindInfoWrapper> = buffer_binds.iter().map(From::from).collect();
+                let vk_buffer_binds: Vec<_> = buffer_binds.iter().map(|b| b.vks_struct).collect();
                 (buffer_binds.len() as u32, vk_buffer_binds.as_ptr(), Some(buffer_binds), Some(vk_buffer_binds))
             }
 
@@ -5324,8 +5135,8 @@ impl<'a> From<&'a BindSparseInfo> for VkBindSparseInfoWrapper {
 
         let (image_opaque_binds_count, vk_image_opaque_binds_ptr, image_opaque_binds, vk_image_opaque_binds) = match info.image_opaque_binds {
             Some(ref image_opaque_binds) => {
-                let image_opaque_binds: Vec<_> = image_opaque_binds.iter().map(From::from).collect();
-                let vk_image_opaque_binds: Vec<_> = image_opaque_binds.iter().map(AsRef::as_ref).cloned().collect();
+                let image_opaque_binds: Vec<VkSparseImageOpaqueMemoryBindInfoWrapper> = image_opaque_binds.iter().map(From::from).collect();
+                let vk_image_opaque_binds: Vec<_> = image_opaque_binds.iter().map(|i| i.vks_struct).collect();
                 (image_opaque_binds.len() as u32, vk_image_opaque_binds.as_ptr(), Some(image_opaque_binds), Some(vk_image_opaque_binds))
             }
 
@@ -5334,8 +5145,8 @@ impl<'a> From<&'a BindSparseInfo> for VkBindSparseInfoWrapper {
 
         let (image_binds_count, vk_image_binds_ptr, image_binds, vk_image_binds) = match info.image_binds {
             Some(ref image_binds) => {
-                let image_binds: Vec<_> = image_binds.iter().map(From::from).collect();
-                let vk_image_binds: Vec<_> = image_binds.iter().map(AsRef::as_ref).cloned().collect();
+                let image_binds: Vec<VkSparseImageMemoryBindInfoWrapper> = image_binds.iter().map(From::from).collect();
+                let vk_image_binds: Vec<_> = image_binds.iter().map(|i| i.vks_struct).collect();
                 (image_binds.len() as u32, vk_image_binds.as_ptr(), Some(image_binds), Some(vk_image_binds))
             }
 
@@ -5353,7 +5164,7 @@ impl<'a> From<&'a BindSparseInfo> for VkBindSparseInfoWrapper {
         };
 
         VkBindSparseInfoWrapper {
-            info: vks::VkBindSparseInfo {
+            vks_struct: vks::VkBindSparseInfo {
                 sType: vks::VK_STRUCTURE_TYPE_BIND_SPARSE_INFO,
                 pNext: ptr::null(),
                 waitSemaphoreCount: wait_semaphores_count,
@@ -5406,27 +5217,13 @@ impl<'a> From<&'a vks::VkFenceCreateInfo> for FenceCreateInfo {
 
 #[derive(Debug)]
 struct VkFenceCreateInfoWrapper {
-    create_info: vks::VkFenceCreateInfo,
-}
-
-impl Deref for VkFenceCreateInfoWrapper {
-    type Target = vks::VkFenceCreateInfo;
-
-    fn deref(&self) -> &Self::Target {
-        &self.create_info
-    }
-}
-
-impl AsRef<vks::VkFenceCreateInfo> for VkFenceCreateInfoWrapper {
-    fn as_ref(&self) -> &vks::VkFenceCreateInfo {
-        &self.create_info
-    }
+    pub vks_struct: vks::VkFenceCreateInfo,
 }
 
 impl<'a> From<&'a FenceCreateInfo> for VkFenceCreateInfoWrapper {
     fn from(create_info: &'a FenceCreateInfo) -> VkFenceCreateInfoWrapper {
         VkFenceCreateInfoWrapper {
-            create_info: vks::VkFenceCreateInfo {
+            vks_struct: vks::VkFenceCreateInfo {
                 sType: vks::VK_STRUCTURE_TYPE_FENCE_CREATE_INFO,
                 pNext: ptr::null(),
                 flags: create_info.flags,
@@ -5460,27 +5257,13 @@ impl<'a> From<&'a vks::VkSemaphoreCreateInfo> for SemaphoreCreateInfo {
 
 #[derive(Debug)]
 struct VkSemaphoreCreateInfoWrapper {
-    create_info: vks::VkSemaphoreCreateInfo,
-}
-
-impl Deref for VkSemaphoreCreateInfoWrapper {
-    type Target = vks::VkSemaphoreCreateInfo;
-
-    fn deref(&self) -> &Self::Target {
-        &self.create_info
-    }
-}
-
-impl AsRef<vks::VkSemaphoreCreateInfo> for VkSemaphoreCreateInfoWrapper {
-    fn as_ref(&self) -> &vks::VkSemaphoreCreateInfo {
-        &self.create_info
-    }
+    pub vks_struct: vks::VkSemaphoreCreateInfo,
 }
 
 impl<'a> From<&'a SemaphoreCreateInfo> for VkSemaphoreCreateInfoWrapper {
     fn from(create_info: &'a SemaphoreCreateInfo) -> VkSemaphoreCreateInfoWrapper {
         VkSemaphoreCreateInfoWrapper {
-            create_info: vks::VkSemaphoreCreateInfo {
+            vks_struct: vks::VkSemaphoreCreateInfo {
                 sType: vks::VK_STRUCTURE_TYPE_FENCE_CREATE_INFO,
                 pNext: ptr::null(),
                 flags: create_info.flags,
@@ -5514,27 +5297,13 @@ impl<'a> From<&'a vks::VkEventCreateInfo> for EventCreateInfo {
 
 #[derive(Debug)]
 struct VkEventCreateInfoWrapper {
-    create_info: vks::VkEventCreateInfo,
-}
-
-impl Deref for VkEventCreateInfoWrapper {
-    type Target = vks::VkEventCreateInfo;
-
-    fn deref(&self) -> &Self::Target {
-        &self.create_info
-    }
-}
-
-impl AsRef<vks::VkEventCreateInfo> for VkEventCreateInfoWrapper {
-    fn as_ref(&self) -> &vks::VkEventCreateInfo {
-        &self.create_info
-    }
+    pub vks_struct: vks::VkEventCreateInfo,
 }
 
 impl<'a> From<&'a EventCreateInfo> for VkEventCreateInfoWrapper {
     fn from(create_info: &'a EventCreateInfo) -> VkEventCreateInfoWrapper {
         VkEventCreateInfoWrapper {
-            create_info: vks::VkEventCreateInfo {
+            vks_struct: vks::VkEventCreateInfo {
                 sType: vks::VK_STRUCTURE_TYPE_FENCE_CREATE_INFO,
                 pNext: ptr::null(),
                 flags: create_info.flags,
@@ -5574,27 +5343,13 @@ impl<'a> From<&'a vks::VkQueryPoolCreateInfo> for QueryPoolCreateInfo {
 
 #[derive(Debug)]
 struct VkQueryPoolCreateInfoWrapper {
-    create_info: vks::VkQueryPoolCreateInfo,
-}
-
-impl Deref for VkQueryPoolCreateInfoWrapper {
-    type Target = vks::VkQueryPoolCreateInfo;
-
-    fn deref(&self) -> &Self::Target {
-        &self.create_info
-    }
-}
-
-impl AsRef<vks::VkQueryPoolCreateInfo> for VkQueryPoolCreateInfoWrapper {
-    fn as_ref(&self) -> &vks::VkQueryPoolCreateInfo {
-        &self.create_info
-    }
+    pub vks_struct: vks::VkQueryPoolCreateInfo,
 }
 
 impl<'a> From<&'a QueryPoolCreateInfo> for VkQueryPoolCreateInfoWrapper {
     fn from(create_info: &'a QueryPoolCreateInfo) -> VkQueryPoolCreateInfoWrapper {
         VkQueryPoolCreateInfoWrapper {
-            create_info: vks::VkQueryPoolCreateInfo {
+            vks_struct: vks::VkQueryPoolCreateInfo {
                 sType: vks::VK_STRUCTURE_TYPE_QUERY_POOL_CREATE_INFO,
                 pNext: ptr::null(),
                 flags: create_info.flags,
@@ -5648,22 +5403,8 @@ impl<'a> From<&'a vks::VkBufferCreateInfo> for BufferCreateInfo {
 
 #[derive(Debug)]
 struct VkBufferCreateInfoWrapper {
-    create_info: vks::VkBufferCreateInfo,
+    pub vks_struct: vks::VkBufferCreateInfo,
     queue_family_indices: Option<Vec<u32>>,
-}
-
-impl Deref for VkBufferCreateInfoWrapper {
-    type Target = vks::VkBufferCreateInfo;
-
-    fn deref(&self) -> &Self::Target {
-        &self.create_info
-    }
-}
-
-impl AsRef<vks::VkBufferCreateInfo> for VkBufferCreateInfoWrapper {
-    fn as_ref(&self) -> &vks::VkBufferCreateInfo {
-        &self.create_info
-    }
 }
 
 impl<'a> From<&'a BufferCreateInfo> for VkBufferCreateInfoWrapper {
@@ -5675,7 +5416,7 @@ impl<'a> From<&'a BufferCreateInfo> for VkBufferCreateInfoWrapper {
         };
 
         VkBufferCreateInfoWrapper {
-            create_info: vks::VkBufferCreateInfo {
+            vks_struct: vks::VkBufferCreateInfo {
                 sType: vks::VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO,
                 pNext: ptr::null(),
                 flags: create_info.flags,
@@ -5708,28 +5449,14 @@ pub struct BufferViewCreateInfo {
 
 #[derive(Debug)]
 struct VkBufferViewCreateInfoWrapper {
-    create_info: vks::VkBufferViewCreateInfo,
+    pub vks_struct: vks::VkBufferViewCreateInfo,
     buffer: Buffer,
-}
-
-impl Deref for VkBufferViewCreateInfoWrapper {
-    type Target = vks::VkBufferViewCreateInfo;
-
-    fn deref(&self) -> &Self::Target {
-        &self.create_info
-    }
-}
-
-impl AsRef<vks::VkBufferViewCreateInfo> for VkBufferViewCreateInfoWrapper {
-    fn as_ref(&self) -> &vks::VkBufferViewCreateInfo {
-        &self.create_info
-    }
 }
 
 impl<'a> From<&'a BufferViewCreateInfo> for VkBufferViewCreateInfoWrapper {
     fn from(create_info: &'a BufferViewCreateInfo) -> Self {
         VkBufferViewCreateInfoWrapper {
-            create_info: vks::VkBufferViewCreateInfo {
+            vks_struct: vks::VkBufferViewCreateInfo {
                 sType: vks::VK_STRUCTURE_TYPE_BUFFER_VIEW_CREATE_INFO,
                 pNext: ptr::null(),
                 flags: create_info.flags,
@@ -5799,22 +5526,8 @@ impl<'a> From<&'a vks::VkImageCreateInfo> for ImageCreateInfo {
 
 #[derive(Debug)]
 struct VkImageCreateInfoWrapper {
-    create_info: vks::VkImageCreateInfo,
+    pub vks_struct: vks::VkImageCreateInfo,
     queue_family_indices: Option<Vec<u32>>,
-}
-
-impl Deref for VkImageCreateInfoWrapper {
-    type Target = vks::VkImageCreateInfo;
-
-    fn deref(&self) -> &Self::Target {
-        &self.create_info
-    }
-}
-
-impl AsRef<vks::VkImageCreateInfo> for VkImageCreateInfoWrapper {
-    fn as_ref(&self) -> &vks::VkImageCreateInfo {
-        &self.create_info
-    }
 }
 
 impl<'a> From<&'a ImageCreateInfo> for VkImageCreateInfoWrapper {
@@ -5826,7 +5539,7 @@ impl<'a> From<&'a ImageCreateInfo> for VkImageCreateInfoWrapper {
         };
 
         VkImageCreateInfoWrapper {
-            create_info: vks::VkImageCreateInfo {
+            vks_struct: vks::VkImageCreateInfo {
                 sType: vks::VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO,
                 pNext: ptr::null(),
                 flags: create_info.flags,
@@ -5966,28 +5679,14 @@ pub struct ImageViewCreateInfo {
 
 #[derive(Debug)]
 struct VkImageViewCreateInfoWrapper {
-    create_info: vks::VkImageViewCreateInfo,
+    pub vks_struct: vks::VkImageViewCreateInfo,
     image: Image,
-}
-
-impl Deref for VkImageViewCreateInfoWrapper {
-    type Target = vks::VkImageViewCreateInfo;
-
-    fn deref(&self) -> &Self::Target {
-        &self.create_info
-    }
-}
-
-impl AsRef<vks::VkImageViewCreateInfo> for VkImageViewCreateInfoWrapper {
-    fn as_ref(&self) -> &vks::VkImageViewCreateInfo {
-        &self.create_info
-    }
 }
 
 impl<'a> From<&'a ImageViewCreateInfo> for VkImageViewCreateInfoWrapper {
     fn from(create_info: &'a ImageViewCreateInfo) -> Self {
         VkImageViewCreateInfoWrapper {
-            create_info: vks::VkImageViewCreateInfo {
+            vks_struct: vks::VkImageViewCreateInfo {
                 sType: vks::VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO,
                 pNext: ptr::null(),
                 flags: create_info.flags,
@@ -6038,22 +5737,8 @@ impl<'a> From<&'a vks::VkShaderModuleCreateInfo> for ShaderModuleCreateInfo {
 
 #[derive(Debug)]
 struct VkShaderModuleCreateInfoWrapper {
-    create_info: vks::VkShaderModuleCreateInfo,
+    pub vks_struct: vks::VkShaderModuleCreateInfo,
     code: Vec<u32>,
-}
-
-impl Deref for VkShaderModuleCreateInfoWrapper {
-    type Target = vks::VkShaderModuleCreateInfo;
-
-    fn deref(&self) -> &Self::Target {
-        &self.create_info
-    }
-}
-
-impl AsRef<vks::VkShaderModuleCreateInfo> for VkShaderModuleCreateInfoWrapper {
-    fn as_ref(&self) -> &vks::VkShaderModuleCreateInfo {
-        &self.create_info
-    }
 }
 
 impl<'a> From<&'a ShaderModuleCreateInfo> for VkShaderModuleCreateInfoWrapper {
@@ -6061,7 +5746,7 @@ impl<'a> From<&'a ShaderModuleCreateInfo> for VkShaderModuleCreateInfoWrapper {
         let code = create_info.code.clone();
 
         VkShaderModuleCreateInfoWrapper {
-            create_info: vks::VkShaderModuleCreateInfo {
+            vks_struct: vks::VkShaderModuleCreateInfo {
                 sType: vks::VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO,
                 pNext: ptr::null(),
                 flags: create_info.flags,
@@ -6109,22 +5794,8 @@ impl<'a> From<&'a vks::VkPipelineCacheCreateInfo> for PipelineCacheCreateInfo {
 
 #[derive(Debug)]
 struct VkPipelineCacheCreateInfoWrapper {
-    create_info: vks::VkPipelineCacheCreateInfo,
+    pub vks_struct: vks::VkPipelineCacheCreateInfo,
     initial_data: Option<Vec<u8>>,
-}
-
-impl Deref for VkPipelineCacheCreateInfoWrapper {
-    type Target = vks::VkPipelineCacheCreateInfo;
-
-    fn deref(&self) -> &Self::Target {
-        &self.create_info
-    }
-}
-
-impl AsRef<vks::VkPipelineCacheCreateInfo> for VkPipelineCacheCreateInfoWrapper {
-    fn as_ref(&self) -> &vks::VkPipelineCacheCreateInfo {
-        &self.create_info
-    }
 }
 
 impl<'a> From<&'a PipelineCacheCreateInfo> for VkPipelineCacheCreateInfoWrapper {
@@ -6141,7 +5812,7 @@ impl<'a> From<&'a PipelineCacheCreateInfo> for VkPipelineCacheCreateInfoWrapper 
         };
 
         VkPipelineCacheCreateInfoWrapper {
-            create_info: vks::VkPipelineCacheCreateInfo {
+            vks_struct: vks::VkPipelineCacheCreateInfo {
                 sType: vks::VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO,
                 pNext: ptr::null(),
                 flags: create_info.flags,
@@ -6263,23 +5934,9 @@ impl SpecializationInfoBuilder {
 
 #[derive(Debug)]
 struct VkSpecializationInfoWrapper {
-    info: vks::VkSpecializationInfo,
+    pub vks_struct: vks::VkSpecializationInfo,
     map_entries: Option<Vec<vks::VkSpecializationMapEntry>>,
     data: Option<Vec<u8>>,
-}
-
-impl Deref for VkSpecializationInfoWrapper {
-    type Target = vks::VkSpecializationInfo;
-
-    fn deref(&self) -> &Self::Target {
-        &self.info
-    }
-}
-
-impl AsRef<vks::VkSpecializationInfo> for VkSpecializationInfoWrapper {
-    fn as_ref(&self) -> &vks::VkSpecializationInfo {
-        &self.info
-    }
 }
 
 impl<'a> From<&'a SpecializationInfo> for VkSpecializationInfoWrapper {
@@ -6303,7 +5960,7 @@ impl<'a> From<&'a SpecializationInfo> for VkSpecializationInfoWrapper {
         };
 
         VkSpecializationInfoWrapper {
-            info: vks::VkSpecializationInfo {
+            vks_struct: vks::VkSpecializationInfo {
                 mapEntryCount: map_entries_count,
                 pMapEntries: map_entries_ptr,
                 dataSize: data_size,
@@ -6333,24 +5990,10 @@ pub struct PipelineShaderStageCreateInfo {
 
 #[derive(Debug)]
 struct VkPipelineShaderStageCreateInfoWrapper {
-    create_info: vks::VkPipelineShaderStageCreateInfo,
+    pub vks_struct: vks::VkPipelineShaderStageCreateInfo,
     module: ShaderModule,
     name: CString,
     specialization_info: Option<Box<VkSpecializationInfoWrapper>>,
-}
-
-impl Deref for VkPipelineShaderStageCreateInfoWrapper {
-    type Target = vks::VkPipelineShaderStageCreateInfo;
-
-    fn deref(&self) -> &Self::Target {
-        &self.create_info
-    }
-}
-
-impl AsRef<vks::VkPipelineShaderStageCreateInfo> for VkPipelineShaderStageCreateInfoWrapper {
-    fn as_ref(&self) -> &vks::VkPipelineShaderStageCreateInfo {
-        &self.create_info
-    }
 }
 
 impl<'a> From<&'a PipelineShaderStageCreateInfo> for VkPipelineShaderStageCreateInfoWrapper {
@@ -6360,14 +6003,14 @@ impl<'a> From<&'a PipelineShaderStageCreateInfo> for VkPipelineShaderStageCreate
         let (specialization_info_ptr, specialization_info) = match create_info.specialization_info {
             Some(ref specialization_info) => {
                 let specialization_info: Box<VkSpecializationInfoWrapper> = Box::new(specialization_info.into());
-                (&**specialization_info as *const _, Some(specialization_info))
+                (&specialization_info.vks_struct as *const _, Some(specialization_info))
             }
 
             None => (ptr::null(), None),
         };
 
         VkPipelineShaderStageCreateInfoWrapper {
-            create_info: vks::VkPipelineShaderStageCreateInfo {
+            vks_struct: vks::VkPipelineShaderStageCreateInfo {
                 sType: vks::VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
                 pNext: ptr::null(),
                 flags: create_info.flags,
@@ -6495,23 +6138,9 @@ impl<'a> From<&'a vks::VkPipelineVertexInputStateCreateInfo> for PipelineVertexI
 
 #[derive(Debug)]
 struct VkPipelineVertexInputStateCreateInfoWrapper {
-    create_info: vks::VkPipelineVertexInputStateCreateInfo,
+    pub vks_struct: vks::VkPipelineVertexInputStateCreateInfo,
     vertex_binding_descriptions: Option<Vec<vks::VkVertexInputBindingDescription>>,
     vertex_attribute_descriptions: Option<Vec<vks::VkVertexInputAttributeDescription>>,
-}
-
-impl Deref for VkPipelineVertexInputStateCreateInfoWrapper {
-    type Target = vks::VkPipelineVertexInputStateCreateInfo;
-
-    fn deref(&self) -> &Self::Target {
-        &self.create_info
-    }
-}
-
-impl AsRef<vks::VkPipelineVertexInputStateCreateInfo> for VkPipelineVertexInputStateCreateInfoWrapper {
-    fn as_ref(&self) -> &vks::VkPipelineVertexInputStateCreateInfo {
-        &self.create_info
-    }
 }
 
 impl<'a> From<&'a PipelineVertexInputStateCreateInfo> for VkPipelineVertexInputStateCreateInfoWrapper {
@@ -6535,7 +6164,7 @@ impl<'a> From<&'a PipelineVertexInputStateCreateInfo> for VkPipelineVertexInputS
         };
 
         VkPipelineVertexInputStateCreateInfoWrapper {
-            create_info: vks::VkPipelineVertexInputStateCreateInfo {
+            vks_struct: vks::VkPipelineVertexInputStateCreateInfo {
                 sType: vks::VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO,
                 pNext: ptr::null(),
                 flags: create_info.flags,
@@ -6579,27 +6208,13 @@ impl<'a> From<&'a vks::VkPipelineInputAssemblyStateCreateInfo> for PipelineInput
 
 #[derive(Debug)]
 struct VkPipelineInputAssemblyStateCreateInfoWrapper {
-    create_info: vks::VkPipelineInputAssemblyStateCreateInfo,
-}
-
-impl Deref for VkPipelineInputAssemblyStateCreateInfoWrapper {
-    type Target = vks::VkPipelineInputAssemblyStateCreateInfo;
-
-    fn deref(&self) -> &Self::Target {
-        &self.create_info
-    }
-}
-
-impl AsRef<vks::VkPipelineInputAssemblyStateCreateInfo> for VkPipelineInputAssemblyStateCreateInfoWrapper {
-    fn as_ref(&self) -> &vks::VkPipelineInputAssemblyStateCreateInfo {
-        &self.create_info
-    }
+    pub vks_struct: vks::VkPipelineInputAssemblyStateCreateInfo,
 }
 
 impl<'a> From<&'a PipelineInputAssemblyStateCreateInfo> for VkPipelineInputAssemblyStateCreateInfoWrapper {
     fn from(create_info: &'a PipelineInputAssemblyStateCreateInfo) -> Self {
         VkPipelineInputAssemblyStateCreateInfoWrapper {
-            create_info: vks::VkPipelineInputAssemblyStateCreateInfo {
+            vks_struct: vks::VkPipelineInputAssemblyStateCreateInfo {
                 sType: vks::VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO,
                 pNext: ptr::null(),
                 flags: create_info.flags,
@@ -6637,27 +6252,13 @@ impl<'a> From<&'a vks::VkPipelineTessellationStateCreateInfo> for PipelineTessel
 
 #[derive(Debug)]
 struct VkPipelineTessellationStateCreateInfoWrapper {
-    create_info: vks::VkPipelineTessellationStateCreateInfo,
-}
-
-impl Deref for VkPipelineTessellationStateCreateInfoWrapper {
-    type Target = vks::VkPipelineTessellationStateCreateInfo;
-
-    fn deref(&self) -> &Self::Target {
-        &self.create_info
-    }
-}
-
-impl AsRef<vks::VkPipelineTessellationStateCreateInfo> for VkPipelineTessellationStateCreateInfoWrapper {
-    fn as_ref(&self) -> &vks::VkPipelineTessellationStateCreateInfo {
-        &self.create_info
-    }
+    pub vks_struct: vks::VkPipelineTessellationStateCreateInfo,
 }
 
 impl<'a> From<&'a PipelineTessellationStateCreateInfo> for VkPipelineTessellationStateCreateInfoWrapper {
     fn from(create_info: &'a PipelineTessellationStateCreateInfo) -> Self {
         VkPipelineTessellationStateCreateInfoWrapper {
-            create_info: vks::VkPipelineTessellationStateCreateInfo {
+            vks_struct: vks::VkPipelineTessellationStateCreateInfo {
                 sType: vks::VK_STRUCTURE_TYPE_PIPELINE_TESSELLATION_STATE_CREATE_INFO,
                 pNext: ptr::null(),
                 flags: create_info.flags,
@@ -6822,23 +6423,9 @@ impl<'a> From<&'a vks::VkPipelineViewportStateCreateInfo> for PipelineViewportSt
 
 #[derive(Debug)]
 struct VkPipelineViewportStateCreateInfoWrapper {
-    create_info: vks::VkPipelineViewportStateCreateInfo,
+    pub vks_struct: vks::VkPipelineViewportStateCreateInfo,
     viewports: Vec<vks::VkViewport>,
     scissors: Vec<vks::VkRect2D>,
-}
-
-impl Deref for VkPipelineViewportStateCreateInfoWrapper {
-    type Target = vks::VkPipelineViewportStateCreateInfo;
-
-    fn deref(&self) -> &Self::Target {
-        &self.create_info
-    }
-}
-
-impl AsRef<vks::VkPipelineViewportStateCreateInfo> for VkPipelineViewportStateCreateInfoWrapper {
-    fn as_ref(&self) -> &vks::VkPipelineViewportStateCreateInfo {
-        &self.create_info
-    }
 }
 
 impl<'a> From<&'a PipelineViewportStateCreateInfo> for VkPipelineViewportStateCreateInfoWrapper {
@@ -6847,7 +6434,7 @@ impl<'a> From<&'a PipelineViewportStateCreateInfo> for VkPipelineViewportStateCr
         let scissors: Vec<_> = create_info.scissors.iter().map(From::from).collect();
 
         VkPipelineViewportStateCreateInfoWrapper {
-            create_info: vks::VkPipelineViewportStateCreateInfo {
+            vks_struct: vks::VkPipelineViewportStateCreateInfo {
                 sType: vks::VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO,
                 pNext: ptr::null(),
                 flags: create_info.flags,
@@ -6907,27 +6494,13 @@ impl<'a> From<&'a vks::VkPipelineRasterizationStateCreateInfo> for PipelineRaste
 
 #[derive(Debug)]
 struct VkPipelineRasterizationStateCreateInfoWrapper {
-    create_info: vks::VkPipelineRasterizationStateCreateInfo,
-}
-
-impl Deref for VkPipelineRasterizationStateCreateInfoWrapper {
-    type Target = vks::VkPipelineRasterizationStateCreateInfo;
-
-    fn deref(&self) -> &Self::Target {
-        &self.create_info
-    }
-}
-
-impl AsRef<vks::VkPipelineRasterizationStateCreateInfo> for VkPipelineRasterizationStateCreateInfoWrapper {
-    fn as_ref(&self) -> &vks::VkPipelineRasterizationStateCreateInfo {
-        &self.create_info
-    }
+    pub vks_struct: vks::VkPipelineRasterizationStateCreateInfo,
 }
 
 impl<'a> From<&'a PipelineRasterizationStateCreateInfo> for VkPipelineRasterizationStateCreateInfoWrapper {
     fn from(create_info: &'a PipelineRasterizationStateCreateInfo) -> Self {
         VkPipelineRasterizationStateCreateInfoWrapper {
-            create_info: vks::VkPipelineRasterizationStateCreateInfo {
+            vks_struct: vks::VkPipelineRasterizationStateCreateInfo {
                 sType: vks::VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO,
                 pNext: ptr::null(),
                 flags: create_info.flags,
@@ -6993,22 +6566,8 @@ impl<'a> From<&'a vks::VkPipelineMultisampleStateCreateInfo> for PipelineMultisa
 
 #[derive(Debug)]
 struct VkPipelineMultisampleStateCreateInfoWrapper {
-    create_info: vks::VkPipelineMultisampleStateCreateInfo,
+    pub vks_struct: vks::VkPipelineMultisampleStateCreateInfo,
     sample_mask: Option<Vec<u32>>,
-}
-
-impl Deref for VkPipelineMultisampleStateCreateInfoWrapper {
-    type Target = vks::VkPipelineMultisampleStateCreateInfo;
-
-    fn deref(&self) -> &Self::Target {
-        &self.create_info
-    }
-}
-
-impl AsRef<vks::VkPipelineMultisampleStateCreateInfo> for VkPipelineMultisampleStateCreateInfoWrapper {
-    fn as_ref(&self) -> &vks::VkPipelineMultisampleStateCreateInfo {
-        &self.create_info
-    }
 }
 
 impl<'a> From<&'a PipelineMultisampleStateCreateInfo> for VkPipelineMultisampleStateCreateInfoWrapper {
@@ -7023,7 +6582,7 @@ impl<'a> From<&'a PipelineMultisampleStateCreateInfo> for VkPipelineMultisampleS
         };
 
         VkPipelineMultisampleStateCreateInfoWrapper {
-            create_info: vks::VkPipelineMultisampleStateCreateInfo {
+            vks_struct: vks::VkPipelineMultisampleStateCreateInfo {
                 sType: vks::VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO,
                 pNext: ptr::null(),
                 flags: create_info.flags,
@@ -7122,27 +6681,13 @@ impl<'a> From<&'a vks::VkPipelineDepthStencilStateCreateInfo> for PipelineDepthS
 
 #[derive(Debug)]
 struct VkPipelineDepthStencilStateCreateInfoWrapper {
-    create_info: vks::VkPipelineDepthStencilStateCreateInfo,
-}
-
-impl Deref for VkPipelineDepthStencilStateCreateInfoWrapper {
-    type Target = vks::VkPipelineDepthStencilStateCreateInfo;
-
-    fn deref(&self) -> &Self::Target {
-        &self.create_info
-    }
-}
-
-impl AsRef<vks::VkPipelineDepthStencilStateCreateInfo> for VkPipelineDepthStencilStateCreateInfoWrapper {
-    fn as_ref(&self) -> &vks::VkPipelineDepthStencilStateCreateInfo {
-        &self.create_info
-    }
+    pub vks_struct: vks::VkPipelineDepthStencilStateCreateInfo,
 }
 
 impl<'a> From<&'a PipelineDepthStencilStateCreateInfo> for VkPipelineDepthStencilStateCreateInfoWrapper {
     fn from(create_info: &'a PipelineDepthStencilStateCreateInfo) -> Self {
         VkPipelineDepthStencilStateCreateInfoWrapper {
-            create_info: vks::VkPipelineDepthStencilStateCreateInfo {
+            vks_struct: vks::VkPipelineDepthStencilStateCreateInfo {
                 sType: vks::VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO,
                 pNext: ptr::null(),
                 flags: create_info.flags,
@@ -7248,22 +6793,8 @@ impl<'a> From<&'a vks::VkPipelineColorBlendStateCreateInfo> for PipelineColorBle
 
 #[derive(Debug)]
 struct VkPipelineColorBlendStateCreateInfoWrapper {
-    create_info: vks::VkPipelineColorBlendStateCreateInfo,
+    pub vks_struct: vks::VkPipelineColorBlendStateCreateInfo,
     attachments: Option<Vec<vks::VkPipelineColorBlendAttachmentState>>,
-}
-
-impl Deref for VkPipelineColorBlendStateCreateInfoWrapper {
-    type Target = vks::VkPipelineColorBlendStateCreateInfo;
-
-    fn deref(&self) -> &Self::Target {
-        &self.create_info
-    }
-}
-
-impl AsRef<vks::VkPipelineColorBlendStateCreateInfo> for VkPipelineColorBlendStateCreateInfoWrapper {
-    fn as_ref(&self) -> &vks::VkPipelineColorBlendStateCreateInfo {
-        &self.create_info
-    }
 }
 
 impl<'a> From<&'a PipelineColorBlendStateCreateInfo> for VkPipelineColorBlendStateCreateInfoWrapper {
@@ -7278,7 +6809,7 @@ impl<'a> From<&'a PipelineColorBlendStateCreateInfo> for VkPipelineColorBlendSta
         };
 
         VkPipelineColorBlendStateCreateInfoWrapper {
-            create_info: vks::VkPipelineColorBlendStateCreateInfo {
+            vks_struct: vks::VkPipelineColorBlendStateCreateInfo {
                 sType: vks::VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO,
                 pNext: ptr::null(),
                 flags: create_info.flags,
@@ -7328,22 +6859,8 @@ impl<'a> From<&'a vks::VkPipelineDynamicStateCreateInfo> for PipelineDynamicStat
 
 #[derive(Debug)]
 struct VkPipelineDynamicStateCreateInfoWrapper {
-    create_info: vks::VkPipelineDynamicStateCreateInfo,
+    pub vks_struct: vks::VkPipelineDynamicStateCreateInfo,
     dynamic_states: Vec<vks::VkDynamicState>,
-}
-
-impl Deref for VkPipelineDynamicStateCreateInfoWrapper {
-    type Target = vks::VkPipelineDynamicStateCreateInfo;
-
-    fn deref(&self) -> &Self::Target {
-        &self.create_info
-    }
-}
-
-impl AsRef<vks::VkPipelineDynamicStateCreateInfo> for VkPipelineDynamicStateCreateInfoWrapper {
-    fn as_ref(&self) -> &vks::VkPipelineDynamicStateCreateInfo {
-        &self.create_info
-    }
 }
 
 impl<'a> From<&'a PipelineDynamicStateCreateInfo> for VkPipelineDynamicStateCreateInfoWrapper {
@@ -7355,7 +6872,7 @@ impl<'a> From<&'a PipelineDynamicStateCreateInfo> for VkPipelineDynamicStateCrea
             .collect();
 
         VkPipelineDynamicStateCreateInfoWrapper {
-            create_info: vks::VkPipelineDynamicStateCreateInfo {
+            vks_struct: vks::VkPipelineDynamicStateCreateInfo {
                 sType: vks::VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO,
                 pNext: ptr::null(),
                 flags: create_info.flags,
@@ -7396,7 +6913,7 @@ pub struct GraphicsPipelineCreateInfo {
 
 #[derive(Debug)]
 struct VkGraphicsPipelineCreateInfoWrapper {
-    create_info: vks::VkGraphicsPipelineCreateInfo,
+    pub vks_struct: vks::VkGraphicsPipelineCreateInfo,
     stages: Vec<VkPipelineShaderStageCreateInfoWrapper>,
     vk_stages: Vec<vks::VkPipelineShaderStageCreateInfo>,
     vertex_input_state: Box<VkPipelineVertexInputStateCreateInfoWrapper>,
@@ -7413,31 +6930,17 @@ struct VkGraphicsPipelineCreateInfoWrapper {
     base_pipeline: Option<Pipeline>,
 }
 
-impl Deref for VkGraphicsPipelineCreateInfoWrapper {
-    type Target = vks::VkGraphicsPipelineCreateInfo;
-
-    fn deref(&self) -> &Self::Target {
-        &self.create_info
-    }
-}
-
-impl AsRef<vks::VkGraphicsPipelineCreateInfo> for VkGraphicsPipelineCreateInfoWrapper {
-    fn as_ref(&self) -> &vks::VkGraphicsPipelineCreateInfo {
-        &self.create_info
-    }
-}
-
 impl<'a> From<&'a GraphicsPipelineCreateInfo> for VkGraphicsPipelineCreateInfoWrapper {
     fn from(create_info: &'a GraphicsPipelineCreateInfo) -> Self {
-        let stages: Vec<_> = create_info.stages.iter().map(From::from).collect();
-        let vk_stages: Vec<_> = stages.iter().map(AsRef::as_ref).cloned().collect();
+        let stages: Vec<VkPipelineShaderStageCreateInfoWrapper> = create_info.stages.iter().map(From::from).collect();
+        let vk_stages: Vec<_> = stages.iter().map(|s| s.vks_struct).collect();
         let vertex_input_state: Box<VkPipelineVertexInputStateCreateInfoWrapper> = Box::new((&create_info.vertex_input_state).into());
         let input_assembly_state: Box<VkPipelineInputAssemblyStateCreateInfoWrapper> = Box::new((&create_info.input_assembly_state).into());
 
         let (tessellation_state_ptr, tessellation_state) = match create_info.tessellation_state {
             Some(ref tessellation_state) => {
                 let tessellation_state: Box<VkPipelineTessellationStateCreateInfoWrapper> = Box::new(tessellation_state.into());
-                (&**tessellation_state as *const _, Some(tessellation_state))
+                (&tessellation_state.vks_struct as *const _, Some(tessellation_state))
             }
 
             None => (ptr::null(), None),
@@ -7446,7 +6949,7 @@ impl<'a> From<&'a GraphicsPipelineCreateInfo> for VkGraphicsPipelineCreateInfoWr
         let (viewport_state_ptr, viewport_state) = match create_info.viewport_state {
             Some(ref viewport_state) => {
                 let viewport_state: Box<VkPipelineViewportStateCreateInfoWrapper> = Box::new(viewport_state.into());
-                (&**viewport_state as *const _, Some(viewport_state))
+                (&viewport_state.vks_struct as *const _, Some(viewport_state))
             }
 
             None => (ptr::null(), None),
@@ -7457,7 +6960,7 @@ impl<'a> From<&'a GraphicsPipelineCreateInfo> for VkGraphicsPipelineCreateInfoWr
         let (multisample_state_ptr, multisample_state) = match create_info.multisample_state {
             Some(ref multisample_state) => {
                 let multisample_state: Box<VkPipelineMultisampleStateCreateInfoWrapper> = Box::new(multisample_state.into());
-                (&**multisample_state as *const _, Some(multisample_state))
+                (&multisample_state.vks_struct as *const _, Some(multisample_state))
             }
 
             None => (ptr::null(), None),
@@ -7466,7 +6969,7 @@ impl<'a> From<&'a GraphicsPipelineCreateInfo> for VkGraphicsPipelineCreateInfoWr
         let (depth_stencil_state_ptr, depth_stencil_state) = match create_info.depth_stencil_state {
             Some(ref depth_stencil_state) => {
                 let depth_stencil_state: Box<VkPipelineDepthStencilStateCreateInfoWrapper> = Box::new(depth_stencil_state.into());
-                (&**depth_stencil_state as *const _, Some(depth_stencil_state))
+                (&depth_stencil_state.vks_struct as *const _, Some(depth_stencil_state))
             }
 
             None => (ptr::null(), None),
@@ -7475,7 +6978,7 @@ impl<'a> From<&'a GraphicsPipelineCreateInfo> for VkGraphicsPipelineCreateInfoWr
         let (color_blend_state_ptr, color_blend_state) = match create_info.color_blend_state {
             Some(ref color_blend_state) => {
                 let color_blend_state: Box<VkPipelineColorBlendStateCreateInfoWrapper> = Box::new(color_blend_state.into());
-                (&**color_blend_state as *const _, Some(color_blend_state))
+                (&color_blend_state.vks_struct as *const _, Some(color_blend_state))
             }
 
             None => (ptr::null(), None),
@@ -7484,7 +6987,7 @@ impl<'a> From<&'a GraphicsPipelineCreateInfo> for VkGraphicsPipelineCreateInfoWr
         let (dynamic_state_ptr, dynamic_state) = match create_info.dynamic_state {
             Some(ref dynamic_state) => {
                 let dynamic_state: Box<VkPipelineDynamicStateCreateInfoWrapper> = Box::new(dynamic_state.into());
-                (&**dynamic_state as *const _, Some(dynamic_state))
+                (&dynamic_state.vks_struct as *const _, Some(dynamic_state))
             }
 
             None => (ptr::null(), None),
@@ -7501,17 +7004,17 @@ impl<'a> From<&'a GraphicsPipelineCreateInfo> for VkGraphicsPipelineCreateInfoWr
         };
 
         VkGraphicsPipelineCreateInfoWrapper {
-            create_info: vks::VkGraphicsPipelineCreateInfo {
+            vks_struct: vks::VkGraphicsPipelineCreateInfo {
                 sType: vks::VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO,
                 pNext: ptr::null(),
                 flags: create_info.flags,
                 stageCount: stages.len() as u32,
                 pStages: vk_stages.as_ptr(),
-                pVertexInputState: &**vertex_input_state,
-                pInputAssemblyState: &**input_assembly_state,
+                pVertexInputState: &vertex_input_state.vks_struct,
+                pInputAssemblyState: &input_assembly_state.vks_struct,
                 pTessellationState: tessellation_state_ptr,
                 pViewportState: viewport_state_ptr,
-                pRasterizationState: &**rasterization_state,
+                pRasterizationState: &rasterization_state.vks_struct,
                 pMultisampleState: multisample_state_ptr,
                 pDepthStencilState: depth_stencil_state_ptr,
                 pColorBlendState: color_blend_state_ptr,
@@ -7558,24 +7061,10 @@ pub struct ComputePipelineCreateInfo {
 
 #[derive(Debug)]
 struct VkComputePipelineCreateInfoWrapper {
-    create_info: vks::VkComputePipelineCreateInfo,
+    pub vks_struct: vks::VkComputePipelineCreateInfo,
     stage: VkPipelineShaderStageCreateInfoWrapper,
     layout: PipelineLayout,
     base_pipeline: Option<Pipeline>,
-}
-
-impl Deref for VkComputePipelineCreateInfoWrapper {
-    type Target = vks::VkComputePipelineCreateInfo;
-
-    fn deref(&self) -> &Self::Target {
-        &self.create_info
-    }
-}
-
-impl AsRef<vks::VkComputePipelineCreateInfo> for VkComputePipelineCreateInfoWrapper {
-    fn as_ref(&self) -> &vks::VkComputePipelineCreateInfo {
-        &self.create_info
-    }
 }
 
 impl<'a> From<&'a ComputePipelineCreateInfo> for VkComputePipelineCreateInfoWrapper {
@@ -7593,11 +7082,11 @@ impl<'a> From<&'a ComputePipelineCreateInfo> for VkComputePipelineCreateInfoWrap
         };
 
         VkComputePipelineCreateInfoWrapper {
-            create_info: vks::VkComputePipelineCreateInfo {
+            vks_struct: vks::VkComputePipelineCreateInfo {
                 sType: vks::VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO,
                 pNext: ptr::null(),
                 flags: create_info.flags,
-                stage: *stage,
+                stage: stage.vks_struct,
                 layout: create_info.layout.handle(),
                 basePipelineHandle: base_pipeline_handle,
                 basePipelineIndex: base_pipeline_index,
@@ -7653,24 +7142,10 @@ pub struct PipelineLayoutCreateInfo {
 
 #[derive(Debug)]
 struct VkPipelineLayoutCreateInfoWrapper {
-    create_info: vks::VkPipelineLayoutCreateInfo,
+    pub vks_struct: vks::VkPipelineLayoutCreateInfo,
     set_layouts: Option<Vec<DescriptorSetLayout>>,
     vk_set_layouts: Option<Vec<vks::VkDescriptorSetLayout>>,
     push_constant_ranges: Option<Vec<vks::VkPushConstantRange>>,
-}
-
-impl Deref for VkPipelineLayoutCreateInfoWrapper {
-    type Target = vks::VkPipelineLayoutCreateInfo;
-
-    fn deref(&self) -> &Self::Target {
-        &self.create_info
-    }
-}
-
-impl AsRef<vks::VkPipelineLayoutCreateInfo> for VkPipelineLayoutCreateInfoWrapper {
-    fn as_ref(&self) -> &vks::VkPipelineLayoutCreateInfo {
-        &self.create_info
-    }
 }
 
 impl<'a> From<&'a PipelineLayoutCreateInfo> for VkPipelineLayoutCreateInfoWrapper {
@@ -7695,7 +7170,7 @@ impl<'a> From<&'a PipelineLayoutCreateInfo> for VkPipelineLayoutCreateInfoWrappe
         };
 
         VkPipelineLayoutCreateInfoWrapper {
-            create_info: vks::VkPipelineLayoutCreateInfo {
+            vks_struct: vks::VkPipelineLayoutCreateInfo {
                 sType: vks::VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO,
                 pNext: ptr::null(),
                 flags: create_info.flags,
@@ -7766,27 +7241,13 @@ impl<'a> From<&'a vks::VkSamplerCreateInfo> for SamplerCreateInfo {
 
 #[derive(Debug)]
 struct VkSamplerCreateInfoWrapper {
-    create_info: vks::VkSamplerCreateInfo,
-}
-
-impl Deref for VkSamplerCreateInfoWrapper {
-    type Target = vks::VkSamplerCreateInfo;
-
-    fn deref(&self) -> &Self::Target {
-        &self.create_info
-    }
-}
-
-impl AsRef<vks::VkSamplerCreateInfo> for VkSamplerCreateInfoWrapper {
-    fn as_ref(&self) -> &vks::VkSamplerCreateInfo {
-        &self.create_info
-    }
+    pub vks_struct: vks::VkSamplerCreateInfo,
 }
 
 impl<'a> From<&'a SamplerCreateInfo> for VkSamplerCreateInfoWrapper {
     fn from(create_info: &'a SamplerCreateInfo) -> Self {
         VkSamplerCreateInfoWrapper {
-            create_info: vks::VkSamplerCreateInfo {
+            vks_struct: vks::VkSamplerCreateInfo {
                 sType: vks::VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO,
                 pNext: ptr::null(),
                 flags: create_info.flags,
@@ -7822,23 +7283,9 @@ pub struct DescriptorSetLayoutBinding {
 
 #[derive(Debug)]
 struct VkDescriptorSetLayoutBindingWrapper {
-    binding: vks::VkDescriptorSetLayoutBinding,
+    pub vks_struct: vks::VkDescriptorSetLayoutBinding,
     immutable_samplers: Option<Vec<Sampler>>,
     immutable_vk_samplers: Option<Vec<vks::VkSampler>>,
-}
-
-impl Deref for VkDescriptorSetLayoutBindingWrapper {
-    type Target = vks::VkDescriptorSetLayoutBinding;
-
-    fn deref(&self) -> &Self::Target {
-        &self.binding
-    }
-}
-
-impl AsRef<vks::VkDescriptorSetLayoutBinding> for VkDescriptorSetLayoutBindingWrapper {
-    fn as_ref(&self) -> &vks::VkDescriptorSetLayoutBinding {
-        &self.binding
-    }
 }
 
 impl<'a> From<&'a DescriptorSetLayoutBinding> for VkDescriptorSetLayoutBindingWrapper {
@@ -7853,7 +7300,7 @@ impl<'a> From<&'a DescriptorSetLayoutBinding> for VkDescriptorSetLayoutBindingWr
         });
 
         VkDescriptorSetLayoutBindingWrapper {
-            binding: vks::VkDescriptorSetLayoutBinding {
+            vks_struct: vks::VkDescriptorSetLayoutBinding {
                 binding: binding.binding,
                 descriptorType: binding.descriptor_type.into(),
                 descriptorCount: binding.descriptor_count,
@@ -7881,31 +7328,17 @@ pub struct DescriptorSetLayoutCreateInfo {
 
 #[derive(Debug)]
 struct VkDescriptorSetLayoutCreateInfoWrapper {
-    create_info: vks::VkDescriptorSetLayoutCreateInfo,
+    pub vks_struct: vks::VkDescriptorSetLayoutCreateInfo,
     bindings: Option<Vec<VkDescriptorSetLayoutBindingWrapper>>,
     vk_bindings: Option<Vec<vks::VkDescriptorSetLayoutBinding>>,
-}
-
-impl Deref for VkDescriptorSetLayoutCreateInfoWrapper {
-    type Target = vks::VkDescriptorSetLayoutCreateInfo;
-
-    fn deref(&self) -> &Self::Target {
-        &self.create_info
-    }
-}
-
-impl AsRef<vks::VkDescriptorSetLayoutCreateInfo> for VkDescriptorSetLayoutCreateInfoWrapper {
-    fn as_ref(&self) -> &vks::VkDescriptorSetLayoutCreateInfo {
-        &self.create_info
-    }
 }
 
 impl<'a> From<&'a DescriptorSetLayoutCreateInfo> for VkDescriptorSetLayoutCreateInfoWrapper {
     fn from(create_info: &'a DescriptorSetLayoutCreateInfo) -> Self {
         let (vk_bindings_ptr, binding_count, bindings, vk_bindings) = match create_info.bindings {
             Some(ref bindings) => {
-                let bindings: Vec<_> = bindings.iter().map(From::from).collect();
-                let vk_bindings: Vec<_> = bindings.iter().map(AsRef::as_ref).cloned().collect();
+                let bindings: Vec<VkDescriptorSetLayoutBindingWrapper> = bindings.iter().map(From::from).collect();
+                let vk_bindings: Vec<_> = bindings.iter().map(|b| b.vks_struct).collect();
                 (vk_bindings.as_ptr(), bindings.len() as u32, Some(bindings), Some(vk_bindings))
             }
 
@@ -7913,7 +7346,7 @@ impl<'a> From<&'a DescriptorSetLayoutCreateInfo> for VkDescriptorSetLayoutCreate
         };
 
         VkDescriptorSetLayoutCreateInfoWrapper {
-            create_info: vks::VkDescriptorSetLayoutCreateInfo {
+            vks_struct: vks::VkDescriptorSetLayoutCreateInfo {
                 sType: vks::VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO,
                 pNext: ptr::null(),
                 flags: create_info.flags,
@@ -7987,22 +7420,8 @@ impl<'a> From<&'a vks::VkDescriptorPoolCreateInfo> for DescriptorPoolCreateInfo 
 
 #[derive(Debug)]
 struct VkDescriptorPoolCreateInfoWrapper {
-    create_info: vks::VkDescriptorPoolCreateInfo,
+    pub vks_struct: vks::VkDescriptorPoolCreateInfo,
     pool_sizes: Vec<vks::VkDescriptorPoolSize>,
-}
-
-impl Deref for VkDescriptorPoolCreateInfoWrapper {
-    type Target = vks::VkDescriptorPoolCreateInfo;
-
-    fn deref(&self) -> &Self::Target {
-        &self.create_info
-    }
-}
-
-impl AsRef<vks::VkDescriptorPoolCreateInfo> for VkDescriptorPoolCreateInfoWrapper {
-    fn as_ref(&self) -> &vks::VkDescriptorPoolCreateInfo {
-        &self.create_info
-    }
 }
 
 impl<'a> From<&'a DescriptorPoolCreateInfo> for VkDescriptorPoolCreateInfoWrapper {
@@ -8013,7 +7432,7 @@ impl<'a> From<&'a DescriptorPoolCreateInfo> for VkDescriptorPoolCreateInfoWrappe
             .collect();
 
         VkDescriptorPoolCreateInfoWrapper {
-            create_info: vks::VkDescriptorPoolCreateInfo {
+            vks_struct: vks::VkDescriptorPoolCreateInfo {
                 sType: vks::VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO,
                 pNext: ptr::null(),
                 flags: create_info.flags,
@@ -8041,24 +7460,10 @@ pub struct DescriptorSetAllocateInfo {
 
 #[derive(Debug)]
 struct VkDescriptorSetAllocateInfoWrapper {
-    allocate_info: vks::VkDescriptorSetAllocateInfo,
+    pub vks_struct: vks::VkDescriptorSetAllocateInfo,
     descriptor_pool: DescriptorPool,
     set_layouts: Vec<DescriptorSetLayout>,
     vk_set_layouts: Vec<vks::VkDescriptorSetLayout>,
-}
-
-impl Deref for VkDescriptorSetAllocateInfoWrapper {
-    type Target = vks::VkDescriptorSetAllocateInfo;
-
-    fn deref(&self) -> &Self::Target {
-        &self.allocate_info
-    }
-}
-
-impl AsRef<vks::VkDescriptorSetAllocateInfo> for VkDescriptorSetAllocateInfoWrapper {
-    fn as_ref(&self) -> &vks::VkDescriptorSetAllocateInfo {
-        &self.allocate_info
-    }
 }
 
 impl<'a> From<&'a DescriptorSetAllocateInfo> for VkDescriptorSetAllocateInfoWrapper {
@@ -8066,7 +7471,7 @@ impl<'a> From<&'a DescriptorSetAllocateInfo> for VkDescriptorSetAllocateInfoWrap
         let vk_set_layouts: Vec<_> = allocate_info.set_layouts.iter().map(DescriptorSetLayout::handle).collect();
 
         VkDescriptorSetAllocateInfoWrapper {
-            allocate_info: vks::VkDescriptorSetAllocateInfo {
+            vks_struct: vks::VkDescriptorSetAllocateInfo {
                 sType: vks::VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO,
                 pNext: ptr::null(),
                 descriptorPool: allocate_info.descriptor_pool.handle(),
@@ -8090,23 +7495,9 @@ pub struct DescriptorImageInfo {
 
 #[derive(Debug)]
 struct VkDescriptorImageInfoWrapper {
-    info: vks::VkDescriptorImageInfo,
+    pub vks_struct: vks::VkDescriptorImageInfo,
     sampler: Option<Sampler>,
     image_view: Option<ImageView>,
-}
-
-impl Deref for VkDescriptorImageInfoWrapper {
-    type Target = vks::VkDescriptorImageInfo;
-
-    fn deref(&self) -> &Self::Target {
-        &self.info
-    }
-}
-
-impl AsRef<vks::VkDescriptorImageInfo> for VkDescriptorImageInfoWrapper {
-    fn as_ref(&self) -> &vks::VkDescriptorImageInfo {
-        &self.info
-    }
 }
 
 impl<'a> From<&'a DescriptorImageInfo> for VkDescriptorImageInfoWrapper {
@@ -8122,7 +7513,7 @@ impl<'a> From<&'a DescriptorImageInfo> for VkDescriptorImageInfoWrapper {
         };
 
         VkDescriptorImageInfoWrapper {
-            info: vks::VkDescriptorImageInfo {
+            vks_struct: vks::VkDescriptorImageInfo {
                 sampler: vk_sampler,
                 imageView: vk_image_view,
                 imageLayout: info.image_layout.into(),
@@ -8143,28 +7534,14 @@ pub struct DescriptorBufferInfo {
 
 #[derive(Debug)]
 struct VkDescriptorBufferInfoWrapper {
-    info: vks::VkDescriptorBufferInfo,
+    pub vks_struct: vks::VkDescriptorBufferInfo,
     buffer: Buffer,
-}
-
-impl Deref for VkDescriptorBufferInfoWrapper {
-    type Target = vks::VkDescriptorBufferInfo;
-
-    fn deref(&self) -> &Self::Target {
-        &self.info
-    }
-}
-
-impl AsRef<vks::VkDescriptorBufferInfo> for VkDescriptorBufferInfoWrapper {
-    fn as_ref(&self) -> &vks::VkDescriptorBufferInfo {
-        &self.info
-    }
 }
 
 impl<'a> From<&'a DescriptorBufferInfo> for VkDescriptorBufferInfoWrapper {
     fn from(info: &'a DescriptorBufferInfo) -> Self {
         VkDescriptorBufferInfoWrapper {
-            info: vks::VkDescriptorBufferInfo {
+            vks_struct: vks::VkDescriptorBufferInfo {
                 buffer: info.buffer.handle(),
                 offset: info.offset,
                 range: info.range.into(),
@@ -8200,7 +7577,7 @@ pub struct WriteDescriptorSet {
 
 #[derive(Debug)]
 struct VkWriteDescriptorSetWrapper {
-    write: vks::VkWriteDescriptorSet,
+    pub vks_struct: vks::VkWriteDescriptorSet,
     dst_set: DescriptorSet,
     image_info: Option<Vec<VkDescriptorImageInfoWrapper>>,
     vk_image_info: Option<Vec<vks::VkDescriptorImageInfo>>,
@@ -8208,20 +7585,6 @@ struct VkWriteDescriptorSetWrapper {
     vk_buffer_info: Option<Vec<vks::VkDescriptorBufferInfo>>,
     texel_buffer_view: Option<Vec<BufferView>>,
     vk_texel_buffer_view: Option<Vec<vks::VkBufferView>>,
-}
-
-impl Deref for VkWriteDescriptorSetWrapper {
-    type Target = vks::VkWriteDescriptorSet;
-
-    fn deref(&self) -> &Self::Target {
-        &self.write
-    }
-}
-
-impl AsRef<vks::VkWriteDescriptorSet> for VkWriteDescriptorSetWrapper {
-    fn as_ref(&self) -> &vks::VkWriteDescriptorSet {
-        &self.write
-    }
 }
 
 impl<'a> From<&'a WriteDescriptorSet> for VkWriteDescriptorSetWrapper {
@@ -8238,13 +7601,13 @@ impl<'a> From<&'a WriteDescriptorSet> for VkWriteDescriptorSetWrapper {
              texel_buffer_view) = match write.elements {
             WriteDescriptorSetElements::ImageInfo(ref image_info) => {
                 let image_info: Vec<VkDescriptorImageInfoWrapper> = image_info.iter().map(From::from).collect();
-                let vk_image_info: Vec<_> = image_info.iter().map(AsRef::as_ref).cloned().collect();
+                let vk_image_info: Vec<_> = image_info.iter().map(|i| i.vks_struct).collect();
                 (image_info.len() as u32, vk_image_info.as_ptr(), Some(vk_image_info), Some(image_info), ptr::null(), None, None, ptr::null(), None, None)
             },
 
             WriteDescriptorSetElements::BufferInfo(ref buffer_info) => {
                 let buffer_info: Vec<VkDescriptorBufferInfoWrapper> = buffer_info.iter().map(From::from).collect();
-                let vk_buffer_info: Vec<_> = buffer_info.iter().map(AsRef::as_ref).cloned().collect();
+                let vk_buffer_info: Vec<_> = buffer_info.iter().map(|b| b.vks_struct).collect();
                 (buffer_info.len() as u32, ptr::null(), None, None, vk_buffer_info.as_ptr(), Some(vk_buffer_info), Some(buffer_info), ptr::null(), None, None)
             },
 
@@ -8256,7 +7619,7 @@ impl<'a> From<&'a WriteDescriptorSet> for VkWriteDescriptorSetWrapper {
         };
 
         VkWriteDescriptorSetWrapper {
-            write: vks::VkWriteDescriptorSet {
+            vks_struct: vks::VkWriteDescriptorSet {
                 sType: vks::VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET,
                 pNext: ptr::null(),
                 dstSet: write.dst_set.handle(),
@@ -8299,29 +7662,15 @@ pub struct CopyDescriptorSet {
 
 #[derive(Debug)]
 struct VkCopyDescriptorSetWrapper {
-    copy: vks::VkCopyDescriptorSet,
+    pub vks_struct: vks::VkCopyDescriptorSet,
     src_set: DescriptorSet,
     dst_set: DescriptorSet,
-}
-
-impl Deref for VkCopyDescriptorSetWrapper {
-    type Target = vks::VkCopyDescriptorSet;
-
-    fn deref(&self) -> &Self::Target {
-        &self.copy
-    }
-}
-
-impl AsRef<vks::VkCopyDescriptorSet> for VkCopyDescriptorSetWrapper {
-    fn as_ref(&self) -> &vks::VkCopyDescriptorSet {
-        &self.copy
-    }
 }
 
 impl<'a> From<&'a CopyDescriptorSet> for VkCopyDescriptorSetWrapper {
     fn from(copy: &'a CopyDescriptorSet) -> Self {
         VkCopyDescriptorSetWrapper {
-            copy: vks::VkCopyDescriptorSet {
+            vks_struct: vks::VkCopyDescriptorSet {
                 sType: vks::VK_STRUCTURE_TYPE_COPY_DESCRIPTOR_SET,
                 pNext: ptr::null(),
                 srcSet: copy.src_set.handle(),
@@ -8357,24 +7706,10 @@ pub struct FramebufferCreateInfo {
 
 #[derive(Debug)]
 struct VkFramebufferCreateInfoWrapper {
-    create_info: vks::VkFramebufferCreateInfo,
+    pub vks_struct: vks::VkFramebufferCreateInfo,
     render_pass: RenderPass,
     attachments: Option<Vec<ImageView>>,
     vk_attachments: Option<Vec<vks::VkImageView>>,
-}
-
-impl Deref for VkFramebufferCreateInfoWrapper {
-    type Target = vks::VkFramebufferCreateInfo;
-
-    fn deref(&self) -> &Self::Target {
-        &self.create_info
-    }
-}
-
-impl AsRef<vks::VkFramebufferCreateInfo> for VkFramebufferCreateInfoWrapper {
-    fn as_ref(&self) -> &vks::VkFramebufferCreateInfo {
-        &self.create_info
-    }
 }
 
 impl<'a> From<&'a FramebufferCreateInfo> for VkFramebufferCreateInfoWrapper {
@@ -8390,7 +7725,7 @@ impl<'a> From<&'a FramebufferCreateInfo> for VkFramebufferCreateInfoWrapper {
         };
 
         VkFramebufferCreateInfoWrapper {
-            create_info: vks::VkFramebufferCreateInfo {
+            vks_struct: vks::VkFramebufferCreateInfo {
                 sType: vks::VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO,
                 pNext: ptr::null(),
                 flags: create_info.flags,
@@ -8561,26 +7896,12 @@ impl<'a> From<&'a vks::VkSubpassDescription> for SubpassDescription {
 
 #[derive(Debug)]
 struct VkSubpassDescriptionWrapper {
-    description: vks::VkSubpassDescription,
+    pub vks_struct: vks::VkSubpassDescription,
     input_attachments: Option<Vec<vks::VkAttachmentReference>>,
     color_attachments: Option<Vec<vks::VkAttachmentReference>>,
     resolve_attachments: Option<Vec<vks::VkAttachmentReference>>,
     depth_stencil_attachment: Option<Box<vks::VkAttachmentReference>>,
     preserve_attachments: Option<Vec<u32>>,
-}
-
-impl Deref for VkSubpassDescriptionWrapper {
-    type Target = vks::VkSubpassDescription;
-
-    fn deref(&self) -> &Self::Target {
-        &self.description
-    }
-}
-
-impl AsRef<vks::VkSubpassDescription> for VkSubpassDescriptionWrapper {
-    fn as_ref(&self) -> &vks::VkSubpassDescription {
-        &self.description
-    }
 }
 
 impl<'a> From<&'a SubpassDescription> for VkSubpassDescriptionWrapper {
@@ -8631,7 +7952,7 @@ impl<'a> From<&'a SubpassDescription> for VkSubpassDescriptionWrapper {
         };
 
         VkSubpassDescriptionWrapper {
-            description: vks::VkSubpassDescription {
+            vks_struct: vks::VkSubpassDescription {
                 flags: description.flags,
                 pipelineBindPoint: description.pipeline_bind_point.into(),
                 inputAttachmentCount: input_attachments_count,
@@ -8754,25 +8075,11 @@ impl<'a> From<&'a vks::VkRenderPassCreateInfo> for RenderPassCreateInfo {
 
 #[derive(Debug)]
 struct VkRenderPassCreateInfoWrapper {
-    create_info: vks::VkRenderPassCreateInfo,
+    pub vks_struct: vks::VkRenderPassCreateInfo,
     attachments: Option<Vec<vks::VkAttachmentDescription>>,
     subpasses: Vec<VkSubpassDescriptionWrapper>,
     vk_subpasses: Vec<vks::VkSubpassDescription>,
     dependencies: Option<Vec<vks::VkSubpassDependency>>,
-}
-
-impl Deref for VkRenderPassCreateInfoWrapper {
-    type Target = vks::VkRenderPassCreateInfo;
-
-    fn deref(&self) -> &Self::Target {
-        &self.create_info
-    }
-}
-
-impl AsRef<vks::VkRenderPassCreateInfo> for VkRenderPassCreateInfoWrapper {
-    fn as_ref(&self) -> &vks::VkRenderPassCreateInfo {
-        &self.create_info
-    }
 }
 
 impl<'a> From<&'a RenderPassCreateInfo> for VkRenderPassCreateInfoWrapper {
@@ -8787,7 +8094,7 @@ impl<'a> From<&'a RenderPassCreateInfo> for VkRenderPassCreateInfoWrapper {
         };
 
         let subpasses: Vec<VkSubpassDescriptionWrapper> = create_info.subpasses.iter().map(From::from).collect();
-        let vk_subpasses: Vec<vks::VkSubpassDescription> = subpasses.iter().map(AsRef::as_ref).cloned().collect();
+        let vk_subpasses: Vec<vks::VkSubpassDescription> = subpasses.iter().map(|s| s.vks_struct).collect();
 
         let (dependencies_count, dependencies_ptr, dependencies) = match create_info.dependencies {
             Some(ref dependencies) => {
@@ -8799,7 +8106,7 @@ impl<'a> From<&'a RenderPassCreateInfo> for VkRenderPassCreateInfoWrapper {
         };
 
         VkRenderPassCreateInfoWrapper {
-            create_info: vks::VkRenderPassCreateInfo {
+            vks_struct: vks::VkRenderPassCreateInfo {
                 sType: vks::VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO,
                 pNext: ptr::null(),
                 flags: create_info.flags,
@@ -8845,27 +8152,13 @@ impl<'a> From<&'a vks::VkCommandPoolCreateInfo> for CommandPoolCreateInfo {
 
 #[derive(Debug)]
 struct VkCommandPoolCreateInfoWrapper {
-    create_info: vks::VkCommandPoolCreateInfo,
-}
-
-impl Deref for VkCommandPoolCreateInfoWrapper {
-    type Target = vks::VkCommandPoolCreateInfo;
-
-    fn deref(&self) -> &Self::Target {
-        &self.create_info
-    }
-}
-
-impl AsRef<vks::VkCommandPoolCreateInfo> for VkCommandPoolCreateInfoWrapper {
-    fn as_ref(&self) -> &vks::VkCommandPoolCreateInfo {
-        &self.create_info
-    }
+    pub vks_struct: vks::VkCommandPoolCreateInfo,
 }
 
 impl<'a> From<&'a CommandPoolCreateInfo> for VkCommandPoolCreateInfoWrapper {
     fn from(create_info: &'a CommandPoolCreateInfo) -> Self {
         VkCommandPoolCreateInfoWrapper {
-            create_info: vks::VkCommandPoolCreateInfo {
+            vks_struct: vks::VkCommandPoolCreateInfo {
                 sType: vks::VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO,
                 pNext: ptr::null(),
                 flags: create_info.flags,
@@ -8891,28 +8184,14 @@ pub struct CommandBufferAllocateInfo {
 
 #[derive(Debug)]
 struct VkCommandBufferAllocateInfoWrapper {
-    info: vks::VkCommandBufferAllocateInfo,
+    pub vks_struct: vks::VkCommandBufferAllocateInfo,
     command_pool: CommandPool,
-}
-
-impl Deref for VkCommandBufferAllocateInfoWrapper {
-    type Target = vks::VkCommandBufferAllocateInfo;
-
-    fn deref(&self) -> &Self::Target {
-        &self.info
-    }
-}
-
-impl AsRef<vks::VkCommandBufferAllocateInfo> for VkCommandBufferAllocateInfoWrapper {
-    fn as_ref(&self) -> &vks::VkCommandBufferAllocateInfo {
-        &self.info
-    }
 }
 
 impl<'a> From<&'a CommandBufferAllocateInfo> for VkCommandBufferAllocateInfoWrapper {
     fn from(info: &'a CommandBufferAllocateInfo) -> Self {
         VkCommandBufferAllocateInfoWrapper {
-            info: vks::VkCommandBufferAllocateInfo {
+            vks_struct: vks::VkCommandBufferAllocateInfo {
                 sType: vks::VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO,
                 pNext: ptr::null(),
                 commandPool: info.command_pool.handle(),
@@ -8943,23 +8222,9 @@ pub struct CommandBufferInheritanceInfo {
 
 #[derive(Debug)]
 struct VkCommandBufferInheritanceInfoWrapper {
-    info: vks::VkCommandBufferInheritanceInfo,
+    pub vks_struct: vks::VkCommandBufferInheritanceInfo,
     render_pass: Option<RenderPass>,
     framebuffer: Option<Framebuffer>,
-}
-
-impl Deref for VkCommandBufferInheritanceInfoWrapper {
-    type Target = vks::VkCommandBufferInheritanceInfo;
-
-    fn deref(&self) -> &Self::Target {
-        &self.info
-    }
-}
-
-impl AsRef<vks::VkCommandBufferInheritanceInfo> for VkCommandBufferInheritanceInfoWrapper {
-    fn as_ref(&self) -> &vks::VkCommandBufferInheritanceInfo {
-        &self.info
-    }
 }
 
 impl<'a> From<&'a CommandBufferInheritanceInfo> for VkCommandBufferInheritanceInfoWrapper {
@@ -8975,7 +8240,7 @@ impl<'a> From<&'a CommandBufferInheritanceInfo> for VkCommandBufferInheritanceIn
         };
 
         VkCommandBufferInheritanceInfoWrapper {
-            info: vks::VkCommandBufferInheritanceInfo {
+            vks_struct: vks::VkCommandBufferInheritanceInfo {
                 sType: vks::VK_STRUCTURE_TYPE_COMMAND_BUFFER_INHERITANCE_INFO,
                 pNext: ptr::null(),
                 renderPass: render_pass_handle,
@@ -9006,22 +8271,8 @@ pub struct CommandBufferBeginInfo {
 
 #[derive(Debug)]
 struct VkCommandBufferBeginInfoWrapper {
-    begin_info: vks::VkCommandBufferBeginInfo,
+    pub vks_struct: vks::VkCommandBufferBeginInfo,
     inheritance_info: Option<Box<VkCommandBufferInheritanceInfoWrapper>>,
-}
-
-impl Deref for VkCommandBufferBeginInfoWrapper {
-    type Target = vks::VkCommandBufferBeginInfo;
-
-    fn deref(&self) -> &Self::Target {
-        &self.begin_info
-    }
-}
-
-impl AsRef<vks::VkCommandBufferBeginInfo> for VkCommandBufferBeginInfoWrapper {
-    fn as_ref(&self) -> &vks::VkCommandBufferBeginInfo {
-        &self.begin_info
-    }
 }
 
 impl<'a> From<&'a CommandBufferBeginInfo> for VkCommandBufferBeginInfoWrapper {
@@ -9029,14 +8280,14 @@ impl<'a> From<&'a CommandBufferBeginInfo> for VkCommandBufferBeginInfoWrapper {
         let (inheritance_info_ptr, inheritance_info) = match begin_info.inheritance_info {
             Some(ref inheritance_info) => {
                 let inheritance_info: Box<VkCommandBufferInheritanceInfoWrapper> = Box::new(inheritance_info.into());
-                (&**inheritance_info as *const _, Some(inheritance_info))
+                (&inheritance_info.vks_struct as *const _, Some(inheritance_info))
             }
 
             None => (ptr::null(), None),
         };
 
         VkCommandBufferBeginInfoWrapper {
-            begin_info: vks::VkCommandBufferBeginInfo {
+            vks_struct: vks::VkCommandBufferBeginInfo {
                 sType: vks::VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO,
                 pNext: ptr::null(),
                 flags: begin_info.flags,
@@ -9392,27 +8643,13 @@ impl<'a> From<&'a vks::VkMemoryBarrier> for MemoryBarrier {
 
 #[derive(Debug)]
 struct VkMemoryBarrierWrapper {
-    barrier: vks::VkMemoryBarrier,
-}
-
-impl Deref for VkMemoryBarrierWrapper {
-    type Target = vks::VkMemoryBarrier;
-
-    fn deref(&self) -> &Self::Target {
-        &self.barrier
-    }
-}
-
-impl AsRef<vks::VkMemoryBarrier> for VkMemoryBarrierWrapper {
-    fn as_ref(&self) -> &vks::VkMemoryBarrier {
-        &self.barrier
-    }
+    pub vks_struct: vks::VkMemoryBarrier,
 }
 
 impl<'a> From<&'a MemoryBarrier> for VkMemoryBarrierWrapper {
     fn from(barrier: &'a MemoryBarrier) -> Self {
         VkMemoryBarrierWrapper {
-            barrier: vks::VkMemoryBarrier {
+            vks_struct: vks::VkMemoryBarrier {
                 sType: vks::VK_STRUCTURE_TYPE_MEMORY_BARRIER,
                 pNext: ptr::null(),
                 srcAccessMask: barrier.src_access_mask,
@@ -9442,28 +8679,14 @@ pub struct BufferMemoryBarrier {
 
 #[derive(Debug)]
 struct VkBufferMemoryBarrierWrapper {
-    barrier: vks::VkBufferMemoryBarrier,
+    pub vks_struct: vks::VkBufferMemoryBarrier,
     buffer: Buffer,
-}
-
-impl Deref for VkBufferMemoryBarrierWrapper {
-    type Target = vks::VkBufferMemoryBarrier;
-
-    fn deref(&self) -> &Self::Target {
-        &self.barrier
-    }
-}
-
-impl AsRef<vks::VkBufferMemoryBarrier> for VkBufferMemoryBarrierWrapper {
-    fn as_ref(&self) -> &vks::VkBufferMemoryBarrier {
-        &self.barrier
-    }
 }
 
 impl<'a> From<&'a BufferMemoryBarrier> for VkBufferMemoryBarrierWrapper {
     fn from(barrier: &'a BufferMemoryBarrier) -> Self {
         VkBufferMemoryBarrierWrapper {
-            barrier: vks::VkBufferMemoryBarrier {
+            vks_struct: vks::VkBufferMemoryBarrier {
                 sType: vks::VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER,
                 pNext: ptr::null(),
                 srcAccessMask: barrier.src_access_mask,
@@ -9500,28 +8723,14 @@ pub struct ImageMemoryBarrier {
 
 #[derive(Debug)]
 struct VkImageMemoryBarrierWrapper {
-    barrier: vks::VkImageMemoryBarrier,
+    pub vks_struct: vks::VkImageMemoryBarrier,
     image: Image,
-}
-
-impl Deref for VkImageMemoryBarrierWrapper {
-    type Target = vks::VkImageMemoryBarrier;
-
-    fn deref(&self) -> &Self::Target {
-        &self.barrier
-    }
-}
-
-impl AsRef<vks::VkImageMemoryBarrier> for VkImageMemoryBarrierWrapper {
-    fn as_ref(&self) -> &vks::VkImageMemoryBarrier {
-        &self.barrier
-    }
 }
 
 impl<'a> From<&'a ImageMemoryBarrier> for VkImageMemoryBarrierWrapper {
     fn from(barrier: &'a ImageMemoryBarrier) -> Self {
         VkImageMemoryBarrierWrapper {
-            barrier: vks::VkImageMemoryBarrier {
+            vks_struct: vks::VkImageMemoryBarrier {
                 sType: vks::VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER,
                 pNext: ptr::null(),
                 srcAccessMask: barrier.src_access_mask,
@@ -9555,24 +8764,10 @@ pub struct RenderPassBeginInfo {
 
 #[derive(Debug)]
 struct VkRenderPassBeginInfoWrapper {
-    begin_info: vks::VkRenderPassBeginInfo,
+    pub vks_struct: vks::VkRenderPassBeginInfo,
     render_pass: RenderPass,
     framebuffer: Framebuffer,
     clear_values: Option<Vec<vks::VkClearValue>>,
-}
-
-impl Deref for VkRenderPassBeginInfoWrapper {
-    type Target = vks::VkRenderPassBeginInfo;
-
-    fn deref(&self) -> &Self::Target {
-        &self.begin_info
-    }
-}
-
-impl AsRef<vks::VkRenderPassBeginInfo> for VkRenderPassBeginInfoWrapper {
-    fn as_ref(&self) -> &vks::VkRenderPassBeginInfo {
-        &self.begin_info
-    }
 }
 
 impl<'a> From<&'a RenderPassBeginInfo> for VkRenderPassBeginInfoWrapper {
@@ -9587,7 +8782,7 @@ impl<'a> From<&'a RenderPassBeginInfo> for VkRenderPassBeginInfoWrapper {
         };
 
         VkRenderPassBeginInfoWrapper {
-            begin_info: vks::VkRenderPassBeginInfo {
+            vks_struct: vks::VkRenderPassBeginInfo {
                 sType: vks::VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO,
                 pNext: ptr::null(),
                 renderPass: begin_info.render_pass.handle(),

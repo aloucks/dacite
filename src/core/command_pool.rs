@@ -90,7 +90,7 @@ impl CommandPool {
         let mut command_buffers = Vec::with_capacity(allocate_info.command_buffer_count as usize);
         let res = unsafe {
             command_buffers.set_len(allocate_info.command_buffer_count as usize);
-            (command_pool.loader().core.vkAllocateCommandBuffers)(command_pool.device_handle(), allocate_info_wrapper.as_ref(), command_buffers.as_mut_ptr())
+            (command_pool.loader().core.vkAllocateCommandBuffers)(command_pool.device_handle(), &allocate_info_wrapper.vks_struct, command_buffers.as_mut_ptr())
         };
 
         if res == vks::VK_SUCCESS {

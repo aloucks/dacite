@@ -70,7 +70,7 @@ impl Instance {
         let create_info_wrapper: core::VkInstanceCreateInfoWrapper = create_info.into();
         let mut instance = ptr::null_mut();
         let res = unsafe {
-            (loader.core_null_instance.vkCreateInstance)(create_info_wrapper.as_ref(), allocation_callbacks, &mut instance)
+            (loader.core_null_instance.vkCreateInstance)(&create_info_wrapper.vks_struct, allocation_callbacks, &mut instance)
         };
         if res != vks::VK_SUCCESS {
             return Err(res.into());

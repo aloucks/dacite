@@ -230,7 +230,7 @@ impl PhysicalDevice {
 
         let mut device = ptr::null_mut();
         let res = unsafe {
-            (self.loader().core.vkCreateDevice)(self.handle, create_info.as_ref(), allocation_callbacks, &mut device)
+            (self.loader().core.vkCreateDevice)(self.handle, &create_info.vks_struct, allocation_callbacks, &mut device)
         };
 
         if res != vks::VK_SUCCESS {

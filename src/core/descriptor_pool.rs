@@ -76,7 +76,7 @@ impl DescriptorPool {
         let mut descriptor_sets = Vec::with_capacity(allocate_info.set_layouts.len());
         let res = unsafe {
             descriptor_sets.set_len(allocate_info.set_layouts.len());
-            (descriptor_pool.loader().core.vkAllocateDescriptorSets)(descriptor_pool.device_handle(), allocate_info_wrapper.as_ref(), descriptor_sets.as_mut_ptr())
+            (descriptor_pool.loader().core.vkAllocateDescriptorSets)(descriptor_pool.device_handle(), &allocate_info_wrapper.vks_struct, descriptor_sets.as_mut_ptr())
         };
 
         if res == vks::VK_SUCCESS {

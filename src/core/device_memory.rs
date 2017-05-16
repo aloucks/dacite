@@ -115,7 +115,7 @@ impl DeviceMemory {
         let device_handle = ranges[0].memory.device_handle();
 
         let ranges_wrappers: Vec<core::VkMappedMemoryRangeWrapper> = ranges.iter().map(From::from).collect();
-        let ranges: Vec<_> = ranges_wrappers.iter().map(AsRef::as_ref).cloned().collect();
+        let ranges: Vec<_> = ranges_wrappers.iter().map(|r| r.vks_struct).collect();
 
         let res = unsafe {
             (loader.core.vkFlushMappedMemoryRanges)(device_handle, ranges.len() as u32, ranges.as_ptr())
@@ -135,7 +135,7 @@ impl DeviceMemory {
         let device_handle = ranges[0].memory.device_handle();
 
         let ranges_wrappers: Vec<core::VkMappedMemoryRangeWrapper> = ranges.iter().map(From::from).collect();
-        let ranges: Vec<_> = ranges_wrappers.iter().map(AsRef::as_ref).cloned().collect();
+        let ranges: Vec<_> = ranges_wrappers.iter().map(|r| r.vks_struct).collect();
 
         let res = unsafe {
             (loader.core.vkInvalidateMappedMemoryRanges)(device_handle, ranges.len() as u32, ranges.as_ptr())
