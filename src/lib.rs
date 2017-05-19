@@ -15,6 +15,10 @@
 extern crate libc;
 extern crate vks;
 
+#[cfg(feature = "core_1_0_3")]
+#[macro_use]
+mod chain;
+
 mod vulkan_object;
 pub use vulkan_object::{
     TryDestroyError,
