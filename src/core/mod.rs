@@ -4048,33 +4048,33 @@ impl<'a> From<&'a PhysicalDeviceMemoryProperties> for vks::VkPhysicalDeviceMemor
     }
 }
 
-/// See [`VkDeviceQueueCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDeviceQueueCreateInfo)
-#[derive(Debug, Clone, PartialEq)]
-pub enum DeviceQueueCreateInfoChainElement {
+chain_struct! {
+    #[derive(Debug, Clone, Default, PartialEq)]
+    pub struct DeviceQueueCreateInfoChain {
+    }
+
+    #[derive(Debug)]
+    struct DeviceQueueCreateInfoChainWrapper;
 }
 
 /// See [`VkDeviceQueueCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDeviceQueueCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct DeviceQueueCreateInfo {
-    pub chain: Vec<DeviceQueueCreateInfoChainElement>,
     pub flags: DeviceQueueCreateFlags,
     pub queue_family_index: u32,
     pub queue_priorities: Vec<f32>,
+    pub chain: Option<DeviceQueueCreateInfoChain>,
 }
 
-impl<'a> From<&'a vks::VkDeviceQueueCreateInfo> for DeviceQueueCreateInfo {
-    fn from(create_info: &'a vks::VkDeviceQueueCreateInfo) -> Self {
-        debug_assert_eq!(create_info.pNext, ptr::null());
-
-        let queue_priorities_slice = unsafe {
-            slice::from_raw_parts(create_info.pQueuePriorities, create_info.queueCount as usize)
-        };
+impl DeviceQueueCreateInfo {
+    pub unsafe fn from_vks(create_info: &vks::VkDeviceQueueCreateInfo, with_chain: bool) -> Self {
+        let queue_priorities_slice = slice::from_raw_parts(create_info.pQueuePriorities, create_info.queueCount as usize);
 
         DeviceQueueCreateInfo {
-            chain: vec![],
             flags: create_info.flags,
             queue_family_index: create_info.queueFamilyIndex,
             queue_priorities: queue_priorities_slice.to_vec(),
+            chain: DeviceQueueCreateInfoChain::from_vks(create_info.pNext, with_chain),
         }
     }
 }
@@ -4083,87 +4083,84 @@ impl<'a> From<&'a vks::VkDeviceQueueCreateInfo> for DeviceQueueCreateInfo {
 struct VkDeviceQueueCreateInfoWrapper {
     pub vks_struct: vks::VkDeviceQueueCreateInfo,
     queue_priorities: Vec<f32>,
+    chain: Option<DeviceQueueCreateInfoChainWrapper>,
 }
 
-impl<'a> From<&'a DeviceQueueCreateInfo> for VkDeviceQueueCreateInfoWrapper {
-    fn from(create_info: &'a DeviceQueueCreateInfo) -> Self {
+impl VkDeviceQueueCreateInfoWrapper {
+    pub fn new(create_info: &DeviceQueueCreateInfo, with_chain: bool) -> Self {
         let queue_priorities = create_info.queue_priorities.clone();
+        let (pnext, chain) = DeviceQueueCreateInfoChainWrapper::new_optional(&create_info.chain, with_chain);
 
         VkDeviceQueueCreateInfoWrapper {
             vks_struct: vks::VkDeviceQueueCreateInfo {
                 sType: vks::VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO,
-                pNext: ptr::null(),
+                pNext: pnext,
                 flags: create_info.flags,
                 queueFamilyIndex: create_info.queue_family_index,
                 queueCount: queue_priorities.len() as u32,
                 pQueuePriorities: queue_priorities.as_ptr(),
             },
             queue_priorities: queue_priorities,
+            chain: chain,
         }
     }
 }
 
-/// See [`VkDeviceCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDeviceCreateInfo)
-#[derive(Debug, Clone, PartialEq)]
-pub enum DeviceCreateInfoChainElement {
+chain_struct! {
+    #[derive(Debug, Clone, Default, PartialEq)]
+    pub struct DeviceCreateInfoChain {
+    }
+
+    #[derive(Debug)]
+    struct DeviceCreateInfoChainWrapper ;
 }
 
 /// See [`VkDeviceCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDeviceCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct DeviceCreateInfo {
-    pub chain: Vec<DeviceCreateInfoChainElement>,
     pub flags: DeviceCreateFlags,
     pub queue_create_infos: Vec<DeviceQueueCreateInfo>,
     pub enabled_layers: Vec<String>,
     pub enabled_extensions: Vec<DeviceExtension>,
     pub enabled_features: Option<PhysicalDeviceFeatures>,
+    pub chain: Option<DeviceCreateInfoChain>,
 }
 
-impl<'a> From<&'a vks::VkDeviceCreateInfo> for DeviceCreateInfo {
-    fn from(create_info: &'a vks::VkDeviceCreateInfo) -> Self {
-        debug_assert_eq!(create_info.pNext, ptr::null());
-
-        let queue_create_infos_slice = unsafe {
-            slice::from_raw_parts(create_info.pQueueCreateInfos, create_info.queueCreateInfoCount as usize)
-        };
+impl DeviceCreateInfo {
+    pub unsafe fn from_vks(create_info: &vks::VkDeviceCreateInfo, with_chain: bool) -> Self {
+        let queue_create_infos_slice = slice::from_raw_parts(create_info.pQueueCreateInfos, create_info.queueCreateInfoCount as usize);
         let queue_create_infos = queue_create_infos_slice
             .iter()
-            .map(From::from)
+            .map(|q| DeviceQueueCreateInfo::from_vks(q, true))
             .collect();
 
-        let enabled_layers_slice = unsafe {
-            slice::from_raw_parts(create_info.ppEnabledLayerNames, create_info.enabledLayerCount as usize)
-        };
+        let enabled_layers_slice = slice::from_raw_parts(create_info.ppEnabledLayerNames, create_info.enabledLayerCount as usize);
         let enabled_layers = enabled_layers_slice
             .iter()
-            .map(|&e| unsafe { CStr::from_ptr(e).to_str().unwrap().to_owned() })
+            .map(|&e| CStr::from_ptr(e).to_str().unwrap().to_owned())
             .collect();
 
-        let enabled_extensions_slice = unsafe {
-            slice::from_raw_parts(create_info.ppEnabledExtensionNames, create_info.enabledExtensionCount as usize)
-        };
+        let enabled_extensions_slice = slice::from_raw_parts(create_info.ppEnabledExtensionNames, create_info.enabledExtensionCount as usize);
         let enabled_extensions = enabled_extensions_slice
             .iter()
-            .map(|&e| unsafe { CStr::from_ptr(e).to_str().unwrap() })
+            .map(|&e| CStr::from_ptr(e).to_str().unwrap())
             .map(From::from)
             .collect();
 
         let enabled_features = if !create_info.pEnabledFeatures.is_null() {
-            unsafe {
-                Some((&*create_info.pEnabledFeatures).into())
-            }
+            Some((&*create_info.pEnabledFeatures).into())
         }
         else {
             None
         };
 
         DeviceCreateInfo {
-            chain: vec![],
             flags: create_info.flags,
             queue_create_infos: queue_create_infos,
             enabled_layers: enabled_layers,
             enabled_extensions: enabled_extensions,
             enabled_features: enabled_features,
+            chain: DeviceCreateInfoChain::from_vks(create_info.pNext, with_chain),
         }
     }
 }
@@ -4178,13 +4175,14 @@ struct VkDeviceCreateInfoWrapper {
     enabled_extensions: Vec<CString>,
     enabled_extensions_ptrs: Vec<*const c_char>,
     enabled_features: Option<Box<vks::VkPhysicalDeviceFeatures>>,
+    chain: Option<DeviceCreateInfoChainWrapper>,
 }
 
-impl<'a> From<&'a DeviceCreateInfo> for VkDeviceCreateInfoWrapper {
-    fn from(create_info: &'a DeviceCreateInfo) -> Self {
-        let queue_create_infos_wrappers: Vec<VkDeviceQueueCreateInfoWrapper> = create_info.queue_create_infos
+impl VkDeviceCreateInfoWrapper {
+    pub fn new(create_info: &DeviceCreateInfo, with_chain: bool) -> Self {
+        let queue_create_infos_wrappers: Vec<_> = create_info.queue_create_infos
             .iter()
-            .map(From::from)
+            .map(|q| VkDeviceQueueCreateInfoWrapper::new(q, true))
             .collect();
 
         let queue_create_infos: Vec<vks::VkDeviceQueueCreateInfo> = queue_create_infos_wrappers
@@ -4241,10 +4239,12 @@ impl<'a> From<&'a DeviceCreateInfo> for VkDeviceCreateInfoWrapper {
             }
         };
 
+        let (pnext, chain) = DeviceCreateInfoChainWrapper::new_optional(&create_info.chain, with_chain);
+
         VkDeviceCreateInfoWrapper {
             vks_struct: vks::VkDeviceCreateInfo {
                 sType: vks::VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO,
-                pNext: ptr::null(),
+                pNext: pnext,
                 flags: create_info.flags,
                 queueCreateInfoCount: queue_create_infos.len() as u32,
                 pQueueCreateInfos: queue_create_infos.as_ptr(),
@@ -4261,6 +4261,7 @@ impl<'a> From<&'a DeviceCreateInfo> for VkDeviceCreateInfoWrapper {
             enabled_extensions: enabled_extensions,
             enabled_extensions_ptrs: enabled_extensions_ptrs,
             enabled_features: enabled_features,
+            chain: chain,
         }
     }
 }

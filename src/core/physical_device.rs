@@ -226,7 +226,7 @@ impl PhysicalDevice {
     pub fn create_device(&self, create_info: &core::DeviceCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<Device, core::Error> {
         let allocator_helper = allocator.map(AllocatorHelper::new);
         let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), AllocatorHelper::callbacks);
-        let create_info: core::VkDeviceCreateInfoWrapper = create_info.into();
+        let create_info = core::VkDeviceCreateInfoWrapper::new(create_info, true);
 
         let mut device = ptr::null_mut();
         let res = unsafe {
