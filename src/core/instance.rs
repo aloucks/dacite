@@ -67,7 +67,7 @@ impl Instance {
             loader.load_core_null_instance();
         }
 
-        let create_info_wrapper: core::VkInstanceCreateInfoWrapper = create_info.into();
+        let create_info_wrapper = core::VkInstanceCreateInfoWrapper::new(create_info, true);
         let mut instance = ptr::null_mut();
         let res = unsafe {
             (loader.core_null_instance.vkCreateInstance)(&create_info_wrapper.vks_struct, allocation_callbacks, &mut instance)

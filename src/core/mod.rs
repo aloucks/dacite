@@ -2976,33 +2976,35 @@ impl From<SubpassContents> for vks::VkSubpassContents {
     }
 }
 
-/// See [`VkApplicationInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkApplicationInfo)
-#[derive(Debug, Clone, PartialEq)]
-pub enum ApplicationInfoChainElement {
+chain_struct! {
+    #[derive(Debug, Clone, Default, PartialEq)]
+    pub struct ApplicationInfoChain {
+    }
+
+    #[derive(Debug)]
+    struct ApplicationInfoChainWrapper;
 }
 
 /// See [`VkApplicationInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkApplicationInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct ApplicationInfo {
-    pub chain: Vec<ApplicationInfoChainElement>,
     pub application_name: Option<String>,
     pub application_version: u32,
     pub engine_name: Option<String>,
     pub engine_version: u32,
     pub api_version: Option<Version>,
+    pub chain: Option<ApplicationInfoChain>,
 }
 
-impl<'a> From<&'a vks::VkApplicationInfo> for ApplicationInfo {
-    fn from(info: &'a vks::VkApplicationInfo) -> Self {
-        debug_assert_eq!(info.pNext, ptr::null());
-
+impl ApplicationInfo {
+    pub unsafe fn from_vks(info: &vks::VkApplicationInfo, with_chain: bool) -> Self {
         ApplicationInfo {
-            chain: vec![],
             application_name: utils::string_from_cstr(info.pApplicationName),
             application_version: info.applicationVersion,
             engine_name: utils::string_from_cstr(info.pEngineName),
             engine_version: info.engineVersion,
             api_version: Version::from_optional_api_version(info.apiVersion),
+            chain: ApplicationInfoChain::from_vks(info.pNext, with_chain),
         }
     }
 }
@@ -3012,17 +3014,19 @@ struct VkApplicationInfoWrapper {
     pub vks_struct: vks::VkApplicationInfo,
     application_name_cstr: Option<CString>,
     engine_name_cstr: Option<CString>,
+    chain: Option<ApplicationInfoChainWrapper>,
 }
 
-impl<'a> From<&'a ApplicationInfo> for VkApplicationInfoWrapper {
-    fn from(info: &'a ApplicationInfo) -> Self {
+impl VkApplicationInfoWrapper {
+    pub fn new(info: &ApplicationInfo, with_chain: bool) -> Self {
         let application_name_cstr = utils::cstr_from_string(info.application_name.clone());
         let engine_name_cstr = utils::cstr_from_string(info.engine_name.clone());
+        let (pnext, chain) = ApplicationInfoChainWrapper::new_optional(&info.chain, with_chain);
 
         VkApplicationInfoWrapper {
             vks_struct: vks::VkApplicationInfo {
                 sType: vks::VK_STRUCTURE_TYPE_APPLICATION_INFO,
-                pNext: ptr::null(),
+                pNext: pnext,
                 pApplicationName: application_name_cstr.1,
                 applicationVersion: info.application_version,
                 pEngineName: engine_name_cstr.1,
@@ -3031,61 +3035,58 @@ impl<'a> From<&'a ApplicationInfo> for VkApplicationInfoWrapper {
             },
             application_name_cstr: application_name_cstr.0,
             engine_name_cstr: engine_name_cstr.0,
+            chain: chain,
         }
     }
 }
 
-/// See [`VkInstanceCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkInstanceCreateInfo)
-#[derive(Debug, Clone, PartialEq)]
-pub enum InstanceCreateInfoChainElement {
+chain_struct! {
+    #[derive(Debug, Clone, Default, PartialEq)]
+    pub struct InstanceCreateInfoChain {
+    }
+
+    #[derive(Debug)]
+    struct InstanceCreateInfoChainWrapper;
 }
 
 /// See [`VkInstanceCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkInstanceCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct InstanceCreateInfo {
-    pub chain: Vec<InstanceCreateInfoChainElement>,
     pub flags: InstanceCreateFlags,
     pub application_info: Option<ApplicationInfo>,
     pub enabled_layers: Vec<String>,
     pub enabled_extensions: Vec<InstanceExtension>,
+    pub chain: Option<InstanceCreateInfoChain>,
 }
 
-impl<'a> From<&'a vks::VkInstanceCreateInfo> for InstanceCreateInfo {
-    fn from(create_info: &'a vks::VkInstanceCreateInfo) -> Self {
-        debug_assert_eq!(create_info.pNext, ptr::null());
-
+impl InstanceCreateInfo {
+    pub unsafe fn from_vks(create_info: &vks::VkInstanceCreateInfo, with_chain: bool) -> Self {
         let application_info = if !create_info.pApplicationInfo.is_null() {
-            unsafe {
-                Some((&*create_info.pApplicationInfo).into())
-            }
+            Some(ApplicationInfo::from_vks(&*create_info.pApplicationInfo, true))
         }
         else {
             None
         };
 
-        let enabled_layers_slice = unsafe {
-            slice::from_raw_parts(create_info.ppEnabledLayerNames, create_info.enabledLayerCount as usize)
-        };
+        let enabled_layers_slice = slice::from_raw_parts(create_info.ppEnabledLayerNames, create_info.enabledLayerCount as usize);
         let enabled_layers = enabled_layers_slice
             .iter()
-            .map(|&e| unsafe { CStr::from_ptr(e).to_str().unwrap().to_owned() })
+            .map(|&e| CStr::from_ptr(e).to_str().unwrap().to_owned())
             .collect();
 
-        let enabled_extensions_slice = unsafe {
-            slice::from_raw_parts(create_info.ppEnabledExtensionNames, create_info.enabledExtensionCount as usize)
-        };
+        let enabled_extensions_slice = slice::from_raw_parts(create_info.ppEnabledExtensionNames, create_info.enabledExtensionCount as usize);
         let enabled_extensions = enabled_extensions_slice
             .iter()
-            .map(|&e| unsafe { CStr::from_ptr(e).to_str().unwrap() })
+            .map(|&e| CStr::from_ptr(e).to_str().unwrap())
             .map(From::from)
             .collect();
 
         InstanceCreateInfo {
-            chain: vec![],
             flags: create_info.flags,
             application_info: application_info,
             enabled_layers: enabled_layers,
             enabled_extensions: enabled_extensions,
+            chain: InstanceCreateInfoChain::from_vks(create_info.pNext, with_chain),
         }
     }
 }
@@ -3098,13 +3099,14 @@ struct VkInstanceCreateInfoWrapper {
     enabled_layers_ptrs: Vec<*const c_char>,
     enabled_extensions: Vec<CString>,
     enabled_extensions_ptrs: Vec<*const c_char>,
+    chain: Option<InstanceCreateInfoChainWrapper>,
 }
 
-impl<'a> From<&'a InstanceCreateInfo> for VkInstanceCreateInfoWrapper {
-    fn from(create_info: &'a InstanceCreateInfo) -> Self {
+impl VkInstanceCreateInfoWrapper {
+    pub fn new(create_info: &InstanceCreateInfo, with_chain: bool) -> Self {
         let (application_info_ptr, application_info) = match create_info.application_info {
             Some(ref application_info) => {
-                let application_info: Box<VkApplicationInfoWrapper> = Box::new(application_info.into());
+                let application_info: Box<_> = Box::new(VkApplicationInfoWrapper::new(application_info, true));
                 (&application_info.vks_struct as *const _, Some(application_info))
             }
 
@@ -3144,10 +3146,12 @@ impl<'a> From<&'a InstanceCreateInfo> for VkInstanceCreateInfoWrapper {
             ptr::null()
         };
 
+        let (pnext, chain) = InstanceCreateInfoChainWrapper::new_optional(&create_info.chain, with_chain);
+
         VkInstanceCreateInfoWrapper {
             vks_struct: vks::VkInstanceCreateInfo {
                 sType: vks::VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO,
-                pNext: ptr::null(),
+                pNext: pnext,
                 flags: create_info.flags,
                 pApplicationInfo: application_info_ptr,
                 enabledLayerCount: enabled_layers_ptrs.len() as u32,
@@ -3160,6 +3164,7 @@ impl<'a> From<&'a InstanceCreateInfo> for VkInstanceCreateInfoWrapper {
             enabled_layers_ptrs: enabled_layers_ptrs,
             enabled_extensions: enabled_extensions,
             enabled_extensions_ptrs: enabled_extensions_ptrs,
+            chain: chain,
         }
     }
 }

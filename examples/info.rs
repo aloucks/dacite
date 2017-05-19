@@ -49,10 +49,8 @@ fn main() {
     }
 
     let instance_create_info = dacite::core::InstanceCreateInfo {
-        chain: vec![],
         flags: dacite::core::InstanceCreateFlags::empty(),
         application_info: Some(dacite::core::ApplicationInfo {
-            chain: vec![],
             application_name: Some("dacite info example".to_owned()),
             application_version: 0,
             engine_name: None,
@@ -62,9 +60,11 @@ fn main() {
                 minor: dacite::DACITE_API_VERSION_MINOR,
                 patch: dacite::DACITE_API_VERSION_PATCH,
             }),
+            chain: None,
         }),
         enabled_layers: vec![],
         enabled_extensions: vec![],
+        chain: None,
     };
 
     let instance = dacite::core::Instance::create(&instance_create_info, None).unwrap();;
