@@ -3220,7 +3220,7 @@ pub trait Allocator: Send + Sync + fmt::Debug {
 }
 
 /// See [`VkPhysicalDeviceFeatures`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPhysicalDeviceFeatures)
-#[derive(Debug, Copy, Clone, PartialEq)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct PhysicalDeviceFeatures {
     pub robust_buffer_access: bool,
     pub full_draw_index_uint32: bool,
