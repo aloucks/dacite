@@ -8224,62 +8224,58 @@ impl<'a> From<&'a SubpassDependency> for vks::VkSubpassDependency {
     }
 }
 
-/// See [`VkRenderPassCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkRenderPassCreateInfo)
-#[derive(Debug, Clone, PartialEq)]
-pub enum RenderPassCreateInfoChainElement {
+chain_struct! {
+    #[derive(Debug, Clone, Default, PartialEq)]
+    pub struct RenderPassCreateInfoChain {
+    }
+
+    #[derive(Debug)]
+    struct RenderPassCreateInfoChainWrapper;
 }
 
 /// See [`VkRenderPassCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkRenderPassCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct RenderPassCreateInfo {
-    pub chain: Vec<RenderPassCreateInfoChainElement>,
     pub flags: RenderPassCreateFlags,
     pub attachments: Option<Vec<AttachmentDescription>>,
     pub subpasses: Vec<SubpassDescription>,
     pub dependencies: Option<Vec<SubpassDependency>>,
+    pub chain: Option<RenderPassCreateInfoChain>,
 }
 
-impl<'a> From<&'a vks::VkRenderPassCreateInfo> for RenderPassCreateInfo {
-    fn from(create_info: &'a vks::VkRenderPassCreateInfo) -> Self {
-        assert!(create_info.pNext.is_null());
-
+impl RenderPassCreateInfo {
+    pub unsafe fn from(create_info: &vks::VkRenderPassCreateInfo, with_chain: bool) -> Self {
         let attachments = if !create_info.pAttachments.is_null() {
-            unsafe {
-                Some(slice::from_raw_parts(create_info.pAttachments, create_info.attachmentCount as usize)
-                     .iter()
-                     .map(From::from)
-                     .collect())
-            }
+            Some(slice::from_raw_parts(create_info.pAttachments, create_info.attachmentCount as usize)
+                 .iter()
+                 .map(From::from)
+                 .collect())
         }
         else {
             None
         };
 
-        let subpasses = unsafe {
-            slice::from_raw_parts(create_info.pSubpasses, create_info.subpassCount as usize)
-                .iter()
-                .map(From::from)
-                .collect()
-        };
+        let subpasses = slice::from_raw_parts(create_info.pSubpasses, create_info.subpassCount as usize)
+            .iter()
+            .map(From::from)
+            .collect();
 
         let dependencies = if !create_info.pDependencies.is_null() {
-            unsafe {
-                Some(slice::from_raw_parts(create_info.pDependencies, create_info.dependencyCount as usize)
-                     .iter()
-                     .map(From::from)
-                     .collect())
-            }
+            Some(slice::from_raw_parts(create_info.pDependencies, create_info.dependencyCount as usize)
+                 .iter()
+                 .map(From::from)
+                 .collect())
         }
         else {
             None
         };
 
         RenderPassCreateInfo {
-            chain: vec![],
             flags: create_info.flags,
             attachments: attachments,
             subpasses: subpasses,
             dependencies: dependencies,
+            chain: RenderPassCreateInfoChain::from_vks(create_info.pNext, with_chain),
         }
     }
 }
@@ -8291,10 +8287,11 @@ struct VkRenderPassCreateInfoWrapper {
     subpasses: Vec<VkSubpassDescriptionWrapper>,
     vk_subpasses: Vec<vks::VkSubpassDescription>,
     dependencies: Option<Vec<vks::VkSubpassDependency>>,
+    chain: Option<RenderPassCreateInfoChainWrapper>,
 }
 
-impl<'a> From<&'a RenderPassCreateInfo> for VkRenderPassCreateInfoWrapper {
-    fn from(create_info: &'a RenderPassCreateInfo) -> VkRenderPassCreateInfoWrapper {
+impl VkRenderPassCreateInfoWrapper {
+    pub fn new(create_info: &RenderPassCreateInfo, with_chain: bool) -> VkRenderPassCreateInfoWrapper {
         let (attachments_count, attachments_ptr, attachments) = match create_info.attachments {
             Some(ref attachments) => {
                 let attachments: Vec<_> = attachments.iter().map(From::from).collect();
@@ -8316,10 +8313,12 @@ impl<'a> From<&'a RenderPassCreateInfo> for VkRenderPassCreateInfoWrapper {
             None => (0, ptr::null(), None),
         };
 
+        let (pnext, chain) = RenderPassCreateInfoChainWrapper::new_optional(&create_info.chain, with_chain);
+
         VkRenderPassCreateInfoWrapper {
             vks_struct: vks::VkRenderPassCreateInfo {
                 sType: vks::VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO,
-                pNext: ptr::null(),
+                pNext: pnext,
                 flags: create_info.flags,
                 attachmentCount: attachments_count,
                 pAttachments: attachments_ptr,
@@ -8332,6 +8331,7 @@ impl<'a> From<&'a RenderPassCreateInfo> for VkRenderPassCreateInfoWrapper {
             subpasses: subpasses,
             vk_subpasses: vk_subpasses,
             dependencies: dependencies,
+            chain: chain,
         }
     }
 }

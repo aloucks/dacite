@@ -514,7 +514,7 @@ impl Device {
 
     /// See [`vkCreateRenderPass`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCreateRenderPass)
     pub fn create_render_pass(&self, create_info: &core::RenderPassCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<RenderPass, core::Error> {
-        let create_info_wrapper: core::VkRenderPassCreateInfoWrapper = create_info.into();
+        let create_info_wrapper = core::VkRenderPassCreateInfoWrapper::new(create_info, true);
 
         let allocator_helper = allocator.map(AllocatorHelper::new);
         let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), AllocatorHelper::callbacks);
