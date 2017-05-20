@@ -7348,15 +7348,18 @@ impl VkPipelineLayoutCreateInfoWrapper {
     }
 }
 
-/// See [`VkSamplerCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSamplerCreateInfo)
-#[derive(Debug, Clone, PartialEq)]
-pub enum SamplerCreateInfoChainElement {
+chain_struct! {
+    #[derive(Debug, Clone, Default, PartialEq)]
+    pub struct SamplerCreateInfoChain {
+    }
+
+    #[derive(Debug)]
+    struct SamplerCreateInfoChainWrapper;
 }
 
 /// See [`VkSamplerCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSamplerCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct SamplerCreateInfo {
-    pub chain: Vec<SamplerCreateInfoChainElement>,
     pub flags: SamplerCreateFlags,
     pub mag_filter: Filter,
     pub min_filter: Filter,
@@ -7373,14 +7376,12 @@ pub struct SamplerCreateInfo {
     pub max_lod: f32,
     pub border_color: BorderColor,
     pub unnormalized_coordinates: bool,
+    pub chain: Option<SamplerCreateInfoChain>,
 }
 
-impl<'a> From<&'a vks::VkSamplerCreateInfo> for SamplerCreateInfo {
-    fn from(create_info: &'a vks::VkSamplerCreateInfo) -> Self {
-        debug_assert_eq!(create_info.pNext, ptr::null());
-
+impl SamplerCreateInfo {
+    pub unsafe fn from(create_info: &vks::VkSamplerCreateInfo, with_chain: bool) -> Self {
         SamplerCreateInfo {
-            chain: vec![],
             flags: create_info.flags,
             mag_filter: create_info.magFilter.into(),
             min_filter: create_info.minFilter.into(),
@@ -7397,6 +7398,7 @@ impl<'a> From<&'a vks::VkSamplerCreateInfo> for SamplerCreateInfo {
             max_lod: create_info.maxLod,
             border_color: create_info.borderColor.into(),
             unnormalized_coordinates: utils::from_vk_bool(create_info.unnormalizedCoordinates),
+            chain: SamplerCreateInfoChain::from_vks(create_info.pNext, with_chain),
         }
     }
 }
@@ -7404,14 +7406,17 @@ impl<'a> From<&'a vks::VkSamplerCreateInfo> for SamplerCreateInfo {
 #[derive(Debug)]
 struct VkSamplerCreateInfoWrapper {
     pub vks_struct: vks::VkSamplerCreateInfo,
+    chain: Option<SamplerCreateInfoChainWrapper>,
 }
 
-impl<'a> From<&'a SamplerCreateInfo> for VkSamplerCreateInfoWrapper {
-    fn from(create_info: &'a SamplerCreateInfo) -> Self {
+impl VkSamplerCreateInfoWrapper {
+    pub fn new(create_info: &SamplerCreateInfo, with_chain: bool) -> Self {
+        let (pnext, chain) = SamplerCreateInfoChainWrapper::new_optional(&create_info.chain, with_chain);
+
         VkSamplerCreateInfoWrapper {
             vks_struct: vks::VkSamplerCreateInfo {
                 sType: vks::VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO,
-                pNext: ptr::null(),
+                pNext: pnext,
                 flags: create_info.flags,
                 magFilter: create_info.mag_filter.into(),
                 minFilter: create_info.min_filter.into(),
@@ -7429,6 +7434,7 @@ impl<'a> From<&'a SamplerCreateInfo> for VkSamplerCreateInfoWrapper {
                 borderColor: create_info.border_color.into(),
                 unnormalizedCoordinates: utils::to_vk_bool(create_info.unnormalized_coordinates),
             },
+            chain: chain,
         }
     }
 }
