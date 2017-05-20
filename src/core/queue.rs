@@ -129,7 +129,7 @@ impl Queue {
     pub fn bind_sparse(&self, bind_infos: Option<&[core::BindSparseInfo]>, fence: Option<Fence>) -> Result<(), core::Error> {
         let (bind_infos_count, vk_bind_infos_ptr, _, _) = match bind_infos {
             Some(bind_infos) => {
-                let bind_infos_wrappers: Vec<core::VkBindSparseInfoWrapper> = bind_infos.iter().map(From::from).collect();
+                let bind_infos_wrappers: Vec<_> = bind_infos.iter().map(|b| core::VkBindSparseInfoWrapper::new(b, true)).collect();
                 let vk_bind_infos: Vec<vks::VkBindSparseInfo> = bind_infos_wrappers.iter().map(|b| b.vks_struct).collect();
                 (bind_infos.len() as u32, vk_bind_infos.as_ptr(), Some(vk_bind_infos), Some(bind_infos_wrappers))
             }

@@ -5108,20 +5108,24 @@ impl<'a> From<&'a SparseImageMemoryBindInfo> for VkSparseImageMemoryBindInfoWrap
     }
 }
 
-/// See [`VkBindSparseInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkBindSparseInfo)
-#[derive(Debug, Clone, PartialEq)]
-pub enum BindSparseInfoChainElement {
+chain_struct! {
+    #[derive(Debug, Clone, Default, PartialEq)]
+    pub struct BindSparseInfoChain {
+    }
+
+    #[derive(Debug)]
+    struct BindSparseInfoChainWrapper;
 }
 
 /// See [`VkBindSparseInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkBindSparseInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct BindSparseInfo {
-    pub chain: Vec<BindSparseInfoChainElement>,
     pub wait_semaphores: Option<Vec<Semaphore>>,
     pub buffer_binds: Option<Vec<SparseBufferMemoryBindInfo>>,
     pub image_opaque_binds: Option<Vec<SparseImageOpaqueMemoryBindInfo>>,
     pub image_binds: Option<Vec<SparseImageMemoryBindInfo>>,
     pub signal_semaphores: Option<Vec<Semaphore>>,
+    pub chain: Option<BindSparseInfoChain>,
 }
 
 #[derive(Debug)]
@@ -5137,10 +5141,11 @@ struct VkBindSparseInfoWrapper {
     vk_image_binds: Option<Vec<vks::VkSparseImageMemoryBindInfo>>,
     signal_semaphores: Option<Vec<Semaphore>>,
     signal_vk_semaphores: Option<Vec<vks::VkSemaphore>>,
+    chain: Option<BindSparseInfoChainWrapper>,
 }
 
-impl<'a> From<&'a BindSparseInfo> for VkBindSparseInfoWrapper {
-    fn from(info: &'a BindSparseInfo) -> Self {
+impl VkBindSparseInfoWrapper {
+    pub fn new(info: &BindSparseInfo, with_chain: bool) -> Self {
         let (wait_semaphores_count, wait_vk_semaphores_ptr, wait_semaphores, wait_vk_semaphores) = match info.wait_semaphores {
             Some(ref wait_semaphores) => {
                 let wait_semaphores = wait_semaphores.clone();
@@ -5191,10 +5196,12 @@ impl<'a> From<&'a BindSparseInfo> for VkBindSparseInfoWrapper {
             None => (0, ptr::null(), None, None),
         };
 
+        let (pnext, chain) = BindSparseInfoChainWrapper::new_optional(&info.chain, with_chain);
+
         VkBindSparseInfoWrapper {
             vks_struct: vks::VkBindSparseInfo {
                 sType: vks::VK_STRUCTURE_TYPE_BIND_SPARSE_INFO,
-                pNext: ptr::null(),
+                pNext: pnext,
                 waitSemaphoreCount: wait_semaphores_count,
                 pWaitSemaphores: wait_vk_semaphores_ptr,
                 bufferBindCount: buffer_binds_count,
@@ -5216,6 +5223,7 @@ impl<'a> From<&'a BindSparseInfo> for VkBindSparseInfoWrapper {
             vk_image_binds: vk_image_binds,
             signal_semaphores: signal_semaphores,
             signal_vk_semaphores: signal_vk_semaphores,
+            chain: chain,
         }
     }
 }
