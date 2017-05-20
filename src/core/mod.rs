@@ -8906,15 +8906,18 @@ impl VkMemoryBarrierWrapper {
     }
 }
 
-/// See [`VkBufferMemoryBarrier`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkBufferMemoryBarrier)
-#[derive(Debug, Clone, PartialEq)]
-pub enum BufferMemoryBarrierChainElement {
+chain_struct! {
+    #[derive(Debug, Clone, Default, PartialEq)]
+    pub struct BufferMemoryBarrierChain {
+    }
+
+    #[derive(Debug)]
+    struct BufferMemoryBarrierChainWrapper;
 }
 
 /// See [`VkBufferMemoryBarrier`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkBufferMemoryBarrier)
 #[derive(Debug, Clone, PartialEq)]
 pub struct BufferMemoryBarrier {
-    pub chain: Vec<BufferMemoryBarrierChainElement>,
     pub src_access_mask: AccessFlags,
     pub dst_access_mask: AccessFlags,
     pub src_queue_family_index: QueueFamilyIndex,
@@ -8922,20 +8925,24 @@ pub struct BufferMemoryBarrier {
     pub buffer: Buffer,
     pub offset: u64,
     pub size: OptionalDeviceSize,
+    pub chain: Option<BufferMemoryBarrierChain>,
 }
 
 #[derive(Debug)]
 struct VkBufferMemoryBarrierWrapper {
     pub vks_struct: vks::VkBufferMemoryBarrier,
     buffer: Buffer,
+    chain: Option<BufferMemoryBarrierChainWrapper>,
 }
 
-impl<'a> From<&'a BufferMemoryBarrier> for VkBufferMemoryBarrierWrapper {
-    fn from(barrier: &'a BufferMemoryBarrier) -> Self {
+impl VkBufferMemoryBarrierWrapper {
+    pub fn new(barrier: &BufferMemoryBarrier, with_chain: bool) -> Self {
+        let (pnext, chain) = BufferMemoryBarrierChainWrapper::new_optional(&barrier.chain, with_chain);
+
         VkBufferMemoryBarrierWrapper {
             vks_struct: vks::VkBufferMemoryBarrier {
                 sType: vks::VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER,
-                pNext: ptr::null(),
+                pNext: pnext,
                 srcAccessMask: barrier.src_access_mask,
                 dstAccessMask: barrier.dst_access_mask,
                 srcQueueFamilyIndex: barrier.src_queue_family_index.into(),
@@ -8945,6 +8952,7 @@ impl<'a> From<&'a BufferMemoryBarrier> for VkBufferMemoryBarrierWrapper {
                 size: barrier.size.into(),
             },
             buffer: barrier.buffer.clone(),
+            chain: chain,
         }
     }
 }

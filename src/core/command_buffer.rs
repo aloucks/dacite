@@ -378,7 +378,7 @@ impl CommandBuffer {
 
         let (buffer_memory_barriers_count, buffer_memory_barriers_ptr, _, _) = match buffer_memory_barriers {
             Some(buffer_memory_barriers) => {
-                let buffer_memory_barriers_wrappers: Vec<core::VkBufferMemoryBarrierWrapper> = buffer_memory_barriers.iter().map(From::from).collect();
+                let buffer_memory_barriers_wrappers: Vec<_> = buffer_memory_barriers.iter().map(|b| core::VkBufferMemoryBarrierWrapper::new(b, true)).collect();
                 let vk_buffer_memory_barriers: Vec<_> = buffer_memory_barriers_wrappers.iter().map(|b| b.vks_struct).collect();
                 (buffer_memory_barriers.len() as u32, vk_buffer_memory_barriers.as_ptr(), Some(vk_buffer_memory_barriers), Some(buffer_memory_barriers_wrappers))
             }
@@ -415,7 +415,7 @@ impl CommandBuffer {
 
         let (buffer_memory_barriers_count, buffer_memory_barriers_ptr, _, _) = match buffer_memory_barriers {
             Some(buffer_memory_barriers) => {
-                let buffer_memory_barriers_wrappers: Vec<core::VkBufferMemoryBarrierWrapper> = buffer_memory_barriers.iter().map(From::from).collect();
+                let buffer_memory_barriers_wrappers: Vec<_> = buffer_memory_barriers.iter().map(|b| core::VkBufferMemoryBarrierWrapper::new(b, true)).collect();
                 let vk_buffer_memory_barriers: Vec<_> = buffer_memory_barriers_wrappers.iter().map(|b| b.vks_struct).collect();
                 (buffer_memory_barriers.len() as u32, vk_buffer_memory_barriers.as_ptr(), Some(vk_buffer_memory_barriers), Some(buffer_memory_barriers_wrappers))
             }
