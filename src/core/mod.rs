@@ -8336,27 +8336,29 @@ impl VkRenderPassCreateInfoWrapper {
     }
 }
 
-/// See [`VkCommandPoolCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCommandPoolCreateInfo)
-#[derive(Debug, Clone, PartialEq)]
-pub enum CommandPoolCreateInfoChainElement {
+chain_struct! {
+    #[derive(Debug, Clone, Default, PartialEq)]
+    pub struct CommandPoolCreateInfoChain {
+    }
+
+    #[derive(Debug)]
+    struct CommandPoolCreateInfoChainWrapper;
 }
 
 /// See [`VkCommandPoolCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCommandPoolCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct CommandPoolCreateInfo {
-    pub chain: Vec<CommandPoolCreateInfoChainElement>,
     pub flags: CommandPoolCreateFlags,
     pub queue_family_index: u32,
+    pub chain: Option<CommandPoolCreateInfoChain>,
 }
 
-impl<'a> From<&'a vks::VkCommandPoolCreateInfo> for CommandPoolCreateInfo {
-    fn from(create_info: &'a vks::VkCommandPoolCreateInfo) -> Self {
-        debug_assert_eq!(create_info.pNext, ptr::null());
-
+impl CommandPoolCreateInfo {
+    pub unsafe fn from(create_info: &vks::VkCommandPoolCreateInfo, with_chain: bool) -> Self {
         CommandPoolCreateInfo {
-            chain: vec![],
             flags: create_info.flags,
             queue_family_index: create_info.queueFamilyIndex,
+            chain: CommandPoolCreateInfoChain::from_vks(create_info.pNext, with_chain),
         }
     }
 }
@@ -8364,17 +8366,21 @@ impl<'a> From<&'a vks::VkCommandPoolCreateInfo> for CommandPoolCreateInfo {
 #[derive(Debug)]
 struct VkCommandPoolCreateInfoWrapper {
     pub vks_struct: vks::VkCommandPoolCreateInfo,
+    chain: Option<CommandPoolCreateInfoChainWrapper>,
 }
 
-impl<'a> From<&'a CommandPoolCreateInfo> for VkCommandPoolCreateInfoWrapper {
-    fn from(create_info: &'a CommandPoolCreateInfo) -> Self {
+impl VkCommandPoolCreateInfoWrapper {
+    pub fn new(create_info: &CommandPoolCreateInfo, with_chain: bool) -> Self {
+        let (pnext, chain) = CommandPoolCreateInfoChainWrapper::new_optional(&create_info.chain, with_chain);
+
         VkCommandPoolCreateInfoWrapper {
             vks_struct: vks::VkCommandPoolCreateInfo {
                 sType: vks::VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO,
-                pNext: ptr::null(),
+                pNext: pnext,
                 flags: create_info.flags,
                 queueFamilyIndex: create_info.queue_family_index,
             },
+            chain: chain,
         }
     }
 }
