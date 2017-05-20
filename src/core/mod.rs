@@ -8857,27 +8857,29 @@ impl<'a> From<&'a ImageResolve> for vks::VkImageResolve {
     }
 }
 
-/// See [`VkMemoryBarrier`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkMemoryBarrier)
-#[derive(Debug, Clone, PartialEq)]
-pub enum MemoryBarrierChainElement {
+chain_struct! {
+    #[derive(Debug, Clone, Default, PartialEq)]
+    pub struct MemoryBarrierChain {
+    }
+
+    #[derive(Debug)]
+    struct MemoryBarrierChainWrapper;
 }
 
 /// See [`VkMemoryBarrier`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkMemoryBarrier)
 #[derive(Debug, Clone, PartialEq)]
 pub struct MemoryBarrier {
-    pub chain: Vec<MemoryBarrierChainElement>,
     pub src_access_mask: AccessFlags,
     pub dst_access_mask: AccessFlags,
+    pub chain: Option<MemoryBarrierChain>,
 }
 
-impl<'a> From<&'a vks::VkMemoryBarrier> for MemoryBarrier {
-    fn from(barrier: &'a vks::VkMemoryBarrier) -> Self {
-        assert!(barrier.pNext.is_null());
-
+impl MemoryBarrier {
+    pub unsafe fn from(barrier: &vks::VkMemoryBarrier, with_chain: bool) -> Self {
         MemoryBarrier {
-            chain: vec![],
             src_access_mask: barrier.srcAccessMask,
             dst_access_mask: barrier.dstAccessMask,
+            chain: MemoryBarrierChain::from_vks(barrier.pNext, with_chain),
         }
     }
 }
@@ -8885,17 +8887,21 @@ impl<'a> From<&'a vks::VkMemoryBarrier> for MemoryBarrier {
 #[derive(Debug)]
 struct VkMemoryBarrierWrapper {
     pub vks_struct: vks::VkMemoryBarrier,
+    chain: Option<MemoryBarrierChainWrapper>,
 }
 
-impl<'a> From<&'a MemoryBarrier> for VkMemoryBarrierWrapper {
-    fn from(barrier: &'a MemoryBarrier) -> Self {
+impl VkMemoryBarrierWrapper {
+    pub fn new(barrier: &MemoryBarrier, with_chain: bool) -> Self {
+        let (pnext, chain) = MemoryBarrierChainWrapper::new_optional(&barrier.chain, with_chain);
+
         VkMemoryBarrierWrapper {
             vks_struct: vks::VkMemoryBarrier {
                 sType: vks::VK_STRUCTURE_TYPE_MEMORY_BARRIER,
-                pNext: ptr::null(),
+                pNext: pnext,
                 srcAccessMask: barrier.src_access_mask,
                 dstAccessMask: barrier.dst_access_mask,
             },
+            chain: chain,
         }
     }
 }

@@ -368,7 +368,7 @@ impl CommandBuffer {
 
         let (memory_barriers_count, memory_barriers_ptr, _, _) = match memory_barriers {
             Some(memory_barriers) => {
-                let memory_barriers_wrappers: Vec<core::VkMemoryBarrierWrapper> = memory_barriers.iter().map(From::from).collect();
+                let memory_barriers_wrappers: Vec<_> = memory_barriers.iter().map(|m| core::VkMemoryBarrierWrapper::new(m, true)).collect();
                 let vk_memory_barriers: Vec<_> = memory_barriers_wrappers.iter().map(|m| m.vks_struct).collect();
                 (memory_barriers.len() as u32, vk_memory_barriers.as_ptr(), Some(vk_memory_barriers), Some(memory_barriers_wrappers))
             }
@@ -405,7 +405,7 @@ impl CommandBuffer {
     pub fn pipeline_barrier(&self, src_stage_mask: core::PipelineStageFlags, dst_stage_mask: core::PipelineStageFlags, dependency_flags: core::DependencyFlags, memory_barriers: Option<&[core::MemoryBarrier]>, buffer_memory_barriers: Option<&[core::BufferMemoryBarrier]>, image_memory_barriers: Option<&[core::ImageMemoryBarrier]>) {
         let (memory_barriers_count, memory_barriers_ptr, _, _) = match memory_barriers {
             Some(memory_barriers) => {
-                let memory_barriers_wrappers: Vec<core::VkMemoryBarrierWrapper> = memory_barriers.iter().map(From::from).collect();
+                let memory_barriers_wrappers: Vec<_> = memory_barriers.iter().map(|m| core::VkMemoryBarrierWrapper::new(m, true)).collect();
                 let vk_memory_barriers: Vec<_> = memory_barriers_wrappers.iter().map(|m| m.vks_struct).collect();
                 (memory_barriers.len() as u32, vk_memory_barriers.as_ptr(), Some(vk_memory_barriers), Some(memory_barriers_wrappers))
             }
