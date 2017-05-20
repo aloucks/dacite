@@ -5542,15 +5542,18 @@ impl VkBufferViewCreateInfoWrapper {
     }
 }
 
-/// See [`VkImageCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageCreateInfo)
-#[derive(Debug, Clone, PartialEq)]
-pub enum ImageCreateInfoChainElement {
+chain_struct! {
+    #[derive(Debug, Clone, Default, PartialEq)]
+    pub struct ImageCreateInfoChain {
+    }
+
+    #[derive(Debug)]
+    struct ImageCreateInfoChainWrapper;
 }
 
 /// See [`VkImageCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct ImageCreateInfo {
-    pub chain: Vec<ImageCreateInfoChainElement>,
     pub flags: ImageCreateFlags,
     pub image_type: ImageType,
     pub format: Format,
@@ -5563,23 +5566,19 @@ pub struct ImageCreateInfo {
     pub sharing_mode: SharingMode,
     pub queue_family_indices: Option<Vec<u32>>,
     pub initial_layout: ImageLayout,
+    pub chain: Option<ImageCreateInfoChain>,
 }
 
-impl<'a> From<&'a vks::VkImageCreateInfo> for ImageCreateInfo {
-    fn from(create_info: &'a vks::VkImageCreateInfo) -> Self {
-        debug_assert_eq!(create_info.pNext, ptr::null());
-
+impl ImageCreateInfo {
+    pub unsafe fn from_vks(create_info: &vks::VkImageCreateInfo, with_chain: bool) -> Self {
         let queue_family_indices = if !create_info.pQueueFamilyIndices.is_null() {
-            unsafe {
-                Some(slice::from_raw_parts(create_info.pQueueFamilyIndices, create_info.queueFamilyIndexCount as usize).to_vec())
-            }
+            Some(slice::from_raw_parts(create_info.pQueueFamilyIndices, create_info.queueFamilyIndexCount as usize).to_vec())
         }
         else {
             None
         };
 
         ImageCreateInfo {
-            chain: vec![],
             flags: create_info.flags,
             image_type: create_info.imageType.into(),
             format: create_info.format.into(),
@@ -5592,6 +5591,7 @@ impl<'a> From<&'a vks::VkImageCreateInfo> for ImageCreateInfo {
             sharing_mode: create_info.sharingMode.into(),
             queue_family_indices: queue_family_indices,
             initial_layout: create_info.initialLayout.into(),
+            chain: ImageCreateInfoChain::from_vks(create_info.pNext, with_chain),
         }
     }
 }
@@ -5600,20 +5600,23 @@ impl<'a> From<&'a vks::VkImageCreateInfo> for ImageCreateInfo {
 struct VkImageCreateInfoWrapper {
     pub vks_struct: vks::VkImageCreateInfo,
     queue_family_indices: Option<Vec<u32>>,
+    chain: Option<ImageCreateInfoChainWrapper>,
 }
 
-impl<'a> From<&'a ImageCreateInfo> for VkImageCreateInfoWrapper {
-    fn from(create_info: &'a ImageCreateInfo) -> Self {
+impl VkImageCreateInfoWrapper {
+    pub fn new(create_info: &ImageCreateInfo, with_chain: bool) -> Self {
         let queue_family_indices = create_info.queue_family_indices.clone();
         let (queue_family_indices_ptr, queue_family_index_count) = match queue_family_indices {
             Some(ref queue_family_indices) => (queue_family_indices.as_ptr(), queue_family_indices.len() as u32),
             None => (ptr::null(), 0)
         };
 
+        let (pnext, chain) = ImageCreateInfoChainWrapper::new_optional(&create_info.chain, with_chain);
+
         VkImageCreateInfoWrapper {
             vks_struct: vks::VkImageCreateInfo {
                 sType: vks::VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO,
-                pNext: ptr::null(),
+                pNext: pnext,
                 flags: create_info.flags,
                 imageType: create_info.image_type.into(),
                 format: create_info.format.into(),
@@ -5629,6 +5632,7 @@ impl<'a> From<&'a ImageCreateInfo> for VkImageCreateInfoWrapper {
                 initialLayout: create_info.initial_layout.into(),
             },
             queue_family_indices: queue_family_indices,
+            chain: chain,
         }
     }
 }
