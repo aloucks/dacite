@@ -6063,20 +6063,24 @@ impl<'a> From<&'a SpecializationInfo> for VkSpecializationInfoWrapper {
     }
 }
 
-/// See [`VkPipelineShaderStageCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineShaderStageCreateInfo)
-#[derive(Debug, Clone, PartialEq)]
-pub enum PipelineShaderStageCreateInfoChainElement {
+chain_struct! {
+    #[derive(Debug, Clone, Default, PartialEq)]
+    pub struct PipelineShaderStageCreateInfoChain {
+    }
+
+    #[derive(Debug)]
+    struct PipelineShaderStageCreateInfoChainWrapper;
 }
 
 /// See [`VkPipelineShaderStageCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineShaderStageCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct PipelineShaderStageCreateInfo {
-    pub chain: Vec<PipelineShaderStageCreateInfoChainElement>,
     pub flags: PipelineShaderStageCreateFlags,
     pub stage: ShaderStageFlagBits,
     pub module: ShaderModule,
     pub name: String,
     pub specialization_info: Option<SpecializationInfo>,
+    pub chain: Option<PipelineShaderStageCreateInfoChain>,
 }
 
 #[derive(Debug)]
@@ -6085,10 +6089,11 @@ struct VkPipelineShaderStageCreateInfoWrapper {
     module: ShaderModule,
     name: CString,
     specialization_info: Option<Box<VkSpecializationInfoWrapper>>,
+    chain: Option<PipelineShaderStageCreateInfoChainWrapper>,
 }
 
-impl<'a> From<&'a PipelineShaderStageCreateInfo> for VkPipelineShaderStageCreateInfoWrapper {
-    fn from(create_info: &'a PipelineShaderStageCreateInfo) -> Self {
+impl VkPipelineShaderStageCreateInfoWrapper {
+    pub fn new(create_info: &PipelineShaderStageCreateInfo, with_chain: bool) -> Self {
         let name = CString::new(create_info.name.clone()).unwrap();
 
         let (specialization_info_ptr, specialization_info) = match create_info.specialization_info {
@@ -6100,10 +6105,12 @@ impl<'a> From<&'a PipelineShaderStageCreateInfo> for VkPipelineShaderStageCreate
             None => (ptr::null(), None),
         };
 
+        let (pnext, chain) = PipelineShaderStageCreateInfoChainWrapper::new_optional(&create_info.chain, with_chain);
+
         VkPipelineShaderStageCreateInfoWrapper {
             vks_struct: vks::VkPipelineShaderStageCreateInfo {
                 sType: vks::VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
-                pNext: ptr::null(),
+                pNext: pnext,
                 flags: create_info.flags,
                 stage: create_info.stage,
                 module: create_info.module.handle(),
@@ -6113,6 +6120,7 @@ impl<'a> From<&'a PipelineShaderStageCreateInfo> for VkPipelineShaderStageCreate
             module: create_info.module.clone(),
             name: name,
             specialization_info: specialization_info,
+            chain: chain,
         }
     }
 }
@@ -6176,53 +6184,51 @@ impl<'a> From<&'a VertexInputAttributeDescription> for vks::VkVertexInputAttribu
     }
 }
 
-/// See [`VkPipelineVertexInputStateCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineVertexInputStateCreateInfo)
-#[derive(Debug, Clone, PartialEq)]
-pub enum PipelineVertexInputStateCreateInfoChainElement {
+chain_struct! {
+    #[derive(Debug, Clone, Default, PartialEq)]
+    pub struct PipelineVertexInputStateCreateInfoChain {
+    }
+
+    #[derive(Debug)]
+    struct PipelineVertexInputStateCreateInfoChainWrapper;
 }
 
 /// See [`VkPipelineVertexInputStateCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineVertexInputStateCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct PipelineVertexInputStateCreateInfo {
-    pub chain: Vec<PipelineVertexInputStateCreateInfoChainElement>,
     pub flags: PipelineVertexInputStateCreateFlags,
     pub vertex_binding_descriptions: Option<Vec<VertexInputBindingDescription>>,
     pub vertex_attribute_descriptions: Option<Vec<VertexInputAttributeDescription>>,
+    pub chain: Option<PipelineVertexInputStateCreateInfoChain>,
 }
 
-impl<'a> From<&'a vks::VkPipelineVertexInputStateCreateInfo> for PipelineVertexInputStateCreateInfo {
-    fn from(create_info: &'a vks::VkPipelineVertexInputStateCreateInfo) -> Self {
-        debug_assert_eq!(create_info.pNext, ptr::null());
-
+impl PipelineVertexInputStateCreateInfo {
+    pub unsafe fn from(create_info: &vks::VkPipelineVertexInputStateCreateInfo, with_chain: bool) -> Self {
         let vertex_binding_descriptions = if !create_info.pVertexBindingDescriptions.is_null() {
-            unsafe {
-                Some(slice::from_raw_parts(create_info.pVertexBindingDescriptions, create_info.vertexBindingDescriptionCount as usize)
-                     .iter()
-                     .map(From::from)
-                     .collect())
-            }
+            Some(slice::from_raw_parts(create_info.pVertexBindingDescriptions, create_info.vertexBindingDescriptionCount as usize)
+                    .iter()
+                    .map(From::from)
+                    .collect())
         }
         else {
             None
         };
 
         let vertex_attribute_descriptions = if !create_info.pVertexAttributeDescriptions.is_null() {
-            unsafe {
-                Some(slice::from_raw_parts(create_info.pVertexAttributeDescriptions, create_info.vertexAttributeDescriptionCount as usize)
-                     .iter()
-                     .map(From::from)
-                     .collect())
-            }
+            Some(slice::from_raw_parts(create_info.pVertexAttributeDescriptions, create_info.vertexAttributeDescriptionCount as usize)
+                    .iter()
+                    .map(From::from)
+                    .collect())
         }
         else {
             None
         };
 
         PipelineVertexInputStateCreateInfo {
-            chain: vec![],
             flags: create_info.flags,
             vertex_binding_descriptions: vertex_binding_descriptions,
             vertex_attribute_descriptions: vertex_attribute_descriptions,
+            chain: PipelineVertexInputStateCreateInfoChain::from_vks(create_info.pNext, with_chain),
         }
     }
 }
@@ -6232,10 +6238,11 @@ struct VkPipelineVertexInputStateCreateInfoWrapper {
     pub vks_struct: vks::VkPipelineVertexInputStateCreateInfo,
     vertex_binding_descriptions: Option<Vec<vks::VkVertexInputBindingDescription>>,
     vertex_attribute_descriptions: Option<Vec<vks::VkVertexInputAttributeDescription>>,
+    chain: Option<PipelineVertexInputStateCreateInfoChainWrapper>,
 }
 
-impl<'a> From<&'a PipelineVertexInputStateCreateInfo> for VkPipelineVertexInputStateCreateInfoWrapper {
-    fn from(create_info: &'a PipelineVertexInputStateCreateInfo) -> Self {
+impl VkPipelineVertexInputStateCreateInfoWrapper {
+    pub fn new(create_info: &PipelineVertexInputStateCreateInfo, with_chain: bool) -> Self {
         let (vertex_binding_descriptions_count, vertex_binding_descriptions_ptr, vertex_binding_descriptions) = match create_info.vertex_binding_descriptions {
             Some(ref vertex_binding_descriptions) => {
                 let vertex_binding_descriptions: Vec<_> = vertex_binding_descriptions.iter().map(From::from).collect();
@@ -6254,10 +6261,12 @@ impl<'a> From<&'a PipelineVertexInputStateCreateInfo> for VkPipelineVertexInputS
             None => (0, ptr::null(), None),
         };
 
+        let (pnext, chain) = PipelineVertexInputStateCreateInfoChainWrapper::new_optional(&create_info.chain, with_chain);
+
         VkPipelineVertexInputStateCreateInfoWrapper {
             vks_struct: vks::VkPipelineVertexInputStateCreateInfo {
                 sType: vks::VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO,
-                pNext: ptr::null(),
+                pNext: pnext,
                 flags: create_info.flags,
                 vertexBindingDescriptionCount: vertex_binding_descriptions_count,
                 pVertexBindingDescriptions: vertex_binding_descriptions_ptr,
@@ -6266,33 +6275,36 @@ impl<'a> From<&'a PipelineVertexInputStateCreateInfo> for VkPipelineVertexInputS
             },
             vertex_binding_descriptions: vertex_binding_descriptions,
             vertex_attribute_descriptions: vertex_attribute_descriptions,
+            chain: chain,
         }
     }
 }
 
-/// See [`VkPipelineInputAssemblyStateCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineInputAssemblyStateCreateInfo)
-#[derive(Debug, Clone, PartialEq)]
-pub enum PipelineInputAssemblyStateCreateInfoChainElement {
+chain_struct! {
+    #[derive(Debug, Clone, Default, PartialEq)]
+    pub struct PipelineInputAssemblyStateCreateInfoChain {
+    }
+
+    #[derive(Debug)]
+    struct PipelineInputAssemblyStateCreateInfoChainWrapper;
 }
 
 /// See [`VkPipelineInputAssemblyStateCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineInputAssemblyStateCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct PipelineInputAssemblyStateCreateInfo {
-    pub chain: Vec<PipelineInputAssemblyStateCreateInfoChainElement>,
     pub flags: PipelineInputAssemblyStateCreateFlags,
     pub topology: PrimitiveTopology,
     pub primitive_restart_enable: bool,
+    pub chain: Option<PipelineInputAssemblyStateCreateInfoChain>,
 }
 
-impl<'a> From<&'a vks::VkPipelineInputAssemblyStateCreateInfo> for PipelineInputAssemblyStateCreateInfo {
-    fn from(create_info: &'a vks::VkPipelineInputAssemblyStateCreateInfo) -> Self {
-        debug_assert!(create_info.pNext.is_null());
-
+impl PipelineInputAssemblyStateCreateInfo {
+    pub unsafe fn from_vks(create_info: &vks::VkPipelineInputAssemblyStateCreateInfo, with_chain: bool) -> Self {
         PipelineInputAssemblyStateCreateInfo {
-            chain: vec![],
             flags: create_info.flags,
             topology: create_info.topology.into(),
             primitive_restart_enable: utils::from_vk_bool(create_info.primitiveRestartEnable),
+            chain: PipelineInputAssemblyStateCreateInfoChain::from_vks(create_info.pNext, with_chain),
         }
     }
 }
@@ -6300,43 +6312,49 @@ impl<'a> From<&'a vks::VkPipelineInputAssemblyStateCreateInfo> for PipelineInput
 #[derive(Debug)]
 struct VkPipelineInputAssemblyStateCreateInfoWrapper {
     pub vks_struct: vks::VkPipelineInputAssemblyStateCreateInfo,
+    chain: Option<PipelineInputAssemblyStateCreateInfoChainWrapper>,
 }
 
-impl<'a> From<&'a PipelineInputAssemblyStateCreateInfo> for VkPipelineInputAssemblyStateCreateInfoWrapper {
-    fn from(create_info: &'a PipelineInputAssemblyStateCreateInfo) -> Self {
+impl VkPipelineInputAssemblyStateCreateInfoWrapper {
+    pub fn new(create_info: &PipelineInputAssemblyStateCreateInfo, with_chain: bool) -> Self {
+        let (pnext, chain) = PipelineInputAssemblyStateCreateInfoChainWrapper::new_optional(&create_info.chain, with_chain);
+
         VkPipelineInputAssemblyStateCreateInfoWrapper {
             vks_struct: vks::VkPipelineInputAssemblyStateCreateInfo {
                 sType: vks::VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO,
-                pNext: ptr::null(),
+                pNext: pnext,
                 flags: create_info.flags,
                 topology: create_info.topology.into(),
                 primitiveRestartEnable: utils::to_vk_bool(create_info.primitive_restart_enable),
             },
+            chain: chain,
         }
     }
 }
 
-/// See [`VkPipelineTessellationStateCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineTessellationStateCreateInfo)
-#[derive(Debug, Clone, PartialEq)]
-pub enum PipelineTessellationStateCreateInfoChainElement {
+chain_struct! {
+    #[derive(Debug, Clone, Default, PartialEq)]
+    pub struct PipelineTessellationStateCreateInfoChain {
+    }
+
+    #[derive(Debug)]
+    struct PipelineTessellationStateCreateInfoChainWrapper;
 }
 
 /// See [`VkPipelineTessellationStateCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineTessellationStateCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct PipelineTessellationStateCreateInfo {
-    pub chain: Vec<PipelineTessellationStateCreateInfoChainElement>,
     pub flags: PipelineTessellationStateCreateFlags,
     pub patch_control_points: u32,
+    pub chain: Option<PipelineTessellationStateCreateInfoChain>,
 }
 
-impl<'a> From<&'a vks::VkPipelineTessellationStateCreateInfo> for PipelineTessellationStateCreateInfo {
-    fn from(create_info: &'a vks::VkPipelineTessellationStateCreateInfo) -> Self {
-        debug_assert!(create_info.pNext.is_null());
-
+impl PipelineTessellationStateCreateInfo {
+    pub unsafe fn from_vks(create_info: &vks::VkPipelineTessellationStateCreateInfo, with_chain: bool) -> Self {
         PipelineTessellationStateCreateInfo {
-            chain: vec![],
             flags: create_info.flags,
             patch_control_points: create_info.patchControlPoints,
+            chain: PipelineTessellationStateCreateInfoChain::from_vks(create_info.pNext, with_chain),
         }
     }
 }
@@ -6344,17 +6362,21 @@ impl<'a> From<&'a vks::VkPipelineTessellationStateCreateInfo> for PipelineTessel
 #[derive(Debug)]
 struct VkPipelineTessellationStateCreateInfoWrapper {
     pub vks_struct: vks::VkPipelineTessellationStateCreateInfo,
+    chain: Option<PipelineTessellationStateCreateInfoChainWrapper>,
 }
 
-impl<'a> From<&'a PipelineTessellationStateCreateInfo> for VkPipelineTessellationStateCreateInfoWrapper {
-    fn from(create_info: &'a PipelineTessellationStateCreateInfo) -> Self {
+impl VkPipelineTessellationStateCreateInfoWrapper {
+    pub fn new(create_info: &PipelineTessellationStateCreateInfo, with_chain: bool) -> Self {
+        let (pnext, chain) = PipelineTessellationStateCreateInfoChainWrapper::new_optional(&create_info.chain, with_chain);
+
         VkPipelineTessellationStateCreateInfoWrapper {
             vks_struct: vks::VkPipelineTessellationStateCreateInfo {
                 sType: vks::VK_STRUCTURE_TYPE_PIPELINE_TESSELLATION_STATE_CREATE_INFO,
-                pNext: ptr::null(),
+                pNext: pnext,
                 flags: create_info.flags,
                 patchControlPoints: create_info.patch_control_points,
             },
+            chain: chain,
         }
     }
 }
@@ -6471,43 +6493,41 @@ impl<'a> From<&'a Rect2D> for vks::VkRect2D {
     }
 }
 
-/// See [`VkPipelineViewportStateCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineViewportStateCreateInfo)
-#[derive(Debug, Clone, PartialEq)]
-pub enum PipelineViewportStateCreateInfoChainElement {
+chain_struct! {
+    #[derive(Debug, Clone, Default, PartialEq)]
+    pub struct PipelineViewportStateCreateInfoChain {
+    }
+
+    #[derive(Debug)]
+    struct PipelineViewportStateCreateInfoChainWrapper;
 }
 
 /// See [`VkPipelineViewportStateCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineViewportStateCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct PipelineViewportStateCreateInfo {
-    pub chain: Vec<PipelineViewportStateCreateInfoChainElement>,
     pub flags: PipelineViewportStateCreateFlags,
     pub viewports: Vec<Viewport>,
     pub scissors: Vec<Rect2D>,
+    pub chain: Option<PipelineViewportStateCreateInfoChain>,
 }
 
-impl<'a> From<&'a vks::VkPipelineViewportStateCreateInfo> for PipelineViewportStateCreateInfo {
-    fn from(create_info: &'a vks::VkPipelineViewportStateCreateInfo) -> Self {
-        debug_assert!(create_info.pNext.is_null());
+impl PipelineViewportStateCreateInfo {
+    pub unsafe fn from(create_info: &vks::VkPipelineViewportStateCreateInfo, with_chain: bool) -> Self {
+        let viewports = slice::from_raw_parts(create_info.pViewports, create_info.viewportCount as usize)
+            .iter()
+            .map(From::from)
+            .collect();
 
-        let viewports = unsafe {
-            slice::from_raw_parts(create_info.pViewports, create_info.viewportCount as usize)
-                .iter()
-                .map(From::from)
-                .collect()
-        };
-
-        let scissors = unsafe {
-            slice::from_raw_parts(create_info.pScissors, create_info.scissorCount as usize)
-                .iter()
-                .map(From::from)
-                .collect()
-        };
+        let scissors = slice::from_raw_parts(create_info.pScissors, create_info.scissorCount as usize)
+            .iter()
+            .map(From::from)
+            .collect();
 
         PipelineViewportStateCreateInfo {
-            chain: vec![],
             flags: create_info.flags,
             viewports: viewports,
             scissors: scissors,
+            chain: PipelineViewportStateCreateInfoChain::from_vks(create_info.pNext, with_chain),
         }
     }
 }
@@ -6517,17 +6537,19 @@ struct VkPipelineViewportStateCreateInfoWrapper {
     pub vks_struct: vks::VkPipelineViewportStateCreateInfo,
     viewports: Vec<vks::VkViewport>,
     scissors: Vec<vks::VkRect2D>,
+    chain: Option<PipelineViewportStateCreateInfoChainWrapper>,
 }
 
-impl<'a> From<&'a PipelineViewportStateCreateInfo> for VkPipelineViewportStateCreateInfoWrapper {
-    fn from(create_info: &'a PipelineViewportStateCreateInfo) -> Self {
+impl VkPipelineViewportStateCreateInfoWrapper {
+    pub fn new(create_info: &PipelineViewportStateCreateInfo, with_chain: bool) -> Self {
         let viewports: Vec<_> = create_info.viewports.iter().map(From::from).collect();
         let scissors: Vec<_> = create_info.scissors.iter().map(From::from).collect();
+        let (pnext, chain) = PipelineViewportStateCreateInfoChainWrapper::new_optional(&create_info.chain, with_chain);
 
         VkPipelineViewportStateCreateInfoWrapper {
             vks_struct: vks::VkPipelineViewportStateCreateInfo {
                 sType: vks::VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO,
-                pNext: ptr::null(),
+                pNext: pnext,
                 flags: create_info.flags,
                 viewportCount: viewports.len() as u32,
                 pViewports: viewports.as_ptr(),
@@ -6536,19 +6558,23 @@ impl<'a> From<&'a PipelineViewportStateCreateInfo> for VkPipelineViewportStateCr
             },
             viewports: viewports,
             scissors: scissors,
+            chain: chain,
         }
     }
 }
 
-/// See [`VkPipelineRasterizationStateCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineRasterizationStateCreateInfo)
-#[derive(Debug, Clone, PartialEq)]
-pub enum PipelineRasterizationStateCreateInfoChainElement {
+chain_struct! {
+    #[derive(Debug, Clone, Default, PartialEq)]
+    pub struct PipelineRasterizationStateCreateInfoChain {
+    }
+
+    #[derive(Debug)]
+    struct PipelineRasterizationStateCreateInfoChainWrapper;
 }
 
 /// See [`VkPipelineRasterizationStateCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineRasterizationStateCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct PipelineRasterizationStateCreateInfo {
-    pub chain: Vec<PipelineRasterizationStateCreateInfoChainElement>,
     pub flags: PipelineRasterizationStateCreateFlags,
     pub depth_clamp_enable: bool,
     pub rasterizer_discard_enable: bool,
@@ -6560,14 +6586,12 @@ pub struct PipelineRasterizationStateCreateInfo {
     pub depth_bias_clamp: f32,
     pub depth_bias_slope_factor: f32,
     pub line_width: f32,
+    pub chain: Option<PipelineRasterizationStateCreateInfoChain>,
 }
 
-impl<'a> From<&'a vks::VkPipelineRasterizationStateCreateInfo> for PipelineRasterizationStateCreateInfo {
-    fn from(create_info: &'a vks::VkPipelineRasterizationStateCreateInfo) -> Self {
-        assert!(create_info.pNext.is_null());
-
+impl PipelineRasterizationStateCreateInfo {
+    pub unsafe fn from_vks(create_info: &vks::VkPipelineRasterizationStateCreateInfo, with_chain: bool) -> Self {
         PipelineRasterizationStateCreateInfo {
-            chain: vec![],
             flags: create_info.flags,
             depth_clamp_enable: utils::from_vk_bool(create_info.depthClampEnable),
             rasterizer_discard_enable: utils::from_vk_bool(create_info.rasterizerDiscardEnable),
@@ -6579,6 +6603,7 @@ impl<'a> From<&'a vks::VkPipelineRasterizationStateCreateInfo> for PipelineRaste
             depth_bias_clamp: create_info.depthBiasClamp,
             depth_bias_slope_factor: create_info.depthBiasSlopeFactor,
             line_width: create_info.lineWidth,
+            chain: PipelineRasterizationStateCreateInfoChain::from_vks(create_info.pNext, with_chain),
         }
     }
 }
@@ -6586,14 +6611,17 @@ impl<'a> From<&'a vks::VkPipelineRasterizationStateCreateInfo> for PipelineRaste
 #[derive(Debug)]
 struct VkPipelineRasterizationStateCreateInfoWrapper {
     pub vks_struct: vks::VkPipelineRasterizationStateCreateInfo,
+    chain: Option<PipelineRasterizationStateCreateInfoChainWrapper>,
 }
 
-impl<'a> From<&'a PipelineRasterizationStateCreateInfo> for VkPipelineRasterizationStateCreateInfoWrapper {
-    fn from(create_info: &'a PipelineRasterizationStateCreateInfo) -> Self {
+impl VkPipelineRasterizationStateCreateInfoWrapper {
+    pub fn new(create_info: &PipelineRasterizationStateCreateInfo, with_chain: bool) -> Self {
+        let (pnext, chain) = PipelineRasterizationStateCreateInfoChainWrapper::new_optional(&create_info.chain, with_chain);
+
         VkPipelineRasterizationStateCreateInfoWrapper {
             vks_struct: vks::VkPipelineRasterizationStateCreateInfo {
                 sType: vks::VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO,
-                pNext: ptr::null(),
+                pNext: pnext,
                 flags: create_info.flags,
                 depthClampEnable: utils::to_vk_bool(create_info.depth_clamp_enable),
                 rasterizerDiscardEnable: utils::to_vk_bool(create_info.rasterizer_discard_enable),
@@ -6606,19 +6634,23 @@ impl<'a> From<&'a PipelineRasterizationStateCreateInfo> for VkPipelineRasterizat
                 depthBiasSlopeFactor: create_info.depth_bias_slope_factor,
                 lineWidth: create_info.line_width,
             },
+            chain: chain,
         }
     }
 }
 
-/// See [`VkPipelineMultisampleStateCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineMultisampleStateCreateInfo)
-#[derive(Debug, Clone, PartialEq)]
-pub enum PipelineMultisampleStateCreateInfoChainElement {
+chain_struct! {
+    #[derive(Debug, Clone, Default, PartialEq)]
+    pub struct PipelineMultisampleStateCreateInfoChain {
+    }
+
+    #[derive(Debug)]
+    struct PipelineMultisampleStateCreateInfoChainWrapper;
 }
 
 /// See [`VkPipelineMultisampleStateCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineMultisampleStateCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct PipelineMultisampleStateCreateInfo {
-    pub chain: Vec<PipelineMultisampleStateCreateInfoChainElement>,
     pub flags: PipelineMultisampleStateCreateFlags,
     pub rasterization_samples: SampleCountFlagBits,
     pub sample_shading_enable: bool,
@@ -6626,24 +6658,20 @@ pub struct PipelineMultisampleStateCreateInfo {
     pub sample_mask: Option<Vec<u32>>,
     pub alpha_to_coverage_enable: bool,
     pub alpha_to_one_enable: bool,
+    pub chain: Option<PipelineMultisampleStateCreateInfoChain>,
 }
 
-impl<'a> From<&'a vks::VkPipelineMultisampleStateCreateInfo> for PipelineMultisampleStateCreateInfo {
-    fn from(create_info: &'a vks::VkPipelineMultisampleStateCreateInfo) -> Self {
-        debug_assert!(create_info.pNext.is_null());
-
+impl PipelineMultisampleStateCreateInfo {
+    pub unsafe fn from_vks(create_info: &vks::VkPipelineMultisampleStateCreateInfo, with_chain: bool) -> Self {
         let sample_mask = if !create_info.pSampleMask.is_null() {
             let sample_mask_len = (create_info.rasterizationSamples.bits() as usize + 31) / 32;
-            unsafe {
-                Some(slice::from_raw_parts(create_info.pSampleMask, sample_mask_len).to_vec())
-            }
+            Some(slice::from_raw_parts(create_info.pSampleMask, sample_mask_len).to_vec())
         }
         else {
             None
         };
 
         PipelineMultisampleStateCreateInfo {
-            chain: vec![],
             flags: create_info.flags,
             rasterization_samples: create_info.rasterizationSamples,
             sample_shading_enable: utils::from_vk_bool(create_info.sampleShadingEnable),
@@ -6651,6 +6679,7 @@ impl<'a> From<&'a vks::VkPipelineMultisampleStateCreateInfo> for PipelineMultisa
             sample_mask: sample_mask,
             alpha_to_coverage_enable: utils::from_vk_bool(create_info.alphaToCoverageEnable),
             alpha_to_one_enable: utils::from_vk_bool(create_info.alphaToOneEnable),
+            chain: PipelineMultisampleStateCreateInfoChain::from_vks(create_info.pNext, with_chain),
         }
     }
 }
@@ -6659,10 +6688,11 @@ impl<'a> From<&'a vks::VkPipelineMultisampleStateCreateInfo> for PipelineMultisa
 struct VkPipelineMultisampleStateCreateInfoWrapper {
     pub vks_struct: vks::VkPipelineMultisampleStateCreateInfo,
     sample_mask: Option<Vec<u32>>,
+    chain: Option<PipelineMultisampleStateCreateInfoChainWrapper>,
 }
 
-impl<'a> From<&'a PipelineMultisampleStateCreateInfo> for VkPipelineMultisampleStateCreateInfoWrapper {
-    fn from(create_info: &'a PipelineMultisampleStateCreateInfo) -> Self {
+impl VkPipelineMultisampleStateCreateInfoWrapper {
+    pub fn new(create_info: &PipelineMultisampleStateCreateInfo, with_chain: bool) -> Self {
         let (sample_mask_ptr, sample_mask) = match create_info.sample_mask {
             Some(ref sample_mask) => {
                 let sample_mask = sample_mask.clone();
@@ -6672,10 +6702,12 @@ impl<'a> From<&'a PipelineMultisampleStateCreateInfo> for VkPipelineMultisampleS
             None => (ptr::null(), None),
         };
 
+        let (pnext, chain) = PipelineMultisampleStateCreateInfoChainWrapper::new_optional(&create_info.chain, with_chain);
+
         VkPipelineMultisampleStateCreateInfoWrapper {
             vks_struct: vks::VkPipelineMultisampleStateCreateInfo {
                 sType: vks::VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO,
-                pNext: ptr::null(),
+                pNext: pnext,
                 flags: create_info.flags,
                 rasterizationSamples: create_info.rasterization_samples,
                 sampleShadingEnable: utils::to_vk_bool(create_info.sample_shading_enable),
@@ -6685,6 +6717,7 @@ impl<'a> From<&'a PipelineMultisampleStateCreateInfo> for VkPipelineMultisampleS
                 alphaToOneEnable: utils::to_vk_bool(create_info.alpha_to_one_enable),
             },
             sample_mask: sample_mask,
+            chain: chain,
         }
     }
 }
@@ -6729,15 +6762,18 @@ impl<'a> From<&'a StencilOpState> for vks::VkStencilOpState {
     }
 }
 
-/// See [`VkPipelineDepthStencilStateCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineDepthStencilStateCreateInfo)
-#[derive(Debug, Clone, PartialEq)]
-pub enum PipelineDepthStencilStateCreateInfoChainElement {
+chain_struct! {
+    #[derive(Debug, Clone, Default, PartialEq)]
+    pub struct PipelineDepthStencilStateCreateInfoChain {
+    }
+
+    #[derive(Debug)]
+    struct PipelineDepthStencilStateCreateInfoChainWrapper;
 }
 
 /// See [`VkPipelineDepthStencilStateCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineDepthStencilStateCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct PipelineDepthStencilStateCreateInfo {
-    pub chain: Vec<PipelineDepthStencilStateCreateInfoChainElement>,
     pub flags: PipelineDepthStencilStateCreateFlags,
     pub depth_test_enable: bool,
     pub depth_write_enable: bool,
@@ -6748,14 +6784,12 @@ pub struct PipelineDepthStencilStateCreateInfo {
     pub back: StencilOpState,
     pub min_depth_bounds: f32,
     pub max_depth_bounds: f32,
+    pub chain: Option<PipelineDepthStencilStateCreateInfoChain>,
 }
 
-impl<'a> From<&'a vks::VkPipelineDepthStencilStateCreateInfo> for PipelineDepthStencilStateCreateInfo {
-    fn from(create_info: &'a vks::VkPipelineDepthStencilStateCreateInfo) -> Self {
-        assert!(create_info.pNext.is_null());
-
+impl PipelineDepthStencilStateCreateInfo {
+    pub unsafe fn from_vks(create_info: &vks::VkPipelineDepthStencilStateCreateInfo, with_chain: bool) -> Self {
         PipelineDepthStencilStateCreateInfo {
-            chain: vec![],
             flags: create_info.flags,
             depth_test_enable: utils::from_vk_bool(create_info.depthTestEnable),
             depth_write_enable: utils::from_vk_bool(create_info.depthWriteEnable),
@@ -6766,6 +6800,7 @@ impl<'a> From<&'a vks::VkPipelineDepthStencilStateCreateInfo> for PipelineDepthS
             back: (&create_info.back).into(),
             min_depth_bounds: create_info.minDepthBounds,
             max_depth_bounds: create_info.maxDepthBounds,
+            chain: PipelineDepthStencilStateCreateInfoChain::from_vks(create_info.pNext, with_chain),
         }
     }
 }
@@ -6773,14 +6808,17 @@ impl<'a> From<&'a vks::VkPipelineDepthStencilStateCreateInfo> for PipelineDepthS
 #[derive(Debug)]
 struct VkPipelineDepthStencilStateCreateInfoWrapper {
     pub vks_struct: vks::VkPipelineDepthStencilStateCreateInfo,
+    chain: Option<PipelineDepthStencilStateCreateInfoChainWrapper>,
 }
 
-impl<'a> From<&'a PipelineDepthStencilStateCreateInfo> for VkPipelineDepthStencilStateCreateInfoWrapper {
-    fn from(create_info: &'a PipelineDepthStencilStateCreateInfo) -> Self {
+impl VkPipelineDepthStencilStateCreateInfoWrapper {
+    pub fn new(create_info: &PipelineDepthStencilStateCreateInfo, with_chain: bool) -> Self {
+        let (pnext, chain) = PipelineDepthStencilStateCreateInfoChainWrapper::new_optional(&create_info.chain, with_chain);
+
         VkPipelineDepthStencilStateCreateInfoWrapper {
             vks_struct: vks::VkPipelineDepthStencilStateCreateInfo {
                 sType: vks::VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO,
-                pNext: ptr::null(),
+                pNext: pnext,
                 flags: create_info.flags,
                 depthTestEnable: utils::to_vk_bool(create_info.depth_test_enable),
                 depthWriteEnable: utils::to_vk_bool(create_info.depth_write_enable),
@@ -6792,6 +6830,7 @@ impl<'a> From<&'a PipelineDepthStencilStateCreateInfo> for VkPipelineDepthStenci
                 minDepthBounds: create_info.min_depth_bounds,
                 maxDepthBounds: create_info.max_depth_bounds,
             },
+            chain: chain,
         }
     }
 }
@@ -6839,45 +6878,45 @@ impl<'a> From<&'a PipelineColorBlendAttachmentState> for vks::VkPipelineColorBle
     }
 }
 
-/// See [`VkPipelineColorBlendStateCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineColorBlendStateCreateInfo)
-#[derive(Debug, Clone, PartialEq)]
-pub enum PipelineColorBlendStateCreateInfoChainElement {
+chain_struct! {
+    #[derive(Debug, Clone, Default, PartialEq)]
+    pub struct PipelineColorBlendStateCreateInfoChain {
+    }
+
+    #[derive(Debug)]
+    struct PipelineColorBlendStateCreateInfoChainWrapper;
 }
 
 /// See [`VkPipelineColorBlendStateCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineColorBlendStateCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct PipelineColorBlendStateCreateInfo {
-    pub chain: Vec<PipelineColorBlendStateCreateInfoChainElement>,
     pub flags: PipelineColorBlendStateCreateFlags,
     pub logic_op_enable: bool,
     pub logic_op: LogicOp,
     pub attachments: Option<Vec<PipelineColorBlendAttachmentState>>,
     pub blend_constants: [f32; 4],
+    pub chain: Option<PipelineColorBlendStateCreateInfoChain>,
 }
 
-impl<'a> From<&'a vks::VkPipelineColorBlendStateCreateInfo> for PipelineColorBlendStateCreateInfo {
-    fn from(create_info: &'a vks::VkPipelineColorBlendStateCreateInfo) -> Self {
-        assert!(create_info.pNext.is_null());
-
+impl PipelineColorBlendStateCreateInfo {
+    pub unsafe fn from_vks(create_info: &vks::VkPipelineColorBlendStateCreateInfo, with_chain: bool) -> Self {
         let attachments = if !create_info.pAttachments.is_null() {
-            unsafe {
-                Some(slice::from_raw_parts(create_info.pAttachments, create_info.attachmentCount as usize)
-                     .iter()
-                     .map(From::from)
-                     .collect())
-            }
+            Some(slice::from_raw_parts(create_info.pAttachments, create_info.attachmentCount as usize)
+                 .iter()
+                 .map(From::from)
+                 .collect())
         }
         else {
             None
         };
 
         PipelineColorBlendStateCreateInfo {
-            chain: vec![],
             flags: create_info.flags,
             logic_op_enable: utils::from_vk_bool(create_info.logicOpEnable),
             logic_op: create_info.logicOp.into(),
             attachments: attachments,
             blend_constants: create_info.blendConstants,
+            chain: PipelineColorBlendStateCreateInfoChain::from_vks(create_info.pNext, with_chain),
         }
     }
 }
@@ -6886,10 +6925,11 @@ impl<'a> From<&'a vks::VkPipelineColorBlendStateCreateInfo> for PipelineColorBle
 struct VkPipelineColorBlendStateCreateInfoWrapper {
     pub vks_struct: vks::VkPipelineColorBlendStateCreateInfo,
     attachments: Option<Vec<vks::VkPipelineColorBlendAttachmentState>>,
+    chain: Option<PipelineColorBlendStateCreateInfoChainWrapper>,
 }
 
-impl<'a> From<&'a PipelineColorBlendStateCreateInfo> for VkPipelineColorBlendStateCreateInfoWrapper {
-    fn from(create_info: &'a PipelineColorBlendStateCreateInfo) -> Self {
+impl VkPipelineColorBlendStateCreateInfoWrapper {
+    pub fn new(create_info: &PipelineColorBlendStateCreateInfo, with_chain: bool) -> Self {
         let (attachments_count, attachments_ptr, attachments) = match create_info.attachments {
             Some(ref attachments) => {
                 let attachments: Vec<_> = attachments.iter().map(From::from).collect();
@@ -6899,10 +6939,12 @@ impl<'a> From<&'a PipelineColorBlendStateCreateInfo> for VkPipelineColorBlendSta
             None => (0, ptr::null(), None),
         };
 
+        let (pnext, chain) = PipelineColorBlendStateCreateInfoChainWrapper::new_optional(&create_info.chain, with_chain);
+
         VkPipelineColorBlendStateCreateInfoWrapper {
             vks_struct: vks::VkPipelineColorBlendStateCreateInfo {
                 sType: vks::VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO,
-                pNext: ptr::null(),
+                pNext: pnext,
                 flags: create_info.flags,
                 logicOpEnable: utils::to_vk_bool(create_info.logic_op_enable),
                 logicOp: create_info.logic_op.into(),
@@ -6911,39 +6953,40 @@ impl<'a> From<&'a PipelineColorBlendStateCreateInfo> for VkPipelineColorBlendSta
                 blendConstants: create_info.blend_constants,
             },
             attachments: attachments,
+            chain: chain,
         }
     }
 }
 
-/// See [`VkPipelineDynamicStateCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineDynamicStateCreateInfo)
-#[derive(Debug, Clone, PartialEq)]
-pub enum PipelineDynamicStateCreateInfoChainElement {
+chain_struct! {
+    #[derive(Debug, Clone, Default, PartialEq)]
+    pub struct PipelineDynamicStateCreateInfoChain {
+    }
+
+    #[derive(Debug)]
+    struct PipelineDynamicStateCreateInfoChainWrapper;
 }
 
 /// See [`VkPipelineDynamicStateCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineDynamicStateCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct PipelineDynamicStateCreateInfo {
-    pub chain: Vec<PipelineDynamicStateCreateInfoChainElement>,
     pub flags: PipelineDynamicStateCreateFlags,
     pub dynamic_states: Vec<DynamicState>,
+    pub chain: Option<PipelineDynamicStateCreateInfoChain>,
 }
 
-impl<'a> From<&'a vks::VkPipelineDynamicStateCreateInfo> for PipelineDynamicStateCreateInfo {
-    fn from(create_info: &'a vks::VkPipelineDynamicStateCreateInfo) -> Self {
-        assert!(create_info.pNext.is_null());
-
-        let dynamic_states = unsafe {
-            slice::from_raw_parts(create_info.pDynamicStates, create_info.dynamicStateCount as usize)
-                .iter()
-                .cloned()
-                .map(From::from)
-                .collect()
-        };
+impl PipelineDynamicStateCreateInfo {
+    pub unsafe fn from(create_info: &vks::VkPipelineDynamicStateCreateInfo, with_chain: bool) -> Self {
+        let dynamic_states = slice::from_raw_parts(create_info.pDynamicStates, create_info.dynamicStateCount as usize)
+            .iter()
+            .cloned()
+            .map(From::from)
+            .collect();
 
         PipelineDynamicStateCreateInfo {
-            chain: vec![],
             flags: create_info.flags,
             dynamic_states: dynamic_states,
+            chain: PipelineDynamicStateCreateInfoChain::from_vks(create_info.pNext, with_chain),
         }
     }
 }
@@ -6952,38 +6995,45 @@ impl<'a> From<&'a vks::VkPipelineDynamicStateCreateInfo> for PipelineDynamicStat
 struct VkPipelineDynamicStateCreateInfoWrapper {
     pub vks_struct: vks::VkPipelineDynamicStateCreateInfo,
     dynamic_states: Vec<vks::VkDynamicState>,
+    chain: Option<PipelineDynamicStateCreateInfoChainWrapper>,
 }
 
-impl<'a> From<&'a PipelineDynamicStateCreateInfo> for VkPipelineDynamicStateCreateInfoWrapper {
-    fn from(create_info: &'a PipelineDynamicStateCreateInfo) -> Self {
+impl VkPipelineDynamicStateCreateInfoWrapper {
+    pub fn new(create_info: &PipelineDynamicStateCreateInfo, with_chain: bool) -> Self {
         let dynamic_states: Vec<_> = create_info.dynamic_states
             .iter()
             .cloned()
             .map(From::from)
             .collect();
 
+        let (pnext, chain) = PipelineDynamicStateCreateInfoChainWrapper::new_optional(&create_info.chain, with_chain);
+
         VkPipelineDynamicStateCreateInfoWrapper {
             vks_struct: vks::VkPipelineDynamicStateCreateInfo {
                 sType: vks::VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO,
-                pNext: ptr::null(),
+                pNext: pnext,
                 flags: create_info.flags,
                 dynamicStateCount: dynamic_states.len() as u32,
                 pDynamicStates: dynamic_states.as_ptr(),
             },
             dynamic_states: dynamic_states,
+            chain: chain,
         }
     }
 }
 
-/// See [`VkGraphicsPipelineCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkGraphicsPipelineCreateInfo)
-#[derive(Debug, Clone, PartialEq)]
-pub enum GraphicsPipelineCreateInfoChainElement {
+chain_struct! {
+    #[derive(Debug, Clone, Default, PartialEq)]
+    pub struct GraphicsPipelineCreateInfoChain {
+    }
+
+    #[derive(Debug)]
+    struct GraphicsPipelineCreateInfoChainWrapper;
 }
 
 /// See [`VkGraphicsPipelineCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkGraphicsPipelineCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct GraphicsPipelineCreateInfo {
-    pub chain: Vec<GraphicsPipelineCreateInfoChainElement>,
     pub flags: PipelineCreateFlags,
     pub stages: Vec<PipelineShaderStageCreateInfo>,
     pub vertex_input_state: PipelineVertexInputStateCreateInfo,
@@ -7000,6 +7050,7 @@ pub struct GraphicsPipelineCreateInfo {
     pub subpass: u32,
     pub base_pipeline: Option<Pipeline>,
     pub base_pipeline_index: Option<u32>,
+    pub chain: Option<GraphicsPipelineCreateInfoChain>,
 }
 
 #[derive(Debug)]
@@ -7019,18 +7070,19 @@ struct VkGraphicsPipelineCreateInfoWrapper {
     layout: PipelineLayout,
     render_pass: RenderPass,
     base_pipeline: Option<Pipeline>,
+    chain: Option<GraphicsPipelineCreateInfoChainWrapper>,
 }
 
-impl<'a> From<&'a GraphicsPipelineCreateInfo> for VkGraphicsPipelineCreateInfoWrapper {
-    fn from(create_info: &'a GraphicsPipelineCreateInfo) -> Self {
-        let stages: Vec<VkPipelineShaderStageCreateInfoWrapper> = create_info.stages.iter().map(From::from).collect();
+impl VkGraphicsPipelineCreateInfoWrapper {
+    pub fn new(create_info: &GraphicsPipelineCreateInfo, with_chain: bool) -> Self {
+        let stages: Vec<_> = create_info.stages.iter().map(|c| VkPipelineShaderStageCreateInfoWrapper::new(c, true)).collect();
         let vk_stages: Vec<_> = stages.iter().map(|s| s.vks_struct).collect();
-        let vertex_input_state: Box<VkPipelineVertexInputStateCreateInfoWrapper> = Box::new((&create_info.vertex_input_state).into());
-        let input_assembly_state: Box<VkPipelineInputAssemblyStateCreateInfoWrapper> = Box::new((&create_info.input_assembly_state).into());
+        let vertex_input_state: Box<_> = Box::new(VkPipelineVertexInputStateCreateInfoWrapper::new(&create_info.vertex_input_state, true));
+        let input_assembly_state: Box<_> = Box::new(VkPipelineInputAssemblyStateCreateInfoWrapper::new(&create_info.input_assembly_state, true));
 
         let (tessellation_state_ptr, tessellation_state) = match create_info.tessellation_state {
             Some(ref tessellation_state) => {
-                let tessellation_state: Box<VkPipelineTessellationStateCreateInfoWrapper> = Box::new(tessellation_state.into());
+                let tessellation_state: Box<_> = Box::new(VkPipelineTessellationStateCreateInfoWrapper::new(tessellation_state, true));
                 (&tessellation_state.vks_struct as *const _, Some(tessellation_state))
             }
 
@@ -7039,18 +7091,18 @@ impl<'a> From<&'a GraphicsPipelineCreateInfo> for VkGraphicsPipelineCreateInfoWr
 
         let (viewport_state_ptr, viewport_state) = match create_info.viewport_state {
             Some(ref viewport_state) => {
-                let viewport_state: Box<VkPipelineViewportStateCreateInfoWrapper> = Box::new(viewport_state.into());
+                let viewport_state: Box<_> = Box::new(VkPipelineViewportStateCreateInfoWrapper::new(viewport_state, true));
                 (&viewport_state.vks_struct as *const _, Some(viewport_state))
             }
 
             None => (ptr::null(), None),
         };
 
-        let rasterization_state: Box<VkPipelineRasterizationStateCreateInfoWrapper> = Box::new((&create_info.rasterization_state).into());
+        let rasterization_state: Box<_> = Box::new(VkPipelineRasterizationStateCreateInfoWrapper::new(&create_info.rasterization_state, true));
 
         let (multisample_state_ptr, multisample_state) = match create_info.multisample_state {
             Some(ref multisample_state) => {
-                let multisample_state: Box<VkPipelineMultisampleStateCreateInfoWrapper> = Box::new(multisample_state.into());
+                let multisample_state: Box<_> = Box::new(VkPipelineMultisampleStateCreateInfoWrapper::new(multisample_state, true));
                 (&multisample_state.vks_struct as *const _, Some(multisample_state))
             }
 
@@ -7059,7 +7111,7 @@ impl<'a> From<&'a GraphicsPipelineCreateInfo> for VkGraphicsPipelineCreateInfoWr
 
         let (depth_stencil_state_ptr, depth_stencil_state) = match create_info.depth_stencil_state {
             Some(ref depth_stencil_state) => {
-                let depth_stencil_state: Box<VkPipelineDepthStencilStateCreateInfoWrapper> = Box::new(depth_stencil_state.into());
+                let depth_stencil_state: Box<_> = Box::new(VkPipelineDepthStencilStateCreateInfoWrapper::new(depth_stencil_state, true));
                 (&depth_stencil_state.vks_struct as *const _, Some(depth_stencil_state))
             }
 
@@ -7068,7 +7120,7 @@ impl<'a> From<&'a GraphicsPipelineCreateInfo> for VkGraphicsPipelineCreateInfoWr
 
         let (color_blend_state_ptr, color_blend_state) = match create_info.color_blend_state {
             Some(ref color_blend_state) => {
-                let color_blend_state: Box<VkPipelineColorBlendStateCreateInfoWrapper> = Box::new(color_blend_state.into());
+                let color_blend_state: Box<_> = Box::new(VkPipelineColorBlendStateCreateInfoWrapper::new(color_blend_state, true));
                 (&color_blend_state.vks_struct as *const _, Some(color_blend_state))
             }
 
@@ -7077,7 +7129,7 @@ impl<'a> From<&'a GraphicsPipelineCreateInfo> for VkGraphicsPipelineCreateInfoWr
 
         let (dynamic_state_ptr, dynamic_state) = match create_info.dynamic_state {
             Some(ref dynamic_state) => {
-                let dynamic_state: Box<VkPipelineDynamicStateCreateInfoWrapper> = Box::new(dynamic_state.into());
+                let dynamic_state: Box<_> = Box::new(VkPipelineDynamicStateCreateInfoWrapper::new(dynamic_state, true));
                 (&dynamic_state.vks_struct as *const _, Some(dynamic_state))
             }
 
@@ -7094,10 +7146,12 @@ impl<'a> From<&'a GraphicsPipelineCreateInfo> for VkGraphicsPipelineCreateInfoWr
             None => -1,
         };
 
+        let (pnext, chain) = GraphicsPipelineCreateInfoChainWrapper::new_optional(&create_info.chain, with_chain);
+
         VkGraphicsPipelineCreateInfoWrapper {
             vks_struct: vks::VkGraphicsPipelineCreateInfo {
                 sType: vks::VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO,
-                pNext: ptr::null(),
+                pNext: pnext,
                 flags: create_info.flags,
                 stageCount: stages.len() as u32,
                 pStages: vk_stages.as_ptr(),
@@ -7130,24 +7184,29 @@ impl<'a> From<&'a GraphicsPipelineCreateInfo> for VkGraphicsPipelineCreateInfoWr
             layout: create_info.layout.clone(),
             render_pass: create_info.render_pass.clone(),
             base_pipeline: base_pipeline,
+            chain: chain,
         }
     }
 }
 
-/// See [`VkComputePipelineCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkComputePipelineCreateInfo)
-#[derive(Debug, Clone, PartialEq)]
-pub enum ComputePipelineCreateInfoChainElement {
+chain_struct! {
+    #[derive(Debug, Clone, Default, PartialEq)]
+    pub struct ComputePipelineCreateInfoChain {
+    }
+
+    #[derive(Debug)]
+    struct ComputePipelineCreateInfoChainWrapper;
 }
 
 /// See [`VkComputePipelineCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkComputePipelineCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct ComputePipelineCreateInfo {
-    pub chain: Vec<ComputePipelineCreateInfoChainElement>,
     pub flags: PipelineCreateFlags,
     pub stage: PipelineShaderStageCreateInfo,
     pub layout: PipelineLayout,
     pub base_pipeline: Option<Pipeline>,
     pub base_pipeline_index: Option<u32>,
+    pub chain: Option<ComputePipelineCreateInfoChain>,
 }
 
 #[derive(Debug)]
@@ -7156,11 +7215,12 @@ struct VkComputePipelineCreateInfoWrapper {
     stage: VkPipelineShaderStageCreateInfoWrapper,
     layout: PipelineLayout,
     base_pipeline: Option<Pipeline>,
+    chain: Option<ComputePipelineCreateInfoChainWrapper>,
 }
 
-impl<'a> From<&'a ComputePipelineCreateInfo> for VkComputePipelineCreateInfoWrapper {
-    fn from(create_info: &'a ComputePipelineCreateInfo) -> Self {
-        let stage: VkPipelineShaderStageCreateInfoWrapper = (&create_info.stage).into();
+impl VkComputePipelineCreateInfoWrapper {
+    pub fn new(create_info: &ComputePipelineCreateInfo, with_chain: bool) -> Self {
+        let stage = VkPipelineShaderStageCreateInfoWrapper::new(&create_info.stage, true);
 
         let (base_pipeline_handle, base_pipeline) = match create_info.base_pipeline {
             Some(ref base_pipeline) => (base_pipeline.handle(), Some(base_pipeline.clone())),
@@ -7172,10 +7232,12 @@ impl<'a> From<&'a ComputePipelineCreateInfo> for VkComputePipelineCreateInfoWrap
             None => -1,
         };
 
+        let (pnext, chain) = ComputePipelineCreateInfoChainWrapper::new_optional(&create_info.chain, with_chain);
+
         VkComputePipelineCreateInfoWrapper {
             vks_struct: vks::VkComputePipelineCreateInfo {
                 sType: vks::VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO,
-                pNext: ptr::null(),
+                pNext: pnext,
                 flags: create_info.flags,
                 stage: stage.vks_struct,
                 layout: create_info.layout.handle(),
@@ -7185,6 +7247,7 @@ impl<'a> From<&'a ComputePipelineCreateInfo> for VkComputePipelineCreateInfoWrap
             stage: stage,
             layout: create_info.layout.clone(),
             base_pipeline: base_pipeline,
+            chain: chain,
         }
     }
 }

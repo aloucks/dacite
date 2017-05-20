@@ -409,7 +409,7 @@ impl Device {
             None => ptr::null_mut(),
         };
 
-        let create_info_wrappers: Vec<core::VkGraphicsPipelineCreateInfoWrapper> = create_infos.iter().map(From::from).collect();
+        let create_info_wrappers: Vec<_> = create_infos.iter().map(|c| core::VkGraphicsPipelineCreateInfoWrapper::new(c, true)).collect();
         let vk_create_infos: Vec<vks::VkGraphicsPipelineCreateInfo> = create_info_wrappers.iter().map(|c| c.vks_struct).collect();
 
         let allocator_helper = allocator.map(AllocatorHelper::new);
@@ -444,7 +444,7 @@ impl Device {
             None => ptr::null_mut(),
         };
 
-        let create_info_wrappers: Vec<core::VkComputePipelineCreateInfoWrapper> = create_infos.iter().map(From::from).collect();
+        let create_info_wrappers: Vec<_> = create_infos.iter().map(|c| core::VkComputePipelineCreateInfoWrapper::new(c, true)).collect();
         let vk_create_infos: Vec<vks::VkComputePipelineCreateInfo> = create_info_wrappers.iter().map(|c| c.vks_struct).collect();
 
         let allocator_helper = allocator.map(AllocatorHelper::new);
