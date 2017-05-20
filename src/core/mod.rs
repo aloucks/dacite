@@ -9010,19 +9010,23 @@ impl VkImageMemoryBarrierWrapper {
     }
 }
 
-/// See [`VkRenderPassBeginInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkRenderPassBeginInfo)
-#[derive(Debug, Clone, PartialEq)]
-pub enum RenderPassBeginInfoChainElement {
+chain_struct! {
+    #[derive(Debug, Clone, Default, PartialEq)]
+    pub struct RenderPassBeginInfoChain {
+    }
+
+    #[derive(Debug)]
+    struct RenderPassBeginInfoChainWrapper;
 }
 
 /// See [`VkRenderPassBeginInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkRenderPassBeginInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct RenderPassBeginInfo {
-    pub chain: Vec<RenderPassBeginInfoChainElement>,
     pub render_pass: RenderPass,
     pub framebuffer: Framebuffer,
     pub render_area: Rect2D,
     pub clear_values: Option<Vec<ClearValue>>,
+    pub chain: Option<RenderPassBeginInfoChain>,
 }
 
 #[derive(Debug)]
@@ -9031,10 +9035,11 @@ struct VkRenderPassBeginInfoWrapper {
     render_pass: RenderPass,
     framebuffer: Framebuffer,
     clear_values: Option<Vec<vks::VkClearValue>>,
+    chain: Option<RenderPassBeginInfoChainWrapper>,
 }
 
-impl<'a> From<&'a RenderPassBeginInfo> for VkRenderPassBeginInfoWrapper {
-    fn from(begin_info: &'a RenderPassBeginInfo) -> Self {
+impl VkRenderPassBeginInfoWrapper {
+    pub fn new(begin_info: &RenderPassBeginInfo, with_chain: bool) -> Self {
         let (clear_values_count, clear_values_ptr, clear_values) = match begin_info.clear_values {
             Some(ref clear_values) => {
                 let clear_values: Vec<_> = clear_values.iter().map(From::from).collect();
@@ -9044,10 +9049,12 @@ impl<'a> From<&'a RenderPassBeginInfo> for VkRenderPassBeginInfoWrapper {
             None => (0, ptr::null(), None),
         };
 
+        let (pnext, chain) = RenderPassBeginInfoChainWrapper::new_optional(&begin_info.chain, with_chain);
+
         VkRenderPassBeginInfoWrapper {
             vks_struct: vks::VkRenderPassBeginInfo {
                 sType: vks::VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO,
-                pNext: ptr::null(),
+                pNext: pnext,
                 renderPass: begin_info.render_pass.handle(),
                 framebuffer: begin_info.framebuffer.handle(),
                 renderArea: (&begin_info.render_area).into(),
@@ -9057,6 +9064,7 @@ impl<'a> From<&'a RenderPassBeginInfo> for VkRenderPassBeginInfoWrapper {
             render_pass: begin_info.render_pass.clone(),
             framebuffer: begin_info.framebuffer.clone(),
             clear_values: clear_values,
+            chain: chain,
         }
     }
 }

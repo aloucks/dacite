@@ -482,7 +482,7 @@ impl CommandBuffer {
 
     /// See [`vkCmdBeginRenderPass`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCmdBeginRenderPass)
     pub fn begin_render_pass(&self, render_pass_begin: &core::RenderPassBeginInfo, contents: core::SubpassContents) {
-        let render_pass_begin_wrapper: core::VkRenderPassBeginInfoWrapper = render_pass_begin.into();
+        let render_pass_begin_wrapper = core::VkRenderPassBeginInfoWrapper::new(render_pass_begin, true);
         unsafe {
             (self.loader().core.vkCmdBeginRenderPass)(self.handle(), &render_pass_begin_wrapper.vks_struct, contents.into());
         }
