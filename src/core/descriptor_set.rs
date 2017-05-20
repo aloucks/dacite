@@ -106,7 +106,7 @@ impl DescriptorSet {
 
         let (writes_count, writes_ptr, _, _) = match writes {
             Some(writes) => {
-                let writes_wrappers: Vec<core::VkWriteDescriptorSetWrapper> = writes.iter().map(From::from).collect();
+                let writes_wrappers: Vec<_> = writes.iter().map(|w| core::VkWriteDescriptorSetWrapper::new(w, true)).collect();
                 let writes: Vec<_> = writes_wrappers.iter().map(|w| w.vks_struct).collect();
                 (writes.len() as u32, writes.as_ptr(), Some(writes), Some(writes_wrappers))
             }

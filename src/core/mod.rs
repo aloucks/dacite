@@ -7738,9 +7738,13 @@ impl<'a> From<&'a DescriptorBufferInfo> for VkDescriptorBufferInfoWrapper {
     }
 }
 
-/// See [`VkWriteDescriptorSet`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkWriteDescriptorSet)
-#[derive(Debug, Clone, PartialEq)]
-pub enum WriteDescriptorSetChainElement {
+chain_struct! {
+    #[derive(Debug, Clone, Default, PartialEq)]
+    pub struct WriteDescriptorSetChain {
+    }
+
+    #[derive(Debug)]
+    struct WriteDescriptorSetChainWrapper;
 }
 
 /// See [`VkWriteDescriptorSet`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkWriteDescriptorSet)
@@ -7754,12 +7758,12 @@ pub enum WriteDescriptorSetElements {
 /// See [`VkWriteDescriptorSet`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkWriteDescriptorSet)
 #[derive(Debug, Clone, PartialEq)]
 pub struct WriteDescriptorSet {
-    pub chain: Vec<WriteDescriptorSetChainElement>,
     pub dst_set: DescriptorSet,
     pub dst_binding: u32,
     pub dst_array_element: u32,
     pub descriptor_type: DescriptorType,
     pub elements: WriteDescriptorSetElements,
+    pub chain: Option<WriteDescriptorSetChain>,
 }
 
 #[derive(Debug)]
@@ -7772,10 +7776,11 @@ struct VkWriteDescriptorSetWrapper {
     vk_buffer_info: Option<Vec<vks::VkDescriptorBufferInfo>>,
     texel_buffer_view: Option<Vec<BufferView>>,
     vk_texel_buffer_view: Option<Vec<vks::VkBufferView>>,
+    chain: Option<WriteDescriptorSetChainWrapper>,
 }
 
-impl<'a> From<&'a WriteDescriptorSet> for VkWriteDescriptorSetWrapper {
-    fn from(write: &'a WriteDescriptorSet) -> Self {
+impl VkWriteDescriptorSetWrapper {
+    pub fn new(write: &WriteDescriptorSet, with_chain: bool) -> Self {
         let (count,
              vk_image_info_ptr,
              vk_image_info,
@@ -7805,10 +7810,12 @@ impl<'a> From<&'a WriteDescriptorSet> for VkWriteDescriptorSetWrapper {
             },
         };
 
+        let (pnext, chain) = WriteDescriptorSetChainWrapper::new_optional(&write.chain, with_chain);
+
         VkWriteDescriptorSetWrapper {
             vks_struct: vks::VkWriteDescriptorSet {
                 sType: vks::VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET,
-                pNext: ptr::null(),
+                pNext: pnext,
                 dstSet: write.dst_set.handle(),
                 dstBinding: write.dst_binding,
                 dstArrayElement: write.dst_array_element,
@@ -7825,6 +7832,7 @@ impl<'a> From<&'a WriteDescriptorSet> for VkWriteDescriptorSetWrapper {
             vk_buffer_info: vk_buffer_info,
             texel_buffer_view: texel_buffer_view,
             vk_texel_buffer_view: vk_texel_buffer_view,
+            chain: chain,
         }
     }
 }
