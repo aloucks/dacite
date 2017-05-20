@@ -124,7 +124,7 @@ impl Device {
 
     /// See [`vkCreateFence`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCreateFence)
     pub fn create_fence(&self, create_info: &core::FenceCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<Fence, core::Error> {
-        let create_info: core::VkFenceCreateInfoWrapper = create_info.into();
+        let create_info = core::VkFenceCreateInfoWrapper::new(create_info, true);
 
         let allocator_helper = allocator.map(AllocatorHelper::new);
         let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), AllocatorHelper::callbacks);

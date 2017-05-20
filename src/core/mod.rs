@@ -5228,25 +5228,27 @@ impl VkBindSparseInfoWrapper {
     }
 }
 
-/// See [`VkFenceCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkFenceCreateInfo)
-#[derive(Debug, Clone, PartialEq)]
-pub enum FenceCreateInfoChainElement {
+chain_struct! {
+    #[derive(Debug, Clone, Default, PartialEq)]
+    pub struct FenceCreateInfoChain {
+    }
+
+    #[derive(Debug)]
+    struct FenceCreateInfoChainWrapper;
 }
 
 /// See [`VkFenceCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkFenceCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct FenceCreateInfo {
-    pub chain: Vec<FenceCreateInfoChainElement>,
     pub flags: FenceCreateFlags,
+    pub chain: Option<FenceCreateInfoChain>,
 }
 
-impl<'a> From<&'a vks::VkFenceCreateInfo> for FenceCreateInfo {
-    fn from(create_info: &'a vks::VkFenceCreateInfo) -> Self {
-        debug_assert_eq!(create_info.pNext, ptr::null());
-
+impl FenceCreateInfo {
+    pub unsafe fn from_vks(create_info: &vks::VkFenceCreateInfo, with_chain: bool) -> Self {
         FenceCreateInfo {
-            chain: vec![],
             flags: create_info.flags,
+            chain: FenceCreateInfoChain::from_vks(create_info.pNext, with_chain),
         }
     }
 }
@@ -5254,16 +5256,20 @@ impl<'a> From<&'a vks::VkFenceCreateInfo> for FenceCreateInfo {
 #[derive(Debug)]
 struct VkFenceCreateInfoWrapper {
     pub vks_struct: vks::VkFenceCreateInfo,
+    chain: Option<FenceCreateInfoChainWrapper>,
 }
 
-impl<'a> From<&'a FenceCreateInfo> for VkFenceCreateInfoWrapper {
-    fn from(create_info: &'a FenceCreateInfo) -> VkFenceCreateInfoWrapper {
+impl VkFenceCreateInfoWrapper {
+    pub fn new(create_info: &FenceCreateInfo, with_chain: bool) -> VkFenceCreateInfoWrapper {
+        let (pnext, chain) = FenceCreateInfoChainWrapper::new_optional(&create_info.chain, with_chain);
+
         VkFenceCreateInfoWrapper {
             vks_struct: vks::VkFenceCreateInfo {
                 sType: vks::VK_STRUCTURE_TYPE_FENCE_CREATE_INFO,
-                pNext: ptr::null(),
+                pNext: pnext,
                 flags: create_info.flags,
             },
+            chain: chain,
         }
     }
 }
