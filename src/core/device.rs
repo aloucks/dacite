@@ -284,7 +284,7 @@ impl Device {
 
     /// See [`vkCreateShaderModule`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCreateShaderModule)
     pub fn create_shader_module(&self, create_info: &core::ShaderModuleCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<ShaderModule, core::Error> {
-        let create_info: core::VkShaderModuleCreateInfoWrapper = create_info.into();
+        let create_info = core::VkShaderModuleCreateInfoWrapper::new(create_info, true);
 
         let allocator_helper = allocator.map(AllocatorHelper::new);
         let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), AllocatorHelper::callbacks);

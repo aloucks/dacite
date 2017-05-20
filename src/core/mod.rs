@@ -5785,36 +5785,36 @@ impl VkImageViewCreateInfoWrapper {
     }
 }
 
-/// See [`VkShaderModuleCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkShaderModuleCreateInfo)
-#[derive(Debug, Clone, PartialEq)]
-pub enum ShaderModuleCreateInfoChainElement {
+chain_struct! {
+    #[derive(Debug, Clone, Default, PartialEq)]
+    pub struct ShaderModuleCreateInfoChain {
+    }
+
+    #[derive(Debug)]
+    struct ShaderModuleCreateInfoChainWrapper;
 }
 
 /// See [`VkShaderModuleCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkShaderModuleCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct ShaderModuleCreateInfo {
-    pub chain: Vec<ShaderModuleCreateInfoChainElement>,
     pub flags: ShaderModuleCreateFlags,
     pub code_size: usize,
     pub code: Vec<u32>,
+    pub chain: Option<ShaderModuleCreateInfoChain>,
 }
 
-impl<'a> From<&'a vks::VkShaderModuleCreateInfo> for ShaderModuleCreateInfo {
-    fn from(create_info: &'a vks::VkShaderModuleCreateInfo) -> Self {
-        debug_assert_eq!(create_info.pNext, ptr::null());
-
+impl ShaderModuleCreateInfo {
+    pub unsafe fn from_vks(create_info: &vks::VkShaderModuleCreateInfo, with_chain: bool) -> Self {
         let code_size_u32 = (create_info.codeSize / 4) + 1;
         let mut code = Vec::with_capacity(code_size_u32);
-        unsafe {
-            code.set_len(code_size_u32);
-            ptr::copy_nonoverlapping(create_info.pCode as *const u8, code.as_mut_ptr() as *mut u8, create_info.codeSize);
-        }
+        code.set_len(code_size_u32);
+        ptr::copy_nonoverlapping(create_info.pCode as *const u8, code.as_mut_ptr() as *mut u8, create_info.codeSize);
 
         ShaderModuleCreateInfo {
-            chain: vec![],
             flags: create_info.flags,
             code_size: create_info.codeSize,
             code: code,
+            chain: ShaderModuleCreateInfoChain::from_vks(create_info.pNext, with_chain),
         }
     }
 }
@@ -5823,21 +5823,24 @@ impl<'a> From<&'a vks::VkShaderModuleCreateInfo> for ShaderModuleCreateInfo {
 struct VkShaderModuleCreateInfoWrapper {
     pub vks_struct: vks::VkShaderModuleCreateInfo,
     code: Vec<u32>,
+    chain: Option<ShaderModuleCreateInfoChainWrapper>,
 }
 
-impl<'a> From<&'a ShaderModuleCreateInfo> for VkShaderModuleCreateInfoWrapper {
-    fn from(create_info: &'a ShaderModuleCreateInfo) -> Self {
+impl VkShaderModuleCreateInfoWrapper {
+    pub fn new(create_info: &ShaderModuleCreateInfo, with_chain: bool) -> Self {
         let code = create_info.code.clone();
+        let (pnext, chain) = ShaderModuleCreateInfoChainWrapper::new_optional(&create_info.chain, with_chain);
 
         VkShaderModuleCreateInfoWrapper {
             vks_struct: vks::VkShaderModuleCreateInfo {
                 sType: vks::VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO,
-                pNext: ptr::null(),
+                pNext: pnext,
                 flags: create_info.flags,
                 codeSize: create_info.code_size,
                 pCode: code.as_ptr(),
             },
             code: code,
+            chain: chain,
         }
     }
 }
