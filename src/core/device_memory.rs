@@ -114,7 +114,7 @@ impl DeviceMemory {
         let loader = ranges[0].memory.loader();
         let device_handle = ranges[0].memory.device_handle();
 
-        let ranges_wrappers: Vec<core::VkMappedMemoryRangeWrapper> = ranges.iter().map(From::from).collect();
+        let ranges_wrappers: Vec<_> = ranges.iter().map(|r| core::VkMappedMemoryRangeWrapper::new(r, true)).collect();
         let ranges: Vec<_> = ranges_wrappers.iter().map(|r| r.vks_struct).collect();
 
         let res = unsafe {
@@ -134,7 +134,7 @@ impl DeviceMemory {
         let loader = ranges[0].memory.loader();
         let device_handle = ranges[0].memory.device_handle();
 
-        let ranges_wrappers: Vec<core::VkMappedMemoryRangeWrapper> = ranges.iter().map(From::from).collect();
+        let ranges_wrappers: Vec<_> = ranges.iter().map(|r| core::VkMappedMemoryRangeWrapper::new(r, true)).collect();
         let ranges: Vec<_> = ranges_wrappers.iter().map(|r| r.vks_struct).collect();
 
         let res = unsafe {

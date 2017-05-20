@@ -4692,37 +4692,45 @@ impl VkMemoryAllocateInfoWrapper {
     }
 }
 
-/// See [`VkMappedMemoryRange`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkMappedMemoryRange)
-#[derive(Debug, Clone, PartialEq)]
-pub enum MappedMemoryRangeChainElement {
+chain_struct! {
+    #[derive(Debug, Clone, Default, PartialEq)]
+    pub struct MappedMemoryRangeChain {
+    }
+
+    #[derive(Debug)]
+    struct MappedMemoryRangeChainWrapper;
 }
 
 /// See [`VkMappedMemoryRange`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkMappedMemoryRange)
 #[derive(Debug, Clone, PartialEq)]
 pub struct MappedMemoryRange {
-    pub chain: Vec<MappedMemoryRangeChainElement>,
     pub memory: DeviceMemory,
     pub offset: u64,
     pub size: OptionalDeviceSize,
+    pub chain: Option<MappedMemoryRangeChain>,
 }
 
 #[derive(Debug)]
 struct VkMappedMemoryRangeWrapper {
     pub vks_struct: vks::VkMappedMemoryRange,
     memory: DeviceMemory,
+    chain: Option<MappedMemoryRangeChainWrapper>,
 }
 
-impl<'a> From<&'a MappedMemoryRange> for VkMappedMemoryRangeWrapper {
-    fn from(range: &'a MappedMemoryRange) -> Self {
+impl VkMappedMemoryRangeWrapper {
+    pub fn new(range: &MappedMemoryRange, with_chain: bool) -> Self {
+        let (pnext, chain) = MappedMemoryRangeChainWrapper::new_optional(&range.chain, with_chain);
+
         VkMappedMemoryRangeWrapper {
             vks_struct: vks::VkMappedMemoryRange {
                 sType: vks::VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE,
-                pNext: ptr::null(),
+                pNext: pnext,
                 memory: range.memory.handle(),
                 offset: range.offset,
                 size: range.size.into(),
             },
             memory: range.memory.clone(),
+            chain: chain,
         }
     }
 }
