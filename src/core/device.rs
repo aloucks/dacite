@@ -304,7 +304,7 @@ impl Device {
 
     /// See [`vkCreatePipelineCache`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCreatePipelineCache)
     pub fn create_pipeline_cache(&self, create_info: &core::PipelineCacheCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<PipelineCache, core::Error> {
-        let create_info: core::VkPipelineCacheCreateInfoWrapper = create_info.into();
+        let create_info = core::VkPipelineCacheCreateInfoWrapper::new(create_info, true);
 
         let allocator_helper = allocator.map(AllocatorHelper::new);
         let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), AllocatorHelper::callbacks);

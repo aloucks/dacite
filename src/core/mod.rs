@@ -5845,36 +5845,36 @@ impl VkShaderModuleCreateInfoWrapper {
     }
 }
 
-/// See [`VkPipelineCacheCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineCacheCreateInfo)
-#[derive(Debug, Clone, PartialEq)]
-pub enum PipelineCacheCreateInfoChainElement {
+chain_struct! {
+    #[derive(Debug, Clone, Default, PartialEq)]
+    pub struct PipelineCacheCreateInfoChain {
+    }
+
+    #[derive(Debug)]
+    struct PipelineCacheCreateInfoChainWrapper;
 }
 
 /// See [`VkPipelineCacheCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineCacheCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct PipelineCacheCreateInfo {
-    pub chain: Vec<PipelineCacheCreateInfoChainElement>,
     pub flags: PipelineCacheCreateFlags,
     pub initial_data: Option<Vec<u8>>,
+    pub chain: Option<PipelineCacheCreateInfoChain>,
 }
 
-impl<'a> From<&'a vks::VkPipelineCacheCreateInfo> for PipelineCacheCreateInfo {
-    fn from(create_info: &'a vks::VkPipelineCacheCreateInfo) -> Self {
-        debug_assert_eq!(create_info.pNext, ptr::null());
-
+impl PipelineCacheCreateInfo {
+    pub unsafe fn from_vks(create_info: &vks::VkPipelineCacheCreateInfo, with_chain: bool) -> Self {
         let initial_data = if create_info.initialDataSize > 0 {
-            unsafe {
-                Some(slice::from_raw_parts(create_info.pInitialData as *const u8, create_info.initialDataSize).to_vec())
-            }
+            Some(slice::from_raw_parts(create_info.pInitialData as *const u8, create_info.initialDataSize).to_vec())
         }
         else {
             None
         };
 
         PipelineCacheCreateInfo {
-            chain: vec![],
             flags: create_info.flags,
             initial_data: initial_data,
+            chain: PipelineCacheCreateInfoChain::from_vks(create_info.pNext, with_chain),
         }
     }
 }
@@ -5883,10 +5883,11 @@ impl<'a> From<&'a vks::VkPipelineCacheCreateInfo> for PipelineCacheCreateInfo {
 struct VkPipelineCacheCreateInfoWrapper {
     pub vks_struct: vks::VkPipelineCacheCreateInfo,
     initial_data: Option<Vec<u8>>,
+    chain: Option<PipelineCacheCreateInfoChainWrapper>,
 }
 
-impl<'a> From<&'a PipelineCacheCreateInfo> for VkPipelineCacheCreateInfoWrapper {
-    fn from(create_info: &'a PipelineCacheCreateInfo) -> Self {
+impl VkPipelineCacheCreateInfoWrapper {
+    pub fn new(create_info: &PipelineCacheCreateInfo, with_chain: bool) -> Self {
         let (initial_data, initial_data_size, initial_data_ptr) = match create_info.initial_data {
             Some(ref initial_data) => {
                 let initial_data = initial_data.clone();
@@ -5898,15 +5899,18 @@ impl<'a> From<&'a PipelineCacheCreateInfo> for VkPipelineCacheCreateInfoWrapper 
             None => (None, 0, ptr::null()),
         };
 
+        let (pnext, chain) = PipelineCacheCreateInfoChainWrapper::new_optional(&create_info.chain, with_chain);
+
         VkPipelineCacheCreateInfoWrapper {
             vks_struct: vks::VkPipelineCacheCreateInfo {
                 sType: vks::VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO,
-                pNext: ptr::null(),
+                pNext: pnext,
                 flags: create_info.flags,
                 initialDataSize: initial_data_size,
                 pInitialData: initial_data_ptr,
             },
             initial_data: initial_data,
+            chain: chain,
         }
     }
 }
