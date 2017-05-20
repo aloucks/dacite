@@ -7560,36 +7560,36 @@ impl<'a> From<&'a DescriptorPoolSize> for vks::VkDescriptorPoolSize {
     }
 }
 
-/// See [`VkDescriptorPoolCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDescriptorPoolCreateInfo)
-#[derive(Debug, Clone, PartialEq)]
-pub enum DescriptorPoolCreateInfoChainElement {
+chain_struct! {
+    #[derive(Debug, Clone, Default, PartialEq)]
+    pub struct DescriptorPoolCreateInfoChain {
+    }
+
+    #[derive(Debug)]
+    struct DescriptorPoolCreateInfoChainWrapper;
 }
 
 /// See [`VkDescriptorPoolCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDescriptorPoolCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct DescriptorPoolCreateInfo {
-    pub chain: Vec<DescriptorPoolCreateInfoChainElement>,
     pub flags: DescriptorPoolCreateFlags,
     pub max_sets: u32,
     pub pool_sizes: Vec<DescriptorPoolSize>,
+    pub chain: Option<DescriptorPoolCreateInfoChain>,
 }
 
-impl<'a> From<&'a vks::VkDescriptorPoolCreateInfo> for DescriptorPoolCreateInfo {
-    fn from(create_info: &'a vks::VkDescriptorPoolCreateInfo) -> Self {
-        debug_assert_eq!(create_info.pNext, ptr::null());
-
-        let pool_sizes = unsafe {
-            slice::from_raw_parts(create_info.pPoolSizes, create_info.poolSizeCount as usize)
-                .iter()
-                .map(From::from)
-                .collect()
-        };
+impl DescriptorPoolCreateInfo {
+    pub unsafe fn from_vks(create_info: &vks::VkDescriptorPoolCreateInfo, with_chain: bool) -> Self {
+        let pool_sizes = slice::from_raw_parts(create_info.pPoolSizes, create_info.poolSizeCount as usize)
+            .iter()
+            .map(From::from)
+            .collect();
 
         DescriptorPoolCreateInfo {
-            chain: vec![],
             flags: create_info.flags,
             max_sets: create_info.maxSets,
             pool_sizes: pool_sizes,
+            chain: DescriptorPoolCreateInfoChain::from_vks(create_info.pNext, with_chain),
         }
     }
 }
@@ -7598,25 +7598,29 @@ impl<'a> From<&'a vks::VkDescriptorPoolCreateInfo> for DescriptorPoolCreateInfo 
 struct VkDescriptorPoolCreateInfoWrapper {
     pub vks_struct: vks::VkDescriptorPoolCreateInfo,
     pool_sizes: Vec<vks::VkDescriptorPoolSize>,
+    chain: Option<DescriptorPoolCreateInfoChainWrapper>,
 }
 
-impl<'a> From<&'a DescriptorPoolCreateInfo> for VkDescriptorPoolCreateInfoWrapper {
-    fn from(create_info: &'a DescriptorPoolCreateInfo) -> Self {
+impl VkDescriptorPoolCreateInfoWrapper {
+    pub fn new(create_info: &DescriptorPoolCreateInfo, with_chain: bool) -> Self {
         let pool_sizes: Vec<_> = create_info.pool_sizes
             .iter()
             .map(From::from)
             .collect();
 
+        let (pnext, chain) = DescriptorPoolCreateInfoChainWrapper::new_optional(&create_info.chain, with_chain);
+
         VkDescriptorPoolCreateInfoWrapper {
             vks_struct: vks::VkDescriptorPoolCreateInfo {
                 sType: vks::VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO,
-                pNext: ptr::null(),
+                pNext: pnext,
                 flags: create_info.flags,
                 maxSets: create_info.max_sets,
                 poolSizeCount: pool_sizes.len() as u32,
                 pPoolSizes: pool_sizes.as_ptr(),
             },
             pool_sizes: pool_sizes,
+            chain: chain,
         }
     }
 }
