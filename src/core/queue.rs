@@ -89,7 +89,7 @@ impl Queue {
     pub fn submit(&self, submits: Option<&[core::SubmitInfo]>, fence: Option<Fence>) -> Result<(), core::Error> {
         let (submits_count, vk_submits_ptr, _, _) = match submits {
             Some(submits) => {
-                let submits_wrappers: Vec<core::VkSubmitInfoWrapper> = submits.iter().map(From::from).collect();
+                let submits_wrappers: Vec<_> = submits.iter().map(|s| core::VkSubmitInfoWrapper::new(s, true)).collect();
                 let vk_submits: Vec<vks::VkSubmitInfo> = submits_wrappers.iter().map(|s| s.vks_struct).collect();
                 (submits.len() as u32, vk_submits.as_ptr(), Some(vk_submits), Some(submits_wrappers))
             }

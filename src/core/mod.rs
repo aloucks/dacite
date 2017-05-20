@@ -4544,19 +4544,23 @@ impl ExactSizeIterator for LayerPropertiesIterator {
     }
 }
 
-/// See [`VkSubmitInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSubmitInfo)
-#[derive(Debug, Clone, PartialEq)]
-pub enum SubmitInfoChainElement {
+chain_struct! {
+    #[derive(Debug, Clone, Default, PartialEq)]
+    pub struct SubmitInfoChain {
+    }
+
+    #[derive(Debug)]
+    struct SubmitInfoChainWrapper;
 }
 
 /// See [`VkSubmitInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSubmitInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct SubmitInfo {
-    pub chain: Vec<SubmitInfoChainElement>,
     pub wait_semaphores: Option<Vec<Semaphore>>,
     pub wait_dst_stage_mask: Option<Vec<PipelineStageFlags>>,
     pub command_buffers: Option<Vec<CommandBuffer>>,
     pub signal_semaphores: Option<Vec<Semaphore>>,
+    pub chain: Option<SubmitInfoChain>,
 }
 
 #[derive(Debug)]
@@ -4569,10 +4573,11 @@ struct VkSubmitInfoWrapper {
     vk_command_buffers: Option<Vec<vks::VkCommandBuffer>>,
     signal_semaphores: Option<Vec<Semaphore>>,
     signal_vk_semaphores: Option<Vec<vks::VkSemaphore>>,
+    chain: Option<SubmitInfoChainWrapper>,
 }
 
-impl<'a> From<&'a SubmitInfo> for VkSubmitInfoWrapper {
-    fn from(info: &'a SubmitInfo) -> Self {
+impl VkSubmitInfoWrapper {
+    pub fn new(info: &SubmitInfo, with_chain: bool) -> Self {
         let (wait_semaphores_count, wait_vk_semaphores_ptr, wait_semaphores, wait_vk_semaphores) = match info.wait_semaphores {
             Some(ref wait_semaphores) => {
                 let wait_semaphores = wait_semaphores.clone();
@@ -4612,10 +4617,12 @@ impl<'a> From<&'a SubmitInfo> for VkSubmitInfoWrapper {
             None => (0, ptr::null(), None, None),
         };
 
+        let (pnext, chain) = SubmitInfoChainWrapper::new_optional(&info.chain, with_chain);
+
         VkSubmitInfoWrapper {
             vks_struct: vks::VkSubmitInfo {
                 sType: vks::VK_STRUCTURE_TYPE_SUBMIT_INFO,
-                pNext: ptr::null(),
+                pNext: pnext,
                 waitSemaphoreCount: wait_semaphores_count,
                 pWaitSemaphores: wait_vk_semaphores_ptr,
                 pWaitDstStageMask: wait_dst_stage_mask_ptr,
@@ -4631,6 +4638,7 @@ impl<'a> From<&'a SubmitInfo> for VkSubmitInfoWrapper {
             vk_command_buffers: vk_command_buffers,
             signal_semaphores: signal_semaphores,
             signal_vk_semaphores: signal_vk_semaphores,
+            chain: chain,
         }
     }
 }
