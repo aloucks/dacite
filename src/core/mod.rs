@@ -8428,21 +8428,25 @@ impl VkCommandBufferAllocateInfoWrapper {
     }
 }
 
-/// See [`VkCommandBufferInheritanceInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCommandBufferInheritanceInfo)
-#[derive(Debug, Clone, PartialEq)]
-pub enum CommandBufferInheritanceInfoChainElement {
+chain_struct! {
+    #[derive(Debug, Clone, Default, PartialEq)]
+    pub struct CommandBufferInheritanceInfoChain {
+    }
+
+    #[derive(Debug)]
+    struct CommandBufferInheritanceInfoChainWrapper;
 }
 
 /// See [`VkCommandBufferInheritanceInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCommandBufferInheritanceInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct CommandBufferInheritanceInfo {
-    pub chain: Vec<CommandBufferInheritanceInfoChainElement>,
     pub render_pass: Option<RenderPass>,
     pub subpass: u32,
     pub framebuffer: Option<Framebuffer>,
     pub occlusion_query_enable: bool,
     pub query_flags: QueryControlFlags,
     pub pipeline_statistics: QueryPipelineStatisticFlags,
+    pub chain: Option<CommandBufferInheritanceInfoChain>,
 }
 
 #[derive(Debug)]
@@ -8450,10 +8454,11 @@ struct VkCommandBufferInheritanceInfoWrapper {
     pub vks_struct: vks::VkCommandBufferInheritanceInfo,
     render_pass: Option<RenderPass>,
     framebuffer: Option<Framebuffer>,
+    chain: Option<CommandBufferInheritanceInfoChainWrapper>,
 }
 
-impl<'a> From<&'a CommandBufferInheritanceInfo> for VkCommandBufferInheritanceInfoWrapper {
-    fn from(info: &'a CommandBufferInheritanceInfo) -> Self {
+impl VkCommandBufferInheritanceInfoWrapper {
+    pub fn new(info: &CommandBufferInheritanceInfo, with_chain: bool) -> Self {
         let (render_pass_handle, render_pass) = match info.render_pass {
             Some(ref render_pass) => (render_pass.handle(), Some(render_pass.clone())),
             None => (ptr::null_mut(), None),
@@ -8464,10 +8469,12 @@ impl<'a> From<&'a CommandBufferInheritanceInfo> for VkCommandBufferInheritanceIn
             None => (ptr::null_mut(), None),
         };
 
+        let (pnext, chain) = CommandBufferInheritanceInfoChainWrapper::new_optional(&info.chain, with_chain);
+
         VkCommandBufferInheritanceInfoWrapper {
             vks_struct: vks::VkCommandBufferInheritanceInfo {
                 sType: vks::VK_STRUCTURE_TYPE_COMMAND_BUFFER_INHERITANCE_INFO,
-                pNext: ptr::null(),
+                pNext: pnext,
                 renderPass: render_pass_handle,
                 subpass: info.subpass,
                 framebuffer: framebuffer_handle,
@@ -8477,48 +8484,57 @@ impl<'a> From<&'a CommandBufferInheritanceInfo> for VkCommandBufferInheritanceIn
             },
             render_pass: render_pass,
             framebuffer: framebuffer,
+            chain: chain,
         }
     }
 }
 
-/// See [`VkCommandBufferBeginInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCommandBufferBeginInfo)
-#[derive(Debug, Clone, PartialEq)]
-pub enum CommandBufferBeginInfoChainElement {
+chain_struct! {
+    #[derive(Debug, Clone, Default, PartialEq)]
+    pub struct CommandBufferBeginInfoChain {
+    }
+
+    #[derive(Debug)]
+    struct CommandBufferBeginInfoChainWrapper;
 }
 
 /// See [`VkCommandBufferBeginInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCommandBufferBeginInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct CommandBufferBeginInfo {
-    pub chain: Vec<CommandBufferBeginInfoChainElement>,
     pub flags: CommandBufferUsageFlags,
     pub inheritance_info: Option<CommandBufferInheritanceInfo>,
+    pub chain: Option<CommandBufferBeginInfoChain>,
 }
 
 #[derive(Debug)]
 struct VkCommandBufferBeginInfoWrapper {
     pub vks_struct: vks::VkCommandBufferBeginInfo,
     inheritance_info: Option<Box<VkCommandBufferInheritanceInfoWrapper>>,
+    chain: Option<CommandBufferBeginInfoChainWrapper>,
 }
 
-impl<'a> From<&'a CommandBufferBeginInfo> for VkCommandBufferBeginInfoWrapper {
-    fn from(begin_info: &'a CommandBufferBeginInfo) -> Self {
+impl VkCommandBufferBeginInfoWrapper {
+    pub fn new(begin_info: &CommandBufferBeginInfo, with_chain: bool) -> Self {
         let (inheritance_info_ptr, inheritance_info) = match begin_info.inheritance_info {
             Some(ref inheritance_info) => {
-                let inheritance_info: Box<VkCommandBufferInheritanceInfoWrapper> = Box::new(inheritance_info.into());
+                let inheritance_info: Box<_> = Box::new(VkCommandBufferInheritanceInfoWrapper::new(inheritance_info, true));
                 (&inheritance_info.vks_struct as *const _, Some(inheritance_info))
             }
 
             None => (ptr::null(), None),
         };
 
+        let (pnext, chain) = CommandBufferBeginInfoChainWrapper::new_optional(&begin_info.chain, with_chain);
+
         VkCommandBufferBeginInfoWrapper {
             vks_struct: vks::VkCommandBufferBeginInfo {
                 sType: vks::VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO,
-                pNext: ptr::null(),
+                pNext: pnext,
                 flags: begin_info.flags,
                 pInheritanceInfo: inheritance_info_ptr,
             },
             inheritance_info: inheritance_info,
+            chain: chain,
         }
     }
 }

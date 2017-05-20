@@ -74,7 +74,7 @@ impl CommandBuffer {
 
     /// See [`vkBeginCommandBuffer`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkBeginCommandBuffer)
     pub fn begin(&self, begin_info: &core::CommandBufferBeginInfo) -> Result<(), core::Error> {
-        let begin_info_wrapper: core::VkCommandBufferBeginInfoWrapper = begin_info.into();
+        let begin_info_wrapper = core::VkCommandBufferBeginInfoWrapper::new(begin_info, true);
 
         let res = unsafe {
             (self.loader().core.vkBeginCommandBuffer)(self.handle(), &begin_info_wrapper.vks_struct)
