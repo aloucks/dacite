@@ -264,7 +264,7 @@ impl Device {
 
     /// See [`vkCreateImageView`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCreateImageView)
     pub fn create_image_view(&self, create_info: &core::ImageViewCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<ImageView, core::Error> {
-        let create_info_wrapper: core::VkImageViewCreateInfoWrapper = create_info.into();
+        let create_info_wrapper = core::VkImageViewCreateInfoWrapper::new(create_info, true);
 
         let allocator_helper = allocator.map(AllocatorHelper::new);
         let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), AllocatorHelper::callbacks);

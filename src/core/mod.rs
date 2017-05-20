@@ -5736,35 +5736,42 @@ impl<'a> From<&'a ImageSubresourceRange> for vks::VkImageSubresourceRange {
     }
 }
 
-/// See [`VkImageViewCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageViewCreateInfo)
-#[derive(Debug, Clone, PartialEq)]
-pub enum ImageViewCreateInfoChainElement {
+chain_struct! {
+    #[derive(Debug, Clone, Default, PartialEq)]
+    pub struct ImageViewCreateInfoChain {
+    }
+
+    #[derive(Debug)]
+    struct ImageViewCreateInfoChainWrapper;
 }
 
 /// See [`VkImageViewCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageViewCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct ImageViewCreateInfo {
-    pub chain: Vec<ImageViewCreateInfoChainElement>,
     pub flags: ImageViewCreateFlags,
     pub image: Image,
     pub view_type: ImageViewType,
     pub format: Format,
     pub components: ComponentMapping,
     pub subresource_range: ImageSubresourceRange,
+    pub chain: Option<ImageViewCreateInfoChain>,
 }
 
 #[derive(Debug)]
 struct VkImageViewCreateInfoWrapper {
     pub vks_struct: vks::VkImageViewCreateInfo,
     image: Image,
+    chain: Option<ImageViewCreateInfoChainWrapper>,
 }
 
-impl<'a> From<&'a ImageViewCreateInfo> for VkImageViewCreateInfoWrapper {
-    fn from(create_info: &'a ImageViewCreateInfo) -> Self {
+impl VkImageViewCreateInfoWrapper {
+    pub fn new(create_info: &ImageViewCreateInfo, with_chain: bool) -> Self {
+        let (pnext, chain) = ImageViewCreateInfoChainWrapper::new_optional(&create_info.chain, with_chain);
+
         VkImageViewCreateInfoWrapper {
             vks_struct: vks::VkImageViewCreateInfo {
                 sType: vks::VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO,
-                pNext: ptr::null(),
+                pNext: pnext,
                 flags: create_info.flags,
                 image: create_info.image.handle(),
                 viewType: create_info.view_type.into(),
@@ -5773,6 +5780,7 @@ impl<'a> From<&'a ImageViewCreateInfo> for VkImageViewCreateInfoWrapper {
                 subresourceRange: (&create_info.subresource_range).into(),
             },
             image: create_info.image.clone(),
+            chain: chain,
         }
     }
 }
