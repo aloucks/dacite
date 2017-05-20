@@ -4643,27 +4643,29 @@ impl VkSubmitInfoWrapper {
     }
 }
 
-/// See [`VkMemoryAllocateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkMemoryAllocateInfo)
-#[derive(Debug, Clone, PartialEq)]
-pub enum MemoryAllocateInfoChainElement {
+chain_struct! {
+    #[derive(Debug, Clone, Default, PartialEq)]
+    pub struct MemoryAllocateInfoChain {
+    }
+
+    #[derive(Debug)]
+    struct MemoryAllocateInfoChainWrapper;
 }
 
 /// See [`VkMemoryAllocateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkMemoryAllocateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct MemoryAllocateInfo {
-    pub chain: Vec<MemoryAllocateInfoChainElement>,
     pub allocation_size: u64,
     pub memory_type_index: u32,
+    pub chain: Option<MemoryAllocateInfoChain>,
 }
 
-impl<'a> From<&'a vks::VkMemoryAllocateInfo> for MemoryAllocateInfo {
-    fn from(info: &'a vks::VkMemoryAllocateInfo) -> Self {
-        debug_assert_eq!(info.pNext, ptr::null());
-
+impl MemoryAllocateInfo {
+    pub unsafe fn from_vks(info: &vks::VkMemoryAllocateInfo, with_chain: bool) -> Self {
         MemoryAllocateInfo {
-            chain: vec![],
             allocation_size: info.allocationSize,
             memory_type_index: info.memoryTypeIndex,
+            chain: MemoryAllocateInfoChain::from_vks(info.pNext, with_chain),
         }
     }
 }
@@ -4671,17 +4673,21 @@ impl<'a> From<&'a vks::VkMemoryAllocateInfo> for MemoryAllocateInfo {
 #[derive(Debug)]
 struct VkMemoryAllocateInfoWrapper {
     pub vks_struct: vks::VkMemoryAllocateInfo,
+    chain: Option<MemoryAllocateInfoChainWrapper>,
 }
 
-impl<'a> From<&'a MemoryAllocateInfo> for VkMemoryAllocateInfoWrapper {
-    fn from(info: &'a MemoryAllocateInfo) -> Self {
+impl VkMemoryAllocateInfoWrapper {
+    pub fn new(info: &MemoryAllocateInfo, with_chain: bool) -> Self {
+        let (pnext, chain) = MemoryAllocateInfoChainWrapper::new_optional(&info.chain, with_chain);
+
         VkMemoryAllocateInfoWrapper {
             vks_struct: vks::VkMemoryAllocateInfo {
                 sType: vks::VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO,
-                pNext: ptr::null(),
+                pNext: pnext,
                 allocationSize: info.allocation_size,
                 memoryTypeIndex: info.memory_type_index,
             },
+            chain: chain,
         }
     }
 }

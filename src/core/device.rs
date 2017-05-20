@@ -384,7 +384,7 @@ impl Device {
 
     /// See [`vkAllocateMemory`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkAllocateMemory)
     pub fn allocate_memory(&self, allocate_info: &core::MemoryAllocateInfo, allocator: Option<Box<core::Allocator>>) -> Result<DeviceMemory, core::Error> {
-        let allocate_info_wrapper: core::VkMemoryAllocateInfoWrapper = allocate_info.into();
+        let allocate_info_wrapper = core::VkMemoryAllocateInfoWrapper::new(allocate_info, true);
 
         let allocator_helper = allocator.map(AllocatorHelper::new);
         let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), AllocatorHelper::callbacks);
