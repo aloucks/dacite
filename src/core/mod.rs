@@ -5495,34 +5495,41 @@ impl VkBufferCreateInfoWrapper {
     }
 }
 
-/// See [`VkBufferViewCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkBufferViewCreateInfo)
-#[derive(Debug, Clone, PartialEq)]
-pub enum BufferViewCreateInfoChainElement {
+chain_struct! {
+    #[derive(Debug, Clone, Default, PartialEq)]
+    pub struct BufferViewCreateInfoChain {
+    }
+
+    #[derive(Debug)]
+    struct BufferViewCreateInfoChainWrapper;
 }
 
 /// See [`VkBufferViewCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkBufferViewCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct BufferViewCreateInfo {
-    pub chain: Vec<BufferViewCreateInfoChainElement>,
     pub flags: BufferViewCreateFlags,
     pub buffer: Buffer,
     pub format: Format,
     pub offset: u64,
     pub range: OptionalDeviceSize,
+    pub chain: Option<BufferViewCreateInfoChain>,
 }
 
 #[derive(Debug)]
 struct VkBufferViewCreateInfoWrapper {
     pub vks_struct: vks::VkBufferViewCreateInfo,
     buffer: Buffer,
+    chain: Option<BufferViewCreateInfoChainWrapper>,
 }
 
-impl<'a> From<&'a BufferViewCreateInfo> for VkBufferViewCreateInfoWrapper {
-    fn from(create_info: &'a BufferViewCreateInfo) -> Self {
+impl VkBufferViewCreateInfoWrapper {
+    pub fn new(create_info: &BufferViewCreateInfo, with_chain: bool) -> Self {
+        let (pnext, chain) = BufferViewCreateInfoChainWrapper::new_optional(&create_info.chain, with_chain);
+
         VkBufferViewCreateInfoWrapper {
             vks_struct: vks::VkBufferViewCreateInfo {
                 sType: vks::VK_STRUCTURE_TYPE_BUFFER_VIEW_CREATE_INFO,
-                pNext: ptr::null(),
+                pNext: pnext,
                 flags: create_info.flags,
                 buffer: create_info.buffer.handle(),
                 format: create_info.format.into(),
@@ -5530,6 +5537,7 @@ impl<'a> From<&'a BufferViewCreateInfo> for VkBufferViewCreateInfoWrapper {
                 range: create_info.range.into(),
             },
             buffer: create_info.buffer.clone(),
+            chain: chain,
         }
     }
 }
