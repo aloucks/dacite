@@ -388,7 +388,7 @@ impl CommandBuffer {
 
         let (image_memory_barriers_count, image_memory_barriers_ptr, _, _) = match image_memory_barriers {
             Some(image_memory_barriers) => {
-                let image_memory_barriers_wrappers: Vec<core::VkImageMemoryBarrierWrapper> = image_memory_barriers.iter().map(From::from).collect();
+                let image_memory_barriers_wrappers: Vec<_> = image_memory_barriers.iter().map(|i| core::VkImageMemoryBarrierWrapper::new(i, true)).collect();
                 let vk_image_memory_barriers: Vec<_> = image_memory_barriers_wrappers.iter().map(|i| i.vks_struct).collect();
                 (image_memory_barriers.len() as u32, vk_image_memory_barriers.as_ptr(), Some(vk_image_memory_barriers), Some(image_memory_barriers_wrappers))
             }
@@ -425,7 +425,7 @@ impl CommandBuffer {
 
         let (image_memory_barriers_count, image_memory_barriers_ptr, _, _) = match image_memory_barriers {
             Some(image_memory_barriers) => {
-                let image_memory_barriers_wrappers: Vec<core::VkImageMemoryBarrierWrapper> = image_memory_barriers.iter().map(From::from).collect();
+                let image_memory_barriers_wrappers: Vec<_> = image_memory_barriers.iter().map(|i| core::VkImageMemoryBarrierWrapper::new(i, true)).collect();
                 let vk_image_memory_barriers: Vec<_> = image_memory_barriers_wrappers.iter().map(|i| i.vks_struct).collect();
                 (image_memory_barriers.len() as u32, vk_image_memory_barriers.as_ptr(), Some(vk_image_memory_barriers), Some(image_memory_barriers_wrappers))
             }

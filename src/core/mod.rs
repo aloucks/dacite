@@ -8957,15 +8957,18 @@ impl VkBufferMemoryBarrierWrapper {
     }
 }
 
-/// See [`VkImageMemoryBarrier`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageMemoryBarrier)
-#[derive(Debug, Clone, PartialEq)]
-pub enum ImageMemoryBarrierChainElement {
+chain_struct! {
+    #[derive(Debug, Clone, Default, PartialEq)]
+    pub struct ImageMemoryBarrierChain {
+    }
+
+    #[derive(Debug)]
+    struct ImageMemoryBarrierChainWrapper;
 }
 
 /// See [`VkImageMemoryBarrier`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageMemoryBarrier)
 #[derive(Debug, Clone, PartialEq)]
 pub struct ImageMemoryBarrier {
-    pub chain: Vec<ImageMemoryBarrierChainElement>,
     pub src_access_mask: AccessFlags,
     pub dst_access_mask: AccessFlags,
     pub old_layout: ImageLayout,
@@ -8974,20 +8977,24 @@ pub struct ImageMemoryBarrier {
     pub dst_queue_family_index: QueueFamilyIndex,
     pub image: Image,
     pub subresource_range: ImageSubresourceRange,
+    pub chain: Option<ImageMemoryBarrierChain>,
 }
 
 #[derive(Debug)]
 struct VkImageMemoryBarrierWrapper {
     pub vks_struct: vks::VkImageMemoryBarrier,
     image: Image,
+    chain: Option<ImageMemoryBarrierChainWrapper>,
 }
 
-impl<'a> From<&'a ImageMemoryBarrier> for VkImageMemoryBarrierWrapper {
-    fn from(barrier: &'a ImageMemoryBarrier) -> Self {
+impl VkImageMemoryBarrierWrapper {
+    pub fn new(barrier: &ImageMemoryBarrier, with_chain: bool) -> Self {
+        let (pnext, chain) = ImageMemoryBarrierChainWrapper::new_optional(&barrier.chain, with_chain);
+
         VkImageMemoryBarrierWrapper {
             vks_struct: vks::VkImageMemoryBarrier {
                 sType: vks::VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER,
-                pNext: ptr::null(),
+                pNext: pnext,
                 srcAccessMask: barrier.src_access_mask,
                 dstAccessMask: barrier.dst_access_mask,
                 oldLayout: barrier.old_layout.into(),
@@ -8998,6 +9005,7 @@ impl<'a> From<&'a ImageMemoryBarrier> for VkImageMemoryBarrierWrapper {
                 subresourceRange: (&barrier.subresource_range).into(),
             },
             image: barrier.image.clone(),
+            chain: chain,
         }
     }
 }
