@@ -7481,17 +7481,21 @@ impl<'a> From<&'a DescriptorSetLayoutBinding> for VkDescriptorSetLayoutBindingWr
     }
 }
 
-/// See [`VkDescriptorSetLayoutCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDescriptorSetLayoutCreateInfo)
-#[derive(Debug, Clone, PartialEq)]
-pub enum DescriptorSetLayoutCreateInfoChainElement {
+chain_struct! {
+    #[derive(Debug, Clone, Default, PartialEq)]
+    pub struct DescriptorSetLayoutCreateInfoChain {
+    }
+
+    #[derive(Debug)]
+    struct DescriptorSetLayoutCreateInfoChainWrapper;
 }
 
 /// See [`VkDescriptorSetLayoutCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDescriptorSetLayoutCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct DescriptorSetLayoutCreateInfo {
-    pub chain: Vec<DescriptorSetLayoutCreateInfoChainElement>,
     pub flags: DescriptorSetLayoutCreateFlags,
     pub bindings: Option<Vec<DescriptorSetLayoutBinding>>,
+    pub chain: Option<DescriptorSetLayoutCreateInfoChain>,
 }
 
 #[derive(Debug)]
@@ -7499,10 +7503,11 @@ struct VkDescriptorSetLayoutCreateInfoWrapper {
     pub vks_struct: vks::VkDescriptorSetLayoutCreateInfo,
     bindings: Option<Vec<VkDescriptorSetLayoutBindingWrapper>>,
     vk_bindings: Option<Vec<vks::VkDescriptorSetLayoutBinding>>,
+    chain: Option<DescriptorSetLayoutCreateInfoChainWrapper>,
 }
 
-impl<'a> From<&'a DescriptorSetLayoutCreateInfo> for VkDescriptorSetLayoutCreateInfoWrapper {
-    fn from(create_info: &'a DescriptorSetLayoutCreateInfo) -> Self {
+impl VkDescriptorSetLayoutCreateInfoWrapper {
+    pub fn new(create_info: &DescriptorSetLayoutCreateInfo, with_chain: bool) -> Self {
         let (vk_bindings_ptr, binding_count, bindings, vk_bindings) = match create_info.bindings {
             Some(ref bindings) => {
                 let bindings: Vec<VkDescriptorSetLayoutBindingWrapper> = bindings.iter().map(From::from).collect();
@@ -7513,16 +7518,19 @@ impl<'a> From<&'a DescriptorSetLayoutCreateInfo> for VkDescriptorSetLayoutCreate
             None => (ptr::null(), 0, None, None),
         };
 
+        let (pnext, chain) = DescriptorSetLayoutCreateInfoChainWrapper::new_optional(&create_info.chain, with_chain);
+
         VkDescriptorSetLayoutCreateInfoWrapper {
             vks_struct: vks::VkDescriptorSetLayoutCreateInfo {
                 sType: vks::VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO,
-                pNext: ptr::null(),
+                pNext: pnext,
                 flags: create_info.flags,
                 bindingCount: binding_count,
                 pBindings: vk_bindings_ptr,
             },
             bindings: bindings,
             vk_bindings: vk_bindings,
+            chain: chain,
         }
     }
 }
