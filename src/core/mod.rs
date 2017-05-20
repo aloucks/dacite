@@ -8385,37 +8385,45 @@ impl VkCommandPoolCreateInfoWrapper {
     }
 }
 
-/// See [`VkCommandBufferAllocateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCommandBufferAllocateInfo)
-#[derive(Debug, Clone, PartialEq)]
-pub enum CommandBufferAllocateInfoChainElement {
+chain_struct! {
+    #[derive(Debug, Clone, Default, PartialEq)]
+    pub struct CommandBufferAllocateInfoChain {
+    }
+
+    #[derive(Debug)]
+    struct CommandBufferAllocateInfoChainWrapper;
 }
 
 /// See [`VkCommandBufferAllocateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCommandBufferAllocateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct CommandBufferAllocateInfo {
-    pub chain: Vec<CommandBufferAllocateInfoChainElement>,
     pub command_pool: CommandPool,
     pub level: CommandBufferLevel,
     pub command_buffer_count: u32,
+    pub chain: Option<CommandBufferAllocateInfoChain>,
 }
 
 #[derive(Debug)]
 struct VkCommandBufferAllocateInfoWrapper {
     pub vks_struct: vks::VkCommandBufferAllocateInfo,
     command_pool: CommandPool,
+    chain: Option<CommandBufferAllocateInfoChainWrapper>,
 }
 
-impl<'a> From<&'a CommandBufferAllocateInfo> for VkCommandBufferAllocateInfoWrapper {
-    fn from(info: &'a CommandBufferAllocateInfo) -> Self {
+impl VkCommandBufferAllocateInfoWrapper {
+    pub fn new(info: &CommandBufferAllocateInfo, with_chain: bool) -> Self {
+        let (pnext, chain) = CommandBufferAllocateInfoChainWrapper::new_optional(&info.chain, with_chain);
+
         VkCommandBufferAllocateInfoWrapper {
             vks_struct: vks::VkCommandBufferAllocateInfo {
                 sType: vks::VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO,
-                pNext: ptr::null(),
+                pNext: pnext,
                 commandPool: info.command_pool.handle(),
                 level: info.level.into(),
                 commandBufferCount: info.command_buffer_count,
             },
             command_pool: info.command_pool.clone(),
+            chain: chain,
         }
     }
 }

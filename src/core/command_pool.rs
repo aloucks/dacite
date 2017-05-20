@@ -85,7 +85,7 @@ impl CommandPool {
     /// See [`vkAllocateCommandBuffers`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkAllocateCommandBuffers)
     pub fn allocate_command_buffers(allocate_info: &core::CommandBufferAllocateInfo) -> Result<Vec<CommandBuffer>, core::Error> {
         let command_pool = &allocate_info.command_pool;
-        let allocate_info_wrapper: core::VkCommandBufferAllocateInfoWrapper = allocate_info.into();
+        let allocate_info_wrapper = core::VkCommandBufferAllocateInfoWrapper::new(allocate_info, true);
 
         let mut command_buffers = Vec::with_capacity(allocate_info.command_buffer_count as usize);
         let res = unsafe {
