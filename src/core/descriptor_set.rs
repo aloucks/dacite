@@ -116,7 +116,7 @@ impl DescriptorSet {
 
         let (copies_count, copies_ptr, _, _) = match copies {
             Some(copies) => {
-                let copies_wrappers: Vec<core::VkCopyDescriptorSetWrapper> = copies.iter().map(From::from).collect();
+                let copies_wrappers: Vec<_> = copies.iter().map(|c| core::VkCopyDescriptorSetWrapper::new(c, true)).collect();
                 let copies: Vec<_> = copies_wrappers.iter().map(|c| c.vks_struct).collect();
                 (copies.len() as u32, copies.as_ptr(), Some(copies), Some(copies_wrappers))
             }

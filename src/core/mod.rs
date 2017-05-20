@@ -7837,15 +7837,18 @@ impl VkWriteDescriptorSetWrapper {
     }
 }
 
-/// See [`VkCopyDescriptorSet`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCopyDescriptorSet)
-#[derive(Debug, Clone, PartialEq)]
-pub enum CopyDescriptorSetChainElement {
+chain_struct! {
+    #[derive(Debug, Clone, Default, PartialEq)]
+    pub struct CopyDescriptorSetChain {
+    }
+
+    #[derive(Debug)]
+    struct CopyDescriptorSetChainWrapper;
 }
 
 /// See [`VkCopyDescriptorSet`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCopyDescriptorSet)
 #[derive(Debug, Clone, PartialEq)]
 pub struct CopyDescriptorSet {
-    pub chain: Vec<CopyDescriptorSetChainElement>,
     pub src_set: DescriptorSet,
     pub src_binding: u32,
     pub src_array_element: u32,
@@ -7853,6 +7856,7 @@ pub struct CopyDescriptorSet {
     pub dst_binding: u32,
     pub dst_array_element: u32,
     pub descriptor_count: u32,
+    pub chain: Option<CopyDescriptorSetChain>,
 }
 
 #[derive(Debug)]
@@ -7860,14 +7864,17 @@ struct VkCopyDescriptorSetWrapper {
     pub vks_struct: vks::VkCopyDescriptorSet,
     src_set: DescriptorSet,
     dst_set: DescriptorSet,
+    chain: Option<CopyDescriptorSetChainWrapper>,
 }
 
-impl<'a> From<&'a CopyDescriptorSet> for VkCopyDescriptorSetWrapper {
-    fn from(copy: &'a CopyDescriptorSet) -> Self {
+impl VkCopyDescriptorSetWrapper {
+    pub fn new(copy: &CopyDescriptorSet, with_chain: bool) -> Self {
+        let (pnext, chain) = CopyDescriptorSetChainWrapper::new_optional(&copy.chain, with_chain);
+
         VkCopyDescriptorSetWrapper {
             vks_struct: vks::VkCopyDescriptorSet {
                 sType: vks::VK_STRUCTURE_TYPE_COPY_DESCRIPTOR_SET,
-                pNext: ptr::null(),
+                pNext: pnext,
                 srcSet: copy.src_set.handle(),
                 srcBinding: copy.src_binding,
                 srcArrayElement: copy.src_array_element,
@@ -7878,6 +7885,7 @@ impl<'a> From<&'a CopyDescriptorSet> for VkCopyDescriptorSetWrapper {
             },
             src_set: copy.src_set.clone(),
             dst_set: copy.dst_set.clone(),
+            chain: chain,
         }
     }
 }
