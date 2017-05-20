@@ -71,7 +71,7 @@ impl DescriptorPool {
     /// See [`vkAllocateDescriptorSets`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkAllocateDescriptorSets)
     pub fn allocate_descriptor_sets(allocate_info: &core::DescriptorSetAllocateInfo) -> Result<Vec<DescriptorSet>, core::Error> {
         let descriptor_pool = &allocate_info.descriptor_pool;
-        let allocate_info_wrapper: core::VkDescriptorSetAllocateInfoWrapper = allocate_info.into();
+        let allocate_info_wrapper = core::VkDescriptorSetAllocateInfoWrapper::new(allocate_info, true);
 
         let mut descriptor_sets = Vec::with_capacity(allocate_info.set_layouts.len());
         let res = unsafe {

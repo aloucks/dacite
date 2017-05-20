@@ -7625,17 +7625,21 @@ impl VkDescriptorPoolCreateInfoWrapper {
     }
 }
 
-/// See [`VkDescriptorSetAllocateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDescriptorSetAllocateInfo)
-#[derive(Debug, Clone, PartialEq)]
-pub enum DescriptorSetAllocateInfoChainElement {
+chain_struct! {
+    #[derive(Debug, Clone, Default, PartialEq)]
+    pub struct DescriptorSetAllocateInfoChain {
+    }
+
+    #[derive(Debug)]
+    struct DescriptorSetAllocateInfoChainWrapper;
 }
 
 /// See [`VkDescriptorSetAllocateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDescriptorSetAllocateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct DescriptorSetAllocateInfo {
-    pub chain: Vec<DescriptorSetAllocateInfoChainElement>,
     pub descriptor_pool: DescriptorPool,
     pub set_layouts: Vec<DescriptorSetLayout>,
+    pub chain: Option<DescriptorSetAllocateInfoChain>,
 }
 
 #[derive(Debug)]
@@ -7644,16 +7648,18 @@ struct VkDescriptorSetAllocateInfoWrapper {
     descriptor_pool: DescriptorPool,
     set_layouts: Vec<DescriptorSetLayout>,
     vk_set_layouts: Vec<vks::VkDescriptorSetLayout>,
+    chain: Option<DescriptorSetAllocateInfoChainWrapper>,
 }
 
-impl<'a> From<&'a DescriptorSetAllocateInfo> for VkDescriptorSetAllocateInfoWrapper {
-    fn from(allocate_info: &'a DescriptorSetAllocateInfo) -> Self {
+impl VkDescriptorSetAllocateInfoWrapper {
+    pub fn new(allocate_info: &DescriptorSetAllocateInfo, with_chain: bool) -> Self {
         let vk_set_layouts: Vec<_> = allocate_info.set_layouts.iter().map(DescriptorSetLayout::handle).collect();
+        let (pnext, chain) = DescriptorSetAllocateInfoChainWrapper::new_optional(&allocate_info.chain, with_chain);
 
         VkDescriptorSetAllocateInfoWrapper {
             vks_struct: vks::VkDescriptorSetAllocateInfo {
                 sType: vks::VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO,
-                pNext: ptr::null(),
+                pNext: pnext,
                 descriptorPool: allocate_info.descriptor_pool.handle(),
                 descriptorSetCount: vk_set_layouts.len() as u32,
                 pSetLayouts: vk_set_layouts.as_ptr(),
@@ -7661,6 +7667,7 @@ impl<'a> From<&'a DescriptorSetAllocateInfo> for VkDescriptorSetAllocateInfoWrap
             descriptor_pool: allocate_info.descriptor_pool.clone(),
             set_layouts: allocate_info.set_layouts.clone(),
             vk_set_layouts: vk_set_layouts,
+            chain: chain,
         }
     }
 }
