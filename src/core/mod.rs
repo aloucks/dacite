@@ -5260,7 +5260,7 @@ struct VkFenceCreateInfoWrapper {
 }
 
 impl VkFenceCreateInfoWrapper {
-    pub fn new(create_info: &FenceCreateInfo, with_chain: bool) -> VkFenceCreateInfoWrapper {
+    pub fn new(create_info: &FenceCreateInfo, with_chain: bool) -> Self {
         let (pnext, chain) = FenceCreateInfoChainWrapper::new_optional(&create_info.chain, with_chain);
 
         VkFenceCreateInfoWrapper {
@@ -5306,7 +5306,7 @@ struct VkSemaphoreCreateInfoWrapper {
 }
 
 impl VkSemaphoreCreateInfoWrapper {
-    pub fn new(create_info: &SemaphoreCreateInfo, with_chain: bool) -> VkSemaphoreCreateInfoWrapper {
+    pub fn new(create_info: &SemaphoreCreateInfo, with_chain: bool) -> Self {
         let (pnext, chain) = SemaphoreCreateInfoChainWrapper::new_optional(&create_info.chain, with_chain);
 
         VkSemaphoreCreateInfoWrapper {
@@ -5352,7 +5352,7 @@ struct VkEventCreateInfoWrapper {
 }
 
 impl VkEventCreateInfoWrapper {
-    pub fn new(create_info: &EventCreateInfo, with_chain: bool) -> VkEventCreateInfoWrapper {
+    pub fn new(create_info: &EventCreateInfo, with_chain: bool) -> Self {
         let (pnext, chain) = EventCreateInfoChainWrapper::new_optional(&create_info.chain, with_chain);
 
         VkEventCreateInfoWrapper {
@@ -5404,7 +5404,7 @@ struct VkQueryPoolCreateInfoWrapper {
 }
 
 impl VkQueryPoolCreateInfoWrapper {
-    pub fn new(create_info: &QueryPoolCreateInfo, with_chain: bool) -> VkQueryPoolCreateInfoWrapper {
+    pub fn new(create_info: &QueryPoolCreateInfo, with_chain: bool) -> Self {
         let (pnext, chain) = QueryPoolCreateInfoChainWrapper::new_optional(&create_info.chain, with_chain);
 
         VkQueryPoolCreateInfoWrapper {
@@ -8291,7 +8291,7 @@ struct VkRenderPassCreateInfoWrapper {
 }
 
 impl VkRenderPassCreateInfoWrapper {
-    pub fn new(create_info: &RenderPassCreateInfo, with_chain: bool) -> VkRenderPassCreateInfoWrapper {
+    pub fn new(create_info: &RenderPassCreateInfo, with_chain: bool) -> Self {
         let (attachments_count, attachments_ptr, attachments) = match create_info.attachments {
             Some(ref attachments) => {
                 let attachments: Vec<_> = attachments.iter().map(From::from).collect();
