@@ -5366,31 +5366,33 @@ impl VkEventCreateInfoWrapper {
     }
 }
 
-/// See [`VkQueryPoolCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueryPoolCreateInfo)
-#[derive(Debug, Clone, PartialEq)]
-pub enum QueryPoolCreateInfoChainElement {
+chain_struct! {
+    #[derive(Debug, Clone, Default, PartialEq)]
+    pub struct QueryPoolCreateInfoChain {
+    }
+
+    #[derive(Debug)]
+    struct QueryPoolCreateInfoChainWrapper;
 }
 
 /// See [`VkQueryPoolCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueryPoolCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct QueryPoolCreateInfo {
-    pub chain: Vec<QueryPoolCreateInfoChainElement>,
     pub flags: QueryPoolCreateFlags,
     pub query_type: QueryType,
     pub query_count: u32,
     pub pipeline_statistics: QueryPipelineStatisticFlags,
+    pub chain: Option<QueryPoolCreateInfoChain>,
 }
 
-impl<'a> From<&'a vks::VkQueryPoolCreateInfo> for QueryPoolCreateInfo {
-    fn from(create_info: &'a vks::VkQueryPoolCreateInfo) -> Self {
-        debug_assert_eq!(create_info.pNext, ptr::null());
-
+impl QueryPoolCreateInfo {
+    pub unsafe fn from(create_info: &vks::VkQueryPoolCreateInfo, with_chain: bool) -> Self {
         QueryPoolCreateInfo {
-            chain: vec![],
             flags: create_info.flags,
             query_type: create_info.queryType.into(),
             query_count: create_info.queryCount,
             pipeline_statistics: create_info.pipelineStatistics,
+            chain: QueryPoolCreateInfoChain::from_vks(create_info.pNext, with_chain),
         }
     }
 }
@@ -5398,19 +5400,23 @@ impl<'a> From<&'a vks::VkQueryPoolCreateInfo> for QueryPoolCreateInfo {
 #[derive(Debug)]
 struct VkQueryPoolCreateInfoWrapper {
     pub vks_struct: vks::VkQueryPoolCreateInfo,
+    chain: Option<QueryPoolCreateInfoChainWrapper>,
 }
 
-impl<'a> From<&'a QueryPoolCreateInfo> for VkQueryPoolCreateInfoWrapper {
-    fn from(create_info: &'a QueryPoolCreateInfo) -> VkQueryPoolCreateInfoWrapper {
+impl VkQueryPoolCreateInfoWrapper {
+    pub fn new(create_info: &QueryPoolCreateInfo, with_chain: bool) -> VkQueryPoolCreateInfoWrapper {
+        let (pnext, chain) = QueryPoolCreateInfoChainWrapper::new_optional(&create_info.chain, with_chain);
+
         VkQueryPoolCreateInfoWrapper {
             vks_struct: vks::VkQueryPoolCreateInfo {
                 sType: vks::VK_STRUCTURE_TYPE_QUERY_POOL_CREATE_INFO,
-                pNext: ptr::null(),
+                pNext: pnext,
                 flags: create_info.flags,
                 queryType: create_info.query_type.into(),
                 queryCount: create_info.query_count,
                 pipelineStatistics: create_info.pipeline_statistics,
             },
+            chain: chain,
         }
     }
 }
