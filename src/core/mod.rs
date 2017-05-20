@@ -7890,21 +7890,25 @@ impl VkCopyDescriptorSetWrapper {
     }
 }
 
-/// See [`VkFramebufferCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkFramebufferCreateInfo)
-#[derive(Debug, Clone, PartialEq)]
-pub enum FramebufferCreateInfoChainElement {
+chain_struct! {
+    #[derive(Debug, Clone, Default, PartialEq)]
+    pub struct FramebufferCreateInfoChain {
+    }
+
+    #[derive(Debug)]
+    struct FramebufferCreateInfoChainWrapper;
 }
 
 /// See [`VkFramebufferCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkFramebufferCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct FramebufferCreateInfo {
-    pub chain: Vec<FramebufferCreateInfoChainElement>,
     pub flags: FramebufferCreateFlags,
     pub render_pass: RenderPass,
     pub attachments: Option<Vec<ImageView>>,
     pub width: u32,
     pub height: u32,
     pub layers: u32,
+    pub chain: Option<FramebufferCreateInfoChain>,
 }
 
 #[derive(Debug)]
@@ -7913,10 +7917,11 @@ struct VkFramebufferCreateInfoWrapper {
     render_pass: RenderPass,
     attachments: Option<Vec<ImageView>>,
     vk_attachments: Option<Vec<vks::VkImageView>>,
+    chain: Option<FramebufferCreateInfoChainWrapper>,
 }
 
-impl<'a> From<&'a FramebufferCreateInfo> for VkFramebufferCreateInfoWrapper {
-    fn from(create_info: &'a FramebufferCreateInfo) -> Self {
+impl VkFramebufferCreateInfoWrapper {
+    pub fn new(create_info: &FramebufferCreateInfo, with_chain: bool) -> Self {
         let (attachments_count, vk_attachments_ptr, attachments, vk_attachments) = match create_info.attachments {
             Some(ref attachments) => {
                 let attachments = attachments.clone();
@@ -7927,10 +7932,12 @@ impl<'a> From<&'a FramebufferCreateInfo> for VkFramebufferCreateInfoWrapper {
             None => (0, ptr::null(), None, None),
         };
 
+        let (pnext, chain) = FramebufferCreateInfoChainWrapper::new_optional(&create_info.chain, with_chain);
+
         VkFramebufferCreateInfoWrapper {
             vks_struct: vks::VkFramebufferCreateInfo {
                 sType: vks::VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO,
-                pNext: ptr::null(),
+                pNext: pnext,
                 flags: create_info.flags,
                 renderPass: create_info.render_pass.handle(),
                 attachmentCount: attachments_count,
@@ -7942,6 +7949,7 @@ impl<'a> From<&'a FramebufferCreateInfo> for VkFramebufferCreateInfoWrapper {
             render_pass: create_info.render_pass.clone(),
             attachments: attachments,
             vk_attachments: vk_attachments,
+            chain: chain,
         }
     }
 }

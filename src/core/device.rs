@@ -494,7 +494,7 @@ impl Device {
 
     /// See [`vkCreateFramebuffer`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCreateFramebuffer)
     pub fn create_framebuffer(&self, create_info: &core::FramebufferCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<Framebuffer, core::Error> {
-        let create_info_wrapper: core::VkFramebufferCreateInfoWrapper = create_info.into();
+        let create_info_wrapper = core::VkFramebufferCreateInfoWrapper::new(create_info, true);
 
         let allocator_helper = allocator.map(AllocatorHelper::new);
         let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), AllocatorHelper::callbacks);
