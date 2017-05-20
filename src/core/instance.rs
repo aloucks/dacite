@@ -17,11 +17,15 @@ use core::allocator_helper::AllocatorHelper;
 use core;
 use std::cmp::Ordering;
 use std::hash::{Hash, Hasher};
+use std::mem;
 use std::ptr;
 use std::sync::Arc;
 use utils;
 use vks;
 use {TryDestroyError, TryDestroyErrorKind, VulkanObject};
+
+#[cfg(feature = "ext_debug_report_1")]
+use ext_debug_report;
 
 /// See [`VkInstance`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkInstance)
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
@@ -84,16 +88,35 @@ impl Instance {
                     #[cfg(feature = "khr_surface_25")]
                     core::InstanceExtension::KHRSurface => loader.load_khr_surface(instance),
 
+                    #[cfg(feature = "ext_debug_report_1")]
+                    core::InstanceExtension::ExtDebugReport => loader.load_ext_debug_report(instance),
+
                     core::InstanceExtension::Unknown(_) => { },
                 }
             }
         }
 
-        Ok(Instance(Arc::new(Inner {
-            handle: instance,
-            allocator: allocator_helper,
-            loader: loader,
-        })))
+        let inner = unsafe {
+            let mut inner: Inner = mem::uninitialized();
+            ptr::write(&mut inner.handle, instance);
+            ptr::write(&mut inner.allocator, allocator_helper);
+            ptr::write(&mut inner.loader, loader);
+
+            #[cfg(feature = "ext_debug_report_1")]
+            {
+                ptr::write(&mut inner.debug_report_callback, None);
+
+                if let Some(ref chain) = create_info.chain {
+                    if let Some(ref debug_report_callback_create_info_ext) = chain.debug_report_callback_create_info_ext {
+                        ptr::write(&mut inner.debug_report_callback, Some(debug_report_callback_create_info_ext.callback.clone()));
+                    }
+                }
+            }
+
+            inner
+        };
+
+        Ok(Instance(Arc::new(inner)))
     }
 
     /// See [`vkEnumeratePhysicalDevices`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkEnumeratePhysicalDevices)
@@ -172,6 +195,41 @@ impl Instance {
             Ok(core::InstanceExtensionPropertiesIterator(extension_properties.into_iter()))
         }
     }
+
+    #[cfg(feature = "ext_debug_report_1")]
+    /// See [`vkCreateDebugReportCallbackEXT`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCreateDebugReportCallbackEXT)
+    /// and extension [`VK_EXT_debug_report`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_EXT_debug_report)
+    pub fn create_debug_report_callback_ext(&self, create_info: &ext_debug_report::DebugReportCallbackCreateInfoExt, allocator: Option<Box<core::Allocator>>) -> Result<ext_debug_report::DebugReportCallbackExt, core::Error> {
+        let allocator_helper = allocator.map(AllocatorHelper::new);
+        let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), AllocatorHelper::callbacks);
+        let create_info_wrapper = ext_debug_report::VkDebugReportCallbackCreateInfoEXTWrapper::new(create_info, true);
+
+        let mut debug_report_callback = ptr::null_mut();
+        let res = unsafe {
+            (self.loader().ext_debug_report.vkCreateDebugReportCallbackEXT)(self.handle(), &create_info_wrapper.vks_struct, allocation_callbacks, &mut debug_report_callback)
+        };
+
+        if res == vks::VK_SUCCESS {
+            Ok(ext_debug_report::DebugReportCallbackExt::new(debug_report_callback, self.clone(), allocator_helper, create_info_wrapper.callback_helper))
+        }
+        else {
+            Err(res.into())
+        }
+    }
+
+    #[cfg(feature = "ext_debug_report_1")]
+    /// See [`vkDebugReportMessageEXT`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkDebugReportMessageEXT)
+    /// and extension [`VK_EXT_debug_report`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_EXT_debug_report)
+    pub fn debug_report_message_ext(&self, flags: ext_debug_report::DebugReportFlagsExt, object_type: ext_debug_report::DebugReportObjectTypeExt, object: u64, location: usize, message_code: i32, layer_prefix: &str, message: &str) {
+        use std::ffi::CString;
+
+        let layer_prefix = CString::new(layer_prefix).unwrap();
+        let message = CString::new(message).unwrap();
+
+        unsafe {
+            (self.loader().ext_debug_report.vkDebugReportMessageEXT)(self.handle(), flags, object_type.into(), object, location, message_code, layer_prefix.as_ptr(), message.as_ptr());
+        }
+    }
 }
 
 #[derive(Debug)]
@@ -179,6 +237,9 @@ struct Inner {
     handle: vks::VkInstance,
     allocator: Option<AllocatorHelper>,
     loader: vks::InstanceProcAddrLoader,
+
+    #[cfg(feature = "ext_debug_report_1")]
+    debug_report_callback: Option<Arc<ext_debug_report::DebugReportCallbacksExt>>,
 }
 
 impl Drop for Inner {

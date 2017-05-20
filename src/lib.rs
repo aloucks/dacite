@@ -40,3 +40,6 @@ pub use version::{DACITE_API_VERSION_MAJOR, DACITE_API_VERSION_MINOR, DACITE_API
 
 #[cfg(feature = "khr_surface_25")]
 pub mod khr_surface;
+
+#[cfg(feature = "ext_debug_report_1")]
+pub mod ext_debug_report;

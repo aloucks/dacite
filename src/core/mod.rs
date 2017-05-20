@@ -49,6 +49,9 @@ use std::slice;
 use utils;
 use vks;
 
+#[cfg(feature = "ext_debug_report_1")]
+use ext_debug_report::{DebugReportCallbackCreateInfoExt, VkDebugReportCallbackCreateInfoEXTWrapper};
+
 pub use self::buffer::Buffer;
 pub use self::buffer_view::BufferView;
 pub use self::command_buffer::CommandBuffer;
@@ -1129,6 +1132,10 @@ pub enum Error {
     /// See extension [`VK_KHR_surface`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_surface)
     NativeWindowInUseKHR,
 
+    #[cfg(feature = "ext_debug_report_1")]
+    /// See extension [`VK_EXT_debug_report`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_EXT_debug_report)
+    ValidationFailedEXT,
+
     Unknown(vks::VkResult),
 }
 
@@ -1159,6 +1166,9 @@ impl ::std::error::Error for Error {
             #[cfg(feature = "khr_surface_25")]
             Error::NativeWindowInUseKHR => "NativeWindowInUse",
 
+            #[cfg(feature = "ext_debug_report_1")]
+            Error::ValidationFailedEXT => "ValidationFailed",
+
             Error::Unknown(_) => "unknown error",
         }
     }
@@ -1187,6 +1197,9 @@ impl From<vks::VkResult> for Error {
             #[cfg(feature = "khr_surface_25")]
             vks::VK_ERROR_NATIVE_WINDOW_IN_USE_KHR => Error::NativeWindowInUseKHR,
 
+            #[cfg(feature = "ext_debug_report_1")]
+            vks::VK_ERROR_VALIDATION_FAILED_EXT => Error::ValidationFailedEXT,
+
             _ => Error::Unknown(res),
         }
     }
@@ -1212,6 +1225,9 @@ impl From<Error> for vks::VkResult {
 
             #[cfg(feature = "khr_surface_25")]
             Error::NativeWindowInUseKHR => vks::VK_ERROR_NATIVE_WINDOW_IN_USE_KHR,
+
+            #[cfg(feature = "ext_debug_report_1")]
+            Error::ValidationFailedEXT => vks::VK_ERROR_VALIDATION_FAILED_EXT,
 
             Error::Unknown(res) => res,
         }
@@ -3043,6 +3059,12 @@ impl VkApplicationInfoWrapper {
 chain_struct! {
     #[derive(Debug, Clone, Default, PartialEq)]
     pub struct InstanceCreateInfoChain {
+        #[cfg(feature = "ext_debug_report_1")]
+        field debug_report_callback_create_info_ext: DebugReportCallbackCreateInfoExt {
+            fn: add_debug_report_callback_create_info_ext,
+            stype: vks::VK_STRUCTURE_TYPE_DEBUG_REPORT_CREATE_INFO_EXT,
+            wrapper: VkDebugReportCallbackCreateInfoEXTWrapper,
+        },
     }
 
     #[derive(Debug)]
@@ -4272,6 +4294,9 @@ pub enum InstanceExtension {
 
     #[cfg(feature = "khr_surface_25")]
     KHRSurface,
+
+    #[cfg(feature = "ext_debug_report_1")]
+    ExtDebugReport,
 }
 
 impl From<String> for InstanceExtension {
@@ -4279,6 +4304,9 @@ impl From<String> for InstanceExtension {
         match name.as_str() {
             #[cfg(feature = "khr_surface_25")]
             vks::VK_KHR_SURFACE_EXTENSION_NAME_STR => InstanceExtension::KHRSurface,
+
+            #[cfg(feature = "ext_debug_report_1")]
+            vks::VK_EXT_DEBUG_REPORT_EXTENSION_NAME_STR => InstanceExtension::ExtDebugReport,
 
             _ => InstanceExtension::Unknown(name)
         }
@@ -4291,6 +4319,9 @@ impl<'a> From<&'a str> for InstanceExtension {
             #[cfg(feature = "khr_surface_25")]
             vks::VK_KHR_SURFACE_EXTENSION_NAME_STR => InstanceExtension::KHRSurface,
 
+            #[cfg(feature = "ext_debug_report_1")]
+            vks::VK_EXT_DEBUG_REPORT_EXTENSION_NAME_STR => InstanceExtension::ExtDebugReport,
+
             _ => InstanceExtension::Unknown(name.to_owned())
         }
     }
@@ -4302,6 +4333,9 @@ impl From<InstanceExtension> for String {
             #[cfg(feature = "khr_surface_25")]
             InstanceExtension::KHRSurface => vks::VK_KHR_SURFACE_EXTENSION_NAME_STR.to_owned(),
 
+            #[cfg(feature = "ext_debug_report_1")]
+            InstanceExtension::ExtDebugReport => vks::VK_EXT_DEBUG_REPORT_EXTENSION_NAME_STR.to_owned(),
+
             InstanceExtension::Unknown(name) => name,
         }
     }
@@ -4312,6 +4346,9 @@ impl<'a> From<&'a InstanceExtension> for &'a str {
         match *extension {
             #[cfg(feature = "khr_surface_25")]
             InstanceExtension::KHRSurface => vks::VK_KHR_SURFACE_EXTENSION_NAME_STR,
+
+            #[cfg(feature = "ext_debug_report_1")]
+            InstanceExtension::ExtDebugReport => vks::VK_EXT_DEBUG_REPORT_EXTENSION_NAME_STR,
 
             InstanceExtension::Unknown(ref name) => name,
         }
