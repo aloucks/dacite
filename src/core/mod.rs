@@ -5320,25 +5320,27 @@ impl VkSemaphoreCreateInfoWrapper {
     }
 }
 
-/// See [`VkEventCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkEventCreateInfo)
-#[derive(Debug, Clone, PartialEq)]
-pub enum EventCreateInfoChainElement {
+chain_struct! {
+    #[derive(Debug, Clone, Default, PartialEq)]
+    pub struct EventCreateInfoChain {
+    }
+
+    #[derive(Debug)]
+    struct EventCreateInfoChainWrapper;
 }
 
 /// See [`VkEventCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkEventCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct EventCreateInfo {
-    pub chain: Vec<EventCreateInfoChainElement>,
     pub flags: EventCreateFlags,
+    pub chain: Option<EventCreateInfoChain>,
 }
 
-impl<'a> From<&'a vks::VkEventCreateInfo> for EventCreateInfo {
-    fn from(create_info: &'a vks::VkEventCreateInfo) -> Self {
-        debug_assert_eq!(create_info.pNext, ptr::null());
-
+impl EventCreateInfo {
+    pub unsafe fn from(create_info: &vks::VkEventCreateInfo, with_chain: bool) -> Self {
         EventCreateInfo {
-            chain: vec![],
             flags: create_info.flags,
+            chain: EventCreateInfoChain::from_vks(create_info.pNext, with_chain),
         }
     }
 }
@@ -5346,16 +5348,20 @@ impl<'a> From<&'a vks::VkEventCreateInfo> for EventCreateInfo {
 #[derive(Debug)]
 struct VkEventCreateInfoWrapper {
     pub vks_struct: vks::VkEventCreateInfo,
+    chain: Option<EventCreateInfoChainWrapper>,
 }
 
-impl<'a> From<&'a EventCreateInfo> for VkEventCreateInfoWrapper {
-    fn from(create_info: &'a EventCreateInfo) -> VkEventCreateInfoWrapper {
+impl VkEventCreateInfoWrapper {
+    pub fn new(create_info: &EventCreateInfo, with_chain: bool) -> VkEventCreateInfoWrapper {
+        let (pnext, chain) = EventCreateInfoChainWrapper::new_optional(&create_info.chain, with_chain);
+
         VkEventCreateInfoWrapper {
             vks_struct: vks::VkEventCreateInfo {
                 sType: vks::VK_STRUCTURE_TYPE_FENCE_CREATE_INFO,
-                pNext: ptr::null(),
+                pNext: pnext,
                 flags: create_info.flags,
             },
+            chain: chain,
         }
     }
 }

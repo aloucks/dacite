@@ -164,7 +164,7 @@ impl Device {
 
     /// See [`vkCreateEvent`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCreateEvent)
     pub fn create_event(&self, create_info: &core::EventCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<Event, core::Error> {
-        let create_info: core::VkEventCreateInfoWrapper = create_info.into();
+        let create_info = core::VkEventCreateInfoWrapper::new(create_info, true);
 
         let allocator_helper = allocator.map(AllocatorHelper::new);
         let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), AllocatorHelper::callbacks);
