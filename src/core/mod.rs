@@ -5950,21 +5950,17 @@ pub struct SpecializationInfo {
     pub data: Option<Vec<u8>>,
 }
 
-impl<'a> From<&'a vks::VkSpecializationInfo> for SpecializationInfo {
-    fn from(info: &'a vks::VkSpecializationInfo) -> Self {
+impl SpecializationInfo {
+    pub unsafe fn from_vks(info: &vks::VkSpecializationInfo) -> Self {
         let map_entries = if !info.pMapEntries.is_null() {
-            unsafe {
-                Some(slice::from_raw_parts(info.pMapEntries, info.mapEntryCount as usize).iter().map(From::from).collect())
-            }
+            Some(slice::from_raw_parts(info.pMapEntries, info.mapEntryCount as usize).iter().map(From::from).collect())
         }
         else {
             None
         };
 
         let data = if !info.pData.is_null() {
-            unsafe {
-                Some(slice::from_raw_parts(info.pData as *const u8, info.dataSize).to_vec())
-            }
+            Some(slice::from_raw_parts(info.pData as *const u8, info.dataSize).to_vec())
         }
         else {
             None
@@ -8037,57 +8033,47 @@ pub struct SubpassDescription {
     pub preserve_attachments: Option<Vec<u32>>,
 }
 
-impl<'a> From<&'a vks::VkSubpassDescription> for SubpassDescription {
-    fn from(description: &'a vks::VkSubpassDescription) -> Self {
+impl SubpassDescription {
+    pub unsafe fn from_vks(description: &vks::VkSubpassDescription) -> Self {
         let input_attachments = if !description.pInputAttachments.is_null() {
-            unsafe {
-                Some(slice::from_raw_parts(description.pInputAttachments, description.inputAttachmentCount as usize)
-                     .iter()
-                     .map(From::from)
-                     .collect())
-            }
+            Some(slice::from_raw_parts(description.pInputAttachments, description.inputAttachmentCount as usize)
+                 .iter()
+                 .map(From::from)
+                 .collect())
         }
         else {
             None
         };
 
         let color_attachments = if !description.pColorAttachments.is_null() {
-            unsafe {
-                Some(slice::from_raw_parts(description.pColorAttachments, description.colorAttachmentCount as usize)
-                     .iter()
-                     .map(From::from)
-                     .collect())
-            }
+            Some(slice::from_raw_parts(description.pColorAttachments, description.colorAttachmentCount as usize)
+                 .iter()
+                 .map(From::from)
+                 .collect())
         }
         else {
             None
         };
 
         let resolve_attachments = if !description.pResolveAttachments.is_null() {
-            unsafe {
-                Some(slice::from_raw_parts(description.pResolveAttachments, description.colorAttachmentCount as usize)
-                     .iter()
-                     .map(From::from)
-                     .collect())
-            }
+            Some(slice::from_raw_parts(description.pResolveAttachments, description.colorAttachmentCount as usize)
+                 .iter()
+                 .map(From::from)
+                 .collect())
         }
         else {
             None
         };
 
         let depth_stencil_attachment = if !description.pDepthStencilAttachment.is_null() {
-            unsafe {
-                Some((&*description.pDepthStencilAttachment).into())
-            }
+            Some((&*description.pDepthStencilAttachment).into())
         }
         else {
             None
         };
 
         let preserve_attachments = if !description.pPreserveAttachments.is_null() {
-            unsafe {
-                Some(slice::from_raw_parts(description.pPreserveAttachments, description.preserveAttachmentCount as usize).to_vec())
-            }
+            Some(slice::from_raw_parts(description.pPreserveAttachments, description.preserveAttachmentCount as usize).to_vec())
         }
         else {
             None
@@ -8257,7 +8243,7 @@ impl RenderPassCreateInfo {
 
         let subpasses = slice::from_raw_parts(create_info.pSubpasses, create_info.subpassCount as usize)
             .iter()
-            .map(From::from)
+            .map(|s| SubpassDescription::from_vks(s))
             .collect();
 
         let dependencies = if !create_info.pDependencies.is_null() {
