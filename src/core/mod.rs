@@ -7280,18 +7280,22 @@ impl<'a> From<&'a PushConstantRange> for vks::VkPushConstantRange {
     }
 }
 
-/// See [`VkPipelineLayoutCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineLayoutCreateInfo)
-#[derive(Debug, Clone, PartialEq)]
-pub enum PipelineLayoutCreateInfoChainElement {
+chain_struct! {
+    #[derive(Debug, Clone, Default, PartialEq)]
+    pub struct PipelineLayoutCreateInfoChain {
+    }
+
+    #[derive(Debug)]
+    struct PipelineLayoutCreateInfoChainWrapper;
 }
 
 /// See [`VkPipelineLayoutCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineLayoutCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct PipelineLayoutCreateInfo {
-    pub chain: Vec<PipelineLayoutCreateInfoChainElement>,
     pub flags: PipelineLayoutCreateFlags,
     pub set_layouts: Option<Vec<DescriptorSetLayout>>,
     pub push_constant_ranges: Option<Vec<PushConstantRange>>,
+    pub chain: Option<PipelineLayoutCreateInfoChain>,
 }
 
 #[derive(Debug)]
@@ -7300,10 +7304,11 @@ struct VkPipelineLayoutCreateInfoWrapper {
     set_layouts: Option<Vec<DescriptorSetLayout>>,
     vk_set_layouts: Option<Vec<vks::VkDescriptorSetLayout>>,
     push_constant_ranges: Option<Vec<vks::VkPushConstantRange>>,
+    chain: Option<PipelineLayoutCreateInfoChainWrapper>,
 }
 
-impl<'a> From<&'a PipelineLayoutCreateInfo> for VkPipelineLayoutCreateInfoWrapper {
-    fn from(create_info: &'a PipelineLayoutCreateInfo) -> Self {
+impl VkPipelineLayoutCreateInfoWrapper {
+    pub fn new(create_info: &PipelineLayoutCreateInfo, with_chain: bool) -> Self {
         let (vk_set_layouts_ptr, set_layout_count, set_layouts, vk_set_layouts) = match create_info.set_layouts {
             Some(ref set_layouts) => {
                 let set_layouts = set_layouts.clone();
@@ -7323,10 +7328,12 @@ impl<'a> From<&'a PipelineLayoutCreateInfo> for VkPipelineLayoutCreateInfoWrappe
             None => (0, ptr::null(), None),
         };
 
+        let (pnext, chain) = PipelineLayoutCreateInfoChainWrapper::new_optional(&create_info.chain, with_chain);
+
         VkPipelineLayoutCreateInfoWrapper {
             vks_struct: vks::VkPipelineLayoutCreateInfo {
                 sType: vks::VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO,
-                pNext: ptr::null(),
+                pNext: pnext,
                 flags: create_info.flags,
                 setLayoutCount: set_layout_count,
                 pSetLayouts: vk_set_layouts_ptr,
@@ -7336,6 +7343,7 @@ impl<'a> From<&'a PipelineLayoutCreateInfo> for VkPipelineLayoutCreateInfoWrappe
             set_layouts: set_layouts,
             vk_set_layouts: vk_set_layouts,
             push_constant_ranges: push_constant_ranges,
+            chain: chain,
         }
     }
 }

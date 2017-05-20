@@ -474,7 +474,7 @@ impl Device {
 
     /// See [`vkCreatePipelineLayout`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCreatePipelineLayout)
     pub fn create_pipeline_layout(&self, create_info: &core::PipelineLayoutCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<PipelineLayout, core::Error> {
-        let create_info_wrapper: core::VkPipelineLayoutCreateInfoWrapper = create_info.into();
+        let create_info_wrapper = core::VkPipelineLayoutCreateInfoWrapper::new(create_info, true);
 
         let allocator_helper = allocator.map(AllocatorHelper::new);
         let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), AllocatorHelper::callbacks);
