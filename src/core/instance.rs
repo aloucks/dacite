@@ -84,7 +84,7 @@ impl Instance {
                     #[cfg(feature = "khr_surface_25")]
                     core::InstanceExtension::KHRSurface => loader.load_khr_surface(instance),
 
-                    _ => {}
+                    core::InstanceExtension::Unknown(_) => { },
                 }
             }
         }
