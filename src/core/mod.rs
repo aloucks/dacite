@@ -5421,42 +5421,42 @@ impl VkQueryPoolCreateInfoWrapper {
     }
 }
 
-/// See [`VkBufferCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkBufferCreateInfo)
-#[derive(Debug, Clone, PartialEq)]
-pub enum BufferCreateInfoChainElement {
+chain_struct! {
+    #[derive(Debug, Clone, Default, PartialEq)]
+    pub struct BufferCreateInfoChain {
+    }
+
+    #[derive(Debug)]
+    struct BufferCreateInfoChainWrapper;
 }
 
 /// See [`VkBufferCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkBufferCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct BufferCreateInfo {
-    pub chain: Vec<BufferCreateInfoChainElement>,
     pub flags: BufferCreateFlags,
     pub size: u64,
     pub usage: BufferUsageFlags,
     pub sharing_mode: SharingMode,
     pub queue_family_indices: Option<Vec<u32>>,
+    pub chain: Option<BufferCreateInfoChain>,
 }
 
-impl<'a> From<&'a vks::VkBufferCreateInfo> for BufferCreateInfo {
-    fn from(create_info: &'a vks::VkBufferCreateInfo) -> Self {
-        debug_assert_eq!(create_info.pNext, ptr::null());
-
+impl BufferCreateInfo {
+    pub unsafe fn from(create_info: &vks::VkBufferCreateInfo, with_chain: bool) -> Self {
         let queue_family_indices = if !create_info.pQueueFamilyIndices.is_null() {
-            unsafe {
-                Some(slice::from_raw_parts(create_info.pQueueFamilyIndices, create_info.queueFamilyIndexCount as usize).to_vec())
-            }
+            Some(slice::from_raw_parts(create_info.pQueueFamilyIndices, create_info.queueFamilyIndexCount as usize).to_vec())
         }
         else {
             None
         };
 
         BufferCreateInfo {
-            chain: vec![],
             flags: create_info.flags,
             size: create_info.size,
             usage: create_info.usage,
             sharing_mode: create_info.sharingMode.into(),
             queue_family_indices: queue_family_indices,
+            chain: BufferCreateInfoChain::from_vks(create_info.pNext, with_chain),
         }
     }
 }
@@ -5465,20 +5465,23 @@ impl<'a> From<&'a vks::VkBufferCreateInfo> for BufferCreateInfo {
 struct VkBufferCreateInfoWrapper {
     pub vks_struct: vks::VkBufferCreateInfo,
     queue_family_indices: Option<Vec<u32>>,
+    chain: Option<BufferCreateInfoChainWrapper>,
 }
 
-impl<'a> From<&'a BufferCreateInfo> for VkBufferCreateInfoWrapper {
-    fn from(create_info: &'a BufferCreateInfo) -> Self {
+impl VkBufferCreateInfoWrapper {
+    pub fn new(create_info: &BufferCreateInfo, with_chain: bool) -> Self {
         let queue_family_indices = create_info.queue_family_indices.clone();
         let (queue_family_indices_ptr, queue_family_index_count) = match queue_family_indices {
             Some(ref queue_family_indices) => (queue_family_indices.as_ptr(), queue_family_indices.len() as u32),
             None => (ptr::null(), 0)
         };
 
+        let (pnext, chain) = BufferCreateInfoChainWrapper::new_optional(&create_info.chain, with_chain);
+
         VkBufferCreateInfoWrapper {
             vks_struct: vks::VkBufferCreateInfo {
                 sType: vks::VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO,
-                pNext: ptr::null(),
+                pNext: pnext,
                 flags: create_info.flags,
                 size: create_info.size,
                 usage: create_info.usage,
@@ -5487,6 +5490,7 @@ impl<'a> From<&'a BufferCreateInfo> for VkBufferCreateInfoWrapper {
                 pQueueFamilyIndices: queue_family_indices_ptr,
             },
             queue_family_indices: queue_family_indices,
+            chain: chain,
         }
     }
 }
