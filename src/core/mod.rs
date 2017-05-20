@@ -5274,25 +5274,27 @@ impl VkFenceCreateInfoWrapper {
     }
 }
 
-/// See [`VkSemaphoreCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSemaphoreCreateInfo)
-#[derive(Debug, Clone, PartialEq)]
-pub enum SemaphoreCreateInfoChainElement {
+chain_struct! {
+    #[derive(Debug, Clone, Default, PartialEq)]
+    pub struct SemaphoreCreateInfoChain {
+    }
+
+    #[derive(Debug)]
+    struct SemaphoreCreateInfoChainWrapper;
 }
 
 /// See [`VkSemaphoreCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSemaphoreCreateInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct SemaphoreCreateInfo {
-    pub chain: Vec<SemaphoreCreateInfoChainElement>,
     pub flags: SemaphoreCreateFlags,
+    pub chain: Option<SemaphoreCreateInfoChain>,
 }
 
-impl<'a> From<&'a vks::VkSemaphoreCreateInfo> for SemaphoreCreateInfo {
-    fn from(create_info: &'a vks::VkSemaphoreCreateInfo) -> Self {
-        debug_assert_eq!(create_info.pNext, ptr::null());
-
+impl SemaphoreCreateInfo {
+    pub unsafe fn from_vks(create_info: &vks::VkSemaphoreCreateInfo, with_chain: bool) -> Self {
         SemaphoreCreateInfo {
-            chain: vec![],
             flags: create_info.flags,
+            chain: SemaphoreCreateInfoChain::from_vks(create_info.pNext, with_chain),
         }
     }
 }
@@ -5300,16 +5302,20 @@ impl<'a> From<&'a vks::VkSemaphoreCreateInfo> for SemaphoreCreateInfo {
 #[derive(Debug)]
 struct VkSemaphoreCreateInfoWrapper {
     pub vks_struct: vks::VkSemaphoreCreateInfo,
+    chain: Option<SemaphoreCreateInfoChainWrapper>,
 }
 
-impl<'a> From<&'a SemaphoreCreateInfo> for VkSemaphoreCreateInfoWrapper {
-    fn from(create_info: &'a SemaphoreCreateInfo) -> VkSemaphoreCreateInfoWrapper {
+impl VkSemaphoreCreateInfoWrapper {
+    pub fn new(create_info: &SemaphoreCreateInfo, with_chain: bool) -> VkSemaphoreCreateInfoWrapper {
+        let (pnext, chain) = SemaphoreCreateInfoChainWrapper::new_optional(&create_info.chain, with_chain);
+
         VkSemaphoreCreateInfoWrapper {
             vks_struct: vks::VkSemaphoreCreateInfo {
                 sType: vks::VK_STRUCTURE_TYPE_FENCE_CREATE_INFO,
-                pNext: ptr::null(),
+                pNext: pnext,
                 flags: create_info.flags,
             },
+            chain: chain,
         }
     }
 }
