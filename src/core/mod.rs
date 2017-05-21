@@ -1126,11 +1126,11 @@ pub enum Error {
 
     #[cfg(feature = "khr_surface_25")]
     /// See extension [`VK_KHR_surface`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_surface)
-    SurfaceLostKHR,
+    SurfaceLostKhr,
 
     #[cfg(feature = "khr_surface_25")]
     /// See extension [`VK_KHR_surface`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_surface)
-    NativeWindowInUseKHR,
+    NativeWindowInUseKhr,
 
     #[cfg(feature = "ext_debug_report_1")]
     /// See extension [`VK_EXT_debug_report`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_EXT_debug_report)
@@ -1161,10 +1161,10 @@ impl ::std::error::Error for Error {
             Error::FormatNotSupported => "FormatNotSupported",
 
             #[cfg(feature = "khr_surface_25")]
-            Error::SurfaceLostKHR => "SurfaceLost",
+            Error::SurfaceLostKhr => "SurfaceLost",
 
             #[cfg(feature = "khr_surface_25")]
-            Error::NativeWindowInUseKHR => "NativeWindowInUse",
+            Error::NativeWindowInUseKhr => "NativeWindowInUse",
 
             #[cfg(feature = "ext_debug_report_1")]
             Error::ValidationFailedEXT => "ValidationFailed",
@@ -1192,10 +1192,10 @@ impl From<vks::VkResult> for Error {
             vks::VK_ERROR_FORMAT_NOT_SUPPORTED => Error::FormatNotSupported,
 
             #[cfg(feature = "khr_surface_25")]
-            vks::VK_ERROR_SURFACE_LOST_KHR => Error::SurfaceLostKHR,
+            vks::VK_ERROR_SURFACE_LOST_KHR => Error::SurfaceLostKhr,
 
             #[cfg(feature = "khr_surface_25")]
-            vks::VK_ERROR_NATIVE_WINDOW_IN_USE_KHR => Error::NativeWindowInUseKHR,
+            vks::VK_ERROR_NATIVE_WINDOW_IN_USE_KHR => Error::NativeWindowInUseKhr,
 
             #[cfg(feature = "ext_debug_report_1")]
             vks::VK_ERROR_VALIDATION_FAILED_EXT => Error::ValidationFailedEXT,
@@ -1221,10 +1221,10 @@ impl From<Error> for vks::VkResult {
             Error::FormatNotSupported => vks::VK_ERROR_FORMAT_NOT_SUPPORTED,
 
             #[cfg(feature = "khr_surface_25")]
-            Error::SurfaceLostKHR => vks::VK_ERROR_SURFACE_LOST_KHR,
+            Error::SurfaceLostKhr => vks::VK_ERROR_SURFACE_LOST_KHR,
 
             #[cfg(feature = "khr_surface_25")]
-            Error::NativeWindowInUseKHR => vks::VK_ERROR_NATIVE_WINDOW_IN_USE_KHR,
+            Error::NativeWindowInUseKhr => vks::VK_ERROR_NATIVE_WINDOW_IN_USE_KHR,
 
             #[cfg(feature = "ext_debug_report_1")]
             Error::ValidationFailedEXT => vks::VK_ERROR_VALIDATION_FAILED_EXT,
@@ -4293,7 +4293,7 @@ pub enum InstanceExtension {
     Unknown(String),
 
     #[cfg(feature = "khr_surface_25")]
-    KHRSurface,
+    KhrSurface,
 
     #[cfg(feature = "ext_debug_report_1")]
     ExtDebugReport,
@@ -4303,7 +4303,7 @@ impl From<String> for InstanceExtension {
     fn from(name: String) -> Self {
         match name.as_str() {
             #[cfg(feature = "khr_surface_25")]
-            vks::VK_KHR_SURFACE_EXTENSION_NAME_STR => InstanceExtension::KHRSurface,
+            vks::VK_KHR_SURFACE_EXTENSION_NAME_STR => InstanceExtension::KhrSurface,
 
             #[cfg(feature = "ext_debug_report_1")]
             vks::VK_EXT_DEBUG_REPORT_EXTENSION_NAME_STR => InstanceExtension::ExtDebugReport,
@@ -4317,7 +4317,7 @@ impl<'a> From<&'a str> for InstanceExtension {
     fn from(name: &'a str) -> Self {
         match name {
             #[cfg(feature = "khr_surface_25")]
-            vks::VK_KHR_SURFACE_EXTENSION_NAME_STR => InstanceExtension::KHRSurface,
+            vks::VK_KHR_SURFACE_EXTENSION_NAME_STR => InstanceExtension::KhrSurface,
 
             #[cfg(feature = "ext_debug_report_1")]
             vks::VK_EXT_DEBUG_REPORT_EXTENSION_NAME_STR => InstanceExtension::ExtDebugReport,
@@ -4331,7 +4331,7 @@ impl From<InstanceExtension> for String {
     fn from(extension: InstanceExtension) -> Self {
         match extension {
             #[cfg(feature = "khr_surface_25")]
-            InstanceExtension::KHRSurface => vks::VK_KHR_SURFACE_EXTENSION_NAME_STR.to_owned(),
+            InstanceExtension::KhrSurface => vks::VK_KHR_SURFACE_EXTENSION_NAME_STR.to_owned(),
 
             #[cfg(feature = "ext_debug_report_1")]
             InstanceExtension::ExtDebugReport => vks::VK_EXT_DEBUG_REPORT_EXTENSION_NAME_STR.to_owned(),
@@ -4345,7 +4345,7 @@ impl<'a> From<&'a InstanceExtension> for &'a str {
     fn from(extension: &'a InstanceExtension) -> Self {
         match *extension {
             #[cfg(feature = "khr_surface_25")]
-            InstanceExtension::KHRSurface => vks::VK_KHR_SURFACE_EXTENSION_NAME_STR,
+            InstanceExtension::KhrSurface => vks::VK_KHR_SURFACE_EXTENSION_NAME_STR,
 
             #[cfg(feature = "ext_debug_report_1")]
             InstanceExtension::ExtDebugReport => vks::VK_EXT_DEBUG_REPORT_EXTENSION_NAME_STR,

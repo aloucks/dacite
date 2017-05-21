@@ -86,7 +86,7 @@ impl Instance {
             for instance_extension in &create_info.enabled_extensions {
                 match *instance_extension {
                     #[cfg(feature = "khr_surface_25")]
-                    core::InstanceExtension::KHRSurface => loader.load_khr_surface(instance),
+                    core::InstanceExtension::KhrSurface => loader.load_khr_surface(instance),
 
                     #[cfg(feature = "ext_debug_report_1")]
                     core::InstanceExtension::ExtDebugReport => loader.load_ext_debug_report(instance),

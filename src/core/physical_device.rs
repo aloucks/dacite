@@ -243,7 +243,7 @@ impl PhysicalDevice {
     #[cfg(feature = "khr_surface_25")]
     /// See [`vkGetPhysicalDeviceSurfaceSupportKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetPhysicalDeviceSurfaceSupportKHR)
     /// and extension [`VK_KHR_surface`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_surface)
-    pub fn get_surface_support_khr(&self, queue_family_index: u32, surface: &khr_surface::SurfaceKHR) -> Result<bool, core::Error> {
+    pub fn get_surface_support_khr(&self, queue_family_index: u32, surface: &khr_surface::SurfaceKhr) -> Result<bool, core::Error> {
         let mut supported = vks::VK_FALSE;
         let res = unsafe {
             (self.loader().khr_surface.vkGetPhysicalDeviceSurfaceSupportKHR)(self.handle, queue_family_index, surface.handle(), &mut supported)
@@ -260,7 +260,7 @@ impl PhysicalDevice {
     #[cfg(feature = "khr_surface_25")]
     /// See [`vkGetPhysicalDeviceSurfaceCapabilitiesKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetPhysicalDeviceSurfaceCapabilitiesKHR)
     /// and extension [`VK_KHR_surface`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_surface)
-    pub fn get_surface_capabilities_khr(&self, surface: &khr_surface::SurfaceKHR) -> Result<khr_surface::SurfaceCapabilitiesKHR, core::Error> {
+    pub fn get_surface_capabilities_khr(&self, surface: &khr_surface::SurfaceKhr) -> Result<khr_surface::SurfaceCapabilitiesKhr, core::Error> {
         unsafe {
             let mut capabilities = mem::uninitialized();
             let res = (self.loader().khr_surface.vkGetPhysicalDeviceSurfaceCapabilitiesKHR)(self.handle, surface.handle(), &mut capabilities);
@@ -277,7 +277,7 @@ impl PhysicalDevice {
     #[cfg(feature = "khr_surface_25")]
     /// See [`vkGetPhysicalDeviceSurfaceFormatsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetPhysicalDeviceSurfaceFormatsKHR)
     /// and extension [`VK_KHR_surface`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_surface)
-    pub fn get_surface_formats_khr(&self, surface: &khr_surface::SurfaceKHR) -> Result<khr_surface::SurfaceFormatKHRIterator, core::Error> {
+    pub fn get_surface_formats_khr(&self, surface: &khr_surface::SurfaceKhr) -> Result<khr_surface::SurfaceFormatKhrIterator, core::Error> {
         let mut num_formats = 0;
         let res = unsafe {
             (self.loader().khr_surface.vkGetPhysicalDeviceSurfaceFormatsKHR)(self.handle, surface.handle(), &mut num_formats, ptr::null_mut())
@@ -297,7 +297,7 @@ impl PhysicalDevice {
                 formats.set_len(num_formats as usize);
             }
 
-            Ok(khr_surface::SurfaceFormatKHRIterator(formats.into_iter()))
+            Ok(khr_surface::SurfaceFormatKhrIterator(formats.into_iter()))
         }
         else {
             Err(res.into())
@@ -307,7 +307,7 @@ impl PhysicalDevice {
     #[cfg(feature = "khr_surface_25")]
     /// See [`vkGetPhysicalDeviceSurfacePresentModesKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetPhysicalDeviceSurfacePresentModesKHR)
     /// and extension [`VK_KHR_surface`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_surface)
-    pub fn get_surface_present_modes_khr(&self, surface: &khr_surface::SurfaceKHR) -> Result<khr_surface::PresentModeKHRIterator, core::Error> {
+    pub fn get_surface_present_modes_khr(&self, surface: &khr_surface::SurfaceKhr) -> Result<khr_surface::PresentModeKhrIterator, core::Error> {
         let mut num_modes = 0;
         let res = unsafe {
             (self.loader().khr_surface.vkGetPhysicalDeviceSurfacePresentModesKHR)(self.handle, surface.handle(), &mut num_modes, ptr::null_mut())
@@ -327,7 +327,7 @@ impl PhysicalDevice {
                 modes.set_len(num_modes as usize);
             }
 
-            Ok(khr_surface::PresentModeKHRIterator(modes.into_iter()))
+            Ok(khr_surface::PresentModeKhrIterator(modes.into_iter()))
         }
         else {
             Err(res.into())

@@ -23,9 +23,9 @@ use {TryDestroyError, TryDestroyErrorKind, VulkanObject};
 
 /// See [`VkSurfaceKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSurfaceKHR)
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
-pub struct SurfaceKHR(Arc<Inner>);
+pub struct SurfaceKhr(Arc<Inner>);
 
-impl VulkanObject for SurfaceKHR {
+impl VulkanObject for SurfaceKhr {
     type NativeVulkanObject = vks::VkSurfaceKHR;
 
     #[inline]
@@ -44,9 +44,9 @@ impl VulkanObject for SurfaceKHR {
     }
 }
 
-impl SurfaceKHR {
+impl SurfaceKhr {
     pub(crate) fn new(handle: vks::VkSurfaceKHR, instance: Instance, allocator: Option<AllocatorHelper>) -> Self {
-        SurfaceKHR(Arc::new(Inner {
+        SurfaceKhr(Arc::new(Inner {
             handle: handle,
             instance: instance,
             allocator: allocator,
