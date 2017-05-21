@@ -15,7 +15,7 @@ gitlab = { repository = "https://gitlab.com/dennis-hamester/dacite" }
 libc = "0.2"
 
 [dependencies.vks]
-version = "0.14"
+version = "0.15"
 default-features = false
 
 [features]
