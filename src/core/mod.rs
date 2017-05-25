@@ -1134,7 +1134,7 @@ pub enum Error {
 
     #[cfg(feature = "ext_debug_report_1")]
     /// See extension [`VK_EXT_debug_report`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_EXT_debug_report)
-    ValidationFailedEXT,
+    ValidationFailedExt,
 
     Unknown(vks::VkResult),
 }
@@ -1167,7 +1167,7 @@ impl ::std::error::Error for Error {
             Error::NativeWindowInUseKhr => "NativeWindowInUse",
 
             #[cfg(feature = "ext_debug_report_1")]
-            Error::ValidationFailedEXT => "ValidationFailed",
+            Error::ValidationFailedExt => "ValidationFailed",
 
             Error::Unknown(_) => "unknown error",
         }
@@ -1198,7 +1198,7 @@ impl From<vks::VkResult> for Error {
             vks::VK_ERROR_NATIVE_WINDOW_IN_USE_KHR => Error::NativeWindowInUseKhr,
 
             #[cfg(feature = "ext_debug_report_1")]
-            vks::VK_ERROR_VALIDATION_FAILED_EXT => Error::ValidationFailedEXT,
+            vks::VK_ERROR_VALIDATION_FAILED_EXT => Error::ValidationFailedExt,
 
             _ => Error::Unknown(res),
         }
@@ -1227,7 +1227,7 @@ impl From<Error> for vks::VkResult {
             Error::NativeWindowInUseKhr => vks::VK_ERROR_NATIVE_WINDOW_IN_USE_KHR,
 
             #[cfg(feature = "ext_debug_report_1")]
-            Error::ValidationFailedEXT => vks::VK_ERROR_VALIDATION_FAILED_EXT,
+            Error::ValidationFailedExt => vks::VK_ERROR_VALIDATION_FAILED_EXT,
 
             Error::Unknown(res) => res,
         }
