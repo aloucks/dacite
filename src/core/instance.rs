@@ -27,6 +27,15 @@ use {TryDestroyError, TryDestroyErrorKind, VulkanObject};
 #[cfg(feature = "ext_debug_report_1")]
 use ext_debug_report;
 
+#[cfg(feature = "khr_display_21")]
+use khr_surface;
+
+#[cfg(feature = "khr_display_21")]
+use khr_display;
+
+#[cfg(feature = "khr_display_21")]
+use std::sync::Mutex;
+
 /// See [`VkInstance`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkInstance)
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct Instance(Arc<Inner>);
@@ -61,6 +70,11 @@ impl Instance {
         &self.0.loader
     }
 
+    #[cfg(feature = "khr_display_21")]
+    pub(crate) fn add_display_mode_allocator(&self, allocator: AllocatorHelper) {
+        self.0.display_mode_allocators.lock().unwrap().push(allocator);
+    }
+
     /// See [`vkCreateInstance`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCreateInstance)
     pub fn create(create_info: &core::InstanceCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<Instance, core::Error> {
         let allocator_helper = allocator.map(AllocatorHelper::new);
@@ -91,6 +105,9 @@ impl Instance {
                     #[cfg(feature = "ext_debug_report_1")]
                     core::InstanceExtension::ExtDebugReport => loader.load_ext_debug_report(instance),
 
+                    #[cfg(feature = "khr_display_21")]
+                    core::InstanceExtension::KhrDisplay => loader.load_khr_display(instance),
+
                     core::InstanceExtension::Unknown(_) => { },
                 }
             }
@@ -112,6 +129,9 @@ impl Instance {
                     }
                 }
             }
+
+            #[cfg(feature = "khr_display_21")]
+            ptr::write(&mut inner.display_mode_allocators, Mutex::new(Vec::new()));
 
             inner
         };
@@ -230,6 +250,28 @@ impl Instance {
             (self.loader().ext_debug_report.vkDebugReportMessageEXT)(self.handle(), flags, object_type.into(), object, location, message_code, layer_prefix.as_ptr(), message.as_ptr());
         }
     }
+
+    #[cfg(feature = "khr_display_21")]
+    /// See [`vkCreateDisplayPlaneSurfaceKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCreateDisplayPlaneSurfaceKHR)
+    /// and extensions [`VK_KHR_display`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_display),
+    /// [`VK_KHR_surface`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_surface)
+    pub fn create_display_plane_surface_khr(&self, create_info: &khr_display::DisplaySurfaceCreateInfoKhr, allocator: Option<Box<core::Allocator>>) -> Result<khr_surface::SurfaceKhr, core::Error> {
+        let allocator_helper = allocator.map(AllocatorHelper::new);
+        let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), AllocatorHelper::callbacks);
+        let create_info_wrapper = khr_display::VkDisplaySurfaceCreateInfoKHRWrapper::new(create_info, true);
+
+        let mut surface = ptr::null_mut();
+        let res = unsafe {
+            (self.loader().khr_display.vkCreateDisplayPlaneSurfaceKHR)(self.handle(), &create_info_wrapper.vks_struct, allocation_callbacks, &mut surface)
+        };
+
+        if res == vks::VK_SUCCESS {
+            Ok(khr_surface::SurfaceKhr::new(surface, self.clone(), allocator_helper))
+        }
+        else {
+            Err(res.into())
+        }
+    }
 }
 
 #[derive(Debug)]
@@ -240,6 +282,9 @@ struct Inner {
 
     #[cfg(feature = "ext_debug_report_1")]
     debug_report_callback: Option<Arc<ext_debug_report::DebugReportCallbacksExt>>,
+
+    #[cfg(feature = "khr_display_21")]
+    display_mode_allocators: Mutex<Vec<AllocatorHelper>>,
 }
 
 impl Drop for Inner {

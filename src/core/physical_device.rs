@@ -25,11 +25,14 @@ use {TryDestroyError, TryDestroyErrorKind, VulkanObject};
 #[cfg(feature = "khr_surface_25")]
 use khr_surface;
 
+#[cfg(feature = "khr_display_21")]
+use khr_display;
+
 /// See [`VkPhysicalDevice`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPhysicalDevice)
 #[derive(Debug, Clone)]
 pub struct PhysicalDevice {
-    handle: vks::VkPhysicalDevice,
-    instance: Instance,
+    pub(crate) handle: vks::VkPhysicalDevice,
+    pub(crate) instance: Instance,
 }
 
 unsafe impl Send for PhysicalDevice { }
@@ -328,6 +331,91 @@ impl PhysicalDevice {
             }
 
             Ok(khr_surface::PresentModeKhrIterator(modes.into_iter()))
+        }
+        else {
+            Err(res.into())
+        }
+    }
+
+    #[cfg(feature = "khr_display_21")]
+    /// See [`vkGetPhysicalDeviceDisplayPropertiesKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetPhysicalDeviceDisplayPropertiesKHR)
+    /// and extension [`VK_KHR_display`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_display)
+    pub fn get_display_properties_khr(&self) -> Result<Vec<khr_display::DisplayPropertiesKhr>, core::Error> {
+        let mut len = 0;
+        let res = unsafe {
+            (self.loader().khr_display.vkGetPhysicalDeviceDisplayPropertiesKHR)(self.handle, &mut len, ptr::null_mut())
+        };
+
+        if res != vks::VK_SUCCESS {
+            return Err(res.into());
+        }
+
+        let mut properties = Vec::with_capacity(len as usize);
+        let res = unsafe {
+            properties.set_len(len as usize);
+            (self.loader().khr_display.vkGetPhysicalDeviceDisplayPropertiesKHR)(self.handle, &mut len, properties.as_mut_ptr())
+        };
+
+        if res == vks::VK_SUCCESS {
+            unsafe {
+                Ok(properties.iter().map(|p| khr_display::DisplayPropertiesKhr::from_vks(p, self.clone())).collect())
+            }
+        }
+        else {
+            Err(res.into())
+        }
+    }
+
+    #[cfg(feature = "khr_display_21")]
+    /// See [`vkGetPhysicalDeviceDisplayPlanePropertiesKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetPhysicalDeviceDisplayPlanePropertiesKHR)
+    /// and extension [`VK_KHR_display`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_display)
+    pub fn get_display_plane_properties_khr(&self) -> Result<Vec<khr_display::DisplayPlanePropertiesKhr>, core::Error> {
+        let mut len = 0;
+        let res = unsafe {
+            (self.loader().khr_display.vkGetPhysicalDeviceDisplayPlanePropertiesKHR)(self.handle, &mut len, ptr::null_mut())
+        };
+
+        if res != vks::VK_SUCCESS {
+            return Err(res.into());
+        }
+
+        let mut properties = Vec::with_capacity(len as usize);
+        let res = unsafe {
+            properties.set_len(len as usize);
+            (self.loader().khr_display.vkGetPhysicalDeviceDisplayPlanePropertiesKHR)(self.handle, &mut len, properties.as_mut_ptr())
+        };
+
+        if res == vks::VK_SUCCESS {
+            unsafe {
+                Ok(properties.iter().map(|p| khr_display::DisplayPlanePropertiesKhr::from_vks(p, self)).collect())
+            }
+        }
+        else {
+            Err(res.into())
+        }
+    }
+
+    #[cfg(feature = "khr_display_21")]
+    /// See [`vkGetDisplayPlaneSupportedDisplaysKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetDisplayPlaneSupportedDisplaysKHR)
+    /// and extension [`VK_KHR_display`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_display)
+    pub fn get_display_plane_supported_displays_khr(&self, plane_index: u32) -> Result<Vec<khr_display::DisplayKhr>, core::Error> {
+        let mut len = 0;
+        let res = unsafe {
+            (self.loader().khr_display.vkGetDisplayPlaneSupportedDisplaysKHR)(self.handle, plane_index, &mut len, ptr::null_mut())
+        };
+
+        if res != vks::VK_SUCCESS {
+            return Err(res.into());
+        }
+
+        let mut displays = Vec::with_capacity(len as usize);
+        let res = unsafe {
+            displays.set_len(len as usize);
+            (self.loader().khr_display.vkGetDisplayPlaneSupportedDisplaysKHR)(self.handle, plane_index, &mut len, displays.as_mut_ptr())
+        };
+
+        if res == vks::VK_SUCCESS {
+            Ok(displays.iter().map(|d| khr_display::DisplayKhr::new(*d, self.clone())).collect())
         }
         else {
             Err(res.into())

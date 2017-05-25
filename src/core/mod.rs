@@ -3442,6 +3442,9 @@ pub enum InstanceExtension {
 
     #[cfg(feature = "ext_debug_report_1")]
     ExtDebugReport,
+
+    #[cfg(feature = "khr_display_21")]
+    KhrDisplay,
 }
 
 impl<'a> From<&'a str> for InstanceExtension {
@@ -3452,6 +3455,9 @@ impl<'a> From<&'a str> for InstanceExtension {
 
             #[cfg(feature = "ext_debug_report_1")]
             vks::VK_EXT_DEBUG_REPORT_EXTENSION_NAME_STR => InstanceExtension::ExtDebugReport,
+
+            #[cfg(feature = "khr_display_21")]
+            vks::VK_KHR_DISPLAY_EXTENSION_NAME_STR => InstanceExtension::KhrDisplay,
 
             _ => InstanceExtension::Unknown(name.to_owned())
         }
@@ -3466,6 +3472,9 @@ impl From<InstanceExtension> for String {
 
             #[cfg(feature = "ext_debug_report_1")]
             InstanceExtension::ExtDebugReport => vks::VK_EXT_DEBUG_REPORT_EXTENSION_NAME_STR.to_owned(),
+
+            #[cfg(feature = "khr_display_21")]
+            InstanceExtension::KhrDisplay => vks::VK_KHR_DISPLAY_EXTENSION_NAME_STR.to_owned(),
 
             InstanceExtension::Unknown(name) => name,
         }
@@ -5170,6 +5179,15 @@ impl<'a> From<&'a Viewport> for vks::VkViewport {
 pub struct Offset2D {
     pub x: i32,
     pub y: i32,
+}
+
+impl<'a> From<&'a vks::VkOffset2D> for Offset2D {
+    fn from(offset: &'a vks::VkOffset2D) -> Self {
+        Offset2D {
+            x: offset.x,
+            y: offset.y,
+        }
+    }
 }
 
 impl<'a> From<&'a Offset2D> for vks::VkOffset2D {

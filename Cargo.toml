@@ -21,7 +21,7 @@ default-features = false
 [features]
 default = [ "vk_1_0_3" ]
 
-vk_1_0_3 = [ "core_1_0_3", "khr_surface_25", "ext_debug_report_1" ]
+vk_1_0_3 = [ "core_1_0_3", "khr_surface_25", "ext_debug_report_1", "khr_display_21" ]
 
 core = [ "core_1_0_3" ]
 core_1_0_3 = [ "vks/core_1_0_3" ]
@@ -31,3 +31,6 @@ khr_surface_25 = [ "core_1_0_3", "vks/khr_surface_25" ]
 
 ext_debug_report = [ "ext_debug_report_1" ]
 ext_debug_report_1 = [ "core_1_0_3", "vks/ext_debug_report_1" ]
+
+khr_display = [ "khr_display_21" ]
+khr_display_21 = [ "core_1_0_3", "khr_surface_25", "vks/khr_display_21" ]

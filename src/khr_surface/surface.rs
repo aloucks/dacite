@@ -45,13 +45,14 @@ impl VulkanObject for SurfaceKhr {
 }
 
 impl SurfaceKhr {
-    // pub(crate) fn new(handle: vks::VkSurfaceKHR, instance: Instance, allocator: Option<AllocatorHelper>) -> Self {
-    //     SurfaceKhr(Arc::new(Inner {
-    //         handle: handle,
-    //         instance: instance,
-    //         allocator: allocator,
-    //     }))
-    // }
+    #[cfg(feature = "khr_display_21")]
+    pub(crate) fn new(handle: vks::VkSurfaceKHR, instance: Instance, allocator: Option<AllocatorHelper>) -> Self {
+        SurfaceKhr(Arc::new(Inner {
+            handle: handle,
+            instance: instance,
+            allocator: allocator,
+        }))
+    }
 
     #[inline]
     pub(crate) fn handle(&self) -> vks::VkSurfaceKHR {

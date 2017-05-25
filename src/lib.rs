@@ -43,3 +43,6 @@ pub mod khr_surface;
 
 #[cfg(feature = "ext_debug_report_1")]
 pub mod ext_debug_report;
+
+#[cfg(feature = "khr_display_21")]
+pub mod khr_display;
