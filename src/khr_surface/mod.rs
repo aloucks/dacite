@@ -37,15 +37,6 @@ impl From<vks::VkColorSpaceKHR> for ColorSpaceKhr {
     }
 }
 
-impl From<ColorSpaceKhr> for vks::VkColorSpaceKHR {
-    fn from(color_space: ColorSpaceKhr) -> Self {
-        match color_space {
-            ColorSpaceKhr::SRGBNonLinear => vks::VK_COLORSPACE_SRGB_NONLINEAR_KHR,
-            ColorSpaceKhr::Unknown(color_space) => color_space,
-        }
-    }
-}
-
 /// See [`VkPresentModeKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPresentModeKHR)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum PresentModeKhr {
@@ -64,18 +55,6 @@ impl From<vks::VkPresentModeKHR> for PresentModeKhr {
             vks::VK_PRESENT_MODE_FIFO_KHR => PresentModeKhr::Fifo,
             vks::VK_PRESENT_MODE_FIFO_RELAXED_KHR => PresentModeKhr::FifoRelaxed,
             _ => PresentModeKhr::Unknown(mode),
-        }
-    }
-}
-
-impl From<PresentModeKhr> for vks::VkPresentModeKHR {
-    fn from(mode: PresentModeKhr) -> Self {
-        match mode {
-            PresentModeKhr::Immediate=> vks::VK_PRESENT_MODE_IMMEDIATE_KHR,
-            PresentModeKhr::Mailbox=> vks::VK_PRESENT_MODE_MAILBOX_KHR,
-            PresentModeKhr::Fifo=> vks::VK_PRESENT_MODE_FIFO_KHR,
-            PresentModeKhr::FifoRelaxed=> vks::VK_PRESENT_MODE_FIFO_RELAXED_KHR,
-            PresentModeKhr::Unknown(mode) => mode,
         }
     }
 }
@@ -190,23 +169,6 @@ impl<'a> From<&'a vks::VkSurfaceCapabilitiesKHR> for SurfaceCapabilitiesKhr {
     }
 }
 
-impl<'a> From<&'a SurfaceCapabilitiesKhr> for vks::VkSurfaceCapabilitiesKHR {
-    fn from(capabilities: &'a SurfaceCapabilitiesKhr) -> Self {
-        vks::VkSurfaceCapabilitiesKHR {
-            minImageCount: capabilities.min_image_count,
-            maxImageCount: capabilities.max_image_count,
-            currentExtent: (&capabilities.current_extent).into(),
-            minImageExtent: (&capabilities.min_image_extent).into(),
-            maxImageExtent: (&capabilities.max_image_extent).into(),
-            maxImageArrayLayers: capabilities.max_image_array_layers,
-            supportedTransforms: capabilities.supported_transforms,
-            currentTransform: capabilities.current_transform,
-            supportedCompositeAlpha: capabilities.supported_composite_alpha,
-            supportedUsageFlags: capabilities.supported_usage_flags,
-        }
-    }
-}
-
 /// See [`VkSurfaceFormatKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSurfaceFormatKHR)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct SurfaceFormatKhr {
@@ -219,15 +181,6 @@ impl<'a> From<&'a vks::VkSurfaceFormatKHR> for SurfaceFormatKhr {
         SurfaceFormatKhr {
             format: format.format.into(),
             color_space: format.colorSpace.into(),
-        }
-    }
-}
-
-impl<'a> From<&'a SurfaceFormatKhr> for vks::VkSurfaceFormatKHR {
-    fn from(format: &'a SurfaceFormatKhr) -> Self {
-        vks::VkSurfaceFormatKHR {
-            format: format.format.into(),
-            colorSpace: format.color_space.into(),
         }
     }
 }

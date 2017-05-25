@@ -13,7 +13,7 @@
 // PERFORMANCE OF THIS SOFTWARE.
 
 use libc::c_char;
-use std::ffi::{CStr, CString};
+use std::ffi::CString;
 use std::ptr;
 use vks;
 
@@ -29,16 +29,6 @@ pub fn to_vk_bool(v: bool) -> vks::VkBool32 {
     }
     else {
         vks::VK_FALSE
-    }
-}
-
-#[inline]
-pub unsafe fn string_from_cstr(cstr: *const c_char) -> Option<String> {
-    if !cstr.is_null() {
-        Some(CStr::from_ptr(cstr).to_str().unwrap().to_owned())
-    }
-    else {
-        None
     }
 }
 

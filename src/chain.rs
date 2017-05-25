@@ -12,18 +12,6 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-#[repr(C)]
-pub struct VkStructure {
-    pub stype: ::vks::VkStructureType,
-    pub pnext: *const ::libc::c_void,
-}
-
-// #[repr(C)]
-// pub struct VkStructureMut {
-//     pub stype: ::vks::VkStructureType,
-//     pub pnext: *mut ::libc::c_void,
-// }
-
 macro_rules! chain_struct {
     (
         $( #[$struct_attrs:meta] )*
@@ -71,45 +59,6 @@ macro_rules! chain_struct {
                     self
                 }
             )*
-
-            pub unsafe fn from_vks(mut pnext: *const ::libc::c_void, enable: bool) -> ::std::option::Option<Self> {
-                if !enable || pnext.is_null() {
-                    return ::std::option::Option::None;
-                }
-
-                $(
-                    $( #[$field_guard] )*
-                    let mut $field_name = ::std::option::Option::None;
-                )*
-
-                loop {
-                    match *(pnext as *const ::vks::VkStructureType) {
-                        $(
-                            $( #[$field_guard] )*
-                            $field_stype => {
-                                debug_assert!($field_name.is_none());
-                                $field_name = ::std::option::Option::Some($field_ty::from_vks(&*(pnext as *const _), false));
-                            }
-                        )*
-
-                        _ => { }
-                    }
-
-                    pnext = (*(pnext as *const ::chain::VkStructure)).pnext;
-                    if pnext.is_null() {
-                        break;
-                    }
-                }
-
-                let mut _result: $struct_name = ::std::mem::uninitialized();
-
-                $(
-                    $( #[$field_guard] )*
-                    ::std::ptr::write(&mut _result.$field_name, $field_name);
-                )*
-
-                ::std::option::Option::Some(_result)
-            }
         }
 
         $( #[$struct_wrapper_attrs] )*

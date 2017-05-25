@@ -45,7 +45,6 @@ use std::ffi::{CStr, CString};
 use std::fmt;
 use std::mem;
 use std::ptr;
-use std::slice;
 use utils;
 use vks;
 
@@ -870,17 +869,6 @@ pub enum OptionalDeviceSize {
     WholeSize,
 }
 
-impl From<u64> for OptionalDeviceSize {
-    fn from(size: u64) -> Self {
-        if size != vks::VK_WHOLE_SIZE {
-            OptionalDeviceSize::Size(size)
-        }
-        else {
-            OptionalDeviceSize::WholeSize
-        }
-    }
-}
-
 impl From<OptionalDeviceSize> for u64 {
     fn from(size: OptionalDeviceSize) -> Self {
         match size {
@@ -894,17 +882,6 @@ impl From<OptionalDeviceSize> for u64 {
 pub enum OptionalMipLevels {
     MipLevels(u32),
     Remaining,
-}
-
-impl From<u32> for OptionalMipLevels {
-    fn from(mip_levels: u32) -> Self {
-        if mip_levels != vks::VK_REMAINING_MIP_LEVELS {
-            OptionalMipLevels::MipLevels(mip_levels)
-        }
-        else {
-            OptionalMipLevels::Remaining
-        }
-    }
 }
 
 impl From<OptionalMipLevels> for u32 {
@@ -922,17 +899,6 @@ pub enum OptionalArrayLayers {
     Remaining,
 }
 
-impl From<u32> for OptionalArrayLayers {
-    fn from(array_layers: u32) -> Self {
-        if array_layers != vks::VK_REMAINING_ARRAY_LAYERS {
-            OptionalArrayLayers::ArrayLayers(array_layers)
-        }
-        else {
-            OptionalArrayLayers::Remaining
-        }
-    }
-}
-
 impl From<OptionalArrayLayers> for u32 {
     fn from(array_layers: OptionalArrayLayers) -> Self {
         match array_layers {
@@ -946,17 +912,6 @@ impl From<OptionalArrayLayers> for u32 {
 pub enum AttachmentIndex {
     Index(u32),
     Unused,
-}
-
-impl From<u32> for AttachmentIndex {
-    fn from(index: u32) -> Self {
-        if index != vks::VK_ATTACHMENT_UNUSED {
-            AttachmentIndex::Index(index)
-        }
-        else {
-            AttachmentIndex::Unused
-        }
-    }
 }
 
 impl From<AttachmentIndex> for u32 {
@@ -974,17 +929,6 @@ pub enum QueueFamilyIndex {
     Ignored,
 }
 
-impl From<u32> for QueueFamilyIndex {
-    fn from(index: u32) -> Self {
-        if index != vks::VK_QUEUE_FAMILY_IGNORED {
-            QueueFamilyIndex::Index(index)
-        }
-        else {
-            QueueFamilyIndex::Ignored
-        }
-    }
-}
-
 impl From<QueueFamilyIndex> for u32 {
     fn from(index: QueueFamilyIndex) -> Self {
         match index {
@@ -998,17 +942,6 @@ impl From<QueueFamilyIndex> for u32 {
 pub enum SubpassIndex {
     Index(u32),
     External,
-}
-
-impl From<u32> for SubpassIndex {
-    fn from(index: u32) -> Self {
-        if index != vks::VK_SUBPASS_EXTERNAL {
-            SubpassIndex::Index(index)
-        }
-        else {
-            SubpassIndex::External
-        }
-    }
 }
 
 impl From<SubpassIndex> for u32 {
@@ -1049,15 +982,6 @@ impl Version {
         }
     }
 
-    pub fn from_optional_api_version(version: u32) -> Option<Self> {
-        if version != 0 {
-            Some(Version::from_api_version(version))
-        }
-        else {
-            None
-        }
-    }
-
     pub fn as_api_version(&self) -> u32 {
         vks::vk_make_version(self.major, self.minor, self.patch)
     }
@@ -1089,24 +1013,6 @@ pub const MAX_DESCRIPTION_SIZE: usize = vks::VK_MAX_DESCRIPTION_SIZE;
 pub enum PipelineCacheHeaderVersion {
     One,
     Unknown(vks::VkPipelineCacheHeaderVersion),
-}
-
-impl From<vks::VkPipelineCacheHeaderVersion> for PipelineCacheHeaderVersion {
-    fn from(version: vks::VkPipelineCacheHeaderVersion) -> Self {
-        match version {
-            vks::VK_PIPELINE_CACHE_HEADER_VERSION_ONE => PipelineCacheHeaderVersion::One,
-            _ => PipelineCacheHeaderVersion::Unknown(version),
-        }
-    }
-}
-
-impl From<PipelineCacheHeaderVersion> for vks::VkPipelineCacheHeaderVersion {
-    fn from(version: PipelineCacheHeaderVersion) -> Self {
-        match version {
-            PipelineCacheHeaderVersion::One => vks::VK_PIPELINE_CACHE_HEADER_VERSION_ONE,
-            PipelineCacheHeaderVersion::Unknown(version) => version,
-        }
-    }
 }
 
 /// See [`VkResult`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkResult)
@@ -1205,35 +1111,6 @@ impl From<vks::VkResult> for Error {
     }
 }
 
-impl From<Error> for vks::VkResult {
-    fn from(err: Error) -> Self {
-        match err {
-            Error::OutOfHostMemory => vks::VK_ERROR_OUT_OF_HOST_MEMORY,
-            Error::OutOfDeviceMemory => vks::VK_ERROR_OUT_OF_DEVICE_MEMORY,
-            Error::InitializationFailed => vks::VK_ERROR_INITIALIZATION_FAILED,
-            Error::DeviceLost => vks::VK_ERROR_DEVICE_LOST,
-            Error::MemoryMapFailed => vks::VK_ERROR_MEMORY_MAP_FAILED,
-            Error::LayerNotPresent => vks::VK_ERROR_LAYER_NOT_PRESENT,
-            Error::ExtensionNotPresent => vks::VK_ERROR_EXTENSION_NOT_PRESENT,
-            Error::FeatureNotPresent => vks::VK_ERROR_FEATURE_NOT_PRESENT,
-            Error::IncompatibleDriver => vks::VK_ERROR_INCOMPATIBLE_DRIVER,
-            Error::TooManyObjects => vks::VK_ERROR_TOO_MANY_OBJECTS,
-            Error::FormatNotSupported => vks::VK_ERROR_FORMAT_NOT_SUPPORTED,
-
-            #[cfg(feature = "khr_surface_25")]
-            Error::SurfaceLostKhr => vks::VK_ERROR_SURFACE_LOST_KHR,
-
-            #[cfg(feature = "khr_surface_25")]
-            Error::NativeWindowInUseKhr => vks::VK_ERROR_NATIVE_WINDOW_IN_USE_KHR,
-
-            #[cfg(feature = "ext_debug_report_1")]
-            Error::ValidationFailedExt => vks::VK_ERROR_VALIDATION_FAILED_EXT,
-
-            Error::Unknown(res) => res,
-        }
-    }
-}
-
 /// See [`VkSystemAllocationSope`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSystemAllocationSope)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum SystemAllocationSope {
@@ -1258,19 +1135,6 @@ impl From<vks::VkSystemAllocationScope> for SystemAllocationSope {
     }
 }
 
-impl From<SystemAllocationSope> for vks::VkSystemAllocationScope {
-    fn from(scope: SystemAllocationSope) -> vks::VkSystemAllocationScope {
-        match scope {
-            SystemAllocationSope::Command => vks::VK_SYSTEM_ALLOCATION_SCOPE_COMMAND,
-            SystemAllocationSope::Object => vks::VK_SYSTEM_ALLOCATION_SCOPE_OBJECT,
-            SystemAllocationSope::Cache => vks::VK_SYSTEM_ALLOCATION_SCOPE_CACHE,
-            SystemAllocationSope::Device => vks::VK_SYSTEM_ALLOCATION_SCOPE_DEVICE,
-            SystemAllocationSope::Instance => vks::VK_SYSTEM_ALLOCATION_SCOPE_INSTANCE,
-            SystemAllocationSope::Unknown(scope) => scope,
-        }
-    }
-}
-
 /// See [`VkInternalAllocationType`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkInternalAllocationType)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum InternalAllocationType {
@@ -1283,15 +1147,6 @@ impl From<vks::VkInternalAllocationType> for InternalAllocationType {
         match allocation_type {
             vks::VK_INTERNAL_ALLOCATION_TYPE_EXECUTABLE => InternalAllocationType::Executable,
             _ => InternalAllocationType::Unknown(allocation_type),
-        }
-    }
-}
-
-impl From<InternalAllocationType> for vks::VkInternalAllocationType {
-    fn from(allocation_type: InternalAllocationType) -> vks::VkInternalAllocationType {
-        match allocation_type {
-            InternalAllocationType::Executable => vks::VK_INTERNAL_ALLOCATION_TYPE_EXECUTABLE,
-            InternalAllocationType::Unknown(allocation_type) => allocation_type,
         }
     }
 }
@@ -1883,17 +1738,6 @@ pub enum ImageType {
     Unknown(vks::VkImageType),
 }
 
-impl From<vks::VkImageType> for ImageType {
-    fn from(image_type: vks::VkImageType) -> Self {
-        match image_type {
-            vks::VK_IMAGE_TYPE_1D => ImageType::Type1D,
-            vks::VK_IMAGE_TYPE_2D => ImageType::Type2D,
-            vks::VK_IMAGE_TYPE_3D => ImageType::Type3D,
-            _ => ImageType::Unknown(image_type),
-        }
-    }
-}
-
 impl From<ImageType> for vks::VkImageType {
     fn from(image_type: ImageType) -> Self {
         match image_type {
@@ -1911,16 +1755,6 @@ pub enum ImageTiling {
     Optimal,
     Linear,
     Unknown(vks::VkImageTiling),
-}
-
-impl From<vks::VkImageTiling> for ImageTiling {
-    fn from(tiling: vks::VkImageTiling) -> Self {
-        match tiling {
-            vks::VK_IMAGE_TILING_OPTIMAL => ImageTiling::Optimal,
-            vks::VK_IMAGE_TILING_LINEAR => ImageTiling::Linear,
-            _ => ImageTiling::Unknown(tiling),
-        }
-    }
 }
 
 impl From<ImageTiling> for vks::VkImageTiling {
@@ -1957,19 +1791,6 @@ impl From<vks::VkPhysicalDeviceType> for PhysicalDeviceType {
     }
 }
 
-impl From<PhysicalDeviceType> for vks::VkPhysicalDeviceType {
-    fn from(physical_device_type: PhysicalDeviceType) -> Self {
-        match physical_device_type {
-            PhysicalDeviceType::Other => vks::VK_PHYSICAL_DEVICE_TYPE_OTHER,
-            PhysicalDeviceType::IntegratedGpu => vks::VK_PHYSICAL_DEVICE_TYPE_INTEGRATED_GPU,
-            PhysicalDeviceType::DiscreteGpu => vks::VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU,
-            PhysicalDeviceType::VirtualGpu => vks::VK_PHYSICAL_DEVICE_TYPE_VIRTUAL_GPU,
-            PhysicalDeviceType::Cpu => vks::VK_PHYSICAL_DEVICE_TYPE_CPU,
-            PhysicalDeviceType::Unknown(physical_device_type) => physical_device_type,
-        }
-    }
-}
-
 /// See [`VkQueryType`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueryType)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum QueryType {
@@ -1977,17 +1798,6 @@ pub enum QueryType {
     PipelineStatistics,
     Timestamp,
     Unknown(vks::VkQueryType),
-}
-
-impl From<vks::VkQueryType> for QueryType {
-    fn from(query_type: vks::VkQueryType) -> Self {
-        match query_type {
-            vks::VK_QUERY_TYPE_OCCLUSION => QueryType::Occlusion,
-            vks::VK_QUERY_TYPE_PIPELINE_STATISTICS => QueryType::PipelineStatistics,
-            vks::VK_QUERY_TYPE_TIMESTAMP => QueryType::Timestamp,
-            _ => QueryType::Unknown(query_type),
-        }
-    }
 }
 
 impl From<QueryType> for vks::VkQueryType {
@@ -2007,16 +1817,6 @@ pub enum SharingMode {
     Exclusive,
     Concurrent,
     Unknown(vks::VkSharingMode),
-}
-
-impl From<vks::VkSharingMode> for SharingMode {
-    fn from(mode: vks::VkSharingMode) -> Self {
-        match mode {
-            vks::VK_SHARING_MODE_EXCLUSIVE => SharingMode::Exclusive,
-            vks::VK_SHARING_MODE_CONCURRENT => SharingMode::Concurrent,
-            _ => SharingMode::Unknown(mode),
-        }
-    }
 }
 
 impl From<SharingMode> for vks::VkSharingMode {
@@ -2042,23 +1842,6 @@ pub enum ImageLayout {
     TransferDstOptimal,
     Preinitialized,
     Unknown(vks::VkImageLayout),
-}
-
-impl From<vks::VkImageLayout> for ImageLayout {
-    fn from(layout: vks::VkImageLayout) -> Self {
-        match layout {
-            vks::VK_IMAGE_LAYOUT_UNDEFINED => ImageLayout::Undefined,
-            vks::VK_IMAGE_LAYOUT_GENERAL => ImageLayout::General,
-            vks::VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL => ImageLayout::ColorAttachmentOptimal,
-            vks::VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL => ImageLayout::DepthStencilAttachmentOptimal,
-            vks::VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL => ImageLayout::DepthStencilReadOnlyOptimal,
-            vks::VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL => ImageLayout::ShaderReadOnlyOptimal,
-            vks::VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL => ImageLayout::TransferSrcOptimal,
-            vks::VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL => ImageLayout::TransferDstOptimal,
-            vks::VK_IMAGE_LAYOUT_PREINITIALIZED => ImageLayout::Preinitialized,
-            _ => ImageLayout::Unknown(layout),
-        }
-    }
 }
 
 impl From<ImageLayout> for vks::VkImageLayout {
@@ -2091,21 +1874,6 @@ pub enum ImageViewType {
     Unknown(vks::VkImageViewType),
 }
 
-impl From<vks::VkImageViewType> for ImageViewType {
-    fn from(view_type: vks::VkImageViewType) -> Self {
-        match view_type {
-            vks::VK_IMAGE_VIEW_TYPE_1D => ImageViewType::Type1D,
-            vks::VK_IMAGE_VIEW_TYPE_2D => ImageViewType::Type2D,
-            vks::VK_IMAGE_VIEW_TYPE_3D => ImageViewType::Type3D,
-            vks::VK_IMAGE_VIEW_TYPE_CUBE => ImageViewType::TypeCube,
-            vks::VK_IMAGE_VIEW_TYPE_1D_ARRAY => ImageViewType::Type1DArray,
-            vks::VK_IMAGE_VIEW_TYPE_2D_ARRAY => ImageViewType::Type2DArray,
-            vks::VK_IMAGE_VIEW_TYPE_CUBE_ARRAY => ImageViewType::TypeCubeArray,
-            _ => ImageViewType::Unknown(view_type),
-        }
-    }
-}
-
 impl From<ImageViewType> for vks::VkImageViewType {
     fn from(view_type: ImageViewType) -> Self {
         match view_type {
@@ -2134,21 +1902,6 @@ pub enum ComponentSwizzle {
     Unknown(vks::VkComponentSwizzle),
 }
 
-impl From<vks::VkComponentSwizzle> for ComponentSwizzle {
-    fn from(swizzle: vks::VkComponentSwizzle) -> Self {
-        match swizzle {
-            vks::VK_COMPONENT_SWIZZLE_IDENTITY => ComponentSwizzle::Identity,
-            vks::VK_COMPONENT_SWIZZLE_ZERO => ComponentSwizzle::Zero,
-            vks::VK_COMPONENT_SWIZZLE_ONE => ComponentSwizzle::One,
-            vks::VK_COMPONENT_SWIZZLE_R => ComponentSwizzle::R,
-            vks::VK_COMPONENT_SWIZZLE_G => ComponentSwizzle::G,
-            vks::VK_COMPONENT_SWIZZLE_B => ComponentSwizzle::B,
-            vks::VK_COMPONENT_SWIZZLE_A => ComponentSwizzle::A,
-            _ => ComponentSwizzle::Unknown(swizzle),
-        }
-    }
-}
-
 impl From<ComponentSwizzle> for vks::VkComponentSwizzle {
     fn from(swizzle: ComponentSwizzle) -> Self {
         match swizzle {
@@ -2170,16 +1923,6 @@ pub enum VertexInputRate {
     Vertex,
     Instance,
     Unknown(vks::VkVertexInputRate),
-}
-
-impl From<vks::VkVertexInputRate> for VertexInputRate {
-    fn from(rate: vks::VkVertexInputRate) -> Self {
-        match rate {
-            vks::VK_VERTEX_INPUT_RATE_VERTEX => VertexInputRate::Vertex,
-            vks::VK_VERTEX_INPUT_RATE_INSTANCE => VertexInputRate::Instance,
-            _ => VertexInputRate::Unknown(rate),
-        }
-    }
 }
 
 impl From<VertexInputRate> for vks::VkVertexInputRate {
@@ -2207,25 +1950,6 @@ pub enum PrimitiveTopology {
     TriangleStripWithAdjacency,
     PatchList,
     Unknown(vks::VkPrimitiveTopology)
-}
-
-impl From<vks::VkPrimitiveTopology> for PrimitiveTopology {
-    fn from(topology: vks::VkPrimitiveTopology) -> Self {
-        match topology {
-            vks::VK_PRIMITIVE_TOPOLOGY_POINT_LIST => PrimitiveTopology::PointList,
-            vks::VK_PRIMITIVE_TOPOLOGY_LINE_LIST => PrimitiveTopology::LineList,
-            vks::VK_PRIMITIVE_TOPOLOGY_LINE_STRIP => PrimitiveTopology::LineStrip,
-            vks::VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST => PrimitiveTopology::TriangleList,
-            vks::VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP => PrimitiveTopology::TriangleStrip,
-            vks::VK_PRIMITIVE_TOPOLOGY_TRIANGLE_FAN => PrimitiveTopology::TriangleFan,
-            vks::VK_PRIMITIVE_TOPOLOGY_LINE_LIST_WITH_ADJACENCY => PrimitiveTopology::LineListWithAdjacency,
-            vks::VK_PRIMITIVE_TOPOLOGY_LINE_STRIP_WITH_ADJACENCY => PrimitiveTopology::LineStripWithAdjacency,
-            vks::VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST_WITH_ADJACENCY => PrimitiveTopology::TriangleListWithAdjacency,
-            vks::VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP_WITH_ADJACENCY => PrimitiveTopology::TriangleStripWithAdjacency,
-            vks::VK_PRIMITIVE_TOPOLOGY_PATCH_LIST => PrimitiveTopology::PatchList,
-            _ => PrimitiveTopology::Unknown(topology),
-        }
-    }
 }
 
 impl From<PrimitiveTopology> for vks::VkPrimitiveTopology {
@@ -2256,17 +1980,6 @@ pub enum PolygonMode {
     Unknown(vks::VkPolygonMode),
 }
 
-impl From<vks::VkPolygonMode> for PolygonMode {
-    fn from(mode: vks::VkPolygonMode) -> Self {
-        match mode {
-            vks::VK_POLYGON_MODE_FILL => PolygonMode::Fill,
-            vks::VK_POLYGON_MODE_LINE => PolygonMode::Line,
-            vks::VK_POLYGON_MODE_POINT => PolygonMode::Point,
-            _ => PolygonMode::Unknown(mode),
-        }
-    }
-}
-
 impl From<PolygonMode> for vks::VkPolygonMode {
     fn from(mode: PolygonMode) -> Self {
         match mode {
@@ -2284,16 +1997,6 @@ pub enum FrontFace {
     CounterClockwise,
     Clockwise,
     Unknown(vks::VkFrontFace),
-}
-
-impl From<vks::VkFrontFace> for FrontFace {
-    fn from(face: vks::VkFrontFace) -> Self {
-        match face {
-            vks::VK_FRONT_FACE_COUNTER_CLOCKWISE => FrontFace::CounterClockwise,
-            vks::VK_FRONT_FACE_CLOCKWISE => FrontFace::Clockwise,
-            _ => FrontFace::Unknown(face),
-        }
-    }
 }
 
 impl From<FrontFace> for vks::VkFrontFace {
@@ -2318,22 +2021,6 @@ pub enum CompareOp {
     GreaterOrEqual,
     Always,
     Unknown(vks::VkCompareOp),
-}
-
-impl From<vks::VkCompareOp> for CompareOp {
-    fn from(op: vks::VkCompareOp) -> Self {
-        match op {
-            vks::VK_COMPARE_OP_NEVER => CompareOp::Never,
-            vks::VK_COMPARE_OP_LESS => CompareOp::Less,
-            vks::VK_COMPARE_OP_EQUAL => CompareOp::Equal,
-            vks::VK_COMPARE_OP_LESS_OR_EQUAL => CompareOp::LessOrEqual,
-            vks::VK_COMPARE_OP_GREATER => CompareOp::Greater,
-            vks::VK_COMPARE_OP_NOT_EQUAL => CompareOp::NotEqual,
-            vks::VK_COMPARE_OP_GREATER_OR_EQUAL => CompareOp::GreaterOrEqual,
-            vks::VK_COMPARE_OP_ALWAYS => CompareOp::Always,
-            _ => CompareOp::Unknown(op),
-        }
-    }
 }
 
 impl From<CompareOp> for vks::VkCompareOp {
@@ -2364,22 +2051,6 @@ pub enum StencilOp {
     IncrementAndWrap,
     DecrementAndWrap,
     Unknown(vks::VkStencilOp),
-}
-
-impl From<vks::VkStencilOp> for StencilOp {
-    fn from(op: vks::VkStencilOp) -> Self {
-        match op {
-            vks::VK_STENCIL_OP_KEEP => StencilOp::Keep,
-            vks::VK_STENCIL_OP_ZERO => StencilOp::Zero,
-            vks::VK_STENCIL_OP_REPLACE => StencilOp::Replace,
-            vks::VK_STENCIL_OP_INCREMENT_AND_CLAMP => StencilOp::IncrementAndClamp,
-            vks::VK_STENCIL_OP_DECREMENT_AND_CLAMP => StencilOp::DecrementAndClamp,
-            vks::VK_STENCIL_OP_INVERT => StencilOp::Invert,
-            vks::VK_STENCIL_OP_INCREMENT_AND_WRAP => StencilOp::IncrementAndWrap,
-            vks::VK_STENCIL_OP_DECREMENT_AND_WRAP => StencilOp::DecrementAndWrap,
-            _ => StencilOp::Unknown(op),
-        }
-    }
 }
 
 impl From<StencilOp> for vks::VkStencilOp {
@@ -2418,30 +2089,6 @@ pub enum LogicOp {
     Nand,
     Set,
     Unknown(vks::VkLogicOp),
-}
-
-impl From<vks::VkLogicOp> for LogicOp {
-    fn from(op: vks::VkLogicOp) -> Self {
-        match op {
-            vks::VK_LOGIC_OP_CLEAR => LogicOp::Clear,
-            vks::VK_LOGIC_OP_AND => LogicOp::And,
-            vks::VK_LOGIC_OP_AND_REVERSE => LogicOp::AndReverse,
-            vks::VK_LOGIC_OP_COPY => LogicOp::Copy,
-            vks::VK_LOGIC_OP_AND_INVERTED => LogicOp::AndInverted,
-            vks::VK_LOGIC_OP_NO_OP => LogicOp::NoOp,
-            vks::VK_LOGIC_OP_XOR => LogicOp::Xor,
-            vks::VK_LOGIC_OP_OR => LogicOp::Or,
-            vks::VK_LOGIC_OP_NOR => LogicOp::Nor,
-            vks::VK_LOGIC_OP_EQUIVALENT => LogicOp::Equivalent,
-            vks::VK_LOGIC_OP_INVERT => LogicOp::Invert,
-            vks::VK_LOGIC_OP_OR_REVERSE => LogicOp::OrReverse,
-            vks::VK_LOGIC_OP_COPY_INVERTED => LogicOp::CopyInverted,
-            vks::VK_LOGIC_OP_OR_INVERTED => LogicOp::OrInverted,
-            vks::VK_LOGIC_OP_NAND => LogicOp::Nand,
-            vks::VK_LOGIC_OP_SET => LogicOp::Set,
-            _ => LogicOp::Unknown(op),
-        }
-    }
 }
 
 impl From<LogicOp> for vks::VkLogicOp {
@@ -2493,33 +2140,6 @@ pub enum BlendFactor {
     Unknown(vks::VkBlendFactor),
 }
 
-impl From<vks::VkBlendFactor> for BlendFactor {
-    fn from(factor: vks::VkBlendFactor) -> Self {
-        match factor {
-            vks::VK_BLEND_FACTOR_ZERO => BlendFactor::Zero,
-            vks::VK_BLEND_FACTOR_ONE => BlendFactor::One,
-            vks::VK_BLEND_FACTOR_SRC_COLOR => BlendFactor::SrcColor,
-            vks::VK_BLEND_FACTOR_ONE_MINUS_SRC_COLOR => BlendFactor::OneMinusSrcColor,
-            vks::VK_BLEND_FACTOR_DST_COLOR => BlendFactor::DstColor,
-            vks::VK_BLEND_FACTOR_ONE_MINUS_DST_COLOR => BlendFactor::OneMinusDstColor,
-            vks::VK_BLEND_FACTOR_SRC_ALPHA => BlendFactor::SrcAlpha,
-            vks::VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA => BlendFactor::OneMinusSrcAlpha,
-            vks::VK_BLEND_FACTOR_DST_ALPHA => BlendFactor::DstAlpha,
-            vks::VK_BLEND_FACTOR_ONE_MINUS_DST_ALPHA => BlendFactor::OneMinusDstAlpha,
-            vks::VK_BLEND_FACTOR_CONSTANT_COLOR => BlendFactor::ConstantColor,
-            vks::VK_BLEND_FACTOR_ONE_MINUS_CONSTANT_COLOR => BlendFactor::OneMinusConstantColor,
-            vks::VK_BLEND_FACTOR_CONSTANT_ALPHA => BlendFactor::ConstantAlpha,
-            vks::VK_BLEND_FACTOR_ONE_MINUS_CONSTANT_ALPHA => BlendFactor::OneMinusConstantAlpha,
-            vks::VK_BLEND_FACTOR_SRC_ALPHA_SATURATE => BlendFactor::SrcAlphaSaturate,
-            vks::VK_BLEND_FACTOR_SRC1_COLOR => BlendFactor::Src1Color,
-            vks::VK_BLEND_FACTOR_ONE_MINUS_SRC1_COLOR => BlendFactor::OneMinusSrc1Color,
-            vks::VK_BLEND_FACTOR_SRC1_ALPHA => BlendFactor::Src1Alpha,
-            vks::VK_BLEND_FACTOR_ONE_MINUS_SRC1_ALPHA => BlendFactor::OneMinusSrc1Alpha,
-            _ => BlendFactor::Unknown(factor),
-        }
-    }
-}
-
 impl From<BlendFactor> for vks::VkBlendFactor {
     fn from(factor: BlendFactor) -> Self {
         match factor {
@@ -2558,19 +2178,6 @@ pub enum BlendOp {
     Unknown(vks::VkBlendOp),
 }
 
-impl From<vks::VkBlendOp> for BlendOp {
-    fn from(op: vks::VkBlendOp) -> Self {
-        match op {
-            vks::VK_BLEND_OP_ADD => BlendOp::Add,
-            vks::VK_BLEND_OP_SUBTRACT => BlendOp::Subtract,
-            vks::VK_BLEND_OP_REVERSE_SUBTRACT => BlendOp::ReverseSubtract,
-            vks::VK_BLEND_OP_MIN => BlendOp::Min,
-            vks::VK_BLEND_OP_MAX => BlendOp::Max,
-            _ => BlendOp::Unknown(op),
-        }
-    }
-}
-
 impl From<BlendOp> for vks::VkBlendOp {
     fn from(op: BlendOp) -> Self {
         match op {
@@ -2599,23 +2206,6 @@ pub enum DynamicState {
     Unknown(vks::VkDynamicState),
 }
 
-impl From<vks::VkDynamicState> for DynamicState {
-    fn from(state: vks::VkDynamicState) -> Self {
-        match state {
-            vks::VK_DYNAMIC_STATE_VIEWPORT => DynamicState::Viewport,
-            vks::VK_DYNAMIC_STATE_SCISSOR => DynamicState::Scissor,
-            vks::VK_DYNAMIC_STATE_LINE_WIDTH => DynamicState::LineWidth,
-            vks::VK_DYNAMIC_STATE_DEPTH_BIAS => DynamicState::DepthBias,
-            vks::VK_DYNAMIC_STATE_BLEND_CONSTANTS => DynamicState::BlendConstants,
-            vks::VK_DYNAMIC_STATE_DEPTH_BOUNDS => DynamicState::DepthBounds,
-            vks::VK_DYNAMIC_STATE_STENCIL_COMPARE_MASK => DynamicState::StencilCompareMask,
-            vks::VK_DYNAMIC_STATE_STENCIL_WRITE_MASK => DynamicState::StencilWriteMask,
-            vks::VK_DYNAMIC_STATE_STENCIL_REFERENCE => DynamicState::StencilReference,
-            _ => DynamicState::Unknown(state),
-        }
-    }
-}
-
 impl From<DynamicState> for vks::VkDynamicState {
     fn from(state: DynamicState) -> Self {
         match state {
@@ -2641,16 +2231,6 @@ pub enum Filter {
     Unknown(vks::VkFilter),
 }
 
-impl From<vks::VkFilter> for Filter {
-    fn from(filter: vks::VkFilter) -> Self {
-        match filter {
-            vks::VK_FILTER_NEAREST => Filter::Nearest,
-            vks::VK_FILTER_LINEAR => Filter::Linear,
-            _ => Filter::Unknown(filter),
-        }
-    }
-}
-
 impl From<Filter> for vks::VkFilter {
     fn from(filter: Filter) -> Self {
         match filter {
@@ -2667,16 +2247,6 @@ pub enum SamplerMipmapMode {
     Nearest,
     Linear,
     Unknown(vks::VkSamplerMipmapMode),
-}
-
-impl From<vks::VkSamplerMipmapMode> for SamplerMipmapMode {
-    fn from(mode: vks::VkSamplerMipmapMode) -> Self {
-        match mode {
-            vks::VK_SAMPLER_MIPMAP_MODE_NEAREST => SamplerMipmapMode::Nearest,
-            vks::VK_SAMPLER_MIPMAP_MODE_LINEAR => SamplerMipmapMode::Linear,
-            _ => SamplerMipmapMode::Unknown(mode),
-        }
-    }
 }
 
 impl From<SamplerMipmapMode> for vks::VkSamplerMipmapMode {
@@ -2698,19 +2268,6 @@ pub enum SamplerAddressMode {
     ClampToBorder,
     MirrorClampToEdge,
     Unknown(vks::VkSamplerAddressMode),
-}
-
-impl From<vks::VkSamplerAddressMode> for SamplerAddressMode {
-    fn from(mode: vks::VkSamplerAddressMode) -> Self {
-        match mode {
-            vks::VK_SAMPLER_ADDRESS_MODE_REPEAT => SamplerAddressMode::Repeat,
-            vks::VK_SAMPLER_ADDRESS_MODE_MIRRORED_REPEAT => SamplerAddressMode::MirroredRepeat,
-            vks::VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE => SamplerAddressMode::ClampToEdge,
-            vks::VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER => SamplerAddressMode::ClampToBorder,
-            vks::VK_SAMPLER_ADDRESS_MODE_MIRROR_CLAMP_TO_EDGE => SamplerAddressMode::MirrorClampToEdge,
-            _ => SamplerAddressMode::Unknown(mode),
-        }
-    }
 }
 
 impl From<SamplerAddressMode> for vks::VkSamplerAddressMode {
@@ -2736,20 +2293,6 @@ pub enum BorderColor {
     FloatOpaqueWhite,
     IntOpaqueWhite,
     Unknown(vks::VkBorderColor),
-}
-
-impl From<vks::VkBorderColor> for BorderColor {
-    fn from(color: vks::VkBorderColor) -> Self {
-        match color {
-            vks::VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK => BorderColor::FloatTransparentBlack,
-            vks::VK_BORDER_COLOR_INT_TRANSPARENT_BLACK => BorderColor::IntTransparentBlack,
-            vks::VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK => BorderColor::FloatOpaqueBlack,
-            vks::VK_BORDER_COLOR_INT_OPAQUE_BLACK => BorderColor::IntOpaqueBlack,
-            vks::VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE => BorderColor::FloatOpaqueWhite,
-            vks::VK_BORDER_COLOR_INT_OPAQUE_WHITE => BorderColor::IntOpaqueWhite,
-            _ => BorderColor::Unknown(color),
-        }
-    }
 }
 
 impl From<BorderColor> for vks::VkBorderColor {
@@ -2783,25 +2326,6 @@ pub enum DescriptorType {
     Unknown(vks::VkDescriptorType),
 }
 
-impl From<vks::VkDescriptorType> for DescriptorType {
-    fn from(descriptor_type: vks::VkDescriptorType) -> Self {
-        match descriptor_type {
-            vks::VK_DESCRIPTOR_TYPE_SAMPLER => DescriptorType::Sampler,
-            vks::VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER => DescriptorType::CombinedImageSampler,
-            vks::VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE => DescriptorType::SampledImage,
-            vks::VK_DESCRIPTOR_TYPE_STORAGE_IMAGE => DescriptorType::StorageImage,
-            vks::VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER => DescriptorType::UniformTexelBuffer,
-            vks::VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER => DescriptorType::StorageTexelBuffer,
-            vks::VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER => DescriptorType::UniformBuffer,
-            vks::VK_DESCRIPTOR_TYPE_STORAGE_BUFFER => DescriptorType::StorageBuffer,
-            vks::VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC => DescriptorType::UniformBufferDynamic,
-            vks::VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC => DescriptorType::StorageBufferDynamic,
-            vks::VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT => DescriptorType::InputAttachment,
-            _ => DescriptorType::Unknown(descriptor_type),
-        }
-    }
-}
-
 impl From<DescriptorType> for vks::VkDescriptorType {
     fn from(descriptor_type: DescriptorType) -> Self {
         match descriptor_type {
@@ -2830,17 +2354,6 @@ pub enum AttachmentLoadOp {
     Unknown(vks::VkAttachmentLoadOp),
 }
 
-impl From<vks::VkAttachmentLoadOp> for AttachmentLoadOp {
-    fn from(op: vks::VkAttachmentLoadOp) -> Self {
-        match op {
-            vks::VK_ATTACHMENT_LOAD_OP_LOAD => AttachmentLoadOp::Load,
-            vks::VK_ATTACHMENT_LOAD_OP_CLEAR => AttachmentLoadOp::Clear,
-            vks::VK_ATTACHMENT_LOAD_OP_DONT_CARE => AttachmentLoadOp::DontCare,
-            _ => AttachmentLoadOp::Unknown(op),
-        }
-    }
-}
-
 impl From<AttachmentLoadOp> for vks::VkAttachmentLoadOp {
     fn from(op: AttachmentLoadOp) -> Self {
         match op {
@@ -2858,16 +2371,6 @@ pub enum AttachmentStoreOp {
     Store,
     DontCare,
     Unknown(vks::VkAttachmentStoreOp),
-}
-
-impl From<vks::VkAttachmentStoreOp> for AttachmentStoreOp {
-    fn from(op: vks::VkAttachmentStoreOp) -> Self {
-        match op {
-            vks::VK_ATTACHMENT_STORE_OP_STORE => AttachmentStoreOp::Store,
-            vks::VK_ATTACHMENT_STORE_OP_DONT_CARE => AttachmentStoreOp::DontCare,
-            _ => AttachmentStoreOp::Unknown(op),
-        }
-    }
 }
 
 impl From<AttachmentStoreOp> for vks::VkAttachmentStoreOp {
@@ -2888,16 +2391,6 @@ pub enum PipelineBindPoint {
     Unknown(vks::VkPipelineBindPoint),
 }
 
-impl From<vks::VkPipelineBindPoint> for PipelineBindPoint {
-    fn from(bind_point: vks::VkPipelineBindPoint) -> Self {
-        match bind_point {
-            vks::VK_PIPELINE_BIND_POINT_GRAPHICS => PipelineBindPoint::Graphics,
-            vks::VK_PIPELINE_BIND_POINT_COMPUTE => PipelineBindPoint::Compute,
-            _ => PipelineBindPoint::Unknown(bind_point),
-        }
-    }
-}
-
 impl From<PipelineBindPoint> for vks::VkPipelineBindPoint {
     fn from(bind_point: PipelineBindPoint) -> Self {
         match bind_point {
@@ -2914,16 +2407,6 @@ pub enum CommandBufferLevel {
     Primary,
     Secondary,
     Unknown(vks::VkCommandBufferLevel),
-}
-
-impl From<vks::VkCommandBufferLevel> for CommandBufferLevel {
-    fn from(level: vks::VkCommandBufferLevel) -> Self {
-        match level {
-            vks::VK_COMMAND_BUFFER_LEVEL_PRIMARY => CommandBufferLevel::Primary,
-            vks::VK_COMMAND_BUFFER_LEVEL_SECONDARY => CommandBufferLevel::Secondary,
-            _ => CommandBufferLevel::Unknown(level),
-        }
-    }
 }
 
 impl From<CommandBufferLevel> for vks::VkCommandBufferLevel {
@@ -2944,16 +2427,6 @@ pub enum IndexType {
     Unknown(vks::VkIndexType),
 }
 
-impl From<vks::VkIndexType> for IndexType {
-    fn from(index_type: vks::VkIndexType) -> Self {
-        match index_type {
-            vks::VK_INDEX_TYPE_UINT16 => IndexType::UInt16,
-            vks::VK_INDEX_TYPE_UINT32 => IndexType::UInt32,
-            _ => IndexType::Unknown(index_type),
-        }
-    }
-}
-
 impl From<IndexType> for vks::VkIndexType {
     fn from(index_type: IndexType) -> Self {
         match index_type {
@@ -2970,16 +2443,6 @@ pub enum SubpassContents {
     Inline,
     SecondaryCommandBuffers,
     Unknown(vks::VkSubpassContents),
-}
-
-impl From<vks::VkSubpassContents> for SubpassContents {
-    fn from(contents: vks::VkSubpassContents) -> Self {
-        match contents {
-            vks::VK_SUBPASS_CONTENTS_INLINE => SubpassContents::Inline,
-            vks::VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS => SubpassContents::SecondaryCommandBuffers,
-            _ => SubpassContents::Unknown(contents),
-        }
-    }
 }
 
 impl From<SubpassContents> for vks::VkSubpassContents {
@@ -3010,19 +2473,6 @@ pub struct ApplicationInfo {
     pub engine_version: u32,
     pub api_version: Option<Version>,
     pub chain: Option<ApplicationInfoChain>,
-}
-
-impl ApplicationInfo {
-    pub unsafe fn from_vks(info: &vks::VkApplicationInfo, with_chain: bool) -> Self {
-        ApplicationInfo {
-            application_name: utils::string_from_cstr(info.pApplicationName),
-            application_version: info.applicationVersion,
-            engine_name: utils::string_from_cstr(info.pEngineName),
-            engine_version: info.engineVersion,
-            api_version: Version::from_optional_api_version(info.apiVersion),
-            chain: ApplicationInfoChain::from_vks(info.pNext, with_chain),
-        }
-    }
 }
 
 #[derive(Debug)]
@@ -3079,38 +2529,6 @@ pub struct InstanceCreateInfo {
     pub enabled_layers: Vec<String>,
     pub enabled_extensions: Vec<InstanceExtension>,
     pub chain: Option<InstanceCreateInfoChain>,
-}
-
-impl InstanceCreateInfo {
-    pub unsafe fn from_vks(create_info: &vks::VkInstanceCreateInfo, with_chain: bool) -> Self {
-        let application_info = if !create_info.pApplicationInfo.is_null() {
-            Some(ApplicationInfo::from_vks(&*create_info.pApplicationInfo, true))
-        }
-        else {
-            None
-        };
-
-        let enabled_layers_slice = slice::from_raw_parts(create_info.ppEnabledLayerNames, create_info.enabledLayerCount as usize);
-        let enabled_layers = enabled_layers_slice
-            .iter()
-            .map(|&e| CStr::from_ptr(e).to_str().unwrap().to_owned())
-            .collect();
-
-        let enabled_extensions_slice = slice::from_raw_parts(create_info.ppEnabledExtensionNames, create_info.enabledExtensionCount as usize);
-        let enabled_extensions = enabled_extensions_slice
-            .iter()
-            .map(|&e| CStr::from_ptr(e).to_str().unwrap())
-            .map(From::from)
-            .collect();
-
-        InstanceCreateInfo {
-            flags: create_info.flags,
-            application_info: application_info,
-            enabled_layers: enabled_layers,
-            enabled_extensions: enabled_extensions,
-            chain: InstanceCreateInfoChain::from_vks(create_info.pNext, with_chain),
-        }
-    }
 }
 
 #[derive(Debug)]
@@ -3414,16 +2832,6 @@ impl<'a> From<&'a vks::VkFormatProperties> for FormatProperties {
     }
 }
 
-impl<'a> From<&'a FormatProperties> for vks::VkFormatProperties {
-    fn from(properties: &'a FormatProperties) -> Self {
-        vks::VkFormatProperties {
-            linearTilingFeatures: properties.linear_tiling_features,
-            optimalTilingFeatures: properties.optimal_tiling_features,
-            bufferFeatures: properties.buffer_features,
-        }
-    }
-}
-
 /// See [`VkExtent3D`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkExtent3D)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct Extent3D {
@@ -3470,18 +2878,6 @@ impl<'a> From<&'a vks::VkImageFormatProperties> for ImageFormatProperties {
             max_array_layers: properties.maxArrayLayers,
             sample_counts: properties.sampleCounts,
             max_resource_size: properties.maxResourceSize,
-        }
-    }
-}
-
-impl<'a> From<&'a ImageFormatProperties> for vks::VkImageFormatProperties {
-    fn from(properties: &'a ImageFormatProperties) -> Self {
-        vks::VkImageFormatProperties {
-            maxExtent: (&properties.max_extent).into(),
-            maxMipLevels: properties.max_mip_levels,
-            maxArrayLayers: properties.max_array_layers,
-            sampleCounts: properties.sample_counts,
-            maxResourceSize: properties.max_resource_size,
         }
     }
 }
@@ -3710,119 +3106,6 @@ impl<'a> From<&'a vks::VkPhysicalDeviceLimits> for PhysicalDeviceLimits {
     }
 }
 
-impl<'a> From<&'a PhysicalDeviceLimits> for vks::VkPhysicalDeviceLimits {
-    fn from(limits: &'a PhysicalDeviceLimits) -> Self {
-        vks::VkPhysicalDeviceLimits {
-            maxImageDimension1D: limits.max_image_dimension_1d,
-            maxImageDimension2D: limits.max_image_dimension_2d,
-            maxImageDimension3D: limits.max_image_dimension_3d,
-            maxImageDimensionCube: limits.max_image_dimension_cube,
-            maxImageArrayLayers: limits.max_image_array_layers,
-            maxTexelBufferElements: limits.max_texel_buffer_elements,
-            maxUniformBufferRange: limits.max_uniform_buffer_range,
-            maxStorageBufferRange: limits.max_storage_buffer_range,
-            maxPushConstantsSize: limits.max_push_constants_size,
-            maxMemoryAllocationCount: limits.max_memory_allocation_count,
-            maxSamplerAllocationCount: limits.max_sampler_allocation_count,
-            bufferImageGranularity: limits.buffer_image_granularity,
-            sparseAddressSpaceSize: limits.sparse_address_space_size,
-            maxBoundDescriptorSets: limits.max_bound_descriptor_sets,
-            maxPerStageDescriptorSamplers: limits.max_per_stage_descriptor_samplers,
-            maxPerStageDescriptorUniformBuffers: limits.max_per_stage_descriptor_uniform_buffers,
-            maxPerStageDescriptorStorageBuffers: limits.max_per_stage_descriptor_storage_buffers,
-            maxPerStageDescriptorSampledImages: limits.max_per_stage_descriptor_sampled_images,
-            maxPerStageDescriptorStorageImages: limits.max_per_stage_descriptor_storage_images,
-            maxPerStageDescriptorInputAttachments: limits.max_per_stage_descriptor_input_attachments,
-            maxPerStageResources: limits.max_per_stage_resources,
-            maxDescriptorSetSamplers: limits.max_descriptor_set_samplers,
-            maxDescriptorSetUniformBuffers: limits.max_descriptor_set_uniform_buffers,
-            maxDescriptorSetUniformBuffersDynamic: limits.max_descriptor_set_uniform_buffers_dynamic,
-            maxDescriptorSetStorageBuffers: limits.max_descriptor_set_storage_buffers,
-            maxDescriptorSetStorageBuffersDynamic: limits.max_descriptor_set_storage_buffers_dynamic,
-            maxDescriptorSetSampledImages: limits.max_descriptor_set_sampled_images,
-            maxDescriptorSetStorageImages: limits.max_descriptor_set_storage_images,
-            maxDescriptorSetInputAttachments: limits.max_descriptor_set_input_attachments,
-            maxVertexInputAttributes: limits.max_vertex_input_attributes,
-            maxVertexInputBindings: limits.max_vertex_input_bindings,
-            maxVertexInputAttributeOffset: limits.max_vertex_input_attribute_offset,
-            maxVertexInputBindingStride: limits.max_vertex_input_binding_stride,
-            maxVertexOutputComponents: limits.max_vertex_output_components,
-            maxTessellationGenerationLevel: limits.max_tessellation_generation_level,
-            maxTessellationPatchSize: limits.max_tessellation_patch_size,
-            maxTessellationControlPerVertexInputComponents: limits.max_tessellation_control_per_vertex_input_components,
-            maxTessellationControlPerVertexOutputComponents: limits.max_tessellation_control_per_vertex_output_components,
-            maxTessellationControlPerPatchOutputComponents: limits.max_tessellation_control_per_patch_output_components,
-            maxTessellationControlTotalOutputComponents: limits.max_tessellation_control_total_output_components,
-            maxTessellationEvaluationInputComponents: limits.max_tessellation_evaluation_input_components,
-            maxTessellationEvaluationOutputComponents: limits.max_tessellation_evaluation_output_components,
-            maxGeometryShaderInvocations: limits.max_geometry_shader_invocations,
-            maxGeometryInputComponents: limits.max_geometry_input_components,
-            maxGeometryOutputComponents: limits.max_geometry_output_components,
-            maxGeometryOutputVertices: limits.max_geometry_output_vertices,
-            maxGeometryTotalOutputComponents: limits.max_geometry_total_output_components,
-            maxFragmentInputComponents: limits.max_fragment_input_components,
-            maxFragmentOutputAttachments: limits.max_fragment_output_attachments,
-            maxFragmentDualSrcAttachments: limits.max_fragment_dual_src_attachments,
-            maxFragmentCombinedOutputResources: limits.max_fragment_combined_output_resources,
-            maxComputeSharedMemorySize: limits.max_compute_shared_memory_size,
-            maxComputeWorkGroupCount: limits.max_compute_work_group_count,
-            maxComputeWorkGroupInvocations: limits.max_compute_work_group_invocations,
-            maxComputeWorkGroupSize: limits.max_compute_work_group_size,
-            subPixelPrecisionBits: limits.sub_pixel_precision_bits,
-            subTexelPrecisionBits: limits.sub_texel_precision_bits,
-            mipmapPrecisionBits: limits.mipmap_precision_bits,
-            maxDrawIndexedIndexValue: limits.max_draw_indexed_index_value,
-            maxDrawIndirectCount: limits.max_draw_indirect_count,
-            maxSamplerLodBias: limits.max_sampler_lod_bias,
-            maxSamplerAnisotropy: limits.max_sampler_anisotropy,
-            maxViewports: limits.max_viewports,
-            maxViewportDimensions: limits.max_viewport_dimensions,
-            viewportBoundsRange: limits.viewport_bounds_range,
-            viewportSubPixelBits: limits.viewport_sub_pixel_bits,
-            minMemoryMapAlignment: limits.min_memory_map_alignment,
-            minTexelBufferOffsetAlignment: limits.min_texel_buffer_offset_alignment,
-            minUniformBufferOffsetAlignment: limits.min_uniform_buffer_offset_alignment,
-            minStorageBufferOffsetAlignment: limits.min_storage_buffer_offset_alignment,
-            minTexelOffset: limits.min_texel_offset,
-            maxTexelOffset: limits.max_texel_offset,
-            minTexelGatherOffset: limits.min_texel_gather_offset,
-            maxTexelGatherOffset: limits.max_texel_gather_offset,
-            minInterpolationOffset: limits.min_interpolation_offset,
-            maxInterpolationOffset: limits.max_interpolation_offset,
-            subPixelInterpolationOffsetBits: limits.sub_pixel_interpolation_offset_bits,
-            maxFramebufferWidth: limits.max_framebuffer_width,
-            maxFramebufferHeight: limits.max_framebuffer_height,
-            maxFramebufferLayers: limits.max_framebuffer_layers,
-            framebufferColorSampleCounts: limits.framebuffer_color_sample_counts,
-            framebufferDepthSampleCounts: limits.framebuffer_depth_sample_counts,
-            framebufferStencilSampleCounts: limits.framebuffer_stencil_sample_counts,
-            framebufferNoAttachmentsSampleCounts: limits.framebuffer_no_attachments_sample_counts,
-            maxColorAttachments: limits.max_color_attachments,
-            sampledImageColorSampleCounts: limits.sampled_image_color_sample_counts,
-            sampledImageIntegerSampleCounts: limits.sampled_image_integer_sample_counts,
-            sampledImageDepthSampleCounts: limits.sampled_image_depth_sample_counts,
-            sampledImageStencilSampleCounts: limits.sampled_image_stencil_sample_counts,
-            storageImageSampleCounts: limits.storage_image_sample_counts,
-            maxSampleMaskWords: limits.max_sample_mask_words,
-            timestampComputeAndGraphics: utils::to_vk_bool(limits.timestamp_compute_and_graphics),
-            timestampPeriod: limits.timestamp_period,
-            maxClipDistances: limits.max_clip_distances,
-            maxCullDistances: limits.max_cull_distances,
-            maxCombinedClipAndCullDistances: limits.max_combined_clip_and_cull_distances,
-            discreteQueuePriorities: limits.discrete_queue_priorities,
-            pointSizeRange: limits.point_size_range,
-            lineWidthRange: limits.line_width_range,
-            pointSizeGranularity: limits.point_size_granularity,
-            lineWidthGranularity: limits.line_width_granularity,
-            strictLines: utils::to_vk_bool(limits.strict_lines),
-            standardSampleLocations: utils::to_vk_bool(limits.standard_sample_locations),
-            optimalBufferCopyOffsetAlignment: limits.optimal_buffer_copy_offset_alignment,
-            optimalBufferCopyRowPitchAlignment: limits.optimal_buffer_copy_row_pitch_alignment,
-            nonCoherentAtomSize: limits.non_coherent_atom_size,
-        }
-    }
-}
-
 /// See [`VkPhysicalDeviceSparseProperties`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPhysicalDeviceSparseProperties)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct PhysicalDeviceSparseProperties {
@@ -3841,18 +3124,6 @@ impl<'a> From<&'a vks::VkPhysicalDeviceSparseProperties> for PhysicalDeviceSpars
             residency_standard_3d_block_shape: utils::from_vk_bool(properties.residencyStandard3DBlockShape),
             residency_aligned_mip_size: utils::from_vk_bool(properties.residencyAlignedMipSize),
             residency_non_resident_strict: utils::from_vk_bool(properties.residencyNonResidentStrict),
-        }
-    }
-}
-
-impl<'a> From<&'a PhysicalDeviceSparseProperties> for vks::VkPhysicalDeviceSparseProperties {
-    fn from(properties: &'a PhysicalDeviceSparseProperties) -> Self {
-        vks::VkPhysicalDeviceSparseProperties {
-            residencyStandard2DBlockShape: utils::to_vk_bool(properties.residency_standard_2d_block_shape),
-            residencyStandard2DMultisampleBlockShape: utils::to_vk_bool(properties.residency_standard_2d_multisample_block_shape),
-            residencyStandard3DBlockShape: utils::to_vk_bool(properties.residency_standard_3d_block_shape),
-            residencyAlignedMipSize: utils::to_vk_bool(properties.residency_aligned_mip_size),
-            residencyNonResidentStrict: utils::to_vk_bool(properties.residency_non_resident_strict),
         }
     }
 }
@@ -3891,30 +3162,6 @@ impl<'a> From<&'a vks::VkPhysicalDeviceProperties> for PhysicalDeviceProperties 
     }
 }
 
-impl<'a> From<&'a PhysicalDeviceProperties> for vks::VkPhysicalDeviceProperties {
-    fn from(properties: &'a PhysicalDeviceProperties) -> Self {
-        let mut res = vks::VkPhysicalDeviceProperties {
-            apiVersion: properties.api_version.as_api_version(),
-            driverVersion: properties.driver_version,
-            vendorID: properties.vendor_id,
-            deviceID: properties.device_id,
-            deviceType: properties.device_type.into(),
-            deviceName: unsafe { mem::uninitialized() },
-            pipelineCacheUUID: properties.pipeline_cache_uuid,
-            limits: (&properties.limits).into(),
-            sparseProperties: (&properties.sparse_properties).into(),
-        };
-
-        debug_assert!(properties.device_name.len() < res.deviceName.len());
-        unsafe {
-            ptr::copy_nonoverlapping(properties.device_name.as_ptr() as *const _, res.deviceName.as_mut_ptr(), properties.device_name.len());
-        }
-        res.deviceName[properties.device_name.len()] = 0;
-
-        res
-    }
-}
-
 /// See [`VkQueueFamilyProperties`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueueFamilyProperties)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct QueueFamilyProperties {
@@ -3931,17 +3178,6 @@ impl<'a> From<&'a vks::VkQueueFamilyProperties> for QueueFamilyProperties {
             queue_count: properties.queueCount,
             timestamp_valid_bits: properties.timestampValidBits,
             min_image_transfer_granularity: (&properties.minImageTransferGranularity).into(),
-        }
-    }
-}
-
-impl<'a> From<&'a QueueFamilyProperties> for vks::VkQueueFamilyProperties {
-    fn from(properties: &'a QueueFamilyProperties) -> Self {
-        vks::VkQueueFamilyProperties {
-            queueFlags: properties.queue_flags,
-            queueCount: properties.queue_count,
-            timestampValidBits: properties.timestamp_valid_bits,
-            minImageTransferGranularity: (&properties.min_image_transfer_granularity).into(),
         }
     }
 }
@@ -3989,15 +3225,6 @@ impl<'a> From<&'a vks::VkMemoryType> for MemoryType {
     }
 }
 
-impl<'a> From<&'a MemoryType> for vks::VkMemoryType {
-    fn from(memory_type: &'a MemoryType) -> Self {
-        vks::VkMemoryType {
-            propertyFlags: memory_type.property_flags,
-            heapIndex: memory_type.heap_index,
-        }
-    }
-}
-
 /// See [`VkMemoryHeap`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkMemoryHeap)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct MemoryHeap {
@@ -4008,15 +3235,6 @@ pub struct MemoryHeap {
 impl<'a> From<&'a vks::VkMemoryHeap> for MemoryHeap {
     fn from(heap: &'a vks::VkMemoryHeap) -> Self {
         MemoryHeap {
-            size: heap.size,
-            flags: heap.flags,
-        }
-    }
-}
-
-impl<'a> From<&'a MemoryHeap> for vks::VkMemoryHeap {
-    fn from(heap: &'a MemoryHeap) -> Self {
-        vks::VkMemoryHeap {
             size: heap.size,
             flags: heap.flags,
         }
@@ -4049,27 +3267,6 @@ impl<'a> From<&'a vks::VkPhysicalDeviceMemoryProperties> for PhysicalDeviceMemor
     }
 }
 
-impl<'a> From<&'a PhysicalDeviceMemoryProperties> for vks::VkPhysicalDeviceMemoryProperties {
-    fn from(properties: &'a PhysicalDeviceMemoryProperties) -> Self {
-        debug_assert!(properties.memory_types.len() <= vks::VK_MAX_MEMORY_TYPES);
-        debug_assert!(properties.memory_heaps.len() <= vks::VK_MAX_MEMORY_HEAPS);
-
-        let mut res: vks::VkPhysicalDeviceMemoryProperties = unsafe { mem::uninitialized() };
-
-        res.memoryTypeCount = properties.memory_types.len() as u32;
-        for (src, dst) in properties.memory_types.iter().zip(res.memoryTypes.iter_mut()) {
-            *dst = src.into();
-        }
-
-        res.memoryHeapCount = properties.memory_heaps.len() as u32;
-        for (src, dst) in properties.memory_heaps.iter().zip(res.memoryHeaps.iter_mut()) {
-            *dst = src.into();
-        }
-
-        res
-    }
-}
-
 chain_struct! {
     #[derive(Debug, Clone, Default, PartialEq)]
     pub struct DeviceQueueCreateInfoChain {
@@ -4086,19 +3283,6 @@ pub struct DeviceQueueCreateInfo {
     pub queue_family_index: u32,
     pub queue_priorities: Vec<f32>,
     pub chain: Option<DeviceQueueCreateInfoChain>,
-}
-
-impl DeviceQueueCreateInfo {
-    pub unsafe fn from_vks(create_info: &vks::VkDeviceQueueCreateInfo, with_chain: bool) -> Self {
-        let queue_priorities_slice = slice::from_raw_parts(create_info.pQueuePriorities, create_info.queueCount as usize);
-
-        DeviceQueueCreateInfo {
-            flags: create_info.flags,
-            queue_family_index: create_info.queueFamilyIndex,
-            queue_priorities: queue_priorities_slice.to_vec(),
-            chain: DeviceQueueCreateInfoChain::from_vks(create_info.pNext, with_chain),
-        }
-    }
 }
 
 #[derive(Debug)]
@@ -4146,45 +3330,6 @@ pub struct DeviceCreateInfo {
     pub enabled_extensions: Vec<DeviceExtension>,
     pub enabled_features: Option<PhysicalDeviceFeatures>,
     pub chain: Option<DeviceCreateInfoChain>,
-}
-
-impl DeviceCreateInfo {
-    pub unsafe fn from_vks(create_info: &vks::VkDeviceCreateInfo, with_chain: bool) -> Self {
-        let queue_create_infos_slice = slice::from_raw_parts(create_info.pQueueCreateInfos, create_info.queueCreateInfoCount as usize);
-        let queue_create_infos = queue_create_infos_slice
-            .iter()
-            .map(|q| DeviceQueueCreateInfo::from_vks(q, true))
-            .collect();
-
-        let enabled_layers_slice = slice::from_raw_parts(create_info.ppEnabledLayerNames, create_info.enabledLayerCount as usize);
-        let enabled_layers = enabled_layers_slice
-            .iter()
-            .map(|&e| CStr::from_ptr(e).to_str().unwrap().to_owned())
-            .collect();
-
-        let enabled_extensions_slice = slice::from_raw_parts(create_info.ppEnabledExtensionNames, create_info.enabledExtensionCount as usize);
-        let enabled_extensions = enabled_extensions_slice
-            .iter()
-            .map(|&e| CStr::from_ptr(e).to_str().unwrap())
-            .map(From::from)
-            .collect();
-
-        let enabled_features = if !create_info.pEnabledFeatures.is_null() {
-            Some((&*create_info.pEnabledFeatures).into())
-        }
-        else {
-            None
-        };
-
-        DeviceCreateInfo {
-            flags: create_info.flags,
-            queue_create_infos: queue_create_infos,
-            enabled_layers: enabled_layers,
-            enabled_extensions: enabled_extensions,
-            enabled_features: enabled_features,
-            chain: DeviceCreateInfoChain::from_vks(create_info.pNext, with_chain),
-        }
-    }
 }
 
 #[derive(Debug)]
@@ -4299,20 +3444,6 @@ pub enum InstanceExtension {
     ExtDebugReport,
 }
 
-impl From<String> for InstanceExtension {
-    fn from(name: String) -> Self {
-        match name.as_str() {
-            #[cfg(feature = "khr_surface_25")]
-            vks::VK_KHR_SURFACE_EXTENSION_NAME_STR => InstanceExtension::KhrSurface,
-
-            #[cfg(feature = "ext_debug_report_1")]
-            vks::VK_EXT_DEBUG_REPORT_EXTENSION_NAME_STR => InstanceExtension::ExtDebugReport,
-
-            _ => InstanceExtension::Unknown(name)
-        }
-    }
-}
-
 impl<'a> From<&'a str> for InstanceExtension {
     fn from(name: &'a str) -> Self {
         match name {
@@ -4341,20 +3472,6 @@ impl From<InstanceExtension> for String {
     }
 }
 
-impl<'a> From<&'a InstanceExtension> for &'a str {
-    fn from(extension: &'a InstanceExtension) -> Self {
-        match *extension {
-            #[cfg(feature = "khr_surface_25")]
-            InstanceExtension::KhrSurface => vks::VK_KHR_SURFACE_EXTENSION_NAME_STR,
-
-            #[cfg(feature = "ext_debug_report_1")]
-            InstanceExtension::ExtDebugReport => vks::VK_EXT_DEBUG_REPORT_EXTENSION_NAME_STR,
-
-            InstanceExtension::Unknown(ref name) => name,
-        }
-    }
-}
-
 /// See [`VkExtensionProperties`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkExtensionProperties)
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct InstanceExtensionProperties {
@@ -4369,22 +3486,6 @@ impl<'a> From<&'a vks::VkExtensionProperties> for InstanceExtensionProperties {
         InstanceExtensionProperties {
             extension: name.into(),
             spec_version: properties.specVersion,
-        }
-    }
-}
-
-impl<'a> From<&'a InstanceExtensionProperties> for vks::VkExtensionProperties {
-    fn from(properties: &'a InstanceExtensionProperties) -> Self {
-        unsafe {
-            let name: &str = (&properties.extension).into();
-            debug_assert!(name.len() < vks::VK_MAX_EXTENSION_NAME_SIZE);
-
-            let mut res: vks::VkExtensionProperties = mem::uninitialized();
-            ptr::copy_nonoverlapping(name.as_ptr() as *const _, res.extensionName.as_mut_ptr(), name.len());
-            res.extensionName[name.len()] = 0;
-            res.specVersion = properties.spec_version;
-
-            res
         }
     }
 }
@@ -4421,12 +3522,6 @@ pub enum DeviceExtension {
     Unknown(String),
 }
 
-impl From<String> for DeviceExtension {
-    fn from(name: String) -> Self {
-        DeviceExtension::Unknown(name)
-    }
-}
-
 impl<'a> From<&'a str> for DeviceExtension {
     fn from(name: &'a str) -> Self {
         DeviceExtension::Unknown(name.to_owned())
@@ -4437,14 +3532,6 @@ impl From<DeviceExtension> for String {
     fn from(extension: DeviceExtension) -> Self {
         match extension {
             DeviceExtension::Unknown(name) => name,
-        }
-    }
-}
-
-impl<'a> From<&'a DeviceExtension> for &'a str {
-    fn from(extension: &'a DeviceExtension) -> Self {
-        match *extension {
-            DeviceExtension::Unknown(ref name) => name,
         }
     }
 }
@@ -4463,22 +3550,6 @@ impl<'a> From<&'a vks::VkExtensionProperties> for DeviceExtensionProperties {
         DeviceExtensionProperties {
             extension: name.into(),
             spec_version: properties.specVersion,
-        }
-    }
-}
-
-impl<'a> From<&'a DeviceExtensionProperties> for vks::VkExtensionProperties {
-    fn from(properties: &'a DeviceExtensionProperties) -> Self {
-        unsafe {
-            let name: &str = (&properties.extension).into();
-            debug_assert!(name.len() < vks::VK_MAX_EXTENSION_NAME_SIZE);
-
-            let mut res: vks::VkExtensionProperties = mem::uninitialized();
-            ptr::copy_nonoverlapping(name.as_ptr() as *const _, res.extensionName.as_mut_ptr(), name.len());
-            res.extensionName[name.len()] = 0;
-            res.specVersion = properties.spec_version;
-
-            res
         }
     }
 }
@@ -4528,28 +3599,6 @@ impl<'a> From<&'a vks::VkLayerProperties> for LayerProperties {
                 implementation_version: layer_properties.implementationVersion,
                 description: CStr::from_ptr(layer_properties.description.as_ptr()).to_str().unwrap().to_owned(),
             }
-        }
-    }
-}
-
-impl<'a> From<&'a LayerProperties> for vks::VkLayerProperties {
-    fn from(properties: &'a LayerProperties) -> Self {
-        unsafe {
-            debug_assert!(properties.layer_name.len() < vks::VK_MAX_EXTENSION_NAME_SIZE);
-            debug_assert!(properties.description.len() < vks::VK_MAX_DESCRIPTION_SIZE);
-
-            let mut res: vks::VkLayerProperties = mem::uninitialized();
-
-            ptr::copy_nonoverlapping(properties.layer_name.as_ptr() as *const _, res.layerName.as_mut_ptr(), properties.layer_name.len());
-            res.layerName[properties.layer_name.len()] = 0;
-
-            res.specVersion = properties.spec_version.as_api_version();
-            res.implementationVersion = properties.implementation_version;
-
-            ptr::copy_nonoverlapping(properties.description.as_ptr() as *const _, res.description.as_mut_ptr(), properties.description.len());
-            res.description[properties.description.len()] = 0;
-
-            res
         }
     }
 }
@@ -4697,16 +3746,6 @@ pub struct MemoryAllocateInfo {
     pub chain: Option<MemoryAllocateInfoChain>,
 }
 
-impl MemoryAllocateInfo {
-    pub unsafe fn from_vks(info: &vks::VkMemoryAllocateInfo, with_chain: bool) -> Self {
-        MemoryAllocateInfo {
-            allocation_size: info.allocationSize,
-            memory_type_index: info.memoryTypeIndex,
-            chain: MemoryAllocateInfoChain::from_vks(info.pNext, with_chain),
-        }
-    }
-}
-
 #[derive(Debug)]
 struct VkMemoryAllocateInfoWrapper {
     pub vks_struct: vks::VkMemoryAllocateInfo,
@@ -4790,16 +3829,6 @@ impl<'a> From<&'a vks::VkMemoryRequirements> for MemoryRequirements {
     }
 }
 
-impl<'a> From<&'a MemoryRequirements> for vks::VkMemoryRequirements {
-    fn from(requirements: &'a MemoryRequirements) -> Self {
-        vks::VkMemoryRequirements {
-            size: requirements.size,
-            alignment: requirements.alignment,
-            memoryTypeBits: requirements.memory_type_bits,
-        }
-    }
-}
-
 /// See [`VkSparseImageFormatProperties`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSparseImageFormatProperties)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct SparseImageFormatProperties {
@@ -4813,16 +3842,6 @@ impl<'a> From<&'a vks::VkSparseImageFormatProperties> for SparseImageFormatPrope
         SparseImageFormatProperties {
             aspect_mask: properties.aspectMask,
             image_granularity: (&properties.imageGranularity).into(),
-            flags: properties.flags,
-        }
-    }
-}
-
-impl<'a> From<&'a SparseImageFormatProperties> for vks::VkSparseImageFormatProperties {
-    fn from(properties: &'a SparseImageFormatProperties) -> Self {
-        vks::VkSparseImageFormatProperties {
-            aspectMask: properties.aspect_mask,
-            imageGranularity: (&properties.image_granularity).into(),
             flags: properties.flags,
         }
     }
@@ -4873,18 +3892,6 @@ impl<'a> From<&'a vks::VkSparseImageMemoryRequirements> for SparseImageMemoryReq
             image_mip_tail_size: requirements.imageMipTailSize,
             image_mip_tail_offset: requirements.imageMipTailOffset,
             image_mip_tail_stride: requirements.imageMipTailStride,
-        }
-    }
-}
-
-impl<'a> From<&'a SparseImageMemoryRequirements> for vks::VkSparseImageMemoryRequirements {
-    fn from(requirements: &'a SparseImageMemoryRequirements) -> Self {
-        vks::VkSparseImageMemoryRequirements {
-            formatProperties: (&requirements.format_properties).into(),
-            imageMipTailFirstLod: requirements.image_mip_tail_first_lod,
-            imageMipTailSize: requirements.image_mip_tail_size,
-            imageMipTailOffset: requirements.image_mip_tail_offset,
-            imageMipTailStride: requirements.image_mip_tail_stride,
         }
     }
 }
@@ -5026,16 +4033,6 @@ pub struct ImageSubresource {
     pub array_layer: u32,
 }
 
-impl<'a> From<&'a vks::VkImageSubresource> for ImageSubresource {
-    fn from(subresource: &'a vks::VkImageSubresource) -> Self {
-        ImageSubresource {
-            aspect_mask: subresource.aspectMask,
-            mip_level: subresource.mipLevel,
-            array_layer: subresource.arrayLayer,
-        }
-    }
-}
-
 impl<'a> From<&'a ImageSubresource> for vks::VkImageSubresource {
     fn from(subresource: &'a ImageSubresource) -> Self {
         vks::VkImageSubresource {
@@ -5052,16 +4049,6 @@ pub struct Offset3D {
     pub x: i32,
     pub y: i32,
     pub z: i32,
-}
-
-impl<'a> From<&'a vks::VkOffset3D> for Offset3D {
-    fn from(offset: &'a vks::VkOffset3D) -> Self {
-        Offset3D {
-            x: offset.x,
-            y: offset.y,
-            z: offset.z,
-        }
-    }
 }
 
 impl<'a> From<&'a Offset3D> for vks::VkOffset3D {
@@ -5281,15 +4268,6 @@ pub struct FenceCreateInfo {
     pub chain: Option<FenceCreateInfoChain>,
 }
 
-impl FenceCreateInfo {
-    pub unsafe fn from_vks(create_info: &vks::VkFenceCreateInfo, with_chain: bool) -> Self {
-        FenceCreateInfo {
-            flags: create_info.flags,
-            chain: FenceCreateInfoChain::from_vks(create_info.pNext, with_chain),
-        }
-    }
-}
-
 #[derive(Debug)]
 struct VkFenceCreateInfoWrapper {
     pub vks_struct: vks::VkFenceCreateInfo,
@@ -5327,15 +4305,6 @@ pub struct SemaphoreCreateInfo {
     pub chain: Option<SemaphoreCreateInfoChain>,
 }
 
-impl SemaphoreCreateInfo {
-    pub unsafe fn from_vks(create_info: &vks::VkSemaphoreCreateInfo, with_chain: bool) -> Self {
-        SemaphoreCreateInfo {
-            flags: create_info.flags,
-            chain: SemaphoreCreateInfoChain::from_vks(create_info.pNext, with_chain),
-        }
-    }
-}
-
 #[derive(Debug)]
 struct VkSemaphoreCreateInfoWrapper {
     pub vks_struct: vks::VkSemaphoreCreateInfo,
@@ -5371,15 +4340,6 @@ chain_struct! {
 pub struct EventCreateInfo {
     pub flags: EventCreateFlags,
     pub chain: Option<EventCreateInfoChain>,
-}
-
-impl EventCreateInfo {
-    pub unsafe fn from(create_info: &vks::VkEventCreateInfo, with_chain: bool) -> Self {
-        EventCreateInfo {
-            flags: create_info.flags,
-            chain: EventCreateInfoChain::from_vks(create_info.pNext, with_chain),
-        }
-    }
 }
 
 #[derive(Debug)]
@@ -5420,18 +4380,6 @@ pub struct QueryPoolCreateInfo {
     pub query_count: u32,
     pub pipeline_statistics: QueryPipelineStatisticFlags,
     pub chain: Option<QueryPoolCreateInfoChain>,
-}
-
-impl QueryPoolCreateInfo {
-    pub unsafe fn from(create_info: &vks::VkQueryPoolCreateInfo, with_chain: bool) -> Self {
-        QueryPoolCreateInfo {
-            flags: create_info.flags,
-            query_type: create_info.queryType.into(),
-            query_count: create_info.queryCount,
-            pipeline_statistics: create_info.pipelineStatistics,
-            chain: QueryPoolCreateInfoChain::from_vks(create_info.pNext, with_chain),
-        }
-    }
 }
 
 #[derive(Debug)]
@@ -5476,26 +4424,6 @@ pub struct BufferCreateInfo {
     pub sharing_mode: SharingMode,
     pub queue_family_indices: Option<Vec<u32>>,
     pub chain: Option<BufferCreateInfoChain>,
-}
-
-impl BufferCreateInfo {
-    pub unsafe fn from(create_info: &vks::VkBufferCreateInfo, with_chain: bool) -> Self {
-        let queue_family_indices = if !create_info.pQueueFamilyIndices.is_null() {
-            Some(slice::from_raw_parts(create_info.pQueueFamilyIndices, create_info.queueFamilyIndexCount as usize).to_vec())
-        }
-        else {
-            None
-        };
-
-        BufferCreateInfo {
-            flags: create_info.flags,
-            size: create_info.size,
-            usage: create_info.usage,
-            sharing_mode: create_info.sharingMode.into(),
-            queue_family_indices: queue_family_indices,
-            chain: BufferCreateInfoChain::from_vks(create_info.pNext, with_chain),
-        }
-    }
 }
 
 #[derive(Debug)]
@@ -5606,33 +4534,6 @@ pub struct ImageCreateInfo {
     pub chain: Option<ImageCreateInfoChain>,
 }
 
-impl ImageCreateInfo {
-    pub unsafe fn from_vks(create_info: &vks::VkImageCreateInfo, with_chain: bool) -> Self {
-        let queue_family_indices = if !create_info.pQueueFamilyIndices.is_null() {
-            Some(slice::from_raw_parts(create_info.pQueueFamilyIndices, create_info.queueFamilyIndexCount as usize).to_vec())
-        }
-        else {
-            None
-        };
-
-        ImageCreateInfo {
-            flags: create_info.flags,
-            image_type: create_info.imageType.into(),
-            format: create_info.format.into(),
-            extent: (&create_info.extent).into(),
-            mip_levels: create_info.mipLevels,
-            array_layers: create_info.arrayLayers,
-            samples: create_info.samples,
-            tiling: create_info.tiling.into(),
-            usage: create_info.usage,
-            sharing_mode: create_info.sharingMode.into(),
-            queue_family_indices: queue_family_indices,
-            initial_layout: create_info.initialLayout.into(),
-            chain: ImageCreateInfoChain::from_vks(create_info.pNext, with_chain),
-        }
-    }
-}
-
 #[derive(Debug)]
 struct VkImageCreateInfoWrapper {
     pub vks_struct: vks::VkImageCreateInfo,
@@ -5696,18 +4597,6 @@ impl<'a> From<&'a vks::VkSubresourceLayout> for SubresourceLayout {
     }
 }
 
-impl<'a> From<&'a SubresourceLayout> for vks::VkSubresourceLayout {
-    fn from(layout: &'a SubresourceLayout) -> Self {
-        vks::VkSubresourceLayout {
-            offset: layout.offset,
-            size: layout.size,
-            rowPitch: layout.row_pitch,
-            arrayPitch: layout.array_pitch,
-            depthPitch: layout.depth_pitch,
-        }
-    }
-}
-
 /// See [`VkComponentMapping`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkComponentMapping)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct ComponentMapping {
@@ -5715,17 +4604,6 @@ pub struct ComponentMapping {
     pub g: ComponentSwizzle,
     pub b: ComponentSwizzle,
     pub a: ComponentSwizzle,
-}
-
-impl<'a> From<&'a vks::VkComponentMapping> for ComponentMapping {
-    fn from(mapping: &'a vks::VkComponentMapping) -> Self {
-        ComponentMapping {
-            r: mapping.r.into(),
-            g: mapping.g.into(),
-            b: mapping.b.into(),
-            a: mapping.a.into(),
-        }
-    }
 }
 
 impl<'a> From<&'a ComponentMapping> for vks::VkComponentMapping {
@@ -5747,18 +4625,6 @@ pub struct ImageSubresourceRange {
     pub level_count: OptionalMipLevels,
     pub base_array_layer: u32,
     pub layer_count: OptionalArrayLayers,
-}
-
-impl<'a> From<&'a vks::VkImageSubresourceRange> for ImageSubresourceRange {
-    fn from(range: &'a vks::VkImageSubresourceRange) -> Self {
-        ImageSubresourceRange {
-            aspect_mask: range.aspectMask,
-            base_mip_level: range.baseMipLevel,
-            level_count: range.levelCount.into(),
-            base_array_layer: range.baseArrayLayer,
-            layer_count: range.layerCount.into(),
-        }
-    }
 }
 
 impl<'a> From<&'a ImageSubresourceRange> for vks::VkImageSubresourceRange {
@@ -5840,22 +4706,6 @@ pub struct ShaderModuleCreateInfo {
     pub chain: Option<ShaderModuleCreateInfoChain>,
 }
 
-impl ShaderModuleCreateInfo {
-    pub unsafe fn from_vks(create_info: &vks::VkShaderModuleCreateInfo, with_chain: bool) -> Self {
-        let code_size_u32 = (create_info.codeSize / 4) + 1;
-        let mut code = Vec::with_capacity(code_size_u32);
-        code.set_len(code_size_u32);
-        ptr::copy_nonoverlapping(create_info.pCode as *const u8, code.as_mut_ptr() as *mut u8, create_info.codeSize);
-
-        ShaderModuleCreateInfo {
-            flags: create_info.flags,
-            code_size: create_info.codeSize,
-            code: code,
-            chain: ShaderModuleCreateInfoChain::from_vks(create_info.pNext, with_chain),
-        }
-    }
-}
-
 #[derive(Debug)]
 struct VkShaderModuleCreateInfoWrapper {
     pub vks_struct: vks::VkShaderModuleCreateInfo,
@@ -5897,23 +4747,6 @@ pub struct PipelineCacheCreateInfo {
     pub flags: PipelineCacheCreateFlags,
     pub initial_data: Option<Vec<u8>>,
     pub chain: Option<PipelineCacheCreateInfoChain>,
-}
-
-impl PipelineCacheCreateInfo {
-    pub unsafe fn from_vks(create_info: &vks::VkPipelineCacheCreateInfo, with_chain: bool) -> Self {
-        let initial_data = if create_info.initialDataSize > 0 {
-            Some(slice::from_raw_parts(create_info.pInitialData as *const u8, create_info.initialDataSize).to_vec())
-        }
-        else {
-            None
-        };
-
-        PipelineCacheCreateInfo {
-            flags: create_info.flags,
-            initial_data: initial_data,
-            chain: PipelineCacheCreateInfoChain::from_vks(create_info.pNext, with_chain),
-        }
-    }
 }
 
 #[derive(Debug)]
@@ -5960,16 +4793,6 @@ pub struct SpecializationMapEntry {
     pub size: usize,
 }
 
-impl<'a> From<&'a vks::VkSpecializationMapEntry> for SpecializationMapEntry {
-    fn from(entry: &'a vks::VkSpecializationMapEntry) -> Self {
-        SpecializationMapEntry {
-            constant_id: entry.constantID,
-            offset: entry.offset,
-            size: entry.size,
-        }
-    }
-}
-
 impl<'a> From<&'a SpecializationMapEntry> for vks::VkSpecializationMapEntry {
     fn from(entry: &'a SpecializationMapEntry) -> Self {
         vks::VkSpecializationMapEntry {
@@ -5985,29 +4808,6 @@ impl<'a> From<&'a SpecializationMapEntry> for vks::VkSpecializationMapEntry {
 pub struct SpecializationInfo {
     pub map_entries: Option<Vec<SpecializationMapEntry>>,
     pub data: Option<Vec<u8>>,
-}
-
-impl SpecializationInfo {
-    pub unsafe fn from_vks(info: &vks::VkSpecializationInfo) -> Self {
-        let map_entries = if !info.pMapEntries.is_null() {
-            Some(slice::from_raw_parts(info.pMapEntries, info.mapEntryCount as usize).iter().map(From::from).collect())
-        }
-        else {
-            None
-        };
-
-        let data = if !info.pData.is_null() {
-            Some(slice::from_raw_parts(info.pData as *const u8, info.dataSize).to_vec())
-        }
-        else {
-            None
-        };
-
-        SpecializationInfo {
-            map_entries: map_entries,
-            data: data,
-        }
-    }
 }
 
 /// See [`VkSpecializationInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSpecializationInfo)
@@ -6166,16 +4966,6 @@ pub struct VertexInputBindingDescription {
     pub input_rate: VertexInputRate,
 }
 
-impl<'a> From<&'a vks::VkVertexInputBindingDescription> for VertexInputBindingDescription {
-    fn from(description: &'a vks::VkVertexInputBindingDescription) -> Self {
-        VertexInputBindingDescription {
-            binding: description.binding,
-            stride: description.stride,
-            input_rate: description.inputRate.into(),
-        }
-    }
-}
-
 impl<'a> From<&'a VertexInputBindingDescription> for vks::VkVertexInputBindingDescription {
     fn from(description: &'a VertexInputBindingDescription) -> Self {
         vks::VkVertexInputBindingDescription {
@@ -6193,17 +4983,6 @@ pub struct VertexInputAttributeDescription {
     pub binding: u32,
     pub format: Format,
     pub offset: u32,
-}
-
-impl<'a> From<&'a vks::VkVertexInputAttributeDescription> for VertexInputAttributeDescription {
-    fn from(description: &'a vks::VkVertexInputAttributeDescription) -> Self {
-        VertexInputAttributeDescription {
-            location: description.location,
-            binding: description.binding,
-            format: description.format.into(),
-            offset: description.offset,
-        }
-    }
 }
 
 impl<'a> From<&'a VertexInputAttributeDescription> for vks::VkVertexInputAttributeDescription {
@@ -6233,37 +5012,6 @@ pub struct PipelineVertexInputStateCreateInfo {
     pub vertex_binding_descriptions: Option<Vec<VertexInputBindingDescription>>,
     pub vertex_attribute_descriptions: Option<Vec<VertexInputAttributeDescription>>,
     pub chain: Option<PipelineVertexInputStateCreateInfoChain>,
-}
-
-impl PipelineVertexInputStateCreateInfo {
-    pub unsafe fn from(create_info: &vks::VkPipelineVertexInputStateCreateInfo, with_chain: bool) -> Self {
-        let vertex_binding_descriptions = if !create_info.pVertexBindingDescriptions.is_null() {
-            Some(slice::from_raw_parts(create_info.pVertexBindingDescriptions, create_info.vertexBindingDescriptionCount as usize)
-                    .iter()
-                    .map(From::from)
-                    .collect())
-        }
-        else {
-            None
-        };
-
-        let vertex_attribute_descriptions = if !create_info.pVertexAttributeDescriptions.is_null() {
-            Some(slice::from_raw_parts(create_info.pVertexAttributeDescriptions, create_info.vertexAttributeDescriptionCount as usize)
-                    .iter()
-                    .map(From::from)
-                    .collect())
-        }
-        else {
-            None
-        };
-
-        PipelineVertexInputStateCreateInfo {
-            flags: create_info.flags,
-            vertex_binding_descriptions: vertex_binding_descriptions,
-            vertex_attribute_descriptions: vertex_attribute_descriptions,
-            chain: PipelineVertexInputStateCreateInfoChain::from_vks(create_info.pNext, with_chain),
-        }
-    }
 }
 
 #[derive(Debug)]
@@ -6331,17 +5079,6 @@ pub struct PipelineInputAssemblyStateCreateInfo {
     pub chain: Option<PipelineInputAssemblyStateCreateInfoChain>,
 }
 
-impl PipelineInputAssemblyStateCreateInfo {
-    pub unsafe fn from_vks(create_info: &vks::VkPipelineInputAssemblyStateCreateInfo, with_chain: bool) -> Self {
-        PipelineInputAssemblyStateCreateInfo {
-            flags: create_info.flags,
-            topology: create_info.topology.into(),
-            primitive_restart_enable: utils::from_vk_bool(create_info.primitiveRestartEnable),
-            chain: PipelineInputAssemblyStateCreateInfoChain::from_vks(create_info.pNext, with_chain),
-        }
-    }
-}
-
 #[derive(Debug)]
 struct VkPipelineInputAssemblyStateCreateInfoWrapper {
     pub vks_struct: vks::VkPipelineInputAssemblyStateCreateInfo,
@@ -6382,16 +5119,6 @@ pub struct PipelineTessellationStateCreateInfo {
     pub chain: Option<PipelineTessellationStateCreateInfoChain>,
 }
 
-impl PipelineTessellationStateCreateInfo {
-    pub unsafe fn from_vks(create_info: &vks::VkPipelineTessellationStateCreateInfo, with_chain: bool) -> Self {
-        PipelineTessellationStateCreateInfo {
-            flags: create_info.flags,
-            patch_control_points: create_info.patchControlPoints,
-            chain: PipelineTessellationStateCreateInfoChain::from_vks(create_info.pNext, with_chain),
-        }
-    }
-}
-
 #[derive(Debug)]
 struct VkPipelineTessellationStateCreateInfoWrapper {
     pub vks_struct: vks::VkPipelineTessellationStateCreateInfo,
@@ -6425,19 +5152,6 @@ pub struct Viewport {
     pub max_depth: f32,
 }
 
-impl<'a> From<&'a vks::VkViewport> for Viewport {
-    fn from(viewport: &'a vks::VkViewport) -> Self {
-        Viewport {
-            x: viewport.x,
-            y: viewport.y,
-            width: viewport.width,
-            height: viewport.height,
-            min_depth: viewport.minDepth,
-            max_depth: viewport.maxDepth,
-        }
-    }
-}
-
 impl<'a> From<&'a Viewport> for vks::VkViewport {
     fn from(viewport: &'a Viewport) -> Self {
         vks::VkViewport {
@@ -6456,15 +5170,6 @@ impl<'a> From<&'a Viewport> for vks::VkViewport {
 pub struct Offset2D {
     pub x: i32,
     pub y: i32,
-}
-
-impl<'a> From<&'a vks::VkOffset2D> for Offset2D {
-    fn from(offset: &'a vks::VkOffset2D) -> Self {
-        Offset2D {
-            x: offset.x,
-            y: offset.y,
-        }
-    }
 }
 
 impl<'a> From<&'a Offset2D> for vks::VkOffset2D {
@@ -6508,15 +5213,6 @@ pub struct Rect2D {
     pub extent: Extent2D,
 }
 
-impl<'a> From<&'a vks::VkRect2D> for Rect2D {
-    fn from(rect: &'a vks::VkRect2D) -> Self {
-        Rect2D {
-            offset: (&rect.offset).into(),
-            extent: (&rect.extent).into(),
-        }
-    }
-}
-
 impl<'a> From<&'a Rect2D> for vks::VkRect2D {
     fn from(rect: &'a Rect2D) -> Self {
         vks::VkRect2D {
@@ -6542,27 +5238,6 @@ pub struct PipelineViewportStateCreateInfo {
     pub viewports: Vec<Viewport>,
     pub scissors: Vec<Rect2D>,
     pub chain: Option<PipelineViewportStateCreateInfoChain>,
-}
-
-impl PipelineViewportStateCreateInfo {
-    pub unsafe fn from(create_info: &vks::VkPipelineViewportStateCreateInfo, with_chain: bool) -> Self {
-        let viewports = slice::from_raw_parts(create_info.pViewports, create_info.viewportCount as usize)
-            .iter()
-            .map(From::from)
-            .collect();
-
-        let scissors = slice::from_raw_parts(create_info.pScissors, create_info.scissorCount as usize)
-            .iter()
-            .map(From::from)
-            .collect();
-
-        PipelineViewportStateCreateInfo {
-            flags: create_info.flags,
-            viewports: viewports,
-            scissors: scissors,
-            chain: PipelineViewportStateCreateInfoChain::from_vks(create_info.pNext, with_chain),
-        }
-    }
 }
 
 #[derive(Debug)]
@@ -6622,25 +5297,6 @@ pub struct PipelineRasterizationStateCreateInfo {
     pub chain: Option<PipelineRasterizationStateCreateInfoChain>,
 }
 
-impl PipelineRasterizationStateCreateInfo {
-    pub unsafe fn from_vks(create_info: &vks::VkPipelineRasterizationStateCreateInfo, with_chain: bool) -> Self {
-        PipelineRasterizationStateCreateInfo {
-            flags: create_info.flags,
-            depth_clamp_enable: utils::from_vk_bool(create_info.depthClampEnable),
-            rasterizer_discard_enable: utils::from_vk_bool(create_info.rasterizerDiscardEnable),
-            polygon_mode: create_info.polygonMode.into(),
-            cull_mode: create_info.cullMode,
-            front_face: create_info.frontFace.into(),
-            depth_bias_enable: utils::from_vk_bool(create_info.depthBiasEnable),
-            depth_bias_constant_factor: create_info.depthBiasConstantFactor,
-            depth_bias_clamp: create_info.depthBiasClamp,
-            depth_bias_slope_factor: create_info.depthBiasSlopeFactor,
-            line_width: create_info.lineWidth,
-            chain: PipelineRasterizationStateCreateInfoChain::from_vks(create_info.pNext, with_chain),
-        }
-    }
-}
-
 #[derive(Debug)]
 struct VkPipelineRasterizationStateCreateInfoWrapper {
     pub vks_struct: vks::VkPipelineRasterizationStateCreateInfo,
@@ -6694,29 +5350,6 @@ pub struct PipelineMultisampleStateCreateInfo {
     pub chain: Option<PipelineMultisampleStateCreateInfoChain>,
 }
 
-impl PipelineMultisampleStateCreateInfo {
-    pub unsafe fn from_vks(create_info: &vks::VkPipelineMultisampleStateCreateInfo, with_chain: bool) -> Self {
-        let sample_mask = if !create_info.pSampleMask.is_null() {
-            let sample_mask_len = (create_info.rasterizationSamples.bits() as usize + 31) / 32;
-            Some(slice::from_raw_parts(create_info.pSampleMask, sample_mask_len).to_vec())
-        }
-        else {
-            None
-        };
-
-        PipelineMultisampleStateCreateInfo {
-            flags: create_info.flags,
-            rasterization_samples: create_info.rasterizationSamples,
-            sample_shading_enable: utils::from_vk_bool(create_info.sampleShadingEnable),
-            min_sample_shading: create_info.minSampleShading,
-            sample_mask: sample_mask,
-            alpha_to_coverage_enable: utils::from_vk_bool(create_info.alphaToCoverageEnable),
-            alpha_to_one_enable: utils::from_vk_bool(create_info.alphaToOneEnable),
-            chain: PipelineMultisampleStateCreateInfoChain::from_vks(create_info.pNext, with_chain),
-        }
-    }
-}
-
 #[derive(Debug)]
 struct VkPipelineMultisampleStateCreateInfoWrapper {
     pub vks_struct: vks::VkPipelineMultisampleStateCreateInfo,
@@ -6767,20 +5400,6 @@ pub struct StencilOpState {
     pub reference: u32,
 }
 
-impl<'a> From<&'a vks::VkStencilOpState> for StencilOpState {
-    fn from(state: &'a vks::VkStencilOpState) -> Self {
-        StencilOpState {
-            fail_op: state.failOp.into(),
-            pass_op: state.passOp.into(),
-            depth_fail_op: state.depthFailOp.into(),
-            compare_op: state.compareOp.into(),
-            compare_mask: state.compareMask,
-            write_mask: state.writeMask,
-            reference: state.reference,
-        }
-    }
-}
-
 impl<'a> From<&'a StencilOpState> for vks::VkStencilOpState {
     fn from(state: &'a StencilOpState) -> Self {
         vks::VkStencilOpState {
@@ -6818,24 +5437,6 @@ pub struct PipelineDepthStencilStateCreateInfo {
     pub min_depth_bounds: f32,
     pub max_depth_bounds: f32,
     pub chain: Option<PipelineDepthStencilStateCreateInfoChain>,
-}
-
-impl PipelineDepthStencilStateCreateInfo {
-    pub unsafe fn from_vks(create_info: &vks::VkPipelineDepthStencilStateCreateInfo, with_chain: bool) -> Self {
-        PipelineDepthStencilStateCreateInfo {
-            flags: create_info.flags,
-            depth_test_enable: utils::from_vk_bool(create_info.depthTestEnable),
-            depth_write_enable: utils::from_vk_bool(create_info.depthWriteEnable),
-            depth_compare_op: create_info.depthCompareOp.into(),
-            depth_bounds_test_enable: utils::from_vk_bool(create_info.depthBoundsTestEnable),
-            stencil_test_enable: utils::from_vk_bool(create_info.stencilTestEnable),
-            front: (&create_info.front).into(),
-            back: (&create_info.back).into(),
-            min_depth_bounds: create_info.minDepthBounds,
-            max_depth_bounds: create_info.maxDepthBounds,
-            chain: PipelineDepthStencilStateCreateInfoChain::from_vks(create_info.pNext, with_chain),
-        }
-    }
 }
 
 #[derive(Debug)]
@@ -6881,21 +5482,6 @@ pub struct PipelineColorBlendAttachmentState {
     pub color_write_mask: ColorComponentFlags,
 }
 
-impl<'a> From<&'a vks::VkPipelineColorBlendAttachmentState> for PipelineColorBlendAttachmentState {
-    fn from(state: &'a vks::VkPipelineColorBlendAttachmentState) -> Self {
-        PipelineColorBlendAttachmentState {
-            blend_enable: utils::from_vk_bool(state.blendEnable),
-            src_color_blend_factor: state.srcColorBlendFactor.into(),
-            dst_color_blend_factor: state.dstColorBlendFactor.into(),
-            color_blend_op: state.colorBlendOp.into(),
-            src_alpha_blend_factor: state.srcAlphaBlendFactor.into(),
-            dst_alpha_blend_factor: state.dstAlphaBlendFactor.into(),
-            alpha_blend_op: state.alphaBlendOp.into(),
-            color_write_mask: state.colorWriteMask,
-        }
-    }
-}
-
 impl<'a> From<&'a PipelineColorBlendAttachmentState> for vks::VkPipelineColorBlendAttachmentState {
     fn from(state: &'a PipelineColorBlendAttachmentState) -> Self {
         vks::VkPipelineColorBlendAttachmentState {
@@ -6929,29 +5515,6 @@ pub struct PipelineColorBlendStateCreateInfo {
     pub attachments: Option<Vec<PipelineColorBlendAttachmentState>>,
     pub blend_constants: [f32; 4],
     pub chain: Option<PipelineColorBlendStateCreateInfoChain>,
-}
-
-impl PipelineColorBlendStateCreateInfo {
-    pub unsafe fn from_vks(create_info: &vks::VkPipelineColorBlendStateCreateInfo, with_chain: bool) -> Self {
-        let attachments = if !create_info.pAttachments.is_null() {
-            Some(slice::from_raw_parts(create_info.pAttachments, create_info.attachmentCount as usize)
-                 .iter()
-                 .map(From::from)
-                 .collect())
-        }
-        else {
-            None
-        };
-
-        PipelineColorBlendStateCreateInfo {
-            flags: create_info.flags,
-            logic_op_enable: utils::from_vk_bool(create_info.logicOpEnable),
-            logic_op: create_info.logicOp.into(),
-            attachments: attachments,
-            blend_constants: create_info.blendConstants,
-            chain: PipelineColorBlendStateCreateInfoChain::from_vks(create_info.pNext, with_chain),
-        }
-    }
 }
 
 #[derive(Debug)]
@@ -7006,22 +5569,6 @@ pub struct PipelineDynamicStateCreateInfo {
     pub flags: PipelineDynamicStateCreateFlags,
     pub dynamic_states: Vec<DynamicState>,
     pub chain: Option<PipelineDynamicStateCreateInfoChain>,
-}
-
-impl PipelineDynamicStateCreateInfo {
-    pub unsafe fn from(create_info: &vks::VkPipelineDynamicStateCreateInfo, with_chain: bool) -> Self {
-        let dynamic_states = slice::from_raw_parts(create_info.pDynamicStates, create_info.dynamicStateCount as usize)
-            .iter()
-            .cloned()
-            .map(From::from)
-            .collect();
-
-        PipelineDynamicStateCreateInfo {
-            flags: create_info.flags,
-            dynamic_states: dynamic_states,
-            chain: PipelineDynamicStateCreateInfoChain::from_vks(create_info.pNext, with_chain),
-        }
-    }
 }
 
 #[derive(Debug)]
@@ -7293,16 +5840,6 @@ pub struct PushConstantRange {
     pub size: u32,
 }
 
-impl<'a> From<&'a vks::VkPushConstantRange> for PushConstantRange {
-    fn from(range: &'a vks::VkPushConstantRange) -> Self {
-        PushConstantRange {
-            stage_flags: range.stageFlags,
-            offset: range.offset,
-            size: range.size,
-        }
-    }
-}
-
 impl<'a> From<&'a PushConstantRange> for vks::VkPushConstantRange {
     fn from(range: &'a PushConstantRange) -> Self {
         vks::VkPushConstantRange {
@@ -7410,30 +5947,6 @@ pub struct SamplerCreateInfo {
     pub border_color: BorderColor,
     pub unnormalized_coordinates: bool,
     pub chain: Option<SamplerCreateInfoChain>,
-}
-
-impl SamplerCreateInfo {
-    pub unsafe fn from(create_info: &vks::VkSamplerCreateInfo, with_chain: bool) -> Self {
-        SamplerCreateInfo {
-            flags: create_info.flags,
-            mag_filter: create_info.magFilter.into(),
-            min_filter: create_info.minFilter.into(),
-            mipmap_mode: create_info.mipmapMode.into(),
-            address_mode_u: create_info.addressModeU.into(),
-            address_mode_v: create_info.addressModeV.into(),
-            address_mode_w: create_info.addressModeW.into(),
-            mip_lod_bias: create_info.mipLodBias,
-            anisotropy_enable: utils::from_vk_bool(create_info.anisotropyEnable),
-            max_anisotropy: create_info.maxAnisotropy,
-            compare_enable: utils::from_vk_bool(create_info.compareEnable),
-            compare_op: create_info.compareOp.into(),
-            min_lod: create_info.minLod,
-            max_lod: create_info.maxLod,
-            border_color: create_info.borderColor.into(),
-            unnormalized_coordinates: utils::from_vk_bool(create_info.unnormalizedCoordinates),
-            chain: SamplerCreateInfoChain::from_vks(create_info.pNext, with_chain),
-        }
-    }
 }
 
 #[derive(Debug)]
@@ -7575,15 +6088,6 @@ pub struct DescriptorPoolSize {
     pub descriptor_count: u32,
 }
 
-impl<'a> From<&'a vks::VkDescriptorPoolSize> for DescriptorPoolSize {
-    fn from(size: &'a vks::VkDescriptorPoolSize) -> Self {
-        DescriptorPoolSize {
-            descriptor_type: size.type_.into(),
-            descriptor_count: size.descriptorCount,
-        }
-    }
-}
-
 impl<'a> From<&'a DescriptorPoolSize> for vks::VkDescriptorPoolSize {
     fn from(size: &'a DescriptorPoolSize) -> Self {
         vks::VkDescriptorPoolSize {
@@ -7609,22 +6113,6 @@ pub struct DescriptorPoolCreateInfo {
     pub max_sets: u32,
     pub pool_sizes: Vec<DescriptorPoolSize>,
     pub chain: Option<DescriptorPoolCreateInfoChain>,
-}
-
-impl DescriptorPoolCreateInfo {
-    pub unsafe fn from_vks(create_info: &vks::VkDescriptorPoolCreateInfo, with_chain: bool) -> Self {
-        let pool_sizes = slice::from_raw_parts(create_info.pPoolSizes, create_info.poolSizeCount as usize)
-            .iter()
-            .map(From::from)
-            .collect();
-
-        DescriptorPoolCreateInfo {
-            flags: create_info.flags,
-            max_sets: create_info.maxSets,
-            pool_sizes: pool_sizes,
-            chain: DescriptorPoolCreateInfoChain::from_vks(create_info.pNext, with_chain),
-        }
-    }
 }
 
 #[derive(Debug)]
@@ -8001,22 +6489,6 @@ pub struct AttachmentDescription {
     pub final_layout: ImageLayout,
 }
 
-impl<'a> From<&'a vks::VkAttachmentDescription> for AttachmentDescription {
-    fn from(description: &'a vks::VkAttachmentDescription) -> Self {
-        AttachmentDescription {
-            flags: description.flags,
-            format: description.format.into(),
-            samples: description.samples,
-            load_op: description.loadOp.into(),
-            store_op: description.storeOp.into(),
-            stencil_load_op: description.stencilLoadOp.into(),
-            stencil_store_op: description.stencilStoreOp.into(),
-            initial_layout: description.initialLayout.into(),
-            final_layout: description.finalLayout.into(),
-        }
-    }
-}
-
 impl<'a> From<&'a AttachmentDescription> for vks::VkAttachmentDescription {
     fn from(description: &'a AttachmentDescription) -> Self {
         vks::VkAttachmentDescription {
@@ -8040,15 +6512,6 @@ pub struct AttachmentReference {
     pub layout: ImageLayout,
 }
 
-impl<'a> From<&'a vks::VkAttachmentReference> for AttachmentReference {
-    fn from(reference: &'a vks::VkAttachmentReference) -> Self {
-        AttachmentReference {
-            attachment: reference.attachment.into(),
-            layout: reference.layout.into(),
-        }
-    }
-}
-
 impl<'a> From<&'a AttachmentReference> for vks::VkAttachmentReference {
     fn from(reference: &'a AttachmentReference) -> Self {
         vks::VkAttachmentReference {
@@ -8068,64 +6531,6 @@ pub struct SubpassDescription {
     pub resolve_attachments: Option<Vec<AttachmentReference>>,
     pub depth_stencil_attachment: Option<AttachmentReference>,
     pub preserve_attachments: Option<Vec<u32>>,
-}
-
-impl SubpassDescription {
-    pub unsafe fn from_vks(description: &vks::VkSubpassDescription) -> Self {
-        let input_attachments = if !description.pInputAttachments.is_null() {
-            Some(slice::from_raw_parts(description.pInputAttachments, description.inputAttachmentCount as usize)
-                 .iter()
-                 .map(From::from)
-                 .collect())
-        }
-        else {
-            None
-        };
-
-        let color_attachments = if !description.pColorAttachments.is_null() {
-            Some(slice::from_raw_parts(description.pColorAttachments, description.colorAttachmentCount as usize)
-                 .iter()
-                 .map(From::from)
-                 .collect())
-        }
-        else {
-            None
-        };
-
-        let resolve_attachments = if !description.pResolveAttachments.is_null() {
-            Some(slice::from_raw_parts(description.pResolveAttachments, description.colorAttachmentCount as usize)
-                 .iter()
-                 .map(From::from)
-                 .collect())
-        }
-        else {
-            None
-        };
-
-        let depth_stencil_attachment = if !description.pDepthStencilAttachment.is_null() {
-            Some((&*description.pDepthStencilAttachment).into())
-        }
-        else {
-            None
-        };
-
-        let preserve_attachments = if !description.pPreserveAttachments.is_null() {
-            Some(slice::from_raw_parts(description.pPreserveAttachments, description.preserveAttachmentCount as usize).to_vec())
-        }
-        else {
-            None
-        };
-
-        SubpassDescription {
-            flags: description.flags,
-            pipeline_bind_point: description.pipelineBindPoint.into(),
-            input_attachments: input_attachments,
-            color_attachments: color_attachments,
-            resolve_attachments: resolve_attachments,
-            depth_stencil_attachment: depth_stencil_attachment,
-            preserve_attachments: preserve_attachments,
-        }
-    }
 }
 
 #[derive(Debug)]
@@ -8219,20 +6624,6 @@ pub struct SubpassDependency {
     pub dependency_flags: DependencyFlags,
 }
 
-impl<'a> From<&'a vks::VkSubpassDependency> for SubpassDependency {
-    fn from(dependency: &'a vks::VkSubpassDependency) -> Self {
-        SubpassDependency {
-            src_subpass: dependency.srcSubpass.into(),
-            dst_subpass: dependency.dstSubpass.into(),
-            src_stage_mask: dependency.srcStageMask,
-            dst_stage_mask: dependency.dstStageMask,
-            src_access_mask: dependency.srcAccessMask,
-            dst_access_mask: dependency.dstAccessMask,
-            dependency_flags: dependency.dependencyFlags,
-        }
-    }
-}
-
 impl<'a> From<&'a SubpassDependency> for vks::VkSubpassDependency {
     fn from(dependency: &'a SubpassDependency) -> Self {
         vks::VkSubpassDependency {
@@ -8264,43 +6655,6 @@ pub struct RenderPassCreateInfo {
     pub subpasses: Vec<SubpassDescription>,
     pub dependencies: Option<Vec<SubpassDependency>>,
     pub chain: Option<RenderPassCreateInfoChain>,
-}
-
-impl RenderPassCreateInfo {
-    pub unsafe fn from(create_info: &vks::VkRenderPassCreateInfo, with_chain: bool) -> Self {
-        let attachments = if !create_info.pAttachments.is_null() {
-            Some(slice::from_raw_parts(create_info.pAttachments, create_info.attachmentCount as usize)
-                 .iter()
-                 .map(From::from)
-                 .collect())
-        }
-        else {
-            None
-        };
-
-        let subpasses = slice::from_raw_parts(create_info.pSubpasses, create_info.subpassCount as usize)
-            .iter()
-            .map(|s| SubpassDescription::from_vks(s))
-            .collect();
-
-        let dependencies = if !create_info.pDependencies.is_null() {
-            Some(slice::from_raw_parts(create_info.pDependencies, create_info.dependencyCount as usize)
-                 .iter()
-                 .map(From::from)
-                 .collect())
-        }
-        else {
-            None
-        };
-
-        RenderPassCreateInfo {
-            flags: create_info.flags,
-            attachments: attachments,
-            subpasses: subpasses,
-            dependencies: dependencies,
-            chain: RenderPassCreateInfoChain::from_vks(create_info.pNext, with_chain),
-        }
-    }
 }
 
 #[derive(Debug)]
@@ -8374,16 +6728,6 @@ pub struct CommandPoolCreateInfo {
     pub flags: CommandPoolCreateFlags,
     pub queue_family_index: u32,
     pub chain: Option<CommandPoolCreateInfoChain>,
-}
-
-impl CommandPoolCreateInfo {
-    pub unsafe fn from(create_info: &vks::VkCommandPoolCreateInfo, with_chain: bool) -> Self {
-        CommandPoolCreateInfo {
-            flags: create_info.flags,
-            queue_family_index: create_info.queueFamilyIndex,
-            chain: CommandPoolCreateInfoChain::from_vks(create_info.pNext, with_chain),
-        }
-    }
 }
 
 #[derive(Debug)]
@@ -8570,16 +6914,6 @@ pub struct BufferCopy {
     pub size: u64,
 }
 
-impl<'a> From<&'a vks::VkBufferCopy> for BufferCopy {
-    fn from(copy: &'a vks::VkBufferCopy) -> Self {
-        BufferCopy {
-            src_offset: copy.srcOffset,
-            dst_offset: copy.dstOffset,
-            size: copy.size,
-        }
-    }
-}
-
 impl<'a> From<&'a BufferCopy> for vks::VkBufferCopy {
     fn from(copy: &'a BufferCopy) -> Self {
         vks::VkBufferCopy {
@@ -8597,17 +6931,6 @@ pub struct ImageSubresourceLayers {
     pub mip_level: u32,
     pub base_array_layer: u32,
     pub layer_count: u32,
-}
-
-impl<'a> From<&'a vks::VkImageSubresourceLayers> for ImageSubresourceLayers {
-    fn from(layers: &'a vks::VkImageSubresourceLayers) -> Self {
-        ImageSubresourceLayers {
-            aspect_mask: layers.aspectMask,
-            mip_level: layers.mipLevel,
-            base_array_layer: layers.baseArrayLayer,
-            layer_count: layers.layerCount,
-        }
-    }
 }
 
 impl<'a> From<&'a ImageSubresourceLayers> for vks::VkImageSubresourceLayers {
@@ -8631,18 +6954,6 @@ pub struct ImageCopy {
     pub extent: Extent3D,
 }
 
-impl<'a> From<&'a vks::VkImageCopy> for ImageCopy {
-    fn from(copy: &'a vks::VkImageCopy) -> Self {
-        ImageCopy {
-            src_subresource: (&copy.srcSubresource).into(),
-            src_offset: (&copy.srcOffset).into(),
-            dst_subresource: (&copy.dstSubresource).into(),
-            dst_offset: (&copy.dstOffset).into(),
-            extent: (&copy.extent).into(),
-        }
-    }
-}
-
 impl<'a> From<&'a ImageCopy> for vks::VkImageCopy {
     fn from(copy: &'a ImageCopy) -> Self {
         vks::VkImageCopy {
@@ -8662,20 +6973,6 @@ pub struct ImageBlit {
     pub src_offsets: [Offset3D; 2],
     pub dst_subresource: ImageSubresourceLayers,
     pub dst_offsets: [Offset3D; 2],
-}
-
-impl<'a> From<&'a vks::VkImageBlit> for ImageBlit {
-    fn from(blit: &'a vks::VkImageBlit) -> Self {
-        let src_offsets = [(&blit.srcOffsets[0]).into(), (&blit.srcOffsets[1]).into()];
-        let dst_offsets = [(&blit.dstOffsets[0]).into(), (&blit.dstOffsets[1]).into()];
-
-        ImageBlit {
-            src_subresource: (&blit.srcSubresource).into(),
-            src_offsets: src_offsets,
-            dst_subresource: (&blit.dstSubresource).into(),
-            dst_offsets: dst_offsets,
-        }
-    }
 }
 
 impl<'a> From<&'a ImageBlit> for vks::VkImageBlit {
@@ -8701,19 +6998,6 @@ pub struct BufferImageCopy {
     pub image_subresource: ImageSubresourceLayers,
     pub image_offset: Offset3D,
     pub image_extent: Extent3D,
-}
-
-impl<'a> From<&'a vks::VkBufferImageCopy> for BufferImageCopy {
-    fn from(copy: &'a vks::VkBufferImageCopy) -> Self {
-        BufferImageCopy {
-            buffer_offset: copy.bufferOffset,
-            buffer_row_length: copy.bufferRowLength,
-            buffer_image_height: copy.bufferImageHeight,
-            image_subresource: (&copy.imageSubresource).into(),
-            image_offset: (&copy.imageOffset).into(),
-            image_extent: (&copy.imageExtent).into(),
-        }
-    }
 }
 
 impl<'a> From<&'a BufferImageCopy> for vks::VkBufferImageCopy {
@@ -8758,15 +7042,6 @@ impl<'a> From<&'a ClearColorValue> for vks::VkClearColorValue {
 pub struct ClearDepthStencilValue {
     pub depth: f32,
     pub stencil: u32,
-}
-
-impl<'a> From<&'a vks::VkClearDepthStencilValue> for ClearDepthStencilValue {
-    fn from(value: &'a vks::VkClearDepthStencilValue) -> Self {
-        ClearDepthStencilValue {
-            depth: value.depth,
-            stencil: value.stencil,
-        }
-    }
 }
 
 impl<'a> From<&'a ClearDepthStencilValue> for vks::VkClearDepthStencilValue {
@@ -8826,16 +7101,6 @@ pub struct ClearRect {
     pub layer_count: u32,
 }
 
-impl<'a> From<&'a vks::VkClearRect> for ClearRect {
-    fn from(rect: &'a vks::VkClearRect) -> Self {
-        ClearRect {
-            rect: (&rect.rect).into(),
-            base_array_layer: rect.baseArrayLayer,
-            layer_count: rect.layerCount,
-        }
-    }
-}
-
 impl<'a> From<&'a ClearRect> for vks::VkClearRect {
     fn from(rect: &'a ClearRect) -> Self {
         vks::VkClearRect {
@@ -8854,18 +7119,6 @@ pub struct ImageResolve {
     pub dst_subresource: ImageSubresourceLayers,
     pub dst_offset: Offset3D,
     pub extent: Extent3D,
-}
-
-impl<'a> From<&'a vks::VkImageResolve> for ImageResolve {
-    fn from(resolve: &'a vks::VkImageResolve) -> Self {
-        ImageResolve {
-            src_subresource: (&resolve.srcSubresource).into(),
-            src_offset: (&resolve.srcOffset).into(),
-            dst_subresource: (&resolve.dstSubresource).into(),
-            dst_offset: (&resolve.dstOffset).into(),
-            extent: (&resolve.extent).into(),
-        }
-    }
 }
 
 impl<'a> From<&'a ImageResolve> for vks::VkImageResolve {
@@ -8895,16 +7148,6 @@ pub struct MemoryBarrier {
     pub src_access_mask: AccessFlags,
     pub dst_access_mask: AccessFlags,
     pub chain: Option<MemoryBarrierChain>,
-}
-
-impl MemoryBarrier {
-    pub unsafe fn from(barrier: &vks::VkMemoryBarrier, with_chain: bool) -> Self {
-        MemoryBarrier {
-            src_access_mask: barrier.srcAccessMask,
-            dst_access_mask: barrier.dstAccessMask,
-            chain: MemoryBarrierChain::from_vks(barrier.pNext, with_chain),
-        }
-    }
 }
 
 #[derive(Debug)]
@@ -9100,26 +7343,6 @@ pub struct DispatchIndirectCommand {
     pub z: u32,
 }
 
-impl<'a> From<&'a vks::VkDispatchIndirectCommand> for DispatchIndirectCommand {
-    fn from(command: &'a vks::VkDispatchIndirectCommand) -> Self {
-        DispatchIndirectCommand {
-            x: command.x,
-            y: command.y,
-            z: command.z,
-        }
-    }
-}
-
-impl<'a> From<&'a DispatchIndirectCommand> for vks::VkDispatchIndirectCommand {
-    fn from(command: &'a DispatchIndirectCommand) -> Self {
-        vks::VkDispatchIndirectCommand {
-            x: command.x,
-            y: command.y,
-            z: command.z,
-        }
-    }
-}
-
 /// See [`VkDrawIndexedIndirectCommand`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDrawIndexedIndirectCommand)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct DrawIndexedIndirectCommand {
@@ -9130,30 +7353,6 @@ pub struct DrawIndexedIndirectCommand {
     pub first_instance: u32,
 }
 
-impl<'a> From<&'a vks::VkDrawIndexedIndirectCommand> for DrawIndexedIndirectCommand {
-    fn from(command: &'a vks::VkDrawIndexedIndirectCommand) -> Self {
-        DrawIndexedIndirectCommand {
-            index_count: command.indexCount,
-            instance_count: command.instanceCount,
-            first_index: command.firstIndex,
-            vertex_offset: command.vertexOffset,
-            first_instance: command.firstInstance,
-        }
-    }
-}
-
-impl<'a> From<&'a DrawIndexedIndirectCommand> for vks::VkDrawIndexedIndirectCommand {
-    fn from(command: &'a DrawIndexedIndirectCommand) -> Self {
-        vks::VkDrawIndexedIndirectCommand {
-            indexCount: command.index_count,
-            instanceCount: command.instance_count,
-            firstIndex: command.first_index,
-            vertexOffset: command.vertex_offset,
-            firstInstance: command.first_instance,
-        }
-    }
-}
-
 /// See [`VkDrawIndirectCommand`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDrawIndirectCommand)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct DrawIndirectCommand {
@@ -9161,26 +7360,4 @@ pub struct DrawIndirectCommand {
     pub instance_count: u32,
     pub first_vertex: u32,
     pub first_instance: u32,
-}
-
-impl<'a> From<&'a vks::VkDrawIndirectCommand> for DrawIndirectCommand {
-    fn from(command: &'a vks::VkDrawIndirectCommand) -> Self {
-        DrawIndirectCommand {
-            vertex_count: command.vertexCount,
-            instance_count: command.instanceCount,
-            first_vertex: command.firstVertex,
-            first_instance: command.firstInstance,
-        }
-    }
-}
-
-impl<'a> From<&'a DrawIndirectCommand> for vks::VkDrawIndirectCommand {
-    fn from(command: &'a DrawIndirectCommand) -> Self {
-        vks::VkDrawIndirectCommand {
-            vertexCount: command.vertex_count,
-            instanceCount: command.instance_count,
-            firstVertex: command.first_vertex,
-            firstInstance: command.first_instance,
-        }
-    }
 }

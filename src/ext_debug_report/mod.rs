@@ -17,12 +17,9 @@
 mod callback_helper;
 mod debug_report_callback;
 
-use libc::c_void;
 use self::callback_helper::CallbackHelper;
-use std::ffi::CString;
 use std::fmt;
 use std::sync::Arc;
-use utils;
 use vks;
 
 pub use self::debug_report_callback::DebugReportCallbackExt;
@@ -194,56 +191,6 @@ impl PartialEq for DebugReportCallbackCreateInfoExt {
     }
 }
 
-impl DebugReportCallbackCreateInfoExt {
-    pub unsafe fn from_vks(create_info: &vks::VkDebugReportCallbackCreateInfoEXT, with_chain: bool) -> Self {
-        DebugReportCallbackCreateInfoExt {
-            flags: create_info.flags,
-            callback: Arc::new(DebugReportCallbacksExtFromVksHelper {
-                callback: create_info.pfnCallback,
-                user_data: create_info.pUserData,
-            }),
-            chain: DebugReportCallbackCreateInfoChainExt::from_vks(create_info.pNext, with_chain),
-        }
-    }
-}
-
-struct DebugReportCallbacksExtFromVksHelper {
-    callback: vks::PFN_vkDebugReportCallbackEXT,
-    user_data: *mut c_void,
-}
-
-unsafe impl Send for DebugReportCallbacksExtFromVksHelper { }
-
-unsafe impl Sync for DebugReportCallbacksExtFromVksHelper { }
-
-impl fmt::Debug for DebugReportCallbacksExtFromVksHelper {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.debug_struct("DebugReportCallbacksExtFromVksHelper")
-            .field("callback", &(self.callback as *mut c_void))
-            .field("user_data", &self.user_data)
-            .finish()
-    }
-}
-
-impl DebugReportCallbacksExt for DebugReportCallbacksExtFromVksHelper {
-    fn callback(&self, flags: DebugReportFlagsExt, object_type: DebugReportObjectTypeExt, object: u64, location: usize, message_code: i32, layer_prefix: Option<&str>, message: Option<&str>) -> bool {
-        unsafe {
-            let layer_prefix = match layer_prefix {
-                Some(layer_prefix) => CString::new(layer_prefix).unwrap(),
-                None => CString::new(Vec::new()).unwrap(),
-            };
-
-            let message = match message {
-                Some(message) => CString::new(message).unwrap(),
-                None => CString::new(Vec::new()).unwrap(),
-            };
-
-            let res = (self.callback)(flags, object_type.into(), object, location, message_code, layer_prefix.as_ptr(), message.as_ptr(), self.user_data);
-            utils::from_vk_bool(res)
-        }
-    }
-}
-
 #[derive(Debug)]
 pub(crate) struct VkDebugReportCallbackCreateInfoEXTWrapper {
     pub vks_struct: vks::VkDebugReportCallbackCreateInfoEXT,
@@ -269,7 +216,3 @@ impl VkDebugReportCallbackCreateInfoEXTWrapper {
         }
     }
 }
-
-// extern "system" {
-
-// }
