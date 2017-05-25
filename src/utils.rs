@@ -33,11 +33,9 @@ pub fn to_vk_bool(v: bool) -> vks::VkBool32 {
 }
 
 #[inline]
-pub fn string_from_cstr(cstr: *const c_char) -> Option<String> {
+pub unsafe fn string_from_cstr(cstr: *const c_char) -> Option<String> {
     if !cstr.is_null() {
-        unsafe {
-            Some(CStr::from_ptr(cstr).to_str().unwrap().to_owned())
-        }
+        Some(CStr::from_ptr(cstr).to_str().unwrap().to_owned())
     }
     else {
         None
