@@ -1042,6 +1042,10 @@ pub enum Error {
     /// See extension [`VK_EXT_debug_report`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_EXT_debug_report)
     ValidationFailedExt,
 
+    #[cfg(feature = "khr_swapchain_67")]
+    /// See extension [`VK_KHR_swapchain`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_swapchain)
+    OutOfDateKhr,
+
     Unknown(vks::VkResult),
 }
 
@@ -1075,6 +1079,9 @@ impl ::std::error::Error for Error {
             #[cfg(feature = "ext_debug_report_1")]
             Error::ValidationFailedExt => "ValidationFailed",
 
+            #[cfg(feature = "khr_swapchain_67")]
+            Error::OutOfDateKhr => "OutOfDate",
+
             Error::Unknown(_) => "unknown error",
         }
     }
@@ -1105,6 +1112,9 @@ impl From<vks::VkResult> for Error {
 
             #[cfg(feature = "ext_debug_report_1")]
             vks::VK_ERROR_VALIDATION_FAILED_EXT => Error::ValidationFailedExt,
+
+            #[cfg(feature = "khr_swapchain_67")]
+            vks::VK_ERROR_OUT_OF_DATE_KHR => Error::OutOfDateKhr,
 
             _ => Error::Unknown(res),
         }
@@ -1841,6 +1851,11 @@ pub enum ImageLayout {
     TransferSrcOptimal,
     TransferDstOptimal,
     Preinitialized,
+
+    #[cfg(feature = "khr_swapchain_67")]
+    /// See extension [`VK_KHR_swapchain`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_swapchain)
+    PresentSrcKhr,
+
     Unknown(vks::VkImageLayout),
 }
 
@@ -1856,6 +1871,10 @@ impl From<ImageLayout> for vks::VkImageLayout {
             ImageLayout::TransferSrcOptimal => vks::VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
             ImageLayout::TransferDstOptimal => vks::VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
             ImageLayout::Preinitialized => vks::VK_IMAGE_LAYOUT_PREINITIALIZED,
+
+            #[cfg(feature = "khr_swapchain_67")]
+            ImageLayout::PresentSrcKhr => vks::VK_IMAGE_LAYOUT_PRESENT_SRC_KHR,
+
             ImageLayout::Unknown(layout) => layout,
         }
     }
@@ -3529,17 +3548,28 @@ impl ExactSizeIterator for InstanceExtensionPropertiesIterator {
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub enum DeviceExtension {
     Unknown(String),
+
+    #[cfg(feature = "khr_swapchain_67")]
+    KhrSwapchain,
 }
 
 impl<'a> From<&'a str> for DeviceExtension {
     fn from(name: &'a str) -> Self {
-        DeviceExtension::Unknown(name.to_owned())
+        match name {
+            #[cfg(feature = "khr_swapchain_67")]
+            vks::VK_KHR_SWAPCHAIN_EXTENSION_NAME_STR => DeviceExtension::KhrSwapchain,
+
+            _ => DeviceExtension::Unknown(name.to_owned())
+        }
     }
 }
 
 impl From<DeviceExtension> for String {
     fn from(extension: DeviceExtension) -> Self {
         match extension {
+            #[cfg(feature = "khr_swapchain_67")]
+            DeviceExtension::KhrSwapchain => vks::VK_KHR_SWAPCHAIN_EXTENSION_NAME_STR.to_owned(),
+
             DeviceExtension::Unknown(name) => name,
         }
     }

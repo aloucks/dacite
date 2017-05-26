@@ -37,6 +37,15 @@ impl From<vks::VkColorSpaceKHR> for ColorSpaceKhr {
     }
 }
 
+impl From<ColorSpaceKhr> for vks::VkColorSpaceKHR {
+    fn from(color_space: ColorSpaceKhr) -> Self {
+        match color_space {
+            ColorSpaceKhr::SRGBNonLinear => vks::VK_COLORSPACE_SRGB_NONLINEAR_KHR,
+            ColorSpaceKhr::Unknown(color_space) => color_space,
+        }
+    }
+}
+
 /// See [`VkPresentModeKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPresentModeKHR)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum PresentModeKhr {
@@ -55,6 +64,18 @@ impl From<vks::VkPresentModeKHR> for PresentModeKhr {
             vks::VK_PRESENT_MODE_FIFO_KHR => PresentModeKhr::Fifo,
             vks::VK_PRESENT_MODE_FIFO_RELAXED_KHR => PresentModeKhr::FifoRelaxed,
             _ => PresentModeKhr::Unknown(mode),
+        }
+    }
+}
+
+impl From<PresentModeKhr> for vks::VkPresentModeKHR {
+    fn from(mode: PresentModeKhr) -> Self {
+        match mode {
+            PresentModeKhr::Immediate => vks::VK_PRESENT_MODE_IMMEDIATE_KHR,
+            PresentModeKhr::Mailbox => vks::VK_PRESENT_MODE_MAILBOX_KHR,
+            PresentModeKhr::Fifo => vks::VK_PRESENT_MODE_FIFO_KHR,
+            PresentModeKhr::FifoRelaxed => vks::VK_PRESENT_MODE_FIFO_RELAXED_KHR,
+            PresentModeKhr::Unknown(mode) => mode,
         }
     }
 }

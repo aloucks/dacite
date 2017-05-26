@@ -46,3 +46,6 @@ pub mod ext_debug_report;
 
 #[cfg(feature = "khr_display_21")]
 pub mod khr_display;
+
+#[cfg(feature = "khr_swapchain_67")]
+pub mod khr_swapchain;

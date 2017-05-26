@@ -44,6 +44,9 @@ use std::sync::Arc;
 use vks;
 use {TryDestroyError, TryDestroyErrorKind, VulkanObject};
 
+#[cfg(feature = "khr_swapchain_67")]
+use khr_swapchain;
+
 /// See [`VkDevice`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDevice)
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct Device(Arc<Inner>);
@@ -68,12 +71,7 @@ impl VulkanObject for Device {
 }
 
 impl Device {
-    pub(crate) fn new(handle: vks::VkDevice, instance: Instance, allocator: Option<AllocatorHelper>) -> Self {
-        let mut loader = vks::DeviceProcAddrLoader::from_get_device_proc_addr(instance.loader().core.vkGetDeviceProcAddr);
-        unsafe {
-            loader.load_core(handle);
-        }
-
+    pub(crate) fn new(handle: vks::VkDevice, instance: Instance, allocator: Option<AllocatorHelper>, loader: vks::DeviceProcAddrLoader) -> Self {
         Device(Arc::new(Inner {
             handle: handle,
             instance: instance,
@@ -540,6 +538,27 @@ impl Device {
 
         if res == vks::VK_SUCCESS {
             Ok(())
+        }
+        else {
+            Err(res.into())
+        }
+    }
+
+    #[cfg(feature = "khr_swapchain_67")]
+    /// See [`vkCreateSwapchainKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCreateSwapchainKHR)
+    /// and extension [`VK_KHR_swapchain`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_swapchain)
+    pub fn create_swapchain_khr(&self, create_info: &khr_swapchain::SwapchainCreateInfoKhr, allocator: Option<Box<core::Allocator>>) -> Result<khr_swapchain::SwapchainKhr, core::Error> {
+        let create_info_wrapper = khr_swapchain::VkSwapchainCreateInfoKHRWrapper::new(create_info, true);
+        let allocator_helper = allocator.map(AllocatorHelper::new);
+        let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), AllocatorHelper::callbacks);
+
+        let mut swapchain = ptr::null_mut();
+        let res = unsafe {
+            (self.loader().khr_swapchain.vkCreateSwapchainKHR)(self.handle(), &create_info_wrapper.vks_struct, allocation_callbacks, &mut swapchain)
+        };
+
+        if res == vks::VK_SUCCESS {
+            Ok(khr_swapchain::SwapchainKhr::new(swapchain, self.clone(), allocator_helper))
         }
         else {
             Err(res.into())

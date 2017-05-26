@@ -229,18 +229,34 @@ impl PhysicalDevice {
     pub fn create_device(&self, create_info: &core::DeviceCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<Device, core::Error> {
         let allocator_helper = allocator.map(AllocatorHelper::new);
         let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), AllocatorHelper::callbacks);
-        let create_info = core::VkDeviceCreateInfoWrapper::new(create_info, true);
+        let create_info_wrapper = core::VkDeviceCreateInfoWrapper::new(create_info, true);
 
         let mut device = ptr::null_mut();
         let res = unsafe {
-            (self.loader().core.vkCreateDevice)(self.handle, &create_info.vks_struct, allocation_callbacks, &mut device)
+            (self.loader().core.vkCreateDevice)(self.handle, &create_info_wrapper.vks_struct, allocation_callbacks, &mut device)
         };
 
-        if res != vks::VK_SUCCESS {
-            return Err(res.into());
-        }
+        if res == vks::VK_SUCCESS {
+            let mut loader = vks::DeviceProcAddrLoader::from_get_device_proc_addr(self.loader().core.vkGetDeviceProcAddr);
 
-        Ok(Device::new(device, self.instance.clone(), allocator_helper))
+            unsafe {
+                loader.load_core(device);
+
+                for device_extension in &create_info.enabled_extensions {
+                    match *device_extension {
+                        #[cfg(feature = "khr_swapchain_67")]
+                        core::DeviceExtension::KhrSwapchain => loader.load_khr_swapchain(device),
+
+                        core::DeviceExtension::Unknown(_) => { },
+                    }
+                }
+            }
+
+            Ok(Device::new(device, self.instance.clone(), allocator_helper, loader))
+        }
+        else {
+            Err(res.into())
+        }
     }
 
     #[cfg(feature = "khr_surface_25")]

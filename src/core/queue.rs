@@ -19,6 +19,9 @@ use std::ptr;
 use vks;
 use {TryDestroyError, TryDestroyErrorKind, VulkanObject};
 
+#[cfg(feature = "khr_swapchain_67")]
+use khr_swapchain;
+
 /// See [`VkQueue`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueue)
 #[derive(Debug, Clone)]
 pub struct Queue {
@@ -148,6 +151,34 @@ impl Queue {
         }
         else {
             Err(res.into())
+        }
+    }
+
+    #[cfg(feature = "khr_swapchain_67")]
+    /// See [`vkQueuePresentKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkQueuePresentKHR)
+    /// and extension [`VK_KHR_swapchain`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_swapchain)
+    pub fn queue_present_khr(&self, present_info: &mut khr_swapchain::PresentInfoKhr) -> Result<khr_swapchain::QueuePresentResultKhr, core::Error> {
+        let present_info_wrapper = khr_swapchain::VkPresentInfoKHRWrapper::new(present_info, true);
+
+        let res = unsafe {
+            (self.loader().khr_swapchain.vkQueuePresentKHR)(self.handle, &present_info_wrapper.vks_struct)
+        };
+
+        if let Some(ref mut results) = present_info.results {
+            results.clear();
+            for &result in &present_info_wrapper.results.unwrap() {
+                match result {
+                    vks::VK_SUCCESS => results.push(Ok(khr_swapchain::QueuePresentResultKhr::Ok)),
+                    vks::VK_SUBOPTIMAL_KHR => results.push(Ok(khr_swapchain::QueuePresentResultKhr::Suboptimal)),
+                    _ => results.push(Err(result.into())),
+                }
+            }
+        }
+
+        match res {
+            vks::VK_SUCCESS => Ok(khr_swapchain::QueuePresentResultKhr::Ok),
+            vks::VK_SUBOPTIMAL_KHR => Ok(khr_swapchain::QueuePresentResultKhr::Suboptimal),
+            _ => Err(res.into()),
         }
     }
 }

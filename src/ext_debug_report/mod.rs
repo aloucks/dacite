@@ -59,6 +59,10 @@ pub enum DebugReportObjectTypeExt {
     /// See extension [`VK_KHR_surface`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_surface)
     SurfaceKhr,
 
+    #[cfg(feature = "khr_swapchain_67")]
+    /// See extension [`VK_KHR_swapchain`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_swapchain)
+    SwapchainKhr,
+
     UnknownValue(vks::VkDebugReportObjectTypeEXT),
 }
 
@@ -95,6 +99,9 @@ impl From<vks::VkDebugReportObjectTypeEXT> for DebugReportObjectTypeExt {
 
             #[cfg(feature = "khr_surface_25")]
             vks::VK_DEBUG_REPORT_OBJECT_TYPE_SURFACE_KHR_EXT => DebugReportObjectTypeExt::SurfaceKhr,
+
+            #[cfg(feature = "khr_swapchain_67")]
+            vks::VK_DEBUG_REPORT_OBJECT_TYPE_SWAPCHAIN_KHR_EXT => DebugReportObjectTypeExt::SwapchainKhr,
 
             _ => DebugReportObjectTypeExt::UnknownValue(ty),
         }
@@ -134,6 +141,9 @@ impl From<DebugReportObjectTypeExt> for vks::VkDebugReportObjectTypeEXT {
 
             #[cfg(feature = "khr_surface_25")]
             DebugReportObjectTypeExt::SurfaceKhr => vks::VK_DEBUG_REPORT_OBJECT_TYPE_SURFACE_KHR_EXT,
+
+            #[cfg(feature = "khr_swapchain_67")]
+            DebugReportObjectTypeExt::SwapchainKhr => vks::VK_DEBUG_REPORT_OBJECT_TYPE_SWAPCHAIN_KHR_EXT,
 
             DebugReportObjectTypeExt::UnknownValue(ty) => ty,
         }
