@@ -11,12 +11,19 @@ license = "ISC"
 [badges]
 gitlab = { repository = "dennis-hamester/dacite" }
 
+[[example]]
+name = "triangle"
+required-features = [ "khr_surface_25", "khr_swapchain_67" ]
+
 [dependencies]
 libc = "0.2"
 
 [dependencies.vks]
 version = "0.16"
 default-features = false
+
+[dev-dependencies]
+winit = "0.6"
 
 [features]
 default = [ "vk_1_0_3" ]
