@@ -124,11 +124,11 @@ impl DisplayModePropertiesKhr {
 
 chain_struct! {
     #[derive(Debug, Clone, Default, PartialEq)]
-    pub struct DisplayModeCreateInfoKhrChain {
+    pub struct DisplayModeCreateInfoChainKhr {
     }
 
     #[derive(Debug)]
-    struct DisplayModeCreateInfoKhrChainWrapper;
+    struct DisplayModeCreateInfoChainKhrWrapper;
 }
 
 /// See [`VkDisplayModeCreateInfoKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDisplayModeCreateInfoKHR)
@@ -136,18 +136,18 @@ chain_struct! {
 pub struct DisplayModeCreateInfoKhr {
     pub flags: DisplayModeCreateFlagsKhr,
     pub parameters: DisplayModeParametersKhr,
-    pub chain: Option<DisplayModeCreateInfoKhrChain>,
+    pub chain: Option<DisplayModeCreateInfoChainKhr>,
 }
 
 #[derive(Debug)]
 struct VkDisplayModeCreateInfoKHRWrapper {
     pub vks_struct: vks::VkDisplayModeCreateInfoKHR,
-    chain: Option<DisplayModeCreateInfoKhrChainWrapper>,
+    chain: Option<DisplayModeCreateInfoChainKhrWrapper>,
 }
 
 impl VkDisplayModeCreateInfoKHRWrapper {
     fn new(create_info: &DisplayModeCreateInfoKhr, with_chain: bool) -> Self {
-        let (pnext, chain) = DisplayModeCreateInfoKhrChainWrapper::new_optional(&create_info.chain, with_chain);
+        let (pnext, chain) = DisplayModeCreateInfoChainKhrWrapper::new_optional(&create_info.chain, with_chain);
 
         VkDisplayModeCreateInfoKHRWrapper {
             vks_struct: vks::VkDisplayModeCreateInfoKHR {
@@ -216,11 +216,11 @@ impl DisplayPlanePropertiesKhr {
 
 chain_struct! {
     #[derive(Debug, Clone, Default, PartialEq)]
-    pub struct DisplaySurfaceCreateInfoKhrChain {
+    pub struct DisplaySurfaceCreateInfoChainKhr {
     }
 
     #[derive(Debug)]
-    struct DisplaySurfaceCreateInfoKhrChainWrapper;
+    struct DisplaySurfaceCreateInfoChainKhrWrapper;
 }
 
 /// See [`VkDisplaySurfaceCreateInfoKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDisplaySurfaceCreateInfoKHR)
@@ -234,18 +234,18 @@ pub struct DisplaySurfaceCreateInfoKhr {
     pub global_alpha: f32,
     pub alpha_mode: DisplayPlaneAlphaFlagBitsKhr,
     pub image_extent: core::Extent2D,
-    pub chain: Option<DisplaySurfaceCreateInfoKhrChain>,
+    pub chain: Option<DisplaySurfaceCreateInfoChainKhr>,
 }
 
 #[derive(Debug)]
 pub(crate) struct VkDisplaySurfaceCreateInfoKHRWrapper {
     pub vks_struct: vks::VkDisplaySurfaceCreateInfoKHR,
-    chain: Option<DisplaySurfaceCreateInfoKhrChainWrapper>,
+    chain: Option<DisplaySurfaceCreateInfoChainKhrWrapper>,
 }
 
 impl VkDisplaySurfaceCreateInfoKHRWrapper {
     pub fn new(create_info: &DisplaySurfaceCreateInfoKhr, with_chain: bool) -> Self {
-        let (pnext, chain) = DisplaySurfaceCreateInfoKhrChainWrapper::new_optional(&create_info.chain, with_chain);
+        let (pnext, chain) = DisplaySurfaceCreateInfoChainKhrWrapper::new_optional(&create_info.chain, with_chain);
 
         VkDisplaySurfaceCreateInfoKHRWrapper {
             vks_struct: vks::VkDisplaySurfaceCreateInfoKHR {

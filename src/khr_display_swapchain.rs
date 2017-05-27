@@ -20,11 +20,11 @@ use vks;
 
 chain_struct! {
     #[derive(Debug, Clone, Default, PartialEq)]
-    pub struct DisplayPresentInfoKhrChain {
+    pub struct DisplayPresentInfoChainKhr {
     }
 
     #[derive(Debug)]
-    struct DisplayPresentInfoKhrChainWrapper;
+    struct DisplayPresentInfoChainKhrWrapper;
 }
 
 /// See [`VkDisplayPresentInfoKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDisplayPresentInfoKHR)
@@ -33,18 +33,18 @@ pub struct DisplayPresentInfoKhr {
     pub src_rect: core::Rect2D,
     pub dst_rect: core::Rect2D,
     pub persistent: bool,
-    pub chain: Option<DisplayPresentInfoKhrChain>,
+    pub chain: Option<DisplayPresentInfoChainKhr>,
 }
 
 #[derive(Debug)]
 pub(crate) struct VkDisplayPresentInfoKHRWrapper {
     pub vks_struct: vks::VkDisplayPresentInfoKHR,
-    chain: Option<DisplayPresentInfoKhrChainWrapper>,
+    chain: Option<DisplayPresentInfoChainKhrWrapper>,
 }
 
 impl VkDisplayPresentInfoKHRWrapper {
     pub fn new(info: &DisplayPresentInfoKhr, with_chain: bool) -> Self {
-        let (pnext, chain) = DisplayPresentInfoKhrChainWrapper::new_optional(&info.chain, with_chain);
+        let (pnext, chain) = DisplayPresentInfoChainKhrWrapper::new_optional(&info.chain, with_chain);
 
         VkDisplayPresentInfoKHRWrapper {
             vks_struct: vks::VkDisplayPresentInfoKHR {

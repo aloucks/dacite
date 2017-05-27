@@ -59,11 +59,11 @@ pub enum QueuePresentResultKhr {
 
 chain_struct! {
     #[derive(Debug, Clone, Default, PartialEq)]
-    pub struct SwapchainCreateInfoKhrChain {
+    pub struct SwapchainCreateInfoChainKhr {
     }
 
     #[derive(Debug)]
-    struct SwapchainCreateInfoKhrChainWrapper;
+    struct SwapchainCreateInfoChainKhrWrapper;
 }
 
 /// See [`VkSwapchainCreateInfoKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSwapchainCreateInfoKHR)
@@ -84,7 +84,7 @@ pub struct SwapchainCreateInfoKhr {
     pub present_mode: khr_surface::PresentModeKhr,
     pub clipped: bool,
     pub old_swapchain: Option<SwapchainKhr>,
-    pub chain: Option<SwapchainCreateInfoKhrChain>,
+    pub chain: Option<SwapchainCreateInfoChainKhr>,
 }
 
 #[derive(Debug)]
@@ -93,14 +93,14 @@ pub(crate) struct VkSwapchainCreateInfoKHRWrapper {
     surface: khr_surface::SurfaceKhr,
     queue_family_indices: Vec<u32>,
     old_swapchain: Option<SwapchainKhr>,
-    chain: Option<SwapchainCreateInfoKhrChainWrapper>,
+    chain: Option<SwapchainCreateInfoChainKhrWrapper>,
 }
 
 impl VkSwapchainCreateInfoKHRWrapper {
     pub fn new(create_info: &SwapchainCreateInfoKhr, with_chain: bool) -> Self {
         let queue_family_indices = create_info.queue_family_indices.clone();
         let old_swapchain_handle = create_info.old_swapchain.as_ref().map_or(ptr::null_mut(), |s| s.handle());
-        let (pnext, chain) = SwapchainCreateInfoKhrChainWrapper::new_optional(&create_info.chain, with_chain);
+        let (pnext, chain) = SwapchainCreateInfoChainKhrWrapper::new_optional(&create_info.chain, with_chain);
 
         VkSwapchainCreateInfoKHRWrapper {
             vks_struct: vks::VkSwapchainCreateInfoKHR {
@@ -133,7 +133,7 @@ impl VkSwapchainCreateInfoKHRWrapper {
 
 chain_struct! {
     #[derive(Debug, Clone, Default, PartialEq)]
-    pub struct PresentInfoKhrChain {
+    pub struct PresentInfoChainKhr {
         #[cfg(feature = "khr_display_swapchain_9")]
         field display_present_info_khr: DisplayPresentInfoKhr {
             fn: add_display_present_info_khr,
@@ -143,7 +143,7 @@ chain_struct! {
     }
 
     #[derive(Debug)]
-    struct PresentInfoKhrChainWrapper;
+    struct PresentInfoChainKhrWrapper;
 }
 
 /// See [`VkPresentInfoKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPresentInfoKHR)
@@ -153,7 +153,7 @@ pub struct PresentInfoKhr {
     pub swapchains: Vec<SwapchainKhr>,
     pub image_indices: Vec<u32>,
     pub results: Option<Vec<Result<QueuePresentResultKhr, core::Error>>>,
-    pub chain: Option<PresentInfoKhrChain>,
+    pub chain: Option<PresentInfoChainKhr>,
 }
 
 #[derive(Debug)]
@@ -165,7 +165,7 @@ pub(crate) struct VkPresentInfoKHRWrapper {
     swapchains: Vec<SwapchainKhr>,
     vk_swapchains: Vec<vks::VkSwapchainKHR>,
     image_indices: Vec<u32>,
-    chain: Option<PresentInfoKhrChainWrapper>,
+    chain: Option<PresentInfoChainKhrWrapper>,
 }
 
 impl VkPresentInfoKHRWrapper {
@@ -193,7 +193,7 @@ impl VkPresentInfoKHRWrapper {
             (ptr::null_mut(), None)
         };
 
-        let (pnext, chain) = PresentInfoKhrChainWrapper::new_optional(&info.chain, with_chain);
+        let (pnext, chain) = PresentInfoChainKhrWrapper::new_optional(&info.chain, with_chain);
 
         VkPresentInfoKHRWrapper {
             vks_struct: vks::VkPresentInfoKHR {
