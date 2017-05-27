@@ -9,7 +9,7 @@ keywords = [ "vulkan", "graphics" ]
 license = "ISC"
 
 [badges]
-gitlab = { repository = "https://gitlab.com/dennis-hamester/dacite" }
+gitlab = { repository = "dennis-hamester/dacite" }
 
 [dependencies]
 libc = "0.2"
