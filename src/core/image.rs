@@ -35,22 +35,28 @@ impl VulkanObject for Image {
     }
 
     fn try_destroy(self) -> Result<(), TryDestroyError<Self>> {
-        let strong_count = Arc::strong_count(&self.0);
-        if strong_count == 1 {
-            Ok(())
+        if self.0.owned {
+            let strong_count = Arc::strong_count(&self.0);
+            if strong_count == 1 {
+                Ok(())
+            }
+            else {
+                Err(TryDestroyError::new(self, TryDestroyErrorKind::InUse(Some(strong_count))))
+            }
         }
         else {
-            Err(TryDestroyError::new(self, TryDestroyErrorKind::InUse(Some(strong_count))))
+            Err(TryDestroyError::new(self, TryDestroyErrorKind::Unsupported))
         }
     }
 }
 
 impl Image {
-    pub(crate) fn new(handle: vks::VkImage, device: Device, allocator: Option<AllocatorHelper>) -> Self {
+    pub(crate) fn new(handle: vks::VkImage, device: Device, allocator: Option<AllocatorHelper>, owned: bool) -> Self {
         Image(Arc::new(Inner {
             handle: handle,
             device: device,
             allocator: allocator,
+            owned: owned,
         }))
     }
 
@@ -125,17 +131,20 @@ struct Inner {
     handle: vks::VkImage,
     device: Device,
     allocator: Option<AllocatorHelper>,
+    owned: bool,
 }
 
 impl Drop for Inner {
     fn drop(&mut self) {
-        let allocator = match self.allocator {
-            Some(ref allocator) => allocator.callbacks(),
-            None => ptr::null(),
-        };
+        if self.owned {
+            let allocator = match self.allocator {
+                Some(ref allocator) => allocator.callbacks(),
+                None => ptr::null(),
+            };
 
-        unsafe {
-            (self.device.loader().core.vkDestroyImage)(self.device.handle(), self.handle, allocator);
+            unsafe {
+                (self.device.loader().core.vkDestroyImage)(self.device.handle(), self.handle, allocator);
+            }
         }
     }
 }
