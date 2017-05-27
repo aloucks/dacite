@@ -247,6 +247,9 @@ impl PhysicalDevice {
                         #[cfg(feature = "khr_swapchain_67")]
                         core::DeviceExtension::KhrSwapchain => loader.load_khr_swapchain(device),
 
+                        #[cfg(feature = "khr_display_swapchain_9")]
+                        core::DeviceExtension::KhrDisplaySwapchain => loader.load_khr_display_swapchain(device),
+
                         core::DeviceExtension::Unknown(_) => { },
                     }
                 }

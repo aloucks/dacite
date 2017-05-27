@@ -564,6 +564,29 @@ impl Device {
             Err(res.into())
         }
     }
+
+    #[cfg(feature = "khr_display_swapchain_9")]
+    /// See [`vkCreateSharedSwapchainsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCreateSharedSwapchainsKHR)
+    /// and extension [`VK_KHR_display_swapchain`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_display_swapchain)
+    pub fn create_shared_swapchains_khr(&self, create_infos: &[khr_swapchain::SwapchainCreateInfoKhr], allocator: Option<Box<core::Allocator>>) -> Result<Vec<khr_swapchain::SwapchainKhr>, core::Error> {
+        let create_info_wrappers: Vec<_> = create_infos.iter().map(|c| khr_swapchain::VkSwapchainCreateInfoKHRWrapper::new(c, true)).collect();
+        let vk_create_infos: Vec<_> = create_info_wrappers.iter().map(|c| c.vks_struct).collect();
+        let allocator_helper = allocator.map(AllocatorHelper::new);
+        let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), AllocatorHelper::callbacks);
+
+        let mut swapchains = Vec::with_capacity(create_infos.len());
+        let res = unsafe {
+            swapchains.set_len(create_infos.len());
+            (self.loader().khr_display_swapchain.vkCreateSharedSwapchainsKHR)(self.handle(), create_infos.len() as u32, vk_create_infos.as_ptr(), allocation_callbacks, swapchains.as_mut_ptr())
+        };
+
+        if res == vks::VK_SUCCESS {
+            Ok(swapchains.iter().map(|&s| khr_swapchain::SwapchainKhr::new(s, self.clone(), allocator_helper.clone())).collect())
+        }
+        else {
+            Err(res.into())
+        }
+    }
 }
 
 #[derive(Debug)]

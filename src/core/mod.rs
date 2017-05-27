@@ -1046,6 +1046,10 @@ pub enum Error {
     /// See extension [`VK_KHR_swapchain`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_swapchain)
     OutOfDateKhr,
 
+    #[cfg(feature = "khr_display_swapchain_9")]
+    /// See extension [`VK_KHR_display_swapchain`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_display_swapchain)
+    IncompatibleDisplayKhr,
+
     Unknown(vks::VkResult),
 }
 
@@ -1082,6 +1086,9 @@ impl ::std::error::Error for Error {
             #[cfg(feature = "khr_swapchain_67")]
             Error::OutOfDateKhr => "OutOfDate",
 
+            #[cfg(feature = "khr_display_swapchain_9")]
+            Error::IncompatibleDisplayKhr => "IncompatibleDisplay",
+
             Error::Unknown(_) => "unknown error",
         }
     }
@@ -1115,6 +1122,9 @@ impl From<vks::VkResult> for Error {
 
             #[cfg(feature = "khr_swapchain_67")]
             vks::VK_ERROR_OUT_OF_DATE_KHR => Error::OutOfDateKhr,
+
+            #[cfg(feature = "khr_display_swapchain_9")]
+            vks::VK_ERROR_INCOMPATIBLE_DISPLAY_KHR => Error::IncompatibleDisplayKhr,
 
             _ => Error::Unknown(res),
         }
@@ -3551,6 +3561,9 @@ pub enum DeviceExtension {
 
     #[cfg(feature = "khr_swapchain_67")]
     KhrSwapchain,
+
+    #[cfg(feature = "khr_display_swapchain_9")]
+    KhrDisplaySwapchain,
 }
 
 impl<'a> From<&'a str> for DeviceExtension {
@@ -3558,6 +3571,9 @@ impl<'a> From<&'a str> for DeviceExtension {
         match name {
             #[cfg(feature = "khr_swapchain_67")]
             vks::VK_KHR_SWAPCHAIN_EXTENSION_NAME_STR => DeviceExtension::KhrSwapchain,
+
+            #[cfg(feature = "khr_display_swapchain_9")]
+            vks::VK_KHR_DISPLAY_SWAPCHAIN_EXTENSION_NAME_STR => DeviceExtension::KhrDisplaySwapchain,
 
             _ => DeviceExtension::Unknown(name.to_owned())
         }
@@ -3569,6 +3585,9 @@ impl From<DeviceExtension> for String {
         match extension {
             #[cfg(feature = "khr_swapchain_67")]
             DeviceExtension::KhrSwapchain => vks::VK_KHR_SWAPCHAIN_EXTENSION_NAME_STR.to_owned(),
+
+            #[cfg(feature = "khr_display_swapchain_9")]
+            DeviceExtension::KhrDisplaySwapchain => vks::VK_KHR_DISPLAY_SWAPCHAIN_EXTENSION_NAME_STR.to_owned(),
 
             DeviceExtension::Unknown(name) => name,
         }

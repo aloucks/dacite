@@ -22,7 +22,7 @@ default-features = false
 default = [ "vk_1_0_3" ]
 
 vk_1_0_3 = [ "core_1_0_3", "khr_surface_25", "ext_debug_report_1", "khr_display_21",
-             "khr_swapchain_67" ]
+             "khr_swapchain_67", "khr_display_swapchain_9" ]
 
 core = [ "core_1_0_3" ]
 core_1_0_3 = [ "vks/core_1_0_3" ]
@@ -38,3 +38,7 @@ khr_display_21 = [ "core_1_0_3", "khr_surface_25", "vks/khr_display_21" ]
 
 khr_swapchain = [ "khr_swapchain_67" ]
 khr_swapchain_67 = [ "core_1_0_3", "khr_surface_25", "vks/khr_swapchain_67" ]
+
+khr_display_swapchain = [ "khr_display_swapchain_9" ]
+khr_display_swapchain_9 = [ "core_1_0_3", "khr_swapchain_67", "khr_display_21",
+                            "vks/khr_display_swapchain_9" ]

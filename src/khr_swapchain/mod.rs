@@ -22,6 +22,9 @@ use std::ptr;
 use utils;
 use vks;
 
+#[cfg(feature = "khr_display_swapchain_9")]
+use khr_display_swapchain::{DisplayPresentInfoKhr, VkDisplayPresentInfoKHRWrapper};
+
 pub use self::swapchain::SwapchainKhr;
 
 /// See [`VkSwapchainCreateFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSwapchainCreateFlagBitsKHR)
@@ -131,6 +134,12 @@ impl VkSwapchainCreateInfoKHRWrapper {
 chain_struct! {
     #[derive(Debug, Clone, Default, PartialEq)]
     pub struct PresentInfoKhrChain {
+        #[cfg(feature = "khr_display_swapchain_9")]
+        field display_present_info_khr: DisplayPresentInfoKhr {
+            fn: add_display_present_info_khr,
+            stype: vks::VK_STRUCTURE_TYPE_DISPLAY_PRESENT_INFO_KHR,
+            wrapper: VkDisplayPresentInfoKHRWrapper,
+        },
     }
 
     #[derive(Debug)]

@@ -49,3 +49,6 @@ pub mod khr_display;
 
 #[cfg(feature = "khr_swapchain_67")]
 pub mod khr_swapchain;
+
+#[cfg(feature = "khr_display_swapchain_9")]
+pub mod khr_display_swapchain;
