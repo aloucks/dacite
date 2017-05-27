@@ -36,7 +36,12 @@ pub mod core;
 mod version;
 
 #[cfg(feature = "core_1_0_3")]
-pub use version::{DACITE_API_VERSION_MAJOR, DACITE_API_VERSION_MINOR, DACITE_API_VERSION_PATCH};
+pub use version::{
+    DACITE_API_VERSION,
+    DACITE_API_VERSION_MAJOR,
+    DACITE_API_VERSION_MINOR,
+    DACITE_API_VERSION_PATCH
+};
 
 #[cfg(feature = "khr_surface_25")]
 pub mod khr_surface;
