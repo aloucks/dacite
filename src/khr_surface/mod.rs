@@ -162,8 +162,8 @@ pub const COMPOSITE_ALPHA_INHERIT_BIT_KHR: CompositeAlphaFlagsKhr = vks::VK_COMP
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct SurfaceCapabilitiesKhr {
     pub min_image_count: u32,
-    pub max_image_count: u32,
-    pub current_extent: core::Extent2D,
+    pub max_image_count: Option<u32>,
+    pub current_extent: Option<core::Extent2D>,
     pub min_image_extent: core::Extent2D,
     pub max_image_extent: core::Extent2D,
     pub max_image_array_layers: u32,
@@ -175,10 +175,24 @@ pub struct SurfaceCapabilitiesKhr {
 
 impl<'a> From<&'a vks::VkSurfaceCapabilitiesKHR> for SurfaceCapabilitiesKhr {
     fn from(capabilities: &'a vks::VkSurfaceCapabilitiesKHR) -> Self {
+        let max_image_count = if capabilities.maxImageCount > 0 {
+            Some(capabilities.maxImageCount)
+        }
+        else {
+            None
+        };
+
+        let current_extent = if (capabilities.currentExtent.width != ::std::u32::MAX) || (capabilities.currentExtent.height != ::std::u32::MAX) {
+            Some((&capabilities.currentExtent).into())
+        }
+        else {
+            None
+        };
+
         SurfaceCapabilitiesKhr {
             min_image_count: capabilities.minImageCount,
-            max_image_count: capabilities.maxImageCount,
-            current_extent: (&capabilities.currentExtent).into(),
+            max_image_count: max_image_count,
+            current_extent: current_extent,
             min_image_extent: (&capabilities.minImageExtent).into(),
             max_image_extent: (&capabilities.maxImageExtent).into(),
             max_image_array_layers: capabilities.maxImageArrayLayers,
