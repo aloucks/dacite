@@ -7,6 +7,11 @@ homepage = "https://gitlab.com/dennis-hamester/dacite"
 repository = "https://gitlab.com/dennis-hamester/dacite"
 keywords = [ "vulkan", "graphics" ]
 license = "ISC"
+exclude = [
+    ".gitignore",
+    ".gitlab-ci.yml",
+    "tools/*",
+]
 
 [badges]
 gitlab = { repository = "dennis-hamester/dacite" }
