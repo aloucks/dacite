@@ -147,44 +147,53 @@ fn create_surface(instance: &dacite::core::Instance, backend: &WindowBackend) ->
     }
 }
 
-fn check_device_suitability(physical_device: dacite::core::PhysicalDevice, surface: &dacite::khr_surface::SurfaceKhr) -> Result<DeviceSettings, ()> {
-    let mut graphics_index = None;
-    let mut present_index = None;
+fn find_queue_family_indices(physical_device: &dacite::core::PhysicalDevice, surface: &dacite::khr_surface::SurfaceKhr) -> Result<QueueFamilyIndices, ()> {
+    let mut graphics = None;
+    let mut present = None;
 
     for (index, queue_family_properties) in physical_device.queue_family_properties().enumerate() {
         if queue_family_properties.queue_count == 0 {
             continue;
         }
 
-        if graphics_index.is_none() && queue_family_properties.queue_flags.contains(dacite::core::QUEUE_GRAPHICS_BIT) {
-            graphics_index = Some(index);
+        if graphics.is_none() && queue_family_properties.queue_flags.contains(dacite::core::QUEUE_GRAPHICS_BIT) {
+            graphics = Some(index);
         }
 
-        if present_index.is_none() {
+        if present.is_none() {
             if let Ok(true) = physical_device.get_surface_support_khr(index as u32, surface) {
-                present_index = Some(index);
+                present = Some(index);
             }
         }
-
     }
 
-    if graphics_index.is_none() || present_index.is_none() {
-        return Err(());
+    if let (Some(graphics), Some(present)) = (graphics, present) {
+        Ok(QueueFamilyIndices {
+            graphics: graphics as u32,
+            present: present as u32,
+        })
     }
+    else {
+        Err(())
+    }
+}
 
+fn check_device_extensions(physical_device: &dacite::core::PhysicalDevice) -> Result<Vec<dacite::core::DeviceExtension>, ()> {
     let required_device_extensions = vec![dacite::core::DeviceExtensionProperties {
         extension: dacite::core::DeviceExtension::KhrSwapchain,
         spec_version: 67,
     }];
 
-    let device_extensions = physical_device.check_device_extensions(required_device_extensions).map_err(|_| ())?;
+    physical_device.check_device_extensions(required_device_extensions).map_err(|_| ())
+}
+
+fn check_device_suitability(physical_device: dacite::core::PhysicalDevice, surface: &dacite::khr_surface::SurfaceKhr) -> Result<DeviceSettings, ()> {
+    let queue_family_indices = find_queue_family_indices(&physical_device, surface)?;
+    let device_extensions = check_device_extensions(&physical_device)?;
 
     Ok(DeviceSettings {
         physical_device: physical_device,
-        queue_family_indices: QueueFamilyIndices {
-            graphics: graphics_index.unwrap() as u32,
-            present: present_index.unwrap() as u32,
-        },
+        queue_family_indices: queue_family_indices,
         device_extensions: device_extensions,
     })
 }
