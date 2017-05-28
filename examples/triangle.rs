@@ -28,7 +28,7 @@ struct QueueFamilyIndices {
 struct DeviceSettings {
     physical_device: dacite::core::PhysicalDevice,
     queue_family_indices: QueueFamilyIndices,
-
+    device_extensions: Vec<dacite::core::DeviceExtension>,
 }
 
 #[allow(unused_mut)]
@@ -147,7 +147,7 @@ fn create_surface(instance: &dacite::core::Instance, backend: &WindowBackend) ->
     }
 }
 
-fn check_device_suitability(physical_device: &dacite::core::PhysicalDevice, surface: &dacite::khr_surface::SurfaceKhr) -> Result<QueueFamilyIndices, ()> {
+fn check_device_suitability(physical_device: dacite::core::PhysicalDevice, surface: &dacite::khr_surface::SurfaceKhr) -> Result<DeviceSettings, ()> {
     let mut graphics_index = None;
     let mut present_index = None;
 
@@ -168,15 +168,25 @@ fn check_device_suitability(physical_device: &dacite::core::PhysicalDevice, surf
 
     }
 
-    if let (Some(graphics_index), Some(present_index)) = (graphics_index, present_index) {
-        Ok(QueueFamilyIndices {
-            graphics: graphics_index as u32,
-            present: present_index as u32,
-        })
+    if graphics_index.is_none() || present_index.is_none() {
+        return Err(());
     }
-    else {
-        Err(())
-    }
+
+    let required_device_extensions = vec![dacite::core::DeviceExtensionProperties {
+        extension: dacite::core::DeviceExtension::KhrSwapchain,
+        spec_version: 67,
+    }];
+
+    let device_extensions = physical_device.check_device_extensions(required_device_extensions).map_err(|_| ())?;
+
+    Ok(DeviceSettings {
+        physical_device: physical_device,
+        queue_family_indices: QueueFamilyIndices {
+            graphics: graphics_index.unwrap() as u32,
+            present: present_index.unwrap() as u32,
+        },
+        device_extensions: device_extensions,
+    })
 }
 
 fn find_suitable_device(instance: &dacite::core::Instance, surface: &dacite::khr_surface::SurfaceKhr) -> Result<DeviceSettings, ()> {
@@ -185,11 +195,8 @@ fn find_suitable_device(instance: &dacite::core::Instance, surface: &dacite::khr
     })?;
 
     for physical_device in physical_devices {
-        if let Ok(queue_family_indices) = check_device_suitability(&physical_device, surface) {
-            return Ok(DeviceSettings {
-                physical_device: physical_device,
-                queue_family_indices: queue_family_indices,
-            });
+        if let Ok(device_settings) = check_device_suitability(physical_device, surface) {
+            return Ok(device_settings);
         }
     }
 
@@ -197,7 +204,7 @@ fn find_suitable_device(instance: &dacite::core::Instance, surface: &dacite::khr
     Err(())
 }
 
-fn create_device(physical_device: &dacite::core::PhysicalDevice, queue_family_indices: &QueueFamilyIndices) -> Result<dacite::core::Device, ()> {
+fn create_device(physical_device: &dacite::core::PhysicalDevice, device_extensions: Vec<dacite::core::DeviceExtension>, queue_family_indices: &QueueFamilyIndices) -> Result<dacite::core::Device, ()> {
     let device_queue_create_infos = vec![
         dacite::core::DeviceQueueCreateInfo {
             flags: dacite::core::DeviceQueueCreateFlags::empty(),
@@ -211,7 +218,7 @@ fn create_device(physical_device: &dacite::core::PhysicalDevice, queue_family_in
         flags: dacite::core::DeviceCreateFlags::empty(),
         queue_create_infos: device_queue_create_infos,
         enabled_layers: vec![],
-        enabled_extensions: vec![],
+        enabled_extensions: device_extensions,
         enabled_features: None,
         chain: None,
     };
@@ -235,9 +242,10 @@ fn real_main() -> Result<(), ()> {
     let DeviceSettings {
         physical_device,
         queue_family_indices,
+        device_extensions,
     } = find_suitable_device(&instance, &surface)?;
 
-    let device = create_device(&physical_device, &queue_family_indices)?;
+    let device = create_device(&physical_device, device_extensions, &queue_family_indices)?;
     let graphics_queue = device.get_queue(queue_family_indices.graphics, 0);
     let present_queue = device.get_queue(queue_family_indices.present, 0);
 
