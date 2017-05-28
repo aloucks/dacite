@@ -27,7 +27,7 @@ use {TryDestroyError, TryDestroyErrorKind, VulkanObject};
 #[cfg(feature = "ext_debug_report_1")]
 use ext_debug_report;
 
-#[cfg(feature = "khr_display_21")]
+#[cfg(any(feature = "khr_display_21", feature = "khr_xlib_surface_6"))]
 use khr_surface;
 
 #[cfg(feature = "khr_display_21")]
@@ -35,6 +35,9 @@ use khr_display;
 
 #[cfg(feature = "khr_display_21")]
 use std::sync::Mutex;
+
+#[cfg(feature = "khr_xlib_surface_6")]
+use khr_xlib_surface;
 
 /// See [`VkInstance`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkInstance)
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
@@ -107,6 +110,9 @@ impl Instance {
 
                     #[cfg(feature = "khr_display_21")]
                     core::InstanceExtension::KhrDisplay => loader.load_khr_display(instance),
+
+                    #[cfg(feature = "khr_xlib_surface_6")]
+                    core::InstanceExtension::KhrXlibSurface => loader.load_khr_xlib_surface(instance),
 
                     core::InstanceExtension::Unknown(_) => { },
                 }
@@ -263,6 +269,27 @@ impl Instance {
         let mut surface = ptr::null_mut();
         let res = unsafe {
             (self.loader().khr_display.vkCreateDisplayPlaneSurfaceKHR)(self.handle(), &create_info_wrapper.vks_struct, allocation_callbacks, &mut surface)
+        };
+
+        if res == vks::VK_SUCCESS {
+            Ok(khr_surface::SurfaceKhr::new(surface, self.clone(), allocator_helper))
+        }
+        else {
+            Err(res.into())
+        }
+    }
+
+    #[cfg(feature = "khr_xlib_surface_6")]
+    /// See [`vkCreateXlibSurfaceKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCreateXlibSurfaceKHR)
+    /// and extension [`VK_KHR_xlib_surface`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_xlib_surface)
+    pub fn create_xlib_surface_khr(&self, create_info: &khr_xlib_surface::XlibSurfaceCreateInfoKhr, allocator: Option<Box<core::Allocator>>) -> Result<khr_surface::SurfaceKhr, core::Error> {
+        let allocator_helper = allocator.map(AllocatorHelper::new);
+        let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), AllocatorHelper::callbacks);
+        let create_info_wrapper = khr_xlib_surface::VkXlibSurfaceCreateInfoKHRWrapper::new(create_info, true);
+
+        let mut surface = ptr::null_mut();
+        let res = unsafe {
+            (self.loader().khr_xlib_surface.vkCreateXlibSurfaceKHR)(self.handle(), &create_info_wrapper.vks_struct, allocation_callbacks, &mut surface)
         };
 
         if res == vks::VK_SUCCESS {

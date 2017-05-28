@@ -3474,6 +3474,9 @@ pub enum InstanceExtension {
 
     #[cfg(feature = "khr_display_21")]
     KhrDisplay,
+
+    #[cfg(feature = "khr_xlib_surface_6")]
+    KhrXlibSurface,
 }
 
 impl<'a> From<&'a str> for InstanceExtension {
@@ -3487,6 +3490,9 @@ impl<'a> From<&'a str> for InstanceExtension {
 
             #[cfg(feature = "khr_display_21")]
             vks::VK_KHR_DISPLAY_EXTENSION_NAME_STR => InstanceExtension::KhrDisplay,
+
+            #[cfg(feature = "khr_xlib_surface_6")]
+            vks::VK_KHR_XLIB_SURFACE_EXTENSION_NAME_STR => InstanceExtension::KhrXlibSurface,
 
             _ => InstanceExtension::Unknown(name.to_owned())
         }
@@ -3504,6 +3510,9 @@ impl From<InstanceExtension> for String {
 
             #[cfg(feature = "khr_display_21")]
             InstanceExtension::KhrDisplay => vks::VK_KHR_DISPLAY_EXTENSION_NAME_STR.to_owned(),
+
+            #[cfg(feature = "khr_xlib_surface_6")]
+            InstanceExtension::KhrXlibSurface => vks::VK_KHR_XLIB_SURFACE_EXTENSION_NAME_STR.to_owned(),
 
             InstanceExtension::Unknown(name) => name,
         }

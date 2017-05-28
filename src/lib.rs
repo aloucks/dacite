@@ -43,6 +43,9 @@ pub use version::{
     DACITE_API_VERSION_PATCH
 };
 
+#[cfg(feature = "khr_xlib_surface_6")]
+pub use vks::xlib_wrapper;
+
 #[cfg(feature = "khr_surface_25")]
 pub mod khr_surface;
 
@@ -57,3 +60,6 @@ pub mod khr_swapchain;
 
 #[cfg(feature = "khr_display_swapchain_9")]
 pub mod khr_display_swapchain;
+
+#[cfg(feature = "khr_xlib_surface_6")]
+pub mod khr_xlib_surface;

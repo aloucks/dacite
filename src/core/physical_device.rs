@@ -22,6 +22,9 @@ use utils;
 use vks;
 use {TryDestroyError, TryDestroyErrorKind, VulkanObject};
 
+#[cfg(feature = "khr_xlib_surface_6")]
+use xlib_wrapper;
+
 #[cfg(feature = "khr_surface_25")]
 use khr_surface;
 
@@ -439,5 +442,16 @@ impl PhysicalDevice {
         else {
             Err(res.into())
         }
+    }
+
+    #[cfg(feature = "khr_xlib_surface_6")]
+    /// See [`vkGetPhysicalDeviceXlibPresentationSupportKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetPhysicalDeviceXlibPresentationSupportKHR)
+    /// and extension [`VK_KHR_xlib_surface`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_xlib_surface)
+    pub fn get_xlib_presentation_support_khr(&self, queue_family_index: u32, dpy: *mut xlib_wrapper::Display, visual_id: xlib_wrapper::VisualID) -> bool {
+        let res = unsafe {
+            (self.loader().khr_xlib_surface.vkGetPhysicalDeviceXlibPresentationSupportKHR)(self.handle, queue_family_index, dpy, visual_id)
+        };
+
+        utils::from_vk_bool(res)
     }
 }
