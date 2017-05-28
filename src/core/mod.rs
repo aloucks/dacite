@@ -66,7 +66,7 @@ pub use self::framebuffer::Framebuffer;
 pub use self::image::Image;
 pub use self::image_view::ImageView;
 pub use self::instance::{CheckInstanceExtensionsError, Instance};
-pub use self::physical_device::PhysicalDevice;
+pub use self::physical_device::{CheckDeviceExtensionsError, PhysicalDevice};
 pub use self::pipeline::Pipeline;
 pub use self::pipeline_cache::PipelineCache;
 pub use self::pipeline_layout::PipelineLayout;

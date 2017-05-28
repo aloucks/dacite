@@ -31,6 +31,12 @@ use khr_surface;
 #[cfg(feature = "khr_display_21")]
 use khr_display;
 
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum CheckDeviceExtensionsError {
+    Missing(Vec<core::DeviceExtensionProperties>),
+    VulkanError(core::Error),
+}
+
 /// See [`VkPhysicalDevice`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPhysicalDevice)
 #[derive(Debug, Clone)]
 pub struct PhysicalDevice {
@@ -96,6 +102,26 @@ impl PhysicalDevice {
     #[inline]
     pub(crate) fn loader(&self) -> &vks::InstanceProcAddrLoader {
         self.instance.loader()
+    }
+
+    pub fn check_device_extensions(&self, extensions: Vec<core::DeviceExtensionProperties>) -> Result<Vec<core::DeviceExtension>, CheckDeviceExtensionsError> {
+        let mut found = Vec::new();
+        let mut missing = extensions;
+
+        let device_extensions = self.enumerate_device_extension_properties(None).map_err(|e| CheckDeviceExtensionsError::VulkanError(e))?;
+        for extension in device_extensions {
+            let pos = missing.iter().position(|e| (e.extension == extension.extension) && (e.spec_version <= extension.spec_version));
+            if let Some(pos) = pos {
+                found.push(missing.swap_remove(pos).extension);
+            }
+        }
+
+        if missing.is_empty() {
+            Ok(found)
+        }
+        else {
+            Err(CheckDeviceExtensionsError::Missing(missing))
+        }
     }
 
     /// See [`vkGetPhysicalDeviceProperties`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetPhysicalDeviceProperties)
