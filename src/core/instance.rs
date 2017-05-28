@@ -88,7 +88,7 @@ impl Instance {
         let mut found = Vec::new();
         let mut missing = extensions;
 
-        let instance_extensions = Instance::enumerate_instance_extension_properties(None).map_err(|e| CheckInstanceExtensionsError::VulkanError(e))?;
+        let instance_extensions = Instance::enumerate_instance_extension_properties(None).map_err(CheckInstanceExtensionsError::VulkanError)?;
         for extension in instance_extensions {
             let pos = missing.iter().position(|e| (e.extension == extension.extension) && (e.spec_version <= extension.spec_version));
             if let Some(pos) = pos {

@@ -108,7 +108,7 @@ impl PhysicalDevice {
         let mut found = Vec::new();
         let mut missing = extensions;
 
-        let device_extensions = self.enumerate_device_extension_properties(None).map_err(|e| CheckDeviceExtensionsError::VulkanError(e))?;
+        let device_extensions = self.enumerate_device_extension_properties(None).map_err(CheckDeviceExtensionsError::VulkanError)?;
         for extension in device_extensions {
             let pos = missing.iter().position(|e| (e.extension == extension.extension) && (e.spec_version <= extension.spec_version));
             if let Some(pos) = pos {
