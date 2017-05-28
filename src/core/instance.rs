@@ -39,6 +39,12 @@ use std::sync::Mutex;
 #[cfg(feature = "khr_xlib_surface_6")]
 use khr_xlib_surface;
 
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum CheckInstanceExtensionsError {
+    Missing(Vec<core::InstanceExtensionProperties>),
+    VulkanError(core::Error),
+}
+
 /// See [`VkInstance`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkInstance)
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct Instance(Arc<Inner>);
@@ -76,6 +82,26 @@ impl Instance {
     #[cfg(feature = "khr_display_21")]
     pub(crate) fn add_display_mode_allocator(&self, allocator: AllocatorHelper) {
         self.0.display_mode_allocators.lock().unwrap().push(allocator);
+    }
+
+    pub fn check_instance_extensions(extensions: Vec<core::InstanceExtensionProperties>) -> Result<Vec<core::InstanceExtension>, CheckInstanceExtensionsError> {
+        let mut found = Vec::new();
+        let mut missing = extensions;
+
+        let instance_extensions = Instance::enumerate_instance_extension_properties(None).map_err(|e| CheckInstanceExtensionsError::VulkanError(e))?;
+        for extension in instance_extensions {
+            let pos = missing.iter().position(|e| (e.extension == extension.extension) && (e.spec_version <= extension.spec_version));
+            if let Some(pos) = pos {
+                found.push(missing.swap_remove(pos).extension);
+            }
+        }
+
+        if missing.is_empty() {
+            Ok(found)
+        }
+        else {
+            Err(CheckInstanceExtensionsError::Missing(missing))
+        }
     }
 
     /// See [`vkCreateInstance`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCreateInstance)
