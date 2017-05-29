@@ -35,6 +35,8 @@ struct DeviceSettings {
 struct SwapchainSettings {
     swapchain: dacite::khr_swapchain::SwapchainKhr,
     extent: dacite::core::Extent2D,
+    images: Vec<dacite::core::Image>,
+    image_views: Vec<dacite::core::ImageView>,
 }
 
 #[allow(unused_mut)]
@@ -265,10 +267,9 @@ fn create_swapchain(physical_device: &dacite::core::PhysicalDevice, device: &dac
         }
     }
 
-    if format.is_none() {
+    let format = format.ok_or_else(|| {
         println!("No suitable surface format found");
-        return Err(());
-    }
+    })?;
 
     let (image_sharing_mode, queue_family_indices) = if queue_family_indices.graphics == queue_family_indices.present {
         (dacite::core::SharingMode::Exclusive, None)
@@ -306,7 +307,7 @@ fn create_swapchain(physical_device: &dacite::core::PhysicalDevice, device: &dac
         flags: dacite::khr_swapchain::SwapchainCreateFlagsKhr::empty(),
         surface: surface.clone(),
         min_image_count: min_image_count,
-        image_format: format.unwrap(),
+        image_format: format,
         image_color_space: color_space.unwrap(),
         image_extent: extent,
         image_array_layers: 1,
@@ -325,9 +326,45 @@ fn create_swapchain(physical_device: &dacite::core::PhysicalDevice, device: &dac
         println!("Failed to create swapchain ({})", e);
     })?;
 
+    let images = swapchain.get_images_khr().map_err(|e| {
+        println!("Failed to get swapchain images ({})", e);
+    })?;
+
+    let mut image_views = Vec::with_capacity(images.len());
+    for image in &images {
+        let create_info = dacite::core::ImageViewCreateInfo {
+            flags: dacite::core::ImageViewCreateFlags::empty(),
+            image: image.clone(),
+            view_type: dacite::core::ImageViewType::Type2D,
+            format: format,
+            components: dacite::core::ComponentMapping {
+                r: dacite::core::ComponentSwizzle::Identity,
+                g: dacite::core::ComponentSwizzle::Identity,
+                b: dacite::core::ComponentSwizzle::Identity,
+                a: dacite::core::ComponentSwizzle::Identity,
+            },
+            subresource_range: dacite::core::ImageSubresourceRange {
+                aspect_mask: dacite::core::IMAGE_ASPECT_COLOR_BIT,
+                base_mip_level: 0,
+                level_count: dacite::core::OptionalMipLevels::MipLevels(1),
+                base_array_layer: 0,
+                layer_count: dacite::core::OptionalArrayLayers::ArrayLayers(1),
+            },
+            chain: None,
+        };
+
+        let image_view = device.create_image_view(&create_info, None).map_err(|e| {
+            println!("Failed to create swapchain image view ({})", e);
+        })?;
+
+        image_views.push(image_view);
+    }
+
     Ok(SwapchainSettings {
         swapchain: swapchain,
         extent: extent,
+        images: images,
+        image_views: image_views,
     })
 }
 
@@ -360,11 +397,9 @@ fn real_main() -> Result<(), ()> {
     let SwapchainSettings {
         swapchain,
         extent,
+        images: swapchain_images,
+        image_views: swapchain_image_views,
     } = create_swapchain(&physical_device, &device, &surface, &preferred_extent, &queue_family_indices)?;
-
-    let swapchain_images = swapchain.get_images_khr().map_err(|e| {
-        println!("Failed to get swapchain images ({})", e);
-    })?;
 
     window.show();
     events_loop.run_forever(|event| {
