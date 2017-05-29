@@ -362,6 +362,10 @@ fn real_main() -> Result<(), ()> {
         extent,
     } = create_swapchain(&physical_device, &device, &surface, &preferred_extent, &queue_family_indices)?;
 
+    let swapchain_images = swapchain.get_images_khr().map_err(|e| {
+        println!("Failed to get swapchain images ({})", e);
+    })?;
+
     window.show();
     events_loop.run_forever(|event| {
         if let winit::Event::WindowEvent { event: winit::WindowEvent::Closed, .. } = event {
