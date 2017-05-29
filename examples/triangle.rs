@@ -271,10 +271,10 @@ fn create_swapchain(physical_device: &dacite::core::PhysicalDevice, device: &dac
     }
 
     let (image_sharing_mode, queue_family_indices) = if queue_family_indices.graphics == queue_family_indices.present {
-        (dacite::core::SharingMode::Exclusive, vec![queue_family_indices.graphics])
+        (dacite::core::SharingMode::Exclusive, None)
     }
     else {
-        (dacite::core::SharingMode::Concurrent, vec![queue_family_indices.graphics, queue_family_indices.present])
+        (dacite::core::SharingMode::Concurrent, Some(vec![queue_family_indices.graphics, queue_family_indices.present]))
     };
 
     let extent = match capabilities.current_extent {

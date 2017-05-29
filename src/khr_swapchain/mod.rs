@@ -78,7 +78,7 @@ pub struct SwapchainCreateInfoKhr {
     pub image_array_layers: u32,
     pub image_usage: core::ImageUsageFlags,
     pub image_sharing_mode: core::SharingMode,
-    pub queue_family_indices: Vec<u32>,
+    pub queue_family_indices: Option<Vec<u32>>,
     pub pre_transform: khr_surface::SurfaceTransformFlagBitsKhr,
     pub composite_alpha: khr_surface::CompositeAlphaFlagBitsKhr,
     pub present_mode: khr_surface::PresentModeKhr,
@@ -91,14 +91,22 @@ pub struct SwapchainCreateInfoKhr {
 pub(crate) struct VkSwapchainCreateInfoKHRWrapper {
     pub vks_struct: vks::VkSwapchainCreateInfoKHR,
     surface: khr_surface::SurfaceKhr,
-    queue_family_indices: Vec<u32>,
+    queue_family_indices: Option<Vec<u32>>,
     old_swapchain: Option<SwapchainKhr>,
     chain: Option<SwapchainCreateInfoChainKhrWrapper>,
 }
 
 impl VkSwapchainCreateInfoKHRWrapper {
     pub fn new(create_info: &SwapchainCreateInfoKhr, with_chain: bool) -> Self {
-        let queue_family_indices = create_info.queue_family_indices.clone();
+        let (queue_family_indices_count, queue_family_indices_ptr, queue_family_indices) = match create_info.queue_family_indices {
+            Some(ref queue_family_indices) => {
+                let queue_family_indices = queue_family_indices.clone();
+                (queue_family_indices.len() as u32, queue_family_indices.as_ptr(), Some(queue_family_indices))
+            }
+
+            None => (0, ptr::null(), None),
+        };
+
         let old_swapchain_handle = create_info.old_swapchain.as_ref().map_or(ptr::null_mut(), |s| s.handle());
         let (pnext, chain) = SwapchainCreateInfoChainKhrWrapper::new_optional(&create_info.chain, with_chain);
 
@@ -115,8 +123,8 @@ impl VkSwapchainCreateInfoKHRWrapper {
                 imageArrayLayers: create_info.image_array_layers,
                 imageUsage: create_info.image_usage,
                 imageSharingMode: create_info.image_sharing_mode.into(),
-                queueFamilyIndexCount: queue_family_indices.len() as u32,
-                pQueueFamilyIndices: queue_family_indices.as_ptr(),
+                queueFamilyIndexCount: queue_family_indices_count,
+                pQueueFamilyIndices: queue_family_indices_ptr,
                 preTransform: create_info.pre_transform,
                 compositeAlpha: create_info.composite_alpha,
                 presentMode: create_info.present_mode.into(),
