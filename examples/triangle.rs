@@ -41,6 +41,7 @@ struct SwapchainSettings {
 fn create_window(extent: &dacite::core::Extent2D) -> Result<Window, ()> {
     let events_loop = winit::EventsLoop::new();
     let window = winit::WindowBuilder::new()
+        .with_title("dacite triangle example")
         .with_dimensions(extent.width, extent.height)
         .with_min_dimensions(extent.width, extent.height)
         .with_max_dimensions(extent.width, extent.height)
