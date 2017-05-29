@@ -1,6 +1,7 @@
 extern crate dacite;
 extern crate winit;
 
+use std::cmp;
 use std::process;
 
 #[cfg(target_os = "linux")]
@@ -31,16 +32,18 @@ struct DeviceSettings {
     device_extensions: Vec<dacite::core::DeviceExtension>,
 }
 
-#[allow(unused_mut)]
-fn create_window() -> Result<Window, ()> {
-    let width = 800;
-    let height = 600;
+struct SwapchainSettings {
+    swapchain: dacite::khr_swapchain::SwapchainKhr,
+    extent: dacite::core::Extent2D,
+}
 
+#[allow(unused_mut)]
+fn create_window(extent: &dacite::core::Extent2D) -> Result<Window, ()> {
     let events_loop = winit::EventsLoop::new();
     let window = winit::WindowBuilder::new()
-        .with_dimensions(width, height)
-        .with_min_dimensions(width, height)
-        .with_max_dimensions(width, height)
+        .with_dimensions(extent.width, extent.height)
+        .with_min_dimensions(extent.width, extent.height)
+        .with_max_dimensions(extent.width, extent.height)
         .with_visibility(false)
         .build(&events_loop);
 
@@ -237,12 +240,107 @@ fn create_device(physical_device: &dacite::core::PhysicalDevice, device_extensio
     })
 }
 
+fn create_swapchain(physical_device: &dacite::core::PhysicalDevice, device: &dacite::core::Device, surface: &dacite::khr_surface::SurfaceKhr, preferred_extent: &dacite::core::Extent2D, queue_family_indices: &QueueFamilyIndices) -> Result<SwapchainSettings, ()> {
+    let capabilities = physical_device.get_surface_capabilities_khr(surface).map_err(|e| {
+        println!("Failed to get surface capabilities ({})", e);
+    })?;
+
+    let min_image_count = match capabilities.max_image_count {
+        Some(max_image_count) => cmp::max(capabilities.min_image_count, cmp::min(3, max_image_count)),
+        None => cmp::max(capabilities.min_image_count, 3),
+    };
+
+    let surface_formats = physical_device.get_surface_formats_khr(surface).map_err(|e| {
+        println!("Failed to get surface formats ({})", e);
+    })?;
+
+    let mut format = None;
+    let mut color_space = None;
+    for surface_format in surface_formats {
+        if (surface_format.format == dacite::core::Format::B8G8R8A8_UNorm) && (surface_format.color_space == dacite::khr_surface::ColorSpaceKhr::SRGBNonLinear) {
+            format = Some(surface_format.format);
+            color_space = Some(surface_format.color_space);
+            break;
+        }
+    }
+
+    if format.is_none() {
+        println!("No suitable surface format found");
+        return Err(());
+    }
+
+    let (image_sharing_mode, queue_family_indices) = if queue_family_indices.graphics == queue_family_indices.present {
+        (dacite::core::SharingMode::Exclusive, vec![queue_family_indices.graphics])
+    }
+    else {
+        (dacite::core::SharingMode::Concurrent, vec![queue_family_indices.graphics, queue_family_indices.present])
+    };
+
+    let extent = match capabilities.current_extent {
+        Some(extent) => extent,
+        None => preferred_extent.clone(),
+    };
+
+    let present_modes = physical_device.get_surface_present_modes_khr(surface).map_err(|e| {
+        println!("Failed to get surface present modes ({})", e);
+    })?;
+
+    let mut present_mode = None;
+    for mode in present_modes {
+        if mode == dacite::khr_surface::PresentModeKhr::Mailbox {
+            present_mode = Some(dacite::khr_surface::PresentModeKhr::Mailbox);
+            break;
+        }
+        else if mode == dacite::khr_surface::PresentModeKhr::Immediate {
+            present_mode = Some(dacite::khr_surface::PresentModeKhr::Immediate);
+        }
+    }
+
+    if present_mode.is_none() {
+        println!("No suitable present mode found");
+        return Err(());
+    }
+
+    let create_info = dacite::khr_swapchain::SwapchainCreateInfoKhr {
+        flags: dacite::khr_swapchain::SwapchainCreateFlagsKhr::empty(),
+        surface: surface.clone(),
+        min_image_count: min_image_count,
+        image_format: format.unwrap(),
+        image_color_space: color_space.unwrap(),
+        image_extent: extent,
+        image_array_layers: 1,
+        image_usage: dacite::core::IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
+        image_sharing_mode: image_sharing_mode,
+        queue_family_indices: queue_family_indices,
+        pre_transform: capabilities.current_transform,
+        composite_alpha: dacite::khr_surface::COMPOSITE_ALPHA_OPAQUE_BIT_KHR,
+        present_mode: present_mode.unwrap(),
+        clipped: true,
+        old_swapchain: None,
+        chain: None,
+    };
+
+    let swapchain = device.create_swapchain_khr(&create_info, None).map_err(|e| {
+        println!("Failed to create swapchain ({})", e);
+    })?;
+
+    Ok(SwapchainSettings {
+        swapchain: swapchain,
+        extent: extent,
+    })
+}
+
 fn real_main() -> Result<(), ()> {
+    let preferred_extent = dacite::core::Extent2D {
+        width: 800,
+        height: 600,
+    };
+
     let Window {
         events_loop,
         window,
         backend: window_backend,
-    } = create_window()?;
+    } = create_window(&preferred_extent)?;
 
     let instance_extensions = compute_instance_extensions(&window_backend)?;
     let instance = create_instance(instance_extensions)?;
@@ -257,6 +355,11 @@ fn real_main() -> Result<(), ()> {
     let device = create_device(&physical_device, device_extensions, &queue_family_indices)?;
     let graphics_queue = device.get_queue(queue_family_indices.graphics, 0);
     let present_queue = device.get_queue(queue_family_indices.present, 0);
+
+    let SwapchainSettings {
+        swapchain,
+        extent,
+    } = create_swapchain(&physical_device, &device, &surface, &preferred_extent, &queue_family_indices)?;
 
     window.show();
     events_loop.run_forever(|event| {
