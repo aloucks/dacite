@@ -40,6 +40,13 @@ struct SwapchainSettings {
     format: dacite::core::Format,
 }
 
+struct PipelineSettings {
+    pipeline: dacite::core::Pipeline,
+    layout: dacite::core::PipelineLayout,
+    vertex_shader: dacite::core::ShaderModule,
+    fragment_shader: dacite::core::ShaderModule,
+}
+
 #[allow(unused_mut)]
 fn create_window(extent: &dacite::core::Extent2D) -> Result<Window, ()> {
     let events_loop = winit::EventsLoop::new();
@@ -405,6 +412,167 @@ fn create_render_pass(device: &dacite::core::Device, format: dacite::core::Forma
     })
 }
 
+fn create_vertex_shader(device: &dacite::core::Device) -> Result<dacite::core::ShaderModule, ()> {
+    let vertex_shader_bytes = include_bytes!("shaders/triangle.vert.spv");
+
+    let create_info = dacite::core::ShaderModuleCreateInfo {
+        flags: dacite::core::ShaderModuleCreateFlags::empty(),
+        code: vertex_shader_bytes.to_vec(),
+        chain: None,
+    };
+
+    device.create_shader_module(&create_info, None).map_err(|e| {
+        println!("Failed to create vertex shader module ({})", e);
+    })
+}
+
+fn create_fragment_shader(device: &dacite::core::Device) -> Result<dacite::core::ShaderModule, ()> {
+    let fragment_shader_bytes = include_bytes!("shaders/triangle.frag.spv");
+
+    let create_info = dacite::core::ShaderModuleCreateInfo {
+        flags: dacite::core::ShaderModuleCreateFlags::empty(),
+        code: fragment_shader_bytes.to_vec(),
+        chain: None,
+    };
+
+    device.create_shader_module(&create_info, None).map_err(|e| {
+        println!("Failed to create fragment shader module ({})", e);
+    })
+}
+
+fn create_pipeline_layout(device: &dacite::core::Device) -> Result<dacite::core::PipelineLayout, ()> {
+    let create_info = dacite::core::PipelineLayoutCreateInfo {
+        flags: dacite::core::PipelineLayoutCreateFlags::empty(),
+        set_layouts: None,
+        push_constant_ranges: None,
+        chain: None,
+    };
+
+    device.create_pipeline_layout(&create_info, None).map_err(|e| {
+        println!("Failed to create pipeline layout ({})", e);
+    })
+}
+
+fn create_pipeline(device: &dacite::core::Device, render_pass: &dacite::core::RenderPass, extent: &dacite::core::Extent2D) -> Result<PipelineSettings, ()> {
+    let vertex_shader = create_vertex_shader(device)?;
+    let fragment_shader = create_fragment_shader(device)?;
+    let layout = create_pipeline_layout(device)?;
+
+    let create_infos = vec![dacite::core::GraphicsPipelineCreateInfo {
+        flags: dacite::core::PipelineCreateFlags::empty(),
+        stages: vec![
+            dacite::core::PipelineShaderStageCreateInfo {
+                flags: dacite::core::PipelineShaderStageCreateFlags::empty(),
+                stage: dacite::core::SHADER_STAGE_VERTEX_BIT,
+                module: vertex_shader.clone(),
+                name: "main".to_owned(),
+                specialization_info: None,
+                chain: None,
+            },
+            dacite::core::PipelineShaderStageCreateInfo {
+                flags: dacite::core::PipelineShaderStageCreateFlags::empty(),
+                stage: dacite::core::SHADER_STAGE_FRAGMENT_BIT,
+                module: fragment_shader.clone(),
+                name: "main".to_owned(),
+                specialization_info: None,
+                chain: None,
+            },
+        ],
+        vertex_input_state: dacite::core::PipelineVertexInputStateCreateInfo {
+            flags: dacite::core::PipelineVertexInputStateCreateFlags::empty(),
+            vertex_binding_descriptions: None,
+            vertex_attribute_descriptions: None,
+            chain: None,
+        },
+        input_assembly_state: dacite::core::PipelineInputAssemblyStateCreateInfo {
+            flags: dacite::core::PipelineInputAssemblyStateCreateFlags::empty(),
+            topology: dacite::core::PrimitiveTopology::TriangleList,
+            primitive_restart_enable: false,
+            chain: None,
+        },
+        tessellation_state: None,
+        viewport_state: Some(dacite::core::PipelineViewportStateCreateInfo {
+            flags: dacite::core::PipelineViewportStateCreateFlags::empty(),
+            viewports: vec![dacite::core::Viewport {
+                x: 0.0,
+                y: 0.0,
+                width: extent.width as f32,
+                height: extent.height as f32,
+                min_depth: 0.0,
+                max_depth: 1.0,
+            }],
+            scissors: vec![dacite::core::Rect2D {
+                offset: dacite::core::Offset2D {
+                    x: 0,
+                    y: 0,
+                },
+                extent: extent.clone(),
+            }],
+            chain: None,
+        }),
+        rasterization_state: dacite::core::PipelineRasterizationStateCreateInfo {
+            flags: dacite::core::PipelineRasterizationStateCreateFlags::empty(),
+            depth_clamp_enable: false,
+            rasterizer_discard_enable: false,
+            polygon_mode: dacite::core::PolygonMode::Fill,
+            cull_mode: dacite::core::CULL_MODE_NONE,
+            front_face: dacite::core::FrontFace::Clockwise,
+            depth_bias_enable: false,
+            depth_bias_constant_factor: 0.0,
+            depth_bias_clamp: 0.0,
+            depth_bias_slope_factor: 0.0,
+            line_width: 1.0,
+            chain: None,
+        },
+        multisample_state: Some(dacite::core::PipelineMultisampleStateCreateInfo {
+            flags: dacite::core::PipelineMultisampleStateCreateFlags::empty(),
+            rasterization_samples: dacite::core::SAMPLE_COUNT_1_BIT,
+            sample_shading_enable: false,
+            min_sample_shading: 1.0,
+            sample_mask: None,
+            alpha_to_coverage_enable: false,
+            alpha_to_one_enable: false,
+            chain: None,
+        }),
+        depth_stencil_state: None,
+        color_blend_state: Some(dacite::core::PipelineColorBlendStateCreateInfo {
+            flags: dacite::core::PipelineColorBlendStateCreateFlags::empty(),
+            logic_op_enable: false,
+            logic_op: dacite::core::LogicOp::Copy,
+            attachments: Some(vec![dacite::core::PipelineColorBlendAttachmentState {
+                blend_enable: false,
+                src_color_blend_factor: dacite::core::BlendFactor::One,
+                dst_color_blend_factor: dacite::core::BlendFactor::Zero,
+                color_blend_op: dacite::core::BlendOp::Add,
+                src_alpha_blend_factor: dacite::core::BlendFactor::One,
+                dst_alpha_blend_factor: dacite::core::BlendFactor::Zero,
+                alpha_blend_op: dacite::core::BlendOp::Add,
+                color_write_mask: dacite::core::ColorComponentFlags::empty(),
+            }]),
+            blend_constants: [0.0, 0.0, 0.0, 0.0],
+            chain: None,
+        }),
+        dynamic_state: None,
+        layout: layout.clone(),
+        render_pass: render_pass.clone(),
+        subpass: 0,
+        base_pipeline: None,
+        base_pipeline_index: None,
+        chain: None,
+    }];
+
+    let pipelines = device.create_graphics_pipelines(None, &create_infos, None).map_err(|(e, _)| {
+        println!("Failed to create pipeline ({})", e);
+    })?;
+
+    Ok(PipelineSettings {
+        pipeline: pipelines[0].clone(),
+        layout: layout,
+        vertex_shader: vertex_shader,
+        fragment_shader: fragment_shader,
+    })
+}
+
 fn real_main() -> Result<(), ()> {
     let preferred_extent = dacite::core::Extent2D {
         width: 800,
@@ -440,6 +608,13 @@ fn real_main() -> Result<(), ()> {
     } = create_swapchain(&physical_device, &device, &surface, &preferred_extent, &queue_family_indices)?;
 
     let render_pass = create_render_pass(&device, format)?;
+
+    let PipelineSettings {
+        pipeline,
+        layout: pipeline_layout,
+        vertex_shader,
+        fragment_shader,
+    } = create_pipeline(&device, &render_pass, &extent)?;
 
     window.show();
     events_loop.run_forever(|event| {
