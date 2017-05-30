@@ -4768,8 +4768,7 @@ chain_struct! {
 #[derive(Debug, Clone, PartialEq)]
 pub struct ShaderModuleCreateInfo {
     pub flags: ShaderModuleCreateFlags,
-    pub code_size: usize,
-    pub code: Vec<u32>,
+    pub code: Vec<u8>,
     pub chain: Option<ShaderModuleCreateInfoChain>,
 }
 
@@ -4782,7 +4781,19 @@ struct VkShaderModuleCreateInfoWrapper {
 
 impl VkShaderModuleCreateInfoWrapper {
     pub fn new(create_info: &ShaderModuleCreateInfo, with_chain: bool) -> Self {
-        let code = create_info.code.clone();
+        let size_u32 = if create_info.code.len() % mem::size_of::<u32>() == 0 {
+            create_info.code.len() / mem::size_of::<u32>()
+        }
+        else {
+            1 + create_info.code.len() / mem::size_of::<u32>()
+        };
+
+        let mut code = Vec::with_capacity(size_u32);
+        unsafe {
+            code.set_len(size_u32);
+            ptr::copy_nonoverlapping(create_info.code.as_ptr(), code.as_mut_ptr() as *mut u8, create_info.code.len());
+        }
+
         let (pnext, chain) = ShaderModuleCreateInfoChainWrapper::new_optional(&create_info.chain, with_chain);
 
         VkShaderModuleCreateInfoWrapper {
@@ -4790,7 +4801,7 @@ impl VkShaderModuleCreateInfoWrapper {
                 sType: vks::VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO,
                 pNext: pnext,
                 flags: create_info.flags,
-                codeSize: create_info.code_size,
+                codeSize: create_info.code.len(),
                 pCode: code.as_ptr(),
             },
             code: code,
