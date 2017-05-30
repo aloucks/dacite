@@ -37,6 +37,7 @@ struct SwapchainSettings {
     extent: dacite::core::Extent2D,
     images: Vec<dacite::core::Image>,
     image_views: Vec<dacite::core::ImageView>,
+    format: dacite::core::Format,
 }
 
 #[allow(unused_mut)]
@@ -365,6 +366,42 @@ fn create_swapchain(physical_device: &dacite::core::PhysicalDevice, device: &dac
         extent: extent,
         images: images,
         image_views: image_views,
+        format: format,
+    })
+}
+
+fn create_render_pass(device: &dacite::core::Device, format: dacite::core::Format) -> Result<dacite::core::RenderPass, ()> {
+    let create_info = dacite::core::RenderPassCreateInfo {
+        flags: dacite::core::RenderPassCreateFlags::empty(),
+        attachments: Some(vec![dacite::core::AttachmentDescription {
+            flags: dacite::core::AttachmentDescriptionFlags::empty(),
+            format: format,
+            samples: dacite::core::SAMPLE_COUNT_1_BIT,
+            load_op: dacite::core::AttachmentLoadOp::Clear,
+            store_op: dacite::core::AttachmentStoreOp::Store,
+            stencil_load_op: dacite::core::AttachmentLoadOp::DontCare,
+            stencil_store_op: dacite::core::AttachmentStoreOp::DontCare,
+            initial_layout: dacite::core::ImageLayout::Undefined,
+            final_layout: dacite::core::ImageLayout::PresentSrcKhr,
+        }]),
+        subpasses: vec![dacite::core::SubpassDescription {
+            flags: dacite::core::SubpassDescriptionFlags::empty(),
+            pipeline_bind_point: dacite::core::PipelineBindPoint::Graphics,
+            input_attachments: None,
+            color_attachments: Some(vec![dacite::core::AttachmentReference {
+                attachment: dacite::core::AttachmentIndex::Index(0),
+                layout: dacite::core::ImageLayout::ColorAttachmentOptimal,
+            }]),
+            resolve_attachments: None,
+            depth_stencil_attachment: None,
+            preserve_attachments: None,
+        }],
+        dependencies: None,
+        chain: None,
+    };
+
+    device.create_render_pass(&create_info, None).map_err(|e| {
+        println!("Failed to create renderpass ({})", e);
     })
 }
 
@@ -399,7 +436,10 @@ fn real_main() -> Result<(), ()> {
         extent,
         images: swapchain_images,
         image_views: swapchain_image_views,
+        format,
     } = create_swapchain(&physical_device, &device, &surface, &preferred_extent, &queue_family_indices)?;
+
+    let render_pass = create_render_pass(&device, format)?;
 
     window.show();
     events_loop.run_forever(|event| {
