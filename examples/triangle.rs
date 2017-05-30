@@ -412,6 +412,29 @@ fn create_render_pass(device: &dacite::core::Device, format: dacite::core::Forma
     })
 }
 
+fn create_framebuffers(device: &dacite::core::Device, image_views: &[dacite::core::ImageView], render_pass: &dacite::core::RenderPass, extent: &dacite::core::Extent2D) -> Result<Vec<dacite::core::Framebuffer>, ()> {
+    let mut framebuffers = Vec::with_capacity(image_views.len());
+    for image_view in image_views {
+        let create_info = dacite::core::FramebufferCreateInfo {
+            flags: dacite::core::FramebufferCreateFlags::empty(),
+            render_pass: render_pass.clone(),
+            attachments: Some(vec![image_view.clone()]),
+            width: extent.width,
+            height: extent.height,
+            layers: 1,
+            chain: None,
+        };
+
+        let framebuffer = device.create_framebuffer(&create_info, None).map_err(|e| {
+            println!("Failed to create framebuffer ({})", e);
+        })?;
+
+        framebuffers.push(framebuffer);
+    }
+
+    Ok(framebuffers)
+}
+
 fn create_vertex_shader(device: &dacite::core::Device) -> Result<dacite::core::ShaderModule, ()> {
     let vertex_shader_bytes = include_bytes!("shaders/triangle.vert.spv");
 
@@ -608,6 +631,7 @@ fn real_main() -> Result<(), ()> {
     } = create_swapchain(&physical_device, &device, &surface, &preferred_extent, &queue_family_indices)?;
 
     let render_pass = create_render_pass(&device, format)?;
+    let framebuffers = create_framebuffers(&device, &swapchain_image_views, &render_pass, &extent)?;
 
     let PipelineSettings {
         pipeline,
