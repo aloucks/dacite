@@ -596,6 +596,68 @@ fn create_pipeline(device: &dacite::core::Device, render_pass: &dacite::core::Re
     })
 }
 
+fn create_command_pool(device: &dacite::core::Device, queue_family_index: u32) -> Result<dacite::core::CommandPool, ()> {
+    let create_info = dacite::core::CommandPoolCreateInfo {
+        flags: dacite::core::CommandPoolCreateFlags::empty(),
+        queue_family_index: queue_family_index,
+        chain: None,
+    };
+
+    device.create_command_pool(&create_info, None).map_err(|e| {
+        println!("Failed to create command pool ({})", e);
+    })
+}
+
+fn record_command_buffer(command_pool: &dacite::core::CommandPool, pipeline: &dacite::core::Pipeline, framebuffers: &[dacite::core::Framebuffer], render_pass: &dacite::core::RenderPass, extent: &dacite::core::Extent2D) -> Result<Vec<dacite::core::CommandBuffer>, ()> {
+    let allocate_info = dacite::core::CommandBufferAllocateInfo {
+        command_pool: command_pool.clone(),
+        level: dacite::core::CommandBufferLevel::Primary,
+        command_buffer_count: framebuffers.len() as u32,
+        chain: None,
+    };
+
+    let command_buffers = dacite::core::CommandPool::allocate_command_buffers(&allocate_info).map_err(|e| {
+        println!("Failed to allocate command buffers ({})", e);
+    })?;
+
+    for (command_buffer, framebuffer) in command_buffers.iter().zip(framebuffers.iter()) {
+        let begin_info = dacite::core::CommandBufferBeginInfo {
+            flags: dacite::core::CommandBufferUsageFlags::empty(),
+            inheritance_info: None,
+            chain: None,
+        };
+
+        command_buffer.begin(&begin_info).map_err(|e| {
+            println!("Failed to begin command buffer ({})", e);
+        })?;
+
+        let begin_info = dacite::core::RenderPassBeginInfo {
+            render_pass: render_pass.clone(),
+            framebuffer: framebuffer.clone(),
+            render_area: dacite::core::Rect2D {
+                offset: dacite::core::Offset2D {
+                    x: 0,
+                    y: 0,
+                },
+                extent: extent.clone(),
+            },
+            clear_values: Some(vec![dacite::core::ClearValue::Color(dacite::core::ClearColorValue::Float32([0.0, 0.0, 0.0, 1.0]))]),
+            chain: None,
+        };
+
+        command_buffer.begin_render_pass(&begin_info, dacite::core::SubpassContents::Inline);
+        command_buffer.bind_pipeline(dacite::core::PipelineBindPoint::Graphics, pipeline);
+        command_buffer.draw(3, 1, 0, 0);
+
+        command_buffer.end_render_pass();
+        command_buffer.end().map_err(|e| {
+            println!("Failed to record command buffer ({})", e);
+        })?;
+    }
+
+    Ok(command_buffers)
+}
+
 fn real_main() -> Result<(), ()> {
     let preferred_extent = dacite::core::Extent2D {
         width: 800,
@@ -639,6 +701,9 @@ fn real_main() -> Result<(), ()> {
         vertex_shader,
         fragment_shader,
     } = create_pipeline(&device, &render_pass, &extent)?;
+
+    let command_pool = create_command_pool(&device, queue_family_indices.graphics)?;
+    let command_buffers = record_command_buffer(&command_pool, &pipeline, &framebuffers, &render_pass, &extent)?;
 
     window.show();
     events_loop.run_forever(|event| {
