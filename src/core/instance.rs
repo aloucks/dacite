@@ -15,7 +15,10 @@
 use core::PhysicalDevice;
 use core::allocator_helper::AllocatorHelper;
 use core;
+use libloading;
 use std::cmp::Ordering;
+use std::error;
+use std::fmt;
 use std::hash::{Hash, Hasher};
 use std::mem;
 use std::ptr;
@@ -23,6 +26,12 @@ use std::sync::Arc;
 use utils;
 use vks;
 use {TryDestroyError, TryDestroyErrorKind, VulkanObject};
+
+#[cfg(unix)]
+use libloading::os::unix::Symbol;
+
+#[cfg(windows)]
+use libloading::os::windows::Symbol;
 
 #[cfg(feature = "ext_debug_report_1")]
 use ext_debug_report;
@@ -39,10 +48,57 @@ use std::sync::Mutex;
 #[cfg(feature = "khr_xlib_surface_6")]
 use khr_xlib_surface;
 
+const VK_GET_INSTANCE_PROC_ADDR: &'static str = "vkGetInstanceProcAddr";
+
+/// Indicates an error, which occurred before an Instance was created.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum EarlyInstanceError {
+    /// The Vulkan library could be loaded.
+    LoadLibraryFailed(String),
+
+    /// A required symbol was not found in the Vulkan library.
+    SymbolNotFound(String),
+
+    /// A Vulkan error occurred.
+    VulkanError(core::Error),
+}
+
+impl From<vks::VkResult> for EarlyInstanceError {
+    fn from(res: vks::VkResult) -> Self {
+        EarlyInstanceError::VulkanError(res.into())
+    }
+}
+
+impl fmt::Display for EarlyInstanceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            EarlyInstanceError::LoadLibraryFailed(ref l) => write!(f, "Failed to load library {}", l),
+            EarlyInstanceError::SymbolNotFound(ref s) => write!(f, "Symbol {} not found", s),
+            EarlyInstanceError::VulkanError(e) => e.fmt(f),
+        }
+    }
+}
+
+impl error::Error for EarlyInstanceError {
+    fn description(&self) -> &str {
+        match *self {
+            EarlyInstanceError::LoadLibraryFailed(_) => "LoadLibraryFailed",
+            EarlyInstanceError::SymbolNotFound(_) => "SymbolNotFound",
+            EarlyInstanceError::VulkanError(ref e) => e.description(),
+        }
+    }
+}
+
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum CheckInstanceExtensionsError {
     Missing(Vec<core::InstanceExtensionProperties>),
-    VulkanError(core::Error),
+    EarlyInstanceError(EarlyInstanceError),
+}
+
+impl From<EarlyInstanceError> for CheckInstanceExtensionsError {
+    fn from(e: EarlyInstanceError) -> Self {
+        CheckInstanceExtensionsError::EarlyInstanceError(e)
+    }
 }
 
 /// See [`VkInstance`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkInstance)
@@ -88,7 +144,7 @@ impl Instance {
         let mut found = Vec::new();
         let mut missing = extensions;
 
-        let instance_extensions = Instance::enumerate_instance_extension_properties(None).map_err(CheckInstanceExtensionsError::VulkanError)?;
+        let instance_extensions = Instance::enumerate_instance_extension_properties(None)?;
         for extension in instance_extensions {
             let pos = missing.iter().position(|e| (e.extension == extension.extension) && (e.spec_version <= extension.spec_version));
             if let Some(pos) = pos {
@@ -105,11 +161,23 @@ impl Instance {
     }
 
     /// See [`vkCreateInstance`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCreateInstance)
-    pub fn create(create_info: &core::InstanceCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<Instance, core::Error> {
+    pub fn create(create_info: &core::InstanceCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<Instance, EarlyInstanceError> {
+        let (library, vk_get_instance_proc_addr) = unsafe {
+            let library = libloading::Library::new(vks::VULKAN_LIBRARY_NAME)
+                .map_err(|_| EarlyInstanceError::LoadLibraryFailed(vks::VULKAN_LIBRARY_NAME.to_owned()))?;
+            let vk_get_instance_proc_addr = {
+                let vk_get_instance_proc_addr: libloading::Symbol<vks::PFN_vkGetInstanceProcAddr> = library
+                    .get(VK_GET_INSTANCE_PROC_ADDR.as_bytes())
+                    .map_err(|_| EarlyInstanceError::SymbolNotFound(VK_GET_INSTANCE_PROC_ADDR.to_owned()))?;
+                vk_get_instance_proc_addr.into_raw()
+            };
+            (library, vk_get_instance_proc_addr)
+        };
+
         let allocator_helper = allocator.map(AllocatorHelper::new);
         let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), AllocatorHelper::callbacks);
 
-        let mut loader = vks::InstanceProcAddrLoader::from_get_instance_proc_addr(vks::vkGetInstanceProcAddr);
+        let mut loader = vks::InstanceProcAddrLoader::from_get_instance_proc_addr(*vk_get_instance_proc_addr);
         unsafe {
             loader.load_core_null_instance();
         }
@@ -150,6 +218,8 @@ impl Instance {
             ptr::write(&mut inner.handle, instance);
             ptr::write(&mut inner.allocator, allocator_helper);
             ptr::write(&mut inner.loader, loader);
+            ptr::write(&mut inner.library, library);
+            ptr::write(&mut inner.vk_get_instance_proc_addr, vk_get_instance_proc_addr);
 
             #[cfg(feature = "ext_debug_report_1")]
             {
@@ -201,10 +271,16 @@ impl Instance {
     }
 
     /// See [`vkEnumerateInstanceLayerProperties`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkEnumerateInstanceLayerProperties)
-    pub fn enumerate_instance_layer_properties() -> Result<core::LayerPropertiesIterator, core::Error> {
+    pub fn enumerate_instance_layer_properties() -> Result<core::LayerPropertiesIterator, EarlyInstanceError> {
         unsafe {
+            let library = libloading::Library::new(vks::VULKAN_LIBRARY_NAME)
+                .map_err(|_| EarlyInstanceError::LoadLibraryFailed(vks::VULKAN_LIBRARY_NAME.to_owned()))?;
+            let vk_get_instance_proc_addr: libloading::Symbol<vks::PFN_vkGetInstanceProcAddr> = library
+                .get(VK_GET_INSTANCE_PROC_ADDR.as_bytes())
+                .map_err(|_| EarlyInstanceError::SymbolNotFound(VK_GET_INSTANCE_PROC_ADDR.to_owned()))?;
+
             let mut loader = vks::instance_proc_addr_loader::CoreNullInstance::new();
-            loader.load(vks::vkGetInstanceProcAddr, ptr::null_mut());
+            loader.load(*vk_get_instance_proc_addr, ptr::null_mut());
 
             let mut num_layer_properties = 0;
             let res = (loader.vkEnumerateInstanceLayerProperties)(&mut num_layer_properties, ptr::null_mut());
@@ -224,10 +300,16 @@ impl Instance {
     }
 
     /// See [`vkEnumerateInstanceExtensionProperties`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkEnumerateInstanceExtensionProperties)
-    pub fn enumerate_instance_extension_properties(layer_name: Option<&str>) -> Result<core::InstanceExtensionPropertiesIterator, core::Error> {
+    pub fn enumerate_instance_extension_properties(layer_name: Option<&str>) -> Result<core::InstanceExtensionPropertiesIterator, EarlyInstanceError> {
         unsafe {
+            let library = libloading::Library::new(vks::VULKAN_LIBRARY_NAME)
+                .map_err(|_| EarlyInstanceError::LoadLibraryFailed(vks::VULKAN_LIBRARY_NAME.to_owned()))?;
+            let vk_get_instance_proc_addr: libloading::Symbol<vks::PFN_vkGetInstanceProcAddr> = library
+                .get(VK_GET_INSTANCE_PROC_ADDR.as_bytes())
+                .map_err(|_| EarlyInstanceError::SymbolNotFound(VK_GET_INSTANCE_PROC_ADDR.to_owned()))?;
+
             let mut loader = vks::instance_proc_addr_loader::CoreNullInstance::new();
-            loader.load(vks::vkGetInstanceProcAddr, ptr::null_mut());
+            loader.load(*vk_get_instance_proc_addr, ptr::null_mut());
 
             let layer_name_cstr = utils::cstr_from_str(layer_name);
 
@@ -332,6 +414,8 @@ struct Inner {
     handle: vks::VkInstance,
     allocator: Option<AllocatorHelper>,
     loader: vks::InstanceProcAddrLoader,
+    library: libloading::Library,
+    vk_get_instance_proc_addr: Symbol<vks::PFN_vkGetInstanceProcAddr>,
 
     #[cfg(feature = "ext_debug_report_1")]
     debug_report_callback: Option<Arc<ext_debug_report::DebugReportCallbacksExt>>,

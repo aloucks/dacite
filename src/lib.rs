@@ -13,6 +13,7 @@
 // PERFORMANCE OF THIS SOFTWARE.
 
 extern crate libc;
+extern crate libloading;
 extern crate vks;
 
 #[cfg(feature = "core_1_0_3")]

@@ -115,7 +115,7 @@ fn compute_instance_extensions(backend: &WindowBackend) -> Result<Vec<dacite::co
                 }
             }
 
-            dacite::core::CheckInstanceExtensionsError::VulkanError(e) => println!("Failed to query instance extensions ({})", e),
+            dacite::core::CheckInstanceExtensionsError::EarlyInstanceError(e) => println!("{}", e),
         }
     })
 }
