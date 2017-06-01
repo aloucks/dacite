@@ -3,6 +3,7 @@ extern crate winit;
 
 use std::cmp;
 use std::process;
+use std::time::Duration;
 
 #[cfg(target_os = "linux")]
 use winit::os::unix::WindowExt;
@@ -570,7 +571,7 @@ fn create_pipeline(device: &dacite::core::Device, render_pass: &dacite::core::Re
                 src_alpha_blend_factor: dacite::core::BlendFactor::One,
                 dst_alpha_blend_factor: dacite::core::BlendFactor::Zero,
                 alpha_blend_op: dacite::core::BlendOp::Add,
-                color_write_mask: dacite::core::ColorComponentFlags::empty(),
+                color_write_mask: dacite::core::ColorComponentFlags::all(),
             }]),
             blend_constants: [0.0, 0.0, 0.0, 0.0],
             chain: None,
@@ -658,6 +659,62 @@ fn record_command_buffer(command_pool: &dacite::core::CommandPool, pipeline: &da
     Ok(command_buffers)
 }
 
+fn create_semaphores(device: &dacite::core::Device) -> Result<(dacite::core::Semaphore, dacite::core::Semaphore), ()> {
+    let create_info = dacite::core::SemaphoreCreateInfo {
+        flags: dacite::core::SemaphoreCreateFlags::empty(),
+        chain: None,
+    };
+
+    let image_acquired = device.create_semaphore(&create_info, None).map_err(|e| {
+        println!("Failed to create semaphore ({})", e);
+    })?;
+
+    let image_rendered = device.create_semaphore(&create_info, None).map_err(|e| {
+        println!("Failed to create semaphore ({})", e);
+    })?;
+
+    Ok((image_acquired, image_rendered))
+}
+
+fn render(graphics_queue: &dacite::core::Queue, present_queue: &dacite::core::Queue, command_buffers: &[dacite::core::CommandBuffer], swapchain: &dacite::khr_swapchain::SwapchainKhr, image_acquired: &dacite::core::Semaphore, image_rendered: &dacite::core::Semaphore) -> Result<(), ()> {
+    let next_image_res = swapchain.acquire_next_image_khr(dacite::core::Timeout::Some(Duration::from_millis(17)), Some(&image_acquired), None).map_err(|e| {
+        println!("Failed to acquire next image ({})", e);
+    })?;
+
+    let next_image = match next_image_res {
+        dacite::khr_swapchain::AcquireNextImageResultKhr::Index(idx) => idx,
+        dacite::khr_swapchain::AcquireNextImageResultKhr::Suboptimal(idx) => idx,
+        dacite::khr_swapchain::AcquireNextImageResultKhr::Timeout |
+        dacite::khr_swapchain::AcquireNextImageResultKhr::NotReady => return Ok(()),
+    };
+
+    let submit_infos = vec![dacite::core::SubmitInfo {
+        wait_semaphores: Some(vec![image_acquired.clone()]),
+        wait_dst_stage_mask: Some(vec![dacite::core::PIPELINE_STAGE_TOP_OF_PIPE_BIT]),
+        command_buffers: Some(vec![command_buffers[next_image].clone()]),
+        signal_semaphores: Some(vec![image_rendered.clone()]),
+        chain: None,
+    }];
+
+    graphics_queue.submit(Some(&submit_infos), None).map_err(|e| {
+        println!("Failed to submit command buffer ({})", e);
+    })?;
+
+    let mut present_info = dacite::khr_swapchain::PresentInfoKhr {
+        wait_semaphores: Some(vec![image_rendered.clone()]),
+        swapchains: vec![swapchain.clone()],
+        image_indices: vec![next_image as u32],
+        results: None,
+        chain: None,
+    };
+
+    present_queue.queue_present_khr(&mut present_info).map_err(|e| {
+        println!("Failed to present image ({})", e);
+    })?;
+
+    Ok(())
+}
+
 fn real_main() -> Result<(), ()> {
     let preferred_extent = dacite::core::Extent2D {
         width: 800,
@@ -704,13 +761,28 @@ fn real_main() -> Result<(), ()> {
 
     let command_pool = create_command_pool(&device, queue_family_indices.graphics)?;
     let command_buffers = record_command_buffer(&command_pool, &pipeline, &framebuffers, &render_pass, &extent)?;
+    let (image_acquired, image_rendered) = create_semaphores(&device)?;
 
     window.show();
-    events_loop.run_forever(|event| {
-        if let winit::Event::WindowEvent { event: winit::WindowEvent::Closed, .. } = event {
-            events_loop.interrupt();
-        }
-    });
+
+    let mut running = true;
+    while running {
+        events_loop.poll_events(|event| {
+            if let winit::Event::WindowEvent { event: winit::WindowEvent::Closed, .. } = event {
+                running = false;
+            }
+        });
+
+        render(&graphics_queue, &present_queue, &command_buffers, &swapchain, &image_acquired, &image_rendered)?;
+
+        device.wait_idle().map_err(|e| {
+            println!("Failed to wait for device becoming idle ({})", e);
+        })?;
+    }
+
+    device.wait_idle().map_err(|e| {
+        println!("Failed to wait for device becoming idle ({})", e);
+    })?;
 
     Ok(())
 }
