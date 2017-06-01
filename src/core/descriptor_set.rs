@@ -104,7 +104,8 @@ impl DescriptorSet {
             _ => return,
         };
 
-        let (writes_count, writes_ptr, _, _) = match writes {
+        #[allow(unused_variables)]
+        let (writes_count, writes_ptr, writes, writes_wrappers) = match writes {
             Some(writes) => {
                 let writes_wrappers: Vec<_> = writes.iter().map(|w| core::VkWriteDescriptorSetWrapper::new(w, true)).collect();
                 let writes: Vec<_> = writes_wrappers.iter().map(|w| w.vks_struct).collect();
@@ -114,7 +115,8 @@ impl DescriptorSet {
             None => (0, ptr::null(), None, None),
         };
 
-        let (copies_count, copies_ptr, _, _) = match copies {
+        #[allow(unused_variables)]
+        let (copies_count, copies_ptr, copies, copies_wrappers) = match copies {
             Some(copies) => {
                 let copies_wrappers: Vec<_> = copies.iter().map(|c| core::VkCopyDescriptorSetWrapper::new(c, true)).collect();
                 let copies: Vec<_> = copies_wrappers.iter().map(|c| c.vks_struct).collect();

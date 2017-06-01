@@ -90,7 +90,8 @@ impl Queue {
 
     /// See [`vkQueueSubmit`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkQueueSubmit)
     pub fn submit(&self, submits: Option<&[core::SubmitInfo]>, fence: Option<Fence>) -> Result<(), core::Error> {
-        let (submits_count, vk_submits_ptr, _, _) = match submits {
+        #[allow(unused_variables)]
+        let (submits_count, vk_submits_ptr, vk_submits, submits_wrappers) = match submits {
             Some(submits) => {
                 let submits_wrappers: Vec<_> = submits.iter().map(|s| core::VkSubmitInfoWrapper::new(s, true)).collect();
                 let vk_submits: Vec<vks::VkSubmitInfo> = submits_wrappers.iter().map(|s| s.vks_struct).collect();
@@ -130,7 +131,8 @@ impl Queue {
 
     /// See [`vkQueueBindSparse`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkQueueBindSparse)
     pub fn bind_sparse(&self, bind_infos: Option<&[core::BindSparseInfo]>, fence: Option<Fence>) -> Result<(), core::Error> {
-        let (bind_infos_count, vk_bind_infos_ptr, _, _) = match bind_infos {
+        #[allow(unused_variables)]
+        let (bind_infos_count, vk_bind_infos_ptr, vk_bind_infos, bind_infos_wrappers) = match bind_infos {
             Some(bind_infos) => {
                 let bind_infos_wrappers: Vec<_> = bind_infos.iter().map(|b| core::VkBindSparseInfoWrapper::new(b, true)).collect();
                 let vk_bind_infos: Vec<vks::VkBindSparseInfo> = bind_infos_wrappers.iter().map(|b| b.vks_struct).collect();

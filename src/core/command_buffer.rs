@@ -366,7 +366,8 @@ impl CommandBuffer {
     pub fn wait_events(&self, events: &[Event], src_stage_mask: core::PipelineStageFlags, dst_stage_mask: core::PipelineStageFlags, memory_barriers: Option<&[core::MemoryBarrier]>, buffer_memory_barriers: Option<&[core::BufferMemoryBarrier]>, image_memory_barriers: Option<&[core::ImageMemoryBarrier]>) {
         let events: Vec<_> = events.iter().map(Event::handle).collect();
 
-        let (memory_barriers_count, memory_barriers_ptr, _, _) = match memory_barriers {
+        #[allow(unused_variables)]
+        let (memory_barriers_count, memory_barriers_ptr, vk_memory_barriers, memory_barriers_wrappers) = match memory_barriers {
             Some(memory_barriers) => {
                 let memory_barriers_wrappers: Vec<_> = memory_barriers.iter().map(|m| core::VkMemoryBarrierWrapper::new(m, true)).collect();
                 let vk_memory_barriers: Vec<_> = memory_barriers_wrappers.iter().map(|m| m.vks_struct).collect();
@@ -376,7 +377,8 @@ impl CommandBuffer {
             None => (0, ptr::null(), None, None),
         };
 
-        let (buffer_memory_barriers_count, buffer_memory_barriers_ptr, _, _) = match buffer_memory_barriers {
+        #[allow(unused_variables)]
+        let (buffer_memory_barriers_count, buffer_memory_barriers_ptr, vk_buffer_memory_barriers, buffer_memory_barriers_wrappers) = match buffer_memory_barriers {
             Some(buffer_memory_barriers) => {
                 let buffer_memory_barriers_wrappers: Vec<_> = buffer_memory_barriers.iter().map(|b| core::VkBufferMemoryBarrierWrapper::new(b, true)).collect();
                 let vk_buffer_memory_barriers: Vec<_> = buffer_memory_barriers_wrappers.iter().map(|b| b.vks_struct).collect();
@@ -386,7 +388,8 @@ impl CommandBuffer {
             None => (0, ptr::null(), None, None),
         };
 
-        let (image_memory_barriers_count, image_memory_barriers_ptr, _, _) = match image_memory_barriers {
+        #[allow(unused_variables)]
+        let (image_memory_barriers_count, image_memory_barriers_ptr, vk_image_memory_barriers, image_memory_barriers_wrappers) = match image_memory_barriers {
             Some(image_memory_barriers) => {
                 let image_memory_barriers_wrappers: Vec<_> = image_memory_barriers.iter().map(|i| core::VkImageMemoryBarrierWrapper::new(i, true)).collect();
                 let vk_image_memory_barriers: Vec<_> = image_memory_barriers_wrappers.iter().map(|i| i.vks_struct).collect();
@@ -403,7 +406,8 @@ impl CommandBuffer {
 
     /// See [`vkCmdPipelineBarrier`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCmdPipelineBarrier)
     pub fn pipeline_barrier(&self, src_stage_mask: core::PipelineStageFlags, dst_stage_mask: core::PipelineStageFlags, dependency_flags: core::DependencyFlags, memory_barriers: Option<&[core::MemoryBarrier]>, buffer_memory_barriers: Option<&[core::BufferMemoryBarrier]>, image_memory_barriers: Option<&[core::ImageMemoryBarrier]>) {
-        let (memory_barriers_count, memory_barriers_ptr, _, _) = match memory_barriers {
+        #[allow(unused_variables)]
+        let (memory_barriers_count, memory_barriers_ptr, vk_memory_barriers, memory_barriers_wrappers) = match memory_barriers {
             Some(memory_barriers) => {
                 let memory_barriers_wrappers: Vec<_> = memory_barriers.iter().map(|m| core::VkMemoryBarrierWrapper::new(m, true)).collect();
                 let vk_memory_barriers: Vec<_> = memory_barriers_wrappers.iter().map(|m| m.vks_struct).collect();
@@ -413,7 +417,8 @@ impl CommandBuffer {
             None => (0, ptr::null(), None, None),
         };
 
-        let (buffer_memory_barriers_count, buffer_memory_barriers_ptr, _, _) = match buffer_memory_barriers {
+        #[allow(unused_variables)]
+        let (buffer_memory_barriers_count, buffer_memory_barriers_ptr, vk_buffer_memory_barriers, buffer_memory_barriers_wrappers) = match buffer_memory_barriers {
             Some(buffer_memory_barriers) => {
                 let buffer_memory_barriers_wrappers: Vec<_> = buffer_memory_barriers.iter().map(|b| core::VkBufferMemoryBarrierWrapper::new(b, true)).collect();
                 let vk_buffer_memory_barriers: Vec<_> = buffer_memory_barriers_wrappers.iter().map(|b| b.vks_struct).collect();
@@ -423,7 +428,8 @@ impl CommandBuffer {
             None => (0, ptr::null(), None, None),
         };
 
-        let (image_memory_barriers_count, image_memory_barriers_ptr, _, _) = match image_memory_barriers {
+        #[allow(unused_variables)]
+        let (image_memory_barriers_count, image_memory_barriers_ptr, vk_image_memory_barriers, image_memory_barriers_wrappers) = match image_memory_barriers {
             Some(image_memory_barriers) => {
                 let image_memory_barriers_wrappers: Vec<_> = image_memory_barriers.iter().map(|i| core::VkImageMemoryBarrierWrapper::new(i, true)).collect();
                 let vk_image_memory_barriers: Vec<_> = image_memory_barriers_wrappers.iter().map(|i| i.vks_struct).collect();
