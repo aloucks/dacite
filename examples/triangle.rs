@@ -36,16 +36,8 @@ struct DeviceSettings {
 struct SwapchainSettings {
     swapchain: dacite::khr_swapchain::SwapchainKhr,
     extent: dacite::core::Extent2D,
-    images: Vec<dacite::core::Image>,
     image_views: Vec<dacite::core::ImageView>,
     format: dacite::core::Format,
-}
-
-struct PipelineSettings {
-    pipeline: dacite::core::Pipeline,
-    layout: dacite::core::PipelineLayout,
-    vertex_shader: dacite::core::ShaderModule,
-    fragment_shader: dacite::core::ShaderModule,
 }
 
 #[allow(unused_mut)]
@@ -372,7 +364,6 @@ fn create_swapchain(physical_device: &dacite::core::PhysicalDevice, device: &dac
     Ok(SwapchainSettings {
         swapchain: swapchain,
         extent: extent,
-        images: images,
         image_views: image_views,
         format: format,
     })
@@ -477,7 +468,7 @@ fn create_pipeline_layout(device: &dacite::core::Device) -> Result<dacite::core:
     })
 }
 
-fn create_pipeline(device: &dacite::core::Device, render_pass: &dacite::core::RenderPass, extent: &dacite::core::Extent2D) -> Result<PipelineSettings, ()> {
+fn create_pipeline(device: &dacite::core::Device, render_pass: &dacite::core::RenderPass, extent: &dacite::core::Extent2D) -> Result<dacite::core::Pipeline, ()> {
     let vertex_shader = create_vertex_shader(device)?;
     let fragment_shader = create_fragment_shader(device)?;
     let layout = create_pipeline_layout(device)?;
@@ -589,12 +580,7 @@ fn create_pipeline(device: &dacite::core::Device, render_pass: &dacite::core::Re
         println!("Failed to create pipeline ({})", e);
     })?;
 
-    Ok(PipelineSettings {
-        pipeline: pipelines[0].clone(),
-        layout: layout,
-        vertex_shader: vertex_shader,
-        fragment_shader: fragment_shader,
-    })
+    Ok(pipelines[0].clone())
 }
 
 fn create_command_pool(device: &dacite::core::Device, queue_family_index: u32) -> Result<dacite::core::CommandPool, ()> {
@@ -744,21 +730,13 @@ fn real_main() -> Result<(), ()> {
     let SwapchainSettings {
         swapchain,
         extent,
-        images: swapchain_images,
         image_views: swapchain_image_views,
         format,
     } = create_swapchain(&physical_device, &device, &surface, &preferred_extent, &queue_family_indices)?;
 
     let render_pass = create_render_pass(&device, format)?;
     let framebuffers = create_framebuffers(&device, &swapchain_image_views, &render_pass, &extent)?;
-
-    let PipelineSettings {
-        pipeline,
-        layout: pipeline_layout,
-        vertex_shader,
-        fragment_shader,
-    } = create_pipeline(&device, &render_pass, &extent)?;
-
+    let pipeline = create_pipeline(&device, &render_pass, &extent)?;
     let command_pool = create_command_pool(&device, queue_family_indices.graphics)?;
     let command_buffers = record_command_buffer(&command_pool, &pipeline, &framebuffers, &render_pass, &extent)?;
     let (image_acquired, image_rendered) = create_semaphores(&device)?;
