@@ -18,7 +18,6 @@ use std::cmp::Ordering;
 use std::hash::{Hash, Hasher};
 use std::ptr;
 use std::sync::Arc;
-use std::time::Duration;
 use utils;
 use vks;
 use {TryDestroyError, TryDestroyErrorKind, VulkanObject};
@@ -71,18 +70,13 @@ impl Fence {
     }
 
     /// See [`vkWaitForFences`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkWaitForFences)
-    pub fn wait_for_fences(fences: &[Self], wait_all: bool, timeout: Option<Duration>) -> Result<bool, core::Error> {
+    pub fn wait_for_fences(fences: &[Self], wait_all: bool, timeout: core::Timeout) -> Result<bool, core::Error> {
         let loader = fences[0].loader();
         let device = fences[0].device_handle();
         let fences: Vec<_> = fences.iter().map(Fence::handle).collect();
 
-        let timeout = match timeout {
-            Some(timeout) => 1000000000u64 * timeout.as_secs() + timeout.subsec_nanos() as u64,
-            None => 0,
-        };
-
         let res = unsafe {
-            (loader.core.vkWaitForFences)(device, fences.len() as u32, fences.as_ptr(), utils::to_vk_bool(wait_all), timeout)
+            (loader.core.vkWaitForFences)(device, fences.len() as u32, fences.as_ptr(), utils::to_vk_bool(wait_all), timeout.as_nanoseconds())
         };
 
         match res {
@@ -94,7 +88,7 @@ impl Fence {
 
     /// See [`vkWaitForFences`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkWaitForFences)
     #[inline]
-    pub fn wait_for(&self, timeout: Option<Duration>) -> Result<bool, core::Error> {
+    pub fn wait_for(&self, timeout: core::Timeout) -> Result<bool, core::Error> {
         Fence::wait_for_fences(&[self.clone()], false, timeout)
     }
 
