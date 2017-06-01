@@ -35,14 +35,6 @@ pub type SwapchainCreateFlagBitsKhr = vks::VkSwapchainCreateFlagBitsKHR;
 
 /// See [`vkAcquireNextImageKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkAcquireNextImageKHR)
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum AcquireNextImageTimeoutKhr {
-    None,
-    NanoSeconds(u64),
-    Infinite,
-}
-
-/// See [`vkAcquireNextImageKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkAcquireNextImageKHR)
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum AcquireNextImageResultKhr {
     Index(usize),
     Timeout,

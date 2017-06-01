@@ -14,7 +14,7 @@
 
 use core::allocator_helper::AllocatorHelper;
 use core;
-use khr_swapchain::{AcquireNextImageResultKhr, AcquireNextImageTimeoutKhr};
+use khr_swapchain::AcquireNextImageResultKhr;
 use std::cmp::Ordering;
 use std::hash::{Hash, Hasher};
 use std::ptr;
@@ -95,19 +95,13 @@ impl SwapchainKhr {
     }
 
     /// See [`vkAcquireNextImageKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkAcquireNextImageKHR)
-    pub fn acquire_next_image_khr(&self, timeout: AcquireNextImageTimeoutKhr, semaphore: Option<&core::Semaphore>, fence: Option<&core::Fence>) -> Result<AcquireNextImageResultKhr, core::Error> {
-        let timeout = match timeout {
-            AcquireNextImageTimeoutKhr::None => 0,
-            AcquireNextImageTimeoutKhr::NanoSeconds(timeout) => timeout,
-            AcquireNextImageTimeoutKhr::Infinite => ::std::u64::MAX,
-        };
-
+    pub fn acquire_next_image_khr(&self, timeout: core::Timeout, semaphore: Option<&core::Semaphore>, fence: Option<&core::Fence>) -> Result<AcquireNextImageResultKhr, core::Error> {
         let semaphore = semaphore.map_or(ptr::null_mut(), |s| s.handle());
         let fence = fence.map_or(ptr::null_mut(), |f| f.handle());
 
         let mut index = 0;
         let res = unsafe {
-            (self.loader().khr_swapchain.vkAcquireNextImageKHR)(self.device_handle(), self.handle(), timeout, semaphore, fence, &mut index)
+            (self.loader().khr_swapchain.vkAcquireNextImageKHR)(self.device_handle(), self.handle(), timeout.as_nanoseconds(), semaphore, fence, &mut index)
         };
 
         match res {
