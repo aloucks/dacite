@@ -45,6 +45,7 @@ use std::ffi::{CStr, CString};
 use std::fmt;
 use std::mem;
 use std::ptr;
+use std::time::Duration;
 use utils;
 use vks;
 
@@ -957,6 +958,24 @@ impl From<SubpassIndex> for u32 {
 pub enum QueryResult {
     U32(u32),
     U64(u64),
+}
+
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
+pub enum Timeout {
+    None,
+    Some(Duration),
+    Infinite,
+}
+
+impl Timeout {
+    #[inline]
+    pub fn as_nanoseconds(&self) -> u64 {
+        match *self {
+            Timeout::None => 0,
+            Timeout::Some(ref d) => 1000000000u64 * d.as_secs() + d.subsec_nanos() as u64,
+            Timeout::Infinite => u64::max_value(),
+        }
+    }
 }
 
 /// See [API Version Numbers](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#fundamentals-versionnum)
