@@ -4403,7 +4403,7 @@ impl VkSemaphoreCreateInfoWrapper {
 
         VkSemaphoreCreateInfoWrapper {
             vks_struct: vks::VkSemaphoreCreateInfo {
-                sType: vks::VK_STRUCTURE_TYPE_FENCE_CREATE_INFO,
+                sType: vks::VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO,
                 pNext: pnext,
                 flags: create_info.flags,
             },
