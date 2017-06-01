@@ -94,8 +94,8 @@ impl Fence {
 
     /// See [`vkWaitForFences`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkWaitForFences)
     #[inline]
-    pub fn wait_for(&self, wait_all: bool, timeout: Option<Duration>) -> Result<bool, core::Error> {
-        Fence::wait_for_fences(&[self.clone()], wait_all, timeout)
+    pub fn wait_for(&self, timeout: Option<Duration>) -> Result<bool, core::Error> {
+        Fence::wait_for_fences(&[self.clone()], false, timeout)
     }
 
     /// See [`vkResetFences`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkResetFences)
