@@ -281,7 +281,7 @@ fn create_swapchain(physical_device: &dacite::core::PhysicalDevice, device: &dac
 
     let extent = match capabilities.current_extent {
         Some(extent) => extent,
-        None => preferred_extent.clone(),
+        None => *preferred_extent,
     };
 
     let present_modes = physical_device.get_surface_present_modes_khr(surface).map_err(|e| {
@@ -521,7 +521,7 @@ fn create_pipeline(device: &dacite::core::Device, render_pass: &dacite::core::Re
                     x: 0,
                     y: 0,
                 },
-                extent: extent.clone(),
+                extent: *extent,
             }],
             chain: None,
         }),
@@ -626,7 +626,7 @@ fn record_command_buffer(command_pool: &dacite::core::CommandPool, pipeline: &da
                     x: 0,
                     y: 0,
                 },
-                extent: extent.clone(),
+                extent: *extent,
             },
             clear_values: Some(vec![dacite::core::ClearValue::Color(dacite::core::ClearColorValue::Float32([0.0, 0.0, 0.0, 1.0]))]),
             chain: None,
@@ -663,12 +663,12 @@ fn create_semaphores(device: &dacite::core::Device) -> Result<(dacite::core::Sem
 }
 
 fn render(graphics_queue: &dacite::core::Queue, present_queue: &dacite::core::Queue, command_buffers: &[dacite::core::CommandBuffer], swapchain: &dacite::khr_swapchain::SwapchainKhr, image_acquired: &dacite::core::Semaphore, image_rendered: &dacite::core::Semaphore) -> Result<(), ()> {
-    let next_image_res = swapchain.acquire_next_image_khr(dacite::core::Timeout::Some(Duration::from_millis(17)), Some(&image_acquired), None).map_err(|e| {
+    let next_image_res = swapchain.acquire_next_image_khr(dacite::core::Timeout::Some(Duration::from_millis(17)), Some(image_acquired), None).map_err(|e| {
         println!("Failed to acquire next image ({})", e);
     })?;
 
     let next_image = match next_image_res {
-        dacite::khr_swapchain::AcquireNextImageResultKhr::Index(idx) => idx,
+        dacite::khr_swapchain::AcquireNextImageResultKhr::Index(idx) |
         dacite::khr_swapchain::AcquireNextImageResultKhr::Suboptimal(idx) => idx,
         dacite::khr_swapchain::AcquireNextImageResultKhr::Timeout |
         dacite::khr_swapchain::AcquireNextImageResultKhr::NotReady => return Ok(()),
