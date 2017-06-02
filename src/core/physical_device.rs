@@ -25,6 +25,9 @@ use {TryDestroyError, TryDestroyErrorKind, VulkanObject};
 #[cfg(feature = "khr_xlib_surface_6")]
 use xlib_wrapper;
 
+#[cfg(feature = "khr_wayland_surface_5")]
+use wayland_wrapper;
+
 #[cfg(feature = "khr_surface_25")]
 use khr_surface;
 
@@ -476,6 +479,17 @@ impl PhysicalDevice {
     pub fn get_xlib_presentation_support_khr(&self, queue_family_index: u32, dpy: *mut xlib_wrapper::Display, visual_id: xlib_wrapper::VisualID) -> bool {
         let res = unsafe {
             (self.loader().khr_xlib_surface.vkGetPhysicalDeviceXlibPresentationSupportKHR)(self.handle, queue_family_index, dpy, visual_id)
+        };
+
+        utils::from_vk_bool(res)
+    }
+
+    #[cfg(feature = "khr_wayland_surface_5")]
+    /// See [`vkGetPhysicalDeviceWaylandPresentationSupportKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetPhysicalDeviceWaylandPresentationSupportKHR)
+    /// and extension [`VK_KHR_wayland_surface`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_wayland_surface)
+    pub fn get_wayland_presentation_support_khr(&self, queue_family_index: u32, display: *mut wayland_wrapper::wl_display) -> bool {
+        let res = unsafe {
+            (self.loader().khr_wayland_surface.vkGetPhysicalDeviceWaylandPresentationSupportKHR)(self.handle, queue_family_index, display)
         };
 
         utils::from_vk_bool(res)

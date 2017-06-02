@@ -3496,6 +3496,9 @@ pub enum InstanceExtension {
 
     #[cfg(feature = "khr_xlib_surface_6")]
     KhrXlibSurface,
+
+    #[cfg(feature = "khr_wayland_surface_5")]
+    KhrWaylandSurface,
 }
 
 impl<'a> From<&'a str> for InstanceExtension {
@@ -3512,6 +3515,9 @@ impl<'a> From<&'a str> for InstanceExtension {
 
             #[cfg(feature = "khr_xlib_surface_6")]
             vks::VK_KHR_XLIB_SURFACE_EXTENSION_NAME_STR => InstanceExtension::KhrXlibSurface,
+
+            #[cfg(feature = "khr_wayland_surface_5")]
+            vks::VK_KHR_WAYLAND_SURFACE_EXTENSION_NAME_STR => InstanceExtension::KhrWaylandSurface,
 
             _ => InstanceExtension::Unknown(name.to_owned())
         }
@@ -3532,6 +3538,9 @@ impl From<InstanceExtension> for String {
 
             #[cfg(feature = "khr_xlib_surface_6")]
             InstanceExtension::KhrXlibSurface => vks::VK_KHR_XLIB_SURFACE_EXTENSION_NAME_STR.to_owned(),
+
+            #[cfg(feature = "khr_wayland_surface_5")]
+            InstanceExtension::KhrWaylandSurface => vks::VK_KHR_WAYLAND_SURFACE_EXTENSION_NAME_STR.to_owned(),
 
             InstanceExtension::Unknown(name) => name,
         }

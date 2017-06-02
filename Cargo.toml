@@ -36,7 +36,8 @@ winit = "0.6"
 default = [ "vk_1_0_3" ]
 
 vk_1_0_3 = [ "core_1_0_3", "khr_surface_25", "ext_debug_report_1", "khr_display_21",
-             "khr_swapchain_67", "khr_display_swapchain_9", "khr_xlib_surface_6" ]
+             "khr_swapchain_67", "khr_display_swapchain_9", "khr_xlib_surface_6",
+             "khr_wayland_surface_5" ]
 
 core = [ "core_1_0_3" ]
 core_1_0_3 = [ "vks/core_1_0_3" ]
@@ -59,3 +60,6 @@ khr_display_swapchain_9 = [ "core_1_0_3", "khr_swapchain_67", "khr_display_21",
 
 khr_xlib_surface = [ "khr_xlib_surface_6" ]
 khr_xlib_surface_6 = [ "core_1_0_3", "khr_surface_25", "vks/khr_xlib_surface_6" ]
+
+khr_wayland_surface = [ "khr_wayland_surface_5" ]
+khr_wayland_surface_5 = [ "core_1_0_3", "khr_surface_25", "vks/khr_wayland_surface_5" ]

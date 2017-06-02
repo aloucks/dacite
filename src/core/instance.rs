@@ -36,7 +36,9 @@ use libloading::os::windows::Symbol;
 #[cfg(feature = "ext_debug_report_1")]
 use ext_debug_report;
 
-#[cfg(any(feature = "khr_display_21", feature = "khr_xlib_surface_6"))]
+#[cfg(any(feature = "khr_display_21",
+          feature = "khr_xlib_surface_6",
+          feature = "khr_wayland_surface_5"))]
 use khr_surface;
 
 #[cfg(feature = "khr_display_21")]
@@ -47,6 +49,9 @@ use std::sync::Mutex;
 
 #[cfg(feature = "khr_xlib_surface_6")]
 use khr_xlib_surface;
+
+#[cfg(feature = "khr_wayland_surface_5")]
+use khr_wayland_surface;
 
 const VK_GET_INSTANCE_PROC_ADDR: &'static str = "vkGetInstanceProcAddr";
 
@@ -207,6 +212,9 @@ impl Instance {
 
                     #[cfg(feature = "khr_xlib_surface_6")]
                     core::InstanceExtension::KhrXlibSurface => loader.load_khr_xlib_surface(instance),
+
+                    #[cfg(feature = "khr_wayland_surface_5")]
+                    core::InstanceExtension::KhrWaylandSurface => loader.load_khr_wayland_surface(instance),
 
                     core::InstanceExtension::Unknown(_) => { },
                 }
@@ -398,6 +406,27 @@ impl Instance {
         let mut surface = ptr::null_mut();
         let res = unsafe {
             (self.loader().khr_xlib_surface.vkCreateXlibSurfaceKHR)(self.handle(), &create_info_wrapper.vks_struct, allocation_callbacks, &mut surface)
+        };
+
+        if res == vks::VK_SUCCESS {
+            Ok(khr_surface::SurfaceKhr::new(surface, self.clone(), allocator_helper))
+        }
+        else {
+            Err(res.into())
+        }
+    }
+
+    #[cfg(feature = "khr_wayland_surface_5")]
+    /// See [`vkCreateWaylandSurfaceKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCreateWaylandSurfaceKHR)
+    /// and extension [`VK_KHR_wayland_surface`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_wayland_surface)
+    pub fn create_wayland_surface_khr(&self, create_info: &khr_wayland_surface::WaylandSurfaceCreateInfoKhr, allocator: Option<Box<core::Allocator>>) -> Result<khr_surface::SurfaceKhr, core::Error> {
+        let allocator_helper = allocator.map(AllocatorHelper::new);
+        let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), AllocatorHelper::callbacks);
+        let create_info_wrapper = khr_wayland_surface::VkWaylandSurfaceCreateInfoKHRWrapper::new(create_info, true);
+
+        let mut surface = ptr::null_mut();
+        let res = unsafe {
+            (self.loader().khr_wayland_surface.vkCreateWaylandSurfaceKHR)(self.handle(), &create_info_wrapper.vks_struct, allocation_callbacks, &mut surface)
         };
 
         if res == vks::VK_SUCCESS {

@@ -47,6 +47,9 @@ pub use version::{
 #[cfg(feature = "khr_xlib_surface_6")]
 pub use vks::xlib_wrapper;
 
+#[cfg(feature = "khr_wayland_surface_5")]
+pub use vks::wayland_wrapper;
+
 #[cfg(feature = "khr_surface_25")]
 pub mod khr_surface;
 
@@ -64,3 +67,6 @@ pub mod khr_display_swapchain;
 
 #[cfg(feature = "khr_xlib_surface_6")]
 pub mod khr_xlib_surface;
+
+#[cfg(feature = "khr_wayland_surface_5")]
+pub mod khr_wayland_surface;
