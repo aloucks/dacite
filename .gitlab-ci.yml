@@ -4,7 +4,7 @@ before_script:
     - rustc --version
     - cargo --version
 
-build:core_1_0_3:
+build:vk_1_0_3:
     stage: build
     script:
-        - cargo build --verbose --jobs 1 --release --no-default-features --features core_1_0_3
+        - cargo build --verbose --jobs 1 --release --no-default-features --features vk_1_0_3
