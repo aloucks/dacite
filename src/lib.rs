@@ -20,7 +20,6 @@ extern crate vks;
 mod chain;
 
 mod utils;
-mod version;
 mod vulkan_object;
 
 pub mod core;
@@ -35,15 +34,18 @@ pub mod khr_xlib_surface;
 pub use vks::xlib_wrapper;
 pub use vks::wayland_wrapper;
 
-pub use version::{
-    DACITE_API_VERSION,
-    DACITE_API_VERSION_MAJOR,
-    DACITE_API_VERSION_MINOR,
-    DACITE_API_VERSION_PATCH
-};
-
 pub use vulkan_object::{
     TryDestroyError,
     TryDestroyErrorKind,
     VulkanObject,
 };
+
+pub const DACITE_API_VERSION: core::Version = core::Version {
+    major: DACITE_API_VERSION_MAJOR,
+    minor: DACITE_API_VERSION_MINOR,
+    patch: DACITE_API_VERSION_PATCH,
+};
+
+pub const DACITE_API_VERSION_MAJOR: u32 = 1;
+pub const DACITE_API_VERSION_MINOR: u32 = 0;
+pub const DACITE_API_VERSION_PATCH: u32 = 3;
