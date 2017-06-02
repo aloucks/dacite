@@ -18,8 +18,6 @@ use std::hash::{Hash, Hasher};
 use std::ptr;
 use vks;
 use {TryDestroyError, TryDestroyErrorKind, VulkanObject};
-
-#[cfg(feature = "khr_swapchain_67")]
 use khr_swapchain;
 
 /// See [`VkQueue`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueue)
@@ -156,7 +154,6 @@ impl Queue {
         }
     }
 
-    #[cfg(feature = "khr_swapchain_67")]
     /// See [`vkQueuePresentKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkQueuePresentKHR)
     /// and extension [`VK_KHR_swapchain`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_swapchain)
     pub fn queue_present_khr(&self, present_info: &mut khr_swapchain::PresentInfoKhr) -> Result<khr_swapchain::QueuePresentResultKhr, core::Error> {

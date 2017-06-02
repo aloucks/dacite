@@ -45,9 +45,6 @@ impl VulkanObject for SurfaceKhr {
 }
 
 impl SurfaceKhr {
-    #[cfg(any(feature = "khr_display_21",
-              feature = "khr_xlib_surface_6",
-              feature = "khr_wayland_surface_5"))]
     pub(crate) fn new(handle: vks::VkSurfaceKHR, instance: Instance, allocator: Option<AllocatorHelper>) -> Self {
         SurfaceKhr(Arc::new(Inner {
             handle: handle,

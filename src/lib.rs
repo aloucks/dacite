@@ -16,27 +16,25 @@ extern crate libc;
 extern crate libloading;
 extern crate vks;
 
-#[cfg(feature = "core_1_0_3")]
 #[macro_use]
 mod chain;
 
-mod vulkan_object;
-pub use vulkan_object::{
-    TryDestroyError,
-    TryDestroyErrorKind,
-    VulkanObject,
-};
-
-#[cfg(feature = "core_1_0_3")]
 mod utils;
-
-#[cfg(feature = "core_1_0_3")]
-pub mod core;
-
-#[cfg(feature = "core_1_0_3")]
 mod version;
+mod vulkan_object;
 
-#[cfg(feature = "core_1_0_3")]
+pub mod core;
+pub mod ext_debug_report;
+pub mod khr_display;
+pub mod khr_display_swapchain;
+pub mod khr_surface;
+pub mod khr_swapchain;
+pub mod khr_wayland_surface;
+pub mod khr_xlib_surface;
+
+pub use vks::xlib_wrapper;
+pub use vks::wayland_wrapper;
+
 pub use version::{
     DACITE_API_VERSION,
     DACITE_API_VERSION_MAJOR,
@@ -44,29 +42,8 @@ pub use version::{
     DACITE_API_VERSION_PATCH
 };
 
-#[cfg(feature = "khr_xlib_surface_6")]
-pub use vks::xlib_wrapper;
-
-#[cfg(feature = "khr_wayland_surface_5")]
-pub use vks::wayland_wrapper;
-
-#[cfg(feature = "khr_surface_25")]
-pub mod khr_surface;
-
-#[cfg(feature = "ext_debug_report_1")]
-pub mod ext_debug_report;
-
-#[cfg(feature = "khr_display_21")]
-pub mod khr_display;
-
-#[cfg(feature = "khr_swapchain_67")]
-pub mod khr_swapchain;
-
-#[cfg(feature = "khr_display_swapchain_9")]
-pub mod khr_display_swapchain;
-
-#[cfg(feature = "khr_xlib_surface_6")]
-pub mod khr_xlib_surface;
-
-#[cfg(feature = "khr_wayland_surface_5")]
-pub mod khr_wayland_surface;
+pub use vulkan_object::{
+    TryDestroyError,
+    TryDestroyErrorKind,
+    VulkanObject,
+};

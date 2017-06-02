@@ -37,15 +37,13 @@ use core::{
     Semaphore,
     ShaderModule,
 };
+use khr_swapchain;
 use std::cmp::Ordering;
 use std::hash::{Hash, Hasher};
 use std::ptr;
 use std::sync::Arc;
 use vks;
 use {TryDestroyError, TryDestroyErrorKind, VulkanObject};
-
-#[cfg(feature = "khr_swapchain_67")]
-use khr_swapchain;
 
 /// See [`VkDevice`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDevice)
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
@@ -544,7 +542,6 @@ impl Device {
         }
     }
 
-    #[cfg(feature = "khr_swapchain_67")]
     /// See [`vkCreateSwapchainKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCreateSwapchainKHR)
     /// and extension [`VK_KHR_swapchain`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_swapchain)
     pub fn create_swapchain_khr(&self, create_info: &khr_swapchain::SwapchainCreateInfoKhr, allocator: Option<Box<core::Allocator>>) -> Result<khr_swapchain::SwapchainKhr, core::Error> {
@@ -565,7 +562,6 @@ impl Device {
         }
     }
 
-    #[cfg(feature = "khr_display_swapchain_9")]
     /// See [`vkCreateSharedSwapchainsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCreateSharedSwapchainsKHR)
     /// and extension [`VK_KHR_display_swapchain`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_display_swapchain)
     pub fn create_shared_swapchains_khr(&self, create_infos: &[khr_swapchain::SwapchainCreateInfoKhr], allocator: Option<Box<core::Allocator>>) -> Result<Vec<khr_swapchain::SwapchainKhr>, core::Error> {

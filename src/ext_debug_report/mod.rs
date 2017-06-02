@@ -55,11 +55,9 @@ pub enum DebugReportObjectTypeExt {
     CommandPool,
     DebugReport,
 
-    #[cfg(feature = "khr_surface_25")]
     /// See extension [`VK_KHR_surface`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_surface)
     SurfaceKhr,
 
-    #[cfg(feature = "khr_swapchain_67")]
     /// See extension [`VK_KHR_swapchain`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_swapchain)
     SwapchainKhr,
 
@@ -96,13 +94,8 @@ impl From<vks::VkDebugReportObjectTypeEXT> for DebugReportObjectTypeExt {
             vks::VK_DEBUG_REPORT_OBJECT_TYPE_FRAMEBUFFER_EXT => DebugReportObjectTypeExt::Framebuffer,
             vks::VK_DEBUG_REPORT_OBJECT_TYPE_COMMAND_POOL_EXT => DebugReportObjectTypeExt::CommandPool,
             vks::VK_DEBUG_REPORT_OBJECT_TYPE_DEBUG_REPORT_EXT => DebugReportObjectTypeExt::DebugReport,
-
-            #[cfg(feature = "khr_surface_25")]
             vks::VK_DEBUG_REPORT_OBJECT_TYPE_SURFACE_KHR_EXT => DebugReportObjectTypeExt::SurfaceKhr,
-
-            #[cfg(feature = "khr_swapchain_67")]
             vks::VK_DEBUG_REPORT_OBJECT_TYPE_SWAPCHAIN_KHR_EXT => DebugReportObjectTypeExt::SwapchainKhr,
-
             _ => DebugReportObjectTypeExt::UnknownValue(ty),
         }
     }
@@ -138,13 +131,8 @@ impl From<DebugReportObjectTypeExt> for vks::VkDebugReportObjectTypeEXT {
             DebugReportObjectTypeExt::Framebuffer => vks::VK_DEBUG_REPORT_OBJECT_TYPE_FRAMEBUFFER_EXT,
             DebugReportObjectTypeExt::CommandPool => vks::VK_DEBUG_REPORT_OBJECT_TYPE_COMMAND_POOL_EXT,
             DebugReportObjectTypeExt::DebugReport => vks::VK_DEBUG_REPORT_OBJECT_TYPE_DEBUG_REPORT_EXT,
-
-            #[cfg(feature = "khr_surface_25")]
             DebugReportObjectTypeExt::SurfaceKhr => vks::VK_DEBUG_REPORT_OBJECT_TYPE_SURFACE_KHR_EXT,
-
-            #[cfg(feature = "khr_swapchain_67")]
             DebugReportObjectTypeExt::SwapchainKhr => vks::VK_DEBUG_REPORT_OBJECT_TYPE_SWAPCHAIN_KHR_EXT,
-
             DebugReportObjectTypeExt::UnknownValue(ty) => ty,
         }
     }

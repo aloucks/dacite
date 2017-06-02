@@ -49,7 +49,6 @@ use std::time::Duration;
 use utils;
 use vks;
 
-#[cfg(feature = "ext_debug_report_1")]
 use ext_debug_report::{DebugReportCallbackCreateInfoExt, VkDebugReportCallbackCreateInfoEXTWrapper};
 
 pub use self::buffer::Buffer;
@@ -1049,23 +1048,18 @@ pub enum Error {
     TooManyObjects,
     FormatNotSupported,
 
-    #[cfg(feature = "khr_surface_25")]
     /// See extension [`VK_KHR_surface`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_surface)
     SurfaceLostKhr,
 
-    #[cfg(feature = "khr_surface_25")]
     /// See extension [`VK_KHR_surface`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_surface)
     NativeWindowInUseKhr,
 
-    #[cfg(feature = "ext_debug_report_1")]
     /// See extension [`VK_EXT_debug_report`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_EXT_debug_report)
     ValidationFailedExt,
 
-    #[cfg(feature = "khr_swapchain_67")]
     /// See extension [`VK_KHR_swapchain`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_swapchain)
     OutOfDateKhr,
 
-    #[cfg(feature = "khr_display_swapchain_9")]
     /// See extension [`VK_KHR_display_swapchain`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_display_swapchain)
     IncompatibleDisplayKhr,
 
@@ -1092,22 +1086,11 @@ impl ::std::error::Error for Error {
             Error::IncompatibleDriver => "IncompatibleDriver",
             Error::TooManyObjects => "TooManyObjects",
             Error::FormatNotSupported => "FormatNotSupported",
-
-            #[cfg(feature = "khr_surface_25")]
             Error::SurfaceLostKhr => "SurfaceLost",
-
-            #[cfg(feature = "khr_surface_25")]
             Error::NativeWindowInUseKhr => "NativeWindowInUse",
-
-            #[cfg(feature = "ext_debug_report_1")]
             Error::ValidationFailedExt => "ValidationFailed",
-
-            #[cfg(feature = "khr_swapchain_67")]
             Error::OutOfDateKhr => "OutOfDate",
-
-            #[cfg(feature = "khr_display_swapchain_9")]
             Error::IncompatibleDisplayKhr => "IncompatibleDisplay",
-
             Error::Unknown(_) => "unknown error",
         }
     }
@@ -1129,22 +1112,11 @@ impl From<vks::VkResult> for Error {
             vks::VK_ERROR_INCOMPATIBLE_DRIVER => Error::IncompatibleDriver,
             vks::VK_ERROR_TOO_MANY_OBJECTS => Error::TooManyObjects,
             vks::VK_ERROR_FORMAT_NOT_SUPPORTED => Error::FormatNotSupported,
-
-            #[cfg(feature = "khr_surface_25")]
             vks::VK_ERROR_SURFACE_LOST_KHR => Error::SurfaceLostKhr,
-
-            #[cfg(feature = "khr_surface_25")]
             vks::VK_ERROR_NATIVE_WINDOW_IN_USE_KHR => Error::NativeWindowInUseKhr,
-
-            #[cfg(feature = "ext_debug_report_1")]
             vks::VK_ERROR_VALIDATION_FAILED_EXT => Error::ValidationFailedExt,
-
-            #[cfg(feature = "khr_swapchain_67")]
             vks::VK_ERROR_OUT_OF_DATE_KHR => Error::OutOfDateKhr,
-
-            #[cfg(feature = "khr_display_swapchain_9")]
             vks::VK_ERROR_INCOMPATIBLE_DISPLAY_KHR => Error::IncompatibleDisplayKhr,
-
             _ => Error::Unknown(res),
         }
     }
@@ -1881,7 +1853,6 @@ pub enum ImageLayout {
     TransferDstOptimal,
     Preinitialized,
 
-    #[cfg(feature = "khr_swapchain_67")]
     /// See extension [`VK_KHR_swapchain`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_swapchain)
     PresentSrcKhr,
 
@@ -1900,10 +1871,7 @@ impl From<ImageLayout> for vks::VkImageLayout {
             ImageLayout::TransferSrcOptimal => vks::VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
             ImageLayout::TransferDstOptimal => vks::VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
             ImageLayout::Preinitialized => vks::VK_IMAGE_LAYOUT_PREINITIALIZED,
-
-            #[cfg(feature = "khr_swapchain_67")]
             ImageLayout::PresentSrcKhr => vks::VK_IMAGE_LAYOUT_PRESENT_SRC_KHR,
-
             ImageLayout::Unknown(layout) => layout,
         }
     }
@@ -2557,7 +2525,6 @@ impl VkApplicationInfoWrapper {
 chain_struct! {
     #[derive(Debug, Clone, Default, PartialEq)]
     pub struct InstanceCreateInfoChain {
-        #[cfg(feature = "ext_debug_report_1")]
         field debug_report_callback_create_info_ext: DebugReportCallbackCreateInfoExt {
             fn: add_debug_report_callback_create_info_ext,
             stype: vks::VK_STRUCTURE_TYPE_DEBUG_REPORT_CREATE_INFO_EXT,
@@ -3484,41 +3451,21 @@ impl VkDeviceCreateInfoWrapper {
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub enum InstanceExtension {
     Unknown(String),
-
-    #[cfg(feature = "khr_surface_25")]
     KhrSurface,
-
-    #[cfg(feature = "ext_debug_report_1")]
     ExtDebugReport,
-
-    #[cfg(feature = "khr_display_21")]
     KhrDisplay,
-
-    #[cfg(feature = "khr_xlib_surface_6")]
     KhrXlibSurface,
-
-    #[cfg(feature = "khr_wayland_surface_5")]
     KhrWaylandSurface,
 }
 
 impl<'a> From<&'a str> for InstanceExtension {
     fn from(name: &'a str) -> Self {
         match name {
-            #[cfg(feature = "khr_surface_25")]
             vks::VK_KHR_SURFACE_EXTENSION_NAME_STR => InstanceExtension::KhrSurface,
-
-            #[cfg(feature = "ext_debug_report_1")]
             vks::VK_EXT_DEBUG_REPORT_EXTENSION_NAME_STR => InstanceExtension::ExtDebugReport,
-
-            #[cfg(feature = "khr_display_21")]
             vks::VK_KHR_DISPLAY_EXTENSION_NAME_STR => InstanceExtension::KhrDisplay,
-
-            #[cfg(feature = "khr_xlib_surface_6")]
             vks::VK_KHR_XLIB_SURFACE_EXTENSION_NAME_STR => InstanceExtension::KhrXlibSurface,
-
-            #[cfg(feature = "khr_wayland_surface_5")]
             vks::VK_KHR_WAYLAND_SURFACE_EXTENSION_NAME_STR => InstanceExtension::KhrWaylandSurface,
-
             _ => InstanceExtension::Unknown(name.to_owned())
         }
     }
@@ -3527,21 +3474,11 @@ impl<'a> From<&'a str> for InstanceExtension {
 impl From<InstanceExtension> for String {
     fn from(extension: InstanceExtension) -> Self {
         match extension {
-            #[cfg(feature = "khr_surface_25")]
             InstanceExtension::KhrSurface => vks::VK_KHR_SURFACE_EXTENSION_NAME_STR.to_owned(),
-
-            #[cfg(feature = "ext_debug_report_1")]
             InstanceExtension::ExtDebugReport => vks::VK_EXT_DEBUG_REPORT_EXTENSION_NAME_STR.to_owned(),
-
-            #[cfg(feature = "khr_display_21")]
             InstanceExtension::KhrDisplay => vks::VK_KHR_DISPLAY_EXTENSION_NAME_STR.to_owned(),
-
-            #[cfg(feature = "khr_xlib_surface_6")]
             InstanceExtension::KhrXlibSurface => vks::VK_KHR_XLIB_SURFACE_EXTENSION_NAME_STR.to_owned(),
-
-            #[cfg(feature = "khr_wayland_surface_5")]
             InstanceExtension::KhrWaylandSurface => vks::VK_KHR_WAYLAND_SURFACE_EXTENSION_NAME_STR.to_owned(),
-
             InstanceExtension::Unknown(name) => name,
         }
     }
@@ -3595,23 +3532,15 @@ impl ExactSizeIterator for InstanceExtensionPropertiesIterator {
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub enum DeviceExtension {
     Unknown(String),
-
-    #[cfg(feature = "khr_swapchain_67")]
     KhrSwapchain,
-
-    #[cfg(feature = "khr_display_swapchain_9")]
     KhrDisplaySwapchain,
 }
 
 impl<'a> From<&'a str> for DeviceExtension {
     fn from(name: &'a str) -> Self {
         match name {
-            #[cfg(feature = "khr_swapchain_67")]
             vks::VK_KHR_SWAPCHAIN_EXTENSION_NAME_STR => DeviceExtension::KhrSwapchain,
-
-            #[cfg(feature = "khr_display_swapchain_9")]
             vks::VK_KHR_DISPLAY_SWAPCHAIN_EXTENSION_NAME_STR => DeviceExtension::KhrDisplaySwapchain,
-
             _ => DeviceExtension::Unknown(name.to_owned())
         }
     }
@@ -3620,12 +3549,8 @@ impl<'a> From<&'a str> for DeviceExtension {
 impl From<DeviceExtension> for String {
     fn from(extension: DeviceExtension) -> Self {
         match extension {
-            #[cfg(feature = "khr_swapchain_67")]
             DeviceExtension::KhrSwapchain => vks::VK_KHR_SWAPCHAIN_EXTENSION_NAME_STR.to_owned(),
-
-            #[cfg(feature = "khr_display_swapchain_9")]
             DeviceExtension::KhrDisplaySwapchain => vks::VK_KHR_DISPLAY_SWAPCHAIN_EXTENSION_NAME_STR.to_owned(),
-
             DeviceExtension::Unknown(name) => name,
         }
     }

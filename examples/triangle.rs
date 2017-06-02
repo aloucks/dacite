@@ -9,7 +9,6 @@ use std::time::Duration;
 use winit::os::unix::WindowExt;
 
 enum WindowBackend {
-    #[cfg(feature = "khr_xlib_surface_6")]
     Xlib {
         display: *mut dacite::xlib_wrapper::Display,
         window: dacite::xlib_wrapper::Window,
@@ -60,7 +59,7 @@ fn create_window(extent: &dacite::core::Extent2D) -> Result<Window, ()> {
 
     let mut backend = None;
 
-    #[cfg(all(target_os = "linux", feature = "khr_xlib_surface_6"))]
+    #[cfg(target_os = "linux")]
     {
         if backend.is_none() {
             if let (Some(xlib_display), Some(xlib_window)) = (window.get_xlib_display(), window.get_xlib_window()) {
@@ -91,7 +90,6 @@ fn compute_instance_extensions(backend: &WindowBackend) -> Result<Vec<dacite::co
         spec_version: 25,
     }];
 
-    #[cfg(feature = "khr_xlib_surface_6")]
     match *backend {
         WindowBackend::Xlib { .. } => required_instance_extensions.push(dacite::core::InstanceExtensionProperties {
             extension: dacite::core::InstanceExtension::KhrXlibSurface,
@@ -138,7 +136,6 @@ fn create_instance(instance_extensions: Vec<dacite::core::InstanceExtension>) ->
 
 fn create_surface(instance: &dacite::core::Instance, backend: &WindowBackend) -> Result<dacite::khr_surface::SurfaceKhr, ()> {
     match *backend {
-        #[cfg(feature = "khr_xlib_surface_6")]
         WindowBackend::Xlib { ref display, ref window } => {
             let xlib_surface_create_info = dacite::khr_xlib_surface::XlibSurfaceCreateInfoKhr {
                 flags: dacite::khr_xlib_surface::XlibSurfaceCreateFlagsKhr::empty(),

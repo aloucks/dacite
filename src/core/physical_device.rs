@@ -14,25 +14,17 @@
 
 use core::allocator_helper::AllocatorHelper;
 use core::{self, Device, Instance};
+use khr_display;
+use khr_surface;
 use std::cmp::Ordering;
 use std::hash::{Hash, Hasher};
 use std::mem;
 use std::ptr;
 use utils;
 use vks;
-use {TryDestroyError, TryDestroyErrorKind, VulkanObject};
-
-#[cfg(feature = "khr_xlib_surface_6")]
-use xlib_wrapper;
-
-#[cfg(feature = "khr_wayland_surface_5")]
 use wayland_wrapper;
-
-#[cfg(feature = "khr_surface_25")]
-use khr_surface;
-
-#[cfg(feature = "khr_display_21")]
-use khr_display;
+use xlib_wrapper;
+use {TryDestroyError, TryDestroyErrorKind, VulkanObject};
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum CheckDeviceExtensionsError {
@@ -276,12 +268,8 @@ impl PhysicalDevice {
 
                 for device_extension in &create_info.enabled_extensions {
                     match *device_extension {
-                        #[cfg(feature = "khr_swapchain_67")]
                         core::DeviceExtension::KhrSwapchain => loader.load_khr_swapchain(device),
-
-                        #[cfg(feature = "khr_display_swapchain_9")]
                         core::DeviceExtension::KhrDisplaySwapchain => loader.load_khr_display_swapchain(device),
-
                         core::DeviceExtension::Unknown(_) => { },
                     }
                 }
@@ -294,7 +282,6 @@ impl PhysicalDevice {
         }
     }
 
-    #[cfg(feature = "khr_surface_25")]
     /// See [`vkGetPhysicalDeviceSurfaceSupportKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetPhysicalDeviceSurfaceSupportKHR)
     /// and extension [`VK_KHR_surface`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_surface)
     pub fn get_surface_support_khr(&self, queue_family_index: u32, surface: &khr_surface::SurfaceKhr) -> Result<bool, core::Error> {
@@ -311,7 +298,6 @@ impl PhysicalDevice {
         }
     }
 
-    #[cfg(feature = "khr_surface_25")]
     /// See [`vkGetPhysicalDeviceSurfaceCapabilitiesKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetPhysicalDeviceSurfaceCapabilitiesKHR)
     /// and extension [`VK_KHR_surface`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_surface)
     pub fn get_surface_capabilities_khr(&self, surface: &khr_surface::SurfaceKhr) -> Result<khr_surface::SurfaceCapabilitiesKhr, core::Error> {
@@ -328,7 +314,6 @@ impl PhysicalDevice {
         }
     }
 
-    #[cfg(feature = "khr_surface_25")]
     /// See [`vkGetPhysicalDeviceSurfaceFormatsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetPhysicalDeviceSurfaceFormatsKHR)
     /// and extension [`VK_KHR_surface`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_surface)
     pub fn get_surface_formats_khr(&self, surface: &khr_surface::SurfaceKhr) -> Result<khr_surface::SurfaceFormatKhrIterator, core::Error> {
@@ -358,7 +343,6 @@ impl PhysicalDevice {
         }
     }
 
-    #[cfg(feature = "khr_surface_25")]
     /// See [`vkGetPhysicalDeviceSurfacePresentModesKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetPhysicalDeviceSurfacePresentModesKHR)
     /// and extension [`VK_KHR_surface`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_surface)
     pub fn get_surface_present_modes_khr(&self, surface: &khr_surface::SurfaceKhr) -> Result<khr_surface::PresentModeKhrIterator, core::Error> {
@@ -388,7 +372,6 @@ impl PhysicalDevice {
         }
     }
 
-    #[cfg(feature = "khr_display_21")]
     /// See [`vkGetPhysicalDeviceDisplayPropertiesKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetPhysicalDeviceDisplayPropertiesKHR)
     /// and extension [`VK_KHR_display`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_display)
     pub fn get_display_properties_khr(&self) -> Result<Vec<khr_display::DisplayPropertiesKhr>, core::Error> {
@@ -417,7 +400,6 @@ impl PhysicalDevice {
         }
     }
 
-    #[cfg(feature = "khr_display_21")]
     /// See [`vkGetPhysicalDeviceDisplayPlanePropertiesKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetPhysicalDeviceDisplayPlanePropertiesKHR)
     /// and extension [`VK_KHR_display`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_display)
     pub fn get_display_plane_properties_khr(&self) -> Result<Vec<khr_display::DisplayPlanePropertiesKhr>, core::Error> {
@@ -446,7 +428,6 @@ impl PhysicalDevice {
         }
     }
 
-    #[cfg(feature = "khr_display_21")]
     /// See [`vkGetDisplayPlaneSupportedDisplaysKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetDisplayPlaneSupportedDisplaysKHR)
     /// and extension [`VK_KHR_display`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_display)
     pub fn get_display_plane_supported_displays_khr(&self, plane_index: u32) -> Result<Vec<khr_display::DisplayKhr>, core::Error> {
@@ -473,7 +454,6 @@ impl PhysicalDevice {
         }
     }
 
-    #[cfg(feature = "khr_xlib_surface_6")]
     /// See [`vkGetPhysicalDeviceXlibPresentationSupportKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetPhysicalDeviceXlibPresentationSupportKHR)
     /// and extension [`VK_KHR_xlib_surface`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_xlib_surface)
     pub fn get_xlib_presentation_support_khr(&self, queue_family_index: u32, dpy: *mut xlib_wrapper::Display, visual_id: xlib_wrapper::VisualID) -> bool {
@@ -484,7 +464,6 @@ impl PhysicalDevice {
         utils::from_vk_bool(res)
     }
 
-    #[cfg(feature = "khr_wayland_surface_5")]
     /// See [`vkGetPhysicalDeviceWaylandPresentationSupportKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetPhysicalDeviceWaylandPresentationSupportKHR)
     /// and extension [`VK_KHR_wayland_surface`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_wayland_surface)
     pub fn get_wayland_presentation_support_khr(&self, queue_family_index: u32, display: *mut wayland_wrapper::wl_display) -> bool {

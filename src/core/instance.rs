@@ -15,43 +15,22 @@
 use core::PhysicalDevice;
 use core::allocator_helper::AllocatorHelper;
 use core;
+use ext_debug_report;
+use khr_display;
+use khr_surface;
+use khr_wayland_surface;
+use khr_xlib_surface;
 use libloading;
 use std::cmp::Ordering;
 use std::error;
 use std::fmt;
 use std::hash::{Hash, Hasher};
-use std::mem;
 use std::ptr;
 use std::sync::Arc;
+use std::sync::Mutex;
 use utils;
 use vks;
 use {TryDestroyError, TryDestroyErrorKind, VulkanObject};
-
-#[cfg(unix)]
-use libloading::os::unix::Symbol;
-
-#[cfg(windows)]
-use libloading::os::windows::Symbol;
-
-#[cfg(feature = "ext_debug_report_1")]
-use ext_debug_report;
-
-#[cfg(any(feature = "khr_display_21",
-          feature = "khr_xlib_surface_6",
-          feature = "khr_wayland_surface_5"))]
-use khr_surface;
-
-#[cfg(feature = "khr_display_21")]
-use khr_display;
-
-#[cfg(feature = "khr_display_21")]
-use std::sync::Mutex;
-
-#[cfg(feature = "khr_xlib_surface_6")]
-use khr_xlib_surface;
-
-#[cfg(feature = "khr_wayland_surface_5")]
-use khr_wayland_surface;
 
 const VK_GET_INSTANCE_PROC_ADDR: &'static str = "vkGetInstanceProcAddr";
 
@@ -140,7 +119,6 @@ impl Instance {
         &self.0.loader
     }
 
-    #[cfg(feature = "khr_display_21")]
     pub(crate) fn add_display_mode_allocator(&self, allocator: AllocatorHelper) {
         self.0.display_mode_allocators.lock().unwrap().push(allocator);
     }
@@ -174,7 +152,7 @@ impl Instance {
                 let vk_get_instance_proc_addr: libloading::Symbol<vks::PFN_vkGetInstanceProcAddr> = library
                     .get(VK_GET_INSTANCE_PROC_ADDR.as_bytes())
                     .map_err(|_| EarlyInstanceError::SymbolNotFound(VK_GET_INSTANCE_PROC_ADDR.to_owned()))?;
-                vk_get_instance_proc_addr.into_raw()
+                *vk_get_instance_proc_addr
             };
             (library, vk_get_instance_proc_addr)
         };
@@ -182,7 +160,7 @@ impl Instance {
         let allocator_helper = allocator.map(AllocatorHelper::new);
         let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), AllocatorHelper::callbacks);
 
-        let mut loader = vks::InstanceProcAddrLoader::from_get_instance_proc_addr(*vk_get_instance_proc_addr);
+        let mut loader = vks::InstanceProcAddrLoader::from_get_instance_proc_addr(vk_get_instance_proc_addr);
         unsafe {
             loader.load_core_null_instance();
         }
@@ -201,52 +179,36 @@ impl Instance {
 
             for instance_extension in &create_info.enabled_extensions {
                 match *instance_extension {
-                    #[cfg(feature = "khr_surface_25")]
                     core::InstanceExtension::KhrSurface => loader.load_khr_surface(instance),
-
-                    #[cfg(feature = "ext_debug_report_1")]
                     core::InstanceExtension::ExtDebugReport => loader.load_ext_debug_report(instance),
-
-                    #[cfg(feature = "khr_display_21")]
                     core::InstanceExtension::KhrDisplay => loader.load_khr_display(instance),
-
-                    #[cfg(feature = "khr_xlib_surface_6")]
                     core::InstanceExtension::KhrXlibSurface => loader.load_khr_xlib_surface(instance),
-
-                    #[cfg(feature = "khr_wayland_surface_5")]
                     core::InstanceExtension::KhrWaylandSurface => loader.load_khr_wayland_surface(instance),
-
                     core::InstanceExtension::Unknown(_) => { },
                 }
             }
         }
 
-        let inner = unsafe {
-            let mut inner: Inner = mem::uninitialized();
-            ptr::write(&mut inner.handle, instance);
-            ptr::write(&mut inner.allocator, allocator_helper);
-            ptr::write(&mut inner.loader, loader);
-            ptr::write(&mut inner.library, library);
-            ptr::write(&mut inner.vk_get_instance_proc_addr, vk_get_instance_proc_addr);
-
-            #[cfg(feature = "ext_debug_report_1")]
-            {
-                ptr::write(&mut inner.debug_report_callback, None);
-
-                if let Some(ref chain) = create_info.chain {
-                    if let Some(ref debug_report_callback_create_info_ext) = chain.debug_report_callback_create_info_ext {
-                        ptr::write(&mut inner.debug_report_callback, Some(debug_report_callback_create_info_ext.callback.clone()));
-                    }
-                }
+        let debug_report_callback = if let Some(ref chain) = create_info.chain {
+            if let Some(ref debug_report_callback_create_info_ext) = chain.debug_report_callback_create_info_ext {
+                Some(debug_report_callback_create_info_ext.callback.clone())
             }
-
-            #[cfg(feature = "khr_display_21")]
-            ptr::write(&mut inner.display_mode_allocators, Mutex::new(Vec::new()));
-
-            inner
+            else {
+                None
+            }
+        }
+        else {
+            None
         };
 
-        Ok(Instance(Arc::new(inner)))
+        Ok(Instance(Arc::new(Inner {
+            handle: instance,
+            allocator: allocator_helper,
+            loader: loader,
+            library: library,
+            debug_report_callback: debug_report_callback,
+            display_mode_allocators: Mutex::new(Vec::new()),
+        })))
     }
 
     /// See [`vkEnumeratePhysicalDevices`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkEnumeratePhysicalDevices)
@@ -338,7 +300,6 @@ impl Instance {
         }
     }
 
-    #[cfg(feature = "ext_debug_report_1")]
     /// See [`vkCreateDebugReportCallbackEXT`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCreateDebugReportCallbackEXT)
     /// and extension [`VK_EXT_debug_report`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_EXT_debug_report)
     pub fn create_debug_report_callback_ext(&self, create_info: &ext_debug_report::DebugReportCallbackCreateInfoExt, allocator: Option<Box<core::Allocator>>) -> Result<ext_debug_report::DebugReportCallbackExt, core::Error> {
@@ -359,7 +320,6 @@ impl Instance {
         }
     }
 
-    #[cfg(feature = "ext_debug_report_1")]
     /// See [`vkDebugReportMessageEXT`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkDebugReportMessageEXT)
     /// and extension [`VK_EXT_debug_report`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_EXT_debug_report)
     pub fn debug_report_message_ext(&self, flags: ext_debug_report::DebugReportFlagsExt, object_type: ext_debug_report::DebugReportObjectTypeExt, object: u64, location: usize, message_code: i32, layer_prefix: &str, message: &str) {
@@ -373,7 +333,6 @@ impl Instance {
         }
     }
 
-    #[cfg(feature = "khr_display_21")]
     /// See [`vkCreateDisplayPlaneSurfaceKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCreateDisplayPlaneSurfaceKHR)
     /// and extensions [`VK_KHR_display`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_display),
     /// [`VK_KHR_surface`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_surface)
@@ -395,7 +354,6 @@ impl Instance {
         }
     }
 
-    #[cfg(feature = "khr_xlib_surface_6")]
     /// See [`vkCreateXlibSurfaceKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCreateXlibSurfaceKHR)
     /// and extension [`VK_KHR_xlib_surface`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_xlib_surface)
     pub fn create_xlib_surface_khr(&self, create_info: &khr_xlib_surface::XlibSurfaceCreateInfoKhr, allocator: Option<Box<core::Allocator>>) -> Result<khr_surface::SurfaceKhr, core::Error> {
@@ -416,7 +374,6 @@ impl Instance {
         }
     }
 
-    #[cfg(feature = "khr_wayland_surface_5")]
     /// See [`vkCreateWaylandSurfaceKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCreateWaylandSurfaceKHR)
     /// and extension [`VK_KHR_wayland_surface`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_wayland_surface)
     pub fn create_wayland_surface_khr(&self, create_info: &khr_wayland_surface::WaylandSurfaceCreateInfoKhr, allocator: Option<Box<core::Allocator>>) -> Result<khr_surface::SurfaceKhr, core::Error> {
@@ -444,12 +401,7 @@ struct Inner {
     allocator: Option<AllocatorHelper>,
     loader: vks::InstanceProcAddrLoader,
     library: libloading::Library,
-    vk_get_instance_proc_addr: Symbol<vks::PFN_vkGetInstanceProcAddr>,
-
-    #[cfg(feature = "ext_debug_report_1")]
     debug_report_callback: Option<Arc<ext_debug_report::DebugReportCallbacksExt>>,
-
-    #[cfg(feature = "khr_display_21")]
     display_mode_allocators: Mutex<Vec<AllocatorHelper>>,
 }
 

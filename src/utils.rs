@@ -13,12 +13,9 @@
 // PERFORMANCE OF THIS SOFTWARE.
 
 use libc::c_char;
-use std::ffi::CString;
+use std::ffi::{CStr, CString};
 use std::ptr;
 use vks;
-
-#[cfg(feature = "khr_display_21")]
-use std::ffi::CStr;
 
 #[inline]
 pub fn from_vk_bool(v: vks::VkBool32) -> bool {
@@ -35,7 +32,6 @@ pub fn to_vk_bool(v: bool) -> vks::VkBool32 {
     }
 }
 
-#[cfg(feature = "khr_display_21")]
 #[inline]
 pub unsafe fn string_from_cstr(cstr: *const c_char) -> Option<String> {
     if !cstr.is_null() {
