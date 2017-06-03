@@ -35,6 +35,7 @@ macro_rules! gen_extension_structs {
         }
 
         impl $name {
+            #[inline]
             pub fn new() -> Self {
                 Default::default()
             }
@@ -110,11 +111,13 @@ macro_rules! gen_extension_structs {
             }
 
             $(
+                #[inline]
                 pub fn $ext_fn_add(&mut self) -> &mut Self {
                     self.$ext = true;
                     self
                 }
 
+                #[inline]
                 pub fn $ext_fn_has(&self) -> bool {
                     self.$ext
                 }
@@ -122,6 +125,7 @@ macro_rules! gen_extension_structs {
 
             #[allow(dead_code)]
             #[allow(unused_variables)]
+            #[inline]
             unsafe fn load_instance(&self, loader: &mut vks::InstanceProcAddrLoader, instance: vks::VkInstance) {
                 $(
                     $( loader.$ext_load_instance(instance); )*
@@ -130,6 +134,7 @@ macro_rules! gen_extension_structs {
 
             #[allow(dead_code)]
             #[allow(unused_variables)]
+            #[inline]
             unsafe fn load_device(&self, loader: &mut vks::DeviceProcAddrLoader, device: vks::VkDevice) {
                 $(
                     $( loader.$ext_load_device(device); )*
@@ -161,6 +166,7 @@ macro_rules! gen_extension_structs {
         }
 
         impl $props_name {
+            #[inline]
             pub fn new() -> Self {
                 Default::default()
             }
@@ -303,6 +309,7 @@ macro_rules! gen_extension_structs {
             }
 
             $(
+                #[inline]
                 pub fn $ext_fn_add(&mut self, spec_version: u32) -> &mut Self {
                     if let Some(ref mut old_spec_version) = self.$ext {
                         if *old_spec_version < spec_version {
@@ -316,10 +323,12 @@ macro_rules! gen_extension_structs {
                     self
                 }
 
+                #[inline]
                 pub fn $ext_fn_has(&self) -> bool {
                     self.$ext.is_some()
                 }
 
+                #[inline]
                 pub fn $ext_fn_get(&self) -> Option<u32> {
                     self.$ext
                 }
