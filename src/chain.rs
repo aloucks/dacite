@@ -17,7 +17,6 @@ macro_rules! chain_struct {
         $( #[$struct_attrs:meta] )*
         pub struct $struct_name:ident {
             $(
-                $( #[$field_guard:meta] )*
                 field $field_name:ident: $field_ty:ident {
                     fn: $field_setter:ident,
                     stype: $field_stype:pat,
@@ -32,7 +31,6 @@ macro_rules! chain_struct {
         $( #[$struct_attrs] )*
         pub struct $struct_name {
             $(
-                $( #[$field_guard] )*
                 pub $field_name: ::std::option::Option<$field_ty>,
             )*
         }
@@ -40,20 +38,14 @@ macro_rules! chain_struct {
         impl $struct_name {
             #[allow(unused_mut)]
             pub fn new() -> Self {
-                unsafe {
-                    let mut result: Self = ::std::mem::uninitialized();
-
+                $struct_name {
                     $(
-                        $( #[$field_guard] )*
-                        ::std::ptr::write(&mut result.$field_name, None);
+                        $field_name: None,
                     )*
-
-                    result
                 }
             }
 
             $(
-                $( #[$field_guard] )*
                 pub fn $field_setter(&mut self, $field_name: $field_ty) -> &mut Self {
                     self.$field_name = Some($field_name);
                     self
@@ -66,7 +58,6 @@ macro_rules! chain_struct {
             pub pnext: *const ::libc::c_void,
 
             $(
-                $( #[$field_guard] )*
                 $field_name: ::std::option::Option<::std::boxed::Box<$field_wrapper_ty>>,
             )*
         }
@@ -79,7 +70,6 @@ macro_rules! chain_struct {
                 let mut pnext: *mut *const ::libc::c_void = &mut pnext_first;
 
                 $(
-                    $( #[$field_guard] )*
                     let $field_name = from.$field_name.as_ref().map(|$field_name| {
                         let mut $field_name: ::std::boxed::Box<_> = ::std::boxed::Box::new($field_wrapper_ty::new($field_name, false));
                         unsafe {
@@ -91,16 +81,12 @@ macro_rules! chain_struct {
                     });
                 )*
 
-                unsafe {
-                    let mut _result: $struct_wrapper_name = ::std::mem::uninitialized();
-                    ::std::ptr::write(&mut _result.pnext, pnext_first);
+                $struct_wrapper_name {
+                    pnext: pnext_first,
 
                     $(
-                        $( #[$field_guard] )*
-                        ::std::ptr::write(&mut _result.$field_name, $field_name);
+                        $field_name: $field_name,
                     )*
-
-                    _result
                 }
             }
 
