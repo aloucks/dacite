@@ -17,6 +17,7 @@ use core::allocator_helper::AllocatorHelper;
 use core;
 use ext_debug_report;
 use khr_display;
+use khr_mir_surface;
 use khr_surface;
 use khr_wayland_surface;
 use khr_xcb_surface;
@@ -186,6 +187,7 @@ impl Instance {
                     core::InstanceExtension::KhrXlibSurface => loader.load_khr_xlib_surface(instance),
                     core::InstanceExtension::KhrWaylandSurface => loader.load_khr_wayland_surface(instance),
                     core::InstanceExtension::KhrXcbSurface => loader.load_khr_xcb_surface(instance),
+                    core::InstanceExtension::KhrMirSurface => loader.load_khr_mir_surface(instance),
                     core::InstanceExtension::Unknown(_) => { },
                 }
             }
@@ -406,6 +408,26 @@ impl Instance {
         let mut surface = ptr::null_mut();
         let res = unsafe {
             (self.loader().khr_xcb_surface.vkCreateXcbSurfaceKHR)(self.handle(), &create_info_wrapper.vks_struct, allocation_callbacks, &mut surface)
+        };
+
+        if res == vks::VK_SUCCESS {
+            Ok(khr_surface::SurfaceKhr::new(surface, self.clone(), allocator_helper))
+        }
+        else {
+            Err(res.into())
+        }
+    }
+
+    /// See [`vkCreateMirSurfaceKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCreateMirSurfaceKHR)
+    /// and extension [`VK_KHR_mir_surface`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_mir_surface)
+    pub fn create_mir_surface_khr(&self, create_info: &khr_mir_surface::MirSurfaceCreateInfoKhr, allocator: Option<Box<core::Allocator>>) -> Result<khr_surface::SurfaceKhr, core::Error> {
+        let allocator_helper = allocator.map(AllocatorHelper::new);
+        let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), AllocatorHelper::callbacks);
+        let create_info_wrapper = khr_mir_surface::VkMirSurfaceCreateInfoKHRWrapper::new(create_info, true);
+
+        let mut surface = ptr::null_mut();
+        let res = unsafe {
+            (self.loader().khr_mir_surface.vkCreateMirSurfaceKHR)(self.handle(), &create_info_wrapper.vks_struct, allocation_callbacks, &mut surface)
         };
 
         if res == vks::VK_SUCCESS {

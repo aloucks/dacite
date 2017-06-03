@@ -16,6 +16,7 @@ use core::allocator_helper::AllocatorHelper;
 use core::{self, Device, Instance};
 use khr_display;
 use khr_surface;
+use mir_wrapper;
 use std::cmp::Ordering;
 use std::hash::{Hash, Hasher};
 use std::mem;
@@ -480,6 +481,16 @@ impl PhysicalDevice {
     pub fn get_xcb_presentation_support_khr(&self, queue_family_index: u32, connection: *mut xcb_wrapper::xcb_connection_t, visual_id: xcb_wrapper::xcb_visualid_t) -> bool {
         let res = unsafe {
             (self.loader().khr_xcb_surface.vkGetPhysicalDeviceXcbPresentationSupportKHR)(self.handle, queue_family_index, connection, visual_id)
+        };
+
+        utils::from_vk_bool(res)
+    }
+
+    /// See [`vkGetPhysicalDeviceMirPresentationSupportKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetPhysicalDeviceMirPresentationSupportKHR)
+    /// and extension [`VK_KHR_mir_surface`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_mir_surface)
+    pub fn get_mir_presentation_support_khr(&self, queue_family_index: u32, connection: *mut mir_wrapper::MirConnection) -> bool {
+        let res = unsafe {
+            (self.loader().khr_mir_surface.vkGetPhysicalDeviceMirPresentationSupportKHR)(self.handle, queue_family_index, connection)
         };
 
         utils::from_vk_bool(res)
