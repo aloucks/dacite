@@ -30,7 +30,7 @@ macro_rules! chain_struct {
         $( #[$struct_attrs] )*
         pub struct $struct_name {
             $(
-                pub $field_name: Option<$field_ty>,
+                $field_name: Option<$field_ty>,
             )*
         }
 
