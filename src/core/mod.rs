@@ -3449,6 +3449,7 @@ gen_extension_structs!{
         name: vks::VK_EXT_DEBUG_REPORT_EXTENSION_NAME_STR,
         fn_add: add_ext_debug_report,
         fn_has: has_ext_debug_report,
+        fn_get: get_ext_debug_report,
         load_instance: load_ext_debug_report,
     }
 
@@ -3456,6 +3457,7 @@ gen_extension_structs!{
         name: vks::VK_KHR_ANDROID_SURFACE_EXTENSION_NAME_STR,
         fn_add: add_khr_android_surface,
         fn_has: has_khr_android_surface,
+        fn_get: get_khr_android_surface,
         load_instance: load_khr_android_surface,
     }
 
@@ -3463,6 +3465,7 @@ gen_extension_structs!{
         name: vks::VK_KHR_DISPLAY_EXTENSION_NAME_STR,
         fn_add: add_khr_display,
         fn_has: has_khr_display,
+        fn_get: get_khr_display,
         load_instance: load_khr_display,
     }
 
@@ -3470,6 +3473,7 @@ gen_extension_structs!{
         name: vks::VK_KHR_MIR_SURFACE_EXTENSION_NAME_STR,
         fn_add: add_khr_mir_surface,
         fn_has: has_khr_mir_surface,
+        fn_get: get_khr_mir_surface,
         load_instance: load_khr_mir_surface,
     }
 
@@ -3477,6 +3481,7 @@ gen_extension_structs!{
         name: vks::VK_KHR_SURFACE_EXTENSION_NAME_STR,
         fn_add: add_khr_surface,
         fn_has: has_khr_surface,
+        fn_get: get_khr_surface,
         load_instance: load_khr_surface,
     }
 
@@ -3484,6 +3489,7 @@ gen_extension_structs!{
         name: vks::VK_KHR_WAYLAND_SURFACE_EXTENSION_NAME_STR,
         fn_add: add_khr_wayland_surface,
         fn_has: has_khr_wayland_surface,
+        fn_get: get_khr_wayland_surface,
         load_instance: load_khr_wayland_surface,
     }
 
@@ -3491,6 +3497,7 @@ gen_extension_structs!{
         name: vks::VK_KHR_WIN32_SURFACE_EXTENSION_NAME_STR,
         fn_add: add_khr_win32_surface,
         fn_has: has_khr_win32_surface,
+        fn_get: get_khr_win32_surface,
         load_instance: load_khr_win32_surface,
     }
 
@@ -3498,6 +3505,7 @@ gen_extension_structs!{
         name: vks::VK_KHR_XCB_SURFACE_EXTENSION_NAME_STR,
         fn_add: add_khr_xcb_surface,
         fn_has: has_khr_xcb_surface,
+        fn_get: get_khr_xcb_surface,
         load_instance: load_khr_xcb_surface,
     }
 
@@ -3505,6 +3513,7 @@ gen_extension_structs!{
         name: vks::VK_KHR_XLIB_SURFACE_EXTENSION_NAME_STR,
         fn_add: add_khr_xlib_surface,
         fn_has: has_khr_xlib_surface,
+        fn_get: get_khr_xlib_surface,
         load_instance: load_khr_xlib_surface,
     }
 }
@@ -3517,6 +3526,7 @@ gen_extension_structs!{
         name: vks::VK_KHR_SWAPCHAIN_EXTENSION_NAME_STR,
         fn_add: add_khr_swapchain,
         fn_has: has_khr_swapchain,
+        fn_get: get_khr_swapchain,
         load_device: load_khr_swapchain,
     }
 
@@ -3524,6 +3534,7 @@ gen_extension_structs!{
         name: vks::VK_KHR_DISPLAY_SWAPCHAIN_EXTENSION_NAME_STR,
         fn_add: add_khr_display_swapchain,
         fn_has: has_khr_display_swapchain,
+        fn_get: get_khr_display_swapchain,
         load_device: load_khr_display_swapchain,
     }
 }

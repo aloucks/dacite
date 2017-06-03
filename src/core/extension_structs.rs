@@ -22,6 +22,7 @@ macro_rules! gen_extension_structs {
                 name: $ext_name:expr,
                 fn_add: $ext_fn_add:ident,
                 fn_has: $ext_fn_has:ident,
+                fn_get: $ext_fn_get:ident,
                 $( load_instance: $ext_load_instance:ident, )*
                 $( load_device: $ext_load_device:ident, )*
             }
@@ -287,10 +288,14 @@ macro_rules! gen_extension_structs {
                 self
             }
 
-            pub fn has_named(&self, name: &str) -> Option<u32> {
+            pub fn has_named(&self, name: &str) -> bool {
+                self.get_named(name).is_some()
+            }
+
+            pub fn get_named(&self, name: &str) -> Option<u32> {
                 $(
                     if name == $ext_name {
-                        return self.$ext_fn_has();
+                        return self.$ext_fn_get();
                     }
                 )*
 
@@ -311,7 +316,11 @@ macro_rules! gen_extension_structs {
                     self
                 }
 
-                pub fn $ext_fn_has(&self) -> Option<u32> {
+                pub fn $ext_fn_has(&self) -> bool {
+                    self.$ext.is_some()
+                }
+
+                pub fn $ext_fn_get(&self) -> Option<u32> {
                     self.$ext
                 }
             )*
