@@ -11,9 +11,11 @@ stages:
 build:dacite:
     stage: build:dacite
     script:
+        - cd dacite
         - cargo build --verbose --jobs 1 --release
 
 build:examples/triangles:
     stage: build:examples
     script:
+        - cd dacite/examples
         - cargo build --verbose --jobs 1 --release --example triangle

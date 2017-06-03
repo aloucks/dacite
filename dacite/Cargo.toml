@@ -1,0 +1,24 @@
+[package]
+name = "dacite"
+version = "0.1.0"
+authors = ["Dennis Hamester <dennis.hamester@startmail.com>"]
+description = "Safe low-level Vulkan library"
+homepage = "https://gitlab.com/dennis-hamester/dacite"
+repository = "https://gitlab.com/dennis-hamester/dacite"
+keywords = [ "vulkan", "graphics" ]
+license = "ISC"
+
+[badges]
+gitlab = { repository = "dennis-hamester/dacite" }
+
+[dependencies]
+libc = "0.2"
+libloading = "0.4"
+
+[dependencies.vks]
+version = "0.16.1"
+default-features = false
+features = [ "no_function_prototypes", "vk_1_0_3" ]
+
+[dev-dependencies]
+winit = "0.6"
