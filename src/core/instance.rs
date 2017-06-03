@@ -19,6 +19,7 @@ use ext_debug_report;
 use khr_display;
 use khr_surface;
 use khr_wayland_surface;
+use khr_xcb_surface;
 use khr_xlib_surface;
 use libloading;
 use std::cmp::Ordering;
@@ -184,6 +185,7 @@ impl Instance {
                     core::InstanceExtension::KhrDisplay => loader.load_khr_display(instance),
                     core::InstanceExtension::KhrXlibSurface => loader.load_khr_xlib_surface(instance),
                     core::InstanceExtension::KhrWaylandSurface => loader.load_khr_wayland_surface(instance),
+                    core::InstanceExtension::KhrXcbSurface => loader.load_khr_xcb_surface(instance),
                     core::InstanceExtension::Unknown(_) => { },
                 }
             }
@@ -384,6 +386,26 @@ impl Instance {
         let mut surface = ptr::null_mut();
         let res = unsafe {
             (self.loader().khr_wayland_surface.vkCreateWaylandSurfaceKHR)(self.handle(), &create_info_wrapper.vks_struct, allocation_callbacks, &mut surface)
+        };
+
+        if res == vks::VK_SUCCESS {
+            Ok(khr_surface::SurfaceKhr::new(surface, self.clone(), allocator_helper))
+        }
+        else {
+            Err(res.into())
+        }
+    }
+
+    /// See [`vkCreateXcbSurfaceKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCreateXcbSurfaceKHR)
+    /// and extension [`VK_KHR_xcb_surface`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_xcb_surface)
+    pub fn create_xcb_surface_khr(&self, create_info: &khr_xcb_surface::XcbSurfaceCreateInfoKhr, allocator: Option<Box<core::Allocator>>) -> Result<khr_surface::SurfaceKhr, core::Error> {
+        let allocator_helper = allocator.map(AllocatorHelper::new);
+        let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), AllocatorHelper::callbacks);
+        let create_info_wrapper = khr_xcb_surface::VkXcbSurfaceCreateInfoKHRWrapper::new(create_info, true);
+
+        let mut surface = ptr::null_mut();
+        let res = unsafe {
+            (self.loader().khr_xcb_surface.vkCreateXcbSurfaceKHR)(self.handle(), &create_info_wrapper.vks_struct, allocation_callbacks, &mut surface)
         };
 
         if res == vks::VK_SUCCESS {

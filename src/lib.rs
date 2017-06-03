@@ -29,10 +29,12 @@ pub mod khr_display_swapchain;
 pub mod khr_surface;
 pub mod khr_swapchain;
 pub mod khr_wayland_surface;
+pub mod khr_xcb_surface;
 pub mod khr_xlib_surface;
 
-pub use vks::xlib_wrapper;
 pub use vks::wayland_wrapper;
+pub use vks::xcb_wrapper;
+pub use vks::xlib_wrapper;
 
 pub use vulkan_object::{
     TryDestroyError,

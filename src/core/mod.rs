@@ -3456,6 +3456,7 @@ pub enum InstanceExtension {
     KhrDisplay,
     KhrXlibSurface,
     KhrWaylandSurface,
+    KhrXcbSurface,
 }
 
 impl<'a> From<&'a str> for InstanceExtension {
@@ -3466,6 +3467,7 @@ impl<'a> From<&'a str> for InstanceExtension {
             vks::VK_KHR_DISPLAY_EXTENSION_NAME_STR => InstanceExtension::KhrDisplay,
             vks::VK_KHR_XLIB_SURFACE_EXTENSION_NAME_STR => InstanceExtension::KhrXlibSurface,
             vks::VK_KHR_WAYLAND_SURFACE_EXTENSION_NAME_STR => InstanceExtension::KhrWaylandSurface,
+            vks::VK_KHR_XCB_SURFACE_EXTENSION_NAME_STR => InstanceExtension::KhrXcbSurface,
             _ => InstanceExtension::Unknown(name.to_owned())
         }
     }
@@ -3479,6 +3481,7 @@ impl From<InstanceExtension> for String {
             InstanceExtension::KhrDisplay => vks::VK_KHR_DISPLAY_EXTENSION_NAME_STR.to_owned(),
             InstanceExtension::KhrXlibSurface => vks::VK_KHR_XLIB_SURFACE_EXTENSION_NAME_STR.to_owned(),
             InstanceExtension::KhrWaylandSurface => vks::VK_KHR_WAYLAND_SURFACE_EXTENSION_NAME_STR.to_owned(),
+            InstanceExtension::KhrXcbSurface => vks::VK_KHR_XCB_SURFACE_EXTENSION_NAME_STR.to_owned(),
             InstanceExtension::Unknown(name) => name,
         }
     }
