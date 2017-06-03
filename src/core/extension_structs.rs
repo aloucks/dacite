@@ -88,7 +88,7 @@ macro_rules! gen_extension_structs {
                 res
             }
 
-            pub fn add_named(&mut self, name: &str) -> &mut Self {
+            pub fn add(&mut self, name: &str) -> &mut Self {
                 $(
                     if name == $ext_name {
                         return self.$ext_fn_add();
@@ -99,7 +99,7 @@ macro_rules! gen_extension_structs {
                 self
             }
 
-            pub fn has_named(&self, name: &str) -> bool {
+            pub fn has(&self, name: &str) -> bool {
                 $(
                     if name == $ext_name {
                         return self.$ext_fn_has();
@@ -240,7 +240,7 @@ macro_rules! gen_extension_structs {
             pub fn union(&self, other: &Self) -> Self {
                 let mut res = self.clone();
                 for (name, &spec_version) in &other.named {
-                    res.add_named(name, spec_version);
+                    res.add(name, spec_version);
                 }
 
                 $(
@@ -271,7 +271,7 @@ macro_rules! gen_extension_structs {
                 res
             }
 
-            pub fn add_named(&mut self, name: &str, spec_version: u32) -> &mut Self {
+            pub fn add(&mut self, name: &str, spec_version: u32) -> &mut Self {
                 $(
                     if name == $ext_name {
                         return self.$ext_fn_add(spec_version);
@@ -288,11 +288,11 @@ macro_rules! gen_extension_structs {
                 self
             }
 
-            pub fn has_named(&self, name: &str) -> bool {
-                self.get_named(name).is_some()
+            pub fn has(&self, name: &str) -> bool {
+                self.get(name).is_some()
             }
 
-            pub fn get_named(&self, name: &str) -> Option<u32> {
+            pub fn get(&self, name: &str) -> Option<u32> {
                 $(
                     if name == $ext_name {
                         return self.$ext_fn_get();

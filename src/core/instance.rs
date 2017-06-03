@@ -262,7 +262,7 @@ impl Instance {
             let mut res = core::InstanceExtensionsProperties::new();
             for extension in extension_properties {
                 let name = CStr::from_ptr(extension.extensionName.as_ptr()).to_str().unwrap();
-                res.add_named(name, extension.specVersion);
+                res.add(name, extension.specVersion);
             }
 
             Ok(res)
