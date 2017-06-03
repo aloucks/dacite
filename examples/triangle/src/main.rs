@@ -435,7 +435,7 @@ fn create_framebuffers(device: &dacite::core::Device, image_views: &[dacite::cor
 }
 
 fn create_vertex_shader(device: &dacite::core::Device) -> Result<dacite::core::ShaderModule, ()> {
-    let vertex_shader_bytes = include_bytes!("shaders/triangle.vert.spv");
+    let vertex_shader_bytes = include_bytes!("../shaders/triangle.vert.spv");
 
     let create_info = dacite::core::ShaderModuleCreateInfo {
         flags: dacite::core::ShaderModuleCreateFlags::empty(),
@@ -449,7 +449,7 @@ fn create_vertex_shader(device: &dacite::core::Device) -> Result<dacite::core::S
 }
 
 fn create_fragment_shader(device: &dacite::core::Device) -> Result<dacite::core::ShaderModule, ()> {
-    let fragment_shader_bytes = include_bytes!("shaders/triangle.frag.spv");
+    let fragment_shader_bytes = include_bytes!("../shaders/triangle.frag.spv");
 
     let create_info = dacite::core::ShaderModuleCreateInfo {
         flags: dacite::core::ShaderModuleCreateFlags::empty(),

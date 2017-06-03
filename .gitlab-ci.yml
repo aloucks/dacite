@@ -17,5 +17,5 @@ build:dacite:
 build:examples/triangles:
     stage: build:examples
     script:
-        - cd dacite/examples
-        - cargo build --verbose --jobs 1 --release --example triangle
+        - cd examples/triangle
+        - cargo build --verbose --jobs 1 --release

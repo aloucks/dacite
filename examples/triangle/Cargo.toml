@@ -1,0 +1,11 @@
+[package]
+name = "triangle"
+version = "0.1.0"
+authors = ["Dennis Hamester <dennis.hamester@startmail.com>"]
+license = "ISC"
+
+[dependencies.dacite]
+path = "../../dacite"
+
+[dependencies]
+winit = "0.6"

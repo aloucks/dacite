@@ -19,6 +19,3 @@ libloading = "0.4"
 version = "0.16.1"
 default-features = false
 features = [ "no_function_prototypes", "vk_1_0_3" ]
-
-[dev-dependencies]
-winit = "0.6"
