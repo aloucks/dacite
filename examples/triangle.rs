@@ -84,34 +84,32 @@ fn create_window(extent: &dacite::core::Extent2D) -> Result<Window, ()> {
     }
 }
 
-fn compute_instance_extensions(backend: &WindowBackend) -> Result<Vec<dacite::core::InstanceExtension>, ()> {
-    let mut required_instance_extensions = vec![dacite::core::InstanceExtensionProperties {
-        extension: dacite::core::InstanceExtension::KhrSurface,
-        spec_version: 25,
-    }];
+fn compute_instance_extensions(backend: &WindowBackend) -> Result<dacite::core::InstanceExtensions, ()> {
+    let available_extensions = dacite::core::Instance::get_instance_extension_properties(None).map_err(|e| {
+        println!("Failed to get instance extension properties ({})", e);
+    })?;
+
+    let mut required_extensions = dacite::core::InstanceExtensionsProperties::new();
+    required_extensions.add_khr_surface(25);
 
     match *backend {
-        WindowBackend::Xlib { .. } => required_instance_extensions.push(dacite::core::InstanceExtensionProperties {
-            extension: dacite::core::InstanceExtension::KhrXlibSurface,
-            spec_version: 6,
-        }),
+        WindowBackend::Xlib { .. } => required_extensions.add_khr_xlib_surface(6),
+    };
+
+    let missing_extensions = required_extensions.difference(&available_extensions);
+    if missing_extensions.is_empty() {
+        Ok(required_extensions.to_extensions())
     }
-
-    dacite::core::Instance::check_instance_extensions(required_instance_extensions).map_err(|e| {
-        match e {
-            dacite::core::CheckInstanceExtensionsError::Missing(missing) => {
-                for missing in missing {
-                    let name: String = missing.extension.into();
-                    println!("Extension {} (revision {}) missing", name, missing.spec_version);
-                }
-            }
-
-            dacite::core::CheckInstanceExtensionsError::EarlyInstanceError(e) => println!("{}", e),
+    else {
+        for (name, spec_version) in missing_extensions.properties() {
+            println!("Extension {} (revision {}) missing", name, spec_version);
         }
-    })
+
+        Err(())
+    }
 }
 
-fn create_instance(instance_extensions: Vec<dacite::core::InstanceExtension>) -> Result<dacite::core::Instance, ()> {
+fn create_instance(instance_extensions: dacite::core::InstanceExtensions) -> Result<dacite::core::Instance, ()> {
     let application_info = dacite::core::ApplicationInfo {
         application_name: Some("dacite triangle example".to_owned()),
         application_version: 0,

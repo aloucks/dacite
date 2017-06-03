@@ -2544,7 +2544,7 @@ pub struct InstanceCreateInfo {
     pub flags: InstanceCreateFlags,
     pub application_info: Option<ApplicationInfo>,
     pub enabled_layers: Vec<String>,
-    pub enabled_extensions: Vec<InstanceExtension>,
+    pub enabled_extensions: InstanceExtensions,
     pub chain: Option<InstanceCreateInfoChain>,
 }
 
@@ -2586,12 +2586,7 @@ impl VkInstanceCreateInfoWrapper {
             ptr::null()
         };
 
-        let enabled_extensions: Vec<_> = create_info.enabled_extensions.iter()
-            .cloned()
-            .map(String::from)
-            .map(CString::new)
-            .map(Result::unwrap)
-            .collect();
+        let enabled_extensions = create_info.enabled_extensions.to_cstring_vec();
         let enabled_extensions_ptrs: Vec<_> = enabled_extensions
             .iter()
             .map(|l| l.as_ptr())
@@ -3571,6 +3566,23 @@ macro_rules! gen_extensions_structs {
                 $(
                     $( loader.$ext_load_device(device); )*
                 )*
+            }
+
+            fn to_cstring_vec(&self) -> Vec<CString> {
+                let mut res: Vec<_> = self.named
+                    .iter()
+                    .cloned()
+                    .map(CString::new)
+                    .map(Result::unwrap)
+                    .collect();
+
+                $(
+                    if self.$ext {
+                        res.push(CString::new($ext_name.to_owned()).unwrap());
+                    }
+                )*
+
+                res
             }
         }
 

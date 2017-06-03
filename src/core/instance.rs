@@ -27,6 +27,7 @@ use khr_xlib_surface;
 use libloading;
 use std::cmp::Ordering;
 use std::error;
+use std::ffi::CStr;
 use std::fmt;
 use std::hash::{Hash, Hasher};
 use std::ptr;
@@ -127,26 +128,6 @@ impl Instance {
         self.0.display_mode_allocators.lock().unwrap().push(allocator);
     }
 
-    pub fn check_instance_extensions(extensions: Vec<core::InstanceExtensionProperties>) -> Result<Vec<core::InstanceExtension>, CheckInstanceExtensionsError> {
-        let mut found = Vec::new();
-        let mut missing = extensions;
-
-        let instance_extensions = Instance::enumerate_instance_extension_properties(None)?;
-        for extension in instance_extensions {
-            let pos = missing.iter().position(|e| (e.extension == extension.extension) && (e.spec_version <= extension.spec_version));
-            if let Some(pos) = pos {
-                found.push(missing.swap_remove(pos).extension);
-            }
-        }
-
-        if missing.is_empty() {
-            Ok(found)
-        }
-        else {
-            Err(CheckInstanceExtensionsError::Missing(missing))
-        }
-    }
-
     /// See [`vkCreateInstance`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCreateInstance)
     pub fn create(create_info: &core::InstanceCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<Instance, EarlyInstanceError> {
         let (library, vk_get_instance_proc_addr) = unsafe {
@@ -180,21 +161,7 @@ impl Instance {
 
         unsafe {
             loader.load_core(instance);
-
-            for instance_extension in &create_info.enabled_extensions {
-                match *instance_extension {
-                    core::InstanceExtension::KhrSurface => loader.load_khr_surface(instance),
-                    core::InstanceExtension::ExtDebugReport => loader.load_ext_debug_report(instance),
-                    core::InstanceExtension::KhrDisplay => loader.load_khr_display(instance),
-                    core::InstanceExtension::KhrXlibSurface => loader.load_khr_xlib_surface(instance),
-                    core::InstanceExtension::KhrWaylandSurface => loader.load_khr_wayland_surface(instance),
-                    core::InstanceExtension::KhrXcbSurface => loader.load_khr_xcb_surface(instance),
-                    core::InstanceExtension::KhrMirSurface => loader.load_khr_mir_surface(instance),
-                    core::InstanceExtension::KhrAndroidSurface => loader.load_khr_android_surface(instance),
-                    core::InstanceExtension::KhrWin32Surface => loader.load_khr_win32_surface(instance),
-                    core::InstanceExtension::Unknown(_) => { },
-                }
-            }
+            create_info.enabled_extensions.load_instance(&mut loader, instance);
         }
 
         let debug_report_callback = if let Some(ref chain) = create_info.chain {
@@ -278,7 +245,7 @@ impl Instance {
     }
 
     /// See [`vkEnumerateInstanceExtensionProperties`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkEnumerateInstanceExtensionProperties)
-    pub fn enumerate_instance_extension_properties(layer_name: Option<&str>) -> Result<core::InstanceExtensionPropertiesIterator, EarlyInstanceError> {
+    pub fn get_instance_extension_properties(layer_name: Option<&str>) -> Result<core::InstanceExtensionsProperties, EarlyInstanceError> {
         unsafe {
             let library = libloading::Library::new(vks::VULKAN_LIBRARY_NAME)
                 .map_err(|_| EarlyInstanceError::LoadLibraryFailed(vks::VULKAN_LIBRARY_NAME.to_owned()))?;
@@ -298,13 +265,19 @@ impl Instance {
             }
 
             let mut extension_properties = Vec::with_capacity(num_extension_properties as usize);
+            extension_properties.set_len(num_extension_properties as usize);
             let res = (loader.vkEnumerateInstanceExtensionProperties)(layer_name_cstr.1, &mut num_extension_properties, extension_properties.as_mut_ptr());
             if res != vks::VK_SUCCESS {
                 return Err(res.into());
             }
-            extension_properties.set_len(num_extension_properties as usize);
 
-            Ok(core::InstanceExtensionPropertiesIterator(extension_properties.into_iter()))
+            let mut res = core::InstanceExtensionsProperties::new();
+            for extension in extension_properties {
+                let name = CStr::from_ptr(extension.extensionName.as_ptr()).to_str().unwrap();
+                res.add_named(name, extension.specVersion);
+            }
+
+            Ok(res)
         }
     }
 
