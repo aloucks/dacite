@@ -18,6 +18,7 @@ use khr_display;
 use khr_surface;
 use mir_wrapper;
 use std::cmp::Ordering;
+use std::ffi::CStr;
 use std::hash::{Hash, Hasher};
 use std::mem;
 use std::ptr;
@@ -101,26 +102,6 @@ impl PhysicalDevice {
         self.instance.loader()
     }
 
-    pub fn check_device_extensions(&self, extensions: Vec<core::DeviceExtensionProperties>) -> Result<Vec<core::DeviceExtension>, CheckDeviceExtensionsError> {
-        let mut found = Vec::new();
-        let mut missing = extensions;
-
-        let device_extensions = self.enumerate_device_extension_properties(None).map_err(CheckDeviceExtensionsError::VulkanError)?;
-        for extension in device_extensions {
-            let pos = missing.iter().position(|e| (e.extension == extension.extension) && (e.spec_version <= extension.spec_version));
-            if let Some(pos) = pos {
-                found.push(missing.swap_remove(pos).extension);
-            }
-        }
-
-        if missing.is_empty() {
-            Ok(found)
-        }
-        else {
-            Err(CheckDeviceExtensionsError::Missing(missing))
-        }
-    }
-
     /// See [`vkGetPhysicalDeviceProperties`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetPhysicalDeviceProperties)
     pub fn properties(&self) -> core::PhysicalDeviceProperties {
         unsafe {
@@ -160,7 +141,7 @@ impl PhysicalDevice {
     }
 
     /// See [`vkEnumerateDeviceExtensionProperties`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkEnumerateDeviceExtensionProperties)
-    pub fn enumerate_device_extension_properties(&self, layer_name: Option<&str>) -> Result<core::DeviceExtensionPropertiesIterator, core::Error> {
+    pub fn get_device_extension_properties(&self, layer_name: Option<&str>) -> Result<core::DeviceExtensionsProperties, core::Error> {
         unsafe {
             let layer_name_cstr = utils::cstr_from_str(layer_name);
 
@@ -171,13 +152,19 @@ impl PhysicalDevice {
             }
 
             let mut extension_properties = Vec::with_capacity(num_extension_properties as usize);
+            extension_properties.set_len(num_extension_properties as usize);
             let res = (self.loader().core.vkEnumerateDeviceExtensionProperties)(self.handle, layer_name_cstr.1, &mut num_extension_properties, extension_properties.as_mut_ptr());
             if res != vks::VK_SUCCESS {
                 return Err(res.into());
             }
-            extension_properties.set_len(num_extension_properties as usize);
 
-            Ok(core::DeviceExtensionPropertiesIterator(extension_properties.into_iter()))
+            let mut res = core::DeviceExtensionsProperties::new();
+            for extension in extension_properties {
+                let name = CStr::from_ptr(extension.extensionName.as_ptr()).to_str().unwrap();
+                res.add_named(name, extension.specVersion);
+            }
+
+            Ok(res)
         }
     }
 
@@ -267,14 +254,7 @@ impl PhysicalDevice {
 
             unsafe {
                 loader.load_core(device);
-
-                for device_extension in &create_info.enabled_extensions {
-                    match *device_extension {
-                        core::DeviceExtension::KhrSwapchain => loader.load_khr_swapchain(device),
-                        core::DeviceExtension::KhrDisplaySwapchain => loader.load_khr_display_swapchain(device),
-                        core::DeviceExtension::Unknown(_) => { },
-                    }
-                }
+                create_info.enabled_extensions.load_device(&mut loader, device);
             }
 
             Ok(Device::new(device, self.instance.clone(), allocator_helper, loader))

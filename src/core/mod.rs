@@ -3339,7 +3339,7 @@ pub struct DeviceCreateInfo {
     pub flags: DeviceCreateFlags,
     pub queue_create_infos: Vec<DeviceQueueCreateInfo>,
     pub enabled_layers: Vec<String>,
-    pub enabled_extensions: Vec<DeviceExtension>,
+    pub enabled_extensions: DeviceExtensions,
     pub enabled_features: Option<PhysicalDeviceFeatures>,
     pub chain: Option<DeviceCreateInfoChain>,
 }
@@ -3386,13 +3386,7 @@ impl VkDeviceCreateInfoWrapper {
             ptr::null()
         };
 
-        let enabled_extensions: Vec<_> = create_info.enabled_extensions
-            .iter()
-            .cloned()
-            .map(String::from)
-            .map(CString::new)
-            .map(Result::unwrap)
-            .collect();
+        let enabled_extensions = create_info.enabled_extensions.to_cstring_vec();
         let enabled_extensions_ptrs: Vec<_> = enabled_extensions
             .iter()
             .map(|l| l.as_ptr())

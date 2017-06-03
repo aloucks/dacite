@@ -29,7 +29,7 @@ struct QueueFamilyIndices {
 struct DeviceSettings {
     physical_device: dacite::core::PhysicalDevice,
     queue_family_indices: QueueFamilyIndices,
-    device_extensions: Vec<dacite::core::DeviceExtension>,
+    device_extensions: dacite::core::DeviceExtensions,
 }
 
 struct SwapchainSettings {
@@ -180,13 +180,25 @@ fn find_queue_family_indices(physical_device: &dacite::core::PhysicalDevice, sur
     }
 }
 
-fn check_device_extensions(physical_device: &dacite::core::PhysicalDevice) -> Result<Vec<dacite::core::DeviceExtension>, ()> {
-    let required_device_extensions = vec![dacite::core::DeviceExtensionProperties {
-        extension: dacite::core::DeviceExtension::KhrSwapchain,
-        spec_version: 67,
-    }];
+fn check_device_extensions(physical_device: &dacite::core::PhysicalDevice) -> Result<dacite::core::DeviceExtensions, ()> {
+    let available_extensions = physical_device.get_device_extension_properties(None).map_err(|e| {
+        println!("Failed to get device extension properties ({})", e);
+    })?;
 
-    physical_device.check_device_extensions(required_device_extensions).map_err(|_| ())
+    let mut required_extensions = dacite::core::DeviceExtensionsProperties::new();
+    required_extensions.add_khr_swapchain(67);
+
+    let missing_extensions = required_extensions.difference(&available_extensions);
+    if missing_extensions.is_empty() {
+        Ok(required_extensions.to_extensions())
+    }
+    else {
+        for (name, spec_version) in missing_extensions.properties() {
+            println!("Extension {} (revision {}) missing", name, spec_version);
+        }
+
+        Err(())
+    }
 }
 
 fn check_device_suitability(physical_device: dacite::core::PhysicalDevice, surface: &dacite::khr_surface::SurfaceKhr) -> Result<DeviceSettings, ()> {
@@ -215,7 +227,7 @@ fn find_suitable_device(instance: &dacite::core::Instance, surface: &dacite::khr
     Err(())
 }
 
-fn create_device(physical_device: &dacite::core::PhysicalDevice, device_extensions: Vec<dacite::core::DeviceExtension>, queue_family_indices: &QueueFamilyIndices) -> Result<dacite::core::Device, ()> {
+fn create_device(physical_device: &dacite::core::PhysicalDevice, device_extensions: dacite::core::DeviceExtensions, queue_family_indices: &QueueFamilyIndices) -> Result<dacite::core::Device, ()> {
     let device_queue_create_infos = vec![
         dacite::core::DeviceQueueCreateInfo {
             flags: dacite::core::DeviceQueueCreateFlags::empty(),
