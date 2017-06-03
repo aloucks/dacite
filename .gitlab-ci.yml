@@ -4,7 +4,16 @@ before_script:
     - rustc --version
     - cargo --version
 
-build:
-    stage: build
+stages:
+    - build:dacite
+    - build:examples
+
+build:dacite:
+    stage: build:dacite
     script:
         - cargo build --verbose --jobs 1 --release
+
+build:examples/triangles:
+    stage: build:examples
+    script:
+        - cargo build --verbose --jobs 1 --release --example triangle
