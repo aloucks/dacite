@@ -16,6 +16,7 @@ use core::PhysicalDevice;
 use core::allocator_helper::AllocatorHelper;
 use core;
 use ext_debug_report;
+use khr_android_surface;
 use khr_display;
 use khr_mir_surface;
 use khr_surface;
@@ -188,6 +189,7 @@ impl Instance {
                     core::InstanceExtension::KhrWaylandSurface => loader.load_khr_wayland_surface(instance),
                     core::InstanceExtension::KhrXcbSurface => loader.load_khr_xcb_surface(instance),
                     core::InstanceExtension::KhrMirSurface => loader.load_khr_mir_surface(instance),
+                    core::InstanceExtension::KhrAndroidSurface => loader.load_khr_android_surface(instance),
                     core::InstanceExtension::Unknown(_) => { },
                 }
             }
@@ -428,6 +430,26 @@ impl Instance {
         let mut surface = ptr::null_mut();
         let res = unsafe {
             (self.loader().khr_mir_surface.vkCreateMirSurfaceKHR)(self.handle(), &create_info_wrapper.vks_struct, allocation_callbacks, &mut surface)
+        };
+
+        if res == vks::VK_SUCCESS {
+            Ok(khr_surface::SurfaceKhr::new(surface, self.clone(), allocator_helper))
+        }
+        else {
+            Err(res.into())
+        }
+    }
+
+    /// See [`vkCreateAndroidSurfaceKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCreateAndroidSurfaceKHR)
+    /// and extension [`VK_KHR_android_surface`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_android_surface)
+    pub fn create_android_surface_khr(&self, create_info: &khr_android_surface::AndroidSurfaceCreateInfoKhr, allocator: Option<Box<core::Allocator>>) -> Result<khr_surface::SurfaceKhr, core::Error> {
+        let allocator_helper = allocator.map(AllocatorHelper::new);
+        let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), AllocatorHelper::callbacks);
+        let create_info_wrapper = khr_android_surface::VkAndroidSurfaceCreateInfoKHRWrapper::new(create_info, true);
+
+        let mut surface = ptr::null_mut();
+        let res = unsafe {
+            (self.loader().khr_android_surface.vkCreateAndroidSurfaceKHR)(self.handle(), &create_info_wrapper.vks_struct, allocation_callbacks, &mut surface)
         };
 
         if res == vks::VK_SUCCESS {

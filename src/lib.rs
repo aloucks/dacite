@@ -24,6 +24,7 @@ mod vulkan_object;
 
 pub mod core;
 pub mod ext_debug_report;
+pub mod khr_android_surface;
 pub mod khr_display;
 pub mod khr_display_swapchain;
 pub mod khr_mir_surface;
@@ -33,6 +34,7 @@ pub mod khr_wayland_surface;
 pub mod khr_xcb_surface;
 pub mod khr_xlib_surface;
 
+pub use vks::android_wrapper;
 pub use vks::mir_wrapper;
 pub use vks::wayland_wrapper;
 pub use vks::xcb_wrapper;
