@@ -68,7 +68,7 @@ pub use self::framebuffer::Framebuffer;
 pub use self::image::Image;
 pub use self::image_view::ImageView;
 pub use self::instance::{EarlyInstanceError, Instance};
-pub use self::physical_device::{CheckDeviceExtensionsError, PhysicalDevice};
+pub use self::physical_device::PhysicalDevice;
 pub use self::pipeline::Pipeline;
 pub use self::pipeline_cache::PipelineCache;
 pub use self::pipeline_layout::PipelineLayout;
@@ -3830,78 +3830,6 @@ gen_extensions_structs!{
         fn_add: add_khr_display_swapchain,
         fn_has: has_khr_display_swapchain,
         load_device: load_khr_display_swapchain,
-    }
-}
-
-#[derive(Debug, Clone, PartialEq, Eq, Hash)]
-pub enum DeviceExtension {
-    Unknown(String),
-    KhrSwapchain,
-    KhrDisplaySwapchain,
-}
-
-impl<'a> From<&'a str> for DeviceExtension {
-    fn from(name: &'a str) -> Self {
-        match name {
-            vks::VK_KHR_SWAPCHAIN_EXTENSION_NAME_STR => DeviceExtension::KhrSwapchain,
-            vks::VK_KHR_DISPLAY_SWAPCHAIN_EXTENSION_NAME_STR => DeviceExtension::KhrDisplaySwapchain,
-            _ => DeviceExtension::Unknown(name.to_owned())
-        }
-    }
-}
-
-impl From<DeviceExtension> for String {
-    fn from(extension: DeviceExtension) -> Self {
-        match extension {
-            DeviceExtension::KhrSwapchain => vks::VK_KHR_SWAPCHAIN_EXTENSION_NAME_STR.to_owned(),
-            DeviceExtension::KhrDisplaySwapchain => vks::VK_KHR_DISPLAY_SWAPCHAIN_EXTENSION_NAME_STR.to_owned(),
-            DeviceExtension::Unknown(name) => name,
-        }
-    }
-}
-
-/// See [`VkExtensionProperties`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkExtensionProperties)
-#[derive(Debug, Clone, PartialEq, Eq, Hash)]
-pub struct DeviceExtensionProperties {
-    pub extension: DeviceExtension,
-    pub spec_version: u32,
-}
-
-impl<'a> From<&'a vks::VkExtensionProperties> for DeviceExtensionProperties {
-    fn from(properties: &'a vks::VkExtensionProperties) -> Self {
-        let name = unsafe { CStr::from_ptr(properties.extensionName.as_ptr()).to_str().unwrap() };
-
-        DeviceExtensionProperties {
-            extension: name.into(),
-            spec_version: properties.specVersion,
-        }
-    }
-}
-
-#[derive(Debug, Clone)]
-pub struct DeviceExtensionPropertiesIterator(::std::vec::IntoIter<vks::VkExtensionProperties>);
-
-impl Iterator for DeviceExtensionPropertiesIterator {
-    type Item = DeviceExtensionProperties;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        self.0.next().as_ref().map(From::from)
-    }
-
-    fn size_hint(&self) -> (usize, Option<usize>) {
-        self.0.size_hint()
-    }
-}
-
-impl DoubleEndedIterator for DeviceExtensionPropertiesIterator {
-    fn next_back(&mut self) -> Option<Self::Item> {
-        self.0.next_back().as_ref().map(From::from)
-    }
-}
-
-impl ExactSizeIterator for DeviceExtensionPropertiesIterator {
-    fn len(&self) -> usize {
-        self.0.len()
     }
 }
 

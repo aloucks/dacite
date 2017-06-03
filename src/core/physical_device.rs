@@ -29,12 +29,6 @@ use xcb_wrapper;
 use xlib_wrapper;
 use {TryDestroyError, TryDestroyErrorKind, VulkanObject};
 
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub enum CheckDeviceExtensionsError {
-    Missing(Vec<core::DeviceExtensionProperties>),
-    VulkanError(core::Error),
-}
-
 /// See [`VkPhysicalDevice`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPhysicalDevice)
 #[derive(Debug, Clone)]
 pub struct PhysicalDevice {
