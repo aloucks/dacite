@@ -20,7 +20,9 @@ extern crate winit;
 
 use dacite::core;
 use dacite::khr_surface;
+use dacite::khr_wayland_surface;
 use dacite::khr_xlib_surface;
+use dacite::wayland_wrapper;
 use dacite::xlib_wrapper;
 use std::error;
 use std::fmt;
@@ -38,6 +40,7 @@ impl WindowExt for Window {
 
         match backend {
             Backend::Xlib { .. } => Ok(true), // FIXME: This needs a VisualID, which winit does not expose
+            Backend::Wayland { display, .. } => Ok(physical_device.get_wayland_presentation_support_khr(queue_family_indices, display)),
         }
     }
 
@@ -49,6 +52,7 @@ impl WindowExt for Window {
 
         match backend {
             Backend::Xlib { .. } => extensions.add_khr_xlib_surface(6),
+            Backend::Wayland { .. } => extensions.add_khr_wayland_surface(5),
         };
 
         Ok(extensions)
@@ -67,6 +71,17 @@ impl WindowExt for Window {
                 };
 
                 Ok(instance.create_xlib_surface_khr(&create_info, allocator)?)
+            }
+
+            Backend::Wayland { display, surface } => {
+                let create_info = khr_wayland_surface::WaylandSurfaceCreateInfoKhr {
+                    flags: khr_wayland_surface::WaylandSurfaceCreateFlagsKhr::empty(),
+                    display: display,
+                    surface: surface,
+                    chain: None,
+                };
+
+                Ok(instance.create_wayland_surface_khr(&create_info, allocator)?)
             }
         }
     }
@@ -118,6 +133,11 @@ enum Backend {
         display: *mut xlib_wrapper::Display,
         window: xlib_wrapper::Window,
     },
+
+    Wayland {
+        display: *mut wayland_wrapper::wl_display,
+        surface: *mut wayland_wrapper::wl_surface,
+    },
 }
 
 #[allow(unused_variables)]
@@ -130,6 +150,13 @@ fn get_backend(window: &Window) -> Result<Backend, Error> {
             return Ok(Backend::Xlib {
                 display: display as _,
                 window: dacite::xlib_wrapper::Window(window as _),
+            });
+        }
+
+        if let (Some(display), Some(surface)) = (window.get_wayland_display(), window.get_wayland_surface()) {
+            return Ok(Backend::Wayland {
+                display: display as _,
+                surface: surface as _,
             });
         }
     }
