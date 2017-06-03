@@ -78,18 +78,6 @@ impl error::Error for EarlyInstanceError {
     }
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub enum CheckInstanceExtensionsError {
-    Missing(Vec<core::InstanceExtensionProperties>),
-    EarlyInstanceError(EarlyInstanceError),
-}
-
-impl From<EarlyInstanceError> for CheckInstanceExtensionsError {
-    fn from(e: EarlyInstanceError) -> Self {
-        CheckInstanceExtensionsError::EarlyInstanceError(e)
-    }
-}
-
 /// See [`VkInstance`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkInstance)
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct Instance(Arc<Inner>);

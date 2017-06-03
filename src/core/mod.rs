@@ -67,7 +67,7 @@ pub use self::fence::Fence;
 pub use self::framebuffer::Framebuffer;
 pub use self::image::Image;
 pub use self::image_view::ImageView;
-pub use self::instance::{CheckInstanceExtensionsError, EarlyInstanceError, Instance};
+pub use self::instance::{EarlyInstanceError, Instance};
 pub use self::physical_device::{CheckDeviceExtensionsError, PhysicalDevice};
 pub use self::pipeline::Pipeline;
 pub use self::pipeline_cache::PipelineCache;
@@ -3817,99 +3817,6 @@ gen_extensions_structs!{
         fn_add: add_khr_xlib_surface,
         fn_has: has_khr_xlib_surface,
         load_instance: load_khr_xlib_surface,
-    }
-}
-
-#[derive(Debug, Clone, PartialEq, Eq, Hash)]
-pub enum InstanceExtension {
-    Unknown(String),
-    KhrSurface,
-    ExtDebugReport,
-    KhrDisplay,
-    KhrXlibSurface,
-    KhrWaylandSurface,
-    KhrXcbSurface,
-    KhrMirSurface,
-    KhrAndroidSurface,
-    KhrWin32Surface,
-}
-
-impl<'a> From<&'a str> for InstanceExtension {
-    fn from(name: &'a str) -> Self {
-        match name {
-            vks::VK_KHR_SURFACE_EXTENSION_NAME_STR => InstanceExtension::KhrSurface,
-            vks::VK_EXT_DEBUG_REPORT_EXTENSION_NAME_STR => InstanceExtension::ExtDebugReport,
-            vks::VK_KHR_DISPLAY_EXTENSION_NAME_STR => InstanceExtension::KhrDisplay,
-            vks::VK_KHR_XLIB_SURFACE_EXTENSION_NAME_STR => InstanceExtension::KhrXlibSurface,
-            vks::VK_KHR_WAYLAND_SURFACE_EXTENSION_NAME_STR => InstanceExtension::KhrWaylandSurface,
-            vks::VK_KHR_XCB_SURFACE_EXTENSION_NAME_STR => InstanceExtension::KhrXcbSurface,
-            vks::VK_KHR_MIR_SURFACE_EXTENSION_NAME_STR => InstanceExtension::KhrMirSurface,
-            vks::VK_KHR_ANDROID_SURFACE_EXTENSION_NAME_STR => InstanceExtension::KhrAndroidSurface,
-            vks::VK_KHR_WIN32_SURFACE_EXTENSION_NAME_STR => InstanceExtension::KhrWin32Surface,
-            _ => InstanceExtension::Unknown(name.to_owned())
-        }
-    }
-}
-
-impl From<InstanceExtension> for String {
-    fn from(extension: InstanceExtension) -> Self {
-        match extension {
-            InstanceExtension::KhrSurface => vks::VK_KHR_SURFACE_EXTENSION_NAME_STR.to_owned(),
-            InstanceExtension::ExtDebugReport => vks::VK_EXT_DEBUG_REPORT_EXTENSION_NAME_STR.to_owned(),
-            InstanceExtension::KhrDisplay => vks::VK_KHR_DISPLAY_EXTENSION_NAME_STR.to_owned(),
-            InstanceExtension::KhrXlibSurface => vks::VK_KHR_XLIB_SURFACE_EXTENSION_NAME_STR.to_owned(),
-            InstanceExtension::KhrWaylandSurface => vks::VK_KHR_WAYLAND_SURFACE_EXTENSION_NAME_STR.to_owned(),
-            InstanceExtension::KhrXcbSurface => vks::VK_KHR_XCB_SURFACE_EXTENSION_NAME_STR.to_owned(),
-            InstanceExtension::KhrMirSurface => vks::VK_KHR_MIR_SURFACE_EXTENSION_NAME_STR.to_owned(),
-            InstanceExtension::KhrAndroidSurface => vks::VK_KHR_ANDROID_SURFACE_EXTENSION_NAME_STR.to_owned(),
-            InstanceExtension::KhrWin32Surface => vks::VK_KHR_WIN32_SURFACE_EXTENSION_NAME_STR.to_owned(),
-            InstanceExtension::Unknown(name) => name,
-        }
-    }
-}
-
-/// See [`VkExtensionProperties`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkExtensionProperties)
-#[derive(Debug, Clone, PartialEq, Eq, Hash)]
-pub struct InstanceExtensionProperties {
-    pub extension: InstanceExtension,
-    pub spec_version: u32,
-}
-
-impl<'a> From<&'a vks::VkExtensionProperties> for InstanceExtensionProperties {
-    fn from(properties: &'a vks::VkExtensionProperties) -> Self {
-        let name = unsafe { CStr::from_ptr(properties.extensionName.as_ptr()).to_str().unwrap() };
-
-        InstanceExtensionProperties {
-            extension: name.into(),
-            spec_version: properties.specVersion,
-        }
-    }
-}
-
-#[derive(Debug, Clone)]
-pub struct InstanceExtensionPropertiesIterator(::std::vec::IntoIter<vks::VkExtensionProperties>);
-
-impl Iterator for InstanceExtensionPropertiesIterator {
-    type Item = InstanceExtensionProperties;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        self.0.next().as_ref().map(From::from)
-    }
-
-    fn size_hint(&self) -> (usize, Option<usize>) {
-        self.0.size_hint()
-    }
-}
-
-impl DoubleEndedIterator for InstanceExtensionPropertiesIterator {
-    fn next_back(&mut self) -> Option<Self::Item> {
-        self.0.next_back().as_ref().map(From::from)
-    }
-}
-
-impl ExactSizeIterator for InstanceExtensionPropertiesIterator {
-    fn len(&self) -> usize {
-        self.0.len()
     }
 }
 
