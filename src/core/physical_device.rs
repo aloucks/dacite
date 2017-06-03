@@ -495,4 +495,14 @@ impl PhysicalDevice {
 
         utils::from_vk_bool(res)
     }
+
+    /// See [`vkGetPhysicalDeviceWin32PresentationSupportKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetPhysicalDeviceWin32PresentationSupportKHR)
+    /// and extension [`VK_KHR_win32_surface`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_win32_surface)
+    pub fn get_win32_presentation_support_khr(&self, queue_family_index: u32) -> bool {
+        let res = unsafe {
+            (self.loader().khr_win32_surface.vkGetPhysicalDeviceWin32PresentationSupportKHR)(self.handle, queue_family_index)
+        };
+
+        utils::from_vk_bool(res)
+    }
 }

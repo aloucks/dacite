@@ -31,12 +31,14 @@ pub mod khr_mir_surface;
 pub mod khr_surface;
 pub mod khr_swapchain;
 pub mod khr_wayland_surface;
+pub mod khr_win32_surface;
 pub mod khr_xcb_surface;
 pub mod khr_xlib_surface;
 
 pub use vks::android_wrapper;
 pub use vks::mir_wrapper;
 pub use vks::wayland_wrapper;
+pub use vks::win32_wrapper;
 pub use vks::xcb_wrapper;
 pub use vks::xlib_wrapper;
 

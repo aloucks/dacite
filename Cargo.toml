@@ -22,10 +22,7 @@ libloading = "0.4"
 [dependencies.vks]
 version = "0.16.1"
 default-features = false
-features = [ "no_function_prototypes", "core_1_0_3",
-             "khr_surface_25", "ext_debug_report_1", "khr_display_21", "khr_swapchain_67",
-             "khr_display_swapchain_9", "khr_xlib_surface_6", "khr_wayland_surface_5",
-             "khr_xcb_surface_6", "khr_mir_surface_4", "khr_android_surface_6" ]
+features = [ "no_function_prototypes", "vk_1_0_3" ]
 
 [dev-dependencies]
 winit = "0.6"
