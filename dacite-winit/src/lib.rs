@@ -21,8 +21,10 @@ extern crate winit;
 use dacite::core;
 use dacite::khr_surface;
 use dacite::khr_wayland_surface;
+use dacite::khr_win32_surface;
 use dacite::khr_xlib_surface;
 use dacite::wayland_wrapper;
+use dacite::win32_wrapper;
 use dacite::xlib_wrapper;
 use std::error;
 use std::fmt;
@@ -41,6 +43,7 @@ impl WindowExt for Window {
         match backend {
             Backend::Xlib { .. } => Ok(true), // FIXME: This needs a VisualID, which winit does not expose
             Backend::Wayland { display, .. } => Ok(physical_device.get_wayland_presentation_support_khr(queue_family_indices, display)),
+            Backend::Win32 { .. } => Ok(physical_device.get_win32_presentation_support_khr(queue_family_indices)),
         }
     }
 
@@ -53,6 +56,7 @@ impl WindowExt for Window {
         match backend {
             Backend::Xlib { .. } => extensions.add_khr_xlib_surface(6),
             Backend::Wayland { .. } => extensions.add_khr_wayland_surface(5),
+            Backend::Win32 { .. } => extensions.add_khr_win32_surface(5),
         };
 
         Ok(extensions)
@@ -82,6 +86,17 @@ impl WindowExt for Window {
                 };
 
                 Ok(instance.create_wayland_surface_khr(&create_info, allocator)?)
+            }
+
+            Backend::Win32 { hinstance, hwnd } => {
+                let create_info = khr_win32_surface::Win32SurfaceCreateInfoKhr {
+                    flags: khr_win32_surface::Win32SurfaceCreateFlagsKhr::empty(),
+                    hinstance: hinstance,
+                    hwnd: hwnd,
+                    chain: None,
+                };
+
+                Ok(instance.create_win32_surface_khr(&create_info, allocator)?)
             }
         }
     }
@@ -138,9 +153,15 @@ enum Backend {
         display: *mut wayland_wrapper::wl_display,
         surface: *mut wayland_wrapper::wl_surface,
     },
+
+    Win32 {
+        hinstance: win32_wrapper::HINSTANCE,
+        hwnd: win32_wrapper::HWND,
+    },
 }
 
 #[allow(unused_variables)]
+#[allow(unreachable_code)]
 fn get_backend(window: &Window) -> Result<Backend, Error> {
     #[cfg(any(target_os = "linux", target_os = "dragonfly", target_os = "freebsd", target_os = "openbsd"))]
     {
@@ -159,6 +180,16 @@ fn get_backend(window: &Window) -> Result<Backend, Error> {
                 surface: surface as _,
             });
         }
+    }
+
+    #[cfg(target_os = "windows")]
+    {
+        use winit::os::windows::WindowExt;
+
+        return Ok(Backend::Win32 {
+            hinstance: ::std::ptr::null_mut(), // FIXME: Need HINSTANCE of the correct module
+            hwnd: window.get_hwnd() as _,
+        });
     }
 
     Err(Error::Unsupported)
