@@ -1,24 +1,15 @@
 extern crate dacite;
+extern crate dacite_winit;
 extern crate winit;
 
+use dacite_winit::WindowExt;
 use std::cmp;
 use std::process;
 use std::time::Duration;
 
-#[cfg(target_os = "linux")]
-use winit::os::unix::WindowExt;
-
-enum WindowBackend {
-    Xlib {
-        display: *mut dacite::xlib_wrapper::Display,
-        window: dacite::xlib_wrapper::Window,
-    },
-}
-
 struct Window {
     events_loop: winit::EventsLoop,
     window: winit::Window,
-    backend: WindowBackend,
 }
 
 struct QueueFamilyIndices {
@@ -39,7 +30,6 @@ struct SwapchainSettings {
     format: dacite::core::Format,
 }
 
-#[allow(unused_mut)]
 fn create_window(extent: &dacite::core::Extent2D) -> Result<Window, ()> {
     let events_loop = winit::EventsLoop::new();
     let window = winit::WindowBuilder::new()
@@ -57,44 +47,21 @@ fn create_window(extent: &dacite::core::Extent2D) -> Result<Window, ()> {
         }
     })?;
 
-    let mut backend = None;
-
-    #[cfg(target_os = "linux")]
-    {
-        if backend.is_none() {
-            if let (Some(xlib_display), Some(xlib_window)) = (window.get_xlib_display(), window.get_xlib_window()) {
-                backend = Some(WindowBackend::Xlib {
-                    display: xlib_display as _,
-                    window: dacite::xlib_wrapper::Window(xlib_window as _),
-                });
-            }
-        }
-    }
-
-    if let Some(backend) = backend {
-        Ok(Window {
-            events_loop: events_loop,
-            window: window,
-            backend: backend,
-        })
-    }
-    else {
-        println!("Failed to create window (backend is not supported)");
-        Err(())
-    }
+    Ok(Window {
+        events_loop: events_loop,
+        window: window,
+    })
 }
 
-fn compute_instance_extensions(backend: &WindowBackend) -> Result<dacite::core::InstanceExtensions, ()> {
+fn compute_instance_extensions(window: &winit::Window) -> Result<dacite::core::InstanceExtensions, ()> {
     let available_extensions = dacite::core::Instance::get_instance_extension_properties(None).map_err(|e| {
         println!("Failed to get instance extension properties ({})", e);
     })?;
 
-    let mut required_extensions = dacite::core::InstanceExtensionsProperties::new();
-    required_extensions.add_khr_surface(25);
-
-    match *backend {
-        WindowBackend::Xlib { .. } => required_extensions.add_khr_xlib_surface(6),
-    };
+    let required_extensions = window.get_required_extensions().map_err(|e| match e {
+        dacite_winit::Error::Unsupported => println!("The windowing system is not supported"),
+        dacite_winit::Error::VulkanError(e) => println!("Failed to get required extensions for the window ({})", e),
+    })?;
 
     let missing_extensions = required_extensions.difference(&available_extensions);
     if missing_extensions.is_empty() {
@@ -130,23 +97,6 @@ fn create_instance(instance_extensions: dacite::core::InstanceExtensions) -> Res
     dacite::core::Instance::create(&create_info, None).map_err(|e| {
         println!("Failed to create instance ({})", e);
     })
-}
-
-fn create_surface(instance: &dacite::core::Instance, backend: &WindowBackend) -> Result<dacite::khr_surface::SurfaceKhr, ()> {
-    match *backend {
-        WindowBackend::Xlib { ref display, ref window } => {
-            let xlib_surface_create_info = dacite::khr_xlib_surface::XlibSurfaceCreateInfoKhr {
-                flags: dacite::khr_xlib_surface::XlibSurfaceCreateFlagsKhr::empty(),
-                dpy: *display,
-                window: *window,
-                chain: None,
-            };
-
-            Ok(instance.create_xlib_surface_khr(&xlib_surface_create_info, None).map_err(|e| {
-                println!("Failed to create xlib surface ({})", e);
-            })?)
-        }
-    }
 }
 
 fn find_queue_family_indices(physical_device: &dacite::core::PhysicalDevice, surface: &dacite::khr_surface::SurfaceKhr) -> Result<QueueFamilyIndices, ()> {
@@ -717,12 +667,15 @@ fn real_main() -> Result<(), ()> {
     let Window {
         events_loop,
         window,
-        backend: window_backend,
     } = create_window(&preferred_extent)?;
 
-    let instance_extensions = compute_instance_extensions(&window_backend)?;
+    let instance_extensions = compute_instance_extensions(&window)?;
     let instance = create_instance(instance_extensions)?;
-    let surface = create_surface(&instance, &window_backend)?;
+
+    let surface = window.create_surface(&instance, dacite_winit::SurfaceCreateFlags::empty(), None).map_err(|e| match e {
+        dacite_winit::Error::Unsupported => println!("The windowing system is not supported"),
+        dacite_winit::Error::VulkanError(e) => println!("Failed to create surface ({})", e),
+    })?;
 
     let DeviceSettings {
         physical_device,
