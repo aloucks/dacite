@@ -3820,6 +3820,25 @@ gen_extensions_structs!{
     }
 }
 
+gen_extensions_structs!{
+    pub struct DeviceExtensions;
+    pub struct DeviceExtensionsProperties;
+
+    khr_swapchain {
+        name: vks::VK_KHR_SWAPCHAIN_EXTENSION_NAME_STR,
+        fn_add: add_khr_swapchain,
+        fn_has: has_khr_swapchain,
+        load_device: load_khr_swapchain,
+    }
+
+    khr_display_swapchain {
+        name: vks::VK_KHR_DISPLAY_SWAPCHAIN_EXTENSION_NAME_STR,
+        fn_add: add_khr_display_swapchain,
+        fn_has: has_khr_display_swapchain,
+        load_device: load_khr_display_swapchain,
+    }
+}
+
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub enum DeviceExtension {
     Unknown(String),
