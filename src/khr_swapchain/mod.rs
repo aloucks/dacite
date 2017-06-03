@@ -133,11 +133,10 @@ impl VkSwapchainCreateInfoKHRWrapper {
 chain_struct! {
     #[derive(Debug, Clone, Default, PartialEq)]
     pub struct PresentInfoChainKhr {
-        field display_present_info_khr: DisplayPresentInfoKhr {
+        display_present_info_khr: DisplayPresentInfoKhr {
             fn: add_display_present_info_khr,
-            stype: vks::VK_STRUCTURE_TYPE_DISPLAY_PRESENT_INFO_KHR,
             wrapper: VkDisplayPresentInfoKHRWrapper,
-        },
+        }
     }
 
     #[derive(Debug)]

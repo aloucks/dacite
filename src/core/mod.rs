@@ -2530,11 +2530,10 @@ impl VkApplicationInfoWrapper {
 chain_struct! {
     #[derive(Debug, Clone, Default, PartialEq)]
     pub struct InstanceCreateInfoChain {
-        field debug_report_callback_create_info_ext: DebugReportCallbackCreateInfoExt {
+        debug_report_callback_create_info_ext: DebugReportCallbackCreateInfoExt {
             fn: add_debug_report_callback_create_info_ext,
-            stype: vks::VK_STRUCTURE_TYPE_DEBUG_REPORT_CREATE_INFO_EXT,
             wrapper: VkDebugReportCallbackCreateInfoEXTWrapper,
-        },
+        }
     }
 
     #[derive(Debug)]
