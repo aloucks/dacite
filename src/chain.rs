@@ -29,22 +29,17 @@ macro_rules! chain_struct {
     ) => (
         $( #[$struct_attrs] )*
         pub struct $struct_name {
-            $(
-                $field_name: Option<$field_ty>,
-            )*
+            $( $field_name: Option<$field_ty>, )*
         }
 
         impl $struct_name {
-            #[allow(unused_mut)]
+            #[inline]
             pub fn new() -> Self {
-                $struct_name {
-                    $(
-                        $field_name: None,
-                    )*
-                }
+                Default::default()
             }
 
             $(
+                #[inline]
                 pub fn $field_setter(&mut self, $field_name: $field_ty) -> &mut Self {
                     self.$field_name = Some($field_name);
                     self
@@ -55,10 +50,7 @@ macro_rules! chain_struct {
         $( #[$struct_wrapper_attrs] )*
         struct $struct_wrapper_name {
             pub pnext: *const ::libc::c_void,
-
-            $(
-                $field_name: Option<Box<$field_wrapper_ty>>,
-            )*
+            $( $field_name: Option<Box<$field_wrapper_ty>>, )*
         }
 
         impl $struct_wrapper_name {
@@ -82,10 +74,7 @@ macro_rules! chain_struct {
 
                 $struct_wrapper_name {
                     pnext: pnext_first,
-
-                    $(
-                        $field_name: $field_name,
-                    )*
+                    $( $field_name: $field_name, )*
                 }
             }
 
