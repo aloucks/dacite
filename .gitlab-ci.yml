@@ -6,12 +6,19 @@ before_script:
 
 stages:
     - build:dacite
+    - build:utilities
     - build:examples
 
 build:dacite:
     stage: build:dacite
     script:
         - cd dacite
+        - cargo build --verbose --jobs 1 --release
+
+build:dacite-winit:
+    stage: build:utilities
+    script:
+        - cd dacite-winit
         - cargo build --verbose --jobs 1 --release
 
 build:examples/triangles:
