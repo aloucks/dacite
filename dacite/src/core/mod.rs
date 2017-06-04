@@ -3555,6 +3555,13 @@ gen_extension_structs!{
         fn_get: get_khr_display_swapchain,
         load_device: load_khr_display_swapchain,
     }
+
+    khr_sampler_mirror_clamp_to_edge {
+        name: vks::VK_KHR_SAMPLER_MIRROR_CLAMP_TO_EDGE_EXTENSION_NAME_STR,
+        fn_add: add_khr_sampler_mirror_clamp_to_edge,
+        fn_has: has_khr_sampler_mirror_clamp_to_edge,
+        fn_get: get_khr_sampler_mirror_clamp_to_edge,
+    }
 }
 
 /// See [`VkLayerProperties`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkLayerProperties)
