@@ -27,6 +27,7 @@ pub mod ext_debug_report;
 pub mod khr_android_surface;
 pub mod khr_display;
 pub mod khr_display_swapchain;
+pub mod khr_get_physical_device_properties2;
 pub mod khr_mir_surface;
 pub mod khr_surface;
 pub mod khr_swapchain;

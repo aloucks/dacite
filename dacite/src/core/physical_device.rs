@@ -15,6 +15,7 @@
 use core::allocator_helper::AllocatorHelper;
 use core::{self, Device, Instance};
 use khr_display;
+use khr_get_physical_device_properties2;
 use khr_surface;
 use mir_wrapper;
 use std::cmp::Ordering;
@@ -478,5 +479,103 @@ impl PhysicalDevice {
         };
 
         utils::from_vk_bool(res)
+    }
+
+    /// See [`vkGetPhysicalDeviceFeatures2KHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetPhysicalDeviceFeatures2KHR)
+    /// and extension [`VK_KHR_get_physical_device_properties2`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_get_physical_device_properties2)
+    pub fn get_features2_khr(&self, chain_query: Option<&khr_get_physical_device_properties2::PhysicalDeviceFeatures2ChainQueryKhr>) -> khr_get_physical_device_properties2::PhysicalDeviceFeatures2Khr {
+        let mut chain_query_wrapper = khr_get_physical_device_properties2::PhysicalDeviceFeatures2ChainQueryKhrWrapper::new_optional(chain_query);
+        unsafe {
+            (self.loader().khr_get_physical_device_properties2.vkGetPhysicalDeviceFeatures2KHR)(self.handle, &mut chain_query_wrapper.vks_struct);
+            khr_get_physical_device_properties2::PhysicalDeviceFeatures2Khr::from_vks(&chain_query_wrapper.vks_struct, true)
+        }
+    }
+
+    /// See [`vkGetPhysicalDeviceProperties2KHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetPhysicalDeviceProperties2KHR)
+    /// and extension [`VK_KHR_get_physical_device_properties2`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_get_physical_device_properties2)
+    pub fn get_properties2_khr(&self, chain_query: Option<&khr_get_physical_device_properties2::PhysicalDeviceProperties2ChainQueryKhr>) -> khr_get_physical_device_properties2::PhysicalDeviceProperties2Khr {
+        let mut chain_query_wrapper = khr_get_physical_device_properties2::PhysicalDeviceProperties2ChainQueryKhrWrapper::new_optional(chain_query);
+        unsafe {
+            (self.loader().khr_get_physical_device_properties2.vkGetPhysicalDeviceProperties2KHR)(self.handle, &mut chain_query_wrapper.vks_struct);
+            khr_get_physical_device_properties2::PhysicalDeviceProperties2Khr::from_vks(&chain_query_wrapper.vks_struct, true)
+        }
+    }
+
+    /// See [`vkGetPhysicalDeviceFormatProperties2KHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetPhysicalDeviceFormatProperties2KHR)
+    /// and extension [`VK_KHR_get_physical_device_properties2`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_get_physical_device_properties2)
+    pub fn get_format_properties2_khr(&self, format: core::Format, chain_query: Option<&khr_get_physical_device_properties2::FormatProperties2ChainQueryKhr>) -> khr_get_physical_device_properties2::FormatProperties2Khr {
+        let mut chain_query_wrapper = khr_get_physical_device_properties2::FormatProperties2ChainQueryKhrWrapper::new_optional(chain_query);
+        unsafe {
+            (self.loader().khr_get_physical_device_properties2.vkGetPhysicalDeviceFormatProperties2KHR)(self.handle, format.into(), &mut chain_query_wrapper.vks_struct);
+            khr_get_physical_device_properties2::FormatProperties2Khr::from_vks(&chain_query_wrapper.vks_struct, true)
+        }
+    }
+
+    /// See [`vkGetPhysicalDeviceImageFormatProperties2KHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetPhysicalDeviceImageFormatProperties2KHR)
+    /// and extension [`VK_KHR_get_physical_device_properties2`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_get_physical_device_properties2)
+    pub fn get_image_format_properties2_khr(&self, image_format_info: &khr_get_physical_device_properties2::PhysicalDeviceImageFormatInfo2Khr, chain_query: Option<&khr_get_physical_device_properties2::ImageFormatProperties2ChainQueryKhr>) -> Result<khr_get_physical_device_properties2::ImageFormatProperties2Khr, core::Error> {
+        let image_format_info_wrapper = khr_get_physical_device_properties2::VkPhysicalDeviceImageFormatInfo2KHRWrapper::new(image_format_info, true);
+        let mut chain_query_wrapper = khr_get_physical_device_properties2::ImageFormatProperties2ChainQueryKhrWrapper::new_optional(chain_query);
+
+        unsafe {
+            let res = (self.loader().khr_get_physical_device_properties2.vkGetPhysicalDeviceImageFormatProperties2KHR)(self.handle, &image_format_info_wrapper.vks_struct, &mut chain_query_wrapper.vks_struct);
+
+            if res == vks::VK_SUCCESS {
+                Ok(khr_get_physical_device_properties2::ImageFormatProperties2Khr::from_vks(&chain_query_wrapper.vks_struct, true))
+            }
+            else {
+                Err(res.into())
+            }
+        }
+    }
+
+    /// See [`vkGetPhysicalDeviceQueueFamilyProperties2KHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetPhysicalDeviceQueueFamilyProperties2KHR)
+    /// and extension [`VK_KHR_get_physical_device_properties2`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_get_physical_device_properties2)
+    pub fn get_queue_family_properties2_khr(&self, chain_query: Option<&khr_get_physical_device_properties2::QueueFamilyProperties2ChainQueryKhr>) -> Vec<khr_get_physical_device_properties2::QueueFamilyProperties2Khr> {
+        unsafe {
+            let mut num = 0;
+            (self.loader().khr_get_physical_device_properties2.vkGetPhysicalDeviceQueueFamilyProperties2KHR)(self.handle, &mut num, ptr::null_mut());
+
+            let mut chain_query_wrappers = Vec::with_capacity(num as usize);
+            for _ in 0..num {
+                chain_query_wrappers.push(khr_get_physical_device_properties2::QueueFamilyProperties2ChainQueryKhrWrapper::new_optional(chain_query));
+            }
+
+            let mut vks_structs: Vec<_> = chain_query_wrappers.iter().map(|w| w.vks_struct).collect();
+            (self.loader().khr_get_physical_device_properties2.vkGetPhysicalDeviceQueueFamilyProperties2KHR)(self.handle, &mut num, vks_structs.as_mut_ptr());
+
+            vks_structs.iter().map(|p| khr_get_physical_device_properties2::QueueFamilyProperties2Khr::from_vks(p, true)).collect()
+        }
+    }
+
+    /// See [`vkGetPhysicalDeviceMemoryProperties2KHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetPhysicalDeviceMemoryProperties2KHR)
+    /// and extension [`VK_KHR_get_physical_device_properties2`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_get_physical_device_properties2)
+    pub fn get_memory_properties2_khr(&self, chain_query: Option<&khr_get_physical_device_properties2::PhysicalDeviceMemoryProperties2ChainQueryKhr>) -> khr_get_physical_device_properties2::PhysicalDeviceMemoryProperties2Khr {
+        let mut chain_query_wrapper = khr_get_physical_device_properties2::PhysicalDeviceMemoryProperties2ChainQueryKhrWrapper::new_optional(chain_query);
+        unsafe {
+            (self.loader().khr_get_physical_device_properties2.vkGetPhysicalDeviceMemoryProperties2KHR)(self.handle, &mut chain_query_wrapper.vks_struct);
+            khr_get_physical_device_properties2::PhysicalDeviceMemoryProperties2Khr::from_vks(&chain_query_wrapper.vks_struct, true)
+        }
+    }
+
+    /// See [`vkGetPhysicalDeviceSparseImageFormatProperties2KHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetPhysicalDeviceSparseImageFormatProperties2KHR)
+    /// and extension [`VK_KHR_get_physical_device_properties2`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_get_physical_device_properties2)
+    pub fn get_sparse_image_format_properties2_khr(&self, format_info: &khr_get_physical_device_properties2::PhysicalDeviceSparseImageFormatInfo2Khr, chain_query: Option<&khr_get_physical_device_properties2::SparseImageFormatProperties2ChainQueryKhr>) -> Vec<khr_get_physical_device_properties2::SparseImageFormatProperties2Khr> {
+        let format_info_wrapper = khr_get_physical_device_properties2::VkPhysicalDeviceSparseImageFormatInfo2KHRWrapper::new(format_info, true);
+
+        unsafe {
+            let mut num = 0;
+            (self.loader().khr_get_physical_device_properties2.vkGetPhysicalDeviceSparseImageFormatProperties2KHR)(self.handle, &format_info_wrapper.vks_struct, &mut num, ptr::null_mut());
+
+            let mut chain_query_wrappers = Vec::with_capacity(num as usize);
+            for _ in 0..num {
+                chain_query_wrappers.push(khr_get_physical_device_properties2::SparseImageFormatProperties2ChainQueryKhrWrapper::new_optional(chain_query));
+            }
+
+            let mut vks_structs: Vec<_> = chain_query_wrappers.iter().map(|w| w.vks_struct).collect();
+            (self.loader().khr_get_physical_device_properties2.vkGetPhysicalDeviceSparseImageFormatProperties2KHR)(self.handle, &format_info_wrapper.vks_struct, &mut num, vks_structs.as_mut_ptr());
+
+            vks_structs.iter().map(|p| khr_get_physical_device_properties2::SparseImageFormatProperties2Khr::from_vks(p, true)).collect()
+        }
     }
 }

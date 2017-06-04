@@ -3333,6 +3333,16 @@ gen_chain_struct! {
     vks: VkDeviceCreateInfo,
     input: true,
     output: false,
+
+    physical_device_features2_khr: PhysicalDeviceFeatures2Khr {
+        mod: khr_get_physical_device_properties2,
+        fn_add: add_physical_device_features2_khr,
+        fn_has: has_physical_device_features2_khr,
+        fn_get: get_physical_device_features2_khr,
+        wrapper: VkPhysicalDeviceFeatures2KHRWrapper,
+        vks: VkPhysicalDeviceFeatures2KHR,
+        stype: vks::VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2_KHR,
+    }
 }
 
 /// See [`VkDeviceCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDeviceCreateInfo)
@@ -3467,6 +3477,14 @@ gen_extension_structs!{
         fn_has: has_khr_display,
         fn_get: get_khr_display,
         load_instance: load_khr_display,
+    }
+
+    khr_get_physical_device_properties2 {
+        name: vks::VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME_STR,
+        fn_add: add_khr_get_physical_device_properties2,
+        fn_has: has_khr_get_physical_device_properties2,
+        fn_get: get_khr_get_physical_device_properties2,
+        load_instance: load_khr_get_physical_device_properties2,
     }
 
     khr_mir_surface {

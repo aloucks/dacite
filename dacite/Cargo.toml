@@ -18,4 +18,5 @@ libloading = "0.4"
 [dependencies.vks]
 version = "0.16.1"
 default-features = false
-features = [ "no_function_prototypes", "vk_1_0_3" ]
+features = [ "no_function_prototypes", "vk_1_0_3",
+             "khr_get_physical_device_properties2_1" ]
