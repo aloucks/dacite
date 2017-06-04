@@ -19,5 +19,5 @@ libloading = "0.4"
 version = "0.16.1"
 default-features = false
 features = [ "no_function_prototypes", "vk_1_0_3",
-             "core_1_0_4", "khr_sampler_mirror_clamp_to_edge_1",
+             "core_1_0_4", "khr_sampler_mirror_clamp_to_edge_1", "ext_debug_report_2",
              "khr_get_physical_device_properties2_1" ]

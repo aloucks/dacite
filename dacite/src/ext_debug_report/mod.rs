@@ -202,7 +202,7 @@ impl VkDebugReportCallbackCreateInfoEXTWrapper {
 
         VkDebugReportCallbackCreateInfoEXTWrapper {
             vks_struct: vks::VkDebugReportCallbackCreateInfoEXT {
-                sType: vks::VK_STRUCTURE_TYPE_DEBUG_REPORT_CREATE_INFO_EXT,
+                sType: vks::VK_STRUCTURE_TYPE_DEBUG_REPORT_CALLBACK_CREATE_INFO_EXT,
                 pNext: pnext,
                 flags: create_info.flags,
                 pfnCallback: callback_helper.vks_callback,

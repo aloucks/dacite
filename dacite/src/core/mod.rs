@@ -2538,7 +2538,7 @@ gen_chain_struct! {
         fn_get: get_debug_report_callback_create_info_ext,
         wrapper: VkDebugReportCallbackCreateInfoEXTWrapper,
         vks: VkDebugReportCallbackCreateInfoEXT,
-        stype: vks::VK_STRUCTURE_TYPE_DEBUG_REPORT_CREATE_INFO_EXT,
+        stype: vks::VK_STRUCTURE_TYPE_DEBUG_REPORT_CALLBACK_CREATE_INFO_EXT,
     }
 }
 
