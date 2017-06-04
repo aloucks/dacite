@@ -164,13 +164,12 @@ pub trait DebugReportCallbacksExt: Send + Sync + fmt::Debug {
     fn callback(&self, flags: DebugReportFlagsExt, object_type: DebugReportObjectTypeExt, object: u64, location: usize, message_code: i32, layer_prefix: Option<&str>, message: Option<&str>) -> bool;
 }
 
-chain_struct! {
-    #[derive(Debug, Clone, Default, PartialEq)]
-    pub struct DebugReportCallbackCreateInfoChainExt {
-    }
-
-    #[derive(Debug)]
-    struct DebugReportCallbackCreateInfoChainWrapperExt;
+gen_chain_struct! {
+    name: DebugReportCallbackCreateInfoChainExt [DebugReportCallbackCreateInfoChainWrapperExt],
+    query: DebugReportCallbackCreateInfoChainQueryExt [DebugReportCallbackCreateInfoChainQueryWrapperExt],
+    vks: VkDebugReportCallbackCreateInfoEXT,
+    input: true,
+    output: false,
 }
 
 /// See [`VkDebugReportCallbackCreateInfoEXT`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDebugReportCallbackCreateInfoEXT)

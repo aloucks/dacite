@@ -18,13 +18,12 @@ use core;
 use utils;
 use vks;
 
-chain_struct! {
-    #[derive(Debug, Clone, Default, PartialEq)]
-    pub struct DisplayPresentInfoChainKhr {
-    }
-
-    #[derive(Debug)]
-    struct DisplayPresentInfoChainKhrWrapper;
+gen_chain_struct! {
+    name: DisplayPresentInfoChainKhr [DisplayPresentInfoChainKhrWrapper],
+    query: DisplayPresentInfoChainQueryKhr [DisplayPresentInfoChainQueryKhrWrapper],
+    vks: VkDisplayPresentInfoKHR,
+    input: true,
+    output: false,
 }
 
 /// See [`VkDisplayPresentInfoKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDisplayPresentInfoKHR)

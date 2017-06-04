@@ -122,13 +122,12 @@ impl DisplayModePropertiesKhr {
     }
 }
 
-chain_struct! {
-    #[derive(Debug, Clone, Default, PartialEq)]
-    pub struct DisplayModeCreateInfoChainKhr {
-    }
-
-    #[derive(Debug)]
-    struct DisplayModeCreateInfoChainKhrWrapper;
+gen_chain_struct! {
+    name: DisplayModeCreateInfoChainKhr [DisplayModeCreateInfoChainKhrWrapper],
+    query: DisplayModeCreateInfoChainQueryKhr [DisplayModeCreateInfoChainQueryKhrWrapper],
+    vks: VkDisplayModeCreateInfoKHR,
+    input: true,
+    output: false,
 }
 
 /// See [`VkDisplayModeCreateInfoKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDisplayModeCreateInfoKHR)
@@ -214,13 +213,12 @@ impl DisplayPlanePropertiesKhr {
     }
 }
 
-chain_struct! {
-    #[derive(Debug, Clone, Default, PartialEq)]
-    pub struct DisplaySurfaceCreateInfoChainKhr {
-    }
-
-    #[derive(Debug)]
-    struct DisplaySurfaceCreateInfoChainKhrWrapper;
+gen_chain_struct! {
+    name: DisplaySurfaceCreateInfoChainKhr [DisplaySurfaceCreateInfoChainKhrWrapper],
+    query: DisplaySurfaceCreateInfoChainQueryKhr [DisplaySurfaceCreateInfoChainQueryKhrWrapper],
+    vks: VkDisplaySurfaceCreateInfoKHR,
+    input: true,
+    output: false,
 }
 
 /// See [`VkDisplaySurfaceCreateInfoKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDisplaySurfaceCreateInfoKHR)

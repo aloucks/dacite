@@ -23,13 +23,12 @@ pub type WaylandSurfaceCreateFlagsKhr = vks::VkWaylandSurfaceCreateFlagsKHR;
 /// See [`VkWaylandSurfaceCreateFlagsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkWaylandSurfaceCreateFlagsKHR)
 pub type WaylandSurfaceCreateFlagBitsKhr = vks::VkWaylandSurfaceCreateFlagBitsKHR;
 
-chain_struct! {
-    #[derive(Debug, Clone, Default, PartialEq)]
-    pub struct WaylandSurfaceCreateInfoChainKhr {
-    }
-
-    #[derive(Debug)]
-    struct WaylandSurfaceCreateInfoChainKhrWrapper;
+gen_chain_struct! {
+    name: WaylandSurfaceCreateInfoChainKhr [WaylandSurfaceCreateInfoChainKhrWrapper],
+    query: WaylandSurfaceCreateInfoChainQueryKhr [WaylandSurfaceCreateInfoChainQueryKhrWrapper],
+    vks: VkWaylandSurfaceCreateInfoKHR,
+    input: true,
+    output: false,
 }
 
 /// See [`VkWaylandSurfaceCreateInfoKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkWaylandSurfaceCreateInfoKHR)

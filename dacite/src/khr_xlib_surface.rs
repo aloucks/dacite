@@ -23,13 +23,12 @@ pub type XlibSurfaceCreateFlagsKhr = vks::VkXlibSurfaceCreateFlagsKHR;
 /// See [`VkXlibSurfaceCreateFlagsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkXlibSurfaceCreateFlagsKHR)
 pub type XlibSurfaceCreateFlagBitsKhr = vks::VkXlibSurfaceCreateFlagBitsKHR;
 
-chain_struct! {
-    #[derive(Debug, Clone, Default, PartialEq)]
-    pub struct XlibSurfaceCreateInfoChainKhr {
-    }
-
-    #[derive(Debug)]
-    struct XlibSurfaceCreateInfoChainKhrWrapper;
+gen_chain_struct! {
+    name: XlibSurfaceCreateInfoChainKhr [XlibSurfaceCreateInfoChainKhrWrapper],
+    query: XlibSurfaceCreateInfoChainQueryKhr [XlibSurfaceCreateInfoChainQueryKhrWrapper],
+    vks: VkXlibSurfaceCreateInfoKHR,
+    input: true,
+    output: false,
 }
 
 /// See [`VkXlibSurfaceCreateInfoKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkXlibSurfaceCreateInfoKHR)

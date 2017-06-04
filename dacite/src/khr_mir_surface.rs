@@ -23,13 +23,12 @@ pub type MirSurfaceCreateFlagsKhr = vks::VkMirSurfaceCreateFlagsKHR;
 /// See [`VkMirSurfaceCreateFlagsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkMirSurfaceCreateFlagsKHR)
 pub type MirSurfaceCreateFlagBitsKhr = vks::VkMirSurfaceCreateFlagBitsKHR;
 
-chain_struct! {
-    #[derive(Debug, Clone, Default, PartialEq)]
-    pub struct MirSurfaceCreateInfoChainKhr {
-    }
-
-    #[derive(Debug)]
-    struct MirSurfaceCreateInfoChainKhrWrapper;
+gen_chain_struct! {
+    name: MirSurfaceCreateInfoChainKhr [MirSurfaceCreateInfoChainKhrWrapper],
+    query: MirSurfaceCreateInfoChainQueryKhr [MirSurfaceCreateInfoChainQueryKhrWrapper],
+    vks: VkMirSurfaceCreateInfoKHR,
+    input: true,
+    output: false,
 }
 
 /// See [`VkMirSurfaceCreateInfoKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkMirSurfaceCreateInfoKHR)

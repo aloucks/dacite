@@ -23,13 +23,12 @@ pub type AndroidSurfaceCreateFlagsKhr = vks::VkAndroidSurfaceCreateFlagsKHR;
 /// See [`VkAndroidSurfaceCreateFlagsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkAndroidSurfaceCreateFlagsKHR)
 pub type AndroidSurfaceCreateFlagBitsKhr = vks::VkAndroidSurfaceCreateFlagBitsKHR;
 
-chain_struct! {
-    #[derive(Debug, Clone, Default, PartialEq)]
-    pub struct AndroidSurfaceCreateInfoChainKhr {
-    }
-
-    #[derive(Debug)]
-    struct AndroidSurfaceCreateInfoChainKhrWrapper;
+gen_chain_struct! {
+    name: AndroidSurfaceCreateInfoChainKhr [AndroidSurfaceCreateInfoChainKhrWrapper],
+    query: AndroidSurfaceCreateInfoChainQueryKhr [AndroidSurfaceCreateInfoChainQueryKhrWrapper],
+    vks: VkAndroidSurfaceCreateInfoKHR,
+    input: true,
+    output: false,
 }
 
 /// See [`VkAndroidSurfaceCreateInfoKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkAndroidSurfaceCreateInfoKHR)

@@ -22,8 +22,6 @@ use std::ptr;
 use utils;
 use vks;
 
-use khr_display_swapchain::{DisplayPresentInfoKhr, VkDisplayPresentInfoKHRWrapper};
-
 pub use self::swapchain::SwapchainKhr;
 
 /// See [`VkSwapchainCreateFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSwapchainCreateFlagBitsKHR)
@@ -48,13 +46,12 @@ pub enum QueuePresentResultKhr {
     Suboptimal,
 }
 
-chain_struct! {
-    #[derive(Debug, Clone, Default, PartialEq)]
-    pub struct SwapchainCreateInfoChainKhr {
-    }
-
-    #[derive(Debug)]
-    struct SwapchainCreateInfoChainKhrWrapper;
+gen_chain_struct! {
+    name: SwapchainCreateInfoChainKhr [SwapchainCreateInfoChainKhrWrapper],
+    query: SwapchainCreateInfoChainQueryKhr [SwapchainCreateInfoChainQueryKhrWrapper],
+    vks: VkSwapchainCreateInfoKHR,
+    input: true,
+    output: false,
 }
 
 /// See [`VkSwapchainCreateInfoKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSwapchainCreateInfoKHR)
@@ -130,17 +127,22 @@ impl VkSwapchainCreateInfoKHRWrapper {
     }
 }
 
-chain_struct! {
-    #[derive(Debug, Clone, Default, PartialEq)]
-    pub struct PresentInfoChainKhr {
-        display_present_info_khr: DisplayPresentInfoKhr {
-            fn: add_display_present_info_khr,
-            wrapper: VkDisplayPresentInfoKHRWrapper,
-        }
-    }
+gen_chain_struct! {
+    name: PresentInfoChainKhr [PresentInfoChainKhrWrapper],
+    query: PresentInfoChainQueryKhr [PresentInfoChainQueryKhrWrapper],
+    vks: VkPresentInfoKHR,
+    input: true,
+    output: false,
 
-    #[derive(Debug)]
-    struct PresentInfoChainKhrWrapper;
+    display_present_info_khr: DisplayPresentInfoKhr {
+        mod: khr_display_swapchain,
+        fn_add: add_display_present_info_khr,
+        fn_has: has_display_present_info_khr,
+        fn_get: get_display_present_info_khr,
+        wrapper: VkDisplayPresentInfoKHRWrapper,
+        vks: VkDisplayPresentInfoKHR,
+        stype: vks::VK_STRUCTURE_TYPE_DISPLAY_PRESENT_INFO_KHR,
+    }
 }
 
 /// See [`VkPresentInfoKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPresentInfoKHR)

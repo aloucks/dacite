@@ -23,13 +23,12 @@ pub type Win32SurfaceCreateFlagsKhr = vks::VkWin32SurfaceCreateFlagsKHR;
 /// See [`VkWin32SurfaceCreateFlagsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkWin32SurfaceCreateFlagsKHR)
 pub type Win32SurfaceCreateFlagBitsKhr = vks::VkWin32SurfaceCreateFlagBitsKHR;
 
-chain_struct! {
-    #[derive(Debug, Clone, Default, PartialEq)]
-    pub struct Win32SurfaceCreateInfoChainKhr {
-    }
-
-    #[derive(Debug)]
-    struct Win32SurfaceCreateInfoChainKhrWrapper;
+gen_chain_struct! {
+    name: Win32SurfaceCreateInfoChainKhr [Win32SurfaceCreateInfoChainKhrWrapper],
+    query: Win32SurfaceCreateInfoChainQueryKhr [Win32SurfaceCreateInfoChainQueryKhrWrapper],
+    vks: VkWin32SurfaceCreateInfoKHR,
+    input: true,
+    output: false,
 }
 
 /// See [`VkWin32SurfaceCreateInfoKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkWin32SurfaceCreateInfoKHR)

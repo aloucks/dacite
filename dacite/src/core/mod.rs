@@ -54,8 +54,6 @@ use std::time::Duration;
 use utils;
 use vks;
 
-use ext_debug_report::{DebugReportCallbackCreateInfoExt, VkDebugReportCallbackCreateInfoEXTWrapper};
-
 pub use self::buffer::Buffer;
 pub use self::buffer_view::BufferView;
 pub use self::command_buffer::CommandBuffer;
@@ -2476,13 +2474,12 @@ impl From<SubpassContents> for vks::VkSubpassContents {
     }
 }
 
-chain_struct! {
-    #[derive(Debug, Clone, Default, PartialEq)]
-    pub struct ApplicationInfoChain {
-    }
-
-    #[derive(Debug)]
-    struct ApplicationInfoChainWrapper;
+gen_chain_struct! {
+    name: ApplicationInfoChain [ApplicationInfoChainWrapper],
+    query: ApplicationInfoChainQuery [ApplicationInfoChainQueryWrapper],
+    vks: VkApplicationInfo,
+    input: true,
+    output: false,
 }
 
 /// See [`VkApplicationInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkApplicationInfo)
@@ -2527,17 +2524,22 @@ impl VkApplicationInfoWrapper {
     }
 }
 
-chain_struct! {
-    #[derive(Debug, Clone, Default, PartialEq)]
-    pub struct InstanceCreateInfoChain {
-        debug_report_callback_create_info_ext: DebugReportCallbackCreateInfoExt {
-            fn: add_debug_report_callback_create_info_ext,
-            wrapper: VkDebugReportCallbackCreateInfoEXTWrapper,
-        }
-    }
+gen_chain_struct! {
+    name: InstanceCreateInfoChain [InstanceCreateInfoChainWrapper],
+    query: InstanceCreateInfoChainQuery [InstanceCreateInfoChainQueryWrapper],
+    vks: VkInstanceCreateInfo,
+    input: true,
+    output: false,
 
-    #[derive(Debug)]
-    struct InstanceCreateInfoChainWrapper;
+    debug_report_callback_create_info_ext: DebugReportCallbackCreateInfoExt {
+        mod: ext_debug_report,
+        fn_add: add_debug_report_callback_create_info_ext,
+        fn_has: has_debug_report_callback_create_info_ext,
+        fn_get: get_debug_report_callback_create_info_ext,
+        wrapper: VkDebugReportCallbackCreateInfoEXTWrapper,
+        vks: VkDebugReportCallbackCreateInfoEXT,
+        stype: vks::VK_STRUCTURE_TYPE_DEBUG_REPORT_CREATE_INFO_EXT,
+    }
 }
 
 /// See [`VkInstanceCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkInstanceCreateInfo)
@@ -3281,13 +3283,12 @@ impl<'a> From<&'a vks::VkPhysicalDeviceMemoryProperties> for PhysicalDeviceMemor
     }
 }
 
-chain_struct! {
-    #[derive(Debug, Clone, Default, PartialEq)]
-    pub struct DeviceQueueCreateInfoChain {
-    }
-
-    #[derive(Debug)]
-    struct DeviceQueueCreateInfoChainWrapper;
+gen_chain_struct! {
+    name: DeviceQueueCreateInfoChain [DeviceQueueCreateInfoChainWrapper],
+    query: DeviceQueueCreateInfoChainQuery [DeviceQueueCreateInfoChainQueryWrapper],
+    vks: VkDeviceQueueCreateInfo,
+    input: true,
+    output: false,
 }
 
 /// See [`VkDeviceQueueCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDeviceQueueCreateInfo)
@@ -3326,13 +3327,12 @@ impl VkDeviceQueueCreateInfoWrapper {
     }
 }
 
-chain_struct! {
-    #[derive(Debug, Clone, Default, PartialEq)]
-    pub struct DeviceCreateInfoChain {
-    }
-
-    #[derive(Debug)]
-    struct DeviceCreateInfoChainWrapper ;
+gen_chain_struct! {
+    name: DeviceCreateInfoChain [DeviceCreateInfoChainWrapper],
+    query: DeviceCreateInfoChainQuery [DeviceCreateInfoChainQueryWrapper],
+    vks: VkDeviceCreateInfo,
+    input: true,
+    output: false,
 }
 
 /// See [`VkDeviceCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDeviceCreateInfo)
@@ -3588,13 +3588,12 @@ impl ExactSizeIterator for LayerPropertiesIterator {
     }
 }
 
-chain_struct! {
-    #[derive(Debug, Clone, Default, PartialEq)]
-    pub struct SubmitInfoChain {
-    }
-
-    #[derive(Debug)]
-    struct SubmitInfoChainWrapper;
+gen_chain_struct! {
+    name: SubmitInfoChain [SubmitInfoChainWrapper],
+    query: SubmitInfoChainQuery [SubmitInfoChainQueryWrapper],
+    vks: VkSubmitInfo,
+    input: true,
+    output: false,
 }
 
 /// See [`VkSubmitInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSubmitInfo)
@@ -3687,13 +3686,12 @@ impl VkSubmitInfoWrapper {
     }
 }
 
-chain_struct! {
-    #[derive(Debug, Clone, Default, PartialEq)]
-    pub struct MemoryAllocateInfoChain {
-    }
-
-    #[derive(Debug)]
-    struct MemoryAllocateInfoChainWrapper;
+gen_chain_struct! {
+    name: MemoryAllocateInfoChain [MemoryAllocateInfoChainWrapper],
+    query: MemoryAllocateInfoChainQuery [MemoryAllocateInfoChainQueryWrapper],
+    vks: VkMemoryAllocateInfo,
+    input: true,
+    output: false,
 }
 
 /// See [`VkMemoryAllocateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkMemoryAllocateInfo)
@@ -3726,13 +3724,12 @@ impl VkMemoryAllocateInfoWrapper {
     }
 }
 
-chain_struct! {
-    #[derive(Debug, Clone, Default, PartialEq)]
-    pub struct MappedMemoryRangeChain {
-    }
-
-    #[derive(Debug)]
-    struct MappedMemoryRangeChainWrapper;
+gen_chain_struct! {
+    name: MappedMemoryRangeChain [MappedMemoryRangeChainWrapper],
+    query: MappedMemoryRangeChainQuery [MappedMemoryRangeChainQueryWrapper],
+    vks: VkMappedMemoryRange,
+    input: true,
+    output: false,
 }
 
 /// See [`VkMappedMemoryRange`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkMappedMemoryRange)
@@ -4090,13 +4087,12 @@ impl<'a> From<&'a SparseImageMemoryBindInfo> for VkSparseImageMemoryBindInfoWrap
     }
 }
 
-chain_struct! {
-    #[derive(Debug, Clone, Default, PartialEq)]
-    pub struct BindSparseInfoChain {
-    }
-
-    #[derive(Debug)]
-    struct BindSparseInfoChainWrapper;
+gen_chain_struct! {
+    name: BindSparseInfoChain [BindSparseInfoChainWrapper],
+    query: BindSparseInfoChainQuery [BindSparseInfoChainQueryWrapper],
+    vks: VkBindSparseInfo,
+    input: true,
+    output: false,
 }
 
 /// See [`VkBindSparseInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkBindSparseInfo)
@@ -4210,13 +4206,12 @@ impl VkBindSparseInfoWrapper {
     }
 }
 
-chain_struct! {
-    #[derive(Debug, Clone, Default, PartialEq)]
-    pub struct FenceCreateInfoChain {
-    }
-
-    #[derive(Debug)]
-    struct FenceCreateInfoChainWrapper;
+gen_chain_struct! {
+    name: FenceCreateInfoChain [FenceCreateInfoChainWrapper],
+    query: FenceCreateInfoChainQuery [FenceCreateInfoChainQueryWrapper],
+    vks: VkFenceCreateInfo,
+    input: true,
+    output: false,
 }
 
 /// See [`VkFenceCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkFenceCreateInfo)
@@ -4247,13 +4242,12 @@ impl VkFenceCreateInfoWrapper {
     }
 }
 
-chain_struct! {
-    #[derive(Debug, Clone, Default, PartialEq)]
-    pub struct SemaphoreCreateInfoChain {
-    }
-
-    #[derive(Debug)]
-    struct SemaphoreCreateInfoChainWrapper;
+gen_chain_struct! {
+    name: SemaphoreCreateInfoChain [SemaphoreCreateInfoChainWrapper],
+    query: SemaphoreCreateInfoChainQuery [SemaphoreCreateInfoChainQueryWrapper],
+    vks: VkSemaphoreCreateInfo,
+    input: true,
+    output: false,
 }
 
 /// See [`VkSemaphoreCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSemaphoreCreateInfo)
@@ -4284,13 +4278,12 @@ impl VkSemaphoreCreateInfoWrapper {
     }
 }
 
-chain_struct! {
-    #[derive(Debug, Clone, Default, PartialEq)]
-    pub struct EventCreateInfoChain {
-    }
-
-    #[derive(Debug)]
-    struct EventCreateInfoChainWrapper;
+gen_chain_struct! {
+    name: EventCreateInfoChain [EventCreateInfoChainWrapper],
+    query: EventCreateInfoChainQuery [EventCreateInfoChainQueryWrapper],
+    vks: VkEventCreateInfo,
+    input: true,
+    output: false,
 }
 
 /// See [`VkEventCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkEventCreateInfo)
@@ -4321,13 +4314,12 @@ impl VkEventCreateInfoWrapper {
     }
 }
 
-chain_struct! {
-    #[derive(Debug, Clone, Default, PartialEq)]
-    pub struct QueryPoolCreateInfoChain {
-    }
-
-    #[derive(Debug)]
-    struct QueryPoolCreateInfoChainWrapper;
+gen_chain_struct! {
+    name: QueryPoolCreateInfoChain [QueryPoolCreateInfoChainWrapper],
+    query: QueryPoolCreateInfoChainQuery [QueryPoolCreateInfoChainQueryWrapper],
+    vks: VkQueryPoolCreateInfo,
+    input: true,
+    output: false,
 }
 
 /// See [`VkQueryPoolCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueryPoolCreateInfo)
@@ -4364,13 +4356,12 @@ impl VkQueryPoolCreateInfoWrapper {
     }
 }
 
-chain_struct! {
-    #[derive(Debug, Clone, Default, PartialEq)]
-    pub struct BufferCreateInfoChain {
-    }
-
-    #[derive(Debug)]
-    struct BufferCreateInfoChainWrapper;
+gen_chain_struct! {
+    name: BufferCreateInfoChain [BufferCreateInfoChainWrapper],
+    query: BufferCreateInfoChainQuery [BufferCreateInfoChainQueryWrapper],
+    vks: VkBufferCreateInfo,
+    input: true,
+    output: false,
 }
 
 /// See [`VkBufferCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkBufferCreateInfo)
@@ -4418,13 +4409,12 @@ impl VkBufferCreateInfoWrapper {
     }
 }
 
-chain_struct! {
-    #[derive(Debug, Clone, Default, PartialEq)]
-    pub struct BufferViewCreateInfoChain {
-    }
-
-    #[derive(Debug)]
-    struct BufferViewCreateInfoChainWrapper;
+gen_chain_struct! {
+    name: BufferViewCreateInfoChain [BufferViewCreateInfoChainWrapper],
+    query: BufferViewCreateInfoChainQuery [BufferViewCreateInfoChainQueryWrapper],
+    vks: VkBufferViewCreateInfo,
+    input: true,
+    output: false,
 }
 
 /// See [`VkBufferViewCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkBufferViewCreateInfo)
@@ -4465,13 +4455,12 @@ impl VkBufferViewCreateInfoWrapper {
     }
 }
 
-chain_struct! {
-    #[derive(Debug, Clone, Default, PartialEq)]
-    pub struct ImageCreateInfoChain {
-    }
-
-    #[derive(Debug)]
-    struct ImageCreateInfoChainWrapper;
+gen_chain_struct! {
+    name: ImageCreateInfoChain [ImageCreateInfoChainWrapper],
+    query: ImageCreateInfoChainQuery [ImageCreateInfoChainQueryWrapper],
+    vks: VkImageCreateInfo,
+    input: true,
+    output: false,
 }
 
 /// See [`VkImageCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageCreateInfo)
@@ -4597,13 +4586,12 @@ impl<'a> From<&'a ImageSubresourceRange> for vks::VkImageSubresourceRange {
     }
 }
 
-chain_struct! {
-    #[derive(Debug, Clone, Default, PartialEq)]
-    pub struct ImageViewCreateInfoChain {
-    }
-
-    #[derive(Debug)]
-    struct ImageViewCreateInfoChainWrapper;
+gen_chain_struct! {
+    name: ImageViewCreateInfoChain [ImageViewCreateInfoChainWrapper],
+    query: ImageViewCreateInfoChainQuery [ImageViewCreateInfoChainQueryWrapper],
+    vks: VkImageViewCreateInfo,
+    input: true,
+    output: false,
 }
 
 /// See [`VkImageViewCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageViewCreateInfo)
@@ -4646,13 +4634,12 @@ impl VkImageViewCreateInfoWrapper {
     }
 }
 
-chain_struct! {
-    #[derive(Debug, Clone, Default, PartialEq)]
-    pub struct ShaderModuleCreateInfoChain {
-    }
-
-    #[derive(Debug)]
-    struct ShaderModuleCreateInfoChainWrapper;
+gen_chain_struct! {
+    name: ShaderModuleCreateInfoChain [ShaderModuleCreateInfoChainWrapper],
+    query: ShaderModuleCreateInfoChainQuery [ShaderModuleCreateInfoChainQueryWrapper],
+    vks: VkShaderModuleCreateInfo,
+    input: true,
+    output: false,
 }
 
 /// See [`VkShaderModuleCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkShaderModuleCreateInfo)
@@ -4701,13 +4688,12 @@ impl VkShaderModuleCreateInfoWrapper {
     }
 }
 
-chain_struct! {
-    #[derive(Debug, Clone, Default, PartialEq)]
-    pub struct PipelineCacheCreateInfoChain {
-    }
-
-    #[derive(Debug)]
-    struct PipelineCacheCreateInfoChainWrapper;
+gen_chain_struct! {
+    name: PipelineCacheCreateInfoChain [PipelineCacheCreateInfoChainWrapper],
+    query: PipelineCacheCreateInfoChainQuery [PipelineCacheCreateInfoChainQueryWrapper],
+    vks: VkPipelineCacheCreateInfo,
+    input: true,
+    output: false,
 }
 
 /// See [`VkPipelineCacheCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineCacheCreateInfo)
@@ -4865,13 +4851,12 @@ impl<'a> From<&'a SpecializationInfo> for VkSpecializationInfoWrapper {
     }
 }
 
-chain_struct! {
-    #[derive(Debug, Clone, Default, PartialEq)]
-    pub struct PipelineShaderStageCreateInfoChain {
-    }
-
-    #[derive(Debug)]
-    struct PipelineShaderStageCreateInfoChainWrapper;
+gen_chain_struct! {
+    name: PipelineShaderStageCreateInfoChain [PipelineShaderStageCreateInfoChainWrapper],
+    query: PipelineShaderStageCreateInfoChainQuery [PipelineShaderStageCreateInfoChainQueryWrapper],
+    vks: VkPipelineShaderStageCreateInfo,
+    input: true,
+    output: false,
 }
 
 /// See [`VkPipelineShaderStageCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineShaderStageCreateInfo)
@@ -4965,13 +4950,12 @@ impl<'a> From<&'a VertexInputAttributeDescription> for vks::VkVertexInputAttribu
     }
 }
 
-chain_struct! {
-    #[derive(Debug, Clone, Default, PartialEq)]
-    pub struct PipelineVertexInputStateCreateInfoChain {
-    }
-
-    #[derive(Debug)]
-    struct PipelineVertexInputStateCreateInfoChainWrapper;
+gen_chain_struct! {
+    name: PipelineVertexInputStateCreateInfoChain [PipelineVertexInputStateCreateInfoChainWrapper],
+    query: PipelineVertexInputStateCreateInfoChainQuery [PipelineVertexInputStateCreateInfoChainQueryWrapper],
+    vks: VkPipelineVertexInputStateCreateInfo,
+    input: true,
+    output: false,
 }
 
 /// See [`VkPipelineVertexInputStateCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineVertexInputStateCreateInfo)
@@ -5030,13 +5014,12 @@ impl VkPipelineVertexInputStateCreateInfoWrapper {
     }
 }
 
-chain_struct! {
-    #[derive(Debug, Clone, Default, PartialEq)]
-    pub struct PipelineInputAssemblyStateCreateInfoChain {
-    }
-
-    #[derive(Debug)]
-    struct PipelineInputAssemblyStateCreateInfoChainWrapper;
+gen_chain_struct! {
+    name: PipelineInputAssemblyStateCreateInfoChain [PipelineInputAssemblyStateCreateInfoChainWrapper],
+    query: PipelineInputAssemblyStateCreateInfoChainQuery [PipelineInputAssemblyStateCreateInfoChainQueryWrapper],
+    vks: VkPipelineInputAssemblyStateCreateInfo,
+    input: true,
+    output: false,
 }
 
 /// See [`VkPipelineInputAssemblyStateCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineInputAssemblyStateCreateInfo)
@@ -5071,13 +5054,12 @@ impl VkPipelineInputAssemblyStateCreateInfoWrapper {
     }
 }
 
-chain_struct! {
-    #[derive(Debug, Clone, Default, PartialEq)]
-    pub struct PipelineTessellationStateCreateInfoChain {
-    }
-
-    #[derive(Debug)]
-    struct PipelineTessellationStateCreateInfoChainWrapper;
+gen_chain_struct! {
+    name: PipelineTessellationStateCreateInfoChain [PipelineTessellationStateCreateInfoChainWrapper],
+    query: PipelineTessellationStateCreateInfoChainQuery [PipelineTessellationStateCreateInfoChainQueryWrapper],
+    vks: VkPipelineTessellationStateCreateInfo,
+    input: true,
+    output: false,
 }
 
 /// See [`VkPipelineTessellationStateCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineTessellationStateCreateInfo)
@@ -5200,13 +5182,12 @@ impl<'a> From<&'a Rect2D> for vks::VkRect2D {
     }
 }
 
-chain_struct! {
-    #[derive(Debug, Clone, Default, PartialEq)]
-    pub struct PipelineViewportStateCreateInfoChain {
-    }
-
-    #[derive(Debug)]
-    struct PipelineViewportStateCreateInfoChainWrapper;
+gen_chain_struct! {
+    name: PipelineViewportStateCreateInfoChain [PipelineViewportStateCreateInfoChainWrapper],
+    query: PipelineViewportStateCreateInfoChainQuery [PipelineViewportStateCreateInfoChainQueryWrapper],
+    vks: VkPipelineViewportStateCreateInfo,
+    input: true,
+    output: false,
 }
 
 /// See [`VkPipelineViewportStateCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineViewportStateCreateInfo)
@@ -5249,13 +5230,12 @@ impl VkPipelineViewportStateCreateInfoWrapper {
     }
 }
 
-chain_struct! {
-    #[derive(Debug, Clone, Default, PartialEq)]
-    pub struct PipelineRasterizationStateCreateInfoChain {
-    }
-
-    #[derive(Debug)]
-    struct PipelineRasterizationStateCreateInfoChainWrapper;
+gen_chain_struct! {
+    name: PipelineRasterizationStateCreateInfoChain [PipelineRasterizationStateCreateInfoChainWrapper],
+    query: PipelineRasterizationStateCreateInfoChainQuery [PipelineRasterizationStateCreateInfoChainQueryWrapper],
+    vks: VkPipelineRasterizationStateCreateInfo,
+    input: true,
+    output: false,
 }
 
 /// See [`VkPipelineRasterizationStateCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineRasterizationStateCreateInfo)
@@ -5306,13 +5286,12 @@ impl VkPipelineRasterizationStateCreateInfoWrapper {
     }
 }
 
-chain_struct! {
-    #[derive(Debug, Clone, Default, PartialEq)]
-    pub struct PipelineMultisampleStateCreateInfoChain {
-    }
-
-    #[derive(Debug)]
-    struct PipelineMultisampleStateCreateInfoChainWrapper;
+gen_chain_struct! {
+    name: PipelineMultisampleStateCreateInfoChain [PipelineMultisampleStateCreateInfoChainWrapper],
+    query: PipelineMultisampleStateCreateInfoChainQuery [PipelineMultisampleStateCreateInfoChainQueryWrapper],
+    vks: VkPipelineMultisampleStateCreateInfo,
+    input: true,
+    output: false,
 }
 
 /// See [`VkPipelineMultisampleStateCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineMultisampleStateCreateInfo)
@@ -5392,13 +5371,12 @@ impl<'a> From<&'a StencilOpState> for vks::VkStencilOpState {
     }
 }
 
-chain_struct! {
-    #[derive(Debug, Clone, Default, PartialEq)]
-    pub struct PipelineDepthStencilStateCreateInfoChain {
-    }
-
-    #[derive(Debug)]
-    struct PipelineDepthStencilStateCreateInfoChainWrapper;
+gen_chain_struct! {
+    name: PipelineDepthStencilStateCreateInfoChain [PipelineDepthStencilStateCreateInfoChainWrapper],
+    query: PipelineDepthStencilStateCreateInfoChainQuery [PipelineDepthStencilStateCreateInfoChainQueryWrapper],
+    vks: VkPipelineDepthStencilStateCreateInfo,
+    input: true,
+    output: false,
 }
 
 /// See [`VkPipelineDepthStencilStateCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineDepthStencilStateCreateInfo)
@@ -5475,13 +5453,12 @@ impl<'a> From<&'a PipelineColorBlendAttachmentState> for vks::VkPipelineColorBle
     }
 }
 
-chain_struct! {
-    #[derive(Debug, Clone, Default, PartialEq)]
-    pub struct PipelineColorBlendStateCreateInfoChain {
-    }
-
-    #[derive(Debug)]
-    struct PipelineColorBlendStateCreateInfoChainWrapper;
+gen_chain_struct! {
+    name: PipelineColorBlendStateCreateInfoChain [PipelineColorBlendStateCreateInfoChainWrapper],
+    query: PipelineColorBlendStateCreateInfoChainQuery [PipelineColorBlendStateCreateInfoChainQueryWrapper],
+    vks: VkPipelineColorBlendStateCreateInfo,
+    input: true,
+    output: false,
 }
 
 /// See [`VkPipelineColorBlendStateCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineColorBlendStateCreateInfo)
@@ -5532,13 +5509,12 @@ impl VkPipelineColorBlendStateCreateInfoWrapper {
     }
 }
 
-chain_struct! {
-    #[derive(Debug, Clone, Default, PartialEq)]
-    pub struct PipelineDynamicStateCreateInfoChain {
-    }
-
-    #[derive(Debug)]
-    struct PipelineDynamicStateCreateInfoChainWrapper;
+gen_chain_struct! {
+    name: PipelineDynamicStateCreateInfoChain [PipelineDynamicStateCreateInfoChainWrapper],
+    query: PipelineDynamicStateCreateInfoChainQuery [PipelineDynamicStateCreateInfoChainQueryWrapper],
+    vks: VkPipelineDynamicStateCreateInfo,
+    input: true,
+    output: false,
 }
 
 /// See [`VkPipelineDynamicStateCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineDynamicStateCreateInfo)
@@ -5580,13 +5556,12 @@ impl VkPipelineDynamicStateCreateInfoWrapper {
     }
 }
 
-chain_struct! {
-    #[derive(Debug, Clone, Default, PartialEq)]
-    pub struct GraphicsPipelineCreateInfoChain {
-    }
-
-    #[derive(Debug)]
-    struct GraphicsPipelineCreateInfoChainWrapper;
+gen_chain_struct! {
+    name: GraphicsPipelineCreateInfoChain [GraphicsPipelineCreateInfoChainWrapper],
+    query: GraphicsPipelineCreateInfoChainQuery [GraphicsPipelineCreateInfoChainQueryWrapper],
+    vks: VkGraphicsPipelineCreateInfo,
+    input: true,
+    output: false,
 }
 
 /// See [`VkGraphicsPipelineCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkGraphicsPipelineCreateInfo)
@@ -5747,13 +5722,12 @@ impl VkGraphicsPipelineCreateInfoWrapper {
     }
 }
 
-chain_struct! {
-    #[derive(Debug, Clone, Default, PartialEq)]
-    pub struct ComputePipelineCreateInfoChain {
-    }
-
-    #[derive(Debug)]
-    struct ComputePipelineCreateInfoChainWrapper;
+gen_chain_struct! {
+    name: ComputePipelineCreateInfoChain [ComputePipelineCreateInfoChainWrapper],
+    query: ComputePipelineCreateInfoChainQuery [ComputePipelineCreateInfoChainQueryWrapper],
+    vks: VkComputePipelineCreateInfo,
+    input: true,
+    output: false,
 }
 
 /// See [`VkComputePipelineCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkComputePipelineCreateInfo)
@@ -5828,13 +5802,12 @@ impl<'a> From<&'a PushConstantRange> for vks::VkPushConstantRange {
     }
 }
 
-chain_struct! {
-    #[derive(Debug, Clone, Default, PartialEq)]
-    pub struct PipelineLayoutCreateInfoChain {
-    }
-
-    #[derive(Debug)]
-    struct PipelineLayoutCreateInfoChainWrapper;
+gen_chain_struct! {
+    name: PipelineLayoutCreateInfoChain [PipelineLayoutCreateInfoChainWrapper],
+    query: PipelineLayoutCreateInfoChainQuery [PipelineLayoutCreateInfoChainQueryWrapper],
+    vks: VkPipelineLayoutCreateInfo,
+    input: true,
+    output: false,
 }
 
 /// See [`VkPipelineLayoutCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineLayoutCreateInfo)
@@ -5896,13 +5869,12 @@ impl VkPipelineLayoutCreateInfoWrapper {
     }
 }
 
-chain_struct! {
-    #[derive(Debug, Clone, Default, PartialEq)]
-    pub struct SamplerCreateInfoChain {
-    }
-
-    #[derive(Debug)]
-    struct SamplerCreateInfoChainWrapper;
+gen_chain_struct! {
+    name: SamplerCreateInfoChain [SamplerCreateInfoChainWrapper],
+    query: SamplerCreateInfoChainQuery [SamplerCreateInfoChainQueryWrapper],
+    vks: VkSamplerCreateInfo,
+    input: true,
+    output: false,
 }
 
 /// See [`VkSamplerCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSamplerCreateInfo)
@@ -6005,13 +5977,12 @@ impl<'a> From<&'a DescriptorSetLayoutBinding> for VkDescriptorSetLayoutBindingWr
     }
 }
 
-chain_struct! {
-    #[derive(Debug, Clone, Default, PartialEq)]
-    pub struct DescriptorSetLayoutCreateInfoChain {
-    }
-
-    #[derive(Debug)]
-    struct DescriptorSetLayoutCreateInfoChainWrapper;
+gen_chain_struct! {
+    name: DescriptorSetLayoutCreateInfoChain [DescriptorSetLayoutCreateInfoChainWrapper],
+    query: DescriptorSetLayoutCreateInfoChainQuery [DescriptorSetLayoutCreateInfoChainQueryWrapper],
+    vks: VkDescriptorSetLayoutCreateInfo,
+    input: true,
+    output: false,
 }
 
 /// See [`VkDescriptorSetLayoutCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDescriptorSetLayoutCreateInfo)
@@ -6075,13 +6046,12 @@ impl<'a> From<&'a DescriptorPoolSize> for vks::VkDescriptorPoolSize {
     }
 }
 
-chain_struct! {
-    #[derive(Debug, Clone, Default, PartialEq)]
-    pub struct DescriptorPoolCreateInfoChain {
-    }
-
-    #[derive(Debug)]
-    struct DescriptorPoolCreateInfoChainWrapper;
+gen_chain_struct! {
+    name: DescriptorPoolCreateInfoChain [DescriptorPoolCreateInfoChainWrapper],
+    query: DescriptorPoolCreateInfoChainQuery [DescriptorPoolCreateInfoChainQueryWrapper],
+    vks: VkDescriptorPoolCreateInfo,
+    input: true,
+    output: false,
 }
 
 /// See [`VkDescriptorPoolCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDescriptorPoolCreateInfo)
@@ -6124,13 +6094,12 @@ impl VkDescriptorPoolCreateInfoWrapper {
     }
 }
 
-chain_struct! {
-    #[derive(Debug, Clone, Default, PartialEq)]
-    pub struct DescriptorSetAllocateInfoChain {
-    }
-
-    #[derive(Debug)]
-    struct DescriptorSetAllocateInfoChainWrapper;
+gen_chain_struct! {
+    name: DescriptorSetAllocateInfoChain [DescriptorSetAllocateInfoChainWrapper],
+    query: DescriptorSetAllocateInfoChainQuery [DescriptorSetAllocateInfoChainQueryWrapper],
+    vks: VkDescriptorSetAllocateInfo,
+    input: true,
+    output: false,
 }
 
 /// See [`VkDescriptorSetAllocateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDescriptorSetAllocateInfo)
@@ -6237,13 +6206,12 @@ impl<'a> From<&'a DescriptorBufferInfo> for VkDescriptorBufferInfoWrapper {
     }
 }
 
-chain_struct! {
-    #[derive(Debug, Clone, Default, PartialEq)]
-    pub struct WriteDescriptorSetChain {
-    }
-
-    #[derive(Debug)]
-    struct WriteDescriptorSetChainWrapper;
+gen_chain_struct! {
+    name: WriteDescriptorSetChain [WriteDescriptorSetChainWrapper],
+    query: WriteDescriptorSetChainQuery [WriteDescriptorSetChainQueryWrapper],
+    vks: VkWriteDescriptorSet,
+    input: true,
+    output: false,
 }
 
 /// See [`VkWriteDescriptorSet`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkWriteDescriptorSet)
@@ -6336,13 +6304,12 @@ impl VkWriteDescriptorSetWrapper {
     }
 }
 
-chain_struct! {
-    #[derive(Debug, Clone, Default, PartialEq)]
-    pub struct CopyDescriptorSetChain {
-    }
-
-    #[derive(Debug)]
-    struct CopyDescriptorSetChainWrapper;
+gen_chain_struct! {
+    name: CopyDescriptorSetChain [CopyDescriptorSetChainWrapper],
+    query: CopyDescriptorSetChainQuery [CopyDescriptorSetChainQueryWrapper],
+    vks: VkCopyDescriptorSet,
+    input: true,
+    output: false,
 }
 
 /// See [`VkCopyDescriptorSet`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCopyDescriptorSet)
@@ -6389,13 +6356,12 @@ impl VkCopyDescriptorSetWrapper {
     }
 }
 
-chain_struct! {
-    #[derive(Debug, Clone, Default, PartialEq)]
-    pub struct FramebufferCreateInfoChain {
-    }
-
-    #[derive(Debug)]
-    struct FramebufferCreateInfoChainWrapper;
+gen_chain_struct! {
+    name: FramebufferCreateInfoChain [FramebufferCreateInfoChainWrapper],
+    query: FramebufferCreateInfoChainQuery [FramebufferCreateInfoChainQueryWrapper],
+    vks: VkFramebufferCreateInfo,
+    input: true,
+    output: false,
 }
 
 /// See [`VkFramebufferCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkFramebufferCreateInfo)
@@ -6616,13 +6582,12 @@ impl<'a> From<&'a SubpassDependency> for vks::VkSubpassDependency {
     }
 }
 
-chain_struct! {
-    #[derive(Debug, Clone, Default, PartialEq)]
-    pub struct RenderPassCreateInfoChain {
-    }
-
-    #[derive(Debug)]
-    struct RenderPassCreateInfoChainWrapper;
+gen_chain_struct! {
+    name: RenderPassCreateInfoChain [RenderPassCreateInfoChainWrapper],
+    query: RenderPassCreateInfoChainQuery [RenderPassCreateInfoChainQueryWrapper],
+    vks: VkRenderPassCreateInfo,
+    input: true,
+    output: false,
 }
 
 /// See [`VkRenderPassCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkRenderPassCreateInfo)
@@ -6691,13 +6656,12 @@ impl VkRenderPassCreateInfoWrapper {
     }
 }
 
-chain_struct! {
-    #[derive(Debug, Clone, Default, PartialEq)]
-    pub struct CommandPoolCreateInfoChain {
-    }
-
-    #[derive(Debug)]
-    struct CommandPoolCreateInfoChainWrapper;
+gen_chain_struct! {
+    name: CommandPoolCreateInfoChain [CommandPoolCreateInfoChainWrapper],
+    query: CommandPoolCreateInfoChainQuery [CommandPoolCreateInfoChainQueryWrapper],
+    vks: VkCommandPoolCreateInfo,
+    input: true,
+    output: false,
 }
 
 /// See [`VkCommandPoolCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCommandPoolCreateInfo)
@@ -6730,13 +6694,12 @@ impl VkCommandPoolCreateInfoWrapper {
     }
 }
 
-chain_struct! {
-    #[derive(Debug, Clone, Default, PartialEq)]
-    pub struct CommandBufferAllocateInfoChain {
-    }
-
-    #[derive(Debug)]
-    struct CommandBufferAllocateInfoChainWrapper;
+gen_chain_struct! {
+    name: CommandBufferAllocateInfoChain [CommandBufferAllocateInfoChainWrapper],
+    query: CommandBufferAllocateInfoChainQuery [CommandBufferAllocateInfoChainQueryWrapper],
+    vks: VkCommandBufferAllocateInfo,
+    input: true,
+    output: false,
 }
 
 /// See [`VkCommandBufferAllocateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCommandBufferAllocateInfo)
@@ -6773,13 +6736,12 @@ impl VkCommandBufferAllocateInfoWrapper {
     }
 }
 
-chain_struct! {
-    #[derive(Debug, Clone, Default, PartialEq)]
-    pub struct CommandBufferInheritanceInfoChain {
-    }
-
-    #[derive(Debug)]
-    struct CommandBufferInheritanceInfoChainWrapper;
+gen_chain_struct! {
+    name: CommandBufferInheritanceInfoChain [CommandBufferInheritanceInfoChainWrapper],
+    query: CommandBufferInheritanceInfoChainQuery [CommandBufferInheritanceInfoChainQueryWrapper],
+    vks: VkCommandBufferInheritanceInfo,
+    input: true,
+    output: false,
 }
 
 /// See [`VkCommandBufferInheritanceInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCommandBufferInheritanceInfo)
@@ -6834,13 +6796,12 @@ impl VkCommandBufferInheritanceInfoWrapper {
     }
 }
 
-chain_struct! {
-    #[derive(Debug, Clone, Default, PartialEq)]
-    pub struct CommandBufferBeginInfoChain {
-    }
-
-    #[derive(Debug)]
-    struct CommandBufferBeginInfoChainWrapper;
+gen_chain_struct! {
+    name: CommandBufferBeginInfoChain [CommandBufferBeginInfoChainWrapper],
+    query: CommandBufferBeginInfoChainQuery [CommandBufferBeginInfoChainQueryWrapper],
+    vks: VkCommandBufferBeginInfo,
+    input: true,
+    output: false,
 }
 
 /// See [`VkCommandBufferBeginInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCommandBufferBeginInfo)
@@ -7111,13 +7072,12 @@ impl<'a> From<&'a ImageResolve> for vks::VkImageResolve {
     }
 }
 
-chain_struct! {
-    #[derive(Debug, Clone, Default, PartialEq)]
-    pub struct MemoryBarrierChain {
-    }
-
-    #[derive(Debug)]
-    struct MemoryBarrierChainWrapper;
+gen_chain_struct! {
+    name: MemoryBarrierChain [MemoryBarrierChainWrapper],
+    query: MemoryBarrierChainQuery [MemoryBarrierChainQueryWrapper],
+    vks: VkMemoryBarrier,
+    input: true,
+    output: false,
 }
 
 /// See [`VkMemoryBarrier`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkMemoryBarrier)
@@ -7150,13 +7110,12 @@ impl VkMemoryBarrierWrapper {
     }
 }
 
-chain_struct! {
-    #[derive(Debug, Clone, Default, PartialEq)]
-    pub struct BufferMemoryBarrierChain {
-    }
-
-    #[derive(Debug)]
-    struct BufferMemoryBarrierChainWrapper;
+gen_chain_struct! {
+    name: BufferMemoryBarrierChain [BufferMemoryBarrierChainWrapper],
+    query: BufferMemoryBarrierChainQuery [BufferMemoryBarrierChainQueryWrapper],
+    vks: VkBufferMemoryBarrier,
+    input: true,
+    output: false,
 }
 
 /// See [`VkBufferMemoryBarrier`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkBufferMemoryBarrier)
@@ -7201,13 +7160,12 @@ impl VkBufferMemoryBarrierWrapper {
     }
 }
 
-chain_struct! {
-    #[derive(Debug, Clone, Default, PartialEq)]
-    pub struct ImageMemoryBarrierChain {
-    }
-
-    #[derive(Debug)]
-    struct ImageMemoryBarrierChainWrapper;
+gen_chain_struct! {
+    name: ImageMemoryBarrierChain [ImageMemoryBarrierChainWrapper],
+    query: ImageMemoryBarrierChainQuery [ImageMemoryBarrierChainQueryWrapper],
+    vks: VkImageMemoryBarrier,
+    input: true,
+    output: false,
 }
 
 /// See [`VkImageMemoryBarrier`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageMemoryBarrier)
@@ -7254,13 +7212,12 @@ impl VkImageMemoryBarrierWrapper {
     }
 }
 
-chain_struct! {
-    #[derive(Debug, Clone, Default, PartialEq)]
-    pub struct RenderPassBeginInfoChain {
-    }
-
-    #[derive(Debug)]
-    struct RenderPassBeginInfoChainWrapper;
+gen_chain_struct! {
+    name: RenderPassBeginInfoChain [RenderPassBeginInfoChainWrapper],
+    query: RenderPassBeginInfoChainQuery [RenderPassBeginInfoChainQueryWrapper],
+    vks: VkRenderPassBeginInfo,
+    input: true,
+    output: false,
 }
 
 /// See [`VkRenderPassBeginInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkRenderPassBeginInfo)
