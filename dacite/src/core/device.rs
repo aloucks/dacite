@@ -69,12 +69,13 @@ impl VulkanObject for Device {
 }
 
 impl Device {
-    pub(crate) fn new(handle: vks::VkDevice, instance: Instance, allocator: Option<AllocatorHelper>, loader: vks::DeviceProcAddrLoader) -> Self {
+    pub(crate) fn new(handle: vks::VkDevice, instance: Instance, allocator: Option<AllocatorHelper>, loader: vks::DeviceProcAddrLoader, enabled_extensions: core::DeviceExtensions) -> Self {
         Device(Arc::new(Inner {
             handle: handle,
             instance: instance,
             allocator: allocator,
             loader: loader,
+            enabled_extensions: enabled_extensions,
         }))
     }
 
@@ -86,6 +87,10 @@ impl Device {
     #[inline]
     pub(crate) fn loader(&self) -> &vks::DeviceProcAddrLoader {
         &self.0.loader
+    }
+
+    pub fn get_enabled_device_extensions(&self) -> &core::DeviceExtensions {
+        &self.0.enabled_extensions
     }
 
     /// See [`vkGetDeviceQueue`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetDeviceQueue)
@@ -591,6 +596,7 @@ struct Inner {
     instance: Instance,
     allocator: Option<AllocatorHelper>,
     loader: vks::DeviceProcAddrLoader,
+    enabled_extensions: core::DeviceExtensions,
 }
 
 impl Drop for Inner {
