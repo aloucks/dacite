@@ -116,6 +116,10 @@ impl Instance {
         self.0.display_mode_allocators.lock().unwrap().push(allocator);
     }
 
+    pub fn get_enabled_extensions(&self) -> &core::InstanceExtensions {
+        &self.0.enabled_extensions
+    }
+
     /// See [`vkCreateInstance`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCreateInstance)
     pub fn create(create_info: &core::InstanceCreateInfo, allocator: Option<Box<core::Allocator>>) -> Result<Instance, EarlyInstanceError> {
         let (library, vk_get_instance_proc_addr) = unsafe {
@@ -169,6 +173,7 @@ impl Instance {
             allocator: allocator_helper,
             loader: loader,
             library: library,
+            enabled_extensions: create_info.enabled_extensions.clone(),
             debug_report_callback: debug_report_callback,
             display_mode_allocators: Mutex::new(Vec::new()),
         })))
@@ -456,6 +461,7 @@ struct Inner {
     allocator: Option<AllocatorHelper>,
     loader: vks::InstanceProcAddrLoader,
     library: libloading::Library,
+    enabled_extensions: core::InstanceExtensions,
     debug_report_callback: Option<Arc<ext_debug_report::DebugReportCallbacksExt>>,
     display_mode_allocators: Mutex<Vec<AllocatorHelper>>,
 }
