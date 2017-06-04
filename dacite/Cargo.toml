@@ -2,9 +2,11 @@
 name = "dacite"
 version = "0.1.0"
 authors = ["Dennis Hamester <dennis.hamester@startmail.com>"]
-description = "Safe low-level Vulkan library"
+description = "Mostly safe low-level Vulkan library"
+documentation = "https://docs.rs/dacite"
 homepage = "https://gitlab.com/dennis-hamester/dacite"
 repository = "https://gitlab.com/dennis-hamester/dacite"
+categories = [ "rendering", "rendering::graphics-api" ]
 keywords = [ "vulkan", "graphics" ]
 license = "ISC"
 

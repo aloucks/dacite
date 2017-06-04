@@ -2,10 +2,12 @@
 name = "dacite-winit"
 version = "0.1.0"
 authors = ["Dennis Hamester <dennis.hamester@startmail.com>"]
-description = "winit bindings for dacite"
+description = "Interoperability library for dacite and winit for easy Vulkan surface creation"
+documentation = "https://docs.rs/dacite-winit"
 homepage = "https://gitlab.com/dennis-hamester/dacite"
 repository = "https://gitlab.com/dennis-hamester/dacite"
-keywords = [ "vulkan", "graphics" ]
+categories = [ "gui" ]
+keywords = [ "windowing", "vulkan" ]
 license = "ISC"
 
 [badges]
