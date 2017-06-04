@@ -250,6 +250,7 @@ impl PhysicalDevice {
             unsafe {
                 loader.load_core(device);
                 create_info.enabled_extensions.load_device(&mut loader, device);
+                self.instance.get_enabled_extensions().load_device(&mut loader, device);
             }
 
             Ok(Device::new(device, self.instance.clone(), allocator_helper, loader))
