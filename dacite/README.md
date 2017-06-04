@@ -23,6 +23,9 @@ dacite is different from the specification will be documented over time.
 
 ## Usage
 
+Dacite requires at least Rust 1.18.0 beta or nightly. The Rust stable channel will be supported as
+soon as Rust 1.18.0 is released.
+
 Dacite is available on [crates.io]. Add this to your `Cargo.toml`:
 
 ```toml
