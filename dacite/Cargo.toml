@@ -6,6 +6,7 @@ description = "Mostly safe low-level Vulkan library"
 documentation = "https://docs.rs/dacite"
 homepage = "https://gitlab.com/dennis-hamester/dacite"
 repository = "https://gitlab.com/dennis-hamester/dacite"
+readme = "README.md"
 categories = [ "rendering", "rendering::graphics-api" ]
 keywords = [ "vulkan", "graphics" ]
 license = "ISC"
