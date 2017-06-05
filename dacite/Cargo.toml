@@ -22,5 +22,5 @@ libloading = "0.4"
 version = "0.17"
 default-features = false
 features = [ "no_function_prototypes", "vk_1_0_4",
-             "core_1_0_5",
+             "core_1_0_5", "nv_glsl_shader_1",
              "khr_get_physical_device_properties2_1" ]

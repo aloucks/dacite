@@ -1066,6 +1066,9 @@ pub enum Error {
     /// See extension [`VK_KHR_display_swapchain`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_display_swapchain)
     IncompatibleDisplayKhr,
 
+    /// See extension [`VK_NV_glsl_shader`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_NV_glsl_shader)
+    InvalidShaderNv,
+
     Unknown(vks::VkResult),
 }
 
@@ -1094,6 +1097,7 @@ impl ::std::error::Error for Error {
             Error::ValidationFailedExt => "ValidationFailed",
             Error::OutOfDateKhr => "OutOfDate",
             Error::IncompatibleDisplayKhr => "IncompatibleDisplay",
+            Error::InvalidShaderNv => "InvalidShader",
             Error::Unknown(_) => "unknown error",
         }
     }
@@ -1120,6 +1124,7 @@ impl From<vks::VkResult> for Error {
             vks::VK_ERROR_VALIDATION_FAILED_EXT => Error::ValidationFailedExt,
             vks::VK_ERROR_OUT_OF_DATE_KHR => Error::OutOfDateKhr,
             vks::VK_ERROR_INCOMPATIBLE_DISPLAY_KHR => Error::IncompatibleDisplayKhr,
+            vks::VK_ERROR_INVALID_SHADER_NV => Error::InvalidShaderNv,
             _ => Error::Unknown(res),
         }
     }
@@ -3561,6 +3566,13 @@ gen_extension_structs!{
         fn_add: add_khr_sampler_mirror_clamp_to_edge,
         fn_has: has_khr_sampler_mirror_clamp_to_edge,
         fn_get: get_khr_sampler_mirror_clamp_to_edge,
+    }
+
+    nv_glsl_shader {
+        name: vks::VK_NV_GLSL_SHADER_EXTENSION_NAME_STR,
+        fn_add: add_nv_glsl_shader,
+        fn_has: has_nv_glsl_shader,
+        fn_get: get_nv_glsl_shader,
     }
 }
 

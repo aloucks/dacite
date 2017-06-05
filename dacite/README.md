@@ -119,6 +119,12 @@ might be breaking change.
 | --- | --- |
 | `VK_EXT_debug_report` | 1 |
 
+### `NV` Extensions
+
+| Extension | Revision |
+| --- | --- |
+| `VK_NV_glsl_shader` | 1 |
+
 ## License
 
 Dacite is licensed under the ISC license:

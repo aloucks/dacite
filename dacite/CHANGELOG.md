@@ -3,6 +3,12 @@
 ## Current Git master branch
 
  - Vulkan 1.0.5
+ - Extension `VK_NV_glsl_shader` (revision 1)
+
+### Breaking changes
+
+ - New variant `InvalidShaderNv` added to `core::Error` (`VK_NV_glsl_shader`)
+
 
 ## Version 0.1.0, released on 05.06.2017
 
