@@ -12,6 +12,62 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
+//! This is a small interoperability library for [dacite] and [winit], which allows the creation of
+//! Vulkan surfaces in an easy and platform-independent manner.
+//!
+//! The main entry point to this crate is the `WindowExt` trait, through which Vulkan surfaces can
+//! be created for winit `Window`s.
+//!
+//! This crate deals only with Vulkan surfaces. `Window` and `EventsLoop` must be created and
+//! managed manually.
+//!
+//! ```rust,no_run
+//! extern crate dacite;
+//! extern crate dacite_winit;
+//! extern crate winit;
+//!
+//! // Import the `WindowExt` trait:
+//! use dacite_winit::WindowExt;
+//!
+//! // Create an `EventsLoop` and a `Window`:
+//! let events_loop = winit::EventsLoop::new();
+//! let window = winit::Window::new(&events_loop).unwrap();
+//!
+//! // Determine required extensions before a Vulkan instance is created:
+//! let required_extensions = match window.get_required_extensions() {
+//!     Ok(required_extensions) => required_extensions,
+//!     Err(error) => {
+//!         // This error can mean either, that the windowing system is not supported, or that
+//!         // a Vulkan error occurred.
+//!
+//!         // Other functions from the `WindowExt` trait can also return errors, which should be
+//!         // handled appropriately.
+//!     }
+//! };
+//!
+//! // Create a Vulkan instance and enable at least the extensions required for the window:
+//! let create_info = dacite::core::InstanceCreateInfo {
+//!     // ...
+//!     enabled_extensions: required_extensions.to_extensions(),
+//!     // ...
+//! };
+//!
+//! let instance = dacite::core::Instance::create(&create_info, None).unwrap();
+//!
+//! // While searching for a suitable physical device, use
+//! // WindowExt::is_presentation_supported() to determine if the physical device has a queue
+//! // family, that can present to the window.
+//! let physical_device = // ...
+//!
+//! // And finally, create a `Surface` from the window:
+//! let surface = window.create_surface(&instance,
+//!                                     dacite_winit::SurfaceCreateFlags::empty(),
+//!                                     None).unwrap();
+//! ```
+//!
+//! [dacite]: https://gitlab.com/dennis-hamester/dacite/tree/master/dacite
+//! [winit]: https://github.com/tomaka/winit
+
 #[macro_use]
 extern crate bitflags;
 
@@ -30,9 +86,31 @@ use std::error;
 use std::fmt;
 use winit::Window;
 
+/// Extension trait for Vulkan surface creation.
 pub trait WindowExt {
+    /// Test whether presentation is supported on a physical device.
+    ///
+    /// This function first determines the correct Vulkan WSI extension for this window and then calls one of the
+    /// `get_*_presentation_support_*` family of functions on the `PhysicalDevice`.
     fn is_presentation_supported(&self, physical_device: &core::PhysicalDevice, queue_family_indices: u32) -> Result<bool, Error>;
+
+    /// Determine required Vulkan instance extensions.
+    ///
+    /// This will always include [`VK_KHR_surface`]. One of the platform-dependent WSI extensions,
+    /// that corresponds to this window, will also be added.
+    ///
+    /// Please note, that the device extension [`VK_KHR_swapchain`] is also required for
+    /// presentation.
+    ///
+    /// [`VK_KHR_surface`]: https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_surface
+    /// [`VK_KHR_swapchain`]: https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_swapchain
     fn get_required_extensions(&self) -> Result<core::InstanceExtensionsProperties, Error>;
+
+    /// Create a surface for this window.
+    ///
+    /// `Instance` must have been created with required extensions, as determined by
+    /// `get_required_extensions()`. The `flags` parameter is currently just a place holder. You
+    /// should specify `SurfaceCreateFlags::empty()` here.
     fn create_surface(&self, instance: &core::Instance, flags: SurfaceCreateFlags, allocator: Option<Box<core::Allocator>>) -> Result<khr_surface::SurfaceKhr, Error>;
 }
 
@@ -102,9 +180,13 @@ impl WindowExt for Window {
     }
 }
 
+/// Error type used throughout this crate.
 #[derive(Debug)]
 pub enum Error {
+    /// The windowing system is not supported by either dacite-winit or dacite.
     Unsupported,
+
+    /// A Vulkan error occurred.
     VulkanError(core::Error),
 }
 
@@ -133,6 +215,9 @@ impl From<core::Error> for Error {
 }
 
 bitflags! {
+    /// Flags used for surface creation.
+    ///
+    /// This is currently a placeholder, with no valid flags. Use `SurfaceCreateFlags::empty()`.
     pub struct SurfaceCreateFlags: u32 {
         /// Dummy flag
         ///
