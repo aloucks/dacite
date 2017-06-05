@@ -6,6 +6,7 @@ description = "Interoperability library for dacite and winit for easy Vulkan sur
 documentation = "https://docs.rs/dacite-winit"
 homepage = "https://gitlab.com/dennis-hamester/dacite"
 repository = "https://gitlab.com/dennis-hamester/dacite"
+readme = "README.md"
 categories = [ "gui" ]
 keywords = [ "windowing", "vulkan" ]
 license = "ISC"
