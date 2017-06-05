@@ -1,6 +1,6 @@
 # dacite Changelog
 
-## Current Git master branch
+## Version 0.2.0, released on 05.06.2017
 
  - Vulkan 1.0.5
  - Extension `VK_NV_glsl_shader` (revision 1)
