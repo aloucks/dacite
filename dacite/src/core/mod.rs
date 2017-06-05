@@ -7296,6 +7296,7 @@ impl VkRenderPassBeginInfoWrapper {
 }
 
 /// See [`VkDispatchIndirectCommand`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDispatchIndirectCommand)
+#[repr(C)]
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct DispatchIndirectCommand {
     pub x: u32,
@@ -7304,6 +7305,7 @@ pub struct DispatchIndirectCommand {
 }
 
 /// See [`VkDrawIndexedIndirectCommand`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDrawIndexedIndirectCommand)
+#[repr(C)]
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct DrawIndexedIndirectCommand {
     pub index_count: u32,
@@ -7314,6 +7316,7 @@ pub struct DrawIndexedIndirectCommand {
 }
 
 /// See [`VkDrawIndirectCommand`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDrawIndirectCommand)
+#[repr(C)]
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct DrawIndirectCommand {
     pub vertex_count: u32,
