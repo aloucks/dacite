@@ -16,8 +16,8 @@ Development is active and ongoing. Support for new Vulkan revisions will be adde
 extensions will also be supported along the way.
 
 Dacite is sorely lacking in the documentation department. I don't plan to fully document every type
-and functions (and thus effectively repeat the Vulkan specification). But at least the parts where
-dacite is different from the specification will be documented over time.
+and function (and thus effectively repeat the Vulkan specification). But at least the parts where
+dacite is different from the C API will be documented over time.
 
 [![build status](https://gitlab.com/dennis-hamester/dacite/badges/master/build.svg)](https://gitlab.com/dennis-hamester/dacite)
 
@@ -88,7 +88,7 @@ added to an existing enum by a new extension must be considered a breaking chang
 
 Dacites has been designed such, that all other additions by new extensions should not break existing
 applications. However, the development of [vks] has shown, that many Vulkan revisions contain minor
-mistakes, which then are fixed later. If one of these mistakes makes it into dacite, its removal
+mistakes, which are then fixed later. If one of these mistakes makes it into dacite, its removal
 might be breaking change.
 
 [Semantic Versioning]: http://semver.org/
