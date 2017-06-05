@@ -2,20 +2,22 @@
 
 This repository hosts multiple related projects:
 
-| Project | Description | Version | crates.io | Documentation |
-| --- | --- | --- | --- | --- |
-| [dacite] | The main project, a mostly safe Vulkan library for Rust | 0.1.0 | [crates.io/crates/dacite] | [docs.rs/dacite] |
-| [dacite-winit] | Easy, platform-independent winit-based surface creation | 0.1.0 | [crates.io/crates/dacite-winit] | [docs.rs/dacite-winit] |
+| Project | Description | Version | Changelog | crates.io | Documentation |
+| --- | --- | --- | --- | --- | --- |
+| [dacite] | The main project, a mostly safe Vulkan library for Rust | 0.1.0 | [Changelog][dacite-changelog] | [crates.io/crates/dacite] | [docs.rs/dacite] |
+| [dacite-winit] | Easy, platform-independent winit-based surface creation | 0.1.0 | [Changelog][dacite-winit-changelog] | [crates.io/crates/dacite-winit] | [docs.rs/dacite-winit] |
 
 See the project specific subdirectories for more information.
 
 [![build status](https://gitlab.com/dennis-hamester/dacite/badges/master/build.svg)](https://gitlab.com/dennis-hamester/dacite)
 
 [dacite]: dacite
+[dacite-changelog]: dacite/CHANGELOG.md
 [crates.io/crates/dacite]: https://crates.io/crates/dacite
 [docs.rs/dacite]: https://docs.rs/dacite
 
 [dacite-winit]: dacite-winit
+[dacite-winit-changelog]: dacite-winit/CHANGELOG.md
 [crates.io/crates/dacite-winit]: https://crates.io/crates/dacite-winit
 [docs.rs/dacite-winit]: https://docs.rs/dacite-winit
 
