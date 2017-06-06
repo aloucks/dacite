@@ -21,6 +21,7 @@ use mir_wrapper;
 use std::cmp::Ordering;
 use std::ffi::CStr;
 use std::hash::{Hash, Hasher};
+use std::iter::FromIterator;
 use std::mem;
 use std::ptr;
 use utils;
@@ -116,7 +117,9 @@ impl PhysicalDevice {
     }
 
     /// See [`vkEnumerateDeviceLayerProperties`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkEnumerateDeviceLayerProperties)
-    pub fn enumerate_device_layer_properties(&self) -> Result<core::LayerPropertiesIterator, core::Error> {
+    pub fn enumerate_device_layer_properties<B>(&self) -> Result<B, core::Error>
+        where B: FromIterator<core::LayerProperties>
+    {
         unsafe {
             let mut num_layer_properties = 0;
             let res = (self.loader().core.vkEnumerateDeviceLayerProperties)(self.handle, &mut num_layer_properties, ptr::null_mut());
@@ -126,12 +129,12 @@ impl PhysicalDevice {
 
             let mut layer_properties = Vec::with_capacity(num_layer_properties as usize);
             let res = (self.loader().core.vkEnumerateDeviceLayerProperties)(self.handle, &mut num_layer_properties, layer_properties.as_mut_ptr());
+            layer_properties.set_len(num_layer_properties as usize);
             if res != vks::VK_SUCCESS {
                 return Err(res.into());
             }
-            layer_properties.set_len(num_layer_properties as usize);
 
-            Ok(core::LayerPropertiesIterator(layer_properties.into_iter()))
+            Ok(layer_properties.iter().map(From::from).collect())
         }
     }
 
@@ -191,7 +194,9 @@ impl PhysicalDevice {
     }
 
     /// See [`vkGetPhysicalDeviceSparseImageFormatProperties`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetPhysicalDeviceSparseImageFormatProperties)
-    pub fn get_sparse_image_format_properties(&self, format: core::Format, image_type: core::ImageType, samples: core::SampleCountFlagBits, usage: core::ImageUsageFlags, tiling: core::ImageTiling) -> core::SparseImageFormatPropertiesIterator {
+    pub fn get_sparse_image_format_properties<B>(&self, format: core::Format, image_type: core::ImageType, samples: core::SampleCountFlagBits, usage: core::ImageUsageFlags, tiling: core::ImageTiling) -> B
+        where B: FromIterator<core::SparseImageFormatProperties>
+    {
         let mut num_properties = 0;
         unsafe {
             (self.loader().core.vkGetPhysicalDeviceSparseImageFormatProperties)(self.handle, format.into(), image_type.into(), samples, usage, tiling.into(), &mut num_properties, ptr::null_mut());
@@ -203,11 +208,13 @@ impl PhysicalDevice {
             properties.set_len(num_properties as usize);
         }
 
-        core::SparseImageFormatPropertiesIterator(properties.into_iter())
+        properties.iter().map(From::from).collect()
     }
 
     /// See [`vkGetPhysicalDeviceQueueFamilyProperties`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetPhysicalDeviceQueueFamilyProperties)
-    pub fn get_queue_family_properties(&self) -> core::QueueFamilyPropertiesIterator {
+    pub fn get_queue_family_properties<B>(&self) -> B
+        where B: FromIterator<core::QueueFamilyProperties>
+    {
         let mut num_properties = 0;
         unsafe {
             (self.loader().core.vkGetPhysicalDeviceQueueFamilyProperties)(self.handle, &mut num_properties, ptr::null_mut());
@@ -219,7 +226,7 @@ impl PhysicalDevice {
             properties.set_len(num_properties as usize);
         }
 
-        core::QueueFamilyPropertiesIterator(properties.into_iter())
+        properties.iter().map(From::from).collect()
     }
 
     /// See [`vkGetPhysicalDeviceMemoryProperties`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetPhysicalDeviceMemoryProperties)
@@ -294,7 +301,9 @@ impl PhysicalDevice {
 
     /// See [`vkGetPhysicalDeviceSurfaceFormatsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetPhysicalDeviceSurfaceFormatsKHR)
     /// and extension [`VK_KHR_surface`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_surface)
-    pub fn get_surface_formats_khr(&self, surface: &khr_surface::SurfaceKhr) -> Result<khr_surface::SurfaceFormatKhrIterator, core::Error> {
+    pub fn get_surface_formats_khr<B>(&self, surface: &khr_surface::SurfaceKhr) -> Result<B, core::Error>
+        where B: FromIterator<khr_surface::SurfaceFormatKhr>
+    {
         let mut num_formats = 0;
         let res = unsafe {
             (self.loader().khr_surface.vkGetPhysicalDeviceSurfaceFormatsKHR)(self.handle, surface.handle(), &mut num_formats, ptr::null_mut())
@@ -314,7 +323,7 @@ impl PhysicalDevice {
                 formats.set_len(num_formats as usize);
             }
 
-            Ok(khr_surface::SurfaceFormatKhrIterator(formats.into_iter()))
+            Ok(formats.iter().map(From::from).collect())
         }
         else {
             Err(res.into())
@@ -323,7 +332,9 @@ impl PhysicalDevice {
 
     /// See [`vkGetPhysicalDeviceSurfacePresentModesKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetPhysicalDeviceSurfacePresentModesKHR)
     /// and extension [`VK_KHR_surface`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_surface)
-    pub fn get_surface_present_modes_khr(&self, surface: &khr_surface::SurfaceKhr) -> Result<khr_surface::PresentModeKhrIterator, core::Error> {
+    pub fn get_surface_present_modes_khr<B>(&self, surface: &khr_surface::SurfaceKhr) -> Result<B, core::Error>
+        where B: FromIterator<khr_surface::PresentModeKhr>
+    {
         let mut num_modes = 0;
         let res = unsafe {
             (self.loader().khr_surface.vkGetPhysicalDeviceSurfacePresentModesKHR)(self.handle, surface.handle(), &mut num_modes, ptr::null_mut())
@@ -343,7 +354,7 @@ impl PhysicalDevice {
                 modes.set_len(num_modes as usize);
             }
 
-            Ok(khr_surface::PresentModeKhrIterator(modes.into_iter()))
+            Ok(modes.into_iter().map(From::from).collect())
         }
         else {
             Err(res.into())

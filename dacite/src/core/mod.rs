@@ -3203,33 +3203,6 @@ impl<'a> From<&'a vks::VkQueueFamilyProperties> for QueueFamilyProperties {
     }
 }
 
-#[derive(Debug, Clone)]
-pub struct QueueFamilyPropertiesIterator(::std::vec::IntoIter<vks::VkQueueFamilyProperties>);
-
-impl Iterator for QueueFamilyPropertiesIterator {
-    type Item = QueueFamilyProperties;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        self.0.next().as_ref().map(From::from)
-    }
-
-    fn size_hint(&self) -> (usize, Option<usize>) {
-        self.0.size_hint()
-    }
-}
-
-impl DoubleEndedIterator for QueueFamilyPropertiesIterator {
-    fn next_back(&mut self) -> Option<Self::Item> {
-        self.0.next_back().as_ref().map(From::from)
-    }
-}
-
-impl ExactSizeIterator for QueueFamilyPropertiesIterator {
-    fn len(&self) -> usize {
-        self.0.len()
-    }
-}
-
 /// See [`VkMemoryType`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkMemoryType)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct MemoryType {
@@ -3598,33 +3571,6 @@ impl<'a> From<&'a vks::VkLayerProperties> for LayerProperties {
     }
 }
 
-#[derive(Debug, Clone)]
-pub struct LayerPropertiesIterator(::std::vec::IntoIter<vks::VkLayerProperties>);
-
-impl Iterator for LayerPropertiesIterator {
-    type Item = LayerProperties;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        self.0.next().as_ref().map(From::from)
-    }
-
-    fn size_hint(&self) -> (usize, Option<usize>) {
-        self.0.size_hint()
-    }
-}
-
-impl DoubleEndedIterator for LayerPropertiesIterator {
-    fn next_back(&mut self) -> Option<Self::Item> {
-        self.0.next_back().as_ref().map(From::from)
-    }
-}
-
-impl ExactSizeIterator for LayerPropertiesIterator {
-    fn len(&self) -> usize {
-        self.0.len()
-    }
-}
-
 gen_chain_struct! {
     name: SubmitInfoChain [SubmitInfoChainWrapper],
     query: SubmitInfoChainQuery [SubmitInfoChainQueryWrapper],
@@ -3839,33 +3785,6 @@ impl<'a> From<&'a vks::VkSparseImageFormatProperties> for SparseImageFormatPrope
     }
 }
 
-#[derive(Debug, Clone)]
-pub struct SparseImageFormatPropertiesIterator(::std::vec::IntoIter<vks::VkSparseImageFormatProperties>);
-
-impl Iterator for SparseImageFormatPropertiesIterator {
-    type Item = SparseImageFormatProperties;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        self.0.next().as_ref().map(From::from)
-    }
-
-    fn size_hint(&self) -> (usize, Option<usize>) {
-        self.0.size_hint()
-    }
-}
-
-impl DoubleEndedIterator for SparseImageFormatPropertiesIterator {
-    fn next_back(&mut self) -> Option<Self::Item> {
-        self.0.next_back().as_ref().map(From::from)
-    }
-}
-
-impl ExactSizeIterator for SparseImageFormatPropertiesIterator {
-    fn len(&self) -> usize {
-        self.0.len()
-    }
-}
-
 /// See [`VkSparseImageMemoryRequirements`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSparseImageMemoryRequirements)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct SparseImageMemoryRequirements {
@@ -3885,33 +3804,6 @@ impl<'a> From<&'a vks::VkSparseImageMemoryRequirements> for SparseImageMemoryReq
             image_mip_tail_offset: requirements.imageMipTailOffset,
             image_mip_tail_stride: requirements.imageMipTailStride,
         }
-    }
-}
-
-#[derive(Debug, Clone)]
-pub struct SparseImageMemoryRequirementsIterator(::std::vec::IntoIter<vks::VkSparseImageMemoryRequirements>);
-
-impl Iterator for SparseImageMemoryRequirementsIterator {
-    type Item = SparseImageMemoryRequirements;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        self.0.next().as_ref().map(From::from)
-    }
-
-    fn size_hint(&self) -> (usize, Option<usize>) {
-        self.0.size_hint()
-    }
-}
-
-impl DoubleEndedIterator for SparseImageMemoryRequirementsIterator {
-    fn next_back(&mut self) -> Option<Self::Item> {
-        self.0.next_back().as_ref().map(From::from)
-    }
-}
-
-impl ExactSizeIterator for SparseImageMemoryRequirementsIterator {
-    fn len(&self) -> usize {
-        self.0.len()
     }
 }
 

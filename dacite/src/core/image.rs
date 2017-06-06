@@ -16,6 +16,7 @@ use core::allocator_helper::AllocatorHelper;
 use core::{self, Device, DeviceMemory};
 use std::cmp::Ordering;
 use std::hash::{Hash, Hasher};
+use std::iter::FromIterator;
 use std::mem;
 use std::ptr;
 use std::sync::Arc;
@@ -99,7 +100,9 @@ impl Image {
     }
 
     /// See [`vkGetImageSparseMemoryRequirements`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetImageSparseMemoryRequirements)
-    pub fn get_sparse_memory_requirements(&self) -> core::SparseImageMemoryRequirementsIterator {
+    pub fn get_sparse_memory_requirements<B>(&self) -> B
+        where B: FromIterator<core::SparseImageMemoryRequirements>
+    {
         let mut num_requirements = 0;
         unsafe {
             (self.loader().core.vkGetImageSparseMemoryRequirements)(self.device_handle(), self.handle(), &mut num_requirements, ptr::null_mut());
@@ -111,7 +114,7 @@ impl Image {
             (self.loader().core.vkGetImageSparseMemoryRequirements)(self.device_handle(), self.handle(), &mut num_requirements, requirements.as_mut_ptr());
         }
 
-        core::SparseImageMemoryRequirementsIterator(requirements.into_iter())
+        requirements.iter().map(From::from).collect()
     }
 
     /// See [`vkGetImageSubresourceLayout`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetImageSubresourceLayout)

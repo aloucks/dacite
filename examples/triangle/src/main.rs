@@ -103,7 +103,8 @@ fn find_queue_family_indices(physical_device: &dacite::core::PhysicalDevice, sur
     let mut graphics = None;
     let mut present = None;
 
-    for (index, queue_family_properties) in physical_device.get_queue_family_properties().enumerate() {
+    let queue_family_properties: Vec<_> = physical_device.get_queue_family_properties();
+    for (index, queue_family_properties) in queue_family_properties.into_iter().enumerate() {
         if queue_family_properties.queue_count == 0 {
             continue;
         }
@@ -211,7 +212,7 @@ fn create_swapchain(physical_device: &dacite::core::PhysicalDevice, device: &dac
         None => cmp::max(capabilities.min_image_count, 3),
     };
 
-    let surface_formats = physical_device.get_surface_formats_khr(surface).map_err(|e| {
+    let surface_formats: Vec<_> = physical_device.get_surface_formats_khr(surface).map_err(|e| {
         println!("Failed to get surface formats ({})", e);
     })?;
 
@@ -241,7 +242,7 @@ fn create_swapchain(physical_device: &dacite::core::PhysicalDevice, device: &dac
         None => *preferred_extent,
     };
 
-    let present_modes = physical_device.get_surface_present_modes_khr(surface).map_err(|e| {
+    let present_modes: Vec<_> = physical_device.get_surface_present_modes_khr(surface).map_err(|e| {
         println!("Failed to get surface present modes ({})", e);
     })?;
 

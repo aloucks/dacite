@@ -30,6 +30,7 @@ use std::error;
 use std::ffi::CStr;
 use std::fmt;
 use std::hash::{Hash, Hasher};
+use std::iter::FromIterator;
 use std::ptr;
 use std::sync::Arc;
 use std::sync::Mutex;
@@ -209,7 +210,9 @@ impl Instance {
     }
 
     /// See [`vkEnumerateInstanceLayerProperties`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkEnumerateInstanceLayerProperties)
-    pub fn enumerate_instance_layer_properties() -> Result<core::LayerPropertiesIterator, EarlyInstanceError> {
+    pub fn enumerate_instance_layer_properties<B>() -> Result<B, EarlyInstanceError>
+        where B: FromIterator<core::LayerProperties>
+    {
         unsafe {
             let library = libloading::Library::new(vks::VULKAN_LIBRARY_NAME)
                 .map_err(|_| EarlyInstanceError::LoadLibraryFailed(vks::VULKAN_LIBRARY_NAME.to_owned()))?;
@@ -227,13 +230,13 @@ impl Instance {
             }
 
             let mut layer_properties = Vec::with_capacity(num_layer_properties as usize);
+            layer_properties.set_len(num_layer_properties as usize);
             let res = (loader.vkEnumerateInstanceLayerProperties)(&mut num_layer_properties, layer_properties.as_mut_ptr());
             if res != vks::VK_SUCCESS {
                 return Err(res.into());
             }
-            layer_properties.set_len(num_layer_properties as usize);
 
-            Ok(core::LayerPropertiesIterator(layer_properties.into_iter()))
+            Ok(layer_properties.iter().map(From::from).collect())
         }
     }
 

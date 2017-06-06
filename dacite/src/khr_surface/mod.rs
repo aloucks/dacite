@@ -80,33 +80,6 @@ impl From<PresentModeKhr> for vks::VkPresentModeKHR {
     }
 }
 
-#[derive(Debug, Clone)]
-pub struct PresentModeKhrIterator(pub(crate) ::std::vec::IntoIter<vks::VkPresentModeKHR>);
-
-impl Iterator for PresentModeKhrIterator {
-    type Item = PresentModeKhr;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        self.0.next().map(From::from)
-    }
-
-    fn size_hint(&self) -> (usize, Option<usize>) {
-        self.0.size_hint()
-    }
-}
-
-impl DoubleEndedIterator for PresentModeKhrIterator {
-    fn next_back(&mut self) -> Option<Self::Item> {
-        self.0.next_back().map(From::from)
-    }
-}
-
-impl ExactSizeIterator for PresentModeKhrIterator {
-    fn len(&self) -> usize {
-        self.0.len()
-    }
-}
-
 /// See [`VkSurfaceTransformFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSurfaceTransformFlagBitsKHR)
 pub type SurfaceTransformFlagsKhr = vks::VkSurfaceTransformFlagsKHR;
 
@@ -217,32 +190,5 @@ impl<'a> From<&'a vks::VkSurfaceFormatKHR> for SurfaceFormatKhr {
             format: format.format.into(),
             color_space: format.colorSpace.into(),
         }
-    }
-}
-
-#[derive(Debug, Clone)]
-pub struct SurfaceFormatKhrIterator(pub(crate) ::std::vec::IntoIter<vks::VkSurfaceFormatKHR>);
-
-impl Iterator for SurfaceFormatKhrIterator {
-    type Item = SurfaceFormatKhr;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        self.0.next().as_ref().map(From::from)
-    }
-
-    fn size_hint(&self) -> (usize, Option<usize>) {
-        self.0.size_hint()
-    }
-}
-
-impl DoubleEndedIterator for SurfaceFormatKhrIterator {
-    fn next_back(&mut self) -> Option<Self::Item> {
-        self.0.next_back().as_ref().map(From::from)
-    }
-}
-
-impl ExactSizeIterator for SurfaceFormatKhrIterator {
-    fn len(&self) -> usize {
-        self.0.len()
     }
 }

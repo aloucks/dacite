@@ -13,6 +13,16 @@
    - `queue_family_properties` -> `get_queue_family_properties`
    - `memory_properties` -> `get_memory_properties`
 
+ - The following functions no longer return an iterator, but instead behave like
+   `std::iter::Iterator::collect` (all iterator types have been removed in the process):
+   - `core::Instance::enumerate_instance_layer_properties`
+   - `core::PhysicalDevice::enumerate_device_layer_properties`
+   - `core::PhysicalDevice::get_sparse_image_format_properties`
+   - `core::PhysicalDevice::get_queue_family_properties`
+   - `core::PhysicalDevice::get_surface_support_khr`
+   - `core::PhysicalDevice::get_surface_present_modes_khr`
+   - `core::Image::get_sparse_memory_requirements`
+
 
 ## Version 0.2.0, released on 05.06.2017
 
