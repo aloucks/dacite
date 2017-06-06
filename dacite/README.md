@@ -125,6 +125,12 @@ might be breaking change.
 | --- | --- |
 | `VK_NV_glsl_shader` | 1 |
 
+### `IMG` Extensions
+
+| Extension | Revision |
+| --- | --- |
+| `VK_IMG_filter_cubic` | 1 |
+
 ## License
 
 Dacite is licensed under the ISC license:

@@ -3,8 +3,11 @@
 ## Current Git master branch
 
  - Vulkan 1.0.6
+ - Extension `VK_IMG_filter_cubic` (revision 1)
 
 ### Breaking changes
+
+ - New variant `CubicImg` added to `core::Filter` (`VK_IMG_filter_cubic`)
 
  - The following functions of `core::PhysicalDevice` have been renamed:
    - `properties` -> `get_properties`

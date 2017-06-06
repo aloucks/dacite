@@ -131,6 +131,10 @@ pub const FORMAT_FEATURE_BLIT_DST_BIT: FormatFeatureFlagBits = vks::VK_FORMAT_FE
 /// See [`VkFormatFeatureFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkFormatFeatureFlagBits)
 pub const FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_LINEAR_BIT: FormatFeatureFlagBits = vks::VK_FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_LINEAR_BIT;
 
+/// See [`VkFormatFeatureFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkFormatFeatureFlagBits)
+/// and extension [`VK_IMG_filter_cubic`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_IMG_filter_cubic)
+pub const FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_CUBIC_BIT_IMG: FormatFeatureFlagBits = vks::VK_FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_CUBIC_BIT_IMG;
+
 /// See [`VkImageUsageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageUsageFlagBits)
 pub type ImageUsageFlags = vks::VkImageUsageFlags;
 
@@ -2252,6 +2256,7 @@ impl From<DynamicState> for vks::VkDynamicState {
 pub enum Filter {
     Nearest,
     Linear,
+    CubicImg,
     Unknown(vks::VkFilter),
 }
 
@@ -2260,6 +2265,7 @@ impl From<Filter> for vks::VkFilter {
         match filter {
             Filter::Nearest => vks::VK_FILTER_NEAREST,
             Filter::Linear => vks::VK_FILTER_LINEAR,
+            Filter::CubicImg => vks::VK_FILTER_CUBIC_IMG,
             Filter::Unknown(filter) => filter,
         }
     }
@@ -3517,6 +3523,13 @@ gen_extension_structs!{
 gen_extension_structs!{
     pub struct DeviceExtensions;
     pub struct DeviceExtensionsProperties;
+
+    img_filter_cubic {
+        name: vks::VK_IMG_FILTER_CUBIC_EXTENSION_NAME_STR,
+        fn_add: add_img_filter_cubic,
+        fn_has: has_img_filter_cubic,
+        fn_get: get_img_filter_cubic,
+    }
 
     khr_swapchain {
         name: vks::VK_KHR_SWAPCHAIN_EXTENSION_NAME_STR,
