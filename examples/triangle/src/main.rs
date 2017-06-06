@@ -103,7 +103,7 @@ fn find_queue_family_indices(physical_device: &dacite::core::PhysicalDevice, sur
     let mut graphics = None;
     let mut present = None;
 
-    for (index, queue_family_properties) in physical_device.queue_family_properties().enumerate() {
+    for (index, queue_family_properties) in physical_device.get_queue_family_properties().enumerate() {
         if queue_family_properties.queue_count == 0 {
             continue;
         }

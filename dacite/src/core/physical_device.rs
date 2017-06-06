@@ -98,7 +98,7 @@ impl PhysicalDevice {
     }
 
     /// See [`vkGetPhysicalDeviceProperties`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetPhysicalDeviceProperties)
-    pub fn properties(&self) -> core::PhysicalDeviceProperties {
+    pub fn get_properties(&self) -> core::PhysicalDeviceProperties {
         unsafe {
             let mut properties = mem::uninitialized();
             (self.loader().core.vkGetPhysicalDeviceProperties)(self.handle, &mut properties);
@@ -107,7 +107,7 @@ impl PhysicalDevice {
     }
 
     /// See [`vkGetPhysicalDeviceFeatures`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetPhysicalDeviceFeatures)
-    pub fn features(&self) -> core::PhysicalDeviceFeatures {
+    pub fn get_features(&self) -> core::PhysicalDeviceFeatures {
         unsafe {
             let mut features = mem::uninitialized();
             (self.loader().core.vkGetPhysicalDeviceFeatures)(self.handle, &mut features);
@@ -164,7 +164,7 @@ impl PhysicalDevice {
     }
 
     /// See [`vkGetPhysicalDeviceFormatProperties`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetPhysicalDeviceFormatProperties)
-    pub fn format_properties(&self, format: core::Format) -> core::FormatProperties {
+    pub fn get_format_properties(&self, format: core::Format) -> core::FormatProperties {
         let mut properties = unsafe { mem::uninitialized() };
 
         unsafe {
@@ -175,7 +175,7 @@ impl PhysicalDevice {
     }
 
     /// See [`vkGetPhysicalDeviceImageFormatProperties`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetPhysicalDeviceImageFormatProperties)
-    pub fn image_format_properties(&self, format: core::Format, image_type: core::ImageType, tiling: core::ImageTiling, usage: core::ImageUsageFlags, flags: core::ImageCreateFlags) -> Result<core::ImageFormatProperties, core::Error> {
+    pub fn get_image_format_properties(&self, format: core::Format, image_type: core::ImageType, tiling: core::ImageTiling, usage: core::ImageUsageFlags, flags: core::ImageCreateFlags) -> Result<core::ImageFormatProperties, core::Error> {
         let mut properties = unsafe { mem::uninitialized() };
 
         let res = unsafe {
@@ -191,7 +191,7 @@ impl PhysicalDevice {
     }
 
     /// See [`vkGetPhysicalDeviceSparseImageFormatProperties`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetPhysicalDeviceSparseImageFormatProperties)
-    pub fn sparse_image_format_properties(&self, format: core::Format, image_type: core::ImageType, samples: core::SampleCountFlagBits, usage: core::ImageUsageFlags, tiling: core::ImageTiling) -> core::SparseImageFormatPropertiesIterator {
+    pub fn get_sparse_image_format_properties(&self, format: core::Format, image_type: core::ImageType, samples: core::SampleCountFlagBits, usage: core::ImageUsageFlags, tiling: core::ImageTiling) -> core::SparseImageFormatPropertiesIterator {
         let mut num_properties = 0;
         unsafe {
             (self.loader().core.vkGetPhysicalDeviceSparseImageFormatProperties)(self.handle, format.into(), image_type.into(), samples, usage, tiling.into(), &mut num_properties, ptr::null_mut());
@@ -207,7 +207,7 @@ impl PhysicalDevice {
     }
 
     /// See [`vkGetPhysicalDeviceQueueFamilyProperties`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetPhysicalDeviceQueueFamilyProperties)
-    pub fn queue_family_properties(&self) -> core::QueueFamilyPropertiesIterator {
+    pub fn get_queue_family_properties(&self) -> core::QueueFamilyPropertiesIterator {
         let mut num_properties = 0;
         unsafe {
             (self.loader().core.vkGetPhysicalDeviceQueueFamilyProperties)(self.handle, &mut num_properties, ptr::null_mut());
@@ -223,7 +223,7 @@ impl PhysicalDevice {
     }
 
     /// See [`vkGetPhysicalDeviceMemoryProperties`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetPhysicalDeviceMemoryProperties)
-    pub fn memory_properties(&self) -> core::PhysicalDeviceMemoryProperties {
+    pub fn get_memory_properties(&self) -> core::PhysicalDeviceMemoryProperties {
         let mut properties = unsafe { mem::uninitialized() };
 
         unsafe {

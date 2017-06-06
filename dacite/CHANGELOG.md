@@ -1,5 +1,19 @@
 # dacite Changelog
 
+## Current Git master branch
+
+### Breaking changes
+
+ - The following functions of `core::PhysicalDevice` have been renamed:
+   - `properties` -> `get_properties`
+   - `features` -> `get_features`
+   - `format_properties` -> `get_format_properties`
+   - `image_format_properties` -> `get_image_format_properties`
+   - `sparse_image_format_properties` -> `get_sparse_image_format_properties`
+   - `queue_family_properties` -> `get_queue_family_properties`
+   - `memory_properties` -> `get_memory_properties`
+
+
 ## Version 0.2.0, released on 05.06.2017
 
  - Vulkan 1.0.5
