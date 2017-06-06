@@ -1,6 +1,6 @@
 # dacite Changelog
 
-## Current Git master branch
+## Version 0.3.0, released on 06.06.2017
 
  - Vulkan 1.0.6
  - Extension `VK_IMG_filter_cubic` (revision 1)

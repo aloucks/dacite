@@ -4,7 +4,7 @@ This repository hosts multiple related projects:
 
 | Project | Description | Version | Changelog | crates.io | Documentation |
 | --- | --- | --- | --- | --- | --- |
-| [dacite] | The main project, a mostly safe Vulkan library for Rust | 0.2.0 | [Changelog][dacite-changelog] | [crates.io/crates/dacite] | [docs.rs/dacite] |
+| [dacite] | The main project, a mostly safe Vulkan library for Rust | 0.3.0 | [Changelog][dacite-changelog] | [crates.io/crates/dacite] | [docs.rs/dacite] |
 | [dacite-winit] | Easy, platform-independent winit-based surface creation | 0.2.0 | [Changelog][dacite-winit-changelog] | [crates.io/crates/dacite-winit] | [docs.rs/dacite-winit] |
 
 See the project specific subdirectories for more information.
