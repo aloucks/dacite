@@ -2,6 +2,8 @@
 
 ## Current Git master branch
 
+ - Vulkan 1.0.6
+
 ### Breaking changes
 
  - The following functions of `core::PhysicalDevice` have been renamed:
