@@ -543,7 +543,9 @@ impl PhysicalDevice {
 
     /// See [`vkGetPhysicalDeviceQueueFamilyProperties2KHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetPhysicalDeviceQueueFamilyProperties2KHR)
     /// and extension [`VK_KHR_get_physical_device_properties2`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_get_physical_device_properties2)
-    pub fn get_queue_family_properties2_khr(&self, chain_query: Option<&khr_get_physical_device_properties2::QueueFamilyProperties2ChainQueryKhr>) -> Vec<khr_get_physical_device_properties2::QueueFamilyProperties2Khr> {
+    pub fn get_queue_family_properties2_khr<B>(&self, chain_query: Option<&khr_get_physical_device_properties2::QueueFamilyProperties2ChainQueryKhr>) -> B
+        where B: FromIterator<khr_get_physical_device_properties2::QueueFamilyProperties2Khr>
+    {
         unsafe {
             let mut num = 0;
             (self.loader().khr_get_physical_device_properties2.vkGetPhysicalDeviceQueueFamilyProperties2KHR)(self.handle, &mut num, ptr::null_mut());
@@ -572,7 +574,9 @@ impl PhysicalDevice {
 
     /// See [`vkGetPhysicalDeviceSparseImageFormatProperties2KHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetPhysicalDeviceSparseImageFormatProperties2KHR)
     /// and extension [`VK_KHR_get_physical_device_properties2`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_get_physical_device_properties2)
-    pub fn get_sparse_image_format_properties2_khr(&self, format_info: &khr_get_physical_device_properties2::PhysicalDeviceSparseImageFormatInfo2Khr, chain_query: Option<&khr_get_physical_device_properties2::SparseImageFormatProperties2ChainQueryKhr>) -> Vec<khr_get_physical_device_properties2::SparseImageFormatProperties2Khr> {
+    pub fn get_sparse_image_format_properties2_khr<B>(&self, format_info: &khr_get_physical_device_properties2::PhysicalDeviceSparseImageFormatInfo2Khr, chain_query: Option<&khr_get_physical_device_properties2::SparseImageFormatProperties2ChainQueryKhr>) -> B
+        where B: FromIterator<khr_get_physical_device_properties2::SparseImageFormatProperties2Khr>
+    {
         let format_info_wrapper = khr_get_physical_device_properties2::VkPhysicalDeviceSparseImageFormatInfo2KHRWrapper::new(format_info, true);
 
         unsafe {

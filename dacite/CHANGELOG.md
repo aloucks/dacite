@@ -23,6 +23,11 @@
    - `core::PhysicalDevice::get_surface_present_modes_khr`
    - `core::Image::get_sparse_memory_requirements`
 
+ - The following functions have also been changed to behave like `std::iter::Iterator::collect`
+   instead of always returning a `Vec`:
+   - `core::PhysicalDevice::get_queue_family_properties2_khr`
+   - `core::PhysicalDevice::get_sparse_image_format_properties2_khr`
+
 
 ## Version 0.2.0, released on 05.06.2017
 
