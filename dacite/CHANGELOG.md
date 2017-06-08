@@ -1,6 +1,6 @@
 # dacite Changelog
 
-## Current Git master branch
+## Version 0.3.2, released on 08.06.2017
 
  - Vulkan 1.0.8
  - Dacite can now be built with stable Rust 1.18.0.
