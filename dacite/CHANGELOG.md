@@ -1,6 +1,6 @@
 # dacite Changelog
 
-## Current Git master branch
+## Version 0.3.3, released on 08.06.2017
 
  - Vulkan 1.0.9
 
