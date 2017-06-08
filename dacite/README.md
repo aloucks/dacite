@@ -23,8 +23,7 @@ dacite is different from the C API will be documented over time.
 
 ## Usage
 
-Dacite requires at least Rust 1.18.0 beta or nightly. The Rust stable channel will be supported as
-soon as Rust 1.18.0 is released.
+Rust 1.18.0 or newer is required.
 
 Dacite is available on [crates.io]. Add this to your `Cargo.toml`:
 
