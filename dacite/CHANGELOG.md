@@ -3,6 +3,7 @@
 ## Current Git master branch
 
  - Vulkan 1.0.11
+ - Bump `VK_KHR_swapchain` to revision 68.
 
 
 ## Version 0.3.4, released on 09.06.2017

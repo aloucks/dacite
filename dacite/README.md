@@ -106,7 +106,7 @@ might be breaking change.
 | `VK_KHR_mir_surface` | 4 |
 | `VK_KHR_sampler_mirror_clamp_to_edge` | 1 |
 | `VK_KHR_surface` | 25 |
-| `VK_KHR_swapchain` | 67 |
+| `VK_KHR_swapchain` | 68 |
 | `VK_KHR_wayland_surface` | 5 |
 | `VK_KHR_win32_surface` | 5 |
 | `VK_KHR_xcb_surface` | 6 |
