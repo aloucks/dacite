@@ -1,5 +1,10 @@
 # dacite Changelog
 
+## Current Git master branch
+
+ - Vulkan 1.0.12
+
+
 ## Version 0.3.5, released on 09.06.2017
 
  - Vulkan 1.0.11
