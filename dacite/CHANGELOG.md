@@ -1,6 +1,6 @@
 # dacite Changelog
 
-## Current Git master branch
+## Version 0.3.5, released on 09.06.2017
 
  - Vulkan 1.0.11
  - Bump `VK_KHR_swapchain` to revision 68.
