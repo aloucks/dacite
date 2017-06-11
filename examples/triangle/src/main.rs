@@ -296,12 +296,7 @@ fn create_swapchain(physical_device: &dacite::core::PhysicalDevice, device: &dac
             image: image.clone(),
             view_type: dacite::core::ImageViewType::Type2D,
             format: format,
-            components: dacite::core::ComponentMapping {
-                r: dacite::core::ComponentSwizzle::Identity,
-                g: dacite::core::ComponentSwizzle::Identity,
-                b: dacite::core::ComponentSwizzle::Identity,
-                a: dacite::core::ComponentSwizzle::Identity,
-            },
+            components: dacite::core::ComponentMapping::identity(),
             subresource_range: dacite::core::ImageSubresourceRange {
                 aspect_mask: dacite::core::IMAGE_ASPECT_COLOR_BIT,
                 base_mip_level: 0,
@@ -474,13 +469,7 @@ fn create_pipeline(device: &dacite::core::Device, render_pass: &dacite::core::Re
                 min_depth: 0.0,
                 max_depth: 1.0,
             }],
-            scissors: vec![dacite::core::Rect2D {
-                offset: dacite::core::Offset2D {
-                    x: 0,
-                    y: 0,
-                },
-                extent: *extent,
-            }],
+            scissors: vec![dacite::core::Rect2D::new(dacite::core::Offset2D::zero(), *extent)],
             chain: None,
         }),
         rasterization_state: dacite::core::PipelineRasterizationStateCreateInfo {
@@ -579,13 +568,7 @@ fn record_command_buffer(command_pool: &dacite::core::CommandPool, pipeline: &da
         let begin_info = dacite::core::RenderPassBeginInfo {
             render_pass: render_pass.clone(),
             framebuffer: framebuffer.clone(),
-            render_area: dacite::core::Rect2D {
-                offset: dacite::core::Offset2D {
-                    x: 0,
-                    y: 0,
-                },
-                extent: *extent,
-            },
+            render_area: dacite::core::Rect2D::new(dacite::core::Offset2D::zero(), *extent),
             clear_values: Some(vec![dacite::core::ClearValue::Color(dacite::core::ClearColorValue::Float32([0.0, 0.0, 0.0, 1.0]))]),
             chain: None,
         };
@@ -660,10 +643,7 @@ fn render(graphics_queue: &dacite::core::Queue, present_queue: &dacite::core::Qu
 }
 
 fn real_main() -> Result<(), ()> {
-    let preferred_extent = dacite::core::Extent2D {
-        width: 800,
-        height: 600,
-    };
+    let preferred_extent = dacite::core::Extent2D::new(800, 600);
 
     let Window {
         events_loop,
