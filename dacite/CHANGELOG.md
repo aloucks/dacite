@@ -1,6 +1,6 @@
 # dacite Changelog
 
-## Current Git master branch
+## Version 0.3.6, released on 11.06.2017
 
  - Vulkan 1.0.12
  - Extension `VK_AMD_rasterization_order` (revision 1)
