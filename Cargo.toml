@@ -1,2 +1,7 @@
 [workspace]
-members = [ "dacite", "dacite-winit", "examples/triangle" ]
+members = [
+    "dacite",
+    "dacite-winit",
+    "examples/triangle",
+    "examples/triangle-offscreen"
+]

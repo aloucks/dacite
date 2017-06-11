@@ -1,0 +1,11 @@
+[package]
+name = "triangle-offscreen"
+version = "0.1.0"
+authors = ["Dennis Hamester <dennis.hamester@startmail.com>"]
+license = "ISC"
+
+[dependencies.dacite]
+path = "../../dacite"
+
+[dependencies]
+png = "0.7"

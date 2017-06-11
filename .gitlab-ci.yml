@@ -21,6 +21,12 @@ build:dacite-winit:
         - cd dacite-winit
         - cargo build --verbose --jobs 1 --release
 
+build:examples/triangles-offscreen:
+    stage: build:examples
+    script:
+        - cd examples/triangle-offscreen
+        - cargo build --verbose --jobs 1 --release
+
 build:examples/triangles:
     stage: build:examples
     script:
