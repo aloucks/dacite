@@ -90,7 +90,7 @@ impl Device {
     }
 
     pub fn get_enabled_instance_extensions(&self) -> &core::InstanceExtensions {
-        &self.0.instance.get_enabled_extensions()
+        self.0.instance.get_enabled_extensions()
     }
 
     pub fn get_enabled_device_extensions(&self) -> &core::DeviceExtensions {
