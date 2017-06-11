@@ -2888,6 +2888,16 @@ impl<'a> From<&'a Extent3D> for vks::VkExtent3D {
 }
 
 impl Extent3D {
+    /// Creates a new `Extent3D`.
+    #[inline]
+    pub fn new(width: u32, height: u32, depth: u32) -> Self {
+        Extent3D {
+            width: width,
+            height: height,
+            depth: depth,
+        }
+    }
+
     /// Creates an `Extent3D` with all components set to 0.
     #[inline]
     pub fn zero() -> Self {
@@ -3988,6 +3998,16 @@ impl<'a> From<&'a Offset3D> for vks::VkOffset3D {
 }
 
 impl Offset3D {
+    /// Creates a new `Offset3D`.
+    #[inline]
+    pub fn new(x: i32, y: i32, z: i32) -> Self {
+        Offset3D {
+            x: x,
+            y: y,
+            z: z,
+        }
+    }
+
     /// Creates an `Offset3D` with all components set to 0.
     #[inline]
     pub fn zero() -> Self {
@@ -5149,6 +5169,15 @@ impl<'a> From<&'a Offset2D> for vks::VkOffset2D {
 }
 
 impl Offset2D {
+    /// Creates a new `Offset2D`.
+    #[inline]
+    pub fn new(x: i32, y: i32) -> Self {
+        Offset2D {
+            x: x,
+            y: y,
+        }
+    }
+
     /// Creates an `Offset2D` with all components set to 0.
     #[inline]
     pub fn zero() -> Self {
@@ -5194,6 +5223,15 @@ impl<'a> From<&'a Extent2D> for vks::VkExtent2D {
 }
 
 impl Extent2D {
+    /// Creates a new `Extent2D`.
+    #[inline]
+    pub fn new(width: u32, height: u32) -> Self {
+        Extent2D {
+            width: width,
+            height: height,
+        }
+    }
+
     /// Creates an `Extent2D` with all components set to 0.
     #[inline]
     pub fn zero() -> Self {
@@ -5225,6 +5263,17 @@ impl<'a> From<&'a Rect2D> for vks::VkRect2D {
         vks::VkRect2D {
             offset: (&rect.offset).into(),
             extent: (&rect.extent).into(),
+        }
+    }
+}
+
+impl Rect2D {
+    /// Creates a new `Rect2D`.
+    #[inline]
+    pub fn new(offset: Offset2D, extent: Extent2D) -> Self {
+        Rect2D {
+            offset: offset,
+            extent: extent,
         }
     }
 }
