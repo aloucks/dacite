@@ -4557,6 +4557,20 @@ impl<'a> From<&'a ComponentMapping> for vks::VkComponentMapping {
     }
 }
 
+impl ComponentMapping {
+    /// Creates a `ComponentMapping` with all components initialized to
+    /// `ComponentSwizzle::Identity`.
+    #[inline]
+    pub fn identity() -> Self {
+        ComponentMapping {
+            r: ComponentSwizzle::Identity,
+            g: ComponentSwizzle::Identity,
+            b: ComponentSwizzle::Identity,
+            a: ComponentSwizzle::Identity,
+        }
+    }
+}
+
 /// See [`VkImageSubresourceRange`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageSubresourceRange)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct ImageSubresourceRange {

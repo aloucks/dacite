@@ -7,6 +7,7 @@
    - `core::Offset3D`: `zero()`, `from_2d()`
    - `core::Extent2D`: `zero()`, `from_3d()`
    - `core::Extent3D`: `zero()`, `from_2d()`
+   - `core::ComponentMapping`: `identity()`
 
 
 ## Version 0.3.6, released on 11.06.2017
