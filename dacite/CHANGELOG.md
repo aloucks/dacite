@@ -3,6 +3,7 @@
 ## Current Git master branch
 
  - Vulkan 1.0.12
+ - Extension `VK_AMD_rasterization_order` (revision 1)
 
 
 ## Version 0.3.5, released on 09.06.2017

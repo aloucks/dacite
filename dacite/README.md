@@ -124,6 +124,12 @@ might be breaking change.
 | --- | --- |
 | `VK_NV_glsl_shader` | 1 |
 
+### `AMD` Extensions
+
+| Extension | Revision |
+| --- | --- |
+| `VK_AMD_rasterization_order` | 1 |
+
 ### `IMG` Extensions
 
 | Extension | Revision |

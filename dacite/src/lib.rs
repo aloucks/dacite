@@ -23,6 +23,7 @@ mod utils;
 mod vulkan_object;
 
 pub mod core;
+pub mod amd_rasterization_order;
 pub mod ext_debug_report;
 pub mod khr_android_surface;
 pub mod khr_display;

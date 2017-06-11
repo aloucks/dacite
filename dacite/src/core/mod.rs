@@ -3524,6 +3524,13 @@ gen_extension_structs!{
     pub struct DeviceExtensions;
     pub struct DeviceExtensionsProperties;
 
+    amd_rasterization_order {
+        name: vks::VK_AMD_RASTERIZATION_ORDER_EXTENSION_NAME_STR,
+        fn_add: add_amd_rasterization_order,
+        fn_has: has_amd_rasterization_order,
+        fn_get: get_amd_rasterization_order,
+    }
+
     img_filter_cubic {
         name: vks::VK_IMG_FILTER_CUBIC_EXTENSION_NAME_STR,
         fn_add: add_img_filter_cubic,
@@ -5178,6 +5185,16 @@ gen_chain_struct! {
     vks: VkPipelineRasterizationStateCreateInfo,
     input: true,
     output: false,
+
+    pipeline_rasterization_state_rasterization_order_amd: PipelineRasterizationStateRasterizationOrderAmd {
+        mod: amd_rasterization_order,
+        fn_add: add_pipeline_rasterization_state_rasterization_order_amd,
+        fn_has: has_pipeline_rasterization_state_rasterization_order_amd,
+        fn_get: get_pipeline_rasterization_state_rasterization_order_amd,
+        wrapper: VkPipelineRasterizationStateRasterizationOrderAMDWrapper,
+        vks: VkPipelineRasterizationStateRasterizationOrderAMD,
+        stype: vks::VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_RASTERIZATION_ORDER_AMD,
+    }
 }
 
 /// See [`VkPipelineRasterizationStateCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineRasterizationStateCreateInfo)

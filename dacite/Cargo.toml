@@ -23,4 +23,5 @@ version = "0.17"
 default-features = false
 features = [ "no_function_prototypes", "vk_1_0_11",
              "core_1_0_12",
+             "amd_rasterization_order_1",
              "khr_get_physical_device_properties2_1" ]
