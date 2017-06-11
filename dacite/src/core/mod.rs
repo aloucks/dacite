@@ -2887,6 +2887,28 @@ impl<'a> From<&'a Extent3D> for vks::VkExtent3D {
     }
 }
 
+impl Extent3D {
+    /// Creates an `Extent3D` with all components set to 0.
+    #[inline]
+    pub fn zero() -> Self {
+        Extent3D {
+            width: 0,
+            height: 0,
+            depth: 0,
+        }
+    }
+
+    /// Creates an `Extent3D` from an `Extent2D` and the specified `depth` component.
+    #[inline]
+    pub fn from_2d(extent: &Extent2D, depth: u32) -> Self {
+        Extent3D {
+            width: extent.width,
+            height: extent.height,
+            depth: depth,
+        }
+    }
+}
+
 /// See [`VkImageFormatProperties`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageFormatProperties)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct ImageFormatProperties {
@@ -3961,6 +3983,28 @@ impl<'a> From<&'a Offset3D> for vks::VkOffset3D {
             x: offset.x,
             y: offset.y,
             z: offset.z,
+        }
+    }
+}
+
+impl Offset3D {
+    /// Creates an `Offset3D` with all components set to 0.
+    #[inline]
+    pub fn zero() -> Self {
+        Offset3D {
+            x: 0,
+            y: 0,
+            z: 0,
+        }
+    }
+
+    /// Creates an `Offset3D` from an `Offset2D` and the specified `z` component.
+    #[inline]
+    pub fn from_2d(offset: &Offset2D, z: i32) -> Self {
+        Offset3D {
+            x: offset.x,
+            y: offset.y,
+            z: z,
         }
     }
 }
@@ -5090,6 +5134,26 @@ impl<'a> From<&'a Offset2D> for vks::VkOffset2D {
     }
 }
 
+impl Offset2D {
+    /// Creates an `Offset2D` with all components set to 0.
+    #[inline]
+    pub fn zero() -> Self {
+        Offset2D {
+            x: 0,
+            y: 0,
+        }
+    }
+
+    /// Creates an `Offset2D` from an `Offset3D` by discarding the `z` component.
+    #[inline]
+    pub fn from_3d(offset: &Offset3D) -> Self {
+        Offset2D {
+            x: offset.x,
+            y: offset.y,
+        }
+    }
+}
+
 /// See [`VkExtent2D`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkExtent2D)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct Extent2D {
@@ -5109,6 +5173,26 @@ impl<'a> From<&'a vks::VkExtent2D> for Extent2D {
 impl<'a> From<&'a Extent2D> for vks::VkExtent2D {
     fn from(extent: &'a Extent2D) -> Self {
         vks::VkExtent2D {
+            width: extent.width,
+            height: extent.height,
+        }
+    }
+}
+
+impl Extent2D {
+    /// Creates an `Extent2D` with all components set to 0.
+    #[inline]
+    pub fn zero() -> Self {
+        Extent2D {
+            width: 0,
+            height: 0,
+        }
+    }
+
+    /// Creates an `Extent2D` from an `Extent3D` by discarding the `depth` component.
+    #[inline]
+    pub fn from_3d(extent: &Extent3D) -> Self {
+        Extent2D {
             width: extent.width,
             height: extent.height,
         }

@@ -1,5 +1,14 @@
 # dacite Changelog
 
+## Current Git master branch
+
+ - Added several convenience functions:
+   - `core::Offset2D`: `zero()`, `from_3d()`
+   - `core::Offset3D`: `zero()`, `from_2d()`
+   - `core::Extent2D`: `zero()`, `from_3d()`
+   - `core::Extent3D`: `zero()`, `from_2d()`
+
+
 ## Version 0.3.6, released on 11.06.2017
 
  - Vulkan 1.0.12
