@@ -248,8 +248,8 @@ fn create_swapchain(physical_device: &dacite::core::PhysicalDevice, device: &dac
 
     let mut present_mode = None;
     for mode in present_modes {
-        if mode == dacite::khr_surface::PresentModeKhr::Mailbox {
-            present_mode = Some(dacite::khr_surface::PresentModeKhr::Mailbox);
+        if mode == dacite::khr_surface::PresentModeKhr::Fifo {
+            present_mode = Some(dacite::khr_surface::PresentModeKhr::Fifo);
             break;
         }
         else if mode == dacite::khr_surface::PresentModeKhr::Immediate {
