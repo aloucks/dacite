@@ -1143,6 +1143,31 @@ impl From<vks::VkResult> for Error {
     }
 }
 
+impl From<Error> for vks::VkResult {
+    fn from(e: Error) -> Self {
+        match e {
+            Error::OutOfHostMemory => vks::VK_ERROR_OUT_OF_HOST_MEMORY,
+            Error::OutOfDeviceMemory => vks::VK_ERROR_OUT_OF_DEVICE_MEMORY,
+            Error::InitializationFailed => vks::VK_ERROR_INITIALIZATION_FAILED,
+            Error::DeviceLost => vks::VK_ERROR_DEVICE_LOST,
+            Error::MemoryMapFailed => vks::VK_ERROR_MEMORY_MAP_FAILED,
+            Error::LayerNotPresent => vks::VK_ERROR_LAYER_NOT_PRESENT,
+            Error::ExtensionNotPresent => vks::VK_ERROR_EXTENSION_NOT_PRESENT,
+            Error::FeatureNotPresent => vks::VK_ERROR_FEATURE_NOT_PRESENT,
+            Error::IncompatibleDriver => vks::VK_ERROR_INCOMPATIBLE_DRIVER,
+            Error::TooManyObjects => vks::VK_ERROR_TOO_MANY_OBJECTS,
+            Error::FormatNotSupported => vks::VK_ERROR_FORMAT_NOT_SUPPORTED,
+            Error::SurfaceLostKhr => vks::VK_ERROR_SURFACE_LOST_KHR,
+            Error::NativeWindowInUseKhr => vks::VK_ERROR_NATIVE_WINDOW_IN_USE_KHR,
+            Error::ValidationFailedExt => vks::VK_ERROR_VALIDATION_FAILED_EXT,
+            Error::OutOfDateKhr => vks::VK_ERROR_OUT_OF_DATE_KHR,
+            Error::IncompatibleDisplayKhr => vks::VK_ERROR_INCOMPATIBLE_DISPLAY_KHR,
+            Error::InvalidShaderNv => vks::VK_ERROR_INVALID_SHADER_NV,
+            Error::Unknown(res) => res,
+        }
+    }
+}
+
 /// See [`VkSystemAllocationSope`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSystemAllocationSope)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum SystemAllocationSope {
