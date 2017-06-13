@@ -66,7 +66,7 @@ pub use self::device_memory::{DeviceMemory, MappedMemory};
 pub use self::event::Event;
 pub use self::fence::Fence;
 pub use self::framebuffer::Framebuffer;
-pub use self::image::Image;
+pub use self::image::{Image, FromNativeImageParameters};
 pub use self::image_view::ImageView;
 pub use self::instance::{EarlyInstanceError, Instance};
 pub use self::physical_device::PhysicalDevice;

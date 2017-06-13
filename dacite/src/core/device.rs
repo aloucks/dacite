@@ -245,7 +245,7 @@ impl Device {
         };
 
         if res == vks::VK_SUCCESS {
-            Ok(Image::new(image, self.clone(), allocator_helper, true))
+            Ok(Image::new(image, true, self.clone(), allocator_helper))
         }
         else {
             Err(res.into())

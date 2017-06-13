@@ -12,6 +12,10 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
+use FromNativeObject;
+use TryDestroyError;
+use TryDestroyErrorKind;
+use VulkanObject;
 use core::allocator_helper::AllocatorHelper;
 use core::{self, Device, DeviceMemory};
 use std::cmp::Ordering;
@@ -21,7 +25,6 @@ use std::mem;
 use std::ptr;
 use std::sync::Arc;
 use vks;
-use {TryDestroyError, TryDestroyErrorKind, VulkanObject};
 
 /// See [`VkImage`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImage)
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
@@ -56,13 +59,45 @@ impl VulkanObject for Image {
     }
 }
 
-impl Image {
-    pub(crate) fn new(handle: vks::VkImage, device: Device, allocator: Option<AllocatorHelper>, owned: bool) -> Self {
-        Image(Arc::new(Inner {
-            handle: handle,
+pub struct FromNativeImageParameters {
+    /// `true`, if this `Image` should destroy the underlying Vulkan object, when it is dropped.
+    pub owned: bool,
+
+    /// The `Device`, from which this `Image` was created.
+    pub device: Device,
+
+    /// An `Allocator` compatible with the one used to create this `Image`.
+    ///
+    /// This parameter is ignored, if `owned` is `false`.
+    pub allocator: Option<Box<core::Allocator>>,
+}
+
+impl FromNativeImageParameters {
+    #[inline]
+    pub fn new(owned: bool, device: Device, allocator: Option<Box<core::Allocator>>) -> Self {
+        FromNativeImageParameters {
+            owned: owned,
             device: device,
             allocator: allocator,
+        }
+    }
+}
+
+impl FromNativeObject for Image {
+    type Parameters = FromNativeImageParameters;
+
+    unsafe fn from_native_object(object: Self::NativeVulkanObject, params: Self::Parameters) -> Self {
+        Image::new(object, params.owned, params.device, params.allocator.map(AllocatorHelper::new))
+    }
+}
+
+impl Image {
+    pub(crate) fn new(handle: vks::VkImage, owned: bool, device: Device, allocator: Option<AllocatorHelper>) -> Self {
+        Image(Arc::new(Inner {
+            handle: handle,
             owned: owned,
+            device: device,
+            allocator: allocator,
         }))
     }
 
@@ -137,9 +172,9 @@ impl Image {
 #[derive(Debug)]
 struct Inner {
     handle: vks::VkImage,
+    owned: bool,
     device: Device,
     allocator: Option<AllocatorHelper>,
-    owned: bool,
 }
 
 impl Drop for Inner {

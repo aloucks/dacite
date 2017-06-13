@@ -92,7 +92,7 @@ impl SwapchainKhr {
         };
 
         if res == vks::VK_SUCCESS {
-            Ok(images.iter().map(|i| core::Image::new(*i, self.0.device.clone(), None, false)).collect())
+            Ok(images.iter().map(|i| core::Image::new(*i, false, self.0.device.clone(), None)).collect())
         }
         else {
             Err(res.into())
