@@ -12,6 +12,10 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
+use FromNativeObject;
+use TryDestroyError;
+use TryDestroyErrorKind;
+use VulkanObject;
 use core::allocator_helper::AllocatorHelper;
 use core::{self, Device, Instance};
 use khr_display;
@@ -29,7 +33,6 @@ use vks;
 use wayland_wrapper;
 use xcb_wrapper;
 use xlib_wrapper;
-use {TryDestroyError, TryDestroyErrorKind, VulkanObject};
 
 /// See [`VkPhysicalDevice`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPhysicalDevice)
 #[derive(Debug, Clone)]
@@ -87,6 +90,14 @@ impl VulkanObject for PhysicalDevice {
 
     fn try_destroy(self) -> Result<(), TryDestroyError<Self>> {
         Err(TryDestroyError::new(self, TryDestroyErrorKind::Unsupported))
+    }
+}
+
+impl FromNativeObject for PhysicalDevice {
+    type Parameters = Instance;
+
+    unsafe fn from_native_object(object: Self::NativeVulkanObject, params: Self::Parameters) -> Self {
+        PhysicalDevice::new(object, params)
     }
 }
 
