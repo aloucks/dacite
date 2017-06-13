@@ -1007,6 +1007,15 @@ impl Version {
         }
     }
 
+    pub fn from_optional_api_version(version: u32) -> Option<Self> {
+        if version != 0 {
+            Some(Version::from_api_version(version))
+        }
+        else {
+            None
+        }
+    }
+
     pub fn as_api_version(&self) -> u32 {
         vks::vk_make_version(self.major, self.minor, self.patch)
     }
