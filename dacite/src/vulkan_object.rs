@@ -113,3 +113,21 @@ pub enum TryDestroyErrorKind {
     /// A Vulkan error occurred at runtime.
     VulkanError(core::Error),
 }
+
+/// Trait for creating dacite Vulkan objects from native FFI objects.
+///
+/// This trait is provided for interoperability with other Vulkan-related libraries, if you need to
+/// create dacite Vulkan objects from existing native FFI objects.
+///
+/// Not all dacite Vulkan objects implement this trait, which is why this is a separate trait
+/// instead of being integrated in the `VulkanObject` trait.
+///
+/// __Caution__: Many implementors can optionally own the underlying native object (specified
+/// through an `owned` parameter). This means, that the Vulkan object will be destroyed, when this
+/// object is dropped. You must not create multiple dacite objects, which own the same Vulkan
+/// object.
+pub trait FromNativeObject: VulkanObject {
+    type Parameters;
+
+    unsafe fn from_native_object(object: Self::NativeVulkanObject, params: Self::Parameters) -> Self;
+}

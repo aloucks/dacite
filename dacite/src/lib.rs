@@ -48,6 +48,7 @@ pub use vulkan_object::{
     TryDestroyError,
     TryDestroyErrorKind,
     VulkanObject,
+    FromNativeObject,
 };
 
 pub const DACITE_API_VERSION: core::Version = core::Version {
