@@ -12,6 +12,10 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
+use FromNativeObject;
+use TryDestroyError;
+use TryDestroyErrorKind;
+use VulkanObject;
 use core::{
     self,
     Buffer,
@@ -29,7 +33,6 @@ use std::hash::{Hash, Hasher};
 use std::ptr;
 use std::sync::Arc;
 use vks;
-use {TryDestroyError, TryDestroyErrorKind, VulkanObject};
 
 /// See [`VkCommandBuffer`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCommandBuffer)
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
@@ -59,10 +62,37 @@ impl VulkanObject for CommandBuffer {
     }
 }
 
+pub struct FromNativeCommandBufferParameters {
+    /// `true`, if this `CommandBuffer` should freed the underlying Vulkan object, when it is dropped.
+    pub owned: bool,
+
+    /// The `CommandPool`, from which this `CommandBuffer` was allocated.
+    pub command_pool: CommandPool,
+}
+
+impl FromNativeCommandBufferParameters {
+    #[inline]
+    pub fn new(owned: bool, command_pool: CommandPool) -> Self {
+        FromNativeCommandBufferParameters {
+            owned: owned,
+            command_pool: command_pool,
+        }
+    }
+}
+
+impl FromNativeObject for CommandBuffer {
+    type Parameters = FromNativeCommandBufferParameters;
+
+    unsafe fn from_native_object(object: Self::NativeVulkanObject, params: Self::Parameters) -> Self {
+        CommandBuffer::new(object, params.owned, params.command_pool)
+    }
+}
+
 impl CommandBuffer {
-    pub(crate) fn new(handle: vks::VkCommandBuffer, command_pool: CommandPool) -> Self {
+    pub(crate) fn new(handle: vks::VkCommandBuffer, owned: bool, command_pool: CommandPool) -> Self {
         CommandBuffer(Arc::new(Inner {
             handle: handle,
+            owned: owned,
             command_pool: command_pool,
         }))
     }
@@ -525,13 +555,16 @@ impl CommandBuffer {
 #[derive(Debug)]
 struct Inner {
     handle: vks::VkCommandBuffer,
+    owned: bool,
     command_pool: CommandPool,
 }
 
 impl Drop for Inner {
     fn drop(&mut self) {
-        unsafe {
-            (self.command_pool.loader().core.vkFreeCommandBuffers)(self.command_pool.device_handle(), self.command_pool.handle(), 1, &self.handle);
+        if self.owned {
+            unsafe {
+                (self.command_pool.loader().core.vkFreeCommandBuffers)(self.command_pool.device_handle(), self.command_pool.handle(), 1, &self.handle);
+            }
         }
     }
 }

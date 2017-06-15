@@ -99,7 +99,7 @@ impl CommandPool {
         };
 
         if res == vks::VK_SUCCESS {
-            Ok(command_buffers.iter().map(|&c| CommandBuffer::new(c, command_pool.clone())).collect())
+            Ok(command_buffers.iter().map(|&c| CommandBuffer::new(c, true, command_pool.clone())).collect())
         }
         else {
             Err(res.into())

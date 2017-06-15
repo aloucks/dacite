@@ -56,7 +56,7 @@ use vks;
 
 pub use self::buffer::{Buffer, FromNativeBufferParameters};
 pub use self::buffer_view::{BufferView, FromNativeBufferViewParameters};
-pub use self::command_buffer::CommandBuffer;
+pub use self::command_buffer::{CommandBuffer, FromNativeCommandBufferParameters};
 pub use self::command_pool::CommandPool;
 pub use self::descriptor_pool::DescriptorPool;
 pub use self::descriptor_set::DescriptorSet;
