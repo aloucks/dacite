@@ -12,12 +12,15 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
+use FromNativeObject;
+use TryDestroyError;
+use TryDestroyErrorKind;
+use VulkanObject;
 use core::{self, DescriptorPool};
 use std::cmp::Ordering;
 use std::hash::{Hash, Hasher};
 use std::ptr;
 use vks;
-use {TryDestroyError, TryDestroyErrorKind, VulkanObject};
 
 /// See [`VkDescriptorSet`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDescriptorSet)
 #[derive(Debug, Clone)]
@@ -41,6 +44,14 @@ impl VulkanObject for DescriptorSet {
 
     fn try_destroy(self) -> Result<(), TryDestroyError<Self>> {
         self.free().map_err(|e| TryDestroyError::new(self, TryDestroyErrorKind::VulkanError(e)))
+    }
+}
+
+impl FromNativeObject for DescriptorSet {
+    type Parameters = DescriptorPool;
+
+    unsafe fn from_native_object(object: Self::NativeVulkanObject, params: Self::Parameters) -> Self {
+        DescriptorSet::new(object, params)
     }
 }
 
