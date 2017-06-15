@@ -54,7 +54,7 @@ use std::time::Duration;
 use utils;
 use vks;
 
-pub use self::buffer::Buffer;
+pub use self::buffer::{Buffer, FromNativeBufferParameters};
 pub use self::buffer_view::BufferView;
 pub use self::command_buffer::CommandBuffer;
 pub use self::command_pool::CommandPool;

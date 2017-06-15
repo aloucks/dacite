@@ -225,7 +225,7 @@ impl Device {
         };
 
         if res == vks::VK_SUCCESS {
-            Ok(Buffer::new(buffer, self.clone(), allocator_helper))
+            Ok(Buffer::new(buffer, true, self.clone(), allocator_helper))
         }
         else {
             Err(res.into())
