@@ -12,14 +12,17 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-use core::Device;
+use FromNativeObject;
+use TryDestroyError;
+use TryDestroyErrorKind;
+use VulkanObject;
 use core::allocator_helper::AllocatorHelper;
+use core::{self, Device};
 use std::cmp::Ordering;
 use std::hash::{Hash, Hasher};
 use std::ptr;
 use std::sync::Arc;
 use vks;
-use {TryDestroyError, TryDestroyErrorKind, VulkanObject};
 
 /// See [`VkDescriptorSetLayout`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDescriptorSetLayout)
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
@@ -49,10 +52,43 @@ impl VulkanObject for DescriptorSetLayout {
     }
 }
 
+pub struct FromNativeDescriptorSetLayoutParameters {
+    /// `true`, if this `DescriptorSetLayout` should destroy the underlying Vulkan object, when it is dropped.
+    pub owned: bool,
+
+    /// The `Device`, from which this `DescriptorSetLayout` was created.
+    pub device: Device,
+
+    /// An `Allocator` compatible with the one used to create this `DescriptorSetLayout`.
+    ///
+    /// This parameter is ignored, if `owned` is `false`.
+    pub allocator: Option<Box<core::Allocator>>,
+}
+
+impl FromNativeDescriptorSetLayoutParameters {
+    #[inline]
+    pub fn new(owned: bool, device: Device, allocator: Option<Box<core::Allocator>>) -> Self {
+        FromNativeDescriptorSetLayoutParameters {
+            owned: owned,
+            device: device,
+            allocator: allocator,
+        }
+    }
+}
+
+impl FromNativeObject for DescriptorSetLayout {
+    type Parameters = FromNativeDescriptorSetLayoutParameters;
+
+    unsafe fn from_native_object(object: Self::NativeVulkanObject, params: Self::Parameters) -> Self {
+        DescriptorSetLayout::new(object, params.owned, params.device, params.allocator.map(AllocatorHelper::new))
+    }
+}
+
 impl DescriptorSetLayout {
-    pub(crate) fn new(handle: vks::VkDescriptorSetLayout, device: Device, allocator: Option<AllocatorHelper>) -> Self {
+    pub(crate) fn new(handle: vks::VkDescriptorSetLayout, owned: bool, device: Device, allocator: Option<AllocatorHelper>) -> Self {
         DescriptorSetLayout(Arc::new(Inner {
             handle: handle,
+            owned: owned,
             device: device,
             allocator: allocator,
         }))
@@ -67,19 +103,22 @@ impl DescriptorSetLayout {
 #[derive(Debug)]
 struct Inner {
     handle: vks::VkDescriptorSetLayout,
+    owned: bool,
     device: Device,
     allocator: Option<AllocatorHelper>,
 }
 
 impl Drop for Inner {
     fn drop(&mut self) {
-        let allocator = match self.allocator {
-            Some(ref allocator) => allocator.callbacks(),
-            None => ptr::null(),
-        };
+        if self.owned {
+            let allocator = match self.allocator {
+                Some(ref allocator) => allocator.callbacks(),
+                None => ptr::null(),
+            };
 
-        unsafe {
-            (self.device.loader().core.vkDestroyDescriptorSetLayout)(self.device.handle(), self.handle, allocator);
+            unsafe {
+                (self.device.loader().core.vkDestroyDescriptorSetLayout)(self.device.handle(), self.handle, allocator);
+            }
         }
     }
 }

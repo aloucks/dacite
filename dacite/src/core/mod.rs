@@ -60,7 +60,7 @@ pub use self::command_buffer::{CommandBuffer, FromNativeCommandBufferParameters}
 pub use self::command_pool::{CommandPool, FromNativeCommandPoolParameters};
 pub use self::descriptor_pool::{DescriptorPool, FromNativeDescriptorPoolParameters};
 pub use self::descriptor_set::DescriptorSet;
-pub use self::descriptor_set_layout::DescriptorSetLayout;
+pub use self::descriptor_set_layout::{DescriptorSetLayout, FromNativeDescriptorSetLayoutParameters};
 pub use self::device::Device;
 pub use self::device_memory::{DeviceMemory, MappedMemory};
 pub use self::event::Event;

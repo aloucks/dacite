@@ -385,7 +385,7 @@ impl Device {
         };
 
         if res == vks::VK_SUCCESS {
-            Ok(DescriptorSetLayout::new(descriptor_set_layout, self.clone(), allocator_helper))
+            Ok(DescriptorSetLayout::new(descriptor_set_layout, true, self.clone(), allocator_helper))
         }
         else {
             Err(res.into())
