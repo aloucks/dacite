@@ -365,7 +365,7 @@ impl Device {
         };
 
         if res == vks::VK_SUCCESS {
-            Ok(DescriptorPool::new(descriptor_pool, self.clone(), allocator_helper))
+            Ok(DescriptorPool::new(descriptor_pool, true, self.clone(), allocator_helper))
         }
         else {
             Err(res.into())
