@@ -125,7 +125,7 @@ impl Device {
         };
 
         if res == vks::VK_SUCCESS {
-            Ok(CommandPool::new(command_pool, self.clone(), allocator_helper))
+            Ok(CommandPool::new(command_pool, true, self.clone(), allocator_helper))
         }
         else {
             Err(res.into())
