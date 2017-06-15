@@ -27,6 +27,7 @@ use core::{
     PipelineLayout,
     QueryPool,
 };
+use ext_debug_marker;
 use libc::c_void;
 use std::cmp::Ordering;
 use std::hash::{Hash, Hasher};
@@ -566,6 +567,26 @@ impl CommandBuffer {
         unsafe {
             (self.loader().amd_draw_indirect_count.vkCmdDrawIndexedIndirectCountAMD)(self.handle(), buffer.handle(), offset, count_buffer.handle(), count_buffer_offset, max_draw_count, stride);
         }
+    }
+
+    /// See [`vkCmdDebugMarkerBeginEXT`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCmdDebugMarkerBeginEXT)
+    /// and extension [`VK_EXT_debug_marker`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_EXT_debug_marker)
+    pub fn debug_marker_begin_ext(&self, marker_info: &ext_debug_marker::DebugMarkerMarkerInfoExt) {
+        let wrapper = ext_debug_marker::VkDebugMarkerMarkerInfoEXTWrapper::new(marker_info, true);
+        unsafe { (self.loader().ext_debug_marker.vkCmdDebugMarkerBeginEXT)(self.handle(), &wrapper.vks_struct as *const _ as _); }
+    }
+
+    /// See [`vkCmdDebugMarkerEndEXT`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCmdDebugMarkerEndEXT)
+    /// and extension [`VK_EXT_debug_marker`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_EXT_debug_marker)
+    pub fn debug_marker_end_ext(&self) {
+        unsafe { (self.loader().ext_debug_marker.vkCmdDebugMarkerEndEXT)(self.handle()); }
+    }
+
+    /// See [`vkCmdDebugMarkerInsertEXT`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCmdDebugMarkerInsertEXT)
+    /// and extension [`VK_EXT_debug_marker`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_EXT_debug_marker)
+    pub fn debug_marker_insert_ext(&self, marker_info: &ext_debug_marker::DebugMarkerMarkerInfoExt) {
+        let wrapper = ext_debug_marker::VkDebugMarkerMarkerInfoEXTWrapper::new(marker_info, true);
+        unsafe { (self.loader().ext_debug_marker.vkCmdDebugMarkerInsertEXT)(self.handle(), &wrapper.vks_struct as *const _ as _); }
     }
 }
 

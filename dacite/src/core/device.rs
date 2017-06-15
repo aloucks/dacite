@@ -37,6 +37,7 @@ use core::{
     Semaphore,
     ShaderModule,
 };
+use ext_debug_marker;
 use khr_swapchain;
 use std::cmp::Ordering;
 use std::hash::{Hash, Hasher};
@@ -592,6 +593,34 @@ impl Device {
 
         if res == vks::VK_SUCCESS {
             Ok(swapchains.iter().map(|&s| khr_swapchain::SwapchainKhr::new(s, true, self.clone(), allocator_helper.clone())).collect())
+        }
+        else {
+            Err(res.into())
+        }
+    }
+
+    /// See [`vkDebugMarkerSetObjectTagEXT`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkDebugMarkerSetObjectTagEXT)
+    /// and extension [`VK_EXT_debug_marker`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_EXT_debug_marker)
+    pub fn debug_marker_set_object_tag_ext(&self, tag_info: &ext_debug_marker::DebugMarkerObjectTagInfoExt) -> Result<(), core::Error> {
+        let wrapper = ext_debug_marker::VkDebugMarkerObjectTagInfoEXTWrapper::new(tag_info, true);
+
+        let res = unsafe { (self.loader().ext_debug_marker.vkDebugMarkerSetObjectTagEXT)(self.handle(), &wrapper.vks_struct as *const _ as _) };
+        if res == vks::VK_SUCCESS {
+            Ok(())
+        }
+        else {
+            Err(res.into())
+        }
+    }
+
+    /// See [`vkDebugMarkerSetObjectNameEXT`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkDebugMarkerSetObjectNameEXT)
+    /// and extension [`VK_EXT_debug_marker`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_EXT_debug_marker)
+    pub fn debug_marker_set_object_name_ext(&self, name_info: &ext_debug_marker::DebugMarkerObjectNameInfoExt) -> Result<(), core::Error> {
+        let wrapper = ext_debug_marker::VkDebugMarkerObjectNameInfoEXTWrapper::new(name_info, true);
+
+        let res = unsafe { (self.loader().ext_debug_marker.vkDebugMarkerSetObjectNameEXT)(self.handle(), &wrapper.vks_struct as *const _ as _) };
+        if res == vks::VK_SUCCESS {
+            Ok(())
         }
         else {
             Err(res.into())

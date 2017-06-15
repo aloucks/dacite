@@ -4701,6 +4701,14 @@ gen_extension_structs!{
         fn_get: get_amd_shader_trinary_minmax,
     }
 
+    ext_debug_marker {
+        name: vks::VK_EXT_DEBUG_MARKER_EXTENSION_NAME_STR,
+        fn_add: add_ext_debug_marker,
+        fn_has: has_ext_debug_marker,
+        fn_get: get_ext_debug_marker,
+        load_device: load_ext_debug_marker,
+    }
+
     img_filter_cubic {
         name: vks::VK_IMG_FILTER_CUBIC_EXTENSION_NAME_STR,
         fn_add: add_img_filter_cubic,
