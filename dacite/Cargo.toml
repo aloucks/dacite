@@ -22,4 +22,5 @@ libloading = "0.4"
 version = "0.17"
 default-features = false
 features = [ "no_function_prototypes", "vk_1_0_12",
+             "core_1_0_13",
              "khr_get_physical_device_properties2_1" ]

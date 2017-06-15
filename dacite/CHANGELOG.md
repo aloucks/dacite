@@ -2,6 +2,7 @@
 
 ## Current Git master branch
 
+ - Vulkan 1.0.13
  - Added several convenience functions:
    - `core::Offset2D`: `new()`, `zero()`, `from_3d()`
    - `core::Offset3D`: `new()`, `zero()`, `from_2d()`
