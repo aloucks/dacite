@@ -265,7 +265,7 @@ impl Device {
         };
 
         if res == vks::VK_SUCCESS {
-            Ok(BufferView::new(buffer_view, self.clone(), allocator_helper))
+            Ok(BufferView::new(buffer_view, true, self.clone(), allocator_helper))
         }
         else {
             Err(res.into())
