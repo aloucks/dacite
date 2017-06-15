@@ -30,6 +30,11 @@ impl VulkanObject for DeviceMemory {
     type NativeVulkanObject = vks::VkDeviceMemory;
 
     #[inline]
+    fn id(&self) -> u64 {
+        self.as_native_vulkan_object() as u64
+    }
+
+    #[inline]
     fn as_native_vulkan_object(&self) -> Self::NativeVulkanObject {
         self.handle()
     }

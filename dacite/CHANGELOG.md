@@ -10,6 +10,8 @@
    - `core::Extent3D`: `new()`, `zero()`, `from_2d()`
    - `core::ComponentMapping`: `identity()`
    - `core::Rect2D`: `new()`
+ - Added `VulkanObject::id()`, which returns the handle cast to a `u64`. See the documentation of
+   that function for more information.
 
 
 ## Version 0.3.6, released on 11.06.2017

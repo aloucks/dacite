@@ -20,6 +20,27 @@ use core;
 pub trait VulkanObject: Sized + Send + Sync + Clone + fmt::Debug {
     type NativeVulkanObject;
 
+    /// Get the object id.
+    ///
+    /// This function returns the same value as `as_native_vulkan_object()`, but conveniently cast
+    /// to a `u64`. This is useful for extensions like `VK_EXT_debug_report` and
+    /// `VK_EXT_debug_marker`, which use these to refer Vulkan objects.
+    ///
+    /// Object ids (or more correctly, handles) come in two variants, *dispatchable* and
+    /// *non-dispatchable*. While dispatchable objects are actually pointers, and thus unique,
+    /// the same is not true for non-dispatchable objects. For instance, two `Semaphore`s, created
+    /// independently of each other, might in fact have the same handle.
+    ///
+    /// Additionally, handles of non-dispatchable objects are only ever meaningful, if their type
+    /// is known (whether it is i.e. a `Semaphore` or some other type). This must be taken into
+    /// account, if handles are used to identify Vulkan objects.
+    ///
+    /// Refer to the Vulkan specification ([Object Model]) for more information.
+    ///
+    /// [Object Model]:
+    /// https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#fundamentals-objectmodel-overview
+    fn id(&self) -> u64;
+
     fn as_native_vulkan_object(&self) -> Self::NativeVulkanObject;
     fn try_destroy(self) -> Result<(), TryDestroyError<Self>>;
 }
