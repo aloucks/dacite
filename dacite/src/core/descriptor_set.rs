@@ -34,7 +34,7 @@ impl VulkanObject for DescriptorSet {
 
     #[inline]
     fn id(&self) -> u64 {
-        self.as_native_vulkan_object() as u64
+        self.handle
     }
 
     #[inline]

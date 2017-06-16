@@ -115,7 +115,7 @@ impl Queue {
             None => (0, ptr::null(), None, None),
         };
 
-        let fence = fence.map_or(ptr::null_mut(), Fence::handle);
+        let fence = fence.map_or(Default::default(), Fence::handle);
 
         let res = unsafe {
             (self.loader().core.vkQueueSubmit)(self.handle, submits_count, vk_submits_ptr, fence)
@@ -156,7 +156,7 @@ impl Queue {
             None => (0, ptr::null(), None, None),
         };
 
-        let fence = fence.map_or(ptr::null_mut(), Fence::handle);
+        let fence = fence.map_or(Default::default(), Fence::handle);
 
         let res = unsafe {
             (self.loader().core.vkQueueBindSparse)(self.handle, bind_infos_count, vk_bind_infos_ptr, fence)

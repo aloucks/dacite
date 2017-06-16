@@ -119,7 +119,7 @@ impl Device {
         let allocator_helper = allocator.map(AllocatorHelper::new);
         let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), AllocatorHelper::callbacks);
 
-        let mut command_pool = ptr::null_mut();
+        let mut command_pool = Default::default();
         let res = unsafe {
             (self.loader().core.vkCreateCommandPool)(self.handle(), &create_info.vks_struct, allocation_callbacks, &mut command_pool)
         };
@@ -139,7 +139,7 @@ impl Device {
         let allocator_helper = allocator.map(AllocatorHelper::new);
         let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), AllocatorHelper::callbacks);
 
-        let mut fence = ptr::null_mut();
+        let mut fence = Default::default();
         let res = unsafe {
             (self.loader().core.vkCreateFence)(self.handle(), &create_info.vks_struct, allocation_callbacks, &mut fence)
         };
@@ -159,7 +159,7 @@ impl Device {
         let allocator_helper = allocator.map(AllocatorHelper::new);
         let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), AllocatorHelper::callbacks);
 
-        let mut semaphore = ptr::null_mut();
+        let mut semaphore = Default::default();
         let res = unsafe {
             (self.loader().core.vkCreateSemaphore)(self.handle(), &create_info.vks_struct, allocation_callbacks, &mut semaphore)
         };
@@ -179,7 +179,7 @@ impl Device {
         let allocator_helper = allocator.map(AllocatorHelper::new);
         let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), AllocatorHelper::callbacks);
 
-        let mut event = ptr::null_mut();
+        let mut event = Default::default();
         let res = unsafe {
             (self.loader().core.vkCreateEvent)(self.handle(), &create_info.vks_struct, allocation_callbacks, &mut event)
         };
@@ -199,7 +199,7 @@ impl Device {
         let allocator_helper = allocator.map(AllocatorHelper::new);
         let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), AllocatorHelper::callbacks);
 
-        let mut query_pool = ptr::null_mut();
+        let mut query_pool = Default::default();
         let res = unsafe {
             (self.loader().core.vkCreateQueryPool)(self.handle(), &create_info.vks_struct, allocation_callbacks, &mut query_pool)
         };
@@ -219,7 +219,7 @@ impl Device {
         let allocator_helper = allocator.map(AllocatorHelper::new);
         let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), AllocatorHelper::callbacks);
 
-        let mut buffer = ptr::null_mut();
+        let mut buffer = Default::default();
         let res = unsafe {
             (self.loader().core.vkCreateBuffer)(self.handle(), &create_info.vks_struct, allocation_callbacks, &mut buffer)
         };
@@ -239,7 +239,7 @@ impl Device {
         let allocator_helper = allocator.map(AllocatorHelper::new);
         let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), AllocatorHelper::callbacks);
 
-        let mut image = ptr::null_mut();
+        let mut image = Default::default();
         let res = unsafe {
             (self.loader().core.vkCreateImage)(self.handle(), &create_info.vks_struct, allocation_callbacks, &mut image)
         };
@@ -259,7 +259,7 @@ impl Device {
         let allocator_helper = allocator.map(AllocatorHelper::new);
         let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), AllocatorHelper::callbacks);
 
-        let mut buffer_view = ptr::null_mut();
+        let mut buffer_view = Default::default();
         let res = unsafe {
             (self.loader().core.vkCreateBufferView)(self.handle(), &create_info_wrapper.vks_struct, allocation_callbacks, &mut buffer_view)
         };
@@ -279,7 +279,7 @@ impl Device {
         let allocator_helper = allocator.map(AllocatorHelper::new);
         let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), AllocatorHelper::callbacks);
 
-        let mut image_view = ptr::null_mut();
+        let mut image_view = Default::default();
         let res = unsafe {
             (self.loader().core.vkCreateImageView)(self.handle(), &create_info_wrapper.vks_struct, allocation_callbacks, &mut image_view)
         };
@@ -299,7 +299,7 @@ impl Device {
         let allocator_helper = allocator.map(AllocatorHelper::new);
         let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), AllocatorHelper::callbacks);
 
-        let mut shader_module = ptr::null_mut();
+        let mut shader_module = Default::default();
         let res = unsafe {
             (self.loader().core.vkCreateShaderModule)(self.handle(), &create_info.vks_struct, allocation_callbacks, &mut shader_module)
         };
@@ -319,7 +319,7 @@ impl Device {
         let allocator_helper = allocator.map(AllocatorHelper::new);
         let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), AllocatorHelper::callbacks);
 
-        let mut pipeline_cache = ptr::null_mut();
+        let mut pipeline_cache = Default::default();
         let res = unsafe {
             (self.loader().core.vkCreatePipelineCache)(self.handle(), &create_info.vks_struct, allocation_callbacks, &mut pipeline_cache)
         };
@@ -339,7 +339,7 @@ impl Device {
         let allocator_helper = allocator.map(AllocatorHelper::new);
         let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), AllocatorHelper::callbacks);
 
-        let mut sampler = ptr::null_mut();
+        let mut sampler = Default::default();
         let res = unsafe {
             (self.loader().core.vkCreateSampler)(self.handle(), &create_info.vks_struct, allocation_callbacks, &mut sampler)
         };
@@ -359,7 +359,7 @@ impl Device {
         let allocator_helper = allocator.map(AllocatorHelper::new);
         let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), AllocatorHelper::callbacks);
 
-        let mut descriptor_pool = ptr::null_mut();
+        let mut descriptor_pool = Default::default();
         let res = unsafe {
             (self.loader().core.vkCreateDescriptorPool)(self.handle(), &create_info.vks_struct, allocation_callbacks, &mut descriptor_pool)
         };
@@ -379,7 +379,7 @@ impl Device {
         let allocator_helper = allocator.map(AllocatorHelper::new);
         let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), AllocatorHelper::callbacks);
 
-        let mut descriptor_set_layout = ptr::null_mut();
+        let mut descriptor_set_layout = Default::default();
         let res = unsafe {
             (self.loader().core.vkCreateDescriptorSetLayout)(self.handle(), &create_info_wrapper.vks_struct, allocation_callbacks, &mut descriptor_set_layout)
         };
@@ -399,7 +399,7 @@ impl Device {
         let allocator_helper = allocator.map(AllocatorHelper::new);
         let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), AllocatorHelper::callbacks);
 
-        let mut memory = ptr::null_mut();
+        let mut memory = Default::default();
         let res = unsafe {
             (self.loader().core.vkAllocateMemory)(self.handle(), &allocate_info_wrapper.vks_struct, allocation_callbacks, &mut memory)
         };
@@ -416,7 +416,7 @@ impl Device {
     pub fn create_graphics_pipelines(&self, pipeline_cache: Option<PipelineCache>, create_infos: &[core::GraphicsPipelineCreateInfo], allocator: Option<Box<core::Allocator>>) -> Result<Vec<Pipeline>, (core::Error, Vec<Option<Pipeline>>)> {
         let pipeline_cache_handle = match pipeline_cache {
             Some(ref pipeline_cache) => pipeline_cache.handle(),
-            None => ptr::null_mut(),
+            None => Default::default(),
         };
 
         let create_info_wrappers: Vec<_> = create_infos.iter().map(|c| core::VkGraphicsPipelineCreateInfoWrapper::new(c, true)).collect();
@@ -435,9 +435,9 @@ impl Device {
             Ok(pipelines.iter().map(|p| Pipeline::new(*p, true, self.clone(), allocator_helper.clone())).collect())
         }
         else {
-            let pipelines = pipelines.iter().map(|p| {
-                if !p.is_null() {
-                    Some(Pipeline::new(*p, true, self.clone(), allocator_helper.clone()))
+            let pipelines = pipelines.iter().map(|&p| {
+                if p != 0 {
+                    Some(Pipeline::new(p, true, self.clone(), allocator_helper.clone()))
                 }
                 else {
                     None
@@ -451,7 +451,7 @@ impl Device {
     pub fn create_compute_pipelines(&self, pipeline_cache: Option<PipelineCache>, create_infos: &[core::ComputePipelineCreateInfo], allocator: Option<Box<core::Allocator>>) -> Result<Vec<Pipeline>, (core::Error, Vec<Option<Pipeline>>)> {
         let pipeline_cache_handle = match pipeline_cache {
             Some(ref pipeline_cache) => pipeline_cache.handle(),
-            None => ptr::null_mut(),
+            None => Default::default(),
         };
 
         let create_info_wrappers: Vec<_> = create_infos.iter().map(|c| core::VkComputePipelineCreateInfoWrapper::new(c, true)).collect();
@@ -470,9 +470,9 @@ impl Device {
             Ok(pipelines.iter().map(|p| Pipeline::new(*p, true, self.clone(), allocator_helper.clone())).collect())
         }
         else {
-            let pipelines = pipelines.iter().map(|p| {
-                if !p.is_null() {
-                    Some(Pipeline::new(*p, true, self.clone(), allocator_helper.clone()))
+            let pipelines = pipelines.iter().map(|&p| {
+                if p != 0 {
+                    Some(Pipeline::new(p, true, self.clone(), allocator_helper.clone()))
                 }
                 else {
                     None
@@ -489,7 +489,7 @@ impl Device {
         let allocator_helper = allocator.map(AllocatorHelper::new);
         let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), AllocatorHelper::callbacks);
 
-        let mut pipeline_layout = ptr::null_mut();
+        let mut pipeline_layout = Default::default();
         let res = unsafe {
             (self.loader().core.vkCreatePipelineLayout)(self.handle(), &create_info_wrapper.vks_struct, allocation_callbacks, &mut pipeline_layout)
         };
@@ -509,7 +509,7 @@ impl Device {
         let allocator_helper = allocator.map(AllocatorHelper::new);
         let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), AllocatorHelper::callbacks);
 
-        let mut framebuffer = ptr::null_mut();
+        let mut framebuffer = Default::default();
         let res = unsafe {
             (self.loader().core.vkCreateFramebuffer)(self.handle(), &create_info_wrapper.vks_struct, allocation_callbacks, &mut framebuffer)
         };
@@ -529,7 +529,7 @@ impl Device {
         let allocator_helper = allocator.map(AllocatorHelper::new);
         let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), AllocatorHelper::callbacks);
 
-        let mut render_pass = ptr::null_mut();
+        let mut render_pass = Default::default();
         let res = unsafe {
             (self.loader().core.vkCreateRenderPass)(self.handle(), &create_info_wrapper.vks_struct, allocation_callbacks, &mut render_pass)
         };
@@ -563,7 +563,7 @@ impl Device {
         let allocator_helper = allocator.map(AllocatorHelper::new);
         let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), AllocatorHelper::callbacks);
 
-        let mut swapchain = ptr::null_mut();
+        let mut swapchain = Default::default();
         let res = unsafe {
             (self.loader().khr_swapchain.vkCreateSwapchainKHR)(self.handle(), &create_info_wrapper.vks_struct, allocation_callbacks, &mut swapchain)
         };

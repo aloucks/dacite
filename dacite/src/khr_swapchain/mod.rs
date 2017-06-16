@@ -95,7 +95,7 @@ impl VkSwapchainCreateInfoKHRWrapper {
             None => (0, ptr::null(), None),
         };
 
-        let old_swapchain_handle = create_info.old_swapchain.as_ref().map_or(ptr::null_mut(), |s| s.handle());
+        let old_swapchain_handle = create_info.old_swapchain.as_ref().map_or(Default::default(), |s| s.handle());
         let (pnext, chain) = SwapchainCreateInfoChainKhrWrapper::new_optional(&create_info.chain, with_chain);
 
         VkSwapchainCreateInfoKHRWrapper {

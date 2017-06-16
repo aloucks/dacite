@@ -289,7 +289,7 @@ impl Instance {
         let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), AllocatorHelper::callbacks);
         let create_info_wrapper = ext_debug_report::VkDebugReportCallbackCreateInfoEXTWrapper::new(create_info, true);
 
-        let mut debug_report_callback = ptr::null_mut();
+        let mut debug_report_callback = Default::default();
         let res = unsafe {
             (self.loader().ext_debug_report.vkCreateDebugReportCallbackEXT)(self.handle(), &create_info_wrapper.vks_struct, allocation_callbacks, &mut debug_report_callback)
         };
@@ -324,7 +324,7 @@ impl Instance {
         let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), AllocatorHelper::callbacks);
         let create_info_wrapper = khr_display::VkDisplaySurfaceCreateInfoKHRWrapper::new(create_info, true);
 
-        let mut surface = ptr::null_mut();
+        let mut surface = Default::default();
         let res = unsafe {
             (self.loader().khr_display.vkCreateDisplayPlaneSurfaceKHR)(self.handle(), &create_info_wrapper.vks_struct, allocation_callbacks, &mut surface)
         };
@@ -345,7 +345,7 @@ impl Instance {
         let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), AllocatorHelper::callbacks);
         let create_info_wrapper = khr_xlib_surface::VkXlibSurfaceCreateInfoKHRWrapper::new(create_info, true);
 
-        let mut surface = ptr::null_mut();
+        let mut surface = Default::default();
         let res = unsafe {
             (self.loader().khr_xlib_surface.vkCreateXlibSurfaceKHR)(self.handle(), &create_info_wrapper.vks_struct, allocation_callbacks, &mut surface)
         };
@@ -366,7 +366,7 @@ impl Instance {
         let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), AllocatorHelper::callbacks);
         let create_info_wrapper = khr_wayland_surface::VkWaylandSurfaceCreateInfoKHRWrapper::new(create_info, true);
 
-        let mut surface = ptr::null_mut();
+        let mut surface = Default::default();
         let res = unsafe {
             (self.loader().khr_wayland_surface.vkCreateWaylandSurfaceKHR)(self.handle(), &create_info_wrapper.vks_struct, allocation_callbacks, &mut surface)
         };
@@ -387,7 +387,7 @@ impl Instance {
         let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), AllocatorHelper::callbacks);
         let create_info_wrapper = khr_xcb_surface::VkXcbSurfaceCreateInfoKHRWrapper::new(create_info, true);
 
-        let mut surface = ptr::null_mut();
+        let mut surface = Default::default();
         let res = unsafe {
             (self.loader().khr_xcb_surface.vkCreateXcbSurfaceKHR)(self.handle(), &create_info_wrapper.vks_struct, allocation_callbacks, &mut surface)
         };
@@ -408,7 +408,7 @@ impl Instance {
         let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), AllocatorHelper::callbacks);
         let create_info_wrapper = khr_mir_surface::VkMirSurfaceCreateInfoKHRWrapper::new(create_info, true);
 
-        let mut surface = ptr::null_mut();
+        let mut surface = Default::default();
         let res = unsafe {
             (self.loader().khr_mir_surface.vkCreateMirSurfaceKHR)(self.handle(), &create_info_wrapper.vks_struct, allocation_callbacks, &mut surface)
         };
@@ -429,7 +429,7 @@ impl Instance {
         let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), AllocatorHelper::callbacks);
         let create_info_wrapper = khr_android_surface::VkAndroidSurfaceCreateInfoKHRWrapper::new(create_info, true);
 
-        let mut surface = ptr::null_mut();
+        let mut surface = Default::default();
         let res = unsafe {
             (self.loader().khr_android_surface.vkCreateAndroidSurfaceKHR)(self.handle(), &create_info_wrapper.vks_struct, allocation_callbacks, &mut surface)
         };
@@ -450,7 +450,7 @@ impl Instance {
         let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), AllocatorHelper::callbacks);
         let create_info_wrapper = khr_win32_surface::VkWin32SurfaceCreateInfoKHRWrapper::new(create_info, true);
 
-        let mut surface = ptr::null_mut();
+        let mut surface = Default::default();
         let res = unsafe {
             (self.loader().khr_win32_surface.vkCreateWin32SurfaceKHR)(self.handle(), &create_info_wrapper.vks_struct, allocation_callbacks, &mut surface)
         };

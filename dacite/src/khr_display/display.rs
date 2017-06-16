@@ -70,7 +70,7 @@ impl VulkanObject for DisplayKhr {
 
     #[inline]
     fn id(&self) -> u64 {
-        self.as_native_vulkan_object() as u64
+        self.handle
     }
 
     #[inline]
@@ -145,7 +145,7 @@ impl DisplayKhr {
         let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), AllocatorHelper::callbacks);
         let create_info_wrapper = khr_display::VkDisplayModeCreateInfoKHRWrapper::new(create_info, true);
 
-        let mut display_mode = ptr::null_mut();
+        let mut display_mode = Default::default();
         let res = unsafe {
             (self.loader().khr_display.vkCreateDisplayModeKHR)(self.physical_device_handle(), self.handle, &create_info_wrapper.vks_struct, allocation_callbacks, &mut display_mode)
         };

@@ -199,7 +199,7 @@ pub struct DisplayPlanePropertiesKhr {
 
 impl DisplayPlanePropertiesKhr {
     pub(crate) unsafe fn from_vks(properties: &vks::VkDisplayPlanePropertiesKHR, physical_device: &core::PhysicalDevice) -> Self {
-        let current_display = if !properties.currentDisplay.is_null() {
+        let current_display = if properties.currentDisplay != 0 {
             Some(DisplayKhr::new(properties.currentDisplay, physical_device.clone()))
         }
         else {

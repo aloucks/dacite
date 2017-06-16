@@ -17,6 +17,7 @@
 
 ### Breaking changes
 
+ - Vks was updated to 0.19.x.
  - `core::Queue::bind_sparse()` takes `Fence` as a reference.
  - `core::Queue::submit()` takes `Fence` as a reference.
 

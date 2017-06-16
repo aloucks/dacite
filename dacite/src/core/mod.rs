@@ -1118,7 +1118,7 @@ impl ::std::error::Error for Error {
 
 impl From<vks::VkResult> for Error {
     fn from(res: vks::VkResult) -> Self {
-        debug_assert!(res.as_raw() < 0);
+        debug_assert!(res < 0);
 
         match res {
             vks::VK_ERROR_OUT_OF_HOST_MEMORY => Error::OutOfHostMemory,
@@ -3913,7 +3913,7 @@ impl<'a> From<&'a SparseMemoryBind> for VkSparseMemoryBindWrapper {
     fn from(bind: &'a SparseMemoryBind) -> Self {
         let (vk_memory, memory) = match bind.memory {
             Some(ref memory) => (memory.handle(), Some(memory.clone())),
-            None => (ptr::null_mut(), None),
+            None => (Default::default(), None),
         };
 
         VkSparseMemoryBindWrapper {
@@ -4084,7 +4084,7 @@ impl<'a> From<&'a SparseImageMemoryBind> for VkSparseImageMemoryBindWrapper {
     fn from(bind: &'a SparseImageMemoryBind) -> Self {
         let (vk_memory, memory) = match bind.memory {
             Some(ref memory) => (memory.handle(), Some(memory.clone())),
-            None => (ptr::null_mut(), None),
+            None => (Default::default(), None),
         };
 
         VkSparseImageMemoryBindWrapper {
@@ -5811,7 +5811,7 @@ impl VkGraphicsPipelineCreateInfoWrapper {
 
         let (base_pipeline_handle, base_pipeline) = match create_info.base_pipeline {
             Some(ref base_pipeline) => (base_pipeline.handle(), Some(base_pipeline.clone())),
-            None => (ptr::null_mut(), None),
+            None => (Default::default(), None),
         };
 
         let base_pipeline_index = match create_info.base_pipeline_index {
@@ -5896,7 +5896,7 @@ impl VkComputePipelineCreateInfoWrapper {
 
         let (base_pipeline_handle, base_pipeline) = match create_info.base_pipeline {
             Some(ref base_pipeline) => (base_pipeline.handle(), Some(base_pipeline.clone())),
-            None => (ptr::null_mut(), None),
+            None => (Default::default(), None),
         };
 
         let base_pipeline_index = match create_info.base_pipeline_index {
@@ -6299,12 +6299,12 @@ impl<'a> From<&'a DescriptorImageInfo> for VkDescriptorImageInfoWrapper {
     fn from(info: &'a DescriptorImageInfo) -> Self {
         let (vk_sampler, sampler) = match info.sampler {
             Some(ref sampler) => (sampler.handle(), Some(sampler.clone())),
-            None => (ptr::null_mut(), None),
+            None => (Default::default(), None),
         };
 
         let (vk_image_view, image_view) = match info.image_view {
             Some(ref image_view) => (image_view.handle(), Some(image_view.clone())),
-            None => (ptr::null_mut(), None),
+            None => (Default::default(), None),
         };
 
         VkDescriptorImageInfoWrapper {
@@ -6908,12 +6908,12 @@ impl VkCommandBufferInheritanceInfoWrapper {
     pub fn new(info: &CommandBufferInheritanceInfo, with_chain: bool) -> Self {
         let (render_pass_handle, render_pass) = match info.render_pass {
             Some(ref render_pass) => (render_pass.handle(), Some(render_pass.clone())),
-            None => (ptr::null_mut(), None),
+            None => (Default::default(), None),
         };
 
         let (framebuffer_handle, framebuffer) = match info.framebuffer {
             Some(ref framebuffer) => (framebuffer.handle(), Some(framebuffer.clone())),
-            None => (ptr::null_mut(), None),
+            None => (Default::default(), None),
         };
 
         let (pnext, chain) = CommandBufferInheritanceInfoChainWrapper::new_optional(&info.chain, with_chain);

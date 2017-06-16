@@ -34,7 +34,7 @@ impl VulkanObject for SwapchainKhr {
 
     #[inline]
     fn id(&self) -> u64 {
-        self.as_native_vulkan_object() as u64
+        self.handle()
     }
 
     #[inline]
@@ -137,8 +137,8 @@ impl SwapchainKhr {
 
     /// See [`vkAcquireNextImageKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkAcquireNextImageKHR)
     pub fn acquire_next_image_khr(&self, timeout: core::Timeout, semaphore: Option<&core::Semaphore>, fence: Option<&core::Fence>) -> Result<AcquireNextImageResultKhr, core::Error> {
-        let semaphore = semaphore.map_or(ptr::null_mut(), |s| s.handle());
-        let fence = fence.map_or(ptr::null_mut(), |f| f.handle());
+        let semaphore = semaphore.map_or(Default::default(), |s| s.handle());
+        let fence = fence.map_or(Default::default(), |f| f.handle());
 
         let mut index = 0;
         let res = unsafe {

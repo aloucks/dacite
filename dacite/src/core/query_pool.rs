@@ -35,7 +35,7 @@ impl VulkanObject for QueryPool {
 
     #[inline]
     fn id(&self) -> u64 {
-        self.as_native_vulkan_object() as u64
+        self.handle()
     }
 
     #[inline]
@@ -113,7 +113,7 @@ impl QueryPool {
 
     /// See [`vkGetQueryPoolResults`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetQueryPoolResults)
     pub fn get_results(&self, first_query: u32, query_count: u32, stride: usize, flags: core::QueryResultFlags, results: &mut [core::QueryResult]) -> Result<bool, core::Error> {
-        if flags.contains(core::QUERY_RESULT_64_BIT) {
+        if (flags & core::QUERY_RESULT_64_BIT) != 0 {
             let mut data: Vec<u64> = Vec::with_capacity(results.len());
             let data_size = results.len() * mem::size_of::<u64>();
             let stride_u64 = (stride * mem::size_of::<u64>()) as u64;
