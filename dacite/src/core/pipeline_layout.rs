@@ -12,14 +12,17 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-use core::Device;
+use FromNativeObject;
+use TryDestroyError;
+use TryDestroyErrorKind;
+use VulkanObject;
 use core::allocator_helper::AllocatorHelper;
+use core::{self, Device};
 use std::cmp::Ordering;
 use std::hash::{Hash, Hasher};
 use std::ptr;
 use std::sync::Arc;
 use vks;
-use {TryDestroyError, TryDestroyErrorKind, VulkanObject};
 
 /// See [`VkPipelineLayout`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineLayout)
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
@@ -49,10 +52,43 @@ impl VulkanObject for PipelineLayout {
     }
 }
 
+pub struct FromNativePipelineLayoutParameters {
+    /// `true`, if this `PipelineLayout` should destroy the underlying Vulkan object, when it is dropped.
+    pub owned: bool,
+
+    /// The `Device`, from which this `PipelineLayout` was created.
+    pub device: Device,
+
+    /// An `Allocator` compatible with the one used to create this `PipelineLayout`.
+    ///
+    /// This parameter is ignored, if `owned` is `false`.
+    pub allocator: Option<Box<core::Allocator>>,
+}
+
+impl FromNativePipelineLayoutParameters {
+    #[inline]
+    pub fn new(owned: bool, device: Device, allocator: Option<Box<core::Allocator>>) -> Self {
+        FromNativePipelineLayoutParameters {
+            owned: owned,
+            device: device,
+            allocator: allocator,
+        }
+    }
+}
+
+impl FromNativeObject for PipelineLayout {
+    type Parameters = FromNativePipelineLayoutParameters;
+
+    unsafe fn from_native_object(object: Self::NativeVulkanObject, params: Self::Parameters) -> Self {
+        PipelineLayout::new(object, params.owned, params.device, params.allocator.map(AllocatorHelper::new))
+    }
+}
+
 impl PipelineLayout {
-    pub(crate) fn new(handle: vks::VkPipelineLayout, device: Device, allocator: Option<AllocatorHelper>) -> Self {
+    pub(crate) fn new(handle: vks::VkPipelineLayout, owned: bool, device: Device, allocator: Option<AllocatorHelper>) -> Self {
         PipelineLayout(Arc::new(Inner {
             handle: handle,
+            owned: owned,
             device: device,
             allocator: allocator,
         }))
@@ -67,19 +103,22 @@ impl PipelineLayout {
 #[derive(Debug)]
 struct Inner {
     handle: vks::VkPipelineLayout,
+    owned: bool,
     device: Device,
     allocator: Option<AllocatorHelper>,
 }
 
 impl Drop for Inner {
     fn drop(&mut self) {
-        let allocator = match self.allocator {
-            Some(ref allocator) => allocator.callbacks(),
-            None => ptr::null(),
-        };
+        if self.owned {
+            let allocator = match self.allocator {
+                Some(ref allocator) => allocator.callbacks(),
+                None => ptr::null(),
+            };
 
-        unsafe {
-            (self.device.loader().core.vkDestroyPipelineLayout)(self.device.handle(), self.handle, allocator);
+            unsafe {
+                (self.device.loader().core.vkDestroyPipelineLayout)(self.device.handle(), self.handle, allocator);
+            }
         }
     }
 }
