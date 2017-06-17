@@ -63,7 +63,7 @@ pub use self::descriptor_set::DescriptorSet;
 pub use self::descriptor_set_layout::{DescriptorSetLayout, FromNativeDescriptorSetLayoutParameters};
 pub use self::device::Device;
 pub use self::device_memory::{DeviceMemory, MappedMemory, FromNativeDeviceMemoryParameters};
-pub use self::event::Event;
+pub use self::event::{Event, FromNativeEventParameters};
 pub use self::fence::Fence;
 pub use self::framebuffer::Framebuffer;
 pub use self::image::{Image, FromNativeImageParameters};

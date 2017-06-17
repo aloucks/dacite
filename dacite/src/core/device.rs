@@ -185,7 +185,7 @@ impl Device {
         };
 
         if res == vks::VK_SUCCESS {
-            Ok(Event::new(event, self.clone(), allocator_helper))
+            Ok(Event::new(event, true, self.clone(), allocator_helper))
         }
         else {
             Err(res.into())
