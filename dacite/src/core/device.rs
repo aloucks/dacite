@@ -515,7 +515,7 @@ impl Device {
         };
 
         if res == vks::VK_SUCCESS {
-            Ok(Framebuffer::new(framebuffer, self.clone(), allocator_helper))
+            Ok(Framebuffer::new(framebuffer, true, self.clone(), allocator_helper))
         }
         else {
             Err(res.into())
