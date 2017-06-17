@@ -73,7 +73,7 @@ pub use self::physical_device::PhysicalDevice;
 pub use self::pipeline::{Pipeline, FromNativePipelineParameters};
 pub use self::pipeline_cache::{PipelineCache, FromNativePipelineCacheParameters};
 pub use self::pipeline_layout::{PipelineLayout, FromNativePipelineLayoutParameters};
-pub use self::query_pool::QueryPool;
+pub use self::query_pool::{QueryPool, FromNativeQueryPoolParameters};
 pub use self::queue::Queue;
 pub use self::render_pass::RenderPass;
 pub use self::sampler::Sampler;

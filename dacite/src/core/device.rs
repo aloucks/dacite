@@ -205,7 +205,7 @@ impl Device {
         };
 
         if res == vks::VK_SUCCESS {
-            Ok(QueryPool::new(query_pool, self.clone(), allocator_helper))
+            Ok(QueryPool::new(query_pool, true, self.clone(), allocator_helper))
         }
         else {
             Err(res.into())
