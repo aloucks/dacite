@@ -12,14 +12,17 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-use core::Instance;
+use FromNativeObject;
+use TryDestroyError;
+use TryDestroyErrorKind;
+use VulkanObject;
 use core::allocator_helper::AllocatorHelper;
+use core::{self, Instance};
 use std::cmp::Ordering;
 use std::hash::{Hash, Hasher};
 use std::ptr;
 use std::sync::Arc;
 use vks;
-use {TryDestroyError, TryDestroyErrorKind, VulkanObject};
 
 /// See [`VkSurfaceKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSurfaceKHR)
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
@@ -49,10 +52,43 @@ impl VulkanObject for SurfaceKhr {
     }
 }
 
+pub struct FromNativeSurfaceKhrParameters {
+    /// `true`, if this `SurfaceKhr` should destroy the underlying Vulkan object, when it is dropped.
+    pub owned: bool,
+
+    /// The `Instance`, from which this `SurfaceKhr` was created.
+    pub instance: Instance,
+
+    /// An `Allocator` compatible with the one used to create this `SurfaceKhr`.
+    ///
+    /// This parameter is ignored, if `owned` is `false`.
+    pub allocator: Option<Box<core::Allocator>>,
+}
+
+impl FromNativeSurfaceKhrParameters {
+    #[inline]
+    pub fn new(owned: bool, instance: Instance, allocator: Option<Box<core::Allocator>>) -> Self {
+        FromNativeSurfaceKhrParameters {
+            owned: owned,
+            instance: instance,
+            allocator: allocator,
+        }
+    }
+}
+
+impl FromNativeObject for SurfaceKhr {
+    type Parameters = FromNativeSurfaceKhrParameters;
+
+    unsafe fn from_native_object(object: Self::NativeVulkanObject, params: Self::Parameters) -> Self {
+        SurfaceKhr::new(object, params.owned, params.instance, params.allocator.map(AllocatorHelper::new))
+    }
+}
+
 impl SurfaceKhr {
-    pub(crate) fn new(handle: vks::VkSurfaceKHR, instance: Instance, allocator: Option<AllocatorHelper>) -> Self {
+    pub(crate) fn new(handle: vks::VkSurfaceKHR, owned: bool, instance: Instance, allocator: Option<AllocatorHelper>) -> Self {
         SurfaceKhr(Arc::new(Inner {
             handle: handle,
+            owned: owned,
             instance: instance,
             allocator: allocator,
         }))
@@ -67,19 +103,22 @@ impl SurfaceKhr {
 #[derive(Debug)]
 struct Inner {
     handle: vks::VkSurfaceKHR,
+    owned: bool,
     instance: Instance,
     allocator: Option<AllocatorHelper>,
 }
 
 impl Drop for Inner {
     fn drop(&mut self) {
-        let allocator = match self.allocator {
-            Some(ref allocator) => allocator.callbacks(),
-            None => ptr::null(),
-        };
+        if self.owned {
+            let allocator = match self.allocator {
+                Some(ref allocator) => allocator.callbacks(),
+                None => ptr::null(),
+            };
 
-        unsafe {
-            (self.instance.loader().khr_surface.vkDestroySurfaceKHR)(self.instance.handle(), self.handle, allocator);
+            unsafe {
+                (self.instance.loader().khr_surface.vkDestroySurfaceKHR)(self.instance.handle(), self.handle, allocator);
+            }
         }
     }
 }

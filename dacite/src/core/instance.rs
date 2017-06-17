@@ -329,7 +329,7 @@ impl Instance {
         };
 
         if res == vks::VK_SUCCESS {
-            Ok(khr_surface::SurfaceKhr::new(surface, self.clone(), allocator_helper))
+            Ok(khr_surface::SurfaceKhr::new(surface, true, self.clone(), allocator_helper))
         }
         else {
             Err(res.into())
@@ -350,7 +350,7 @@ impl Instance {
         };
 
         if res == vks::VK_SUCCESS {
-            Ok(khr_surface::SurfaceKhr::new(surface, self.clone(), allocator_helper))
+            Ok(khr_surface::SurfaceKhr::new(surface, true, self.clone(), allocator_helper))
         }
         else {
             Err(res.into())
@@ -371,7 +371,7 @@ impl Instance {
         };
 
         if res == vks::VK_SUCCESS {
-            Ok(khr_surface::SurfaceKhr::new(surface, self.clone(), allocator_helper))
+            Ok(khr_surface::SurfaceKhr::new(surface, true, self.clone(), allocator_helper))
         }
         else {
             Err(res.into())
@@ -392,7 +392,7 @@ impl Instance {
         };
 
         if res == vks::VK_SUCCESS {
-            Ok(khr_surface::SurfaceKhr::new(surface, self.clone(), allocator_helper))
+            Ok(khr_surface::SurfaceKhr::new(surface, true, self.clone(), allocator_helper))
         }
         else {
             Err(res.into())
@@ -413,7 +413,7 @@ impl Instance {
         };
 
         if res == vks::VK_SUCCESS {
-            Ok(khr_surface::SurfaceKhr::new(surface, self.clone(), allocator_helper))
+            Ok(khr_surface::SurfaceKhr::new(surface, true, self.clone(), allocator_helper))
         }
         else {
             Err(res.into())
@@ -434,7 +434,7 @@ impl Instance {
         };
 
         if res == vks::VK_SUCCESS {
-            Ok(khr_surface::SurfaceKhr::new(surface, self.clone(), allocator_helper))
+            Ok(khr_surface::SurfaceKhr::new(surface, true, self.clone(), allocator_helper))
         }
         else {
             Err(res.into())
@@ -455,7 +455,7 @@ impl Instance {
         };
 
         if res == vks::VK_SUCCESS {
-            Ok(khr_surface::SurfaceKhr::new(surface, self.clone(), allocator_helper))
+            Ok(khr_surface::SurfaceKhr::new(surface, true, self.clone(), allocator_helper))
         }
         else {
             Err(res.into())

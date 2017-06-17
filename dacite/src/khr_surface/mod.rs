@@ -19,7 +19,7 @@ mod surface;
 use core;
 use vks;
 
-pub use self::surface::SurfaceKhr;
+pub use self::surface::{SurfaceKhr, FromNativeSurfaceKhrParameters};
 
 /// See [`VkColorSpaceKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkColorSpaceKHR)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
