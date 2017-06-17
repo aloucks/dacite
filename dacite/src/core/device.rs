@@ -145,7 +145,7 @@ impl Device {
         };
 
         if res == vks::VK_SUCCESS {
-            Ok(Fence::new(fence, self.clone(), allocator_helper))
+            Ok(Fence::new(fence, true, self.clone(), allocator_helper))
         }
         else {
             Err(res.into())
