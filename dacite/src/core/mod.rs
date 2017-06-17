@@ -77,7 +77,7 @@ pub use self::query_pool::{QueryPool, FromNativeQueryPoolParameters};
 pub use self::queue::Queue;
 pub use self::render_pass::{RenderPass, FromNativeRenderPassParameters};
 pub use self::sampler::{Sampler, FromNativeSamplerParameters};
-pub use self::semaphore::Semaphore;
+pub use self::semaphore::{Semaphore, FromNativeSemaphoreParameters};
 pub use self::shader_module::ShaderModule;
 
 /// See [`VkInstanceCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkInstanceCreateFlags)
