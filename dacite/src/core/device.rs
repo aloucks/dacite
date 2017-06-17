@@ -345,7 +345,7 @@ impl Device {
         };
 
         if res == vks::VK_SUCCESS {
-            Ok(Sampler::new(sampler, self.clone(), allocator_helper))
+            Ok(Sampler::new(sampler, true, self.clone(), allocator_helper))
         }
         else {
             Err(res.into())
