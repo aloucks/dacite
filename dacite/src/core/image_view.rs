@@ -12,14 +12,17 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-use core::Device;
+use FromNativeObject;
+use TryDestroyError;
+use TryDestroyErrorKind;
+use VulkanObject;
 use core::allocator_helper::AllocatorHelper;
+use core::{self, Device};
 use std::cmp::Ordering;
 use std::hash::{Hash, Hasher};
 use std::ptr;
 use std::sync::Arc;
 use vks;
-use {TryDestroyError, TryDestroyErrorKind, VulkanObject};
 
 /// See [`VkImageView`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageView)
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
@@ -49,10 +52,43 @@ impl VulkanObject for ImageView {
     }
 }
 
+pub struct FromNativeImageViewParameters {
+    /// `true`, if this `ImageView` should destroy the underlying Vulkan object, when it is dropped.
+    pub owned: bool,
+
+    /// The `Device`, from which this `ImageView` was created.
+    pub device: Device,
+
+    /// An `Allocator` compatible with the one used to create this `ImageView`.
+    ///
+    /// This parameter is ignored, if `owned` is `false`.
+    pub allocator: Option<Box<core::Allocator>>,
+}
+
+impl FromNativeImageViewParameters {
+    #[inline]
+    pub fn new(owned: bool, device: Device, allocator: Option<Box<core::Allocator>>) -> Self {
+        FromNativeImageViewParameters {
+            owned: owned,
+            device: device,
+            allocator: allocator,
+        }
+    }
+}
+
+impl FromNativeObject for ImageView {
+    type Parameters = FromNativeImageViewParameters;
+
+    unsafe fn from_native_object(object: Self::NativeVulkanObject, params: Self::Parameters) -> Self {
+        ImageView::new(object, params.owned, params.device, params.allocator.map(AllocatorHelper::new))
+    }
+}
+
 impl ImageView {
-    pub(crate) fn new(handle: vks::VkImageView, device: Device, allocator: Option<AllocatorHelper>) -> Self {
+    pub(crate) fn new(handle: vks::VkImageView, owned: bool, device: Device, allocator: Option<AllocatorHelper>) -> Self {
         ImageView(Arc::new(Inner {
             handle: handle,
+            owned: owned,
             device: device,
             allocator: allocator,
         }))
@@ -67,19 +103,22 @@ impl ImageView {
 #[derive(Debug)]
 struct Inner {
     handle: vks::VkImageView,
+    owned: bool,
     device: Device,
     allocator: Option<AllocatorHelper>,
 }
 
 impl Drop for Inner {
     fn drop(&mut self) {
-        let allocator = match self.allocator {
-            Some(ref allocator) => allocator.callbacks(),
-            None => ptr::null(),
-        };
+        if self.owned {
+            let allocator = match self.allocator {
+                Some(ref allocator) => allocator.callbacks(),
+                None => ptr::null(),
+            };
 
-        unsafe {
-            (self.device.loader().core.vkDestroyImageView)(self.device.handle(), self.handle, allocator);
+            unsafe {
+                (self.device.loader().core.vkDestroyImageView)(self.device.handle(), self.handle, allocator);
+            }
         }
     }
 }

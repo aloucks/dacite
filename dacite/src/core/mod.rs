@@ -67,7 +67,7 @@ pub use self::event::{Event, FromNativeEventParameters};
 pub use self::fence::{Fence, FromNativeFenceParameters};
 pub use self::framebuffer::{Framebuffer, FromNativeFramebufferParameters};
 pub use self::image::{Image, FromNativeImageParameters};
-pub use self::image_view::ImageView;
+pub use self::image_view::{ImageView, FromNativeImageViewParameters};
 pub use self::instance::{EarlyInstanceError, Instance};
 pub use self::physical_device::PhysicalDevice;
 pub use self::pipeline::Pipeline;

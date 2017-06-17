@@ -285,7 +285,7 @@ impl Device {
         };
 
         if res == vks::VK_SUCCESS {
-            Ok(ImageView::new(image_view, self.clone(), allocator_helper))
+            Ok(ImageView::new(image_view, true, self.clone(), allocator_helper))
         }
         else {
             Err(res.into())
