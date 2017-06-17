@@ -22,7 +22,7 @@ use std::ptr;
 use utils;
 use vks;
 
-pub use self::swapchain::SwapchainKhr;
+pub use self::swapchain::{SwapchainKhr, FromNativeSwapchainKhrParameters};
 
 /// See [`VkSwapchainCreateFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSwapchainCreateFlagBitsKHR)
 pub type SwapchainCreateFlagsKhr = vks::VkSwapchainCreateFlagsKHR;

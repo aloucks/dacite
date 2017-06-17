@@ -12,6 +12,10 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
+use FromNativeObject;
+use TryDestroyError;
+use TryDestroyErrorKind;
+use VulkanObject;
 use core::allocator_helper::AllocatorHelper;
 use core;
 use khr_swapchain::AcquireNextImageResultKhr;
@@ -20,7 +24,6 @@ use std::hash::{Hash, Hasher};
 use std::ptr;
 use std::sync::Arc;
 use vks;
-use {TryDestroyError, TryDestroyErrorKind, VulkanObject};
 
 /// See [`VkSwapchainKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSwapchainKHR)
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
@@ -50,10 +53,43 @@ impl VulkanObject for SwapchainKhr {
     }
 }
 
+pub struct FromNativeSwapchainKhrParameters {
+    /// `true`, if this `SwapchainKhr` should destroy the underlying Vulkan object, when it is dropped.
+    pub owned: bool,
+
+    /// The `Device`, from which this `SwapchainKhr` was created.
+    pub device: core::Device,
+
+    /// An `Allocator` compatible with the one used to create this `SwapchainKhr`.
+    ///
+    /// This parameter is ignored, if `owned` is `false`.
+    pub allocator: Option<Box<core::Allocator>>,
+}
+
+impl FromNativeSwapchainKhrParameters {
+    #[inline]
+    pub fn new(owned: bool, device: core::Device, allocator: Option<Box<core::Allocator>>) -> Self {
+        FromNativeSwapchainKhrParameters {
+            owned: owned,
+            device: device,
+            allocator: allocator,
+        }
+    }
+}
+
+impl FromNativeObject for SwapchainKhr {
+    type Parameters = FromNativeSwapchainKhrParameters;
+
+    unsafe fn from_native_object(object: Self::NativeVulkanObject, params: Self::Parameters) -> Self {
+        SwapchainKhr::new(object, params.owned, params.device, params.allocator.map(AllocatorHelper::new))
+    }
+}
+
 impl SwapchainKhr {
-    pub(crate) fn new(handle: vks::VkSwapchainKHR, device: core::Device, allocator: Option<AllocatorHelper>) -> Self {
+    pub(crate) fn new(handle: vks::VkSwapchainKHR, owned: bool, device: core::Device, allocator: Option<AllocatorHelper>) -> Self {
         SwapchainKhr(Arc::new(Inner {
             handle: handle,
+            owned: owned,
             device: device,
             allocator: allocator,
         }))
@@ -122,19 +158,22 @@ impl SwapchainKhr {
 #[derive(Debug)]
 struct Inner {
     handle: vks::VkSwapchainKHR,
+    owned: bool,
     device: core::Device,
     allocator: Option<AllocatorHelper>,
 }
 
 impl Drop for Inner {
     fn drop(&mut self) {
-        let allocator = match self.allocator {
-            Some(ref allocator) => allocator.callbacks(),
-            None => ptr::null(),
-        };
+        if self.owned {
+            let allocator = match self.allocator {
+                Some(ref allocator) => allocator.callbacks(),
+                None => ptr::null(),
+            };
 
-        unsafe {
-            (self.device.loader().khr_swapchain.vkDestroySwapchainKHR)(self.device.handle(), self.handle, allocator);
+            unsafe {
+                (self.device.loader().khr_swapchain.vkDestroySwapchainKHR)(self.device.handle(), self.handle, allocator);
+            }
         }
     }
 }

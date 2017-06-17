@@ -569,7 +569,7 @@ impl Device {
         };
 
         if res == vks::VK_SUCCESS {
-            Ok(khr_swapchain::SwapchainKhr::new(swapchain, self.clone(), allocator_helper))
+            Ok(khr_swapchain::SwapchainKhr::new(swapchain, true, self.clone(), allocator_helper))
         }
         else {
             Err(res.into())
@@ -591,7 +591,7 @@ impl Device {
         };
 
         if res == vks::VK_SUCCESS {
-            Ok(swapchains.iter().map(|&s| khr_swapchain::SwapchainKhr::new(s, self.clone(), allocator_helper.clone())).collect())
+            Ok(swapchains.iter().map(|&s| khr_swapchain::SwapchainKhr::new(s, true, self.clone(), allocator_helper.clone())).collect())
         }
         else {
             Err(res.into())
