@@ -75,7 +75,7 @@ pub use self::pipeline_cache::{PipelineCache, FromNativePipelineCacheParameters}
 pub use self::pipeline_layout::{PipelineLayout, FromNativePipelineLayoutParameters};
 pub use self::query_pool::{QueryPool, FromNativeQueryPoolParameters};
 pub use self::queue::Queue;
-pub use self::render_pass::RenderPass;
+pub use self::render_pass::{RenderPass, FromNativeRenderPassParameters};
 pub use self::sampler::Sampler;
 pub use self::semaphore::Semaphore;
 pub use self::shader_module::ShaderModule;

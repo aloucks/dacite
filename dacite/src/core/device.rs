@@ -535,7 +535,7 @@ impl Device {
         };
 
         if res == vks::VK_SUCCESS {
-            Ok(RenderPass::new(render_pass, self.clone(), allocator_helper))
+            Ok(RenderPass::new(render_pass, true, self.clone(), allocator_helper))
         }
         else {
             Err(res.into())
