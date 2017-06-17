@@ -12,13 +12,16 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
+use FromNativeObject;
+use TryDestroyError;
+use TryDestroyErrorKind;
+use VulkanObject;
 use core::{self, Device, Fence};
+use khr_swapchain;
 use std::cmp::Ordering;
 use std::hash::{Hash, Hasher};
 use std::ptr;
 use vks;
-use {TryDestroyError, TryDestroyErrorKind, VulkanObject};
-use khr_swapchain;
 
 /// See [`VkQueue`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueue)
 #[derive(Debug, Clone)]
@@ -76,6 +79,14 @@ impl VulkanObject for Queue {
 
     fn try_destroy(self) -> Result<(), TryDestroyError<Self>> {
         Err(TryDestroyError::new(self, TryDestroyErrorKind::Unsupported))
+    }
+}
+
+impl FromNativeObject for Queue {
+    type Parameters = Device;
+
+    unsafe fn from_native_object(object: Self::NativeVulkanObject, params: Self::Parameters) -> Self {
+        Queue::new(object, params)
     }
 }
 
