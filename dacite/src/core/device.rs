@@ -305,7 +305,7 @@ impl Device {
         };
 
         if res == vks::VK_SUCCESS {
-            Ok(ShaderModule::new(shader_module, self.clone(), allocator_helper))
+            Ok(ShaderModule::new(shader_module, true, self.clone(), allocator_helper))
         }
         else {
             Err(res.into())
