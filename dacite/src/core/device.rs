@@ -432,12 +432,12 @@ impl Device {
         };
 
         if res == vks::VK_SUCCESS {
-            Ok(pipelines.iter().map(|p| Pipeline::new(*p, self.clone(), allocator_helper.clone())).collect())
+            Ok(pipelines.iter().map(|p| Pipeline::new(*p, true, self.clone(), allocator_helper.clone())).collect())
         }
         else {
             let pipelines = pipelines.iter().map(|p| {
                 if !p.is_null() {
-                    Some(Pipeline::new(*p, self.clone(), allocator_helper.clone()))
+                    Some(Pipeline::new(*p, true, self.clone(), allocator_helper.clone()))
                 }
                 else {
                     None
@@ -467,12 +467,12 @@ impl Device {
         };
 
         if res == vks::VK_SUCCESS {
-            Ok(pipelines.iter().map(|p| Pipeline::new(*p, self.clone(), allocator_helper.clone())).collect())
+            Ok(pipelines.iter().map(|p| Pipeline::new(*p, true, self.clone(), allocator_helper.clone())).collect())
         }
         else {
             let pipelines = pipelines.iter().map(|p| {
                 if !p.is_null() {
-                    Some(Pipeline::new(*p, self.clone(), allocator_helper.clone()))
+                    Some(Pipeline::new(*p, true, self.clone(), allocator_helper.clone()))
                 }
                 else {
                     None

@@ -70,7 +70,7 @@ pub use self::image::{Image, FromNativeImageParameters};
 pub use self::image_view::{ImageView, FromNativeImageViewParameters};
 pub use self::instance::{EarlyInstanceError, Instance};
 pub use self::physical_device::PhysicalDevice;
-pub use self::pipeline::Pipeline;
+pub use self::pipeline::{Pipeline, FromNativePipelineParameters};
 pub use self::pipeline_cache::PipelineCache;
 pub use self::pipeline_layout::PipelineLayout;
 pub use self::query_pool::QueryPool;
