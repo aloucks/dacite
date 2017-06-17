@@ -295,7 +295,7 @@ impl Instance {
         };
 
         if res == vks::VK_SUCCESS {
-            Ok(ext_debug_report::DebugReportCallbackExt::new(debug_report_callback, self.clone(), allocator_helper, create_info_wrapper.callback_helper))
+            Ok(ext_debug_report::DebugReportCallbackExt::new(debug_report_callback, true, self.clone(), allocator_helper, Some(create_info_wrapper.callback_helper)))
         }
         else {
             Err(res.into())

@@ -22,7 +22,7 @@ use std::fmt;
 use std::sync::Arc;
 use vks;
 
-pub use self::debug_report_callback::DebugReportCallbackExt;
+pub use self::debug_report_callback::{DebugReportCallbackExt, FromNativeDebugReportCallbackExtParameters};
 
 /// See [`VkDebugReportObjectTypeEXT`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDebugReportObjectTypeEXT)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
