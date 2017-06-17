@@ -325,7 +325,7 @@ impl Device {
         };
 
         if res == vks::VK_SUCCESS {
-            Ok(PipelineCache::new(pipeline_cache, self.clone(), allocator_helper))
+            Ok(PipelineCache::new(pipeline_cache, true, self.clone(), allocator_helper))
         }
         else {
             Err(res.into())
