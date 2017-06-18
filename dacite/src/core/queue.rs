@@ -103,7 +103,7 @@ impl Queue {
     }
 
     /// See [`vkQueueSubmit`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkQueueSubmit)
-    pub fn submit(&self, submits: Option<&[core::SubmitInfo]>, fence: Option<Fence>) -> Result<(), core::Error> {
+    pub fn submit(&self, submits: Option<&[core::SubmitInfo]>, fence: Option<&Fence>) -> Result<(), core::Error> {
         #[allow(unused_variables)]
         let (submits_count, vk_submits_ptr, vk_submits, submits_wrappers) = match submits {
             Some(submits) => {
@@ -115,7 +115,7 @@ impl Queue {
             None => (0, ptr::null(), None, None),
         };
 
-        let fence = fence.as_ref().map_or(ptr::null_mut(), Fence::handle);
+        let fence = fence.map_or(ptr::null_mut(), Fence::handle);
 
         let res = unsafe {
             (self.loader().core.vkQueueSubmit)(self.handle, submits_count, vk_submits_ptr, fence)

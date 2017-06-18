@@ -18,6 +18,7 @@
 ### Breaking changes
 
  - `core::Queue::bind_sparse()` takes `Fence` as a reference.
+ - `core::Queue::submit()` takes `Fence` as a reference.
 
 
 ## Version 0.3.6, released on 11.06.2017
