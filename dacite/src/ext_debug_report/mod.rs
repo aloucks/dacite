@@ -138,26 +138,32 @@ impl From<DebugReportObjectTypeExt> for vks::VkDebugReportObjectTypeEXT {
     }
 }
 
-/// See [`VkDebugReportFlagBitsEXT`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDebugReportFlagBitsEXT)
-pub type DebugReportFlagsExt = vks::VkDebugReportFlagsEXT;
+bitflags! {
+    /// See [`VkDebugReportFlagBitsEXT`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDebugReportFlagBitsEXT)
+    #[derive(Default)]
+    pub struct DebugReportFlagsExt: u32 {
+        /// See [`VkDebugReportFlagBitsEXT`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDebugReportFlagBitsEXT)
+        const DEBUG_REPORT_FLAG_BITS_MAX_ENUM_EXT = vks::VK_DEBUG_REPORT_FLAG_BITS_MAX_ENUM_EXT;
+
+        /// See [`VkDebugReportFlagBitsEXT`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDebugReportFlagBitsEXT)
+        const DEBUG_REPORT_INFORMATION_BIT_EXT = vks::VK_DEBUG_REPORT_INFORMATION_BIT_EXT;
+
+        /// See [`VkDebugReportFlagBitsEXT`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDebugReportFlagBitsEXT)
+        const DEBUG_REPORT_WARNING_BIT_EXT = vks::VK_DEBUG_REPORT_WARNING_BIT_EXT;
+
+        /// See [`VkDebugReportFlagBitsEXT`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDebugReportFlagBitsEXT)
+        const DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT = vks::VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT;
+
+        /// See [`VkDebugReportFlagBitsEXT`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDebugReportFlagBitsEXT)
+        const DEBUG_REPORT_ERROR_BIT_EXT = vks::VK_DEBUG_REPORT_ERROR_BIT_EXT;
+
+        /// See [`VkDebugReportFlagBitsEXT`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDebugReportFlagBitsEXT)
+        const DEBUG_REPORT_DEBUG_BIT_EXT = vks::VK_DEBUG_REPORT_DEBUG_BIT_EXT;
+    }
+}
 
 /// See [`VkDebugReportFlagBitsEXT`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDebugReportFlagBitsEXT)
-pub type DebugReportFlagBitsExt = vks::VkDebugReportFlagBitsEXT;
-
-/// See [`VkDebugReportFlagBitsEXT`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDebugReportFlagBitsEXT)
-pub const DEBUG_REPORT_INFORMATION_BIT_EXT: DebugReportFlagBitsExt = vks::VK_DEBUG_REPORT_INFORMATION_BIT_EXT;
-
-/// See [`VkDebugReportFlagBitsEXT`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDebugReportFlagBitsEXT)
-pub const DEBUG_REPORT_WARNING_BIT_EXT: DebugReportFlagBitsExt = vks::VK_DEBUG_REPORT_WARNING_BIT_EXT;
-
-/// See [`VkDebugReportFlagBitsEXT`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDebugReportFlagBitsEXT)
-pub const DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT: DebugReportFlagBitsExt = vks::VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT;
-
-/// See [`VkDebugReportFlagBitsEXT`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDebugReportFlagBitsEXT)
-pub const DEBUG_REPORT_ERROR_BIT_EXT: DebugReportFlagBitsExt = vks::VK_DEBUG_REPORT_ERROR_BIT_EXT;
-
-/// See [`VkDebugReportFlagBitsEXT`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDebugReportFlagBitsEXT)
-pub const DEBUG_REPORT_DEBUG_BIT_EXT: DebugReportFlagBitsExt = vks::VK_DEBUG_REPORT_DEBUG_BIT_EXT;
+pub type DebugReportFlagBitsExt = DebugReportFlagsExt;
 
 /// See [`PFN_vkDebugReportCallbackEXT`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#PFN_vkDebugReportCallbackEXT)
 pub trait DebugReportCallbacksExt: Send + Sync + fmt::Debug {
@@ -205,7 +211,7 @@ impl VkDebugReportCallbackCreateInfoEXTWrapper {
             vks_struct: vks::VkDebugReportCallbackCreateInfoEXT {
                 sType: vks::VK_STRUCTURE_TYPE_DEBUG_REPORT_CALLBACK_CREATE_INFO_EXT,
                 pNext: pnext,
-                flags: create_info.flags,
+                flags: create_info.flags.bits(),
                 pfnCallback: callback_helper.vks_callback,
                 pUserData: callback_helper.user_data,
             },

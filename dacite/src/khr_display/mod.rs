@@ -25,35 +25,53 @@ use vks;
 pub use self::display::DisplayKhr;
 pub use self::display_mode::DisplayModeKhr;
 
-/// See [`VkDisplayPlaneAlphaFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDisplayPlaneAlphaFlagBitsKHR)
-pub type DisplayPlaneAlphaFlagsKhr = vks::VkDisplayPlaneAlphaFlagsKHR;
+bitflags! {
+    /// See [`VkDisplayPlaneAlphaFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDisplayPlaneAlphaFlagBitsKHR)
+    #[derive(Default)]
+    pub struct DisplayPlaneAlphaFlagsKhr: u32 {
+        /// See [`VkDisplayPlaneAlphaFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDisplayPlaneAlphaFlagBitsKHR)
+        const DISPLAY_PLANE_ALPHA_FLAG_BITS_MAX_ENUM_KHR = vks::VK_DISPLAY_PLANE_ALPHA_FLAG_BITS_MAX_ENUM_KHR;
+
+        /// See [`VkDisplayPlaneAlphaFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDisplayPlaneAlphaFlagBitsKHR)
+        const DISPLAY_PLANE_ALPHA_OPAQUE_BIT_KHR = vks::VK_DISPLAY_PLANE_ALPHA_OPAQUE_BIT_KHR;
+
+        /// See [`VkDisplayPlaneAlphaFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDisplayPlaneAlphaFlagBitsKHR)
+        const DISPLAY_PLANE_ALPHA_GLOBAL_BIT_KHR = vks::VK_DISPLAY_PLANE_ALPHA_GLOBAL_BIT_KHR;
+
+        /// See [`VkDisplayPlaneAlphaFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDisplayPlaneAlphaFlagBitsKHR)
+        const DISPLAY_PLANE_ALPHA_PER_PIXEL_BIT_KHR = vks::VK_DISPLAY_PLANE_ALPHA_PER_PIXEL_BIT_KHR;
+
+        /// See [`VkDisplayPlaneAlphaFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDisplayPlaneAlphaFlagBitsKHR)
+        const DISPLAY_PLANE_ALPHA_PER_PIXEL_PREMULTIPLIED_BIT_KHR = vks::VK_DISPLAY_PLANE_ALPHA_PER_PIXEL_PREMULTIPLIED_BIT_KHR;
+    }
+}
 
 /// See [`VkDisplayPlaneAlphaFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDisplayPlaneAlphaFlagBitsKHR)
-pub type DisplayPlaneAlphaFlagBitsKhr = vks::VkDisplayPlaneAlphaFlagBitsKHR;
+pub type DisplayPlaneAlphaFlagBitsKhr = DisplayPlaneAlphaFlagsKhr;
 
-/// See [`VkDisplayPlaneAlphaFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDisplayPlaneAlphaFlagBitsKHR)
-pub const DISPLAY_PLANE_ALPHA_OPAQUE_BIT_KHR: DisplayPlaneAlphaFlagBitsKhr = vks::VK_DISPLAY_PLANE_ALPHA_OPAQUE_BIT_KHR;
-
-/// See [`VkDisplayPlaneAlphaFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDisplayPlaneAlphaFlagBitsKHR)
-pub const DISPLAY_PLANE_ALPHA_GLOBAL_BIT_KHR: DisplayPlaneAlphaFlagBitsKhr = vks::VK_DISPLAY_PLANE_ALPHA_GLOBAL_BIT_KHR;
-
-/// See [`VkDisplayPlaneAlphaFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDisplayPlaneAlphaFlagBitsKHR)
-pub const DISPLAY_PLANE_ALPHA_PER_PIXEL_BIT_KHR: DisplayPlaneAlphaFlagBitsKhr = vks::VK_DISPLAY_PLANE_ALPHA_PER_PIXEL_BIT_KHR;
-
-/// See [`VkDisplayPlaneAlphaFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDisplayPlaneAlphaFlagBitsKHR)
-pub const DISPLAY_PLANE_ALPHA_PER_PIXEL_PREMULTIPLIED_BIT_KHR: DisplayPlaneAlphaFlagBitsKhr = vks::VK_DISPLAY_PLANE_ALPHA_PER_PIXEL_PREMULTIPLIED_BIT_KHR;
+bitflags! {
+    /// See [`VkDisplayModeCreateFlagsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDisplayModeCreateFlagsKHR)
+    #[derive(Default)]
+    pub struct DisplayModeCreateFlagsKhr: u32 {
+        /// See [`VkDisplayModeCreateFlagsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDisplayModeCreateFlagsKHR)
+        const DISPLAY_MODE_CREATE_FLAG_BITS_MAX_ENUM_KHR = vks::VK_DISPLAY_MODE_CREATE_FLAG_BITS_MAX_ENUM_KHR;
+    }
+}
 
 /// See [`VkDisplayModeCreateFlagsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDisplayModeCreateFlagsKHR)
-pub type DisplayModeCreateFlagsKhr = vks::VkDisplayModeCreateFlagsKHR;
+pub type DisplayModeCreateFlagBitsKhr = DisplayModeCreateFlagsKhr;
 
-/// See [`VkDisplayModeCreateFlagsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDisplayModeCreateFlagsKHR)
-pub type DisplayModeCreateFlagBitsKhr = vks::VkDisplayModeCreateFlagBitsKHR;
+bitflags! {
+    /// See [`VkDisplaySurfaceCreateFlagsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDisplaySurfaceCreateFlagsKHR)
+    #[derive(Default)]
+    pub struct DisplaySurfaceCreateFlagsKhr: u32 {
+        /// See [`VkDisplaySurfaceCreateFlagsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDisplaySurfaceCreateFlagsKHR)
+        const DISPLAY_SURFACE_CREATE_FLAG_BITS_MAX_ENUM_KHR = vks::VK_DISPLAY_SURFACE_CREATE_FLAG_BITS_MAX_ENUM_KHR;
+    }
+}
 
 /// See [`VkDisplaySurfaceCreateFlagsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDisplaySurfaceCreateFlagsKHR)
-pub type DisplaySurfaceCreateFlagsKhr = vks::VkDisplaySurfaceCreateFlagsKHR;
-
-/// See [`VkDisplaySurfaceCreateFlagsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDisplaySurfaceCreateFlagsKHR)
-pub type DisplaySurfaceCreateFlagBitsKhr = vks::VkDisplaySurfaceCreateFlagBitsKHR;
+pub type DisplaySurfaceCreateFlagBitsKhr = DisplaySurfaceCreateFlagsKhr;
 
 /// See [`VkDisplayPropertiesKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDisplayPropertiesKHR)
 #[derive(Debug, Clone, PartialEq)]
@@ -74,7 +92,7 @@ impl DisplayPropertiesKhr {
             display_name: utils::string_from_cstr(properties.displayName),
             physical_dimensions: (&properties.physicalDimensions).into(),
             physical_resolution: (&properties.physicalResolution).into(),
-            supported_transforms: properties.supportedTransforms,
+            supported_transforms: khr_surface::SurfaceTransformFlagsKhr::from_bits_truncate(properties.supportedTransforms),
             plane_reorder_possible: utils::from_vk_bool(properties.planeReorderPossible),
             persistent_content: utils::from_vk_bool(properties.persistentContent),
         }
@@ -152,7 +170,7 @@ impl VkDisplayModeCreateInfoKHRWrapper {
             vks_struct: vks::VkDisplayModeCreateInfoKHR {
                 sType: vks::VK_STRUCTURE_TYPE_DISPLAY_MODE_CREATE_INFO_KHR,
                 pNext: pnext,
-                flags: create_info.flags,
+                flags: create_info.flags.bits(),
                 parameters: (&create_info.parameters).into(),
             },
             chain: chain,
@@ -177,7 +195,7 @@ pub struct DisplayPlaneCapabilitiesKhr {
 impl<'a> From<&'a vks::VkDisplayPlaneCapabilitiesKHR> for DisplayPlaneCapabilitiesKhr {
     fn from(capabilities: &'a vks::VkDisplayPlaneCapabilitiesKHR) -> Self {
         DisplayPlaneCapabilitiesKhr {
-            supported_alpha: capabilities.supportedAlpha,
+            supported_alpha: DisplayPlaneAlphaFlagsKhr::from_bits_truncate(capabilities.supportedAlpha),
             min_src_position: (&capabilities.minSrcPosition).into(),
             max_src_position: (&capabilities.maxSrcPosition).into(),
             min_src_extent: (&capabilities.minSrcExtent).into(),
@@ -249,13 +267,13 @@ impl VkDisplaySurfaceCreateInfoKHRWrapper {
             vks_struct: vks::VkDisplaySurfaceCreateInfoKHR {
                 sType: vks::VK_STRUCTURE_TYPE_DISPLAY_SURFACE_CREATE_INFO_KHR,
                 pNext: pnext,
-                flags: create_info.flags,
+                flags: create_info.flags.bits(),
                 displayMode: create_info.display_mode.handle,
                 planeIndex: create_info.plane_index,
                 planeStackIndex: create_info.plane_stack_index,
-                transform: create_info.transform,
+                transform: create_info.transform.bits(),
                 globalAlpha: create_info.global_alpha,
-                alphaMode: create_info.alpha_mode,
+                alphaMode: create_info.alpha_mode.bits(),
                 imageExtent: (&create_info.image_extent).into(),
             },
             chain: chain,

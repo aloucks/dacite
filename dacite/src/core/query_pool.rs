@@ -113,14 +113,14 @@ impl QueryPool {
 
     /// See [`vkGetQueryPoolResults`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetQueryPoolResults)
     pub fn get_results(&self, first_query: u32, query_count: u32, stride: usize, flags: core::QueryResultFlags, results: &mut [core::QueryResult]) -> Result<bool, core::Error> {
-        if (flags & core::QUERY_RESULT_64_BIT) != 0 {
+        if flags.contains(core::QUERY_RESULT_64_BIT) {
             let mut data: Vec<u64> = Vec::with_capacity(results.len());
             let data_size = results.len() * mem::size_of::<u64>();
             let stride_u64 = (stride * mem::size_of::<u64>()) as u64;
 
             let res = unsafe {
                 data.set_len(results.len());
-                (self.loader().core.vkGetQueryPoolResults)(self.device_handle(), self.handle(), first_query, query_count, data_size, data.as_mut_ptr() as *mut c_void, stride_u64, flags)
+                (self.loader().core.vkGetQueryPoolResults)(self.device_handle(), self.handle(), first_query, query_count, data_size, data.as_mut_ptr() as *mut c_void, stride_u64, flags.bits())
             };
 
             match res {
@@ -143,7 +143,7 @@ impl QueryPool {
 
             let res = unsafe {
                 data.set_len(results.len());
-                (self.loader().core.vkGetQueryPoolResults)(self.device_handle(), self.handle(), first_query, query_count, data_size, data.as_mut_ptr() as *mut c_void, stride_u32, flags)
+                (self.loader().core.vkGetQueryPoolResults)(self.device_handle(), self.handle(), first_query, query_count, data_size, data.as_mut_ptr() as *mut c_void, stride_u32, flags.bits())
             };
 
             match res {

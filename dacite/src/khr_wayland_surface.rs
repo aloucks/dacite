@@ -17,11 +17,17 @@
 use vks;
 use wayland_wrapper;
 
-/// See [`VkWaylandSurfaceCreateFlagsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkWaylandSurfaceCreateFlagsKHR)
-pub type WaylandSurfaceCreateFlagsKhr = vks::VkWaylandSurfaceCreateFlagsKHR;
+bitflags! {
+    /// See [`VkWaylandSurfaceCreateFlagsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkWaylandSurfaceCreateFlagsKHR)
+    #[derive(Default)]
+    pub struct WaylandSurfaceCreateFlagsKhr: u32 {
+        /// See [`VkWaylandSurfaceCreateFlagsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkWaylandSurfaceCreateFlagsKHR)
+        const WAYLAND_SURFACE_CREATE_FLAG_BITS_MAX_ENUM_KHR = vks::VK_WAYLAND_SURFACE_CREATE_FLAG_BITS_MAX_ENUM_KHR;
+    }
+}
 
 /// See [`VkWaylandSurfaceCreateFlagsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkWaylandSurfaceCreateFlagsKHR)
-pub type WaylandSurfaceCreateFlagBitsKhr = vks::VkWaylandSurfaceCreateFlagBitsKHR;
+pub type WaylandSurfaceCreateFlagBitsKhr = WaylandSurfaceCreateFlagsKhr;
 
 gen_chain_struct! {
     name: WaylandSurfaceCreateInfoChainKhr [WaylandSurfaceCreateInfoChainKhrWrapper],
@@ -54,7 +60,7 @@ impl VkWaylandSurfaceCreateInfoKHRWrapper {
             vks_struct: vks::VkWaylandSurfaceCreateInfoKHR {
                 sType: vks::VK_STRUCTURE_TYPE_WAYLAND_SURFACE_CREATE_INFO_KHR,
                 pNext: pnext,
-                flags: create_info.flags,
+                flags: create_info.flags.bits(),
                 display: create_info.display,
                 surface: create_info.surface,
             },

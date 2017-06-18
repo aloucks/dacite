@@ -17,11 +17,17 @@
 use vks;
 use xcb_wrapper;
 
-/// See [`VkXcbSurfaceCreateFlagsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkXcbSurfaceCreateFlagsKHR)
-pub type XcbSurfaceCreateFlagsKhr = vks::VkXcbSurfaceCreateFlagsKHR;
+bitflags! {
+    /// See [`VkXcbSurfaceCreateFlagsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkXcbSurfaceCreateFlagsKHR)
+    #[derive(Default)]
+    pub struct XcbSurfaceCreateFlagsKhr: u32 {
+        /// See [`VkXcbSurfaceCreateFlagsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkXcbSurfaceCreateFlagsKHR)
+        const XCB_SURFACE_CREATE_FLAG_BITS_MAX_ENUM_KHR = vks::VK_XCB_SURFACE_CREATE_FLAG_BITS_MAX_ENUM_KHR;
+    }
+}
 
 /// See [`VkXcbSurfaceCreateFlagsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkXcbSurfaceCreateFlagsKHR)
-pub type XcbSurfaceCreateFlagBitsKhr = vks::VkXcbSurfaceCreateFlagBitsKHR;
+pub type XcbSurfaceCreateFlagBitsKhr = XcbSurfaceCreateFlagsKhr;
 
 gen_chain_struct! {
     name: XcbSurfaceCreateInfoChainKhr [XcbSurfaceCreateInfoChainKhrWrapper],
@@ -54,7 +60,7 @@ impl VkXcbSurfaceCreateInfoKHRWrapper {
             vks_struct: vks::VkXcbSurfaceCreateInfoKHR {
                 sType: vks::VK_STRUCTURE_TYPE_XCB_SURFACE_CREATE_INFO_KHR,
                 pNext: pnext,
-                flags: create_info.flags,
+                flags: create_info.flags.bits(),
                 connection: create_info.connection,
                 window: create_info.window,
             },

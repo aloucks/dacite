@@ -17,11 +17,17 @@
 use android_wrapper;
 use vks;
 
-/// See [`VkAndroidSurfaceCreateFlagsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkAndroidSurfaceCreateFlagsKHR)
-pub type AndroidSurfaceCreateFlagsKhr = vks::VkAndroidSurfaceCreateFlagsKHR;
+bitflags! {
+    /// See [`VkAndroidSurfaceCreateFlagsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkAndroidSurfaceCreateFlagsKHR)
+    #[derive(Default)]
+    pub struct AndroidSurfaceCreateFlagsKhr: u32 {
+        /// See [`VkAndroidSurfaceCreateFlagsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkAndroidSurfaceCreateFlagsKHR)
+        const ANDROID_SURFACE_CREATE_FLAG_BITS_MAX_ENUM_KHR = vks::VK_ANDROID_SURFACE_CREATE_FLAG_BITS_MAX_ENUM_KHR;
+    }
+}
 
 /// See [`VkAndroidSurfaceCreateFlagsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkAndroidSurfaceCreateFlagsKHR)
-pub type AndroidSurfaceCreateFlagBitsKhr = vks::VkAndroidSurfaceCreateFlagBitsKHR;
+pub type AndroidSurfaceCreateFlagBitsKhr = AndroidSurfaceCreateFlagsKhr;
 
 gen_chain_struct! {
     name: AndroidSurfaceCreateInfoChainKhr [AndroidSurfaceCreateInfoChainKhrWrapper],
@@ -53,7 +59,7 @@ impl VkAndroidSurfaceCreateInfoKHRWrapper {
             vks_struct: vks::VkAndroidSurfaceCreateInfoKHR {
                 sType: vks::VK_STRUCTURE_TYPE_ANDROID_SURFACE_CREATE_INFO_KHR,
                 pNext: pnext,
-                flags: create_info.flags,
+                flags: create_info.flags.bits(),
                 window: create_info.window,
             },
             chain: chain,

@@ -17,11 +17,17 @@
 use mir_wrapper;
 use vks;
 
-/// See [`VkMirSurfaceCreateFlagsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkMirSurfaceCreateFlagsKHR)
-pub type MirSurfaceCreateFlagsKhr = vks::VkMirSurfaceCreateFlagsKHR;
+bitflags! {
+    /// See [`VkMirSurfaceCreateFlagsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkMirSurfaceCreateFlagsKHR)
+    #[derive(Default)]
+    pub struct MirSurfaceCreateFlagsKhr: u32 {
+        /// See [`VkMirSurfaceCreateFlagsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkMirSurfaceCreateFlagsKHR)
+        const MIR_SURFACE_CREATE_FLAG_BITS_MAX_ENUM_KHR = vks::VK_MIR_SURFACE_CREATE_FLAG_BITS_MAX_ENUM_KHR;
+    }
+}
 
 /// See [`VkMirSurfaceCreateFlagsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkMirSurfaceCreateFlagsKHR)
-pub type MirSurfaceCreateFlagBitsKhr = vks::VkMirSurfaceCreateFlagBitsKHR;
+pub type MirSurfaceCreateFlagBitsKhr = MirSurfaceCreateFlagsKhr;
 
 gen_chain_struct! {
     name: MirSurfaceCreateInfoChainKhr [MirSurfaceCreateInfoChainKhrWrapper],
@@ -54,7 +60,7 @@ impl VkMirSurfaceCreateInfoKHRWrapper {
             vks_struct: vks::VkMirSurfaceCreateInfoKHR {
                 sType: vks::VK_STRUCTURE_TYPE_MIR_SURFACE_CREATE_INFO_KHR,
                 pNext: pnext,
-                flags: create_info.flags,
+                flags: create_info.flags.bits(),
                 connection: create_info.connection,
                 mirSurface: create_info.mir_surface,
             },

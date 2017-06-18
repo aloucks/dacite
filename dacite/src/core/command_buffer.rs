@@ -140,7 +140,7 @@ impl CommandBuffer {
     /// See [`vkResetCommandBuffer`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkResetCommandBuffer)
     pub fn reset(&self, flags: core::CommandBufferResetFlags) -> Result<(), core::Error> {
         let res = unsafe {
-            (self.loader().core.vkResetCommandBuffer)(self.handle(), flags)
+            (self.loader().core.vkResetCommandBuffer)(self.handle(), flags.bits())
         };
 
         if res == vks::VK_SUCCESS {
@@ -205,21 +205,21 @@ impl CommandBuffer {
     /// See [`vkCmdSetStencilCompareMask`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCmdSetStencilCompareMask)
     pub fn set_stencil_compare_mask(&self, face_mask: core::StencilFaceFlags, compare_mask: u32) {
         unsafe {
-            (self.loader().core.vkCmdSetStencilCompareMask)(self.handle(), face_mask, compare_mask);
+            (self.loader().core.vkCmdSetStencilCompareMask)(self.handle(), face_mask.bits(), compare_mask);
         }
     }
 
     /// See [`vkCmdSetStencilWriteMask`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCmdSetStencilWriteMask)
     pub fn set_stencil_write_mask(&self, face_mask: core::StencilFaceFlags, write_mask: u32) {
         unsafe {
-            (self.loader().core.vkCmdSetStencilWriteMask)(self.handle(), face_mask, write_mask);
+            (self.loader().core.vkCmdSetStencilWriteMask)(self.handle(), face_mask.bits(), write_mask);
         }
     }
 
     /// See [`vkCmdSetStencilReference`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCmdSetStencilReference)
     pub fn set_stencil_reference(&self, face_mask: core::StencilFaceFlags, reference: u32) {
         unsafe {
-            (self.loader().core.vkCmdSetStencilReference)(self.handle(), face_mask, reference);
+            (self.loader().core.vkCmdSetStencilReference)(self.handle(), face_mask.bits(), reference);
         }
     }
 
@@ -386,14 +386,14 @@ impl CommandBuffer {
     /// See [`vkCmdSetEvent`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCmdSetEvent)
     pub fn set_event(&self, event: &Event, stage_mask: core::PipelineStageFlags) {
         unsafe {
-            (self.loader().core.vkCmdSetEvent)(self.handle(), event.handle(), stage_mask);
+            (self.loader().core.vkCmdSetEvent)(self.handle(), event.handle(), stage_mask.bits());
         }
     }
 
     /// See [`vkCmdResetEvent`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCmdResetEvent)
     pub fn reset_event(&self, event: &Event, stage_mask: core::PipelineStageFlags) {
         unsafe {
-            (self.loader().core.vkCmdResetEvent)(self.handle(), event.handle(), stage_mask);
+            (self.loader().core.vkCmdResetEvent)(self.handle(), event.handle(), stage_mask.bits());
         }
     }
 
@@ -435,7 +435,7 @@ impl CommandBuffer {
         };
 
         unsafe {
-            (self.loader().core.vkCmdWaitEvents)(self.handle(), events.len() as u32, events.as_ptr(), src_stage_mask, dst_stage_mask, memory_barriers_count, memory_barriers_ptr, buffer_memory_barriers_count, buffer_memory_barriers_ptr, image_memory_barriers_count, image_memory_barriers_ptr);
+            (self.loader().core.vkCmdWaitEvents)(self.handle(), events.len() as u32, events.as_ptr(), src_stage_mask.bits(), dst_stage_mask.bits(), memory_barriers_count, memory_barriers_ptr, buffer_memory_barriers_count, buffer_memory_barriers_ptr, image_memory_barriers_count, image_memory_barriers_ptr);
         }
     }
 
@@ -475,14 +475,14 @@ impl CommandBuffer {
         };
 
         unsafe {
-            (self.loader().core.vkCmdPipelineBarrier)(self.handle(), src_stage_mask, dst_stage_mask, dependency_flags, memory_barriers_count, memory_barriers_ptr, buffer_memory_barriers_count, buffer_memory_barriers_ptr, image_memory_barriers_count, image_memory_barriers_ptr);
+            (self.loader().core.vkCmdPipelineBarrier)(self.handle(), src_stage_mask.bits(), dst_stage_mask.bits(), dependency_flags.bits(), memory_barriers_count, memory_barriers_ptr, buffer_memory_barriers_count, buffer_memory_barriers_ptr, image_memory_barriers_count, image_memory_barriers_ptr);
         }
     }
 
     /// See [`vkCmdBeginQuery`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCmdBeginQuery)
     pub fn begin_query(&self, query_pool: &QueryPool, query: u32, flags: core::QueryControlFlags) {
         unsafe {
-            (self.loader().core.vkCmdBeginQuery)(self.handle(), query_pool.handle(), query, flags);
+            (self.loader().core.vkCmdBeginQuery)(self.handle(), query_pool.handle(), query, flags.bits());
         }
     }
 
@@ -503,7 +503,7 @@ impl CommandBuffer {
     /// See [`vkCmdWriteTimestamp`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCmdWriteTimestamp)
     pub fn write_timestamp(&self, pipeline_stage: core::PipelineStageFlagBits, query_pool: &QueryPool, query: u32) {
         unsafe {
-            (self.loader().core.vkCmdWriteTimestamp)(self.handle(), pipeline_stage, query_pool.handle(), query);
+            (self.loader().core.vkCmdWriteTimestamp)(self.handle(), pipeline_stage.bits(), query_pool.handle(), query);
         }
     }
 
@@ -511,14 +511,14 @@ impl CommandBuffer {
     #[cfg_attr(feature = "cargo-clippy", allow(too_many_arguments))]
     pub fn copy_query_pool_results(&self, query_pool: &QueryPool, first_query: u32, query_count: u32, dst_buffer: &Buffer, dst_offset: u64, stride: u64, flags: core::QueryResultFlags) {
         unsafe {
-            (self.loader().core.vkCmdCopyQueryPoolResults)(self.handle(), query_pool.handle(), first_query, query_count, dst_buffer.handle(), dst_offset, stride, flags);
+            (self.loader().core.vkCmdCopyQueryPoolResults)(self.handle(), query_pool.handle(), first_query, query_count, dst_buffer.handle(), dst_offset, stride, flags.bits());
         }
     }
 
     /// See [`vkCmdPushConstants`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCmdPushConstants)
     pub fn push_constants(&self, layout: &PipelineLayout, stage_flags: core::ShaderStageFlags, offset: u32, values: &[u8]) {
         unsafe {
-            (self.loader().core.vkCmdPushConstants)(self.handle(), layout.handle(), stage_flags, offset, values.len() as u32, values.as_ptr() as *const c_void);
+            (self.loader().core.vkCmdPushConstants)(self.handle(), layout.handle(), stage_flags.bits(), offset, values.len() as u32, values.as_ptr() as *const c_void);
         }
     }
 

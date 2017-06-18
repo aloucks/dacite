@@ -38,7 +38,7 @@ unsafe extern "system" fn debug_report_callback(flags: vks::VkDebugReportFlagsEX
         None
     };
 
-    let res = (*callback).callback(flags, object_type.into(), object, location, message_code, layer_prefix, message);
+    let res = (*callback).callback(ext_debug_report::DebugReportFlagsExt::from_bits_truncate(flags), object_type.into(), object, location, message_code, layer_prefix, message);
     utils::to_vk_bool(res)
 }
 

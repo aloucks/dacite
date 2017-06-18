@@ -17,11 +17,17 @@
 use vks;
 use win32_wrapper;
 
-/// See [`VkWin32SurfaceCreateFlagsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkWin32SurfaceCreateFlagsKHR)
-pub type Win32SurfaceCreateFlagsKhr = vks::VkWin32SurfaceCreateFlagsKHR;
+bitflags! {
+    /// See [`VkWin32SurfaceCreateFlagsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkWin32SurfaceCreateFlagsKHR)
+    #[derive(Default)]
+    pub struct Win32SurfaceCreateFlagsKhr: u32 {
+        /// See [`VkWin32SurfaceCreateFlagsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkWin32SurfaceCreateFlagsKHR)
+        const WIN32_SURFACE_CREATE_FLAG_BITS_MAX_ENUM_KHR = vks::VK_WIN32_SURFACE_CREATE_FLAG_BITS_MAX_ENUM_KHR;
+    }
+}
 
 /// See [`VkWin32SurfaceCreateFlagsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkWin32SurfaceCreateFlagsKHR)
-pub type Win32SurfaceCreateFlagBitsKhr = vks::VkWin32SurfaceCreateFlagBitsKHR;
+pub type Win32SurfaceCreateFlagBitsKhr = Win32SurfaceCreateFlagsKhr;
 
 gen_chain_struct! {
     name: Win32SurfaceCreateInfoChainKhr [Win32SurfaceCreateInfoChainKhrWrapper],
@@ -54,7 +60,7 @@ impl VkWin32SurfaceCreateInfoKHRWrapper {
             vks_struct: vks::VkWin32SurfaceCreateInfoKHR {
                 sType: vks::VK_STRUCTURE_TYPE_WIN32_SURFACE_CREATE_INFO_KHR,
                 pNext: pnext,
-                flags: create_info.flags,
+                flags: create_info.flags.bits(),
                 hinstance: create_info.hinstance,
                 hwnd: create_info.hwnd,
             },

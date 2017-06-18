@@ -133,7 +133,7 @@ impl DeviceMemory {
     pub fn map(&self, offset: u64, size: core::OptionalDeviceSize, flags: core::MemoryMapFlags) -> Result<MappedMemory, core::Error> {
         let mut mapped = ptr::null_mut();
         let res = unsafe {
-            (self.loader().core.vkMapMemory)(self.device_handle(), self.handle(), offset, size.into(), flags, &mut mapped)
+            (self.loader().core.vkMapMemory)(self.device_handle(), self.handle(), offset, size.into(), flags.bits(), &mut mapped)
         };
 
         if res == vks::VK_SUCCESS {

@@ -24,11 +24,17 @@ use vks;
 
 pub use self::swapchain::{SwapchainKhr, FromNativeSwapchainKhrParameters};
 
-/// See [`VkSwapchainCreateFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSwapchainCreateFlagBitsKHR)
-pub type SwapchainCreateFlagsKhr = vks::VkSwapchainCreateFlagsKHR;
+bitflags! {
+    /// See [`VkSwapchainCreateFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSwapchainCreateFlagBitsKHR)
+    #[derive(Default)]
+    pub struct SwapchainCreateFlagsKhr: u32 {
+        /// See [`VkSwapchainCreateFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSwapchainCreateFlagBitsKHR)
+        const SWAPCHAIN_CREATE_FLAG_BITS_MAX_ENUM_KHR = vks::VK_SWAPCHAIN_CREATE_FLAG_BITS_MAX_ENUM_KHR;
+    }
+}
 
 /// See [`VkSwapchainCreateFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSwapchainCreateFlagBitsKHR)
-pub type SwapchainCreateFlagBitsKhr = vks::VkSwapchainCreateFlagBitsKHR;
+pub type SwapchainCreateFlagBitsKhr = SwapchainCreateFlagsKhr;
 
 /// See [`vkAcquireNextImageKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkAcquireNextImageKHR)
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -102,19 +108,19 @@ impl VkSwapchainCreateInfoKHRWrapper {
             vks_struct: vks::VkSwapchainCreateInfoKHR {
                 sType: vks::VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR,
                 pNext: pnext,
-                flags: create_info.flags,
+                flags: create_info.flags.bits(),
                 surface: create_info.surface.handle(),
                 minImageCount: create_info.min_image_count,
                 imageFormat: create_info.image_format.into(),
                 imageColorSpace: create_info.image_color_space.into(),
                 imageExtent: (&create_info.image_extent).into(),
                 imageArrayLayers: create_info.image_array_layers,
-                imageUsage: create_info.image_usage,
+                imageUsage: create_info.image_usage.bits(),
                 imageSharingMode: create_info.image_sharing_mode.into(),
                 queueFamilyIndexCount: queue_family_indices_count,
                 pQueueFamilyIndices: queue_family_indices_ptr,
-                preTransform: create_info.pre_transform,
-                compositeAlpha: create_info.composite_alpha,
+                preTransform: create_info.pre_transform.bits(),
+                compositeAlpha: create_info.composite_alpha.bits(),
                 presentMode: create_info.present_mode.into(),
                 clipped: utils::to_vk_bool(create_info.clipped),
                 oldSwapchain: old_swapchain_handle,

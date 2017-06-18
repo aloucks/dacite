@@ -80,56 +80,68 @@ impl From<PresentModeKhr> for vks::VkPresentModeKHR {
     }
 }
 
-/// See [`VkSurfaceTransformFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSurfaceTransformFlagBitsKHR)
-pub type SurfaceTransformFlagsKhr = vks::VkSurfaceTransformFlagsKHR;
+bitflags! {
+    /// See [`VkSurfaceTransformFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSurfaceTransformFlagBitsKHR)
+    #[derive(Default)]
+    pub struct SurfaceTransformFlagsKhr: u32 {
+        /// See [`VkSurfaceTransformFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSurfaceTransformFlagBitsKHR)
+        const SURFACE_TRANSFORM_FLAG_BITS_MAX_ENUM_KHR = vks::VK_SURFACE_TRANSFORM_FLAG_BITS_MAX_ENUM_KHR;
+
+        /// See [`VkSurfaceTransformFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSurfaceTransformFlagBitsKHR)
+        const SURFACE_TRANSFORM_IDENTITY_BIT_KHR = vks::VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR;
+
+        /// See [`VkSurfaceTransformFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSurfaceTransformFlagBitsKHR)
+        const SURFACE_TRANSFORM_ROTATE_90_BIT_KHR = vks::VK_SURFACE_TRANSFORM_ROTATE_90_BIT_KHR;
+
+        /// See [`VkSurfaceTransformFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSurfaceTransformFlagBitsKHR)
+        const SURFACE_TRANSFORM_ROTATE_180_BIT_KHR = vks::VK_SURFACE_TRANSFORM_ROTATE_180_BIT_KHR;
+
+        /// See [`VkSurfaceTransformFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSurfaceTransformFlagBitsKHR)
+        const SURFACE_TRANSFORM_ROTATE_270_BIT_KHR = vks::VK_SURFACE_TRANSFORM_ROTATE_270_BIT_KHR;
+
+        /// See [`VkSurfaceTransformFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSurfaceTransformFlagBitsKHR)
+        const SURFACE_TRANSFORM_HORIZONTAL_MIRROR_BIT_KHR = vks::VK_SURFACE_TRANSFORM_HORIZONTAL_MIRROR_BIT_KHR;
+
+        /// See [`VkSurfaceTransformFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSurfaceTransformFlagBitsKHR)
+        const SURFACE_TRANSFORM_HORIZONTAL_MIRROR_ROTATE_90_BIT_KHR = vks::VK_SURFACE_TRANSFORM_HORIZONTAL_MIRROR_ROTATE_90_BIT_KHR;
+
+        /// See [`VkSurfaceTransformFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSurfaceTransformFlagBitsKHR)
+        const SURFACE_TRANSFORM_HORIZONTAL_MIRROR_ROTATE_180_BIT_KHR = vks::VK_SURFACE_TRANSFORM_HORIZONTAL_MIRROR_ROTATE_180_BIT_KHR;
+
+        /// See [`VkSurfaceTransformFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSurfaceTransformFlagBitsKHR)
+        const SURFACE_TRANSFORM_HORIZONTAL_MIRROR_ROTATE_270_BIT_KHR = vks::VK_SURFACE_TRANSFORM_HORIZONTAL_MIRROR_ROTATE_270_BIT_KHR;
+
+        /// See [`VkSurfaceTransformFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSurfaceTransformFlagBitsKHR)
+        const SURFACE_TRANSFORM_INHERIT_BIT_KHR = vks::VK_SURFACE_TRANSFORM_INHERIT_BIT_KHR;
+    }
+}
 
 /// See [`VkSurfaceTransformFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSurfaceTransformFlagBitsKHR)
-pub type SurfaceTransformFlagBitsKhr = vks::VkSurfaceTransformFlagBitsKHR ;
+pub type SurfaceTransformFlagBitsKhr = SurfaceTransformFlagsKhr;
 
-/// See [`VkSurfaceTransformFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSurfaceTransformFlagBitsKHR)
-pub const SURFACE_TRANSFORM_IDENTITY_BIT_KHR: SurfaceTransformFlagsKhr = vks::VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR;
+bitflags! {
+    /// See [`VkCompositeAlphaFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCompositeAlphaFlagBitsKHR)
+    #[derive(Default)]
+    pub struct CompositeAlphaFlagsKhr: u32 {
+        /// See [`VkCompositeAlphaFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCompositeAlphaFlagBitsKHR)
+        const COMPOSITE_ALPHA_FLAG_BITS_MAX_ENUM_KHR = vks::VK_COMPOSITE_ALPHA_FLAG_BITS_MAX_ENUM_KHR;
 
-/// See [`VkSurfaceTransformFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSurfaceTransformFlagBitsKHR)
-pub const SURFACE_TRANSFORM_ROTATE_90_BIT_KHR: SurfaceTransformFlagsKhr = vks::VK_SURFACE_TRANSFORM_ROTATE_90_BIT_KHR;
+        /// See [`VkCompositeAlphaFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCompositeAlphaFlagBitsKHR)
+        const COMPOSITE_ALPHA_OPAQUE_BIT_KHR = vks::VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
 
-/// See [`VkSurfaceTransformFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSurfaceTransformFlagBitsKHR)
-pub const SURFACE_TRANSFORM_ROTATE_180_BIT_KHR: SurfaceTransformFlagsKhr = vks::VK_SURFACE_TRANSFORM_ROTATE_180_BIT_KHR;
+        /// See [`VkCompositeAlphaFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCompositeAlphaFlagBitsKHR)
+        const COMPOSITE_ALPHA_PRE_MULTIPLIED_BIT_KHR = vks::VK_COMPOSITE_ALPHA_PRE_MULTIPLIED_BIT_KHR;
 
-/// See [`VkSurfaceTransformFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSurfaceTransformFlagBitsKHR)
-pub const SURFACE_TRANSFORM_ROTATE_270_BIT_KHR: SurfaceTransformFlagsKhr = vks::VK_SURFACE_TRANSFORM_ROTATE_270_BIT_KHR;
+        /// See [`VkCompositeAlphaFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCompositeAlphaFlagBitsKHR)
+        const COMPOSITE_ALPHA_POST_MULTIPLIED_BIT_KHR = vks::VK_COMPOSITE_ALPHA_POST_MULTIPLIED_BIT_KHR;
 
-/// See [`VkSurfaceTransformFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSurfaceTransformFlagBitsKHR)
-pub const SURFACE_TRANSFORM_HORIZONTAL_MIRROR_BIT_KHR: SurfaceTransformFlagsKhr = vks::VK_SURFACE_TRANSFORM_HORIZONTAL_MIRROR_BIT_KHR;
-
-/// See [`VkSurfaceTransformFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSurfaceTransformFlagBitsKHR)
-pub const SURFACE_TRANSFORM_HORIZONTAL_MIRROR_ROTATE_90_BIT_KHR: SurfaceTransformFlagsKhr = vks::VK_SURFACE_TRANSFORM_HORIZONTAL_MIRROR_ROTATE_90_BIT_KHR;
-
-/// See [`VkSurfaceTransformFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSurfaceTransformFlagBitsKHR)
-pub const SURFACE_TRANSFORM_HORIZONTAL_MIRROR_ROTATE_180_BIT_KHR: SurfaceTransformFlagsKhr = vks::VK_SURFACE_TRANSFORM_HORIZONTAL_MIRROR_ROTATE_180_BIT_KHR;
-
-/// See [`VkSurfaceTransformFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSurfaceTransformFlagBitsKHR)
-pub const SURFACE_TRANSFORM_HORIZONTAL_MIRROR_ROTATE_270_BIT_KHR: SurfaceTransformFlagsKhr = vks::VK_SURFACE_TRANSFORM_HORIZONTAL_MIRROR_ROTATE_270_BIT_KHR;
-
-/// See [`VkSurfaceTransformFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSurfaceTransformFlagBitsKHR)
-pub const SURFACE_TRANSFORM_INHERIT_BIT_KHR: SurfaceTransformFlagsKhr = vks::VK_SURFACE_TRANSFORM_INHERIT_BIT_KHR;
+        /// See [`VkCompositeAlphaFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCompositeAlphaFlagBitsKHR)
+        const COMPOSITE_ALPHA_INHERIT_BIT_KHR = vks::VK_COMPOSITE_ALPHA_INHERIT_BIT_KHR;
+    }
+}
 
 /// See [`VkCompositeAlphaFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCompositeAlphaFlagBitsKHR)
-pub type CompositeAlphaFlagsKhr = vks::VkCompositeAlphaFlagsKHR;
-
-/// See [`VkCompositeAlphaFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCompositeAlphaFlagBitsKHR)
-pub type CompositeAlphaFlagBitsKhr = vks::VkCompositeAlphaFlagBitsKHR;
-
-/// See [`VkCompositeAlphaFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCompositeAlphaFlagBitsKHR)
-pub const COMPOSITE_ALPHA_OPAQUE_BIT_KHR: CompositeAlphaFlagsKhr = vks::VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
-
-/// See [`VkCompositeAlphaFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCompositeAlphaFlagBitsKHR)
-pub const COMPOSITE_ALPHA_PRE_MULTIPLIED_BIT_KHR: CompositeAlphaFlagsKhr = vks::VK_COMPOSITE_ALPHA_PRE_MULTIPLIED_BIT_KHR;
-
-/// See [`VkCompositeAlphaFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCompositeAlphaFlagBitsKHR)
-pub const COMPOSITE_ALPHA_POST_MULTIPLIED_BIT_KHR: CompositeAlphaFlagsKhr = vks::VK_COMPOSITE_ALPHA_POST_MULTIPLIED_BIT_KHR;
-
-/// See [`VkCompositeAlphaFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCompositeAlphaFlagBitsKHR)
-pub const COMPOSITE_ALPHA_INHERIT_BIT_KHR: CompositeAlphaFlagsKhr = vks::VK_COMPOSITE_ALPHA_INHERIT_BIT_KHR;
+pub type CompositeAlphaFlagBitsKhr = CompositeAlphaFlagsKhr;
 
 /// See [`VkSurfaceCapabilitiesKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSurfaceCapabilitiesKHR)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
@@ -169,10 +181,10 @@ impl<'a> From<&'a vks::VkSurfaceCapabilitiesKHR> for SurfaceCapabilitiesKhr {
             min_image_extent: (&capabilities.minImageExtent).into(),
             max_image_extent: (&capabilities.maxImageExtent).into(),
             max_image_array_layers: capabilities.maxImageArrayLayers,
-            supported_transforms: capabilities.supportedTransforms,
-            current_transform: capabilities.currentTransform,
-            supported_composite_alpha: capabilities.supportedCompositeAlpha,
-            supported_usage_flags: capabilities.supportedUsageFlags,
+            supported_transforms: SurfaceTransformFlagsKhr::from_bits_truncate(capabilities.supportedTransforms),
+            current_transform: SurfaceTransformFlagsKhr::from_bits_truncate(capabilities.currentTransform),
+            supported_composite_alpha: CompositeAlphaFlagsKhr::from_bits_truncate(capabilities.supportedCompositeAlpha),
+            supported_usage_flags: core::ImageUsageFlags::from_bits_truncate(capabilities.supportedUsageFlags),
         }
     }
 }

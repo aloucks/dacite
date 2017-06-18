@@ -312,7 +312,7 @@ impl Instance {
         let message = CString::new(message).unwrap();
 
         unsafe {
-            (self.loader().ext_debug_report.vkDebugReportMessageEXT)(self.handle(), flags, object_type.into(), object, location, message_code, layer_prefix.as_ptr(), message.as_ptr());
+            (self.loader().ext_debug_report.vkDebugReportMessageEXT)(self.handle(), flags.bits(), object_type.into(), object, location, message_code, layer_prefix.as_ptr(), message.as_ptr());
         }
     }
 

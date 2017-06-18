@@ -198,7 +198,7 @@ impl PhysicalDevice {
         let mut properties = unsafe { mem::uninitialized() };
 
         let res = unsafe {
-            (self.loader().core.vkGetPhysicalDeviceImageFormatProperties)(self.handle, format.into(), image_type.into(), tiling.into(), usage, flags, &mut properties)
+            (self.loader().core.vkGetPhysicalDeviceImageFormatProperties)(self.handle, format.into(), image_type.into(), tiling.into(), usage.bits(), flags.bits(), &mut properties)
         };
 
         if res == vks::VK_SUCCESS {
@@ -215,12 +215,12 @@ impl PhysicalDevice {
     {
         let mut num_properties = 0;
         unsafe {
-            (self.loader().core.vkGetPhysicalDeviceSparseImageFormatProperties)(self.handle, format.into(), image_type.into(), samples, usage, tiling.into(), &mut num_properties, ptr::null_mut());
+            (self.loader().core.vkGetPhysicalDeviceSparseImageFormatProperties)(self.handle, format.into(), image_type.into(), samples.bits(), usage.bits(), tiling.into(), &mut num_properties, ptr::null_mut());
         }
 
         let mut properties = Vec::with_capacity(num_properties as usize);
         unsafe {
-            (self.loader().core.vkGetPhysicalDeviceSparseImageFormatProperties)(self.handle, format.into(), image_type.into(), samples, usage, tiling.into(), &mut num_properties, properties.as_mut_ptr());
+            (self.loader().core.vkGetPhysicalDeviceSparseImageFormatProperties)(self.handle, format.into(), image_type.into(), samples.bits(), usage.bits(), tiling.into(), &mut num_properties, properties.as_mut_ptr());
             properties.set_len(num_properties as usize);
         }
 

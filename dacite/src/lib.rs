@@ -12,6 +12,9 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
+#[macro_use]
+extern crate bitflags;
+
 extern crate libc;
 extern crate libloading;
 extern crate vks;
