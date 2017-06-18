@@ -15,6 +15,10 @@
  - Added a new trait `FromNativeObject`, which can be used to create dacite Vulkan objects from
    native FFI objects. The trait is implemented for types except `Instance` and `Device`.
 
+### Breaking changes
+
+ - `core::Queue::bind_sparse()` takes `Fence` as a reference.
+
 
 ## Version 0.3.6, released on 11.06.2017
 

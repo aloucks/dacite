@@ -144,7 +144,7 @@ impl Queue {
     }
 
     /// See [`vkQueueBindSparse`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkQueueBindSparse)
-    pub fn bind_sparse(&self, bind_infos: Option<&[core::BindSparseInfo]>, fence: Option<Fence>) -> Result<(), core::Error> {
+    pub fn bind_sparse(&self, bind_infos: Option<&[core::BindSparseInfo]>, fence: Option<&Fence>) -> Result<(), core::Error> {
         #[allow(unused_variables)]
         let (bind_infos_count, vk_bind_infos_ptr, vk_bind_infos, bind_infos_wrappers) = match bind_infos {
             Some(bind_infos) => {
@@ -156,7 +156,7 @@ impl Queue {
             None => (0, ptr::null(), None, None),
         };
 
-        let fence = fence.as_ref().map_or(ptr::null_mut(), Fence::handle);
+        let fence = fence.map_or(ptr::null_mut(), Fence::handle);
 
         let res = unsafe {
             (self.loader().core.vkQueueBindSparse)(self.handle, bind_infos_count, vk_bind_infos_ptr, fence)
