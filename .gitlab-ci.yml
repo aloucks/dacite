@@ -1,6 +1,9 @@
 image: "scorpil/rust:nightly"
 
 before_script:
+    - apt-get update
+    - apt-get install -y gcc g++
+    - apt-get install -y cmake
     - rustc --version
     - cargo --version
 
