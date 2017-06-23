@@ -39,6 +39,7 @@ pub struct XlibSurfaceCreateInfoKhr {
     pub window: xlib_wrapper::Window,
     pub chain: Option<XlibSurfaceCreateInfoChainKhr>,
 }
+
 #[derive(Debug)]
 pub(crate) struct VkXlibSurfaceCreateInfoKHRWrapper {
     pub vks_struct: vks::VkXlibSurfaceCreateInfoKHR,
