@@ -1,6 +1,8 @@
 # dacite-winit Changelog
 
-## Current Git master branch
+## Version 0.4.0, released on 25.06.2017
+
+ - Compatibility with dacite 0.4.0
 
 ### Breaking changes
 
