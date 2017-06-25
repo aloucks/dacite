@@ -11,4 +11,4 @@ path = "../../dacite"
 path = "../../dacite-winit"
 
 [dependencies]
-winit = "0.6"
+winit = "0.7"

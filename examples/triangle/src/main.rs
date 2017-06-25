@@ -646,7 +646,7 @@ fn real_main() -> Result<(), ()> {
     let preferred_extent = dacite::core::Extent2D::new(800, 600);
 
     let Window {
-        events_loop,
+        mut events_loop,
         window,
     } = create_window(&preferred_extent)?;
 

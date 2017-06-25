@@ -1,5 +1,12 @@
 # dacite-winit Changelog
 
+## Current Git master branch
+
+### Breaking changes
+
+ - winit was updated to 0.7.x.
+
+
 ## Version 0.3.0, released on 06.06.2017
 
  - Compatibility with dacite 0.3.0
