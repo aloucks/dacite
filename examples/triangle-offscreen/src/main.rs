@@ -429,7 +429,7 @@ fn create_pipeline(device: &dacite::core::Device, render_pass: &dacite::core::Re
                 src_alpha_blend_factor: dacite::core::BlendFactor::One,
                 dst_alpha_blend_factor: dacite::core::BlendFactor::Zero,
                 alpha_blend_op: dacite::core::BlendOp::Add,
-                color_write_mask: dacite::core::ColorComponentFlags::all(),
+                color_write_mask: dacite::core::COLOR_COMPONENT_R_BIT | dacite::core::COLOR_COMPONENT_G_BIT | dacite::core::COLOR_COMPONENT_B_BIT,
             }]),
             blend_constants: [0.0, 0.0, 0.0, 0.0],
             chain: None,
