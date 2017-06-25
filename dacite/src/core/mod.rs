@@ -3623,6 +3623,17 @@ impl<'a> From<&'a vks::VkQueueFamilyProperties> for QueueFamilyProperties {
     }
 }
 
+impl<'a> From<&'a QueueFamilyProperties> for vks::VkQueueFamilyProperties {
+    fn from(properties: &'a QueueFamilyProperties) -> Self {
+        vks::VkQueueFamilyProperties {
+            queueFlags: properties.queue_flags.bits(),
+            queueCount: properties.queue_count,
+            timestampValidBits: properties.timestamp_valid_bits,
+            minImageTransferGranularity: (&properties.min_image_transfer_granularity).into(),
+        }
+    }
+}
+
 /// See [`VkMemoryType`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkMemoryType)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct MemoryType {
