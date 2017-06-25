@@ -14,6 +14,7 @@
    that function for more information.
  - Added a new trait `FromNativeObject`, which can be used to create dacite Vulkan objects from
    native FFI objects. The trait is implemented for types except `Instance` and `Device`.
+ - Added version constant `DACITE_API_VERSION_1_0`.
 
 ### Breaking changes
 

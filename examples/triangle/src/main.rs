@@ -84,7 +84,7 @@ fn create_instance(instance_extensions: dacite::core::InstanceExtensions) -> Res
         application_version: 0,
         engine_name: None,
         engine_version: 0,
-        api_version: Some(dacite::DACITE_API_VERSION),
+        api_version: Some(dacite::DACITE_API_VERSION_1_0),
         chain: None,
     };
 
