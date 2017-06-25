@@ -461,6 +461,7 @@ impl PhysicalDevice {
 
     /// See [`vkGetPhysicalDeviceXlibPresentationSupportKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetPhysicalDeviceXlibPresentationSupportKHR)
     /// and extension [`VK_KHR_xlib_surface`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_xlib_surface)
+    #[cfg_attr(feature = "cargo-clippy", allow(not_unsafe_ptr_arg_deref))]
     pub fn get_xlib_presentation_support_khr(&self, queue_family_index: u32, dpy: *mut xlib_wrapper::Display, visual_id: xlib_wrapper::VisualID) -> bool {
         let res = unsafe {
             (self.loader().khr_xlib_surface.vkGetPhysicalDeviceXlibPresentationSupportKHR)(self.handle, queue_family_index, dpy, visual_id)
@@ -471,6 +472,7 @@ impl PhysicalDevice {
 
     /// See [`vkGetPhysicalDeviceWaylandPresentationSupportKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetPhysicalDeviceWaylandPresentationSupportKHR)
     /// and extension [`VK_KHR_wayland_surface`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_wayland_surface)
+    #[cfg_attr(feature = "cargo-clippy", allow(not_unsafe_ptr_arg_deref))]
     pub fn get_wayland_presentation_support_khr(&self, queue_family_index: u32, display: *mut wayland_wrapper::wl_display) -> bool {
         let res = unsafe {
             (self.loader().khr_wayland_surface.vkGetPhysicalDeviceWaylandPresentationSupportKHR)(self.handle, queue_family_index, display)
@@ -481,6 +483,7 @@ impl PhysicalDevice {
 
     /// See [`vkGetPhysicalDeviceXcbPresentationSupportKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetPhysicalDeviceXcbPresentationSupportKHR)
     /// and extension [`VK_KHR_xcb_surface`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_xcb_surface)
+    #[cfg_attr(feature = "cargo-clippy", allow(not_unsafe_ptr_arg_deref))]
     pub fn get_xcb_presentation_support_khr(&self, queue_family_index: u32, connection: *mut xcb_wrapper::xcb_connection_t, visual_id: xcb_wrapper::xcb_visualid_t) -> bool {
         let res = unsafe {
             (self.loader().khr_xcb_surface.vkGetPhysicalDeviceXcbPresentationSupportKHR)(self.handle, queue_family_index, connection, visual_id)
@@ -491,6 +494,7 @@ impl PhysicalDevice {
 
     /// See [`vkGetPhysicalDeviceMirPresentationSupportKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetPhysicalDeviceMirPresentationSupportKHR)
     /// and extension [`VK_KHR_mir_surface`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_mir_surface)
+    #[cfg_attr(feature = "cargo-clippy", allow(not_unsafe_ptr_arg_deref))]
     pub fn get_mir_presentation_support_khr(&self, queue_family_index: u32, connection: *mut mir_wrapper::MirConnection) -> bool {
         let res = unsafe {
             (self.loader().khr_mir_surface.vkGetPhysicalDeviceMirPresentationSupportKHR)(self.handle, queue_family_index, connection)

@@ -161,6 +161,7 @@ pub const DEBUG_REPORT_DEBUG_BIT_EXT: DebugReportFlagBitsExt = vks::VK_DEBUG_REP
 
 /// See [`PFN_vkDebugReportCallbackEXT`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#PFN_vkDebugReportCallbackEXT)
 pub trait DebugReportCallbacksExt: Send + Sync + fmt::Debug {
+    #[cfg_attr(feature = "cargo-clippy", allow(too_many_arguments))]
     fn callback(&self, flags: DebugReportFlagsExt, object_type: DebugReportObjectTypeExt, object: u64, location: usize, message_code: i32, layer_prefix: Option<&str>, message: Option<&str>) -> bool;
 }
 

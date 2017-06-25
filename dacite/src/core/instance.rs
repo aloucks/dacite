@@ -304,6 +304,7 @@ impl Instance {
 
     /// See [`vkDebugReportMessageEXT`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkDebugReportMessageEXT)
     /// and extension [`VK_EXT_debug_report`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_EXT_debug_report)
+    #[cfg_attr(feature = "cargo-clippy", allow(too_many_arguments))]
     pub fn debug_report_message_ext(&self, flags: ext_debug_report::DebugReportFlagsExt, object_type: ext_debug_report::DebugReportObjectTypeExt, object: u64, location: usize, message_code: i32, layer_prefix: &str, message: &str) {
         use std::ffi::CString;
 
