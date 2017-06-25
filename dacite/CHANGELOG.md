@@ -1,6 +1,6 @@
 # dacite Changelog
 
-## Current Git master branch
+## Version 0.4.0, released on 25.06.2017
 
  - Vulkan 1.0.13
  - Added several convenience functions:

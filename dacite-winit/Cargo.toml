@@ -15,7 +15,7 @@ license = "ISC"
 gitlab = { repository = "dennis-hamester/dacite" }
 
 [dependencies.dacite]
-version = "0.3"
+version = "0.4"
 path = "../dacite"
 
 [dependencies]

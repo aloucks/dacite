@@ -19,7 +19,7 @@ Dacite-winit is available on [crates.io]. Add this to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-dacite = "0.3"
+dacite = "0.4"
 dacite-winit = "0.3"
 winit = "0.6"
 ```
