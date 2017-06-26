@@ -3650,6 +3650,15 @@ impl<'a> From<&'a vks::VkMemoryType> for MemoryType {
     }
 }
 
+impl<'a> From<&'a MemoryType> for vks::VkMemoryType {
+    fn from(memory_type: &'a MemoryType) -> Self {
+        vks::VkMemoryType {
+            propertyFlags: memory_type.property_flags.bits(),
+            heapIndex: memory_type.heap_index,
+        }
+    }
+}
+
 /// See [`VkMemoryHeap`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkMemoryHeap)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct MemoryHeap {
