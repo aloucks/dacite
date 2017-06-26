@@ -3710,6 +3710,30 @@ impl<'a> From<&'a vks::VkPhysicalDeviceMemoryProperties> for PhysicalDeviceMemor
     }
 }
 
+impl<'a> From<&'a PhysicalDeviceMemoryProperties> for vks::VkPhysicalDeviceMemoryProperties {
+    fn from(properties: &'a PhysicalDeviceMemoryProperties) -> Self {
+        debug_assert!(properties.memory_types.len() <= vks::VK_MAX_MEMORY_TYPES);
+        debug_assert!(properties.memory_heaps.len() <= vks::VK_MAX_MEMORY_HEAPS);
+
+        let mut res = vks::VkPhysicalDeviceMemoryProperties {
+            memoryTypeCount: properties.memory_types.len() as u32,
+            memoryTypes: unsafe { mem::uninitialized() },
+            memoryHeapCount: properties.memory_heaps.len() as u32,
+            memoryHeaps: unsafe { mem::uninitialized() },
+        };
+
+        for (vk_memory_type, memory_type) in res.memoryTypes.iter_mut().zip(&properties.memory_types) {
+            *vk_memory_type = memory_type.into();
+        }
+
+        for (vk_memory_heap, memory_heap) in res.memoryHeaps.iter_mut().zip(&properties.memory_heaps) {
+            *vk_memory_heap = memory_heap.into();
+        }
+
+        res
+    }
+}
+
 gen_chain_struct! {
     name: DeviceQueueCreateInfoChain [DeviceQueueCreateInfoChainWrapper],
     query: DeviceQueueCreateInfoChainQuery [DeviceQueueCreateInfoChainQueryWrapper],
