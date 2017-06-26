@@ -3675,6 +3675,15 @@ impl<'a> From<&'a vks::VkMemoryHeap> for MemoryHeap {
     }
 }
 
+impl<'a> From<&'a MemoryHeap> for vks::VkMemoryHeap {
+    fn from(heap: &'a MemoryHeap) -> Self {
+        vks::VkMemoryHeap {
+            size: heap.size,
+            flags: heap.flags.bits(),
+        }
+    }
+}
+
 /// See [`VkPhysicalDeviceMemoryProperties`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPhysicalDeviceMemoryProperties)
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct PhysicalDeviceMemoryProperties {
