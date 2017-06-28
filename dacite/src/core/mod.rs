@@ -3741,6 +3741,31 @@ impl<'a> From<&'a vks::VkPhysicalDeviceProperties> for PhysicalDeviceProperties 
     }
 }
 
+impl<'a> From<&'a PhysicalDeviceProperties> for vks::VkPhysicalDeviceProperties {
+    fn from(properties: &'a PhysicalDeviceProperties) -> Self {
+        debug_assert!(properties.device_name.len() < vks::VK_MAX_PHYSICAL_DEVICE_NAME_SIZE);
+
+        let device_name = unsafe {
+            let mut device_name: [c_char; vks::VK_MAX_PHYSICAL_DEVICE_NAME_SIZE] = mem::uninitialized();
+            ptr::copy_nonoverlapping(properties.device_name.as_ptr(), device_name.as_mut_ptr() as *mut _, properties.device_name.len());
+            device_name[properties.device_name.len()] = 0;
+            device_name
+        };
+
+        vks::VkPhysicalDeviceProperties {
+            apiVersion: properties.api_version.as_api_version(),
+            driverVersion: properties.driver_version,
+            vendorID: properties.vendor_id,
+            deviceID: properties.device_id,
+            deviceType: properties.device_type.into(),
+            deviceName: device_name,
+            pipelineCacheUUID: properties.pipeline_cache_uuid,
+            limits: (&properties.limits).into(),
+            sparseProperties: (&properties.sparse_properties).into(),
+        }
+    }
+}
+
 /// See [`VkQueueFamilyProperties`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueueFamilyProperties)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct QueueFamilyProperties {
