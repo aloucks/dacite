@@ -2196,6 +2196,19 @@ impl From<vks::VkPhysicalDeviceType> for PhysicalDeviceType {
     }
 }
 
+impl From<PhysicalDeviceType> for vks::VkPhysicalDeviceType {
+    fn from(physical_device_type: PhysicalDeviceType) -> Self {
+        match physical_device_type {
+            PhysicalDeviceType::Other => vks::VK_PHYSICAL_DEVICE_TYPE_OTHER,
+            PhysicalDeviceType::IntegratedGpu => vks::VK_PHYSICAL_DEVICE_TYPE_INTEGRATED_GPU,
+            PhysicalDeviceType::DiscreteGpu => vks::VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU,
+            PhysicalDeviceType::VirtualGpu => vks::VK_PHYSICAL_DEVICE_TYPE_VIRTUAL_GPU,
+            PhysicalDeviceType::Cpu => vks::VK_PHYSICAL_DEVICE_TYPE_CPU,
+            PhysicalDeviceType::Unknown(physical_device_type) => physical_device_type,
+        }
+    }
+}
+
 /// See [`VkQueryType`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueryType)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum QueryType {
