@@ -653,10 +653,10 @@ fn render(graphics_queue: &dacite::core::Queue, present_queue: &dacite::core::Qu
     };
 
     let submit_infos = vec![dacite::core::SubmitInfo {
-        wait_semaphores: Some(vec![image_acquired.clone()]),
-        wait_dst_stage_mask: Some(vec![dacite::core::PIPELINE_STAGE_TOP_OF_PIPE_BIT]),
-        command_buffers: Some(vec![command_buffers[next_image].clone()]),
-        signal_semaphores: Some(vec![image_rendered.clone()]),
+        wait_semaphores: vec![image_acquired.clone()],
+        wait_dst_stage_mask: vec![dacite::core::PIPELINE_STAGE_TOP_OF_PIPE_BIT],
+        command_buffers: vec![command_buffers[next_image].clone()],
+        signal_semaphores: vec![image_rendered.clone()],
         chain: None,
     }];
 

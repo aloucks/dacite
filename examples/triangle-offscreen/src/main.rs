@@ -524,10 +524,10 @@ fn record_command_buffer(command_pool: &dacite::core::CommandPool, pipeline: &da
 
 fn draw(queue: &dacite::core::Queue, command_buffer: &dacite::core::CommandBuffer) -> Result<(), ()> {
     let submit_infos = vec![dacite::core::SubmitInfo {
-        wait_semaphores: None,
-        wait_dst_stage_mask: None,
-        command_buffers: Some(vec![command_buffer.clone()]),
-        signal_semaphores: None,
+        wait_semaphores: vec![],
+        wait_dst_stage_mask: vec![],
+        command_buffers: vec![command_buffer.clone()],
+        signal_semaphores: vec![],
         chain: None,
     }];
 

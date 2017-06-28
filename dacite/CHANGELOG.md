@@ -1,5 +1,13 @@
 # dacite Changelog
 
+## Current Git remove-option-vec branch
+
+### Breaking changes
+
+ - All occurrences of `Option<Vec<T>>` have been changed to just `Vec<T>` in the following structs:
+   - `core::SubmitInfo`
+
+
 ## Version 0.4.0, released on 25.06.2017
 
  - Vulkan 1.0.13
