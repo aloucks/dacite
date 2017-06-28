@@ -3682,6 +3682,18 @@ impl<'a> From<&'a vks::VkPhysicalDeviceSparseProperties> for PhysicalDeviceSpars
     }
 }
 
+impl<'a> From<&'a PhysicalDeviceSparseProperties> for vks::VkPhysicalDeviceSparseProperties {
+    fn from(properties: &'a PhysicalDeviceSparseProperties) -> Self {
+        vks::VkPhysicalDeviceSparseProperties {
+            residencyStandard2DBlockShape: utils::to_vk_bool(properties.residency_standard_2d_block_shape),
+            residencyStandard2DMultisampleBlockShape: utils::to_vk_bool(properties.residency_standard_2d_multisample_block_shape),
+            residencyStandard3DBlockShape: utils::to_vk_bool(properties.residency_standard_3d_block_shape),
+            residencyAlignedMipSize: utils::to_vk_bool(properties.residency_aligned_mip_size),
+            residencyNonResidentStrict: utils::to_vk_bool(properties.residency_non_resident_strict),
+        }
+    }
+}
+
 /// See [`VkPhysicalDeviceProperties`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPhysicalDeviceProperties)
 #[derive(Debug, Clone, PartialEq)]
 pub struct PhysicalDeviceProperties {
