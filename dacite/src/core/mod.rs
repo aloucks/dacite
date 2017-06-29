@@ -3247,9 +3247,19 @@ pub struct FormatProperties {
 impl<'a> From<&'a vks::VkFormatProperties> for FormatProperties {
     fn from(properties: &'a vks::VkFormatProperties) -> Self {
         FormatProperties {
-            linear_tiling_features: FormatFeatureFlags { bits: properties.linearTilingFeatures, },
-            optimal_tiling_features: FormatFeatureFlags { bits: properties.optimalTilingFeatures, },
-            buffer_features: FormatFeatureFlags { bits: properties.bufferFeatures, },
+            linear_tiling_features: FormatFeatureFlags::from_bits_truncate(properties.linearTilingFeatures),
+            optimal_tiling_features: FormatFeatureFlags::from_bits_truncate(properties.optimalTilingFeatures),
+            buffer_features: FormatFeatureFlags::from_bits_truncate(properties.bufferFeatures),
+        }
+    }
+}
+
+impl<'a> From<&'a FormatProperties> for vks::VkFormatProperties {
+    fn from(properties: &'a FormatProperties) -> Self {
+        vks::VkFormatProperties {
+            linearTilingFeatures: properties.linear_tiling_features.bits(),
+            optimalTilingFeatures: properties.optimal_tiling_features.bits(),
+            bufferFeatures: properties.buffer_features.bits(),
         }
     }
 }
