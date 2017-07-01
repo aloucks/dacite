@@ -154,7 +154,7 @@ fn create_framebuffer(device: &dacite::core::Device, render_pass: &dacite::core:
         tiling: dacite::core::ImageTiling::Optimal,
         usage: dacite::core::IMAGE_USAGE_COLOR_ATTACHMENT_BIT | dacite::core::IMAGE_USAGE_TRANSFER_SRC_BIT,
         sharing_mode: dacite::core::SharingMode::Exclusive,
-        queue_family_indices: None,
+        queue_family_indices: vec![],
         initial_layout: dacite::core::ImageLayout::Undefined,
         chain: None,
     };

@@ -5152,7 +5152,7 @@ pub struct ImageCreateInfo {
     pub tiling: ImageTiling,
     pub usage: ImageUsageFlags,
     pub sharing_mode: SharingMode,
-    pub queue_family_indices: Option<Vec<u32>>,
+    pub queue_family_indices: Vec<u32>,
     pub initial_layout: ImageLayout,
     pub chain: Option<ImageCreateInfoChain>,
 }
@@ -5160,16 +5160,18 @@ pub struct ImageCreateInfo {
 #[derive(Debug)]
 struct VkImageCreateInfoWrapper {
     pub vks_struct: vks::VkImageCreateInfo,
-    queue_family_indices: Option<Vec<u32>>,
+    queue_family_indices: Vec<u32>,
     chain: Option<ImageCreateInfoChainWrapper>,
 }
 
 impl VkImageCreateInfoWrapper {
     pub fn new(create_info: &ImageCreateInfo, with_chain: bool) -> Self {
         let queue_family_indices = create_info.queue_family_indices.clone();
-        let (queue_family_indices_ptr, queue_family_index_count) = match queue_family_indices {
-            Some(ref queue_family_indices) => (queue_family_indices.as_ptr(), queue_family_indices.len() as u32),
-            None => (ptr::null(), 0)
+        let queue_family_indices_ptr = if !queue_family_indices.is_empty() {
+            queue_family_indices.as_ptr()
+        }
+        else {
+            ptr::null()
         };
 
         let (pnext, chain) = ImageCreateInfoChainWrapper::new_optional(&create_info.chain, with_chain);
@@ -5188,7 +5190,7 @@ impl VkImageCreateInfoWrapper {
                 tiling: create_info.tiling.into(),
                 usage: create_info.usage.bits(),
                 sharingMode: create_info.sharing_mode.into(),
-                queueFamilyIndexCount: queue_family_index_count,
+                queueFamilyIndexCount: queue_family_indices.len() as u32,
                 pQueueFamilyIndices: queue_family_indices_ptr,
                 initialLayout: create_info.initial_layout.into(),
             },
