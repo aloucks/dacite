@@ -2790,6 +2790,17 @@ impl From<AttachmentLoadOp> for vks::VkAttachmentLoadOp {
     }
 }
 
+impl From<vks::VkAttachmentLoadOp> for AttachmentLoadOp {
+    fn from(op: vks::VkAttachmentLoadOp) -> Self {
+        match op {
+            vks::VK_ATTACHMENT_LOAD_OP_LOAD => AttachmentLoadOp::Load,
+            vks::VK_ATTACHMENT_LOAD_OP_CLEAR => AttachmentLoadOp::Clear,
+            vks::VK_ATTACHMENT_LOAD_OP_DONT_CARE => AttachmentLoadOp::DontCare,
+            _ => AttachmentLoadOp::Unknown(op),
+        }
+    }
+}
+
 /// See [`VkAttachmentStoreOp`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkAttachmentStoreOp)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum AttachmentStoreOp {
