@@ -9,7 +9,7 @@
    - `core::BindSparseInfo`
    - `core::BufferCreateInfo`
    - `core::ImageCreateInfo`
-
+   - `core::PipelineCacheCreateInfo`
 
 ## Version 0.4.0, released on 25.06.2017
 

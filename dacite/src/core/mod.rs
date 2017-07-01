@@ -5392,28 +5392,25 @@ gen_chain_struct! {
 #[derive(Debug, Clone, PartialEq)]
 pub struct PipelineCacheCreateInfo {
     pub flags: PipelineCacheCreateFlags,
-    pub initial_data: Option<Vec<u8>>,
+    pub initial_data: Vec<u8>,
     pub chain: Option<PipelineCacheCreateInfoChain>,
 }
 
 #[derive(Debug)]
 struct VkPipelineCacheCreateInfoWrapper {
     pub vks_struct: vks::VkPipelineCacheCreateInfo,
-    initial_data: Option<Vec<u8>>,
+    initial_data: Vec<u8>,
     chain: Option<PipelineCacheCreateInfoChainWrapper>,
 }
 
 impl VkPipelineCacheCreateInfoWrapper {
     pub fn new(create_info: &PipelineCacheCreateInfo, with_chain: bool) -> Self {
-        let (initial_data, initial_data_size, initial_data_ptr) = match create_info.initial_data {
-            Some(ref initial_data) => {
-                let initial_data = initial_data.clone();
-                let initial_data_size = initial_data.len();
-                let initial_data_ptr = initial_data.as_ptr() as *const c_void;
-                (Some(initial_data), initial_data_size, initial_data_ptr)
-            }
-
-            None => (None, 0, ptr::null()),
+        let initial_data = create_info.initial_data.clone();
+        let initial_data_ptr = if !initial_data.is_empty() {
+            initial_data.as_ptr() as *const _
+        }
+        else {
+            ptr::null()
         };
 
         let (pnext, chain) = PipelineCacheCreateInfoChainWrapper::new_optional(&create_info.chain, with_chain);
@@ -5423,7 +5420,7 @@ impl VkPipelineCacheCreateInfoWrapper {
                 sType: vks::VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO,
                 pNext: pnext,
                 flags: create_info.flags.bits(),
-                initialDataSize: initial_data_size,
+                initialDataSize: initial_data.len(),
                 pInitialData: initial_data_ptr,
             },
             initial_data: initial_data,
