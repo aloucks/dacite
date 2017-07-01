@@ -7202,6 +7202,22 @@ impl<'a> From<&'a AttachmentDescription> for vks::VkAttachmentDescription {
     }
 }
 
+impl<'a> From<&'a vks::VkAttachmentDescription> for AttachmentDescription {
+    fn from(description: &'a vks::VkAttachmentDescription) -> Self {
+        AttachmentDescription {
+            flags: AttachmentDescriptionFlags::from_bits_truncate(description.flags),
+            format: description.format.into(),
+            samples: SampleCountFlags::from_bits_truncate(description.samples),
+            load_op: description.loadOp.into(),
+            store_op: description.storeOp.into(),
+            stencil_load_op: description.stencilLoadOp.into(),
+            stencil_store_op: description.stencilStoreOp.into(),
+            initial_layout: description.initialLayout.into(),
+            final_layout: description.finalLayout.into(),
+        }
+    }
+}
+
 /// See [`VkAttachmentReference`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkAttachmentReference)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct AttachmentReference {
