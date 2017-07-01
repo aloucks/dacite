@@ -2874,6 +2874,16 @@ impl From<PipelineBindPoint> for vks::VkPipelineBindPoint {
     }
 }
 
+impl From<vks::VkPipelineBindPoint> for PipelineBindPoint {
+    fn from(bind_point: vks::VkPipelineBindPoint) -> Self {
+        match bind_point {
+            vks::VK_PIPELINE_BIND_POINT_GRAPHICS => PipelineBindPoint::Graphics,
+            vks::VK_PIPELINE_BIND_POINT_COMPUTE => PipelineBindPoint::Compute,
+            _ => PipelineBindPoint::Unknown(bind_point),
+        }
+    }
+}
+
 /// See [`VkCommandBufferLevel`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCommandBufferLevel)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum CommandBufferLevel {
