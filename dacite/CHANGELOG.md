@@ -6,6 +6,7 @@
 
  - All occurrences of `Option<Vec<T>>` have been changed to just `Vec<T>` in the following structs:
    - `core::SubmitInfo`
+   - `core::BindSparseInfo`
 
 
 ## Version 0.4.0, released on 25.06.2017

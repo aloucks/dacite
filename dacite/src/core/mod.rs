@@ -4777,80 +4777,75 @@ gen_chain_struct! {
 /// See [`VkBindSparseInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkBindSparseInfo)
 #[derive(Debug, Clone, PartialEq)]
 pub struct BindSparseInfo {
-    pub wait_semaphores: Option<Vec<Semaphore>>,
-    pub buffer_binds: Option<Vec<SparseBufferMemoryBindInfo>>,
-    pub image_opaque_binds: Option<Vec<SparseImageOpaqueMemoryBindInfo>>,
-    pub image_binds: Option<Vec<SparseImageMemoryBindInfo>>,
-    pub signal_semaphores: Option<Vec<Semaphore>>,
+    pub wait_semaphores: Vec<Semaphore>,
+    pub buffer_binds: Vec<SparseBufferMemoryBindInfo>,
+    pub image_opaque_binds: Vec<SparseImageOpaqueMemoryBindInfo>,
+    pub image_binds: Vec<SparseImageMemoryBindInfo>,
+    pub signal_semaphores: Vec<Semaphore>,
     pub chain: Option<BindSparseInfoChain>,
 }
 
 #[derive(Debug)]
 struct VkBindSparseInfoWrapper {
     pub vks_struct: vks::VkBindSparseInfo,
-    wait_semaphores: Option<Vec<Semaphore>>,
-    wait_vk_semaphores: Option<Vec<vks::VkSemaphore>>,
-    buffer_binds: Option<Vec<VkSparseBufferMemoryBindInfoWrapper>>,
-    vk_buffer_binds: Option<Vec<vks::VkSparseBufferMemoryBindInfo>>,
-    image_opaque_binds: Option<Vec<VkSparseImageOpaqueMemoryBindInfoWrapper>>,
-    vk_image_opaque_binds: Option<Vec<vks::VkSparseImageOpaqueMemoryBindInfo>>,
-    image_binds: Option<Vec<VkSparseImageMemoryBindInfoWrapper>>,
-    vk_image_binds: Option<Vec<vks::VkSparseImageMemoryBindInfo>>,
-    signal_semaphores: Option<Vec<Semaphore>>,
-    signal_vk_semaphores: Option<Vec<vks::VkSemaphore>>,
+    wait_semaphores: Vec<Semaphore>,
+    wait_vk_semaphores: Vec<vks::VkSemaphore>,
+    buffer_binds: Vec<VkSparseBufferMemoryBindInfoWrapper>,
+    vk_buffer_binds: Vec<vks::VkSparseBufferMemoryBindInfo>,
+    image_opaque_binds: Vec<VkSparseImageOpaqueMemoryBindInfoWrapper>,
+    vk_image_opaque_binds: Vec<vks::VkSparseImageOpaqueMemoryBindInfo>,
+    image_binds: Vec<VkSparseImageMemoryBindInfoWrapper>,
+    vk_image_binds: Vec<vks::VkSparseImageMemoryBindInfo>,
+    signal_semaphores: Vec<Semaphore>,
+    signal_vk_semaphores: Vec<vks::VkSemaphore>,
     chain: Option<BindSparseInfoChainWrapper>,
 }
 
 impl VkBindSparseInfoWrapper {
     pub fn new(info: &BindSparseInfo, with_chain: bool) -> Self {
-        let (wait_semaphores_count, wait_vk_semaphores_ptr, wait_semaphores, wait_vk_semaphores) = match info.wait_semaphores {
-            Some(ref wait_semaphores) => {
-                let wait_semaphores = wait_semaphores.clone();
-                let wait_vk_semaphores: Vec<_> = wait_semaphores.iter().map(Semaphore::handle).collect();
-                (wait_semaphores.len() as u32, wait_vk_semaphores.as_ptr(), Some(wait_semaphores), Some(wait_vk_semaphores))
-            }
-
-            None => (0, ptr::null(), None, None),
+        let wait_semaphores = info.wait_semaphores.clone();
+        let (wait_vk_semaphores_ptr, wait_vk_semaphores) = if !wait_semaphores.is_empty() {
+            let wait_vk_semaphores: Vec<_> = wait_semaphores.iter().map(Semaphore::handle).collect();
+            (wait_vk_semaphores.as_ptr(), wait_vk_semaphores)
+        }
+        else {
+            (ptr::null(), vec![])
         };
 
-        let (buffer_binds_count, vk_buffer_binds_ptr, buffer_binds, vk_buffer_binds) = match info.buffer_binds {
-            Some(ref buffer_binds) => {
-                let buffer_binds: Vec<VkSparseBufferMemoryBindInfoWrapper> = buffer_binds.iter().map(From::from).collect();
-                let vk_buffer_binds: Vec<_> = buffer_binds.iter().map(|b| b.vks_struct).collect();
-                (buffer_binds.len() as u32, vk_buffer_binds.as_ptr(), Some(buffer_binds), Some(vk_buffer_binds))
-            }
-
-            None => (0, ptr::null(), None, None),
+        let buffer_binds: Vec<VkSparseBufferMemoryBindInfoWrapper> = info.buffer_binds.iter().map(From::from).collect();
+        let (vk_buffer_binds_ptr, vk_buffer_binds) = if !buffer_binds.is_empty() {
+            let vk_buffer_binds: Vec<_> = buffer_binds.iter().map(|b| b.vks_struct).collect();
+            (vk_buffer_binds.as_ptr(), vk_buffer_binds)
+        }
+        else {
+            (ptr::null(), vec![])
         };
 
-        let (image_opaque_binds_count, vk_image_opaque_binds_ptr, image_opaque_binds, vk_image_opaque_binds) = match info.image_opaque_binds {
-            Some(ref image_opaque_binds) => {
-                let image_opaque_binds: Vec<VkSparseImageOpaqueMemoryBindInfoWrapper> = image_opaque_binds.iter().map(From::from).collect();
-                let vk_image_opaque_binds: Vec<_> = image_opaque_binds.iter().map(|i| i.vks_struct).collect();
-                (image_opaque_binds.len() as u32, vk_image_opaque_binds.as_ptr(), Some(image_opaque_binds), Some(vk_image_opaque_binds))
-            }
-
-            None => (0, ptr::null(), None, None),
+        let image_opaque_binds: Vec<VkSparseImageOpaqueMemoryBindInfoWrapper> = info.image_opaque_binds.iter().map(From::from).collect();
+        let (vk_image_opaque_binds_ptr, vk_image_opaque_binds) = if !image_opaque_binds.is_empty() {
+            let vk_image_opaque_binds: Vec<_> = image_opaque_binds.iter().map(|i| i.vks_struct).collect();
+            (vk_image_opaque_binds.as_ptr(), vk_image_opaque_binds)
+        }
+        else {
+            (ptr::null(), vec![])
         };
 
-        let (image_binds_count, vk_image_binds_ptr, image_binds, vk_image_binds) = match info.image_binds {
-            Some(ref image_binds) => {
-                let image_binds: Vec<VkSparseImageMemoryBindInfoWrapper> = image_binds.iter().map(From::from).collect();
-                let vk_image_binds: Vec<_> = image_binds.iter().map(|i| i.vks_struct).collect();
-                (image_binds.len() as u32, vk_image_binds.as_ptr(), Some(image_binds), Some(vk_image_binds))
-            }
-
-            None => (0, ptr::null(), None, None),
+        let image_binds: Vec<VkSparseImageMemoryBindInfoWrapper> = info.image_binds.iter().map(From::from).collect();
+        let (vk_image_binds_ptr, vk_image_binds) = if !image_binds.is_empty() {
+            let vk_image_binds: Vec<_> = image_binds.iter().map(|i| i.vks_struct).collect();
+            (vk_image_binds.as_ptr(), vk_image_binds)
+        }
+        else {
+            (ptr::null(), vec![])
         };
 
-        let (signal_semaphores_count, signal_vk_semaphores_ptr, signal_semaphores, signal_vk_semaphores) = match info.signal_semaphores {
-            Some(ref signal_semaphores) => {
-                let signal_semaphores = signal_semaphores.clone();
-                let signal_vk_semaphores: Vec<_> = signal_semaphores.iter().map(Semaphore::handle).collect();
-                (signal_semaphores.len() as u32, signal_vk_semaphores.as_ptr(), Some(signal_semaphores), Some(signal_vk_semaphores))
-            }
-
-            None => (0, ptr::null(), None, None),
+        let signal_semaphores = info.signal_semaphores.clone();
+        let (signal_vk_semaphores_ptr, signal_vk_semaphores) = if !signal_semaphores.is_empty() {
+            let signal_vk_semaphores: Vec<_> = signal_semaphores.iter().map(Semaphore::handle).collect();
+            (signal_vk_semaphores.as_ptr(), signal_vk_semaphores)
+        }
+        else {
+            (ptr::null(), vec![])
         };
 
         let (pnext, chain) = BindSparseInfoChainWrapper::new_optional(&info.chain, with_chain);
@@ -4859,15 +4854,15 @@ impl VkBindSparseInfoWrapper {
             vks_struct: vks::VkBindSparseInfo {
                 sType: vks::VK_STRUCTURE_TYPE_BIND_SPARSE_INFO,
                 pNext: pnext,
-                waitSemaphoreCount: wait_semaphores_count,
+                waitSemaphoreCount: wait_semaphores.len() as u32,
                 pWaitSemaphores: wait_vk_semaphores_ptr,
-                bufferBindCount: buffer_binds_count,
+                bufferBindCount: buffer_binds.len() as u32,
                 pBufferBinds: vk_buffer_binds_ptr,
-                imageOpaqueBindCount: image_opaque_binds_count,
+                imageOpaqueBindCount: image_opaque_binds.len() as u32,
                 pImageOpaqueBinds: vk_image_opaque_binds_ptr,
-                imageBindCount: image_binds_count,
+                imageBindCount: image_binds.len() as u32,
                 pImageBinds: vk_image_binds_ptr,
-                signalSemaphoreCount: signal_semaphores_count,
+                signalSemaphoreCount: signal_semaphores.len() as u32,
                 pSignalSemaphores: signal_vk_semaphores_ptr,
             },
             wait_semaphores: wait_semaphores,
