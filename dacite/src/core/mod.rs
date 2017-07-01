@@ -2284,6 +2284,24 @@ impl From<ImageLayout> for vks::VkImageLayout {
     }
 }
 
+impl From<vks::VkImageLayout> for ImageLayout {
+    fn from(layout: vks::VkImageLayout) -> Self {
+        match layout {
+            vks::VK_IMAGE_LAYOUT_UNDEFINED => ImageLayout::Undefined,
+            vks::VK_IMAGE_LAYOUT_GENERAL => ImageLayout::General,
+            vks::VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL => ImageLayout::ColorAttachmentOptimal,
+            vks::VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL => ImageLayout::DepthStencilAttachmentOptimal,
+            vks::VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL => ImageLayout::DepthStencilReadOnlyOptimal,
+            vks::VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL => ImageLayout::ShaderReadOnlyOptimal,
+            vks::VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL => ImageLayout::TransferSrcOptimal,
+            vks::VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL => ImageLayout::TransferDstOptimal,
+            vks::VK_IMAGE_LAYOUT_PREINITIALIZED => ImageLayout::Preinitialized,
+            vks::VK_IMAGE_LAYOUT_PRESENT_SRC_KHR => ImageLayout::PresentSrcKhr,
+            _ => ImageLayout::Unknown(layout),
+        }
+    }
+}
+
 /// See [`VkImageViewType`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageViewType)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum ImageViewType {
