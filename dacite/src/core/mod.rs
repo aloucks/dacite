@@ -5045,23 +5045,25 @@ pub struct BufferCreateInfo {
     pub size: u64,
     pub usage: BufferUsageFlags,
     pub sharing_mode: SharingMode,
-    pub queue_family_indices: Option<Vec<u32>>,
+    pub queue_family_indices: Vec<u32>,
     pub chain: Option<BufferCreateInfoChain>,
 }
 
 #[derive(Debug)]
 struct VkBufferCreateInfoWrapper {
     pub vks_struct: vks::VkBufferCreateInfo,
-    queue_family_indices: Option<Vec<u32>>,
+    queue_family_indices: Vec<u32>,
     chain: Option<BufferCreateInfoChainWrapper>,
 }
 
 impl VkBufferCreateInfoWrapper {
     pub fn new(create_info: &BufferCreateInfo, with_chain: bool) -> Self {
         let queue_family_indices = create_info.queue_family_indices.clone();
-        let (queue_family_indices_ptr, queue_family_index_count) = match queue_family_indices {
-            Some(ref queue_family_indices) => (queue_family_indices.as_ptr(), queue_family_indices.len() as u32),
-            None => (ptr::null(), 0)
+        let queue_family_indices_ptr = if !queue_family_indices.is_empty() {
+            queue_family_indices.as_ptr()
+        }
+        else {
+            ptr::null()
         };
 
         let (pnext, chain) = BufferCreateInfoChainWrapper::new_optional(&create_info.chain, with_chain);
@@ -5074,7 +5076,7 @@ impl VkBufferCreateInfoWrapper {
                 size: create_info.size,
                 usage: create_info.usage.bits(),
                 sharingMode: create_info.sharing_mode.into(),
-                queueFamilyIndexCount: queue_family_index_count,
+                queueFamilyIndexCount: queue_family_indices.len() as u32,
                 pQueueFamilyIndices: queue_family_indices_ptr,
             },
             queue_family_indices: queue_family_indices,

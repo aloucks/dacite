@@ -231,7 +231,7 @@ fn create_buffer(device: &dacite::core::Device, extent: &dacite::core::Extent2D,
         size: 4 * extent.width as u64 * extent.height as u64,
         usage: dacite::core::BUFFER_USAGE_TRANSFER_DST_BIT,
         sharing_mode: dacite::core::SharingMode::Exclusive,
-        queue_family_indices: None,
+        queue_family_indices: vec![],
         chain: None,
     };
 
