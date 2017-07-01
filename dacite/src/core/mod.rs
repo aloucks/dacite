@@ -1318,6 +1318,15 @@ impl From<SubpassIndex> for u32 {
     }
 }
 
+impl From<u32> for SubpassIndex {
+    fn from(index: u32) -> Self {
+        match index {
+            vks::VK_SUBPASS_EXTERNAL => SubpassIndex::External,
+            _ => SubpassIndex::Index(index),
+        }
+    }
+}
+
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum QueryResult {
     U32(u32),
