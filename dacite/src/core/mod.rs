@@ -7441,6 +7441,20 @@ impl<'a> From<&'a SubpassDependency> for vks::VkSubpassDependency {
     }
 }
 
+impl<'a> From<&'a vks::VkSubpassDependency> for SubpassDependency {
+    fn from(dependency: &'a vks::VkSubpassDependency) -> Self {
+        SubpassDependency {
+            src_subpass: dependency.srcSubpass.into(),
+            dst_subpass: dependency.dstSubpass.into(),
+            src_stage_mask: PipelineStageFlags::from_bits_truncate(dependency.srcStageMask),
+            dst_stage_mask: PipelineStageFlags::from_bits_truncate(dependency.dstStageMask),
+            src_access_mask: AccessFlags::from_bits_truncate(dependency.srcAccessMask),
+            dst_access_mask: AccessFlags::from_bits_truncate(dependency.dstAccessMask),
+            dependency_flags: DependencyFlags::from_bits_truncate(dependency.dependencyFlags),
+        }
+    }
+}
+
 gen_chain_struct! {
     name: RenderPassCreateInfoChain [RenderPassCreateInfoChainWrapper],
     query: RenderPassCreateInfoChainQuery [RenderPassCreateInfoChainQueryWrapper],
