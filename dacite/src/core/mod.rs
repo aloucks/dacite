@@ -1278,6 +1278,15 @@ impl From<AttachmentIndex> for u32 {
     }
 }
 
+impl From<u32> for AttachmentIndex {
+    fn from(index: u32) -> Self {
+        match index {
+            vks::VK_ATTACHMENT_UNUSED => AttachmentIndex::Unused,
+            _ => AttachmentIndex::Index(index),
+        }
+    }
+}
+
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum QueueFamilyIndex {
     Index(u32),
