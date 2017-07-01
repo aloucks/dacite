@@ -50,6 +50,7 @@ use std::ffi::{CStr, CString};
 use std::fmt;
 use std::mem;
 use std::ptr;
+use std::slice;
 use std::time::Duration;
 use utils;
 use vks;
@@ -7272,6 +7273,58 @@ pub struct SubpassDescription {
     pub resolve_attachments: Option<Vec<AttachmentReference>>,
     pub depth_stencil_attachment: Option<AttachmentReference>,
     pub preserve_attachments: Option<Vec<u32>>,
+}
+
+impl<'a> From<&'a vks::VkSubpassDescription> for SubpassDescription {
+    fn from(description: &'a vks::VkSubpassDescription) -> Self {
+        let input_attachments = if !description.pInputAttachments.is_null() {
+            let input_attachments = unsafe { slice::from_raw_parts(description.pInputAttachments, description.inputAttachmentCount as usize) };
+            Some(input_attachments.iter().map(AttachmentReference::from).collect())
+        }
+        else {
+            None
+        };
+
+        let color_attachments = if !description.pColorAttachments.is_null() {
+            let color_attachments = unsafe { slice::from_raw_parts(description.pColorAttachments, description.colorAttachmentCount as usize) };
+            Some(color_attachments.iter().map(AttachmentReference::from).collect())
+        }
+        else {
+            None
+        };
+
+        let resolve_attachments = if !description.pResolveAttachments.is_null() {
+            let resolve_attachments = unsafe { slice::from_raw_parts(description.pResolveAttachments, description.colorAttachmentCount as usize) };
+            Some(resolve_attachments.iter().map(AttachmentReference::from).collect())
+        }
+        else {
+            None
+        };
+
+        let depth_stencil_attachment = if !description.pDepthStencilAttachment.is_null() {
+            unsafe { Some((&*description.pDepthStencilAttachment).into()) }
+        }
+        else {
+            None
+        };
+
+        let preserve_attachments = if !description.pPreserveAttachments.is_null() {
+            unsafe { Some(slice::from_raw_parts(description.pPreserveAttachments, description.preserveAttachmentCount as usize).to_vec()) }
+        }
+        else {
+            None
+        };
+
+        SubpassDescription {
+            flags: SubpassDescriptionFlags::from_bits_truncate(description.flags),
+            pipeline_bind_point: description.pipelineBindPoint.into(),
+            input_attachments: input_attachments,
+            color_attachments: color_attachments,
+            resolve_attachments: resolve_attachments,
+            depth_stencil_attachment: depth_stencil_attachment,
+            preserve_attachments: preserve_attachments,
+        }
+    }
 }
 
 #[derive(Debug)]
