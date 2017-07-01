@@ -2819,6 +2819,16 @@ impl From<AttachmentStoreOp> for vks::VkAttachmentStoreOp {
     }
 }
 
+impl From<vks::VkAttachmentStoreOp> for AttachmentStoreOp {
+    fn from(op: vks::VkAttachmentStoreOp) -> Self {
+        match op {
+            vks::VK_ATTACHMENT_STORE_OP_STORE => AttachmentStoreOp::Store,
+            vks::VK_ATTACHMENT_STORE_OP_DONT_CARE => AttachmentStoreOp::DontCare,
+            _ => AttachmentStoreOp::Unknown(op),
+        }
+    }
+}
+
 /// See [`VkPipelineBindPoint`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineBindPoint)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum PipelineBindPoint {
