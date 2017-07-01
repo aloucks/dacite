@@ -7243,6 +7243,15 @@ impl<'a> From<&'a AttachmentReference> for vks::VkAttachmentReference {
     }
 }
 
+impl<'a> From<&'a vks::VkAttachmentReference> for AttachmentReference {
+    fn from(reference: &'a vks::VkAttachmentReference) -> Self {
+        AttachmentReference {
+            attachment: reference.attachment.into(),
+            layout: reference.layout.into(),
+        }
+    }
+}
+
 /// See [`VkSubpassDescription`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSubpassDescription)
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct SubpassDescription {
