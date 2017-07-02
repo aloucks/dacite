@@ -2,6 +2,8 @@
 
 ## Current Git master branch
 
+ - Vulkan 1.0.14
+
 ### Breaking changes
 
  - All occurrences of `Option<Vec<T>>` have been changed to just `Vec<T>` in the following structs:
