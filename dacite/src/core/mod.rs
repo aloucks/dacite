@@ -2175,6 +2175,17 @@ impl From<ImageType> for vks::VkImageType {
     }
 }
 
+impl From<vks::VkImageType> for ImageType {
+    fn from(image_type: vks::VkImageType) -> Self {
+        match image_type {
+            vks::VK_IMAGE_TYPE_1D => ImageType::Type1D,
+            vks::VK_IMAGE_TYPE_2D => ImageType::Type2D,
+            vks::VK_IMAGE_TYPE_3D => ImageType::Type3D,
+            _ => ImageType::Unknown(image_type),
+        }
+    }
+}
+
 /// See [`VkImageTiling`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageTiling)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum ImageTiling {
