@@ -39,6 +39,7 @@ pub mod khr_wayland_surface;
 pub mod khr_win32_surface;
 pub mod khr_xcb_surface;
 pub mod khr_xlib_surface;
+pub mod nv_dedicated_allocation;
 
 pub use vks::android_wrapper;
 pub use vks::mir_wrapper;

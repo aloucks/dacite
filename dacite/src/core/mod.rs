@@ -4290,6 +4290,13 @@ gen_extension_structs!{
         fn_get: get_khr_sampler_mirror_clamp_to_edge,
     }
 
+    nv_dedicated_allocation {
+        name: vks::VK_NV_DEDICATED_ALLOCATION_EXTENSION_NAME_STR,
+        fn_add: add_nv_dedicated_allocation,
+        fn_has: has_nv_dedicated_allocation,
+        fn_get: get_nv_dedicated_allocation,
+    }
+
     nv_glsl_shader {
         name: vks::VK_NV_GLSL_SHADER_EXTENSION_NAME_STR,
         fn_add: add_nv_glsl_shader,
@@ -4414,6 +4421,16 @@ gen_chain_struct! {
     vks: VkMemoryAllocateInfo,
     input: true,
     output: false,
+
+    dedicated_allocation_memory_allocate_info_nv: DedicatedAllocationMemoryAllocateInfoNv {
+        mod: nv_dedicated_allocation,
+        fn_add: add_dedicated_allocation_memory_allocate_info_nv,
+        fn_has: has_dedicated_allocation_memory_allocate_info_nv,
+        fn_get: get_dedicated_allocation_memory_allocate_info_nv,
+        wrapper: VkDedicatedAllocationMemoryAllocateInfoNVWrapper,
+        vks: VkDedicatedAllocationMemoryAllocateInfoNV,
+        stype: vks::VK_STRUCTURE_TYPE_DEDICATED_ALLOCATION_MEMORY_ALLOCATE_INFO_NV,
+    }
 }
 
 /// See [`VkMemoryAllocateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkMemoryAllocateInfo)
@@ -5057,6 +5074,16 @@ gen_chain_struct! {
     vks: VkBufferCreateInfo,
     input: true,
     output: false,
+
+    dedicated_allocation_buffer_create_info_nv: DedicatedAllocationBufferCreateInfoNv {
+        mod: nv_dedicated_allocation,
+        fn_add: add_dedicated_allocation_buffer_create_info_nv,
+        fn_has: has_dedicated_allocation_buffer_create_info_nv,
+        fn_get: get_dedicated_allocation_buffer_create_info_nv,
+        wrapper: VkDedicatedAllocationBufferCreateInfoNVWrapper,
+        vks: VkDedicatedAllocationBufferCreateInfoNV,
+        stype: vks::VK_STRUCTURE_TYPE_DEDICATED_ALLOCATION_BUFFER_CREATE_INFO_NV,
+    }
 }
 
 /// See [`VkBufferCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkBufferCreateInfo)
@@ -5158,6 +5185,16 @@ gen_chain_struct! {
     vks: VkImageCreateInfo,
     input: true,
     output: false,
+
+    dedicated_allocation_image_create_info_nv: DedicatedAllocationImageCreateInfoNv {
+        mod: nv_dedicated_allocation,
+        fn_add: add_dedicated_allocation_image_create_info_nv,
+        fn_has: has_dedicated_allocation_image_create_info_nv,
+        fn_get: get_dedicated_allocation_image_create_info_nv,
+        wrapper: VkDedicatedAllocationImageCreateInfoNVWrapper,
+        vks: VkDedicatedAllocationImageCreateInfoNV,
+        stype: vks::VK_STRUCTURE_TYPE_DEDICATED_ALLOCATION_IMAGE_CREATE_INFO_NV,
+    }
 }
 
 /// See [`VkImageCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageCreateInfo)

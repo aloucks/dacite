@@ -25,5 +25,5 @@ default-features = false
 features = [ "no_function_prototypes", "vk_1_0_12",
              "core_1_0_20",
              "amd_shader_trinary_minmax_1", "amd_shader_explicit_vertex_parameter_1",
-             "amd_gcn_shader_1", "ext_debug_report_3",
+             "amd_gcn_shader_1", "ext_debug_report_3", "nv_dedicated_allocation_1",
              "khr_get_physical_device_properties2_1" ]
