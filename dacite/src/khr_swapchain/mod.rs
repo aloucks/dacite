@@ -153,7 +153,7 @@ gen_chain_struct! {
 /// See [`VkPresentInfoKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPresentInfoKHR)
 #[derive(Debug, Clone, PartialEq)]
 pub struct PresentInfoKhr {
-    pub wait_semaphores: Option<Vec<core::Semaphore>>,
+    pub wait_semaphores: Vec<core::Semaphore>,
     pub swapchains: Vec<SwapchainKhr>,
     pub image_indices: Vec<u32>,
     pub results: Option<Vec<Result<QueuePresentResultKhr, core::Error>>>,
@@ -164,8 +164,8 @@ pub struct PresentInfoKhr {
 pub(crate) struct VkPresentInfoKHRWrapper {
     pub vks_struct: vks::VkPresentInfoKHR,
     pub results: Option<Vec<vks::VkResult>>,
-    wait_semaphores: Option<Vec<core::Semaphore>>,
-    vk_wait_semaphores: Option<Vec<vks::VkSemaphore>>,
+    wait_semaphores: Vec<core::Semaphore>,
+    vk_wait_semaphores: Vec<vks::VkSemaphore>,
     swapchains: Vec<SwapchainKhr>,
     vk_swapchains: Vec<vks::VkSwapchainKHR>,
     image_indices: Vec<u32>,
@@ -174,14 +174,13 @@ pub(crate) struct VkPresentInfoKHRWrapper {
 
 impl VkPresentInfoKHRWrapper {
     pub fn new(info: &PresentInfoKhr, with_chain: bool) -> Self {
-        let (wait_semaphores_count, wait_semaphores_ptr, wait_semaphores, vk_wait_semaphores) = match info.wait_semaphores {
-            Some(ref wait_semaphores) => {
-                let wait_semaphores = wait_semaphores.clone();
-                let vk_wait_semaphores: Vec<_> = wait_semaphores.iter().map(core::Semaphore::handle).collect();
-                (wait_semaphores.len() as u32, vk_wait_semaphores.as_ptr(), Some(wait_semaphores), Some(vk_wait_semaphores))
-            }
-
-            None => (0, ptr::null(), None, None),
+        let wait_semaphores = info.wait_semaphores.clone();
+        let vk_wait_semaphores: Vec<_> = wait_semaphores.iter().map(core::Semaphore::handle).collect();
+        let wait_semaphores_ptr = if !wait_semaphores.is_empty() {
+            vk_wait_semaphores.as_ptr()
+        }
+        else {
+            ptr::null()
         };
 
         let swapchains = info.swapchains.clone();
@@ -203,7 +202,7 @@ impl VkPresentInfoKHRWrapper {
             vks_struct: vks::VkPresentInfoKHR {
                 sType: vks::VK_STRUCTURE_TYPE_PRESENT_INFO_KHR,
                 pNext: pnext,
-                waitSemaphoreCount: wait_semaphores_count,
+                waitSemaphoreCount: wait_semaphores.len() as u32,
                 pWaitSemaphores: wait_semaphores_ptr,
                 swapchainCount: swapchains.len() as u32,
                 pSwapchains: vk_swapchains.as_ptr(),

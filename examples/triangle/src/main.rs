@@ -665,7 +665,7 @@ fn render(graphics_queue: &dacite::core::Queue, present_queue: &dacite::core::Qu
     })?;
 
     let mut present_info = dacite::khr_swapchain::PresentInfoKhr {
-        wait_semaphores: Some(vec![image_rendered.clone()]),
+        wait_semaphores: vec![image_rendered.clone()],
         swapchains: vec![swapchain.clone()],
         image_indices: vec![next_image as u32],
         results: None,
