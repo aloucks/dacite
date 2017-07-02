@@ -1,5 +1,10 @@
 # dacite-winit Changelog
 
+## Version 0.5.0, released on 02.07.2017
+
+ - Compatibility with dacite 0.5.0
+
+
 ## Version 0.4.0, released on 25.06.2017
 
  - Compatibility with dacite 0.4.0
