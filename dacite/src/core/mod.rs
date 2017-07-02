@@ -5448,25 +5448,21 @@ impl<'a> From<&'a SpecializationMapEntry> for vks::VkSpecializationMapEntry {
 }
 
 /// See [`VkSpecializationInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSpecializationInfo)
-#[derive(Debug, Clone, PartialEq, Eq, Hash)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Default)]
 pub struct SpecializationInfo {
-    pub map_entries: Option<Vec<SpecializationMapEntry>>,
-    pub data: Option<Vec<u8>>,
+    pub map_entries: Vec<SpecializationMapEntry>,
+    pub data: Vec<u8>,
 }
 
-/// See [`VkSpecializationInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSpecializationInfo)
-#[derive(Debug, Clone, Default)]
-pub struct SpecializationInfoBuilder {
-    map_entries: Vec<SpecializationMapEntry>,
-    data: Vec<u8>,
-}
-
-impl SpecializationInfoBuilder {
+impl SpecializationInfo {
+    #[inline]
     pub fn new() -> Self {
         Default::default()
     }
 
-    pub fn entry<T: Copy>(&mut self, constant_id: u32, value: T) -> &mut Self {
+    pub fn push<T>(&mut self, constant_id: u32, value: T)
+    where T: Copy
+    {
         let entry = SpecializationMapEntry {
             constant_id: constant_id,
             offset: self.data.len() as u32,
@@ -5480,58 +5476,39 @@ impl SpecializationInfoBuilder {
         }
 
         self.map_entries.push(entry);
-
-        self
-    }
-
-    pub fn done(self) -> SpecializationInfo {
-        if !self.map_entries.is_empty() {
-            SpecializationInfo {
-                map_entries: Some(self.map_entries),
-                data: Some(self.data),
-            }
-        }
-        else {
-            SpecializationInfo {
-                map_entries: None,
-                data: None,
-            }
-        }
     }
 }
 
 #[derive(Debug)]
 struct VkSpecializationInfoWrapper {
     pub vks_struct: vks::VkSpecializationInfo,
-    map_entries: Option<Vec<vks::VkSpecializationMapEntry>>,
-    data: Option<Vec<u8>>,
+    map_entries: Vec<vks::VkSpecializationMapEntry>,
+    data: Vec<u8>,
 }
 
 impl<'a> From<&'a SpecializationInfo> for VkSpecializationInfoWrapper {
     fn from(info: &'a SpecializationInfo) -> Self {
-        let (map_entries_count, map_entries_ptr, map_entries) = match info.map_entries {
-            Some(ref map_entries) => {
-                let map_entries: Vec<_> = map_entries.iter().map(From::from).collect();
-                (map_entries.len() as u32, map_entries.as_ptr(), Some(map_entries))
-            }
-
-            None => (0, ptr::null(), None),
+        let map_entries: Vec<_> = info.map_entries.iter().map(From::from).collect();
+        let map_entries_ptr = if !map_entries.is_empty() {
+            map_entries.as_ptr()
+        }
+        else {
+            ptr::null()
         };
 
-        let (data_size, data_ptr, data) = match info.data {
-            Some(ref data) => {
-                let data = data.clone();
-                (data.len(), data.as_ptr() as *const c_void, Some(data))
-            }
-
-            None => (0, ptr::null(), None),
+        let data = info.data.clone();
+        let data_ptr = if !data.is_empty() {
+            data.as_ptr() as *const _
+        }
+        else {
+            ptr::null()
         };
 
         VkSpecializationInfoWrapper {
             vks_struct: vks::VkSpecializationInfo {
-                mapEntryCount: map_entries_count,
+                mapEntryCount: map_entries.len() as u32,
                 pMapEntries: map_entries_ptr,
-                dataSize: data_size,
+                dataSize: data.len(),
                 pData: data_ptr,
             },
             map_entries: map_entries,

@@ -10,6 +10,11 @@
    - `core::BufferCreateInfo`
    - `core::ImageCreateInfo`
    - `core::PipelineCacheCreateInfo`
+   - `core::SpecializationInfo`
+
+ - The builder `core::SpecializationInfoBuilder` has been removed. Entries to a
+   `core::SpecializationInfo` can now be added conveniently with `core::SpecializationInfo::push`.
+
 
 ## Version 0.4.0, released on 25.06.2017
 
