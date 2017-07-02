@@ -2,7 +2,7 @@
 
 ## Current Git master branch
 
- - Vulkan 1.0.14, 1.0.15, 1.0.16, 1.0.17, 1.0.18, 1.0.19
+ - Vulkan 1.0.14, 1.0.15, 1.0.16, 1.0.17, 1.0.18, 1.0.19, 1.0.20
  - Extension `VK_AMD_shader_trinary_minmax` (revision 1)
  - Extension `VK_AMD_shader_explicit_vertex_parameter` (revision 1)
  - Extension `VK_AMD_gcn_shader` (revision 1)
