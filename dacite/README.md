@@ -116,7 +116,7 @@ might be breaking change.
 
 | Extension | Revision |
 | --- | --- |
-| `VK_EXT_debug_report` | 2 |
+| `VK_EXT_debug_report` | 3 |
 
 ### `NV` Extensions
 
