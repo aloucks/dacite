@@ -6044,7 +6044,7 @@ pub struct PipelineMultisampleStateCreateInfo {
     pub rasterization_samples: SampleCountFlagBits,
     pub sample_shading_enable: bool,
     pub min_sample_shading: f32,
-    pub sample_mask: Option<Vec<u32>>,
+    pub sample_mask: Vec<u32>,
     pub alpha_to_coverage_enable: bool,
     pub alpha_to_one_enable: bool,
     pub chain: Option<PipelineMultisampleStateCreateInfoChain>,
@@ -6053,19 +6053,18 @@ pub struct PipelineMultisampleStateCreateInfo {
 #[derive(Debug)]
 struct VkPipelineMultisampleStateCreateInfoWrapper {
     pub vks_struct: vks::VkPipelineMultisampleStateCreateInfo,
-    sample_mask: Option<Vec<u32>>,
+    sample_mask: Vec<u32>,
     chain: Option<PipelineMultisampleStateCreateInfoChainWrapper>,
 }
 
 impl VkPipelineMultisampleStateCreateInfoWrapper {
     pub fn new(create_info: &PipelineMultisampleStateCreateInfo, with_chain: bool) -> Self {
-        let (sample_mask_ptr, sample_mask) = match create_info.sample_mask {
-            Some(ref sample_mask) => {
-                let sample_mask = sample_mask.clone();
-                (sample_mask.as_ptr(), Some(sample_mask))
-            }
-
-            None => (ptr::null(), None),
+        let sample_mask = create_info.sample_mask.clone();
+        let sample_mask_ptr = if !sample_mask.is_empty() {
+            sample_mask.as_ptr()
+        }
+        else {
+            ptr::null()
         };
 
         let (pnext, chain) = PipelineMultisampleStateCreateInfoChainWrapper::new_optional(&create_info.chain, with_chain);

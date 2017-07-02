@@ -411,7 +411,7 @@ fn create_pipeline(device: &dacite::core::Device, render_pass: &dacite::core::Re
             rasterization_samples: dacite::core::SAMPLE_COUNT_1_BIT,
             sample_shading_enable: false,
             min_sample_shading: 1.0,
-            sample_mask: None,
+            sample_mask: vec![],
             alpha_to_coverage_enable: false,
             alpha_to_one_enable: false,
             chain: None,
