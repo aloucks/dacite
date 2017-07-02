@@ -4232,6 +4232,13 @@ gen_extension_structs!{
     pub struct DeviceExtensions;
     pub struct DeviceExtensionsProperties;
 
+    amd_gcn_shader {
+        name: vks::VK_AMD_GCN_SHADER_EXTENSION_NAME_STR,
+        fn_add: add_amd_gcn_shader,
+        fn_has: has_amd_gcn_shader,
+        fn_get: get_amd_gcn_shader,
+    }
+
     amd_rasterization_order {
         name: vks::VK_AMD_RASTERIZATION_ORDER_EXTENSION_NAME_STR,
         fn_add: add_amd_rasterization_order,
