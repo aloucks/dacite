@@ -3447,6 +3447,18 @@ impl<'a> From<&'a vks::VkImageFormatProperties> for ImageFormatProperties {
     }
 }
 
+impl<'a> From<&'a ImageFormatProperties> for vks::VkImageFormatProperties {
+    fn from(properties: &'a ImageFormatProperties) -> Self {
+        vks::VkImageFormatProperties {
+            maxExtent: (&properties.max_extent).into(),
+            maxMipLevels: properties.max_mip_levels,
+            maxArrayLayers: properties.max_array_layers,
+            sampleCounts: properties.sample_counts.bits(),
+            maxResourceSize: properties.max_resource_size,
+        }
+    }
+}
+
 /// See [`VkPhysicalDeviceLimits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPhysicalDeviceLimits)
 #[derive(Debug, Copy, Clone, PartialEq)]
 pub struct PhysicalDeviceLimits {
