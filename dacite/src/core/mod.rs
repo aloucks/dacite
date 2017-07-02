@@ -2289,6 +2289,16 @@ impl From<SharingMode> for vks::VkSharingMode {
     }
 }
 
+impl From<vks::VkSharingMode> for SharingMode {
+    fn from(mode: vks::VkSharingMode) -> Self {
+        match mode {
+            vks::VK_SHARING_MODE_EXCLUSIVE => SharingMode::Exclusive,
+            vks::VK_SHARING_MODE_CONCURRENT => SharingMode::Concurrent,
+            _ => SharingMode::Unknown(mode),
+        }
+    }
+}
+
 /// See [`VkImageLayout`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageLayout)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum ImageLayout {
