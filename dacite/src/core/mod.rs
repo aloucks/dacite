@@ -6209,7 +6209,7 @@ pub struct PipelineColorBlendStateCreateInfo {
     pub flags: PipelineColorBlendStateCreateFlags,
     pub logic_op_enable: bool,
     pub logic_op: LogicOp,
-    pub attachments: Option<Vec<PipelineColorBlendAttachmentState>>,
+    pub attachments: Vec<PipelineColorBlendAttachmentState>,
     pub blend_constants: [f32; 4],
     pub chain: Option<PipelineColorBlendStateCreateInfoChain>,
 }
@@ -6217,19 +6217,18 @@ pub struct PipelineColorBlendStateCreateInfo {
 #[derive(Debug)]
 struct VkPipelineColorBlendStateCreateInfoWrapper {
     pub vks_struct: vks::VkPipelineColorBlendStateCreateInfo,
-    attachments: Option<Vec<vks::VkPipelineColorBlendAttachmentState>>,
+    attachments: Vec<vks::VkPipelineColorBlendAttachmentState>,
     chain: Option<PipelineColorBlendStateCreateInfoChainWrapper>,
 }
 
 impl VkPipelineColorBlendStateCreateInfoWrapper {
     pub fn new(create_info: &PipelineColorBlendStateCreateInfo, with_chain: bool) -> Self {
-        let (attachments_count, attachments_ptr, attachments) = match create_info.attachments {
-            Some(ref attachments) => {
-                let attachments: Vec<_> = attachments.iter().map(From::from).collect();
-                (attachments.len() as u32, attachments.as_ptr(), Some(attachments))
-            }
-
-            None => (0, ptr::null(), None),
+        let attachments: Vec<_> = create_info.attachments.iter().map(From::from).collect();
+        let attachments_ptr = if !attachments.is_empty() {
+            attachments.as_ptr()
+        }
+        else {
+            ptr::null()
         };
 
         let (pnext, chain) = PipelineColorBlendStateCreateInfoChainWrapper::new_optional(&create_info.chain, with_chain);
@@ -6241,7 +6240,7 @@ impl VkPipelineColorBlendStateCreateInfoWrapper {
                 flags: create_info.flags.bits(),
                 logicOpEnable: utils::to_vk_bool(create_info.logic_op_enable),
                 logicOp: create_info.logic_op.into(),
-                attachmentCount: attachments_count,
+                attachmentCount: attachments.len() as u32,
                 pAttachments: attachments_ptr,
                 blendConstants: create_info.blend_constants,
             },

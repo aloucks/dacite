@@ -538,7 +538,7 @@ fn create_pipeline(device: &dacite::core::Device, render_pass: &dacite::core::Re
             flags: dacite::core::PipelineColorBlendStateCreateFlags::empty(),
             logic_op_enable: false,
             logic_op: dacite::core::LogicOp::Copy,
-            attachments: Some(vec![dacite::core::PipelineColorBlendAttachmentState {
+            attachments: vec![dacite::core::PipelineColorBlendAttachmentState {
                 blend_enable: false,
                 src_color_blend_factor: dacite::core::BlendFactor::One,
                 dst_color_blend_factor: dacite::core::BlendFactor::Zero,
@@ -547,7 +547,7 @@ fn create_pipeline(device: &dacite::core::Device, render_pass: &dacite::core::Re
                 dst_alpha_blend_factor: dacite::core::BlendFactor::Zero,
                 alpha_blend_op: dacite::core::BlendOp::Add,
                 color_write_mask: dacite::core::COLOR_COMPONENT_R_BIT | dacite::core::COLOR_COMPONENT_G_BIT | dacite::core::COLOR_COMPONENT_B_BIT,
-            }]),
+            }],
             blend_constants: [0.0, 0.0, 0.0, 0.0],
             chain: None,
         }),
