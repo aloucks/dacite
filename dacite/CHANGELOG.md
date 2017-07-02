@@ -17,6 +17,7 @@
    - `core::PipelineLayoutCreateInfo`
    - `core::DescriptorSetLayoutBinding`
    - `core::DescriptorSetLayoutCreateInfo`
+   - `core::FramebufferCreateInfo`
 
  - The builder `core::SpecializationInfoBuilder` has been removed. Entries to a
    `core::SpecializationInfo` can now be added conveniently with `core::SpecializationInfo::push`.

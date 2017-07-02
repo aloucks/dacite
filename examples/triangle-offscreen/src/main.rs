@@ -206,7 +206,7 @@ fn create_framebuffer(device: &dacite::core::Device, render_pass: &dacite::core:
     let create_info = dacite::core::FramebufferCreateInfo {
         flags: dacite::core::FramebufferCreateFlags::empty(),
         render_pass: render_pass.clone(),
-        attachments: Some(vec![view.clone()]),
+        attachments: vec![view.clone()],
         width: extent.width,
         height: extent.height,
         layers: 1,

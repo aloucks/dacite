@@ -365,7 +365,7 @@ fn create_framebuffers(device: &dacite::core::Device, image_views: &[dacite::cor
         let create_info = dacite::core::FramebufferCreateInfo {
             flags: dacite::core::FramebufferCreateFlags::empty(),
             render_pass: render_pass.clone(),
-            attachments: Some(vec![image_view.clone()]),
+            attachments: vec![image_view.clone()],
             width: extent.width,
             height: extent.height,
             layers: 1,

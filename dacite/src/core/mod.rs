@@ -7107,7 +7107,7 @@ gen_chain_struct! {
 pub struct FramebufferCreateInfo {
     pub flags: FramebufferCreateFlags,
     pub render_pass: RenderPass,
-    pub attachments: Option<Vec<ImageView>>,
+    pub attachments: Vec<ImageView>,
     pub width: u32,
     pub height: u32,
     pub layers: u32,
@@ -7118,21 +7118,20 @@ pub struct FramebufferCreateInfo {
 struct VkFramebufferCreateInfoWrapper {
     pub vks_struct: vks::VkFramebufferCreateInfo,
     render_pass: RenderPass,
-    attachments: Option<Vec<ImageView>>,
-    vk_attachments: Option<Vec<vks::VkImageView>>,
+    attachments: Vec<ImageView>,
+    vk_attachments: Vec<vks::VkImageView>,
     chain: Option<FramebufferCreateInfoChainWrapper>,
 }
 
 impl VkFramebufferCreateInfoWrapper {
     pub fn new(create_info: &FramebufferCreateInfo, with_chain: bool) -> Self {
-        let (attachments_count, vk_attachments_ptr, attachments, vk_attachments) = match create_info.attachments {
-            Some(ref attachments) => {
-                let attachments = attachments.clone();
-                let vk_attachments: Vec<_> = attachments.iter().map(ImageView::handle).collect();
-                (attachments.len() as u32, vk_attachments.as_ptr(), Some(attachments), Some(vk_attachments))
-            }
-
-            None => (0, ptr::null(), None, None),
+        let attachments = create_info.attachments.clone();
+        let vk_attachments: Vec<_> = attachments.iter().map(ImageView::handle).collect();
+        let vk_attachments_ptr = if !vk_attachments.is_empty() {
+            vk_attachments.as_ptr()
+        }
+        else {
+            ptr::null()
         };
 
         let (pnext, chain) = FramebufferCreateInfoChainWrapper::new_optional(&create_info.chain, with_chain);
@@ -7143,7 +7142,7 @@ impl VkFramebufferCreateInfoWrapper {
                 pNext: pnext,
                 flags: create_info.flags.bits(),
                 renderPass: create_info.render_pass.handle(),
-                attachmentCount: attachments_count,
+                attachmentCount: attachments.len() as u32,
                 pAttachments: vk_attachments_ptr,
                 width: create_info.width,
                 height: create_info.height,
