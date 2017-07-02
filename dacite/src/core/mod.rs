@@ -6681,26 +6681,26 @@ pub struct DescriptorSetLayoutBinding {
     pub descriptor_type: DescriptorType,
     pub descriptor_count: u32,
     pub stage_flags: ShaderStageFlags,
-    pub immutable_samplers: Option<Vec<Sampler>>,
+    pub immutable_samplers: Vec<Sampler>,
 }
 
 #[derive(Debug)]
 struct VkDescriptorSetLayoutBindingWrapper {
     pub vks_struct: vks::VkDescriptorSetLayoutBinding,
-    immutable_samplers: Option<Vec<Sampler>>,
-    immutable_vk_samplers: Option<Vec<vks::VkSampler>>,
+    immutable_samplers: Vec<Sampler>,
+    immutable_vk_samplers: Vec<vks::VkSampler>,
 }
 
 impl<'a> From<&'a DescriptorSetLayoutBinding> for VkDescriptorSetLayoutBindingWrapper {
     fn from(binding: &'a DescriptorSetLayoutBinding) -> Self {
         let immutable_samplers = binding.immutable_samplers.clone();
-
-        let mut immutable_vk_samplers_ptr = ptr::null();
-        let immutable_vk_samplers = immutable_samplers.as_ref().map(|s| {
-            let immutable_vk_samplers: Vec<_> = s.iter().map(Sampler::handle).collect();
-            immutable_vk_samplers_ptr = immutable_vk_samplers.as_ptr();
-            immutable_vk_samplers
-        });
+        let immutable_vk_samplers: Vec<_> = immutable_samplers.iter().map(Sampler::handle).collect();
+        let immutable_vk_samplers_ptr = if !immutable_vk_samplers.is_empty() {
+            immutable_vk_samplers.as_ptr()
+        }
+        else {
+            ptr::null()
+        };
 
         VkDescriptorSetLayoutBindingWrapper {
             vks_struct: vks::VkDescriptorSetLayoutBinding {
