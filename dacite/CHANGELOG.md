@@ -1,6 +1,6 @@
 # dacite Changelog
 
-## Current Git remove-option-vec branch
+## Current Git master branch
 
 ### Breaking changes
 
