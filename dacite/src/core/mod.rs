@@ -8048,7 +8048,7 @@ pub struct RenderPassBeginInfo {
     pub render_pass: RenderPass,
     pub framebuffer: Framebuffer,
     pub render_area: Rect2D,
-    pub clear_values: Option<Vec<ClearValue>>,
+    pub clear_values: Vec<ClearValue>,
     pub chain: Option<RenderPassBeginInfoChain>,
 }
 
@@ -8057,19 +8057,18 @@ struct VkRenderPassBeginInfoWrapper {
     pub vks_struct: vks::VkRenderPassBeginInfo,
     render_pass: RenderPass,
     framebuffer: Framebuffer,
-    clear_values: Option<Vec<vks::VkClearValue>>,
+    clear_values: Vec<vks::VkClearValue>,
     chain: Option<RenderPassBeginInfoChainWrapper>,
 }
 
 impl VkRenderPassBeginInfoWrapper {
     pub fn new(begin_info: &RenderPassBeginInfo, with_chain: bool) -> Self {
-        let (clear_values_count, clear_values_ptr, clear_values) = match begin_info.clear_values {
-            Some(ref clear_values) => {
-                let clear_values: Vec<_> = clear_values.iter().map(From::from).collect();
-                (clear_values.len() as u32, clear_values.as_ptr(), Some(clear_values))
-            }
-
-            None => (0, ptr::null(), None),
+        let clear_values: Vec<_> = begin_info.clear_values.iter().map(From::from).collect();
+        let clear_values_ptr = if !clear_values.is_empty() {
+            clear_values.as_ptr()
+        }
+        else {
+            ptr::null()
         };
 
         let (pnext, chain) = RenderPassBeginInfoChainWrapper::new_optional(&begin_info.chain, with_chain);
@@ -8081,7 +8080,7 @@ impl VkRenderPassBeginInfoWrapper {
                 renderPass: begin_info.render_pass.handle(),
                 framebuffer: begin_info.framebuffer.handle(),
                 renderArea: (&begin_info.render_area).into(),
-                clearValueCount: clear_values_count,
+                clearValueCount: clear_values.len() as u32,
                 pClearValues: clear_values_ptr,
             },
             render_pass: begin_info.render_pass.clone(),

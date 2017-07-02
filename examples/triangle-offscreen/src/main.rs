@@ -488,7 +488,7 @@ fn record_command_buffer(command_pool: &dacite::core::CommandPool, pipeline: &da
         render_pass: render_pass.clone(),
         framebuffer: framebuffer.clone(),
         render_area: dacite::core::Rect2D::new(dacite::core::Offset2D::zero(), *extent),
-        clear_values: Some(vec![dacite::core::ClearValue::Color(dacite::core::ClearColorValue::Float32([0.0, 0.0, 0.0, 1.0]))]),
+        clear_values: vec![dacite::core::ClearValue::Color(dacite::core::ClearColorValue::Float32([0.0, 0.0, 0.0, 1.0]))],
         chain: None,
     };
 

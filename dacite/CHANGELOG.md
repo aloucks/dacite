@@ -20,6 +20,7 @@
    - `core::FramebufferCreateInfo`
    - `core::SubpassDescription`
    - `core::RenderPassCreateInfo`
+   - `core::RenderPassBeginInfo`
 
  - The builder `core::SpecializationInfoBuilder` has been removed. Entries to a
    `core::SpecializationInfo` can now be added conveniently with `core::SpecializationInfo::push`.
