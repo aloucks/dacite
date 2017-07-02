@@ -6728,28 +6728,27 @@ gen_chain_struct! {
 #[derive(Debug, Clone, PartialEq)]
 pub struct DescriptorSetLayoutCreateInfo {
     pub flags: DescriptorSetLayoutCreateFlags,
-    pub bindings: Option<Vec<DescriptorSetLayoutBinding>>,
+    pub bindings: Vec<DescriptorSetLayoutBinding>,
     pub chain: Option<DescriptorSetLayoutCreateInfoChain>,
 }
 
 #[derive(Debug)]
 struct VkDescriptorSetLayoutCreateInfoWrapper {
     pub vks_struct: vks::VkDescriptorSetLayoutCreateInfo,
-    bindings: Option<Vec<VkDescriptorSetLayoutBindingWrapper>>,
-    vk_bindings: Option<Vec<vks::VkDescriptorSetLayoutBinding>>,
+    bindings: Vec<VkDescriptorSetLayoutBindingWrapper>,
+    vk_bindings: Vec<vks::VkDescriptorSetLayoutBinding>,
     chain: Option<DescriptorSetLayoutCreateInfoChainWrapper>,
 }
 
 impl VkDescriptorSetLayoutCreateInfoWrapper {
     pub fn new(create_info: &DescriptorSetLayoutCreateInfo, with_chain: bool) -> Self {
-        let (vk_bindings_ptr, binding_count, bindings, vk_bindings) = match create_info.bindings {
-            Some(ref bindings) => {
-                let bindings: Vec<VkDescriptorSetLayoutBindingWrapper> = bindings.iter().map(From::from).collect();
-                let vk_bindings: Vec<_> = bindings.iter().map(|b| b.vks_struct).collect();
-                (vk_bindings.as_ptr(), bindings.len() as u32, Some(bindings), Some(vk_bindings))
-            }
-
-            None => (ptr::null(), 0, None, None),
+        let bindings: Vec<VkDescriptorSetLayoutBindingWrapper> = create_info.bindings.iter().map(From::from).collect();
+        let vk_bindings: Vec<_> = bindings.iter().map(|b| b.vks_struct).collect();
+        let vk_bindings_ptr = if !vk_bindings.is_empty() {
+            vk_bindings.as_ptr()
+        }
+        else {
+            ptr::null()
         };
 
         let (pnext, chain) = DescriptorSetLayoutCreateInfoChainWrapper::new_optional(&create_info.chain, with_chain);
@@ -6759,7 +6758,7 @@ impl VkDescriptorSetLayoutCreateInfoWrapper {
                 sType: vks::VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO,
                 pNext: pnext,
                 flags: create_info.flags.bits(),
-                bindingCount: binding_count,
+                bindingCount: bindings.len() as u32,
                 pBindings: vk_bindings_ptr,
             },
             bindings: bindings,
