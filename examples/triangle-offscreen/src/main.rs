@@ -102,7 +102,7 @@ fn create_device(physical_device: &dacite::core::PhysicalDevice, queue_family_in
 fn create_render_pass(device: &dacite::core::Device, format: dacite::core::Format) -> Result<dacite::core::RenderPass, ()> {
     let create_info = dacite::core::RenderPassCreateInfo {
         flags: dacite::core::RenderPassCreateFlags::empty(),
-        attachments: Some(vec![dacite::core::AttachmentDescription {
+        attachments: vec![dacite::core::AttachmentDescription {
             flags: dacite::core::AttachmentDescriptionFlags::empty(),
             format: format,
             samples: dacite::core::SAMPLE_COUNT_1_BIT,
@@ -112,7 +112,7 @@ fn create_render_pass(device: &dacite::core::Device, format: dacite::core::Forma
             stencil_store_op: dacite::core::AttachmentStoreOp::DontCare,
             initial_layout: dacite::core::ImageLayout::Undefined,
             final_layout: dacite::core::ImageLayout::TransferSrcOptimal,
-        }]),
+        }],
         subpasses: vec![dacite::core::SubpassDescription {
             flags: dacite::core::SubpassDescriptionFlags::empty(),
             pipeline_bind_point: dacite::core::PipelineBindPoint::Graphics,
@@ -125,7 +125,7 @@ fn create_render_pass(device: &dacite::core::Device, format: dacite::core::Forma
             depth_stencil_attachment: None,
             preserve_attachments: vec![],
         }],
-        dependencies: None,
+        dependencies: vec![],
         chain: None,
     };
 

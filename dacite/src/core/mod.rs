@@ -7418,43 +7418,41 @@ gen_chain_struct! {
 #[derive(Debug, Clone, PartialEq)]
 pub struct RenderPassCreateInfo {
     pub flags: RenderPassCreateFlags,
-    pub attachments: Option<Vec<AttachmentDescription>>,
+    pub attachments: Vec<AttachmentDescription>,
     pub subpasses: Vec<SubpassDescription>,
-    pub dependencies: Option<Vec<SubpassDependency>>,
+    pub dependencies: Vec<SubpassDependency>,
     pub chain: Option<RenderPassCreateInfoChain>,
 }
 
 #[derive(Debug)]
 struct VkRenderPassCreateInfoWrapper {
     pub vks_struct: vks::VkRenderPassCreateInfo,
-    attachments: Option<Vec<vks::VkAttachmentDescription>>,
+    attachments: Vec<vks::VkAttachmentDescription>,
     subpasses: Vec<VkSubpassDescriptionWrapper>,
     vk_subpasses: Vec<vks::VkSubpassDescription>,
-    dependencies: Option<Vec<vks::VkSubpassDependency>>,
+    dependencies: Vec<vks::VkSubpassDependency>,
     chain: Option<RenderPassCreateInfoChainWrapper>,
 }
 
 impl VkRenderPassCreateInfoWrapper {
     pub fn new(create_info: &RenderPassCreateInfo, with_chain: bool) -> Self {
-        let (attachments_count, attachments_ptr, attachments) = match create_info.attachments {
-            Some(ref attachments) => {
-                let attachments: Vec<_> = attachments.iter().map(From::from).collect();
-                (attachments.len() as u32, attachments.as_ptr(), Some(attachments))
-            }
-
-            None => (0, ptr::null(), None),
+        let attachments: Vec<_> = create_info.attachments.iter().map(From::from).collect();
+        let attachments_ptr = if !attachments.is_empty() {
+            attachments.as_ptr()
+        }
+        else {
+            ptr::null()
         };
 
         let subpasses: Vec<VkSubpassDescriptionWrapper> = create_info.subpasses.iter().map(From::from).collect();
         let vk_subpasses: Vec<vks::VkSubpassDescription> = subpasses.iter().map(|s| s.vks_struct).collect();
 
-        let (dependencies_count, dependencies_ptr, dependencies) = match create_info.dependencies {
-            Some(ref dependencies) => {
-                let dependencies: Vec<_> = dependencies.iter().map(From::from).collect();
-                (dependencies.len() as u32, dependencies.as_ptr(), Some(dependencies))
-            }
-
-            None => (0, ptr::null(), None),
+        let dependencies: Vec<_> = create_info.dependencies.iter().map(From::from).collect();
+        let dependencies_ptr = if !dependencies.is_empty() {
+            dependencies.as_ptr()
+        }
+        else {
+            ptr::null()
         };
 
         let (pnext, chain) = RenderPassCreateInfoChainWrapper::new_optional(&create_info.chain, with_chain);
@@ -7464,11 +7462,11 @@ impl VkRenderPassCreateInfoWrapper {
                 sType: vks::VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO,
                 pNext: pnext,
                 flags: create_info.flags.bits(),
-                attachmentCount: attachments_count,
+                attachmentCount: attachments.len() as u32,
                 pAttachments: attachments_ptr,
                 subpassCount: subpasses.len() as u32,
                 pSubpasses: vk_subpasses.as_ptr(),
-                dependencyCount: dependencies_count,
+                dependencyCount: dependencies.len() as u32,
                 pDependencies: dependencies_ptr,
             },
             attachments: attachments,
