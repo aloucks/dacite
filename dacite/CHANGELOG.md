@@ -2,7 +2,7 @@
 
 ## Current Git master branch
 
- - Vulkan 1.0.14
+ - Vulkan 1.0.14, 1.0.15
 
 ### Breaking changes
 
