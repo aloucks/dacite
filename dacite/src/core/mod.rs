@@ -12,6 +12,8 @@
 // OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
+//! Vulkan core specification
+
 #[macro_use]
 mod extension_structs;
 
