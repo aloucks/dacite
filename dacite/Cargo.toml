@@ -23,7 +23,7 @@ libloading = "0.4"
 version = "0.19"
 default-features = false
 features = [ "no_function_prototypes", "vk_1_0_12",
-             "core_1_0_17",
+             "core_1_0_18",
              "amd_shader_trinary_minmax_1", "amd_shader_explicit_vertex_parameter_1",
              "amd_gcn_shader_1", "ext_debug_report_3",
              "khr_get_physical_device_properties2_1" ]
