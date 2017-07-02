@@ -6975,12 +6975,12 @@ pub struct WriteDescriptorSet {
 struct VkWriteDescriptorSetWrapper {
     pub vks_struct: vks::VkWriteDescriptorSet,
     dst_set: DescriptorSet,
-    image_info: Option<Vec<VkDescriptorImageInfoWrapper>>,
-    vk_image_info: Option<Vec<vks::VkDescriptorImageInfo>>,
-    buffer_info: Option<Vec<VkDescriptorBufferInfoWrapper>>,
-    vk_buffer_info: Option<Vec<vks::VkDescriptorBufferInfo>>,
-    texel_buffer_view: Option<Vec<BufferView>>,
-    vk_texel_buffer_view: Option<Vec<vks::VkBufferView>>,
+    image_info: Vec<VkDescriptorImageInfoWrapper>,
+    vk_image_info: Vec<vks::VkDescriptorImageInfo>,
+    buffer_info: Vec<VkDescriptorBufferInfoWrapper>,
+    vk_buffer_info: Vec<vks::VkDescriptorBufferInfo>,
+    texel_buffer_view: Vec<BufferView>,
+    vk_texel_buffer_view: Vec<vks::VkBufferView>,
     chain: Option<WriteDescriptorSetChainWrapper>,
 }
 
@@ -6999,19 +6999,19 @@ impl VkWriteDescriptorSetWrapper {
             WriteDescriptorSetElements::ImageInfo(ref image_info) => {
                 let image_info: Vec<VkDescriptorImageInfoWrapper> = image_info.iter().map(From::from).collect();
                 let vk_image_info: Vec<_> = image_info.iter().map(|i| i.vks_struct).collect();
-                (image_info.len() as u32, vk_image_info.as_ptr(), Some(vk_image_info), Some(image_info), ptr::null(), None, None, ptr::null(), None, None)
+                (image_info.len() as u32, vk_image_info.as_ptr(), vk_image_info, image_info, ptr::null(), vec![], vec![], ptr::null(), vec![], vec![])
             },
 
             WriteDescriptorSetElements::BufferInfo(ref buffer_info) => {
                 let buffer_info: Vec<VkDescriptorBufferInfoWrapper> = buffer_info.iter().map(From::from).collect();
                 let vk_buffer_info: Vec<_> = buffer_info.iter().map(|b| b.vks_struct).collect();
-                (buffer_info.len() as u32, ptr::null(), None, None, vk_buffer_info.as_ptr(), Some(vk_buffer_info), Some(buffer_info), ptr::null(), None, None)
+                (buffer_info.len() as u32, ptr::null(), vec![], vec![], vk_buffer_info.as_ptr(), vk_buffer_info, buffer_info, ptr::null(), vec![], vec![])
             },
 
             WriteDescriptorSetElements::TexelBufferView(ref texel_buffer_view) => {
                 let texel_buffer_view = texel_buffer_view.clone();
                 let vk_texel_buffer_view: Vec<_> = texel_buffer_view.iter().map(BufferView::handle).collect();
-                (texel_buffer_view.len() as u32, ptr::null(), None, None, ptr::null(), None, None, vk_texel_buffer_view.as_ptr(), Some(vk_texel_buffer_view), Some(texel_buffer_view))
+                (texel_buffer_view.len() as u32, ptr::null(), vec![], vec![], ptr::null(), vec![], vec![], vk_texel_buffer_view.as_ptr(), vk_texel_buffer_view, texel_buffer_view)
             },
         };
 
