@@ -5628,37 +5628,35 @@ gen_chain_struct! {
 #[derive(Debug, Clone, PartialEq)]
 pub struct PipelineVertexInputStateCreateInfo {
     pub flags: PipelineVertexInputStateCreateFlags,
-    pub vertex_binding_descriptions: Option<Vec<VertexInputBindingDescription>>,
-    pub vertex_attribute_descriptions: Option<Vec<VertexInputAttributeDescription>>,
+    pub vertex_binding_descriptions: Vec<VertexInputBindingDescription>,
+    pub vertex_attribute_descriptions: Vec<VertexInputAttributeDescription>,
     pub chain: Option<PipelineVertexInputStateCreateInfoChain>,
 }
 
 #[derive(Debug)]
 struct VkPipelineVertexInputStateCreateInfoWrapper {
     pub vks_struct: vks::VkPipelineVertexInputStateCreateInfo,
-    vertex_binding_descriptions: Option<Vec<vks::VkVertexInputBindingDescription>>,
-    vertex_attribute_descriptions: Option<Vec<vks::VkVertexInputAttributeDescription>>,
+    vertex_binding_descriptions: Vec<vks::VkVertexInputBindingDescription>,
+    vertex_attribute_descriptions: Vec<vks::VkVertexInputAttributeDescription>,
     chain: Option<PipelineVertexInputStateCreateInfoChainWrapper>,
 }
 
 impl VkPipelineVertexInputStateCreateInfoWrapper {
     pub fn new(create_info: &PipelineVertexInputStateCreateInfo, with_chain: bool) -> Self {
-        let (vertex_binding_descriptions_count, vertex_binding_descriptions_ptr, vertex_binding_descriptions) = match create_info.vertex_binding_descriptions {
-            Some(ref vertex_binding_descriptions) => {
-                let vertex_binding_descriptions: Vec<_> = vertex_binding_descriptions.iter().map(From::from).collect();
-                (vertex_binding_descriptions.len() as u32, vertex_binding_descriptions.as_ptr(), Some(vertex_binding_descriptions))
-            }
-
-            None => (0, ptr::null(), None),
+        let vertex_binding_descriptions: Vec<_> = create_info.vertex_binding_descriptions.iter().map(From::from).collect();
+        let vertex_binding_descriptions_ptr = if !vertex_binding_descriptions.is_empty() {
+            vertex_binding_descriptions.as_ptr()
+        }
+        else {
+            ptr::null()
         };
 
-        let (vertex_attribute_descriptions_count, vertex_attribute_descriptions_ptr, vertex_attribute_descriptions) = match create_info.vertex_attribute_descriptions {
-            Some(ref vertex_attribute_descriptions) => {
-                let vertex_attribute_descriptions: Vec<_> = vertex_attribute_descriptions.iter().map(From::from).collect();
-                (vertex_attribute_descriptions.len() as u32, vertex_attribute_descriptions.as_ptr(), Some(vertex_attribute_descriptions))
-            }
-
-            None => (0, ptr::null(), None),
+        let vertex_attribute_descriptions: Vec<_> = create_info.vertex_attribute_descriptions.iter().map(From::from).collect();
+        let vertex_attribute_descriptions_ptr = if !vertex_attribute_descriptions.is_empty() {
+            vertex_attribute_descriptions.as_ptr()
+        }
+        else {
+            ptr::null()
         };
 
         let (pnext, chain) = PipelineVertexInputStateCreateInfoChainWrapper::new_optional(&create_info.chain, with_chain);
@@ -5668,9 +5666,9 @@ impl VkPipelineVertexInputStateCreateInfoWrapper {
                 sType: vks::VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO,
                 pNext: pnext,
                 flags: create_info.flags.bits(),
-                vertexBindingDescriptionCount: vertex_binding_descriptions_count,
+                vertexBindingDescriptionCount: vertex_binding_descriptions.len() as u32,
                 pVertexBindingDescriptions: vertex_binding_descriptions_ptr,
-                vertexAttributeDescriptionCount: vertex_attribute_descriptions_count,
+                vertexAttributeDescriptionCount: vertex_attribute_descriptions.len() as u32,
                 pVertexAttributeDescriptions: vertex_attribute_descriptions_ptr,
             },
             vertex_binding_descriptions: vertex_binding_descriptions,

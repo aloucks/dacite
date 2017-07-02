@@ -485,8 +485,8 @@ fn create_pipeline(device: &dacite::core::Device, render_pass: &dacite::core::Re
         ],
         vertex_input_state: dacite::core::PipelineVertexInputStateCreateInfo {
             flags: dacite::core::PipelineVertexInputStateCreateFlags::empty(),
-            vertex_binding_descriptions: None,
-            vertex_attribute_descriptions: None,
+            vertex_binding_descriptions: vec![],
+            vertex_attribute_descriptions: vec![],
             chain: None,
         },
         input_assembly_state: dacite::core::PipelineInputAssemblyStateCreateInfo {
