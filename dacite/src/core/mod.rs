@@ -7232,37 +7232,37 @@ impl<'a> From<&'a vks::VkAttachmentReference> for AttachmentReference {
 pub struct SubpassDescription {
     pub flags: SubpassDescriptionFlags,
     pub pipeline_bind_point: PipelineBindPoint,
-    pub input_attachments: Option<Vec<AttachmentReference>>,
-    pub color_attachments: Option<Vec<AttachmentReference>>,
-    pub resolve_attachments: Option<Vec<AttachmentReference>>,
+    pub input_attachments: Vec<AttachmentReference>,
+    pub color_attachments: Vec<AttachmentReference>,
+    pub resolve_attachments: Vec<AttachmentReference>,
     pub depth_stencil_attachment: Option<AttachmentReference>,
-    pub preserve_attachments: Option<Vec<u32>>,
+    pub preserve_attachments: Vec<u32>,
 }
 
 impl<'a> From<&'a vks::VkSubpassDescription> for SubpassDescription {
     fn from(description: &'a vks::VkSubpassDescription) -> Self {
         let input_attachments = if !description.pInputAttachments.is_null() {
             let input_attachments = unsafe { slice::from_raw_parts(description.pInputAttachments, description.inputAttachmentCount as usize) };
-            Some(input_attachments.iter().map(AttachmentReference::from).collect())
+            input_attachments.iter().map(AttachmentReference::from).collect()
         }
         else {
-            None
+            vec![]
         };
 
         let color_attachments = if !description.pColorAttachments.is_null() {
             let color_attachments = unsafe { slice::from_raw_parts(description.pColorAttachments, description.colorAttachmentCount as usize) };
-            Some(color_attachments.iter().map(AttachmentReference::from).collect())
+            color_attachments.iter().map(AttachmentReference::from).collect()
         }
         else {
-            None
+            vec![]
         };
 
         let resolve_attachments = if !description.pResolveAttachments.is_null() {
             let resolve_attachments = unsafe { slice::from_raw_parts(description.pResolveAttachments, description.colorAttachmentCount as usize) };
-            Some(resolve_attachments.iter().map(AttachmentReference::from).collect())
+            resolve_attachments.iter().map(AttachmentReference::from).collect()
         }
         else {
-            None
+            vec![]
         };
 
         let depth_stencil_attachment = if !description.pDepthStencilAttachment.is_null() {
@@ -7273,10 +7273,10 @@ impl<'a> From<&'a vks::VkSubpassDescription> for SubpassDescription {
         };
 
         let preserve_attachments = if !description.pPreserveAttachments.is_null() {
-            unsafe { Some(slice::from_raw_parts(description.pPreserveAttachments, description.preserveAttachmentCount as usize).to_vec()) }
+            unsafe { slice::from_raw_parts(description.pPreserveAttachments, description.preserveAttachmentCount as usize).to_vec() }
         }
         else {
-            None
+            vec![]
         };
 
         SubpassDescription {
@@ -7294,40 +7294,37 @@ impl<'a> From<&'a vks::VkSubpassDescription> for SubpassDescription {
 #[derive(Debug)]
 struct VkSubpassDescriptionWrapper {
     pub vks_struct: vks::VkSubpassDescription,
-    input_attachments: Option<Vec<vks::VkAttachmentReference>>,
-    color_attachments: Option<Vec<vks::VkAttachmentReference>>,
-    resolve_attachments: Option<Vec<vks::VkAttachmentReference>>,
+    input_attachments: Vec<vks::VkAttachmentReference>,
+    color_attachments: Vec<vks::VkAttachmentReference>,
+    resolve_attachments: Vec<vks::VkAttachmentReference>,
     depth_stencil_attachment: Option<Box<vks::VkAttachmentReference>>,
-    preserve_attachments: Option<Vec<u32>>,
+    preserve_attachments: Vec<u32>,
 }
 
 impl<'a> From<&'a SubpassDescription> for VkSubpassDescriptionWrapper {
     fn from(description: &'a SubpassDescription) -> Self {
-        let (input_attachments_count, input_attachments_ptr, input_attachments) = match description.input_attachments {
-            Some(ref input_attachments) => {
-                let input_attachments: Vec<_> = input_attachments.iter().map(From::from).collect();
-                (input_attachments.len() as u32, input_attachments.as_ptr(), Some(input_attachments))
-            }
-
-            None => (0, ptr::null(), None),
+        let input_attachments: Vec<_> = description.input_attachments.iter().map(From::from).collect();
+        let input_attachments_ptr = if !input_attachments.is_empty() {
+            input_attachments.as_ptr()
+        }
+        else {
+            ptr::null()
         };
 
-        let (color_attachments_count, color_attachments_ptr, color_attachments) = match description.color_attachments {
-            Some(ref color_attachments) => {
-                let color_attachments: Vec<_> = color_attachments.iter().map(From::from).collect();
-                (color_attachments.len() as u32, color_attachments.as_ptr(), Some(color_attachments))
-            }
-
-            None => (0, ptr::null(), None),
+        let color_attachments: Vec<_> = description.color_attachments.iter().map(From::from).collect();
+        let color_attachments_ptr = if !color_attachments.is_empty() {
+            color_attachments.as_ptr()
+        }
+        else {
+            ptr::null()
         };
 
-        let (resolve_attachments_ptr, resolve_attachments) = match description.resolve_attachments {
-            Some(ref resolve_attachments) => {
-                let resolve_attachments: Vec<_> = resolve_attachments.iter().map(From::from).collect();
-                (resolve_attachments.as_ptr(), Some(resolve_attachments))
-            }
-
-            None => (ptr::null(), None),
+        let resolve_attachments: Vec<_> = description.resolve_attachments.iter().map(From::from).collect();
+        let resolve_attachments_ptr = if !resolve_attachments.is_empty() {
+            resolve_attachments.as_ptr()
+        }
+        else {
+            ptr::null()
         };
 
         let (depth_stencil_attachment_ptr, depth_stencil_attachment) = match description.depth_stencil_attachment {
@@ -7339,26 +7336,25 @@ impl<'a> From<&'a SubpassDescription> for VkSubpassDescriptionWrapper {
             None => (ptr::null(), None),
         };
 
-        let (preserve_attachments_count, preserve_attachments_ptr, preserve_attachments) = match description.preserve_attachments {
-            Some(ref preserve_attachments) => {
-                let preserve_attachments = preserve_attachments.clone();
-                (preserve_attachments.len() as u32, preserve_attachments.as_ptr(), Some(preserve_attachments))
-            }
-
-            None => (0, ptr::null(), None),
+        let preserve_attachments = description.preserve_attachments.clone();
+        let preserve_attachments_ptr = if !preserve_attachments.is_empty() {
+            preserve_attachments.as_ptr()
+        }
+        else {
+            ptr::null()
         };
 
         VkSubpassDescriptionWrapper {
             vks_struct: vks::VkSubpassDescription {
                 flags: description.flags.bits(),
                 pipelineBindPoint: description.pipeline_bind_point.into(),
-                inputAttachmentCount: input_attachments_count,
+                inputAttachmentCount: input_attachments.len() as u32,
                 pInputAttachments: input_attachments_ptr,
-                colorAttachmentCount: color_attachments_count,
+                colorAttachmentCount: color_attachments.len() as u32,
                 pColorAttachments: color_attachments_ptr,
                 pResolveAttachments: resolve_attachments_ptr,
                 pDepthStencilAttachment: depth_stencil_attachment_ptr,
-                preserveAttachmentCount: preserve_attachments_count,
+                preserveAttachmentCount: preserve_attachments.len() as u32,
                 pPreserveAttachments: preserve_attachments_ptr,
             },
             input_attachments: input_attachments,

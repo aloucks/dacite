@@ -116,14 +116,14 @@ fn create_render_pass(device: &dacite::core::Device, format: dacite::core::Forma
         subpasses: vec![dacite::core::SubpassDescription {
             flags: dacite::core::SubpassDescriptionFlags::empty(),
             pipeline_bind_point: dacite::core::PipelineBindPoint::Graphics,
-            input_attachments: None,
-            color_attachments: Some(vec![dacite::core::AttachmentReference {
+            input_attachments: vec![],
+            color_attachments: vec![dacite::core::AttachmentReference {
                 attachment: dacite::core::AttachmentIndex::Index(0),
                 layout: dacite::core::ImageLayout::ColorAttachmentOptimal,
-            }]),
-            resolve_attachments: None,
+            }],
+            resolve_attachments: vec![],
             depth_stencil_attachment: None,
-            preserve_attachments: None,
+            preserve_attachments: vec![],
         }],
         dependencies: None,
         chain: None,
