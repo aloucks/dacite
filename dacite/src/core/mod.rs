@@ -4239,6 +4239,13 @@ gen_extension_structs!{
         fn_get: get_amd_rasterization_order,
     }
 
+    amd_shader_explicit_vertex_parameter {
+        name: vks::VK_AMD_SHADER_EXPLICIT_VERTEX_PARAMETER_EXTENSION_NAME_STR,
+        fn_add: add_amd_shader_explicit_vertex_parameter,
+        fn_has: has_amd_shader_explicit_vertex_parameter,
+        fn_get: get_amd_shader_explicit_vertex_parameter,
+    }
+
     amd_shader_trinary_minmax {
         name: vks::VK_AMD_SHADER_TRINARY_MINMAX_EXTENSION_NAME_STR,
         fn_add: add_amd_shader_trinary_minmax,
