@@ -4239,6 +4239,13 @@ gen_extension_structs!{
         fn_get: get_amd_rasterization_order,
     }
 
+    amd_shader_trinary_minmax {
+        name: vks::VK_AMD_SHADER_TRINARY_MINMAX_EXTENSION_NAME_STR,
+        fn_add: add_amd_shader_trinary_minmax,
+        fn_has: has_amd_shader_trinary_minmax,
+        fn_get: get_amd_shader_trinary_minmax,
+    }
+
     img_filter_cubic {
         name: vks::VK_IMG_FILTER_CUBIC_EXTENSION_NAME_STR,
         fn_add: add_img_filter_cubic,
