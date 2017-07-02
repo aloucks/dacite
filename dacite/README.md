@@ -9,7 +9,7 @@ Mostly safe Vulkan library for Rust.
 
 ## Current Status
 
- - Version: 0.4.0
+ - Version: 0.5.0
  - Supported Vulkan specification: 1.0.20
 
 Development is active and ongoing. Support for new Vulkan revisions will be added one-by-one. New
@@ -29,7 +29,7 @@ Dacite is available on [crates.io]. Add this to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-dacite = "0.4"
+dacite = "0.5"
 ```
 
 Check out the [examples] subdirectory to get started.
