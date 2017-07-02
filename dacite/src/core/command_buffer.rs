@@ -337,7 +337,7 @@ impl CommandBuffer {
     /// See [`vkCmdUpdateBuffer`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCmdUpdateBuffer)
     pub fn update_buffer(&self, dst_buffer: &Buffer, dst_offset: u64, data: &[u8]) {
         unsafe {
-            (self.loader().core.vkCmdUpdateBuffer)(self.handle(), dst_buffer.handle(), dst_offset, data.len() as u64, data.as_ptr() as *const u32);
+            (self.loader().core.vkCmdUpdateBuffer)(self.handle(), dst_buffer.handle(), dst_offset, data.len() as u64, data.as_ptr() as *const _);
         }
     }
 
