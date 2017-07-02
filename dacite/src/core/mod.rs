@@ -2204,6 +2204,16 @@ impl From<ImageTiling> for vks::VkImageTiling {
     }
 }
 
+impl From<vks::VkImageTiling> for ImageTiling {
+    fn from(tiling: vks::VkImageTiling) -> Self {
+        match tiling {
+            vks::VK_IMAGE_TILING_OPTIMAL => ImageTiling::Optimal,
+            vks::VK_IMAGE_TILING_LINEAR => ImageTiling::Linear,
+            _ => ImageTiling::Unknown(tiling),
+        }
+    }
+}
+
 /// See [`VkPhysicalDeviceType`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPhysicalDeviceType)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum PhysicalDeviceType {
