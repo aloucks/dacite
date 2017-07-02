@@ -331,8 +331,8 @@ fn create_fragment_shader(device: &dacite::core::Device) -> Result<dacite::core:
 fn create_pipeline_layout(device: &dacite::core::Device) -> Result<dacite::core::PipelineLayout, ()> {
     let create_info = dacite::core::PipelineLayoutCreateInfo {
         flags: dacite::core::PipelineLayoutCreateFlags::empty(),
-        set_layouts: None,
-        push_constant_ranges: None,
+        set_layouts: vec![],
+        push_constant_ranges: vec![],
         chain: None,
     };
 

@@ -6555,39 +6555,37 @@ gen_chain_struct! {
 #[derive(Debug, Clone, PartialEq)]
 pub struct PipelineLayoutCreateInfo {
     pub flags: PipelineLayoutCreateFlags,
-    pub set_layouts: Option<Vec<DescriptorSetLayout>>,
-    pub push_constant_ranges: Option<Vec<PushConstantRange>>,
+    pub set_layouts: Vec<DescriptorSetLayout>,
+    pub push_constant_ranges: Vec<PushConstantRange>,
     pub chain: Option<PipelineLayoutCreateInfoChain>,
 }
 
 #[derive(Debug)]
 struct VkPipelineLayoutCreateInfoWrapper {
     pub vks_struct: vks::VkPipelineLayoutCreateInfo,
-    set_layouts: Option<Vec<DescriptorSetLayout>>,
-    vk_set_layouts: Option<Vec<vks::VkDescriptorSetLayout>>,
-    push_constant_ranges: Option<Vec<vks::VkPushConstantRange>>,
+    set_layouts: Vec<DescriptorSetLayout>,
+    vk_set_layouts: Vec<vks::VkDescriptorSetLayout>,
+    push_constant_ranges: Vec<vks::VkPushConstantRange>,
     chain: Option<PipelineLayoutCreateInfoChainWrapper>,
 }
 
 impl VkPipelineLayoutCreateInfoWrapper {
     pub fn new(create_info: &PipelineLayoutCreateInfo, with_chain: bool) -> Self {
-        let (vk_set_layouts_ptr, set_layout_count, set_layouts, vk_set_layouts) = match create_info.set_layouts {
-            Some(ref set_layouts) => {
-                let set_layouts = set_layouts.clone();
-                let vk_set_layouts: Vec<_> = set_layouts.iter().map(DescriptorSetLayout::handle).collect();
-                (vk_set_layouts.as_ptr(), set_layouts.len() as u32, Some(set_layouts), Some(vk_set_layouts))
-            }
-
-            None => (ptr::null(), 0, None, None),
+        let set_layouts = create_info.set_layouts.clone();
+        let vk_set_layouts: Vec<_> = set_layouts.iter().map(DescriptorSetLayout::handle).collect();
+        let vk_set_layouts_ptr = if !vk_set_layouts.is_empty() {
+            vk_set_layouts.as_ptr()
+        }
+        else {
+            ptr::null()
         };
 
-        let (push_constant_ranges_count, push_constant_ranges_ptr, push_constant_ranges) = match create_info.push_constant_ranges {
-            Some(ref push_constant_ranges) => {
-                let push_constant_ranges: Vec<_> = push_constant_ranges.iter().map(From::from).collect();
-                (push_constant_ranges.len() as u32, push_constant_ranges.as_ptr(), Some(push_constant_ranges))
-            }
-
-            None => (0, ptr::null(), None),
+        let push_constant_ranges: Vec<_> = create_info.push_constant_ranges.iter().map(From::from).collect();
+        let push_constant_ranges_ptr = if !push_constant_ranges.is_empty() {
+            push_constant_ranges.as_ptr()
+        }
+        else {
+            ptr::null()
         };
 
         let (pnext, chain) = PipelineLayoutCreateInfoChainWrapper::new_optional(&create_info.chain, with_chain);
@@ -6597,9 +6595,9 @@ impl VkPipelineLayoutCreateInfoWrapper {
                 sType: vks::VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO,
                 pNext: pnext,
                 flags: create_info.flags.bits(),
-                setLayoutCount: set_layout_count,
+                setLayoutCount: set_layouts.len() as u32,
                 pSetLayouts: vk_set_layouts_ptr,
-                pushConstantRangeCount: push_constant_ranges_count,
+                pushConstantRangeCount: push_constant_ranges.len() as u32,
                 pPushConstantRanges: push_constant_ranges_ptr,
             },
             set_layouts: set_layouts,
