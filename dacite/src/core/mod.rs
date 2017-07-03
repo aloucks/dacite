@@ -4568,6 +4568,16 @@ impl<'a> From<&'a vks::VkMemoryRequirements> for MemoryRequirements {
     }
 }
 
+impl<'a> From<&'a MemoryRequirements> for vks::VkMemoryRequirements {
+    fn from(requirements: &'a MemoryRequirements) -> Self {
+        vks::VkMemoryRequirements {
+            size: requirements.size,
+            alignment: requirements.alignment,
+            memoryTypeBits: requirements.memory_type_bits,
+        }
+    }
+}
+
 /// See [`VkSparseImageFormatProperties`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSparseImageFormatProperties)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct SparseImageFormatProperties {
