@@ -3337,6 +3337,317 @@ impl<'a> From<&'a PhysicalDeviceFeatures> for vks::VkPhysicalDeviceFeatures {
     }
 }
 
+impl PhysicalDeviceFeatures {
+    /// Creates a new `PhysicalDeviceFeatures` with all features set to `false`.
+    #[inline]
+    pub fn new() -> Self {
+        Default::default()
+    }
+
+    /// Creates a new `PhysicalDeviceFeatures` with all features set to `true`.
+    pub fn all() -> Self {
+        PhysicalDeviceFeatures {
+            robust_buffer_access: true,
+            full_draw_index_uint32: true,
+            image_cube_array: true,
+            independent_blend: true,
+            geometry_shader: true,
+            tessellation_shader: true,
+            sample_rate_shading: true,
+            dual_src_blend: true,
+            logic_op: true,
+            multi_draw_indirect: true,
+            draw_indirect_first_instance: true,
+            depth_clamp: true,
+            depth_bias_clamp: true,
+            fill_mode_non_solid: true,
+            depth_bounds: true,
+            wide_lines: true,
+            large_points: true,
+            alpha_to_one: true,
+            multi_viewport: true,
+            sampler_anisotropy: true,
+            texture_compression_etc2: true,
+            texture_compression_astc_ldr: true,
+            texture_compression_bc: true,
+            occlusion_query_precise: true,
+            pipeline_statistics_query: true,
+            vertex_pipeline_stores_and_atomics: true,
+            fragment_stores_and_atomics: true,
+            shader_tessellation_and_geometry_point_size: true,
+            shader_image_gather_extended: true,
+            shader_storage_image_extended_formats: true,
+            shader_storage_image_multisample: true,
+            shader_storage_image_read_without_format: true,
+            shader_storage_image_write_without_format: true,
+            shader_uniform_buffer_array_dynamic_indexing: true,
+            shader_sampled_image_array_dynamic_indexing: true,
+            shader_storage_buffer_array_dynamic_indexing: true,
+            shader_storage_image_array_dynamic_indexing: true,
+            shader_clip_distance: true,
+            shader_cull_distance: true,
+            shader_float64: true,
+            shader_int64: true,
+            shader_int16: true,
+            shader_resource_residency: true,
+            shader_resource_min_lod: true,
+            sparse_binding: true,
+            sparse_residency_buffer: true,
+            sparse_residency_image_2d: true,
+            sparse_residency_image_3d: true,
+            sparse_residency_2_samples: true,
+            sparse_residency_4_samples: true,
+            sparse_residency_8_samples: true,
+            sparse_residency_16_samples: true,
+            sparse_residency_aliased: true,
+            variable_multisample_rate: true,
+            inherited_queries: true,
+        }
+    }
+
+    /// Creates a new `PhysicalDeviceFeatures` with all features set to `false`.
+    #[inline]
+    pub fn empty() -> Self {
+        Default::default()
+    }
+
+    /// Tests if all features are set to `false`.
+    pub fn is_empty(&self) -> bool {
+        !self.robust_buffer_access &&
+        !self.full_draw_index_uint32 &&
+        !self.image_cube_array &&
+        !self.independent_blend &&
+        !self.geometry_shader &&
+        !self.tessellation_shader &&
+        !self.sample_rate_shading &&
+        !self.dual_src_blend &&
+        !self.logic_op &&
+        !self.multi_draw_indirect &&
+        !self.draw_indirect_first_instance &&
+        !self.depth_clamp &&
+        !self.depth_bias_clamp &&
+        !self.fill_mode_non_solid &&
+        !self.depth_bounds &&
+        !self.wide_lines &&
+        !self.large_points &&
+        !self.alpha_to_one &&
+        !self.multi_viewport &&
+        !self.sampler_anisotropy &&
+        !self.texture_compression_etc2 &&
+        !self.texture_compression_astc_ldr &&
+        !self.texture_compression_bc &&
+        !self.occlusion_query_precise &&
+        !self.pipeline_statistics_query &&
+        !self.vertex_pipeline_stores_and_atomics &&
+        !self.fragment_stores_and_atomics &&
+        !self.shader_tessellation_and_geometry_point_size &&
+        !self.shader_image_gather_extended &&
+        !self.shader_storage_image_extended_formats &&
+        !self.shader_storage_image_multisample &&
+        !self.shader_storage_image_read_without_format &&
+        !self.shader_storage_image_write_without_format &&
+        !self.shader_uniform_buffer_array_dynamic_indexing &&
+        !self.shader_sampled_image_array_dynamic_indexing &&
+        !self.shader_storage_buffer_array_dynamic_indexing &&
+        !self.shader_storage_image_array_dynamic_indexing &&
+        !self.shader_clip_distance &&
+        !self.shader_cull_distance &&
+        !self.shader_float64 &&
+        !self.shader_int64 &&
+        !self.shader_int16 &&
+        !self.shader_resource_residency &&
+        !self.shader_resource_min_lod &&
+        !self.sparse_binding &&
+        !self.sparse_residency_buffer &&
+        !self.sparse_residency_image_2d &&
+        !self.sparse_residency_image_3d &&
+        !self.sparse_residency_2_samples &&
+        !self.sparse_residency_4_samples &&
+        !self.sparse_residency_8_samples &&
+        !self.sparse_residency_16_samples &&
+        !self.sparse_residency_aliased &&
+        !self.variable_multisample_rate &&
+        !self.inherited_queries
+    }
+
+    /// Computes the set difference, i.e. the features that are in `self` but not in `other`.
+    pub fn difference(&mut self, other: &Self) {
+        self.robust_buffer_access &= !other.robust_buffer_access;
+        self.full_draw_index_uint32 &= !other.full_draw_index_uint32;
+        self.image_cube_array &= !other.image_cube_array;
+        self.independent_blend &= !other.independent_blend;
+        self.geometry_shader &= !other.geometry_shader;
+        self.tessellation_shader &= !other.tessellation_shader;
+        self.sample_rate_shading &= !other.sample_rate_shading;
+        self.dual_src_blend &= !other.dual_src_blend;
+        self.logic_op &= !other.logic_op;
+        self.multi_draw_indirect &= !other.multi_draw_indirect;
+        self.draw_indirect_first_instance &= !other.draw_indirect_first_instance;
+        self.depth_clamp &= !other.depth_clamp;
+        self.depth_bias_clamp &= !other.depth_bias_clamp;
+        self.fill_mode_non_solid &= !other.fill_mode_non_solid;
+        self.depth_bounds &= !other.depth_bounds;
+        self.wide_lines &= !other.wide_lines;
+        self.large_points &= !other.large_points;
+        self.alpha_to_one &= !other.alpha_to_one;
+        self.multi_viewport &= !other.multi_viewport;
+        self.sampler_anisotropy &= !other.sampler_anisotropy;
+        self.texture_compression_etc2 &= !other.texture_compression_etc2;
+        self.texture_compression_astc_ldr &= !other.texture_compression_astc_ldr;
+        self.texture_compression_bc &= !other.texture_compression_bc;
+        self.occlusion_query_precise &= !other.occlusion_query_precise;
+        self.pipeline_statistics_query &= !other.pipeline_statistics_query;
+        self.vertex_pipeline_stores_and_atomics &= !other.vertex_pipeline_stores_and_atomics;
+        self.fragment_stores_and_atomics &= !other.fragment_stores_and_atomics;
+        self.shader_tessellation_and_geometry_point_size &= !other.shader_tessellation_and_geometry_point_size;
+        self.shader_image_gather_extended &= !other.shader_image_gather_extended;
+        self.shader_storage_image_extended_formats &= !other.shader_storage_image_extended_formats;
+        self.shader_storage_image_multisample &= !other.shader_storage_image_multisample;
+        self.shader_storage_image_read_without_format &= !other.shader_storage_image_read_without_format;
+        self.shader_storage_image_write_without_format &= !other.shader_storage_image_write_without_format;
+        self.shader_uniform_buffer_array_dynamic_indexing &= !other.shader_uniform_buffer_array_dynamic_indexing;
+        self.shader_sampled_image_array_dynamic_indexing &= !other.shader_sampled_image_array_dynamic_indexing;
+        self.shader_storage_buffer_array_dynamic_indexing &= !other.shader_storage_buffer_array_dynamic_indexing;
+        self.shader_storage_image_array_dynamic_indexing &= !other.shader_storage_image_array_dynamic_indexing;
+        self.shader_clip_distance &= !other.shader_clip_distance;
+        self.shader_cull_distance &= !other.shader_cull_distance;
+        self.shader_float64 &= !other.shader_float64;
+        self.shader_int64 &= !other.shader_int64;
+        self.shader_int16 &= !other.shader_int16;
+        self.shader_resource_residency &= !other.shader_resource_residency;
+        self.shader_resource_min_lod &= !other.shader_resource_min_lod;
+        self.sparse_binding &= !other.sparse_binding;
+        self.sparse_residency_buffer &= !other.sparse_residency_buffer;
+        self.sparse_residency_image_2d &= !other.sparse_residency_image_2d;
+        self.sparse_residency_image_3d &= !other.sparse_residency_image_3d;
+        self.sparse_residency_2_samples &= !other.sparse_residency_2_samples;
+        self.sparse_residency_4_samples &= !other.sparse_residency_4_samples;
+        self.sparse_residency_8_samples &= !other.sparse_residency_8_samples;
+        self.sparse_residency_16_samples &= !other.sparse_residency_16_samples;
+        self.sparse_residency_aliased &= !other.sparse_residency_aliased;
+        self.variable_multisample_rate &= !other.variable_multisample_rate;
+        self.inherited_queries &= !other.inherited_queries;
+    }
+
+    /// Computes the set intersection, i.e. the features that are in `self` and in `other`.
+    pub fn intersection(&mut self, other: &Self) {
+        self.robust_buffer_access &= other.robust_buffer_access;
+        self.full_draw_index_uint32 &= other.full_draw_index_uint32;
+        self.image_cube_array &= other.image_cube_array;
+        self.independent_blend &= other.independent_blend;
+        self.geometry_shader &= other.geometry_shader;
+        self.tessellation_shader &= other.tessellation_shader;
+        self.sample_rate_shading &= other.sample_rate_shading;
+        self.dual_src_blend &= other.dual_src_blend;
+        self.logic_op &= other.logic_op;
+        self.multi_draw_indirect &= other.multi_draw_indirect;
+        self.draw_indirect_first_instance &= other.draw_indirect_first_instance;
+        self.depth_clamp &= other.depth_clamp;
+        self.depth_bias_clamp &= other.depth_bias_clamp;
+        self.fill_mode_non_solid &= other.fill_mode_non_solid;
+        self.depth_bounds &= other.depth_bounds;
+        self.wide_lines &= other.wide_lines;
+        self.large_points &= other.large_points;
+        self.alpha_to_one &= other.alpha_to_one;
+        self.multi_viewport &= other.multi_viewport;
+        self.sampler_anisotropy &= other.sampler_anisotropy;
+        self.texture_compression_etc2 &= other.texture_compression_etc2;
+        self.texture_compression_astc_ldr &= other.texture_compression_astc_ldr;
+        self.texture_compression_bc &= other.texture_compression_bc;
+        self.occlusion_query_precise &= other.occlusion_query_precise;
+        self.pipeline_statistics_query &= other.pipeline_statistics_query;
+        self.vertex_pipeline_stores_and_atomics &= other.vertex_pipeline_stores_and_atomics;
+        self.fragment_stores_and_atomics &= other.fragment_stores_and_atomics;
+        self.shader_tessellation_and_geometry_point_size &= other.shader_tessellation_and_geometry_point_size;
+        self.shader_image_gather_extended &= other.shader_image_gather_extended;
+        self.shader_storage_image_extended_formats &= other.shader_storage_image_extended_formats;
+        self.shader_storage_image_multisample &= other.shader_storage_image_multisample;
+        self.shader_storage_image_read_without_format &= other.shader_storage_image_read_without_format;
+        self.shader_storage_image_write_without_format &= other.shader_storage_image_write_without_format;
+        self.shader_uniform_buffer_array_dynamic_indexing &= other.shader_uniform_buffer_array_dynamic_indexing;
+        self.shader_sampled_image_array_dynamic_indexing &= other.shader_sampled_image_array_dynamic_indexing;
+        self.shader_storage_buffer_array_dynamic_indexing &= other.shader_storage_buffer_array_dynamic_indexing;
+        self.shader_storage_image_array_dynamic_indexing &= other.shader_storage_image_array_dynamic_indexing;
+        self.shader_clip_distance &= other.shader_clip_distance;
+        self.shader_cull_distance &= other.shader_cull_distance;
+        self.shader_float64 &= other.shader_float64;
+        self.shader_int64 &= other.shader_int64;
+        self.shader_int16 &= other.shader_int16;
+        self.shader_resource_residency &= other.shader_resource_residency;
+        self.shader_resource_min_lod &= other.shader_resource_min_lod;
+        self.sparse_binding &= other.sparse_binding;
+        self.sparse_residency_buffer &= other.sparse_residency_buffer;
+        self.sparse_residency_image_2d &= other.sparse_residency_image_2d;
+        self.sparse_residency_image_3d &= other.sparse_residency_image_3d;
+        self.sparse_residency_2_samples &= other.sparse_residency_2_samples;
+        self.sparse_residency_4_samples &= other.sparse_residency_4_samples;
+        self.sparse_residency_8_samples &= other.sparse_residency_8_samples;
+        self.sparse_residency_16_samples &= other.sparse_residency_16_samples;
+        self.sparse_residency_aliased &= other.sparse_residency_aliased;
+        self.variable_multisample_rate &= other.variable_multisample_rate;
+        self.inherited_queries &= other.inherited_queries;
+    }
+
+    /// Computes the set union, i.e. the features that are in `self` or in `other`.
+    pub fn union(&mut self, other: &Self) {
+        self.robust_buffer_access |= other.robust_buffer_access;
+        self.full_draw_index_uint32 |= other.full_draw_index_uint32;
+        self.image_cube_array |= other.image_cube_array;
+        self.independent_blend |= other.independent_blend;
+        self.geometry_shader |= other.geometry_shader;
+        self.tessellation_shader |= other.tessellation_shader;
+        self.sample_rate_shading |= other.sample_rate_shading;
+        self.dual_src_blend |= other.dual_src_blend;
+        self.logic_op |= other.logic_op;
+        self.multi_draw_indirect |= other.multi_draw_indirect;
+        self.draw_indirect_first_instance |= other.draw_indirect_first_instance;
+        self.depth_clamp |= other.depth_clamp;
+        self.depth_bias_clamp |= other.depth_bias_clamp;
+        self.fill_mode_non_solid |= other.fill_mode_non_solid;
+        self.depth_bounds |= other.depth_bounds;
+        self.wide_lines |= other.wide_lines;
+        self.large_points |= other.large_points;
+        self.alpha_to_one |= other.alpha_to_one;
+        self.multi_viewport |= other.multi_viewport;
+        self.sampler_anisotropy |= other.sampler_anisotropy;
+        self.texture_compression_etc2 |= other.texture_compression_etc2;
+        self.texture_compression_astc_ldr |= other.texture_compression_astc_ldr;
+        self.texture_compression_bc |= other.texture_compression_bc;
+        self.occlusion_query_precise |= other.occlusion_query_precise;
+        self.pipeline_statistics_query |= other.pipeline_statistics_query;
+        self.vertex_pipeline_stores_and_atomics |= other.vertex_pipeline_stores_and_atomics;
+        self.fragment_stores_and_atomics |= other.fragment_stores_and_atomics;
+        self.shader_tessellation_and_geometry_point_size |= other.shader_tessellation_and_geometry_point_size;
+        self.shader_image_gather_extended |= other.shader_image_gather_extended;
+        self.shader_storage_image_extended_formats |= other.shader_storage_image_extended_formats;
+        self.shader_storage_image_multisample |= other.shader_storage_image_multisample;
+        self.shader_storage_image_read_without_format |= other.shader_storage_image_read_without_format;
+        self.shader_storage_image_write_without_format |= other.shader_storage_image_write_without_format;
+        self.shader_uniform_buffer_array_dynamic_indexing |= other.shader_uniform_buffer_array_dynamic_indexing;
+        self.shader_sampled_image_array_dynamic_indexing |= other.shader_sampled_image_array_dynamic_indexing;
+        self.shader_storage_buffer_array_dynamic_indexing |= other.shader_storage_buffer_array_dynamic_indexing;
+        self.shader_storage_image_array_dynamic_indexing |= other.shader_storage_image_array_dynamic_indexing;
+        self.shader_clip_distance |= other.shader_clip_distance;
+        self.shader_cull_distance |= other.shader_cull_distance;
+        self.shader_float64 |= other.shader_float64;
+        self.shader_int64 |= other.shader_int64;
+        self.shader_int16 |= other.shader_int16;
+        self.shader_resource_residency |= other.shader_resource_residency;
+        self.shader_resource_min_lod |= other.shader_resource_min_lod;
+        self.sparse_binding |= other.sparse_binding;
+        self.sparse_residency_buffer |= other.sparse_residency_buffer;
+        self.sparse_residency_image_2d |= other.sparse_residency_image_2d;
+        self.sparse_residency_image_3d |= other.sparse_residency_image_3d;
+        self.sparse_residency_2_samples |= other.sparse_residency_2_samples;
+        self.sparse_residency_4_samples |= other.sparse_residency_4_samples;
+        self.sparse_residency_8_samples |= other.sparse_residency_8_samples;
+        self.sparse_residency_16_samples |= other.sparse_residency_16_samples;
+        self.sparse_residency_aliased |= other.sparse_residency_aliased;
+        self.variable_multisample_rate |= other.variable_multisample_rate;
+        self.inherited_queries |= other.inherited_queries;
+    }
+}
+
 /// See [`VkFormatProperties`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkFormatProperties)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct FormatProperties {

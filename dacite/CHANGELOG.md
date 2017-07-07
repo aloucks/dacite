@@ -3,6 +3,8 @@
 ## Current Git master branch
 
  - Vulkan 1.0.21
+ - Added the following functions to `core::PhysicalDeviceFeatures`: `new`, `all`, `empty`,
+   `is_empty`, `difference`, `intersection` and `union`.
 
 
 ## Version 0.5.0, released on 02.07.2017
