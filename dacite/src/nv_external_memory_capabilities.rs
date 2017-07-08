@@ -39,7 +39,7 @@ bitflags! {
 }
 
 /// See [`VkExternalMemoryHandleTypeFlagBitsNV`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkExternalMemoryHandleTypeFlagBitsNV)
-pub type ExternalMemoryHandleTypeFlagBitsNv = vks::VkExternalMemoryHandleTypeFlagBitsNV;
+pub type ExternalMemoryHandleTypeFlagBitsNv = ExternalMemoryHandleTypeFlagsNv;
 
 bitflags! {
     /// See [`VkExternalMemoryFeatureFlagBitsNV`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkExternalMemoryFeatureFlagBitsNV)
@@ -60,7 +60,7 @@ bitflags! {
 }
 
 /// See [`VkExternalMemoryFeatureFlagBitsNV`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkExternalMemoryFeatureFlagBitsNV)
-pub type ExternalMemoryFeatureFlagBitsNv = vks::VkExternalMemoryFeatureFlagBitsNV;
+pub type ExternalMemoryFeatureFlagBitsNv = ExternalMemoryFeatureFlagsNv;
 
 /// See [`VkExternalImageFormatPropertiesNV`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkExternalImageFormatPropertiesNV)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
