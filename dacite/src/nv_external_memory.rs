@@ -14,8 +14,8 @@
 
 //! See extension [`VK_NV_external_memory`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_NV_external_memory)
 
-use vks;
 use nv_external_memory_capabilities;
+use vks;
 
 gen_chain_struct! {
     name: ExternalMemoryImageCreateInfoChainNv [ExternalMemoryImageCreateInfoChainNvWrapper],

@@ -6,6 +6,7 @@
  - Extension `VK_IMG_format_pvrtc` (revision 1)
  - Extension `VK_NV_external_memory_capabilities` (revision 1)
  - Extension `VK_NV_external_memory` (revision 1)
+ - Extension `VK_NV_external_memory_win32` (revision 1)
 
 ### Breaking changes
 

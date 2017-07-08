@@ -124,6 +124,7 @@ might be breaking change.
 | --- | --- |
 | `VK_NV_dedicated_allocation` | 1 |
 | `VK_NV_external_memory_capabilities` | 1 |
+| `VK_NV_external_memory_win32` | 1 |
 | `VK_NV_external_memory` | 1 |
 | `VK_NV_glsl_shader` | 1 |
 

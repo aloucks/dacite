@@ -19,11 +19,14 @@ use VulkanObject;
 use core::allocator_helper::AllocatorHelper;
 use core::{self, Device};
 use libc::c_void;
+use nv_external_memory_capabilities;
 use std::cmp::Ordering;
 use std::hash::{Hash, Hasher};
+use std::mem;
 use std::ptr;
 use std::sync::Arc;
 use vks;
+use win32_wrapper;
 
 /// See [`VkDeviceMemory`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDeviceMemory)
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
@@ -191,6 +194,22 @@ impl DeviceMemory {
         }
         else {
             Err(res.into())
+        }
+    }
+
+    /// See [`vkGetMemoryWin32HandleNV`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetMemoryWin32HandleNV)
+    /// and extension [`VK_NV_external_memory_win32`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_NV_external_memory_win32)
+    pub fn get_win32_handle_nv(&self, handle_type: nv_external_memory_capabilities::ExternalMemoryHandleTypeFlagsNv) -> Result<win32_wrapper::HANDLE, core::Error> {
+        unsafe {
+            let mut handle = mem::uninitialized();
+            let res = (self.loader().nv_external_memory_win32.vkGetMemoryWin32HandleNV)(self.device_handle(), self.handle(), handle_type.bits(), &mut handle);
+
+            if res == vks::VK_SUCCESS {
+                Ok(handle)
+            }
+            else {
+                Err(res.into())
+            }
         }
     }
 }

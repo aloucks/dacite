@@ -4728,6 +4728,14 @@ gen_extension_structs!{
         fn_get: get_nv_external_memory,
     }
 
+    nv_external_memory_win32 {
+        name: vks::VK_NV_EXTERNAL_MEMORY_WIN32_EXTENSION_NAME_STR,
+        fn_add: add_nv_external_memory_win32,
+        fn_has: has_nv_external_memory_win32,
+        fn_get: get_nv_external_memory_win32,
+        load_device: load_nv_external_memory_win32,
+    }
+
     nv_glsl_shader {
         name: vks::VK_NV_GLSL_SHADER_EXTENSION_NAME_STR,
         fn_add: add_nv_glsl_shader,
@@ -4871,6 +4879,26 @@ gen_chain_struct! {
         wrapper: VkExportMemoryAllocateInfoNVWrapper,
         vks: VkExportMemoryAllocateInfoNV,
         stype: vks::VK_STRUCTURE_TYPE_EXPORT_MEMORY_ALLOCATE_INFO_NV,
+    }
+
+    import_memory_win32_handle_info_nv: ImportMemoryWin32HandleInfoNv {
+        mod: nv_external_memory_win32,
+        fn_add: add_import_memory_win32_handle_info_nv,
+        fn_has: has_import_memory_win32_handle_info_nv,
+        fn_get: get_import_memory_win32_handle_info_nv,
+        wrapper: VkImportMemoryWin32HandleInfoNVWrapper,
+        vks: VkImportMemoryWin32HandleInfoNV,
+        stype: vks::VK_STRUCTURE_TYPE_IMPORT_MEMORY_WIN32_HANDLE_INFO_NV,
+    }
+
+    export_memory_win32_handle_info_nv: ExportMemoryWin32HandleInfoNv {
+        mod: nv_external_memory_win32,
+        fn_add: add_export_memory_win32_handle_info_nv,
+        fn_has: has_export_memory_win32_handle_info_nv,
+        fn_get: get_export_memory_win32_handle_info_nv,
+        wrapper: VkExportMemoryWin32HandleInfoNVWrapper,
+        vks: VkExportMemoryWin32HandleInfoNV,
+        stype: vks::VK_STRUCTURE_TYPE_EXPORT_MEMORY_WIN32_HANDLE_INFO_NV,
     }
 }
 
