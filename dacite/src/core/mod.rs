@@ -4627,6 +4627,14 @@ gen_extension_structs!{
         fn_get: get_khr_xlib_surface,
         load_instance: load_khr_xlib_surface,
     }
+
+    nv_external_memory_capabilities {
+        name: vks::VK_NV_EXTERNAL_MEMORY_CAPABILITIES_EXTENSION_NAME_STR,
+        fn_add: add_nv_external_memory_capabilities,
+        fn_has: has_nv_external_memory_capabilities,
+        fn_get: get_nv_external_memory_capabilities,
+        load_instance: load_nv_external_memory_capabilities,
+    }
 }
 
 gen_extension_structs!{

@@ -123,6 +123,7 @@ might be breaking change.
 | Extension | Revision |
 | --- | --- |
 | `VK_NV_dedicated_allocation` | 1 |
+| `VK_NV_external_memory_capabilities` | 1 |
 | `VK_NV_glsl_shader` | 1 |
 
 ### `AMD` Extensions

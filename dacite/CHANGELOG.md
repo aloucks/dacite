@@ -4,6 +4,7 @@
 
  - Vulkan 1.0.22, 1.0.23, 1.0.24, 1.0.25
  - Extension `VK_IMG_format_pvrtc` (revision 1)
+ - Extension `VK_NV_external_memory_capabilities` (revision 1)
 
 ### Breaking changes
 

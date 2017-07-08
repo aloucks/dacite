@@ -22,6 +22,7 @@ use khr_display;
 use khr_get_physical_device_properties2;
 use khr_surface;
 use mir_wrapper;
+use nv_external_memory_capabilities;
 use std::cmp::Ordering;
 use std::ffi::CStr;
 use std::hash::{Hash, Hasher};
@@ -612,6 +613,23 @@ impl PhysicalDevice {
             (self.loader().khr_get_physical_device_properties2.vkGetPhysicalDeviceSparseImageFormatProperties2KHR)(self.handle, &format_info_wrapper.vks_struct, &mut num, vks_structs.as_mut_ptr());
 
             vks_structs.iter().map(|p| khr_get_physical_device_properties2::SparseImageFormatProperties2Khr::from_vks(p, true)).collect()
+        }
+    }
+
+    /// See [`vkGetPhysicalDeviceExternalImageFormatPropertiesNV`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetPhysicalDeviceExternalImageFormatPropertiesNV)
+    /// and extension [`VK_NV_external_memory_capabilities`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_NV_external_memory_capabilities)
+    pub fn get_external_image_format_properties_nv(&self, format: core::Format, image_type: core::ImageType, tiling: core::ImageTiling, usage: core::ImageUsageFlags, flags: core::ImageCreateFlags, external_handle_type: nv_external_memory_capabilities::ExternalMemoryHandleTypeFlagsNv) -> Result<nv_external_memory_capabilities::ExternalImageFormatPropertiesNv, core::Error> {
+        let mut properties = unsafe { mem::uninitialized() };
+
+        let res = unsafe {
+            (self.loader().nv_external_memory_capabilities.vkGetPhysicalDeviceExternalImageFormatPropertiesNV)(self.handle, format.into(), image_type.into(), tiling.into(), usage.bits(), flags.bits(), external_handle_type.bits(), &mut properties)
+        };
+
+        if res == vks::VK_SUCCESS {
+            Ok((&properties).into())
+        }
+        else {
+            Err(res.into())
         }
     }
 }
