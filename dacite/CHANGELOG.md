@@ -2,7 +2,7 @@
 
 ## Current Git master branch
 
- - Vulkan 1.0.26
+ - Vulkan 1.0.26, 1.0.27
 
 
 ## Version 0.6.0, released on 08.07.2017
