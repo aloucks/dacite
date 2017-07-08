@@ -1,6 +1,6 @@
 # dacite Changelog
 
-## Current Git master branch
+## Version 0.6.0, released on 08.07.2017
 
  - Vulkan 1.0.22, 1.0.23, 1.0.24, 1.0.25
  - Extension `VK_IMG_format_pvrtc` (revision 1)
