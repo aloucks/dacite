@@ -1,6 +1,6 @@
 [package]
 name = "dacite"
-version = "0.5.0"
+version = "0.5.1"
 authors = ["Dennis Hamester <dennis.hamester@startmail.com>"]
 description = "Mostly safe low-level Vulkan library"
 documentation = "https://docs.rs/dacite"

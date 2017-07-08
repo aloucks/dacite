@@ -1,6 +1,6 @@
 # dacite Changelog
 
-## Current Git master branch
+## Version 0.5.1, released on 08.07.2017
 
  - Vulkan 1.0.21
  - Added the following functions to `core::PhysicalDeviceFeatures`: `new`, `all`, `empty`,
