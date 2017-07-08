@@ -43,6 +43,7 @@ pub mod nv_dedicated_allocation;
 pub mod nv_external_memory;
 pub mod nv_external_memory_capabilities;
 pub mod nv_external_memory_win32;
+pub mod nv_win32_keyed_mutex;
 
 pub use vks::android_wrapper;
 pub use vks::mir_wrapper;

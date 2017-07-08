@@ -8,6 +8,7 @@
  - Extension `VK_NV_external_memory_capabilities` (revision 1)
  - Extension `VK_NV_external_memory` (revision 1)
  - Extension `VK_NV_external_memory_win32` (revision 1)
+ - Extension `VK_NV_win32_keyed_mutex` (revision 1)
 
 ### Breaking changes
 

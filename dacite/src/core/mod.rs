@@ -4742,6 +4742,13 @@ gen_extension_structs!{
         fn_has: has_nv_glsl_shader,
         fn_get: get_nv_glsl_shader,
     }
+
+    nv_win32_keyed_mutex {
+        name: vks::VK_NV_WIN32_KEYED_MUTEX_EXTENSION_NAME_STR,
+        fn_add: add_nv_win32_keyed_mutex,
+        fn_has: has_nv_win32_keyed_mutex,
+        fn_get: get_nv_win32_keyed_mutex,
+    }
 }
 
 /// See [`VkLayerProperties`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkLayerProperties)
@@ -4772,6 +4779,16 @@ gen_chain_struct! {
     vks: VkSubmitInfo,
     input: true,
     output: false,
+
+    win32_keyed_mutex_acquire_release_info_nv: Win32KeyedMutexAcquireReleaseInfoNv {
+        mod: nv_win32_keyed_mutex,
+        fn_add: add_win32_keyed_mutex_acquire_release_info_nv,
+        fn_has: has_win32_keyed_mutex_acquire_release_info_nv,
+        fn_get: get_win32_keyed_mutex_acquire_release_info_nv,
+        wrapper: VkWin32KeyedMutexAcquireReleaseInfoNVWrapper,
+        vks: VkWin32KeyedMutexAcquireReleaseInfoNV,
+        stype: vks::VK_STRUCTURE_TYPE_WIN32_KEYED_MUTEX_ACQUIRE_RELEASE_INFO_NV,
+    }
 }
 
 /// See [`VkSubmitInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSubmitInfo)
