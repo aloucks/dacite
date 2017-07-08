@@ -20,7 +20,7 @@ use vks;
 bitflags! {
     /// See [`VkAndroidSurfaceCreateFlagsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkAndroidSurfaceCreateFlagsKHR)
     #[derive(Default)]
-    pub struct AndroidSurfaceCreateFlagsKhr: u32 {
+    pub struct AndroidSurfaceCreateFlagsKhr: vks::VkAndroidSurfaceCreateFlagsKHR {
         /// See [`VkAndroidSurfaceCreateFlagsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkAndroidSurfaceCreateFlagsKHR)
         const ANDROID_SURFACE_CREATE_FLAG_BITS_MAX_ENUM_KHR = vks::VK_ANDROID_SURFACE_CREATE_FLAG_BITS_MAX_ENUM_KHR;
     }

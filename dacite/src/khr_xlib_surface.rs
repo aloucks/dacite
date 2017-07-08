@@ -20,7 +20,7 @@ use xlib_wrapper;
 bitflags! {
     /// See [`VkXlibSurfaceCreateFlagsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkXlibSurfaceCreateFlagsKHR)
     #[derive(Default)]
-    pub struct XlibSurfaceCreateFlagsKhr: u32 {
+    pub struct XlibSurfaceCreateFlagsKhr: vks::VkXlibSurfaceCreateFlagsKHR {
         /// See [`VkXlibSurfaceCreateFlagsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkXlibSurfaceCreateFlagsKHR)
         const XLIB_SURFACE_CREATE_FLAG_BITS_MAX_ENUM_KHR = vks::VK_XLIB_SURFACE_CREATE_FLAG_BITS_MAX_ENUM_KHR;
     }

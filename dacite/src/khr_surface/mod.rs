@@ -83,7 +83,7 @@ impl From<PresentModeKhr> for vks::VkPresentModeKHR {
 bitflags! {
     /// See [`VkSurfaceTransformFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSurfaceTransformFlagBitsKHR)
     #[derive(Default)]
-    pub struct SurfaceTransformFlagsKhr: u32 {
+    pub struct SurfaceTransformFlagsKhr: vks::VkSurfaceTransformFlagsKHR {
         /// See [`VkSurfaceTransformFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSurfaceTransformFlagBitsKHR)
         const SURFACE_TRANSFORM_FLAG_BITS_MAX_ENUM_KHR = vks::VK_SURFACE_TRANSFORM_FLAG_BITS_MAX_ENUM_KHR;
 
@@ -122,7 +122,7 @@ pub type SurfaceTransformFlagBitsKhr = SurfaceTransformFlagsKhr;
 bitflags! {
     /// See [`VkCompositeAlphaFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCompositeAlphaFlagBitsKHR)
     #[derive(Default)]
-    pub struct CompositeAlphaFlagsKhr: u32 {
+    pub struct CompositeAlphaFlagsKhr: vks::VkCompositeAlphaFlagsKHR {
         /// See [`VkCompositeAlphaFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCompositeAlphaFlagBitsKHR)
         const COMPOSITE_ALPHA_FLAG_BITS_MAX_ENUM_KHR = vks::VK_COMPOSITE_ALPHA_FLAG_BITS_MAX_ENUM_KHR;
 

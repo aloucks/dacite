@@ -27,7 +27,7 @@ pub use self::swapchain::{SwapchainKhr, FromNativeSwapchainKhrParameters};
 bitflags! {
     /// See [`VkSwapchainCreateFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSwapchainCreateFlagBitsKHR)
     #[derive(Default)]
-    pub struct SwapchainCreateFlagsKhr: u32 {
+    pub struct SwapchainCreateFlagsKhr: vks::VkSwapchainCreateFlagsKHR {
         /// See [`VkSwapchainCreateFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSwapchainCreateFlagBitsKHR)
         const SWAPCHAIN_CREATE_FLAG_BITS_MAX_ENUM_KHR = vks::VK_SWAPCHAIN_CREATE_FLAG_BITS_MAX_ENUM_KHR;
     }

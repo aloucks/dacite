@@ -28,7 +28,7 @@ pub use self::display_mode::DisplayModeKhr;
 bitflags! {
     /// See [`VkDisplayPlaneAlphaFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDisplayPlaneAlphaFlagBitsKHR)
     #[derive(Default)]
-    pub struct DisplayPlaneAlphaFlagsKhr: u32 {
+    pub struct DisplayPlaneAlphaFlagsKhr: vks::VkDisplayPlaneAlphaFlagsKHR {
         /// See [`VkDisplayPlaneAlphaFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDisplayPlaneAlphaFlagBitsKHR)
         const DISPLAY_PLANE_ALPHA_FLAG_BITS_MAX_ENUM_KHR = vks::VK_DISPLAY_PLANE_ALPHA_FLAG_BITS_MAX_ENUM_KHR;
 
@@ -52,7 +52,7 @@ pub type DisplayPlaneAlphaFlagBitsKhr = DisplayPlaneAlphaFlagsKhr;
 bitflags! {
     /// See [`VkDisplayModeCreateFlagsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDisplayModeCreateFlagsKHR)
     #[derive(Default)]
-    pub struct DisplayModeCreateFlagsKhr: u32 {
+    pub struct DisplayModeCreateFlagsKhr: vks::VkDisplayModeCreateFlagsKHR {
         /// See [`VkDisplayModeCreateFlagsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDisplayModeCreateFlagsKHR)
         const DISPLAY_MODE_CREATE_FLAG_BITS_MAX_ENUM_KHR = vks::VK_DISPLAY_MODE_CREATE_FLAG_BITS_MAX_ENUM_KHR;
     }
@@ -64,7 +64,7 @@ pub type DisplayModeCreateFlagBitsKhr = DisplayModeCreateFlagsKhr;
 bitflags! {
     /// See [`VkDisplaySurfaceCreateFlagsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDisplaySurfaceCreateFlagsKHR)
     #[derive(Default)]
-    pub struct DisplaySurfaceCreateFlagsKhr: u32 {
+    pub struct DisplaySurfaceCreateFlagsKhr: vks::VkDisplaySurfaceCreateFlagsKHR {
         /// See [`VkDisplaySurfaceCreateFlagsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDisplaySurfaceCreateFlagsKHR)
         const DISPLAY_SURFACE_CREATE_FLAG_BITS_MAX_ENUM_KHR = vks::VK_DISPLAY_SURFACE_CREATE_FLAG_BITS_MAX_ENUM_KHR;
     }

@@ -20,7 +20,7 @@ use vks;
 bitflags! {
     /// See [`VkMirSurfaceCreateFlagsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkMirSurfaceCreateFlagsKHR)
     #[derive(Default)]
-    pub struct MirSurfaceCreateFlagsKhr: u32 {
+    pub struct MirSurfaceCreateFlagsKhr: vks::VkMirSurfaceCreateFlagsKHR {
         /// See [`VkMirSurfaceCreateFlagsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkMirSurfaceCreateFlagsKHR)
         const MIR_SURFACE_CREATE_FLAG_BITS_MAX_ENUM_KHR = vks::VK_MIR_SURFACE_CREATE_FLAG_BITS_MAX_ENUM_KHR;
     }

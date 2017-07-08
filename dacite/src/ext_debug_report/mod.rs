@@ -141,7 +141,7 @@ impl From<DebugReportObjectTypeExt> for vks::VkDebugReportObjectTypeEXT {
 bitflags! {
     /// See [`VkDebugReportFlagBitsEXT`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDebugReportFlagBitsEXT)
     #[derive(Default)]
-    pub struct DebugReportFlagsExt: u32 {
+    pub struct DebugReportFlagsExt: vks::VkDebugReportFlagsEXT {
         /// See [`VkDebugReportFlagBitsEXT`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDebugReportFlagBitsEXT)
         const DEBUG_REPORT_FLAG_BITS_MAX_ENUM_EXT = vks::VK_DEBUG_REPORT_FLAG_BITS_MAX_ENUM_EXT;
 

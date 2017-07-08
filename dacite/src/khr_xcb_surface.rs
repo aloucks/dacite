@@ -20,7 +20,7 @@ use xcb_wrapper;
 bitflags! {
     /// See [`VkXcbSurfaceCreateFlagsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkXcbSurfaceCreateFlagsKHR)
     #[derive(Default)]
-    pub struct XcbSurfaceCreateFlagsKhr: u32 {
+    pub struct XcbSurfaceCreateFlagsKhr: vks::VkXcbSurfaceCreateFlagsKHR {
         /// See [`VkXcbSurfaceCreateFlagsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkXcbSurfaceCreateFlagsKHR)
         const XCB_SURFACE_CREATE_FLAG_BITS_MAX_ENUM_KHR = vks::VK_XCB_SURFACE_CREATE_FLAG_BITS_MAX_ENUM_KHR;
     }

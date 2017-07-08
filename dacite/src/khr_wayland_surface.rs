@@ -20,7 +20,7 @@ use wayland_wrapper;
 bitflags! {
     /// See [`VkWaylandSurfaceCreateFlagsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkWaylandSurfaceCreateFlagsKHR)
     #[derive(Default)]
-    pub struct WaylandSurfaceCreateFlagsKhr: u32 {
+    pub struct WaylandSurfaceCreateFlagsKhr: vks::VkWaylandSurfaceCreateFlagsKHR {
         /// See [`VkWaylandSurfaceCreateFlagsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkWaylandSurfaceCreateFlagsKHR)
         const WAYLAND_SURFACE_CREATE_FLAG_BITS_MAX_ENUM_KHR = vks::VK_WAYLAND_SURFACE_CREATE_FLAG_BITS_MAX_ENUM_KHR;
     }

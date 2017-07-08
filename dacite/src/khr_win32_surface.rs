@@ -20,7 +20,7 @@ use win32_wrapper;
 bitflags! {
     /// See [`VkWin32SurfaceCreateFlagsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkWin32SurfaceCreateFlagsKHR)
     #[derive(Default)]
-    pub struct Win32SurfaceCreateFlagsKhr: u32 {
+    pub struct Win32SurfaceCreateFlagsKhr: vks::VkWin32SurfaceCreateFlagsKHR {
         /// See [`VkWin32SurfaceCreateFlagsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkWin32SurfaceCreateFlagsKHR)
         const WIN32_SURFACE_CREATE_FLAG_BITS_MAX_ENUM_KHR = vks::VK_WIN32_SURFACE_CREATE_FLAG_BITS_MAX_ENUM_KHR;
     }
