@@ -4721,6 +4721,13 @@ gen_extension_structs!{
         fn_get: get_nv_dedicated_allocation,
     }
 
+    nv_external_memory {
+        name: vks::VK_NV_EXTERNAL_MEMORY_EXTENSION_NAME_STR,
+        fn_add: add_nv_external_memory,
+        fn_has: has_nv_external_memory,
+        fn_get: get_nv_external_memory,
+    }
+
     nv_glsl_shader {
         name: vks::VK_NV_GLSL_SHADER_EXTENSION_NAME_STR,
         fn_add: add_nv_glsl_shader,
@@ -4854,6 +4861,16 @@ gen_chain_struct! {
         wrapper: VkDedicatedAllocationMemoryAllocateInfoNVWrapper,
         vks: VkDedicatedAllocationMemoryAllocateInfoNV,
         stype: vks::VK_STRUCTURE_TYPE_DEDICATED_ALLOCATION_MEMORY_ALLOCATE_INFO_NV,
+    }
+
+    export_memory_allocate_info_nv: ExportMemoryAllocateInfoNv {
+        mod: nv_external_memory,
+        fn_add: add_export_memory_allocate_info_nv,
+        fn_has: has_export_memory_allocate_info_nv,
+        fn_get: get_export_memory_allocate_info_nv,
+        wrapper: VkExportMemoryAllocateInfoNVWrapper,
+        vks: VkExportMemoryAllocateInfoNV,
+        stype: vks::VK_STRUCTURE_TYPE_EXPORT_MEMORY_ALLOCATE_INFO_NV,
     }
 }
 
@@ -5628,6 +5645,16 @@ gen_chain_struct! {
         wrapper: VkDedicatedAllocationImageCreateInfoNVWrapper,
         vks: VkDedicatedAllocationImageCreateInfoNV,
         stype: vks::VK_STRUCTURE_TYPE_DEDICATED_ALLOCATION_IMAGE_CREATE_INFO_NV,
+    }
+
+    external_memory_image_create_info_nv: ExternalMemoryImageCreateInfoNv {
+        mod: nv_external_memory,
+        fn_add: add_external_memory_image_create_info_nv,
+        fn_has: has_external_memory_image_create_info_nv,
+        fn_get: get_external_memory_image_create_info_nv,
+        wrapper: VkExternalMemoryImageCreateInfoNVWrapper,
+        vks: VkExternalMemoryImageCreateInfoNV,
+        stype: vks::VK_STRUCTURE_TYPE_EXTERNAL_MEMORY_IMAGE_CREATE_INFO_NV,
     }
 }
 
