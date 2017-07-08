@@ -245,7 +245,8 @@ impl MappedMemory {
 
     /// See [`vkFlushMappedMemoryRanges`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkFlushMappedMemoryRanges)
     pub fn flush(&self, chain: &Option<core::MappedMemoryRangeChain>) -> Result<(), core::Error> {
-        let (pnext, _) = core::MappedMemoryRangeChainWrapper::new_optional(chain, true);
+        #[allow(unused_variables)]
+        let (pnext, chain_wrapper) = core::MappedMemoryRangeChainWrapper::new_optional(chain, true);
 
         let range = vks::VkMappedMemoryRange {
             sType: vks::VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE,
@@ -269,7 +270,8 @@ impl MappedMemory {
 
     /// See [`vkInvalidateMappedMemoryRanges`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkInvalidateMappedMemoryRanges)
     pub fn invalidate(&self, chain: &Option<core::MappedMemoryRangeChain>) -> Result<(), core::Error> {
-        let (pnext, _) = core::MappedMemoryRangeChainWrapper::new_optional(chain, true);
+        #[allow(unused_variables)]
+        let (pnext, chain_wrapper) = core::MappedMemoryRangeChainWrapper::new_optional(chain, true);
 
         let range = vks::VkMappedMemoryRange {
             sType: vks::VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE,
