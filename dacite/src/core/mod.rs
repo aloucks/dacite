@@ -3092,6 +3092,16 @@ gen_chain_struct! {
         vks: VkDebugReportCallbackCreateInfoEXT,
         stype: vks::VK_STRUCTURE_TYPE_DEBUG_REPORT_CALLBACK_CREATE_INFO_EXT,
     }
+
+    validation_flags_ext: ValidationFlagsExt {
+        mod: ext_validation_flags,
+        fn_add: add_validation_flags_ext,
+        fn_has: has_validation_flags_ext,
+        fn_get: get_validation_flags_ext,
+        wrapper: VkValidationFlagsEXTWrapper,
+        vks: VkValidationFlagsEXT,
+        stype: vks::VK_STRUCTURE_TYPE_VALIDATION_FLAGS_EXT,
+    }
 }
 
 /// See [`VkInstanceCreateInfo`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkInstanceCreateInfo)
@@ -4554,6 +4564,13 @@ gen_extension_structs!{
         fn_has: has_ext_debug_report,
         fn_get: get_ext_debug_report,
         load_instance: load_ext_debug_report,
+    }
+
+    ext_validation_flags {
+        name: vks::VK_EXT_VALIDATION_FLAGS_EXTENSION_NAME_STR,
+        fn_add: add_ext_validation_flags,
+        fn_has: has_ext_validation_flags,
+        fn_get: get_ext_validation_flags,
     }
 
     khr_android_surface {

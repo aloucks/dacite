@@ -28,6 +28,7 @@ mod vulkan_object;
 pub mod core;
 pub mod amd_rasterization_order;
 pub mod ext_debug_report;
+pub mod ext_validation_flags;
 pub mod khr_android_surface;
 pub mod khr_display;
 pub mod khr_display_swapchain;
