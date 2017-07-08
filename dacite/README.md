@@ -129,6 +129,7 @@ might be breaking change.
 
 | Extension | Revision |
 | --- | --- |
+| `VK_AMD_draw_indirect_count` | 1 |
 | `VK_AMD_gcn_shader` | 1 |
 | `VK_AMD_rasterization_order` | 1 |
 | `VK_AMD_shader_explicit_vertex_parameter` | 1 |

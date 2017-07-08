@@ -551,6 +551,22 @@ impl CommandBuffer {
             (self.loader().core.vkCmdExecuteCommands)(self.handle(), command_buffers.len() as u32, command_buffers.as_ptr());
         }
     }
+
+    /// See [`vkCmdDrawIndirectCountAMD`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCmdDrawIndirectCountAMD)
+    /// and extension [`VK_AMD_draw_indirect_count`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_AMD_draw_indirect_count)
+    pub fn draw_indirect_count_amd(&self, buffer: &Buffer, offset: u64, count_buffer: &Buffer, count_buffer_offset: u64, max_draw_count: u32, stride: u32) {
+        unsafe {
+            (self.loader().amd_draw_indirect_count.vkCmdDrawIndirectCountAMD)(self.handle(), buffer.handle(), offset, count_buffer.handle(), count_buffer_offset, max_draw_count, stride);
+        }
+    }
+
+    /// See [`vkCmdDrawIndexedIndirectCountAMD`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCmdDrawIndexedIndirectCountAMD)
+    /// and extension [`VK_AMD_draw_indirect_count`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_AMD_draw_indirect_count)
+    pub fn draw_indexed_indirect_count_amd(&self, buffer: &Buffer, offset: u64, count_buffer: &Buffer, count_buffer_offset: u64, max_draw_count: u32, stride: u32) {
+        unsafe {
+            (self.loader().amd_draw_indirect_count.vkCmdDrawIndexedIndirectCountAMD)(self.handle(), buffer.handle(), offset, count_buffer.handle(), count_buffer_offset, max_draw_count, stride);
+        }
+    }
 }
 
 #[derive(Debug)]

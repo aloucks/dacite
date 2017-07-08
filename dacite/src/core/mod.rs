@@ -4633,6 +4633,14 @@ gen_extension_structs!{
     pub struct DeviceExtensions;
     pub struct DeviceExtensionsProperties;
 
+    amd_draw_indirect_count {
+        name: vks::VK_AMD_DRAW_INDIRECT_COUNT_EXTENSION_NAME_STR,
+        fn_add: add_amd_draw_indirect_count,
+        fn_has: has_amd_draw_indirect_count,
+        fn_get: get_amd_draw_indirect_count,
+        load_device: load_amd_draw_indirect_count,
+    }
+
     amd_gcn_shader {
         name: vks::VK_AMD_GCN_SHADER_EXTENSION_NAME_STR,
         fn_add: add_amd_gcn_shader,
