@@ -139,6 +139,7 @@ might be breaking change.
 | Extension | Revision |
 | --- | --- |
 | `VK_IMG_filter_cubic` | 1 |
+| `VK_IMG_format_pvrtc` | 1 |
 
 ## License
 

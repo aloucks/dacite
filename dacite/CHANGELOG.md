@@ -3,10 +3,12 @@
 ## Current Git master branch
 
  - Vulkan 1.0.22, 1.0.23, 1.0.24
+ - Extension `VK_IMG_format_pvrtc` (revision 1)
 
 ### Breaking changes
 
  - New variant `FragmentedPool` added to `core::Error`.
+ - Added several variants to `core::Format` (`VK_IMG_format_pvrtc`).
 
 
 ## Version 0.5.1, released on 08.07.2017

@@ -1770,6 +1770,31 @@ pub enum Format {
     ASTC_12x10_sRGB_Block,
     ASTC_12x12_UNorm_Block,
     ASTC_12x12_sRGB_Block,
+
+    /// See extension [`VK_IMG_format_pvrtc`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_IMG_format_pvrtc)
+    PVRTC1_2BPP_UNorm_Block_Img,
+
+    /// See extension [`VK_IMG_format_pvrtc`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_IMG_format_pvrtc)
+    PVRTC1_4BPP_UNorm_Block_Img,
+
+    /// See extension [`VK_IMG_format_pvrtc`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_IMG_format_pvrtc)
+    PVRTC2_2BPP_UNorm_Block_Img,
+
+    /// See extension [`VK_IMG_format_pvrtc`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_IMG_format_pvrtc)
+    PVRTC2_4BPP_UNorm_Block_Img,
+
+    /// See extension [`VK_IMG_format_pvrtc`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_IMG_format_pvrtc)
+    PVRTC1_2BPP_sRGB_Block_Img,
+
+    /// See extension [`VK_IMG_format_pvrtc`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_IMG_format_pvrtc)
+    PVRTC1_4BPP_sRGB_Block_Img,
+
+    /// See extension [`VK_IMG_format_pvrtc`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_IMG_format_pvrtc)
+    PVRTC2_2BPP_sRGB_Block_Img,
+
+    /// See extension [`VK_IMG_format_pvrtc`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_IMG_format_pvrtc)
+    PVRTC2_4BPP_sRGB_Block_Img,
+
     Unknown(vks::VkFormat),
 }
 
@@ -1961,6 +1986,14 @@ impl From<vks::VkFormat> for Format {
             vks::VK_FORMAT_ASTC_12x10_SRGB_BLOCK => Format::ASTC_12x10_sRGB_Block,
             vks::VK_FORMAT_ASTC_12x12_UNORM_BLOCK => Format::ASTC_12x12_UNorm_Block,
             vks::VK_FORMAT_ASTC_12x12_SRGB_BLOCK => Format::ASTC_12x12_sRGB_Block,
+            vks::VK_FORMAT_PVRTC1_2BPP_UNORM_BLOCK_IMG => Format::PVRTC1_2BPP_UNorm_Block_Img,
+            vks::VK_FORMAT_PVRTC1_4BPP_UNORM_BLOCK_IMG => Format::PVRTC1_4BPP_UNorm_Block_Img,
+            vks::VK_FORMAT_PVRTC2_2BPP_UNORM_BLOCK_IMG => Format::PVRTC2_2BPP_UNorm_Block_Img,
+            vks::VK_FORMAT_PVRTC2_4BPP_UNORM_BLOCK_IMG => Format::PVRTC2_4BPP_UNorm_Block_Img,
+            vks::VK_FORMAT_PVRTC1_2BPP_SRGB_BLOCK_IMG => Format::PVRTC1_2BPP_sRGB_Block_Img,
+            vks::VK_FORMAT_PVRTC1_4BPP_SRGB_BLOCK_IMG => Format::PVRTC1_4BPP_sRGB_Block_Img,
+            vks::VK_FORMAT_PVRTC2_2BPP_SRGB_BLOCK_IMG => Format::PVRTC2_2BPP_sRGB_Block_Img,
+            vks::VK_FORMAT_PVRTC2_4BPP_SRGB_BLOCK_IMG => Format::PVRTC2_4BPP_sRGB_Block_Img,
             _ => Format::Unknown(format),
         }
     }
@@ -2154,6 +2187,14 @@ impl From<Format> for vks::VkFormat {
             Format::ASTC_12x10_sRGB_Block => vks::VK_FORMAT_ASTC_12x10_SRGB_BLOCK,
             Format::ASTC_12x12_UNorm_Block => vks::VK_FORMAT_ASTC_12x12_UNORM_BLOCK,
             Format::ASTC_12x12_sRGB_Block => vks::VK_FORMAT_ASTC_12x12_SRGB_BLOCK,
+            Format::PVRTC1_2BPP_UNorm_Block_Img => vks::VK_FORMAT_PVRTC1_2BPP_UNORM_BLOCK_IMG,
+            Format::PVRTC1_4BPP_UNorm_Block_Img => vks::VK_FORMAT_PVRTC1_4BPP_UNORM_BLOCK_IMG,
+            Format::PVRTC2_2BPP_UNorm_Block_Img => vks::VK_FORMAT_PVRTC2_2BPP_UNORM_BLOCK_IMG,
+            Format::PVRTC2_4BPP_UNorm_Block_Img => vks::VK_FORMAT_PVRTC2_4BPP_UNORM_BLOCK_IMG,
+            Format::PVRTC1_2BPP_sRGB_Block_Img => vks::VK_FORMAT_PVRTC1_2BPP_SRGB_BLOCK_IMG,
+            Format::PVRTC1_4BPP_sRGB_Block_Img => vks::VK_FORMAT_PVRTC1_4BPP_SRGB_BLOCK_IMG,
+            Format::PVRTC2_2BPP_sRGB_Block_Img => vks::VK_FORMAT_PVRTC2_2BPP_SRGB_BLOCK_IMG,
+            Format::PVRTC2_4BPP_sRGB_Block_Img => vks::VK_FORMAT_PVRTC2_4BPP_SRGB_BLOCK_IMG,
             Format::Unknown(format) => format,
         }
     }
@@ -4625,6 +4666,13 @@ gen_extension_structs!{
         fn_add: add_img_filter_cubic,
         fn_has: has_img_filter_cubic,
         fn_get: get_img_filter_cubic,
+    }
+
+    img_format_pvrtc {
+        name: vks::VK_IMG_FORMAT_PVRTC_EXTENSION_NAME_STR,
+        fn_add: add_img_format_pvrtc,
+        fn_has: has_img_format_pvrtc,
+        fn_get: get_img_format_pvrtc,
     }
 
     khr_swapchain {
