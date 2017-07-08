@@ -10,7 +10,7 @@ Mostly safe Vulkan library for Rust.
 ## Current Status
 
  - Version: 0.5.1
- - Supported Vulkan specification: 1.0.23
+ - Supported Vulkan specification: 1.0.24
 
 Development is active and ongoing. Support for new Vulkan revisions will be added one-by-one. New
 extensions will also be supported along the way.
