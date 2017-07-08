@@ -2,7 +2,7 @@
 
 ## Current Git master branch
 
- - Vulkan 1.0.22
+ - Vulkan 1.0.22, 1.0.23
 
 ### Breaking changes
 
