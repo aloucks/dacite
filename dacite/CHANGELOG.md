@@ -1,5 +1,14 @@
 # dacite Changelog
 
+## Current Git master branch
+
+ - Vulkan 1.0.22
+
+### Breaking changes
+
+ - New variant `FragmentedPool` added to `core::Error`.
+
+
 ## Version 0.5.1, released on 08.07.2017
 
  - Vulkan 1.0.21

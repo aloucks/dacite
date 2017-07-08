@@ -1432,6 +1432,7 @@ pub enum Error {
     IncompatibleDriver,
     TooManyObjects,
     FormatNotSupported,
+    FragmentedPool,
 
     /// See extension [`VK_KHR_surface`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_surface)
     SurfaceLostKhr,
@@ -1474,6 +1475,7 @@ impl ::std::error::Error for Error {
             Error::IncompatibleDriver => "IncompatibleDriver",
             Error::TooManyObjects => "TooManyObjects",
             Error::FormatNotSupported => "FormatNotSupported",
+            Error::FragmentedPool => "FragmentedPool",
             Error::SurfaceLostKhr => "SurfaceLost",
             Error::NativeWindowInUseKhr => "NativeWindowInUse",
             Error::ValidationFailedExt => "ValidationFailed",
@@ -1501,6 +1503,7 @@ impl From<vks::VkResult> for Error {
             vks::VK_ERROR_INCOMPATIBLE_DRIVER => Error::IncompatibleDriver,
             vks::VK_ERROR_TOO_MANY_OBJECTS => Error::TooManyObjects,
             vks::VK_ERROR_FORMAT_NOT_SUPPORTED => Error::FormatNotSupported,
+            vks::VK_ERROR_FRAGMENTED_POOL => Error::FragmentedPool,
             vks::VK_ERROR_SURFACE_LOST_KHR => Error::SurfaceLostKhr,
             vks::VK_ERROR_NATIVE_WINDOW_IN_USE_KHR => Error::NativeWindowInUseKhr,
             vks::VK_ERROR_VALIDATION_FAILED_EXT => Error::ValidationFailedExt,
@@ -1526,6 +1529,7 @@ impl From<Error> for vks::VkResult {
             Error::IncompatibleDriver => vks::VK_ERROR_INCOMPATIBLE_DRIVER,
             Error::TooManyObjects => vks::VK_ERROR_TOO_MANY_OBJECTS,
             Error::FormatNotSupported => vks::VK_ERROR_FORMAT_NOT_SUPPORTED,
+            Error::FragmentedPool => vks::VK_ERROR_FRAGMENTED_POOL,
             Error::SurfaceLostKhr => vks::VK_ERROR_SURFACE_LOST_KHR,
             Error::NativeWindowInUseKhr => vks::VK_ERROR_NATIVE_WINDOW_IN_USE_KHR,
             Error::ValidationFailedExt => vks::VK_ERROR_VALIDATION_FAILED_EXT,
