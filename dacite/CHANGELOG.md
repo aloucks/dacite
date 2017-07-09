@@ -1,6 +1,6 @@
 # dacite Changelog
 
-## Current Git master branch
+## Version 0.6.1, released on 09.07.2017
 
  - Vulkan 1.0.26, 1.0.27, 1.0.28, 1.0.29, 1.0.30
  - Extension `VK_EXT_validation_flags` (revision 1)
