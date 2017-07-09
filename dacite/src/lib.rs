@@ -68,7 +68,7 @@ pub const DACITE_API_VERSION: core::Version = core::Version {
 
 pub const DACITE_API_VERSION_MAJOR: u32 = 1;
 pub const DACITE_API_VERSION_MINOR: u32 = 0;
-pub const DACITE_API_VERSION_PATCH: u32 = 29;
+pub const DACITE_API_VERSION_PATCH: u32 = 30;
 
 pub const DACITE_API_VERSION_1_0: core::Version = core::Version {
     major: 1,
