@@ -2,24 +2,21 @@
 
 This repository hosts multiple related projects:
 
-| Project | Description | Version | Changelog | crates.io | Documentation |
-| --- | --- | --- | --- | --- | --- |
-| [dacite] | The main project, a mostly safe Vulkan library for Rust | 0.6.1 | [Changelog][dacite-changelog] | [crates.io/crates/dacite] | [docs.rs/dacite] |
-| [dacite-winit] | Easy, platform-independent winit-based surface creation | 0.6.0 | [Changelog][dacite-winit-changelog] | [crates.io/crates/dacite-winit] | [docs.rs/dacite-winit] |
+| Project | Description | Version | Changelog | crates.io | Documentation | License |
+| --- | --- | --- | --- | --- | --- | --- |
+| [dacite] | The main project, a mostly safe Vulkan library for Rust | 0.6.1 | [Changelog][dacite-changelog] | [![dacite on crates.io](https://img.shields.io/crates/v/dacite.svg)](https://crates.io/crates/dacite) | [![dacite on docs.rs](https://docs.rs/dacite/badge.svg)](https://docs.rs/dacite) | [![dacite license](https://img.shields.io/badge/license-ISC-blue.svg)](dacite/LICENSE) |
+| [dacite-winit] | Easy, platform-independent winit-based surface creation | 0.6.0 | [Changelog][dacite-winit-changelog] | [![dacite-winit on crates.io](https://img.shields.io/crates/v/dacite-winit.svg)](https://crates.io/crates/dacite-winit) | [![dacite-winit on docs.rs](https://docs.rs/dacite-winit/badge.svg)](https://docs.rs/dacite-winit) | [![dacite-winit license](https://img.shields.io/badge/license-ISC-blue.svg)](dacite-winit/LICENSE) |
 
 See the project specific subdirectories for more information.
 
 [![build status](https://gitlab.com/dennis-hamester/dacite/badges/master/build.svg)](https://gitlab.com/dennis-hamester/dacite)
+[![](https://tokei.rs/b1/gitlab/dennis-hamester/dacite?category=lines)](https://gitlab.com/dennis-hamester/dacite)
 
 [dacite]: dacite
 [dacite-changelog]: dacite/CHANGELOG.md
-[crates.io/crates/dacite]: https://crates.io/crates/dacite
-[docs.rs/dacite]: https://docs.rs/dacite
 
 [dacite-winit]: dacite-winit
 [dacite-winit-changelog]: dacite-winit/CHANGELOG.md
-[crates.io/crates/dacite-winit]: https://crates.io/crates/dacite-winit
-[docs.rs/dacite-winit]: https://docs.rs/dacite-winit
 
 ## License
 

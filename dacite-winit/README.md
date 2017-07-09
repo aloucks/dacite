@@ -7,11 +7,9 @@ Vulkan surfaces in an easy and platform-independent manner.
 [winit]: https://github.com/tomaka/winit
 
 [![build status](https://gitlab.com/dennis-hamester/dacite/badges/master/build.svg)](https://gitlab.com/dennis-hamester/dacite)
-
-## Quick Links
-
- - Crate on crates.io: <https://crates.io/crates/dacite-winit>
- - Documentation: <https://docs.rs/dacite-winit>
+[![dacite-winit on crates.io](https://img.shields.io/crates/v/dacite-winit.svg)](https://crates.io/crates/dacite-winit)
+[![dacite-winit on docs.rs](https://docs.rs/dacite-winit/badge.svg)](https://docs.rs/dacite-winit)
+[![dacite-winit license](https://img.shields.io/badge/license-ISC-blue.svg)](LICENSE)
 
 ## Usage
 

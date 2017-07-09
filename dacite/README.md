@@ -2,6 +2,11 @@
 
 Mostly safe Vulkan library for Rust.
 
+[![build status](https://gitlab.com/dennis-hamester/dacite/badges/master/build.svg)](https://gitlab.com/dennis-hamester/dacite)
+[![dacite on crates.io](https://img.shields.io/crates/v/dacite.svg)](https://crates.io/crates/dacite)
+[![dacite on docs.rs](https://docs.rs/dacite/badge.svg)](https://docs.rs/dacite)
+[![dacite license](https://img.shields.io/badge/license-ISC-blue.svg)](LICENSE)
+
 ## Quick Links
 
  - Crate on crates.io: <https://crates.io/crates/dacite>
@@ -18,8 +23,6 @@ extensions will also be supported along the way.
 Dacite is sorely lacking in the documentation department. I don't plan to fully document every type
 and function (and thus effectively repeat the Vulkan specification). But at least the parts where
 dacite is different from the C API will be documented over time.
-
-[![build status](https://gitlab.com/dennis-hamester/dacite/badges/master/build.svg)](https://gitlab.com/dennis-hamester/dacite)
 
 ## Usage
 
