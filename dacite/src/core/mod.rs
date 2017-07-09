@@ -4673,6 +4673,13 @@ gen_extension_structs!{
         fn_get: get_amd_gcn_shader,
     }
 
+    amd_gpu_shader_half_float {
+        name: vks::VK_AMD_GPU_SHADER_HALF_FLOAT_EXTENSION_NAME_STR,
+        fn_add: add_amd_gpu_shader_half_float,
+        fn_has: has_amd_gpu_shader_half_float,
+        fn_get: get_amd_gpu_shader_half_float,
+    }
+
     amd_rasterization_order {
         name: vks::VK_AMD_RASTERIZATION_ORDER_EXTENSION_NAME_STR,
         fn_add: add_amd_rasterization_order,

@@ -28,5 +28,5 @@ features = [ "no_function_prototypes", "vk_1_0_12",
              "amd_gcn_shader_1", "ext_debug_report_3", "nv_dedicated_allocation_1",
              "img_format_pvrtc_1", "amd_draw_indirect_count_1", "nv_external_memory_capabilities_1",
              "nv_external_memory_1", "nv_external_memory_win32_1", "nv_win32_keyed_mutex_1",
-             "ext_validation_flags_1",
+             "ext_validation_flags_1", "amd_gpu_shader_half_float_1",
              "khr_get_physical_device_properties2_1" ]

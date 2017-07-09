@@ -136,6 +136,7 @@ might be breaking change.
 | --- | --- |
 | `VK_AMD_draw_indirect_count` | 1 |
 | `VK_AMD_gcn_shader` | 1 |
+| `VK_AMD_gpu_shader_half_float` | 1 |
 | `VK_AMD_rasterization_order` | 1 |
 | `VK_AMD_shader_explicit_vertex_parameter` | 1 |
 | `VK_AMD_shader_trinary_minmax` | 1 |
