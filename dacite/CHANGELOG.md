@@ -2,7 +2,7 @@
 
 ## Current Git master branch
 
- - Vulkan 1.0.26, 1.0.27, 1.0.28
+ - Vulkan 1.0.26, 1.0.27, 1.0.28, 1.0.29
  - Extension `VK_EXT_validation_flags` (revision 1)
  - Extension `VK_AMD_gpu_shader_half_float` (revision 1)
 
