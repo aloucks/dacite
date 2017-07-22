@@ -30,7 +30,7 @@ use vks;
 pub struct PipelineCache(Arc<Inner>);
 
 impl VulkanObject for PipelineCache {
-    type NativeVulkanObject = vks::VkPipelineCache;
+    type NativeVulkanObject = vks::core::VkPipelineCache;
 
     #[inline]
     fn id(&self) -> u64 {
@@ -86,7 +86,7 @@ impl FromNativeObject for PipelineCache {
 }
 
 impl PipelineCache {
-    pub(crate) fn new(handle: vks::VkPipelineCache, owned: bool, device: Device, allocator: Option<AllocatorHelper>) -> Self {
+    pub(crate) fn new(handle: vks::core::VkPipelineCache, owned: bool, device: Device, allocator: Option<AllocatorHelper>) -> Self {
         PipelineCache(Arc::new(Inner {
             handle: handle,
             owned: owned,
@@ -96,7 +96,7 @@ impl PipelineCache {
     }
 
     #[inline]
-    pub(crate) fn handle(&self) -> vks::VkPipelineCache {
+    pub(crate) fn handle(&self) -> vks::core::VkPipelineCache {
         self.0.handle
     }
 
@@ -106,7 +106,7 @@ impl PipelineCache {
     }
 
     #[inline]
-    pub(crate) fn device_handle(&self) -> vks::VkDevice {
+    pub(crate) fn device_handle(&self) -> vks::core::VkDevice {
         self.0.device.handle()
     }
 
@@ -118,7 +118,7 @@ impl PipelineCache {
             (self.loader().core.vkMergePipelineCaches)(self.device_handle(), self.handle(), caches.len() as u32, caches.as_ptr())
         };
 
-        if res == vks::VK_SUCCESS {
+        if res == vks::core::VK_SUCCESS {
             Ok(())
         }
         else {
@@ -135,7 +135,7 @@ impl PipelineCache {
                 (self.loader().core.vkGetPipelineCacheData)(self.device_handle(), self.handle(), &mut max_size, data.as_mut_ptr() as *mut c_void)
             };
 
-            if (res == vks::VK_SUCCESS) || (res == vks::VK_INCOMPLETE) {
+            if (res == vks::core::VK_SUCCESS) || (res == vks::core::VK_INCOMPLETE) {
                 Ok(data)
             }
             else {
@@ -148,7 +148,7 @@ impl PipelineCache {
                 (self.loader().core.vkGetPipelineCacheData)(self.device_handle(), self.handle(), &mut size, ptr::null_mut())
             };
 
-            if (res != vks::VK_SUCCESS) && (res != vks::VK_INCOMPLETE) {
+            if (res != vks::core::VK_SUCCESS) && (res != vks::core::VK_INCOMPLETE) {
                 return Err(res.into());
             }
 
@@ -158,7 +158,7 @@ impl PipelineCache {
                 (self.loader().core.vkGetPipelineCacheData)(self.device_handle(), self.handle(), &mut size, data.as_mut_ptr() as *mut c_void)
             };
 
-            if (res == vks::VK_SUCCESS) || (res == vks::VK_INCOMPLETE) {
+            if (res == vks::core::VK_SUCCESS) || (res == vks::core::VK_INCOMPLETE) {
                 Ok(data)
             }
             else {
@@ -170,7 +170,7 @@ impl PipelineCache {
 
 #[derive(Debug)]
 struct Inner {
-    handle: vks::VkPipelineCache,
+    handle: vks::core::VkPipelineCache,
     owned: bool,
     device: Device,
     allocator: Option<AllocatorHelper>,

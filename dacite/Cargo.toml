@@ -18,9 +18,4 @@ gitlab = { repository = "dennis-hamester/dacite" }
 bitflags = "0.9"
 libc = "0.2"
 libloading = "0.4"
-
-[dependencies.vks]
-version = "0.19"
-default-features = false
-features = [ "no_function_prototypes", "vk_1_0_30",
-             "khr_get_physical_device_properties2_1" ]
+vks = "0.20"

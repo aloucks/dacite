@@ -20,7 +20,7 @@ use vks;
 gen_chain_struct! {
     name: PhysicalDeviceFeatures2ChainKhr [PhysicalDeviceFeatures2ChainKhrWrapper],
     query: PhysicalDeviceFeatures2ChainQueryKhr [PhysicalDeviceFeatures2ChainQueryKhrWrapper],
-    vks: VkPhysicalDeviceFeatures2KHR,
+    vks: vks::khr_get_physical_device_properties2::VkPhysicalDeviceFeatures2KHR,
     input: true,
     output: true,
 }
@@ -33,7 +33,7 @@ pub struct PhysicalDeviceFeatures2Khr {
 }
 
 impl PhysicalDeviceFeatures2Khr {
-    pub(crate) unsafe fn from_vks(features: &vks::VkPhysicalDeviceFeatures2KHR, with_chain: bool) -> Self {
+    pub(crate) unsafe fn from_vks(features: &vks::khr_get_physical_device_properties2::VkPhysicalDeviceFeatures2KHR, with_chain: bool) -> Self {
         PhysicalDeviceFeatures2Khr {
             features: (&features.features).into(),
             chain: PhysicalDeviceFeatures2ChainKhr::from_optional_pnext(features.pNext, with_chain),
@@ -43,7 +43,7 @@ impl PhysicalDeviceFeatures2Khr {
 
 #[derive(Debug)]
 pub(crate) struct VkPhysicalDeviceFeatures2KHRWrapper {
-    pub vks_struct: vks::VkPhysicalDeviceFeatures2KHR,
+    pub vks_struct: vks::khr_get_physical_device_properties2::VkPhysicalDeviceFeatures2KHR,
     chain: Option<PhysicalDeviceFeatures2ChainKhrWrapper>,
 }
 
@@ -52,8 +52,8 @@ impl VkPhysicalDeviceFeatures2KHRWrapper {
         let (pnext, chain) = PhysicalDeviceFeatures2ChainKhrWrapper::new_optional(&features.chain, with_chain);
 
         VkPhysicalDeviceFeatures2KHRWrapper {
-            vks_struct: vks::VkPhysicalDeviceFeatures2KHR {
-                sType: vks::VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2_KHR,
+            vks_struct: vks::khr_get_physical_device_properties2::VkPhysicalDeviceFeatures2KHR {
+                sType: vks::core::VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2_KHR,
                 pNext: pnext,
                 features: (&features.features).into(),
             },
@@ -65,7 +65,7 @@ impl VkPhysicalDeviceFeatures2KHRWrapper {
 gen_chain_struct! {
     name: PhysicalDeviceProperties2ChainKhr [PhysicalDeviceProperties2ChainKhrWrapper],
     query: PhysicalDeviceProperties2ChainQueryKhr [PhysicalDeviceProperties2ChainQueryKhrWrapper],
-    vks: VkPhysicalDeviceProperties2KHR,
+    vks: vks::khr_get_physical_device_properties2::VkPhysicalDeviceProperties2KHR,
     input: false,
     output: true,
 }
@@ -78,7 +78,7 @@ pub struct PhysicalDeviceProperties2Khr {
 }
 
 impl PhysicalDeviceProperties2Khr {
-    pub(crate) unsafe fn from_vks(properties: &vks::VkPhysicalDeviceProperties2KHR, with_chain: bool) -> Self {
+    pub(crate) unsafe fn from_vks(properties: &vks::khr_get_physical_device_properties2::VkPhysicalDeviceProperties2KHR, with_chain: bool) -> Self {
         PhysicalDeviceProperties2Khr {
             properties: (&properties.properties).into(),
             chain: PhysicalDeviceProperties2ChainKhr::from_optional_pnext(properties.pNext, with_chain),
@@ -89,7 +89,7 @@ impl PhysicalDeviceProperties2Khr {
 gen_chain_struct! {
     name: FormatProperties2ChainKhr [FormatProperties2ChainKhrWrapper],
     query: FormatProperties2ChainQueryKhr [FormatProperties2ChainQueryKhrWrapper],
-    vks: VkFormatProperties2KHR,
+    vks: vks::khr_get_physical_device_properties2::VkFormatProperties2KHR,
     input: false,
     output: true,
 }
@@ -102,7 +102,7 @@ pub struct FormatProperties2Khr {
 }
 
 impl FormatProperties2Khr {
-    pub(crate) unsafe fn from_vks(properties: &vks::VkFormatProperties2KHR, with_chain: bool) -> Self {
+    pub(crate) unsafe fn from_vks(properties: &vks::khr_get_physical_device_properties2::VkFormatProperties2KHR, with_chain: bool) -> Self {
         FormatProperties2Khr {
             format_properties: (&properties.formatProperties).into(),
             chain: FormatProperties2ChainKhr::from_optional_pnext(properties.pNext, with_chain),
@@ -113,7 +113,7 @@ impl FormatProperties2Khr {
 gen_chain_struct! {
     name: ImageFormatProperties2ChainKhr [ImageFormatProperties2ChainKhrWrapper],
     query: ImageFormatProperties2ChainQueryKhr [ImageFormatProperties2ChainQueryKhrWrapper],
-    vks: VkImageFormatProperties2KHR,
+    vks: vks::khr_get_physical_device_properties2::VkImageFormatProperties2KHR,
     input: false,
     output: true,
 }
@@ -126,7 +126,7 @@ pub struct ImageFormatProperties2Khr {
 }
 
 impl ImageFormatProperties2Khr {
-    pub(crate) unsafe fn from_vks(properties: &vks::VkImageFormatProperties2KHR, with_chain: bool) -> Self {
+    pub(crate) unsafe fn from_vks(properties: &vks::khr_get_physical_device_properties2::VkImageFormatProperties2KHR, with_chain: bool) -> Self {
         ImageFormatProperties2Khr {
             image_format_properties: (&properties.imageFormatProperties).into(),
             chain: ImageFormatProperties2ChainKhr::from_optional_pnext(properties.pNext, with_chain),
@@ -137,7 +137,7 @@ impl ImageFormatProperties2Khr {
 gen_chain_struct! {
     name: PhysicalDeviceImageFormatInfo2ChainKhr [PhysicalDeviceImageFormatInfo2ChainKhrWrapper],
     query: PhysicalDeviceImageFormatInfo2ChainQueryKhr [PhysicalDeviceImageFormatInfo2ChainQueryKhrWrapper],
-    vks: VkPhysicalDeviceImageFormatInfo2KHR,
+    vks: vks::khr_get_physical_device_properties2::VkPhysicalDeviceImageFormatInfo2KHR,
     input: true,
     output: false,
 }
@@ -155,7 +155,7 @@ pub struct PhysicalDeviceImageFormatInfo2Khr {
 
 #[derive(Debug)]
 pub(crate) struct VkPhysicalDeviceImageFormatInfo2KHRWrapper {
-    pub vks_struct: vks::VkPhysicalDeviceImageFormatInfo2KHR,
+    pub vks_struct: vks::khr_get_physical_device_properties2::VkPhysicalDeviceImageFormatInfo2KHR,
     chain: Option<PhysicalDeviceImageFormatInfo2ChainKhrWrapper>,
 }
 
@@ -164,8 +164,8 @@ impl VkPhysicalDeviceImageFormatInfo2KHRWrapper {
         let (pnext, chain) = PhysicalDeviceImageFormatInfo2ChainKhrWrapper::new_optional(&info.chain, with_chain);
 
         VkPhysicalDeviceImageFormatInfo2KHRWrapper  {
-            vks_struct: vks::VkPhysicalDeviceImageFormatInfo2KHR {
-                sType: vks::VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_IMAGE_FORMAT_INFO_2_KHR,
+            vks_struct: vks::khr_get_physical_device_properties2::VkPhysicalDeviceImageFormatInfo2KHR {
+                sType: vks::core::VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_IMAGE_FORMAT_INFO_2_KHR,
                 pNext: pnext,
                 format: info.format.into(),
                 type_: info.image_type.into(),
@@ -181,7 +181,7 @@ impl VkPhysicalDeviceImageFormatInfo2KHRWrapper {
 gen_chain_struct! {
     name: QueueFamilyProperties2ChainKhr [QueueFamilyProperties2ChainKhrWrapper],
     query: QueueFamilyProperties2ChainQueryKhr [QueueFamilyProperties2ChainQueryKhrWrapper],
-    vks: VkQueueFamilyProperties2KHR,
+    vks: vks::khr_get_physical_device_properties2::VkQueueFamilyProperties2KHR,
     input: false,
     output: true,
 }
@@ -194,7 +194,7 @@ pub struct QueueFamilyProperties2Khr {
 }
 
 impl QueueFamilyProperties2Khr {
-    pub(crate) unsafe fn from_vks(properties: &vks::VkQueueFamilyProperties2KHR, with_chain: bool) -> Self {
+    pub(crate) unsafe fn from_vks(properties: &vks::khr_get_physical_device_properties2::VkQueueFamilyProperties2KHR, with_chain: bool) -> Self {
         QueueFamilyProperties2Khr {
             queue_family_properties: (&properties.queueFamilyProperties).into(),
             chain: QueueFamilyProperties2ChainKhr::from_optional_pnext(properties.pNext, with_chain),
@@ -205,7 +205,7 @@ impl QueueFamilyProperties2Khr {
 gen_chain_struct! {
     name: PhysicalDeviceMemoryProperties2ChainKhr [PhysicalDeviceMemoryProperties2ChainKhrWrapper],
     query: PhysicalDeviceMemoryProperties2ChainQueryKhr [PhysicalDeviceMemoryProperties2ChainQueryKhrWrapper],
-    vks: VkPhysicalDeviceMemoryProperties2KHR,
+    vks: vks::khr_get_physical_device_properties2::VkPhysicalDeviceMemoryProperties2KHR,
     input: false,
     output: true,
 }
@@ -218,7 +218,7 @@ pub struct PhysicalDeviceMemoryProperties2Khr {
 }
 
 impl PhysicalDeviceMemoryProperties2Khr {
-    pub(crate) unsafe fn from_vks(properties: &vks::VkPhysicalDeviceMemoryProperties2KHR, with_chain: bool) -> Self {
+    pub(crate) unsafe fn from_vks(properties: &vks::khr_get_physical_device_properties2::VkPhysicalDeviceMemoryProperties2KHR, with_chain: bool) -> Self {
         PhysicalDeviceMemoryProperties2Khr {
             memory_properties: (&properties.memoryProperties).into(),
             chain: PhysicalDeviceMemoryProperties2ChainKhr::from_optional_pnext(properties.pNext, with_chain),
@@ -229,7 +229,7 @@ impl PhysicalDeviceMemoryProperties2Khr {
 gen_chain_struct! {
     name: SparseImageFormatProperties2ChainKhr [SparseImageFormatProperties2ChainKhrWrapper],
     query: SparseImageFormatProperties2ChainQueryKhr [SparseImageFormatProperties2ChainQueryKhrWrapper],
-    vks: VkSparseImageFormatProperties2KHR,
+    vks: vks::khr_get_physical_device_properties2::VkSparseImageFormatProperties2KHR,
     input: false,
     output: true,
 }
@@ -242,7 +242,7 @@ pub struct SparseImageFormatProperties2Khr {
 }
 
 impl SparseImageFormatProperties2Khr {
-    pub(crate) unsafe fn from_vks(properties: &vks::VkSparseImageFormatProperties2KHR, with_chain: bool) -> Self {
+    pub(crate) unsafe fn from_vks(properties: &vks::khr_get_physical_device_properties2::VkSparseImageFormatProperties2KHR, with_chain: bool) -> Self {
         SparseImageFormatProperties2Khr {
             properties: (&properties.properties).into(),
             chain: SparseImageFormatProperties2ChainKhr::from_optional_pnext(properties.pNext, with_chain),
@@ -253,7 +253,7 @@ impl SparseImageFormatProperties2Khr {
 gen_chain_struct! {
     name: PhysicalDeviceSparseImageFormatInfo2ChainKhr [PhysicalDeviceSparseImageFormatInfo2ChainKhrWrapper],
     query: PhysicalDeviceSparseImageFormatInfo2ChainQueryKhr [PhysicalDeviceSparseImageFormatInfo2ChainQueryKhrWrapper],
-    vks: VkPhysicalDeviceSparseImageFormatInfo2KHR,
+    vks: vks::khr_get_physical_device_properties2::VkPhysicalDeviceSparseImageFormatInfo2KHR,
     input: true,
     output: false,
 }
@@ -271,7 +271,7 @@ pub struct PhysicalDeviceSparseImageFormatInfo2Khr {
 
 #[derive(Debug)]
 pub(crate) struct VkPhysicalDeviceSparseImageFormatInfo2KHRWrapper {
-    pub vks_struct: vks::VkPhysicalDeviceSparseImageFormatInfo2KHR,
+    pub vks_struct: vks::khr_get_physical_device_properties2::VkPhysicalDeviceSparseImageFormatInfo2KHR,
     chain: Option<PhysicalDeviceSparseImageFormatInfo2ChainKhrWrapper>,
 }
 
@@ -280,8 +280,8 @@ impl VkPhysicalDeviceSparseImageFormatInfo2KHRWrapper {
         let (pnext, chain) = PhysicalDeviceSparseImageFormatInfo2ChainKhrWrapper::new_optional(&info.chain, with_chain);
 
         VkPhysicalDeviceSparseImageFormatInfo2KHRWrapper  {
-            vks_struct: vks::VkPhysicalDeviceSparseImageFormatInfo2KHR {
-                sType: vks::VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_IMAGE_FORMAT_INFO_2_KHR,
+            vks_struct: vks::khr_get_physical_device_properties2::VkPhysicalDeviceSparseImageFormatInfo2KHR {
+                sType: vks::core::VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_IMAGE_FORMAT_INFO_2_KHR,
                 pNext: pnext,
                 format: info.format.into(),
                 type_: info.image_type.into(),

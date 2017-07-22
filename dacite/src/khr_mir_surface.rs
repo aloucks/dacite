@@ -14,15 +14,15 @@
 
 //! See extension [`VK_KHR_mir_surface`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_mir_surface)
 
-use mir_wrapper;
+use mir_types;
 use vks;
 
 bitflags! {
     /// See [`VkMirSurfaceCreateFlagsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkMirSurfaceCreateFlagsKHR)
     #[derive(Default)]
-    pub struct MirSurfaceCreateFlagsKhr: vks::VkMirSurfaceCreateFlagsKHR {
+    pub struct MirSurfaceCreateFlagsKhr: vks::khr_mir_surface::VkMirSurfaceCreateFlagsKHR {
         /// See [`VkMirSurfaceCreateFlagsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkMirSurfaceCreateFlagsKHR)
-        const MIR_SURFACE_CREATE_FLAG_BITS_MAX_ENUM_KHR = vks::VK_MIR_SURFACE_CREATE_FLAG_BITS_MAX_ENUM_KHR;
+        const MIR_SURFACE_CREATE_FLAG_BITS_MAX_ENUM_KHR = vks::khr_mir_surface::VK_MIR_SURFACE_CREATE_FLAG_BITS_MAX_ENUM_KHR;
     }
 }
 
@@ -32,7 +32,7 @@ pub type MirSurfaceCreateFlagBitsKhr = MirSurfaceCreateFlagsKhr;
 gen_chain_struct! {
     name: MirSurfaceCreateInfoChainKhr [MirSurfaceCreateInfoChainKhrWrapper],
     query: MirSurfaceCreateInfoChainQueryKhr [MirSurfaceCreateInfoChainQueryKhrWrapper],
-    vks: VkMirSurfaceCreateInfoKHR,
+    vks: vks::khr_mir_surface::VkMirSurfaceCreateInfoKHR,
     input: true,
     output: false,
 }
@@ -41,14 +41,14 @@ gen_chain_struct! {
 #[derive(Debug, Clone, PartialEq)]
 pub struct MirSurfaceCreateInfoKhr {
     pub flags: MirSurfaceCreateFlagsKhr,
-    pub connection: *mut mir_wrapper::MirConnection,
-    pub mir_surface: *mut mir_wrapper::MirSurface,
+    pub connection: *mut mir_types::MirConnection,
+    pub mir_surface: *mut mir_types::MirSurface,
     pub chain: Option<MirSurfaceCreateInfoChainKhr>,
 }
 
 #[derive(Debug)]
 pub(crate) struct VkMirSurfaceCreateInfoKHRWrapper {
-    pub vks_struct: vks::VkMirSurfaceCreateInfoKHR,
+    pub vks_struct: vks::khr_mir_surface::VkMirSurfaceCreateInfoKHR,
     chain: Option<MirSurfaceCreateInfoChainKhrWrapper>,
 }
 
@@ -57,8 +57,8 @@ impl VkMirSurfaceCreateInfoKHRWrapper {
         let (pnext, chain) = MirSurfaceCreateInfoChainKhrWrapper::new_optional(&create_info.chain, with_chain);
 
         VkMirSurfaceCreateInfoKHRWrapper {
-            vks_struct: vks::VkMirSurfaceCreateInfoKHR {
-                sType: vks::VK_STRUCTURE_TYPE_MIR_SURFACE_CREATE_INFO_KHR,
+            vks_struct: vks::khr_mir_surface::VkMirSurfaceCreateInfoKHR {
+                sType: vks::core::VK_STRUCTURE_TYPE_MIR_SURFACE_CREATE_INFO_KHR,
                 pNext: pnext,
                 flags: create_info.flags.bits(),
                 connection: create_info.connection,

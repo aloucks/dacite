@@ -30,7 +30,7 @@ use vks;
 pub struct DebugReportCallbackExt(Arc<Inner>);
 
 impl VulkanObject for DebugReportCallbackExt {
-    type NativeVulkanObject = vks::VkDebugReportCallbackEXT;
+    type NativeVulkanObject = vks::ext_debug_report::VkDebugReportCallbackEXT;
 
     #[inline]
     fn id(&self) -> u64 {
@@ -86,7 +86,7 @@ impl FromNativeObject for DebugReportCallbackExt {
 }
 
 impl DebugReportCallbackExt {
-    pub(crate) fn new(handle: vks::VkDebugReportCallbackEXT, owned: bool, instance: Instance, allocator: Option<AllocatorHelper>, callback_helper: Option<ext_debug_report::CallbackHelper>) -> Self {
+    pub(crate) fn new(handle: vks::ext_debug_report::VkDebugReportCallbackEXT, owned: bool, instance: Instance, allocator: Option<AllocatorHelper>, callback_helper: Option<ext_debug_report::CallbackHelper>) -> Self {
         DebugReportCallbackExt(Arc::new(Inner {
             handle: handle,
             owned: owned,
@@ -97,14 +97,14 @@ impl DebugReportCallbackExt {
     }
 
     #[inline]
-    pub(crate) fn handle(&self) -> vks::VkDebugReportCallbackEXT {
+    pub(crate) fn handle(&self) -> vks::ext_debug_report::VkDebugReportCallbackEXT {
         self.0.handle
     }
 }
 
 #[derive(Debug)]
 struct Inner {
-    handle: vks::VkDebugReportCallbackEXT,
+    handle: vks::ext_debug_report::VkDebugReportCallbackEXT,
     owned: bool,
     instance: Instance,
     allocator: Option<AllocatorHelper>,

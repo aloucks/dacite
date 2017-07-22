@@ -30,7 +30,7 @@ use vks;
 pub struct Buffer(Arc<Inner>);
 
 impl VulkanObject for Buffer {
-    type NativeVulkanObject = vks::VkBuffer;
+    type NativeVulkanObject = vks::core::VkBuffer;
 
     #[inline]
     fn id(&self) -> u64 {
@@ -86,7 +86,7 @@ impl FromNativeObject for Buffer {
 }
 
 impl Buffer {
-    pub(crate) fn new(handle: vks::VkBuffer, owned: bool, device: Device, allocator: Option<AllocatorHelper>) -> Self {
+    pub(crate) fn new(handle: vks::core::VkBuffer, owned: bool, device: Device, allocator: Option<AllocatorHelper>) -> Self {
         Buffer(Arc::new(Inner {
             handle: handle,
             owned: owned,
@@ -96,7 +96,7 @@ impl Buffer {
     }
 
     #[inline]
-    pub(crate) fn handle(&self) -> vks::VkBuffer {
+    pub(crate) fn handle(&self) -> vks::core::VkBuffer {
         self.0.handle
     }
 
@@ -106,7 +106,7 @@ impl Buffer {
     }
 
     #[inline]
-    pub(crate) fn device_handle(&self) -> vks::VkDevice {
+    pub(crate) fn device_handle(&self) -> vks::core::VkDevice {
         self.0.device.handle()
     }
 
@@ -116,7 +116,7 @@ impl Buffer {
             (self.loader().core.vkBindBufferMemory)(self.device_handle(), self.handle(), memory.handle(), offset)
         };
 
-        if res == vks::VK_SUCCESS {
+        if res == vks::core::VK_SUCCESS {
             Ok(())
         }
         else {
@@ -136,7 +136,7 @@ impl Buffer {
 
 #[derive(Debug)]
 struct Inner {
-    handle: vks::VkBuffer,
+    handle: vks::core::VkBuffer,
     owned: bool,
     device: Device,
     allocator: Option<AllocatorHelper>,

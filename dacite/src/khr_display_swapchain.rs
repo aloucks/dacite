@@ -21,7 +21,7 @@ use vks;
 gen_chain_struct! {
     name: DisplayPresentInfoChainKhr [DisplayPresentInfoChainKhrWrapper],
     query: DisplayPresentInfoChainQueryKhr [DisplayPresentInfoChainQueryKhrWrapper],
-    vks: VkDisplayPresentInfoKHR,
+    vks: vks::khr_display_swapchain::VkDisplayPresentInfoKHR,
     input: true,
     output: false,
 }
@@ -37,7 +37,7 @@ pub struct DisplayPresentInfoKhr {
 
 #[derive(Debug)]
 pub(crate) struct VkDisplayPresentInfoKHRWrapper {
-    pub vks_struct: vks::VkDisplayPresentInfoKHR,
+    pub vks_struct: vks::khr_display_swapchain::VkDisplayPresentInfoKHR,
     chain: Option<DisplayPresentInfoChainKhrWrapper>,
 }
 
@@ -46,8 +46,8 @@ impl VkDisplayPresentInfoKHRWrapper {
         let (pnext, chain) = DisplayPresentInfoChainKhrWrapper::new_optional(&info.chain, with_chain);
 
         VkDisplayPresentInfoKHRWrapper {
-            vks_struct: vks::VkDisplayPresentInfoKHR {
-                sType: vks::VK_STRUCTURE_TYPE_DISPLAY_PRESENT_INFO_KHR,
+            vks_struct: vks::khr_display_swapchain::VkDisplayPresentInfoKHR {
+                sType: vks::core::VK_STRUCTURE_TYPE_DISPLAY_PRESENT_INFO_KHR,
                 pNext: pnext,
                 srcRect: (&info.src_rect).into(),
                 dstRect: (&info.dst_rect).into(),

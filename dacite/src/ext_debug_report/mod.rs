@@ -61,78 +61,78 @@ pub enum DebugReportObjectTypeExt {
     /// See extension [`VK_KHR_swapchain`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_swapchain)
     SwapchainKhr,
 
-    UnknownValue(vks::VkDebugReportObjectTypeEXT),
+    UnknownValue(vks::ext_debug_report::VkDebugReportObjectTypeEXT),
 }
 
-impl From<vks::VkDebugReportObjectTypeEXT> for DebugReportObjectTypeExt {
-    fn from(ty: vks::VkDebugReportObjectTypeEXT) -> Self {
+impl From<vks::ext_debug_report::VkDebugReportObjectTypeEXT> for DebugReportObjectTypeExt {
+    fn from(ty: vks::ext_debug_report::VkDebugReportObjectTypeEXT) -> Self {
         match ty {
-            vks::VK_DEBUG_REPORT_OBJECT_TYPE_UNKNOWN_EXT => DebugReportObjectTypeExt::Unknown,
-            vks::VK_DEBUG_REPORT_OBJECT_TYPE_INSTANCE_EXT => DebugReportObjectTypeExt::Instance,
-            vks::VK_DEBUG_REPORT_OBJECT_TYPE_PHYSICAL_DEVICE_EXT => DebugReportObjectTypeExt::PhysicalDevice,
-            vks::VK_DEBUG_REPORT_OBJECT_TYPE_DEVICE_EXT => DebugReportObjectTypeExt::Device,
-            vks::VK_DEBUG_REPORT_OBJECT_TYPE_QUEUE_EXT => DebugReportObjectTypeExt::Queue,
-            vks::VK_DEBUG_REPORT_OBJECT_TYPE_SEMAPHORE_EXT => DebugReportObjectTypeExt::Semaphore,
-            vks::VK_DEBUG_REPORT_OBJECT_TYPE_COMMAND_BUFFER_EXT => DebugReportObjectTypeExt::CommandBuffer,
-            vks::VK_DEBUG_REPORT_OBJECT_TYPE_FENCE_EXT => DebugReportObjectTypeExt::Fence,
-            vks::VK_DEBUG_REPORT_OBJECT_TYPE_DEVICE_MEMORY_EXT => DebugReportObjectTypeExt::DeviceMemory,
-            vks::VK_DEBUG_REPORT_OBJECT_TYPE_BUFFER_EXT => DebugReportObjectTypeExt::Buffer,
-            vks::VK_DEBUG_REPORT_OBJECT_TYPE_IMAGE_EXT => DebugReportObjectTypeExt::Image,
-            vks::VK_DEBUG_REPORT_OBJECT_TYPE_EVENT_EXT => DebugReportObjectTypeExt::Event,
-            vks::VK_DEBUG_REPORT_OBJECT_TYPE_QUERY_POOL_EXT => DebugReportObjectTypeExt::QueryPool,
-            vks::VK_DEBUG_REPORT_OBJECT_TYPE_BUFFER_VIEW_EXT => DebugReportObjectTypeExt::BufferView,
-            vks::VK_DEBUG_REPORT_OBJECT_TYPE_IMAGE_VIEW_EXT => DebugReportObjectTypeExt::ImageView,
-            vks::VK_DEBUG_REPORT_OBJECT_TYPE_SHADER_MODULE_EXT => DebugReportObjectTypeExt::ShaderModule,
-            vks::VK_DEBUG_REPORT_OBJECT_TYPE_PIPELINE_CACHE_EXT => DebugReportObjectTypeExt::PipelineCache,
-            vks::VK_DEBUG_REPORT_OBJECT_TYPE_PIPELINE_LAYOUT_EXT => DebugReportObjectTypeExt::PipelineLayout,
-            vks::VK_DEBUG_REPORT_OBJECT_TYPE_RENDER_PASS_EXT => DebugReportObjectTypeExt::RenderPass,
-            vks::VK_DEBUG_REPORT_OBJECT_TYPE_PIPELINE_EXT => DebugReportObjectTypeExt::Pipeline,
-            vks::VK_DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_SET_LAYOUT_EXT => DebugReportObjectTypeExt::DescriptorSetLayout,
-            vks::VK_DEBUG_REPORT_OBJECT_TYPE_SAMPLER_EXT => DebugReportObjectTypeExt::Sampler,
-            vks::VK_DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_POOL_EXT => DebugReportObjectTypeExt::DescriptorPool,
-            vks::VK_DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_SET_EXT => DebugReportObjectTypeExt::DescriptorSet,
-            vks::VK_DEBUG_REPORT_OBJECT_TYPE_FRAMEBUFFER_EXT => DebugReportObjectTypeExt::Framebuffer,
-            vks::VK_DEBUG_REPORT_OBJECT_TYPE_COMMAND_POOL_EXT => DebugReportObjectTypeExt::CommandPool,
-            vks::VK_DEBUG_REPORT_OBJECT_TYPE_DEBUG_REPORT_EXT => DebugReportObjectTypeExt::DebugReport,
-            vks::VK_DEBUG_REPORT_OBJECT_TYPE_SURFACE_KHR_EXT => DebugReportObjectTypeExt::SurfaceKhr,
-            vks::VK_DEBUG_REPORT_OBJECT_TYPE_SWAPCHAIN_KHR_EXT => DebugReportObjectTypeExt::SwapchainKhr,
+            vks::ext_debug_report::VK_DEBUG_REPORT_OBJECT_TYPE_UNKNOWN_EXT => DebugReportObjectTypeExt::Unknown,
+            vks::ext_debug_report::VK_DEBUG_REPORT_OBJECT_TYPE_INSTANCE_EXT => DebugReportObjectTypeExt::Instance,
+            vks::ext_debug_report::VK_DEBUG_REPORT_OBJECT_TYPE_PHYSICAL_DEVICE_EXT => DebugReportObjectTypeExt::PhysicalDevice,
+            vks::ext_debug_report::VK_DEBUG_REPORT_OBJECT_TYPE_DEVICE_EXT => DebugReportObjectTypeExt::Device,
+            vks::ext_debug_report::VK_DEBUG_REPORT_OBJECT_TYPE_QUEUE_EXT => DebugReportObjectTypeExt::Queue,
+            vks::ext_debug_report::VK_DEBUG_REPORT_OBJECT_TYPE_SEMAPHORE_EXT => DebugReportObjectTypeExt::Semaphore,
+            vks::ext_debug_report::VK_DEBUG_REPORT_OBJECT_TYPE_COMMAND_BUFFER_EXT => DebugReportObjectTypeExt::CommandBuffer,
+            vks::ext_debug_report::VK_DEBUG_REPORT_OBJECT_TYPE_FENCE_EXT => DebugReportObjectTypeExt::Fence,
+            vks::ext_debug_report::VK_DEBUG_REPORT_OBJECT_TYPE_DEVICE_MEMORY_EXT => DebugReportObjectTypeExt::DeviceMemory,
+            vks::ext_debug_report::VK_DEBUG_REPORT_OBJECT_TYPE_BUFFER_EXT => DebugReportObjectTypeExt::Buffer,
+            vks::ext_debug_report::VK_DEBUG_REPORT_OBJECT_TYPE_IMAGE_EXT => DebugReportObjectTypeExt::Image,
+            vks::ext_debug_report::VK_DEBUG_REPORT_OBJECT_TYPE_EVENT_EXT => DebugReportObjectTypeExt::Event,
+            vks::ext_debug_report::VK_DEBUG_REPORT_OBJECT_TYPE_QUERY_POOL_EXT => DebugReportObjectTypeExt::QueryPool,
+            vks::ext_debug_report::VK_DEBUG_REPORT_OBJECT_TYPE_BUFFER_VIEW_EXT => DebugReportObjectTypeExt::BufferView,
+            vks::ext_debug_report::VK_DEBUG_REPORT_OBJECT_TYPE_IMAGE_VIEW_EXT => DebugReportObjectTypeExt::ImageView,
+            vks::ext_debug_report::VK_DEBUG_REPORT_OBJECT_TYPE_SHADER_MODULE_EXT => DebugReportObjectTypeExt::ShaderModule,
+            vks::ext_debug_report::VK_DEBUG_REPORT_OBJECT_TYPE_PIPELINE_CACHE_EXT => DebugReportObjectTypeExt::PipelineCache,
+            vks::ext_debug_report::VK_DEBUG_REPORT_OBJECT_TYPE_PIPELINE_LAYOUT_EXT => DebugReportObjectTypeExt::PipelineLayout,
+            vks::ext_debug_report::VK_DEBUG_REPORT_OBJECT_TYPE_RENDER_PASS_EXT => DebugReportObjectTypeExt::RenderPass,
+            vks::ext_debug_report::VK_DEBUG_REPORT_OBJECT_TYPE_PIPELINE_EXT => DebugReportObjectTypeExt::Pipeline,
+            vks::ext_debug_report::VK_DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_SET_LAYOUT_EXT => DebugReportObjectTypeExt::DescriptorSetLayout,
+            vks::ext_debug_report::VK_DEBUG_REPORT_OBJECT_TYPE_SAMPLER_EXT => DebugReportObjectTypeExt::Sampler,
+            vks::ext_debug_report::VK_DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_POOL_EXT => DebugReportObjectTypeExt::DescriptorPool,
+            vks::ext_debug_report::VK_DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_SET_EXT => DebugReportObjectTypeExt::DescriptorSet,
+            vks::ext_debug_report::VK_DEBUG_REPORT_OBJECT_TYPE_FRAMEBUFFER_EXT => DebugReportObjectTypeExt::Framebuffer,
+            vks::ext_debug_report::VK_DEBUG_REPORT_OBJECT_TYPE_COMMAND_POOL_EXT => DebugReportObjectTypeExt::CommandPool,
+            vks::ext_debug_report::VK_DEBUG_REPORT_OBJECT_TYPE_DEBUG_REPORT_EXT => DebugReportObjectTypeExt::DebugReport,
+            vks::ext_debug_report::VK_DEBUG_REPORT_OBJECT_TYPE_SURFACE_KHR_EXT => DebugReportObjectTypeExt::SurfaceKhr,
+            vks::ext_debug_report::VK_DEBUG_REPORT_OBJECT_TYPE_SWAPCHAIN_KHR_EXT => DebugReportObjectTypeExt::SwapchainKhr,
             _ => DebugReportObjectTypeExt::UnknownValue(ty),
         }
     }
 }
 
-impl From<DebugReportObjectTypeExt> for vks::VkDebugReportObjectTypeEXT {
+impl From<DebugReportObjectTypeExt> for vks::ext_debug_report::VkDebugReportObjectTypeEXT {
     fn from(ty: DebugReportObjectTypeExt) -> Self {
         match ty {
-            DebugReportObjectTypeExt::Unknown => vks::VK_DEBUG_REPORT_OBJECT_TYPE_UNKNOWN_EXT,
-            DebugReportObjectTypeExt::Instance => vks::VK_DEBUG_REPORT_OBJECT_TYPE_INSTANCE_EXT,
-            DebugReportObjectTypeExt::PhysicalDevice => vks::VK_DEBUG_REPORT_OBJECT_TYPE_PHYSICAL_DEVICE_EXT,
-            DebugReportObjectTypeExt::Device => vks::VK_DEBUG_REPORT_OBJECT_TYPE_DEVICE_EXT,
-            DebugReportObjectTypeExt::Queue => vks::VK_DEBUG_REPORT_OBJECT_TYPE_QUEUE_EXT,
-            DebugReportObjectTypeExt::Semaphore => vks::VK_DEBUG_REPORT_OBJECT_TYPE_SEMAPHORE_EXT,
-            DebugReportObjectTypeExt::CommandBuffer => vks::VK_DEBUG_REPORT_OBJECT_TYPE_COMMAND_BUFFER_EXT,
-            DebugReportObjectTypeExt::Fence => vks::VK_DEBUG_REPORT_OBJECT_TYPE_FENCE_EXT,
-            DebugReportObjectTypeExt::DeviceMemory => vks::VK_DEBUG_REPORT_OBJECT_TYPE_DEVICE_MEMORY_EXT,
-            DebugReportObjectTypeExt::Buffer => vks::VK_DEBUG_REPORT_OBJECT_TYPE_BUFFER_EXT,
-            DebugReportObjectTypeExt::Image => vks::VK_DEBUG_REPORT_OBJECT_TYPE_IMAGE_EXT,
-            DebugReportObjectTypeExt::Event => vks::VK_DEBUG_REPORT_OBJECT_TYPE_EVENT_EXT,
-            DebugReportObjectTypeExt::QueryPool => vks::VK_DEBUG_REPORT_OBJECT_TYPE_QUERY_POOL_EXT,
-            DebugReportObjectTypeExt::BufferView => vks::VK_DEBUG_REPORT_OBJECT_TYPE_BUFFER_VIEW_EXT,
-            DebugReportObjectTypeExt::ImageView => vks::VK_DEBUG_REPORT_OBJECT_TYPE_IMAGE_VIEW_EXT,
-            DebugReportObjectTypeExt::ShaderModule => vks::VK_DEBUG_REPORT_OBJECT_TYPE_SHADER_MODULE_EXT,
-            DebugReportObjectTypeExt::PipelineCache => vks::VK_DEBUG_REPORT_OBJECT_TYPE_PIPELINE_CACHE_EXT,
-            DebugReportObjectTypeExt::PipelineLayout => vks::VK_DEBUG_REPORT_OBJECT_TYPE_PIPELINE_LAYOUT_EXT,
-            DebugReportObjectTypeExt::RenderPass => vks::VK_DEBUG_REPORT_OBJECT_TYPE_RENDER_PASS_EXT,
-            DebugReportObjectTypeExt::Pipeline => vks::VK_DEBUG_REPORT_OBJECT_TYPE_PIPELINE_EXT,
-            DebugReportObjectTypeExt::DescriptorSetLayout => vks::VK_DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_SET_LAYOUT_EXT,
-            DebugReportObjectTypeExt::Sampler => vks::VK_DEBUG_REPORT_OBJECT_TYPE_SAMPLER_EXT,
-            DebugReportObjectTypeExt::DescriptorPool => vks::VK_DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_POOL_EXT,
-            DebugReportObjectTypeExt::DescriptorSet => vks::VK_DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_SET_EXT,
-            DebugReportObjectTypeExt::Framebuffer => vks::VK_DEBUG_REPORT_OBJECT_TYPE_FRAMEBUFFER_EXT,
-            DebugReportObjectTypeExt::CommandPool => vks::VK_DEBUG_REPORT_OBJECT_TYPE_COMMAND_POOL_EXT,
-            DebugReportObjectTypeExt::DebugReport => vks::VK_DEBUG_REPORT_OBJECT_TYPE_DEBUG_REPORT_EXT,
-            DebugReportObjectTypeExt::SurfaceKhr => vks::VK_DEBUG_REPORT_OBJECT_TYPE_SURFACE_KHR_EXT,
-            DebugReportObjectTypeExt::SwapchainKhr => vks::VK_DEBUG_REPORT_OBJECT_TYPE_SWAPCHAIN_KHR_EXT,
+            DebugReportObjectTypeExt::Unknown => vks::ext_debug_report::VK_DEBUG_REPORT_OBJECT_TYPE_UNKNOWN_EXT,
+            DebugReportObjectTypeExt::Instance => vks::ext_debug_report::VK_DEBUG_REPORT_OBJECT_TYPE_INSTANCE_EXT,
+            DebugReportObjectTypeExt::PhysicalDevice => vks::ext_debug_report::VK_DEBUG_REPORT_OBJECT_TYPE_PHYSICAL_DEVICE_EXT,
+            DebugReportObjectTypeExt::Device => vks::ext_debug_report::VK_DEBUG_REPORT_OBJECT_TYPE_DEVICE_EXT,
+            DebugReportObjectTypeExt::Queue => vks::ext_debug_report::VK_DEBUG_REPORT_OBJECT_TYPE_QUEUE_EXT,
+            DebugReportObjectTypeExt::Semaphore => vks::ext_debug_report::VK_DEBUG_REPORT_OBJECT_TYPE_SEMAPHORE_EXT,
+            DebugReportObjectTypeExt::CommandBuffer => vks::ext_debug_report::VK_DEBUG_REPORT_OBJECT_TYPE_COMMAND_BUFFER_EXT,
+            DebugReportObjectTypeExt::Fence => vks::ext_debug_report::VK_DEBUG_REPORT_OBJECT_TYPE_FENCE_EXT,
+            DebugReportObjectTypeExt::DeviceMemory => vks::ext_debug_report::VK_DEBUG_REPORT_OBJECT_TYPE_DEVICE_MEMORY_EXT,
+            DebugReportObjectTypeExt::Buffer => vks::ext_debug_report::VK_DEBUG_REPORT_OBJECT_TYPE_BUFFER_EXT,
+            DebugReportObjectTypeExt::Image => vks::ext_debug_report::VK_DEBUG_REPORT_OBJECT_TYPE_IMAGE_EXT,
+            DebugReportObjectTypeExt::Event => vks::ext_debug_report::VK_DEBUG_REPORT_OBJECT_TYPE_EVENT_EXT,
+            DebugReportObjectTypeExt::QueryPool => vks::ext_debug_report::VK_DEBUG_REPORT_OBJECT_TYPE_QUERY_POOL_EXT,
+            DebugReportObjectTypeExt::BufferView => vks::ext_debug_report::VK_DEBUG_REPORT_OBJECT_TYPE_BUFFER_VIEW_EXT,
+            DebugReportObjectTypeExt::ImageView => vks::ext_debug_report::VK_DEBUG_REPORT_OBJECT_TYPE_IMAGE_VIEW_EXT,
+            DebugReportObjectTypeExt::ShaderModule => vks::ext_debug_report::VK_DEBUG_REPORT_OBJECT_TYPE_SHADER_MODULE_EXT,
+            DebugReportObjectTypeExt::PipelineCache => vks::ext_debug_report::VK_DEBUG_REPORT_OBJECT_TYPE_PIPELINE_CACHE_EXT,
+            DebugReportObjectTypeExt::PipelineLayout => vks::ext_debug_report::VK_DEBUG_REPORT_OBJECT_TYPE_PIPELINE_LAYOUT_EXT,
+            DebugReportObjectTypeExt::RenderPass => vks::ext_debug_report::VK_DEBUG_REPORT_OBJECT_TYPE_RENDER_PASS_EXT,
+            DebugReportObjectTypeExt::Pipeline => vks::ext_debug_report::VK_DEBUG_REPORT_OBJECT_TYPE_PIPELINE_EXT,
+            DebugReportObjectTypeExt::DescriptorSetLayout => vks::ext_debug_report::VK_DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_SET_LAYOUT_EXT,
+            DebugReportObjectTypeExt::Sampler => vks::ext_debug_report::VK_DEBUG_REPORT_OBJECT_TYPE_SAMPLER_EXT,
+            DebugReportObjectTypeExt::DescriptorPool => vks::ext_debug_report::VK_DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_POOL_EXT,
+            DebugReportObjectTypeExt::DescriptorSet => vks::ext_debug_report::VK_DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_SET_EXT,
+            DebugReportObjectTypeExt::Framebuffer => vks::ext_debug_report::VK_DEBUG_REPORT_OBJECT_TYPE_FRAMEBUFFER_EXT,
+            DebugReportObjectTypeExt::CommandPool => vks::ext_debug_report::VK_DEBUG_REPORT_OBJECT_TYPE_COMMAND_POOL_EXT,
+            DebugReportObjectTypeExt::DebugReport => vks::ext_debug_report::VK_DEBUG_REPORT_OBJECT_TYPE_DEBUG_REPORT_EXT,
+            DebugReportObjectTypeExt::SurfaceKhr => vks::ext_debug_report::VK_DEBUG_REPORT_OBJECT_TYPE_SURFACE_KHR_EXT,
+            DebugReportObjectTypeExt::SwapchainKhr => vks::ext_debug_report::VK_DEBUG_REPORT_OBJECT_TYPE_SWAPCHAIN_KHR_EXT,
             DebugReportObjectTypeExt::UnknownValue(ty) => ty,
         }
     }
@@ -141,24 +141,24 @@ impl From<DebugReportObjectTypeExt> for vks::VkDebugReportObjectTypeEXT {
 bitflags! {
     /// See [`VkDebugReportFlagBitsEXT`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDebugReportFlagBitsEXT)
     #[derive(Default)]
-    pub struct DebugReportFlagsExt: vks::VkDebugReportFlagsEXT {
+    pub struct DebugReportFlagsExt: vks::ext_debug_report::VkDebugReportFlagsEXT {
         /// See [`VkDebugReportFlagBitsEXT`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDebugReportFlagBitsEXT)
-        const DEBUG_REPORT_FLAG_BITS_MAX_ENUM_EXT = vks::VK_DEBUG_REPORT_FLAG_BITS_MAX_ENUM_EXT;
+        const DEBUG_REPORT_FLAG_BITS_MAX_ENUM_EXT = vks::ext_debug_report::VK_DEBUG_REPORT_FLAG_BITS_MAX_ENUM_EXT;
 
         /// See [`VkDebugReportFlagBitsEXT`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDebugReportFlagBitsEXT)
-        const DEBUG_REPORT_INFORMATION_BIT_EXT = vks::VK_DEBUG_REPORT_INFORMATION_BIT_EXT;
+        const DEBUG_REPORT_INFORMATION_BIT_EXT = vks::ext_debug_report::VK_DEBUG_REPORT_INFORMATION_BIT_EXT;
 
         /// See [`VkDebugReportFlagBitsEXT`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDebugReportFlagBitsEXT)
-        const DEBUG_REPORT_WARNING_BIT_EXT = vks::VK_DEBUG_REPORT_WARNING_BIT_EXT;
+        const DEBUG_REPORT_WARNING_BIT_EXT = vks::ext_debug_report::VK_DEBUG_REPORT_WARNING_BIT_EXT;
 
         /// See [`VkDebugReportFlagBitsEXT`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDebugReportFlagBitsEXT)
-        const DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT = vks::VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT;
+        const DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT = vks::ext_debug_report::VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT;
 
         /// See [`VkDebugReportFlagBitsEXT`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDebugReportFlagBitsEXT)
-        const DEBUG_REPORT_ERROR_BIT_EXT = vks::VK_DEBUG_REPORT_ERROR_BIT_EXT;
+        const DEBUG_REPORT_ERROR_BIT_EXT = vks::ext_debug_report::VK_DEBUG_REPORT_ERROR_BIT_EXT;
 
         /// See [`VkDebugReportFlagBitsEXT`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDebugReportFlagBitsEXT)
-        const DEBUG_REPORT_DEBUG_BIT_EXT = vks::VK_DEBUG_REPORT_DEBUG_BIT_EXT;
+        const DEBUG_REPORT_DEBUG_BIT_EXT = vks::ext_debug_report::VK_DEBUG_REPORT_DEBUG_BIT_EXT;
     }
 }
 
@@ -174,7 +174,7 @@ pub trait DebugReportCallbacksExt: Send + Sync + fmt::Debug {
 gen_chain_struct! {
     name: DebugReportCallbackCreateInfoChainExt [DebugReportCallbackCreateInfoChainWrapperExt],
     query: DebugReportCallbackCreateInfoChainQueryExt [DebugReportCallbackCreateInfoChainQueryWrapperExt],
-    vks: VkDebugReportCallbackCreateInfoEXT,
+    vks: vks::ext_debug_report::VkDebugReportCallbackCreateInfoEXT,
     input: true,
     output: false,
 }
@@ -197,7 +197,7 @@ impl PartialEq for DebugReportCallbackCreateInfoExt {
 
 #[derive(Debug)]
 pub(crate) struct VkDebugReportCallbackCreateInfoEXTWrapper {
-    pub vks_struct: vks::VkDebugReportCallbackCreateInfoEXT,
+    pub vks_struct: vks::ext_debug_report::VkDebugReportCallbackCreateInfoEXT,
     pub callback_helper: CallbackHelper,
     chain: Option<DebugReportCallbackCreateInfoChainWrapperExt>,
 }
@@ -208,8 +208,8 @@ impl VkDebugReportCallbackCreateInfoEXTWrapper {
         let (pnext, chain) = DebugReportCallbackCreateInfoChainWrapperExt::new_optional(&create_info.chain, with_chain);
 
         VkDebugReportCallbackCreateInfoEXTWrapper {
-            vks_struct: vks::VkDebugReportCallbackCreateInfoEXT {
-                sType: vks::VK_STRUCTURE_TYPE_DEBUG_REPORT_CALLBACK_CREATE_INFO_EXT,
+            vks_struct: vks::ext_debug_report::VkDebugReportCallbackCreateInfoEXT {
+                sType: vks::core::VK_STRUCTURE_TYPE_DEBUG_REPORT_CALLBACK_CREATE_INFO_EXT,
                 pNext: pnext,
                 flags: create_info.flags.bits(),
                 pfnCallback: callback_helper.vks_callback,

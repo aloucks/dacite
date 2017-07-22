@@ -15,14 +15,14 @@
 //! See extension [`VK_KHR_xcb_surface`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_xcb_surface)
 
 use vks;
-use xcb_wrapper;
+use xcb_types;
 
 bitflags! {
     /// See [`VkXcbSurfaceCreateFlagsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkXcbSurfaceCreateFlagsKHR)
     #[derive(Default)]
-    pub struct XcbSurfaceCreateFlagsKhr: vks::VkXcbSurfaceCreateFlagsKHR {
+    pub struct XcbSurfaceCreateFlagsKhr: vks::khr_xcb_surface::VkXcbSurfaceCreateFlagsKHR {
         /// See [`VkXcbSurfaceCreateFlagsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkXcbSurfaceCreateFlagsKHR)
-        const XCB_SURFACE_CREATE_FLAG_BITS_MAX_ENUM_KHR = vks::VK_XCB_SURFACE_CREATE_FLAG_BITS_MAX_ENUM_KHR;
+        const XCB_SURFACE_CREATE_FLAG_BITS_MAX_ENUM_KHR = vks::khr_xcb_surface::VK_XCB_SURFACE_CREATE_FLAG_BITS_MAX_ENUM_KHR;
     }
 }
 
@@ -32,7 +32,7 @@ pub type XcbSurfaceCreateFlagBitsKhr = XcbSurfaceCreateFlagsKhr;
 gen_chain_struct! {
     name: XcbSurfaceCreateInfoChainKhr [XcbSurfaceCreateInfoChainKhrWrapper],
     query: XcbSurfaceCreateInfoChainQueryKhr [XcbSurfaceCreateInfoChainQueryKhrWrapper],
-    vks: VkXcbSurfaceCreateInfoKHR,
+    vks: vks::khr_xcb_surface::VkXcbSurfaceCreateInfoKHR,
     input: true,
     output: false,
 }
@@ -41,14 +41,14 @@ gen_chain_struct! {
 #[derive(Debug, Clone, PartialEq)]
 pub struct XcbSurfaceCreateInfoKhr {
     pub flags: XcbSurfaceCreateFlagsKhr,
-    pub connection: *mut xcb_wrapper::xcb_connection_t,
-    pub window: xcb_wrapper::xcb_window_t,
+    pub connection: *mut xcb_types::xcb_connection_t,
+    pub window: xcb_types::xcb_window_t,
     pub chain: Option<XcbSurfaceCreateInfoChainKhr>,
 }
 
 #[derive(Debug)]
 pub(crate) struct VkXcbSurfaceCreateInfoKHRWrapper {
-    pub vks_struct: vks::VkXcbSurfaceCreateInfoKHR,
+    pub vks_struct: vks::khr_xcb_surface::VkXcbSurfaceCreateInfoKHR,
     chain: Option<XcbSurfaceCreateInfoChainKhrWrapper>,
 }
 
@@ -57,8 +57,8 @@ impl VkXcbSurfaceCreateInfoKHRWrapper {
         let (pnext, chain) = XcbSurfaceCreateInfoChainKhrWrapper::new_optional(&create_info.chain, with_chain);
 
         VkXcbSurfaceCreateInfoKHRWrapper {
-            vks_struct: vks::VkXcbSurfaceCreateInfoKHR {
-                sType: vks::VK_STRUCTURE_TYPE_XCB_SURFACE_CREATE_INFO_KHR,
+            vks_struct: vks::khr_xcb_surface::VkXcbSurfaceCreateInfoKHR {
+                sType: vks::core::VK_STRUCTURE_TYPE_XCB_SURFACE_CREATE_INFO_KHR,
                 pNext: pnext,
                 flags: create_info.flags.bits(),
                 connection: create_info.connection,

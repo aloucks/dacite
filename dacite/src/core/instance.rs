@@ -53,8 +53,8 @@ pub enum EarlyInstanceError {
     VulkanError(core::Error),
 }
 
-impl From<vks::VkResult> for EarlyInstanceError {
-    fn from(res: vks::VkResult) -> Self {
+impl From<vks::core::VkResult> for EarlyInstanceError {
+    fn from(res: vks::core::VkResult) -> Self {
         EarlyInstanceError::VulkanError(res.into())
     }
 }
@@ -84,7 +84,7 @@ impl error::Error for EarlyInstanceError {
 pub struct Instance(Arc<Inner>);
 
 impl VulkanObject for Instance {
-    type NativeVulkanObject = vks::VkInstance;
+    type NativeVulkanObject = vks::core::VkInstance;
 
     #[inline]
     fn id(&self) -> u64 {
@@ -109,7 +109,7 @@ impl VulkanObject for Instance {
 
 impl Instance {
     #[inline]
-    pub(crate) fn handle(&self) -> vks::VkInstance {
+    pub(crate) fn handle(&self) -> vks::core::VkInstance {
         self.0.handle
     }
 
@@ -132,7 +132,7 @@ impl Instance {
             let library = libloading::Library::new(vks::VULKAN_LIBRARY_NAME)
                 .map_err(|_| EarlyInstanceError::LoadLibraryFailed(vks::VULKAN_LIBRARY_NAME.to_owned()))?;
             let vk_get_instance_proc_addr = {
-                let vk_get_instance_proc_addr: libloading::Symbol<vks::PFN_vkGetInstanceProcAddr> = library
+                let vk_get_instance_proc_addr: libloading::Symbol<vks::core::PFN_vkGetInstanceProcAddr> = library
                     .get(VK_GET_INSTANCE_PROC_ADDR.as_bytes())
                     .map_err(|_| EarlyInstanceError::SymbolNotFound(VK_GET_INSTANCE_PROC_ADDR.to_owned()))?;
                 *vk_get_instance_proc_addr
@@ -145,15 +145,15 @@ impl Instance {
 
         let mut loader = vks::InstanceProcAddrLoader::from_get_instance_proc_addr(vk_get_instance_proc_addr);
         unsafe {
-            loader.load_core_null_instance();
+            loader.load_core_global();
         }
 
         let create_info_wrapper = core::VkInstanceCreateInfoWrapper::new(create_info, true);
         let mut instance = ptr::null_mut();
         let res = unsafe {
-            (loader.core_null_instance.vkCreateInstance)(&create_info_wrapper.vks_struct, allocation_callbacks, &mut instance)
+            (loader.core_global.vkCreateInstance)(&create_info_wrapper.vks_struct, allocation_callbacks, &mut instance)
         };
-        if res != vks::VK_SUCCESS {
+        if res != vks::core::VK_SUCCESS {
             return Err(res.into());
         }
 
@@ -191,7 +191,7 @@ impl Instance {
         let res = unsafe {
             (self.loader().core.vkEnumeratePhysicalDevices)(self.handle(), &mut num_physical_devices, ptr::null_mut())
         };
-        if res != vks::VK_SUCCESS {
+        if res != vks::core::VK_SUCCESS {
             return Err(res.into());
         }
 
@@ -199,7 +199,7 @@ impl Instance {
         let res = unsafe {
             (self.loader().core.vkEnumeratePhysicalDevices)(self.handle(), &mut num_physical_devices, physical_devices.as_mut_ptr())
         };
-        if res != vks::VK_SUCCESS {
+        if res != vks::core::VK_SUCCESS {
             return Err(res.into());
         }
         unsafe {
@@ -221,23 +221,23 @@ impl Instance {
         unsafe {
             let library = libloading::Library::new(vks::VULKAN_LIBRARY_NAME)
                 .map_err(|_| EarlyInstanceError::LoadLibraryFailed(vks::VULKAN_LIBRARY_NAME.to_owned()))?;
-            let vk_get_instance_proc_addr: libloading::Symbol<vks::PFN_vkGetInstanceProcAddr> = library
+            let vk_get_instance_proc_addr: libloading::Symbol<vks::core::PFN_vkGetInstanceProcAddr> = library
                 .get(VK_GET_INSTANCE_PROC_ADDR.as_bytes())
                 .map_err(|_| EarlyInstanceError::SymbolNotFound(VK_GET_INSTANCE_PROC_ADDR.to_owned()))?;
 
-            let mut loader = vks::instance_proc_addr_loader::CoreNullInstance::new();
+            let mut loader = vks::instance_proc_addr_loader::CoreGlobal::new();
             loader.load(*vk_get_instance_proc_addr, ptr::null_mut());
 
             let mut num_layer_properties = 0;
             let res = (loader.vkEnumerateInstanceLayerProperties)(&mut num_layer_properties, ptr::null_mut());
-            if res != vks::VK_SUCCESS {
+            if res != vks::core::VK_SUCCESS {
                 return Err(res.into());
             }
 
             let mut layer_properties = Vec::with_capacity(num_layer_properties as usize);
             layer_properties.set_len(num_layer_properties as usize);
             let res = (loader.vkEnumerateInstanceLayerProperties)(&mut num_layer_properties, layer_properties.as_mut_ptr());
-            if res != vks::VK_SUCCESS {
+            if res != vks::core::VK_SUCCESS {
                 return Err(res.into());
             }
 
@@ -250,25 +250,25 @@ impl Instance {
         unsafe {
             let library = libloading::Library::new(vks::VULKAN_LIBRARY_NAME)
                 .map_err(|_| EarlyInstanceError::LoadLibraryFailed(vks::VULKAN_LIBRARY_NAME.to_owned()))?;
-            let vk_get_instance_proc_addr: libloading::Symbol<vks::PFN_vkGetInstanceProcAddr> = library
+            let vk_get_instance_proc_addr: libloading::Symbol<vks::core::PFN_vkGetInstanceProcAddr> = library
                 .get(VK_GET_INSTANCE_PROC_ADDR.as_bytes())
                 .map_err(|_| EarlyInstanceError::SymbolNotFound(VK_GET_INSTANCE_PROC_ADDR.to_owned()))?;
 
-            let mut loader = vks::instance_proc_addr_loader::CoreNullInstance::new();
+            let mut loader = vks::instance_proc_addr_loader::CoreGlobal::new();
             loader.load(*vk_get_instance_proc_addr, ptr::null_mut());
 
             let layer_name_cstr = utils::cstr_from_str(layer_name);
 
             let mut num_extension_properties = 0;
             let res = (loader.vkEnumerateInstanceExtensionProperties)(layer_name_cstr.1, &mut num_extension_properties, ptr::null_mut());
-            if res != vks::VK_SUCCESS {
+            if res != vks::core::VK_SUCCESS {
                 return Err(res.into());
             }
 
             let mut extension_properties = Vec::with_capacity(num_extension_properties as usize);
             extension_properties.set_len(num_extension_properties as usize);
             let res = (loader.vkEnumerateInstanceExtensionProperties)(layer_name_cstr.1, &mut num_extension_properties, extension_properties.as_mut_ptr());
-            if res != vks::VK_SUCCESS {
+            if res != vks::core::VK_SUCCESS {
                 return Err(res.into());
             }
 
@@ -294,7 +294,7 @@ impl Instance {
             (self.loader().ext_debug_report.vkCreateDebugReportCallbackEXT)(self.handle(), &create_info_wrapper.vks_struct, allocation_callbacks, &mut debug_report_callback)
         };
 
-        if res == vks::VK_SUCCESS {
+        if res == vks::core::VK_SUCCESS {
             Ok(ext_debug_report::DebugReportCallbackExt::new(debug_report_callback, true, self.clone(), allocator_helper, Some(create_info_wrapper.callback_helper)))
         }
         else {
@@ -329,7 +329,7 @@ impl Instance {
             (self.loader().khr_display.vkCreateDisplayPlaneSurfaceKHR)(self.handle(), &create_info_wrapper.vks_struct, allocation_callbacks, &mut surface)
         };
 
-        if res == vks::VK_SUCCESS {
+        if res == vks::core::VK_SUCCESS {
             Ok(khr_surface::SurfaceKhr::new(surface, true, self.clone(), allocator_helper))
         }
         else {
@@ -350,7 +350,7 @@ impl Instance {
             (self.loader().khr_xlib_surface.vkCreateXlibSurfaceKHR)(self.handle(), &create_info_wrapper.vks_struct, allocation_callbacks, &mut surface)
         };
 
-        if res == vks::VK_SUCCESS {
+        if res == vks::core::VK_SUCCESS {
             Ok(khr_surface::SurfaceKhr::new(surface, true, self.clone(), allocator_helper))
         }
         else {
@@ -371,7 +371,7 @@ impl Instance {
             (self.loader().khr_wayland_surface.vkCreateWaylandSurfaceKHR)(self.handle(), &create_info_wrapper.vks_struct, allocation_callbacks, &mut surface)
         };
 
-        if res == vks::VK_SUCCESS {
+        if res == vks::core::VK_SUCCESS {
             Ok(khr_surface::SurfaceKhr::new(surface, true, self.clone(), allocator_helper))
         }
         else {
@@ -392,7 +392,7 @@ impl Instance {
             (self.loader().khr_xcb_surface.vkCreateXcbSurfaceKHR)(self.handle(), &create_info_wrapper.vks_struct, allocation_callbacks, &mut surface)
         };
 
-        if res == vks::VK_SUCCESS {
+        if res == vks::core::VK_SUCCESS {
             Ok(khr_surface::SurfaceKhr::new(surface, true, self.clone(), allocator_helper))
         }
         else {
@@ -413,7 +413,7 @@ impl Instance {
             (self.loader().khr_mir_surface.vkCreateMirSurfaceKHR)(self.handle(), &create_info_wrapper.vks_struct, allocation_callbacks, &mut surface)
         };
 
-        if res == vks::VK_SUCCESS {
+        if res == vks::core::VK_SUCCESS {
             Ok(khr_surface::SurfaceKhr::new(surface, true, self.clone(), allocator_helper))
         }
         else {
@@ -434,7 +434,7 @@ impl Instance {
             (self.loader().khr_android_surface.vkCreateAndroidSurfaceKHR)(self.handle(), &create_info_wrapper.vks_struct, allocation_callbacks, &mut surface)
         };
 
-        if res == vks::VK_SUCCESS {
+        if res == vks::core::VK_SUCCESS {
             Ok(khr_surface::SurfaceKhr::new(surface, true, self.clone(), allocator_helper))
         }
         else {
@@ -455,7 +455,7 @@ impl Instance {
             (self.loader().khr_win32_surface.vkCreateWin32SurfaceKHR)(self.handle(), &create_info_wrapper.vks_struct, allocation_callbacks, &mut surface)
         };
 
-        if res == vks::VK_SUCCESS {
+        if res == vks::core::VK_SUCCESS {
             Ok(khr_surface::SurfaceKhr::new(surface, true, self.clone(), allocator_helper))
         }
         else {
@@ -466,7 +466,7 @@ impl Instance {
 
 #[derive(Debug)]
 struct Inner {
-    handle: vks::VkInstance,
+    handle: vks::core::VkInstance,
     allocator: Option<AllocatorHelper>,
     loader: vks::InstanceProcAddrLoader,
     library: libloading::Library,

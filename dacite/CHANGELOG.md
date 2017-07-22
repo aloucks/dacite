@@ -9,9 +9,14 @@ in other sub-sections are prefixed with "**BREAKING**" to increase visibility.
 
 
 ## [Unreleased]
+This release contains breaking changes.
 
 ### Fixed
  - Disabled extensions are no longer loaded
+
+### Changed
+ - Bumped lowest supported Rust version to 1.20.
+ - Updated `vks` to 0.20.
 
 
 ## [0.6.1] - 2017-07-09

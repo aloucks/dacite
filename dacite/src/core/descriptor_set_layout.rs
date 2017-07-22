@@ -29,7 +29,7 @@ use vks;
 pub struct DescriptorSetLayout(Arc<Inner>);
 
 impl VulkanObject for DescriptorSetLayout {
-    type NativeVulkanObject = vks::VkDescriptorSetLayout;
+    type NativeVulkanObject = vks::core::VkDescriptorSetLayout;
 
     #[inline]
     fn id(&self) -> u64 {
@@ -85,7 +85,7 @@ impl FromNativeObject for DescriptorSetLayout {
 }
 
 impl DescriptorSetLayout {
-    pub(crate) fn new(handle: vks::VkDescriptorSetLayout, owned: bool, device: Device, allocator: Option<AllocatorHelper>) -> Self {
+    pub(crate) fn new(handle: vks::core::VkDescriptorSetLayout, owned: bool, device: Device, allocator: Option<AllocatorHelper>) -> Self {
         DescriptorSetLayout(Arc::new(Inner {
             handle: handle,
             owned: owned,
@@ -95,14 +95,14 @@ impl DescriptorSetLayout {
     }
 
     #[inline]
-    pub(crate) fn handle(&self) -> vks::VkDescriptorSetLayout {
+    pub(crate) fn handle(&self) -> vks::core::VkDescriptorSetLayout {
         self.0.handle
     }
 }
 
 #[derive(Debug)]
 struct Inner {
-    handle: vks::VkDescriptorSetLayout,
+    handle: vks::core::VkDescriptorSetLayout,
     owned: bool,
     device: Device,
     allocator: Option<AllocatorHelper>,

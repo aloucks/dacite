@@ -40,7 +40,7 @@ use vks;
 pub struct CommandBuffer(Arc<Inner>);
 
 impl VulkanObject for CommandBuffer {
-    type NativeVulkanObject = vks::VkCommandBuffer;
+    type NativeVulkanObject = vks::core::VkCommandBuffer;
 
     #[inline]
     fn id(&self) -> u64 {
@@ -90,7 +90,7 @@ impl FromNativeObject for CommandBuffer {
 }
 
 impl CommandBuffer {
-    pub(crate) fn new(handle: vks::VkCommandBuffer, owned: bool, command_pool: CommandPool) -> Self {
+    pub(crate) fn new(handle: vks::core::VkCommandBuffer, owned: bool, command_pool: CommandPool) -> Self {
         CommandBuffer(Arc::new(Inner {
             handle: handle,
             owned: owned,
@@ -99,7 +99,7 @@ impl CommandBuffer {
     }
 
     #[inline]
-    pub(crate) fn handle(&self) -> vks::VkCommandBuffer {
+    pub(crate) fn handle(&self) -> vks::core::VkCommandBuffer {
         self.0.handle
     }
 
@@ -116,7 +116,7 @@ impl CommandBuffer {
             (self.loader().core.vkBeginCommandBuffer)(self.handle(), &begin_info_wrapper.vks_struct)
         };
 
-        if res == vks::VK_SUCCESS {
+        if res == vks::core::VK_SUCCESS {
             Ok(())
         }
         else {
@@ -130,7 +130,7 @@ impl CommandBuffer {
             (self.loader().core.vkEndCommandBuffer)(self.handle())
         };
 
-        if res == vks::VK_SUCCESS {
+        if res == vks::core::VK_SUCCESS {
             Ok(())
         }
         else {
@@ -144,7 +144,7 @@ impl CommandBuffer {
             (self.loader().core.vkResetCommandBuffer)(self.handle(), flags.bits())
         };
 
-        if res == vks::VK_SUCCESS {
+        if res == vks::core::VK_SUCCESS {
             Ok(())
         }
         else {
@@ -592,7 +592,7 @@ impl CommandBuffer {
 
 #[derive(Debug)]
 struct Inner {
-    handle: vks::VkCommandBuffer,
+    handle: vks::core::VkCommandBuffer,
     owned: bool,
     command_pool: CommandPool,
 }

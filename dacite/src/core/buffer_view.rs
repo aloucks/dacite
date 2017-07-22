@@ -29,7 +29,7 @@ use vks;
 pub struct BufferView(Arc<Inner>);
 
 impl VulkanObject for BufferView {
-    type NativeVulkanObject = vks::VkBufferView;
+    type NativeVulkanObject = vks::core::VkBufferView;
 
     #[inline]
     fn id(&self) -> u64 {
@@ -85,7 +85,7 @@ impl FromNativeObject for BufferView {
 }
 
 impl BufferView {
-    pub(crate) fn new(handle: vks::VkBufferView, owned: bool, device: Device, allocator: Option<AllocatorHelper>) -> Self {
+    pub(crate) fn new(handle: vks::core::VkBufferView, owned: bool, device: Device, allocator: Option<AllocatorHelper>) -> Self {
         BufferView(Arc::new(Inner {
             handle: handle,
             owned: owned,
@@ -95,14 +95,14 @@ impl BufferView {
     }
 
     #[inline]
-    pub(crate) fn handle(&self) -> vks::VkBufferView {
+    pub(crate) fn handle(&self) -> vks::core::VkBufferView {
         self.0.handle
     }
 }
 
 #[derive(Debug)]
 struct Inner {
-    handle: vks::VkBufferView,
+    handle: vks::core::VkBufferView,
     owned: bool,
     device: Device,
     allocator: Option<AllocatorHelper>,

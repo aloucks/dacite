@@ -15,14 +15,14 @@
 //! See extension [`VK_KHR_win32_surface`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_win32_surface)
 
 use vks;
-use win32_wrapper;
+use win32_types;
 
 bitflags! {
     /// See [`VkWin32SurfaceCreateFlagsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkWin32SurfaceCreateFlagsKHR)
     #[derive(Default)]
-    pub struct Win32SurfaceCreateFlagsKhr: vks::VkWin32SurfaceCreateFlagsKHR {
+    pub struct Win32SurfaceCreateFlagsKhr: vks::khr_win32_surface::VkWin32SurfaceCreateFlagsKHR {
         /// See [`VkWin32SurfaceCreateFlagsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkWin32SurfaceCreateFlagsKHR)
-        const WIN32_SURFACE_CREATE_FLAG_BITS_MAX_ENUM_KHR = vks::VK_WIN32_SURFACE_CREATE_FLAG_BITS_MAX_ENUM_KHR;
+        const WIN32_SURFACE_CREATE_FLAG_BITS_MAX_ENUM_KHR = vks::khr_win32_surface::VK_WIN32_SURFACE_CREATE_FLAG_BITS_MAX_ENUM_KHR;
     }
 }
 
@@ -32,7 +32,7 @@ pub type Win32SurfaceCreateFlagBitsKhr = Win32SurfaceCreateFlagsKhr;
 gen_chain_struct! {
     name: Win32SurfaceCreateInfoChainKhr [Win32SurfaceCreateInfoChainKhrWrapper],
     query: Win32SurfaceCreateInfoChainQueryKhr [Win32SurfaceCreateInfoChainQueryKhrWrapper],
-    vks: VkWin32SurfaceCreateInfoKHR,
+    vks: vks::khr_win32_surface::VkWin32SurfaceCreateInfoKHR,
     input: true,
     output: false,
 }
@@ -41,14 +41,14 @@ gen_chain_struct! {
 #[derive(Debug, Clone, PartialEq)]
 pub struct Win32SurfaceCreateInfoKhr {
     pub flags: Win32SurfaceCreateFlagsKhr,
-    pub hinstance: win32_wrapper::HINSTANCE,
-    pub hwnd: win32_wrapper::HWND,
+    pub hinstance: win32_types::HINSTANCE,
+    pub hwnd: win32_types::HWND,
     pub chain: Option<Win32SurfaceCreateInfoChainKhr>,
 }
 
 #[derive(Debug)]
 pub(crate) struct VkWin32SurfaceCreateInfoKHRWrapper {
-    pub vks_struct: vks::VkWin32SurfaceCreateInfoKHR,
+    pub vks_struct: vks::khr_win32_surface::VkWin32SurfaceCreateInfoKHR,
     chain: Option<Win32SurfaceCreateInfoChainKhrWrapper>,
 }
 
@@ -57,8 +57,8 @@ impl VkWin32SurfaceCreateInfoKHRWrapper {
         let (pnext, chain) = Win32SurfaceCreateInfoChainKhrWrapper::new_optional(&create_info.chain, with_chain);
 
         VkWin32SurfaceCreateInfoKHRWrapper {
-            vks_struct: vks::VkWin32SurfaceCreateInfoKHR {
-                sType: vks::VK_STRUCTURE_TYPE_WIN32_SURFACE_CREATE_INFO_KHR,
+            vks_struct: vks::khr_win32_surface::VkWin32SurfaceCreateInfoKHR {
+                sType: vks::core::VK_STRUCTURE_TYPE_WIN32_SURFACE_CREATE_INFO_KHR,
                 pNext: pnext,
                 flags: create_info.flags.bits(),
                 hinstance: create_info.hinstance,

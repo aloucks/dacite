@@ -20,7 +20,7 @@ use std::sync::Arc;
 use utils;
 use vks;
 
-unsafe extern "system" fn debug_report_callback(flags: vks::VkDebugReportFlagsEXT, object_type: vks::VkDebugReportObjectTypeEXT, object: u64, location: usize, message_code: i32, layer_prefix: *const c_char, message: *const c_char, user_data: *mut c_void) -> vks::VkBool32 {
+unsafe extern "system" fn debug_report_callback(flags: vks::ext_debug_report::VkDebugReportFlagsEXT, object_type: vks::ext_debug_report::VkDebugReportObjectTypeEXT, object: u64, location: usize, message_code: i32, layer_prefix: *const c_char, message: *const c_char, user_data: *mut c_void) -> vks::core::VkBool32 {
     let callback = user_data as *const Arc<ext_debug_report::DebugReportCallbacksExt>;
     // (*callback).alloc(size, alignment, allocation_scope.into())
 
@@ -43,7 +43,7 @@ unsafe extern "system" fn debug_report_callback(flags: vks::VkDebugReportFlagsEX
 }
 
 pub struct CallbackHelper {
-    pub vks_callback: vks::PFN_vkDebugReportCallbackEXT,
+    pub vks_callback: vks::ext_debug_report::PFN_vkDebugReportCallbackEXT,
     pub user_data: *mut c_void,
     callback: Arc<Arc<ext_debug_report::DebugReportCallbacksExt>>,
 }

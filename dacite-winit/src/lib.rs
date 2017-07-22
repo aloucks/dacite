@@ -79,9 +79,9 @@ use dacite::khr_surface;
 use dacite::khr_wayland_surface;
 use dacite::khr_win32_surface;
 use dacite::khr_xlib_surface;
-use dacite::wayland_wrapper;
-use dacite::win32_wrapper;
-use dacite::xlib_wrapper;
+use dacite::wayland_types;
+use dacite::win32_types;
+use dacite::xlib_types;
 use std::error;
 use std::fmt;
 use winit::Window;
@@ -230,18 +230,18 @@ bitflags! {
 #[allow(dead_code)]
 enum Backend {
     Xlib {
-        display: *mut xlib_wrapper::Display,
-        window: xlib_wrapper::Window,
+        display: *mut xlib_types::Display,
+        window: xlib_types::Window,
     },
 
     Wayland {
-        display: *mut wayland_wrapper::wl_display,
-        surface: *mut wayland_wrapper::wl_surface,
+        display: *mut wayland_types::wl_display,
+        surface: *mut wayland_types::wl_surface,
     },
 
     Win32 {
-        hinstance: win32_wrapper::HINSTANCE,
-        hwnd: win32_wrapper::HWND,
+        hinstance: win32_types::HINSTANCE,
+        hwnd: win32_types::HWND,
     },
 }
 
@@ -255,7 +255,7 @@ fn get_backend(window: &Window) -> Result<Backend, Error> {
         if let (Some(display), Some(window)) = (window.get_xlib_display(), window.get_xlib_window()) {
             return Ok(Backend::Xlib {
                 display: display as _,
-                window: dacite::xlib_wrapper::Window(window as _),
+                window: xlib_types::Window(window as _),
             });
         }
 

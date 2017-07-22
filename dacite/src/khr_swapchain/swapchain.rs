@@ -30,7 +30,7 @@ use vks;
 pub struct SwapchainKhr(Arc<Inner>);
 
 impl VulkanObject for SwapchainKhr {
-    type NativeVulkanObject = vks::VkSwapchainKHR;
+    type NativeVulkanObject = vks::khr_swapchain::VkSwapchainKHR;
 
     #[inline]
     fn id(&self) -> u64 {
@@ -86,7 +86,7 @@ impl FromNativeObject for SwapchainKhr {
 }
 
 impl SwapchainKhr {
-    pub(crate) fn new(handle: vks::VkSwapchainKHR, owned: bool, device: core::Device, allocator: Option<AllocatorHelper>) -> Self {
+    pub(crate) fn new(handle: vks::khr_swapchain::VkSwapchainKHR, owned: bool, device: core::Device, allocator: Option<AllocatorHelper>) -> Self {
         SwapchainKhr(Arc::new(Inner {
             handle: handle,
             owned: owned,
@@ -96,7 +96,7 @@ impl SwapchainKhr {
     }
 
     #[inline]
-    pub(crate) fn handle(&self) -> vks::VkSwapchainKHR {
+    pub(crate) fn handle(&self) -> vks::khr_swapchain::VkSwapchainKHR {
         self.0.handle
     }
 
@@ -106,7 +106,7 @@ impl SwapchainKhr {
     }
 
     #[inline]
-    pub(crate) fn device_handle(&self) -> vks::VkDevice {
+    pub(crate) fn device_handle(&self) -> vks::core::VkDevice {
         self.0.device.handle()
     }
 
@@ -117,7 +117,7 @@ impl SwapchainKhr {
             (self.loader().khr_swapchain.vkGetSwapchainImagesKHR)(self.device_handle(), self.handle(), &mut num, ptr::null_mut())
         };
 
-        if res != vks::VK_SUCCESS {
+        if res != vks::core::VK_SUCCESS {
             return Err(res.into());
         }
 
@@ -127,7 +127,7 @@ impl SwapchainKhr {
             (self.loader().khr_swapchain.vkGetSwapchainImagesKHR)(self.device_handle(), self.handle(), &mut num, images.as_mut_ptr())
         };
 
-        if res == vks::VK_SUCCESS {
+        if res == vks::core::VK_SUCCESS {
             Ok(images.iter().map(|i| core::Image::new(*i, false, self.0.device.clone(), None)).collect())
         }
         else {
@@ -146,10 +146,10 @@ impl SwapchainKhr {
         };
 
         match res {
-            vks::VK_SUCCESS => Ok(AcquireNextImageResultKhr::Index(index as usize)),
-            vks::VK_TIMEOUT => Ok(AcquireNextImageResultKhr::Timeout),
-            vks::VK_NOT_READY => Ok(AcquireNextImageResultKhr::NotReady),
-            vks::VK_SUBOPTIMAL_KHR => Ok(AcquireNextImageResultKhr::Suboptimal(index as usize)),
+            vks::core::VK_SUCCESS => Ok(AcquireNextImageResultKhr::Index(index as usize)),
+            vks::core::VK_TIMEOUT => Ok(AcquireNextImageResultKhr::Timeout),
+            vks::core::VK_NOT_READY => Ok(AcquireNextImageResultKhr::NotReady),
+            vks::core::VK_SUBOPTIMAL_KHR => Ok(AcquireNextImageResultKhr::Suboptimal(index as usize)),
             _ => Err(res.into()),
         }
     }
@@ -157,7 +157,7 @@ impl SwapchainKhr {
 
 #[derive(Debug)]
 struct Inner {
-    handle: vks::VkSwapchainKHR,
+    handle: vks::khr_swapchain::VkSwapchainKHR,
     owned: bool,
     device: core::Device,
     allocator: Option<AllocatorHelper>,

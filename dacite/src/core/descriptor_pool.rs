@@ -29,7 +29,7 @@ use vks;
 pub struct DescriptorPool(Arc<Inner>);
 
 impl VulkanObject for DescriptorPool {
-    type NativeVulkanObject = vks::VkDescriptorPool;
+    type NativeVulkanObject = vks::core::VkDescriptorPool;
 
     #[inline]
     fn id(&self) -> u64 {
@@ -85,7 +85,7 @@ impl FromNativeObject for DescriptorPool {
 }
 
 impl DescriptorPool {
-    pub(crate) fn new(handle: vks::VkDescriptorPool, owned: bool, device: Device, allocator: Option<AllocatorHelper>) -> Self {
+    pub(crate) fn new(handle: vks::core::VkDescriptorPool, owned: bool, device: Device, allocator: Option<AllocatorHelper>) -> Self {
         DescriptorPool(Arc::new(Inner {
             handle: handle,
             owned: owned,
@@ -95,7 +95,7 @@ impl DescriptorPool {
     }
 
     #[inline]
-    pub(crate) fn handle(&self) -> vks::VkDescriptorPool {
+    pub(crate) fn handle(&self) -> vks::core::VkDescriptorPool {
         self.0.handle
     }
 
@@ -105,7 +105,7 @@ impl DescriptorPool {
     }
 
     #[inline]
-    pub(crate) fn device_handle(&self) -> vks::VkDevice {
+    pub(crate) fn device_handle(&self) -> vks::core::VkDevice {
         self.0.device.handle()
     }
 
@@ -120,7 +120,7 @@ impl DescriptorPool {
             (descriptor_pool.loader().core.vkAllocateDescriptorSets)(descriptor_pool.device_handle(), &allocate_info_wrapper.vks_struct, descriptor_sets.as_mut_ptr())
         };
 
-        if res == vks::VK_SUCCESS {
+        if res == vks::core::VK_SUCCESS {
             Ok(descriptor_sets.iter().map(|s| DescriptorSet::new(*s, descriptor_pool.clone())).collect())
         }
         else {
@@ -136,7 +136,7 @@ impl DescriptorPool {
             (self.loader().core.vkFreeDescriptorSets)(self.device_handle(), self.handle(), descriptor_sets.len() as u32, descriptor_sets.as_ptr())
         };
 
-        if res == vks::VK_SUCCESS {
+        if res == vks::core::VK_SUCCESS {
             Ok(())
         }
         else {
@@ -150,7 +150,7 @@ impl DescriptorPool {
             (self.loader().core.vkResetDescriptorPool)(self.device_handle(), self.handle(), flags.bits())
         };
 
-        if res == vks::VK_SUCCESS {
+        if res == vks::core::VK_SUCCESS {
             Ok(())
         }
         else {
@@ -161,7 +161,7 @@ impl DescriptorPool {
 
 #[derive(Debug)]
 struct Inner {
-    handle: vks::VkDescriptorPool,
+    handle: vks::core::VkDescriptorPool,
     owned: bool,
     device: Device,
     allocator: Option<AllocatorHelper>,

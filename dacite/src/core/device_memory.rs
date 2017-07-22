@@ -26,14 +26,14 @@ use std::mem;
 use std::ptr;
 use std::sync::Arc;
 use vks;
-use win32_wrapper;
+use win32_types;
 
 /// See [`VkDeviceMemory`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDeviceMemory)
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct DeviceMemory(Arc<Inner>);
 
 impl VulkanObject for DeviceMemory {
-    type NativeVulkanObject = vks::VkDeviceMemory;
+    type NativeVulkanObject = vks::core::VkDeviceMemory;
 
     #[inline]
     fn id(&self) -> u64 {
@@ -93,7 +93,7 @@ impl FromNativeObject for DeviceMemory {
 }
 
 impl DeviceMemory {
-    pub(crate) fn new(handle: vks::VkDeviceMemory, owned: bool, device: Device, allocator: Option<AllocatorHelper>, size: u64) -> Self {
+    pub(crate) fn new(handle: vks::core::VkDeviceMemory, owned: bool, device: Device, allocator: Option<AllocatorHelper>, size: u64) -> Self {
         DeviceMemory(Arc::new(Inner {
             handle: handle,
             owned: owned,
@@ -104,7 +104,7 @@ impl DeviceMemory {
     }
 
     #[inline]
-    pub(crate) fn handle(&self) -> vks::VkDeviceMemory {
+    pub(crate) fn handle(&self) -> vks::core::VkDeviceMemory {
         self.0.handle
     }
 
@@ -114,7 +114,7 @@ impl DeviceMemory {
     }
 
     #[inline]
-    pub(crate) fn device_handle(&self) -> vks::VkDevice {
+    pub(crate) fn device_handle(&self) -> vks::core::VkDevice {
         self.0.device.handle()
     }
 
@@ -139,7 +139,7 @@ impl DeviceMemory {
             (self.loader().core.vkMapMemory)(self.device_handle(), self.handle(), offset, size.into(), flags.bits(), &mut mapped)
         };
 
-        if res == vks::VK_SUCCESS {
+        if res == vks::core::VK_SUCCESS {
             let size = match size {
                 core::OptionalDeviceSize::Size(size) => size,
                 core::OptionalDeviceSize::WholeSize => self.0.size - offset,
@@ -169,7 +169,7 @@ impl DeviceMemory {
             (loader.core.vkFlushMappedMemoryRanges)(device_handle, ranges.len() as u32, ranges.as_ptr())
         };
 
-        if res == vks::VK_SUCCESS {
+        if res == vks::core::VK_SUCCESS {
             Ok(())
         }
         else {
@@ -189,7 +189,7 @@ impl DeviceMemory {
             (loader.core.vkInvalidateMappedMemoryRanges)(device_handle, ranges.len() as u32, ranges.as_ptr())
         };
 
-        if res == vks::VK_SUCCESS {
+        if res == vks::core::VK_SUCCESS {
             Ok(())
         }
         else {
@@ -199,12 +199,12 @@ impl DeviceMemory {
 
     /// See [`vkGetMemoryWin32HandleNV`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetMemoryWin32HandleNV)
     /// and extension [`VK_NV_external_memory_win32`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_NV_external_memory_win32)
-    pub fn get_win32_handle_nv(&self, handle_type: nv_external_memory_capabilities::ExternalMemoryHandleTypeFlagsNv) -> Result<win32_wrapper::HANDLE, core::Error> {
+    pub fn get_win32_handle_nv(&self, handle_type: nv_external_memory_capabilities::ExternalMemoryHandleTypeFlagsNv) -> Result<win32_types::HANDLE, core::Error> {
         unsafe {
             let mut handle = mem::uninitialized();
             let res = (self.loader().nv_external_memory_win32.vkGetMemoryWin32HandleNV)(self.device_handle(), self.handle(), handle_type.bits(), &mut handle);
 
-            if res == vks::VK_SUCCESS {
+            if res == vks::core::VK_SUCCESS {
                 Ok(handle)
             }
             else {
@@ -248,19 +248,19 @@ impl MappedMemory {
         #[allow(unused_variables)]
         let (pnext, chain_wrapper) = core::MappedMemoryRangeChainWrapper::new_optional(chain, true);
 
-        let range = vks::VkMappedMemoryRange {
-            sType: vks::VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE,
+        let range = vks::core::VkMappedMemoryRange {
+            sType: vks::core::VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE,
             pNext: pnext,
             memory: self.memory.handle(),
             offset: self.offset,
-            size: vks::VK_WHOLE_SIZE,
+            size: vks::core::VK_WHOLE_SIZE,
         };
 
         let res = unsafe {
             (self.memory.loader().core.vkFlushMappedMemoryRanges)(self.memory.device_handle(), 1, &range)
         };
 
-        if res == vks::VK_SUCCESS {
+        if res == vks::core::VK_SUCCESS {
             Ok(())
         }
         else {
@@ -273,19 +273,19 @@ impl MappedMemory {
         #[allow(unused_variables)]
         let (pnext, chain_wrapper) = core::MappedMemoryRangeChainWrapper::new_optional(chain, true);
 
-        let range = vks::VkMappedMemoryRange {
-            sType: vks::VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE,
+        let range = vks::core::VkMappedMemoryRange {
+            sType: vks::core::VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE,
             pNext: pnext,
             memory: self.memory.handle(),
             offset: self.offset,
-            size: vks::VK_WHOLE_SIZE,
+            size: vks::core::VK_WHOLE_SIZE,
         };
 
         let res = unsafe {
             (self.memory.loader().core.vkInvalidateMappedMemoryRanges)(self.memory.device_handle(), 1, &range)
         };
 
-        if res == vks::VK_SUCCESS {
+        if res == vks::core::VK_SUCCESS {
             Ok(())
         }
         else {
@@ -296,7 +296,7 @@ impl MappedMemory {
 
 #[derive(Debug)]
 struct Inner {
-    handle: vks::VkDeviceMemory,
+    handle: vks::core::VkDeviceMemory,
     owned: bool,
     device: Device,
     allocator: Option<AllocatorHelper>,

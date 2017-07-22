@@ -30,7 +30,7 @@ use vks;
 pub struct Fence(Arc<Inner>);
 
 impl VulkanObject for Fence {
-    type NativeVulkanObject = vks::VkFence;
+    type NativeVulkanObject = vks::core::VkFence;
 
     #[inline]
     fn id(&self) -> u64 {
@@ -86,7 +86,7 @@ impl FromNativeObject for Fence {
 }
 
 impl Fence {
-    pub(crate) fn new(handle: vks::VkFence, owned: bool, device: Device, allocator: Option<AllocatorHelper>) -> Self {
+    pub(crate) fn new(handle: vks::core::VkFence, owned: bool, device: Device, allocator: Option<AllocatorHelper>) -> Self {
         Fence(Arc::new(Inner {
             handle: handle,
             owned: owned,
@@ -96,7 +96,7 @@ impl Fence {
     }
 
     #[inline]
-    pub(crate) fn handle(&self) -> vks::VkFence {
+    pub(crate) fn handle(&self) -> vks::core::VkFence {
         self.0.handle
     }
 
@@ -106,7 +106,7 @@ impl Fence {
     }
 
     #[inline]
-    pub(crate) fn device_handle(&self) -> vks::VkDevice {
+    pub(crate) fn device_handle(&self) -> vks::core::VkDevice {
         self.0.device.handle()
     }
 
@@ -121,8 +121,8 @@ impl Fence {
         };
 
         match res {
-            vks::VK_SUCCESS => Ok(true),
-            vks::VK_TIMEOUT => Ok(false),
+            vks::core::VK_SUCCESS => Ok(true),
+            vks::core::VK_TIMEOUT => Ok(false),
             _ => Err(res.into()),
         }
     }
@@ -143,7 +143,7 @@ impl Fence {
             (loader.core.vkResetFences)(device, fences.len() as u32, fences.as_ptr())
         };
 
-        if res == vks::VK_SUCCESS {
+        if res == vks::core::VK_SUCCESS {
             Ok(())
         }
         else {
@@ -164,8 +164,8 @@ impl Fence {
         };
 
         match res {
-            vks::VK_SUCCESS => Ok(true),
-            vks::VK_NOT_READY => Ok(false),
+            vks::core::VK_SUCCESS => Ok(true),
+            vks::core::VK_NOT_READY => Ok(false),
             _ => Err(res.into()),
         }
     }
@@ -173,7 +173,7 @@ impl Fence {
 
 #[derive(Debug)]
 struct Inner {
-    handle: vks::VkFence,
+    handle: vks::core::VkFence,
     owned: bool,
     device: Device,
     allocator: Option<AllocatorHelper>,

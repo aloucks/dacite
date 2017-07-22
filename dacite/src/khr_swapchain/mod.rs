@@ -27,9 +27,9 @@ pub use self::swapchain::{SwapchainKhr, FromNativeSwapchainKhrParameters};
 bitflags! {
     /// See [`VkSwapchainCreateFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSwapchainCreateFlagBitsKHR)
     #[derive(Default)]
-    pub struct SwapchainCreateFlagsKhr: vks::VkSwapchainCreateFlagsKHR {
+    pub struct SwapchainCreateFlagsKhr: vks::khr_swapchain::VkSwapchainCreateFlagsKHR {
         /// See [`VkSwapchainCreateFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSwapchainCreateFlagBitsKHR)
-        const SWAPCHAIN_CREATE_FLAG_BITS_MAX_ENUM_KHR = vks::VK_SWAPCHAIN_CREATE_FLAG_BITS_MAX_ENUM_KHR;
+        const SWAPCHAIN_CREATE_FLAG_BITS_MAX_ENUM_KHR = vks::khr_swapchain::VK_SWAPCHAIN_CREATE_FLAG_BITS_MAX_ENUM_KHR;
     }
 }
 
@@ -55,7 +55,7 @@ pub enum QueuePresentResultKhr {
 gen_chain_struct! {
     name: SwapchainCreateInfoChainKhr [SwapchainCreateInfoChainKhrWrapper],
     query: SwapchainCreateInfoChainQueryKhr [SwapchainCreateInfoChainQueryKhrWrapper],
-    vks: VkSwapchainCreateInfoKHR,
+    vks: vks::khr_swapchain::VkSwapchainCreateInfoKHR,
     input: true,
     output: false,
 }
@@ -83,7 +83,7 @@ pub struct SwapchainCreateInfoKhr {
 
 #[derive(Debug)]
 pub(crate) struct VkSwapchainCreateInfoKHRWrapper {
-    pub vks_struct: vks::VkSwapchainCreateInfoKHR,
+    pub vks_struct: vks::khr_swapchain::VkSwapchainCreateInfoKHR,
     surface: khr_surface::SurfaceKhr,
     queue_family_indices: Vec<u32>,
     old_swapchain: Option<SwapchainKhr>,
@@ -104,8 +104,8 @@ impl VkSwapchainCreateInfoKHRWrapper {
         let (pnext, chain) = SwapchainCreateInfoChainKhrWrapper::new_optional(&create_info.chain, with_chain);
 
         VkSwapchainCreateInfoKHRWrapper {
-            vks_struct: vks::VkSwapchainCreateInfoKHR {
-                sType: vks::VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR,
+            vks_struct: vks::khr_swapchain::VkSwapchainCreateInfoKHR {
+                sType: vks::core::VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR,
                 pNext: pnext,
                 flags: create_info.flags.bits(),
                 surface: create_info.surface.handle(),
@@ -135,7 +135,7 @@ impl VkSwapchainCreateInfoKHRWrapper {
 gen_chain_struct! {
     name: PresentInfoChainKhr [PresentInfoChainKhrWrapper],
     query: PresentInfoChainQueryKhr [PresentInfoChainQueryKhrWrapper],
-    vks: VkPresentInfoKHR,
+    vks: vks::khr_swapchain::VkPresentInfoKHR,
     input: true,
     output: false,
 
@@ -145,8 +145,8 @@ gen_chain_struct! {
         fn_has: has_display_present_info_khr,
         fn_get: get_display_present_info_khr,
         wrapper: VkDisplayPresentInfoKHRWrapper,
-        vks: VkDisplayPresentInfoKHR,
-        stype: vks::VK_STRUCTURE_TYPE_DISPLAY_PRESENT_INFO_KHR,
+        vks: vks::khr_display_swapchain::VkDisplayPresentInfoKHR,
+        stype: vks::core::VK_STRUCTURE_TYPE_DISPLAY_PRESENT_INFO_KHR,
     }
 }
 
@@ -162,12 +162,12 @@ pub struct PresentInfoKhr {
 
 #[derive(Debug)]
 pub(crate) struct VkPresentInfoKHRWrapper {
-    pub vks_struct: vks::VkPresentInfoKHR,
-    pub results: Option<Vec<vks::VkResult>>,
+    pub vks_struct: vks::khr_swapchain::VkPresentInfoKHR,
+    pub results: Option<Vec<vks::core::VkResult>>,
     wait_semaphores: Vec<core::Semaphore>,
-    vk_wait_semaphores: Vec<vks::VkSemaphore>,
+    vk_wait_semaphores: Vec<vks::core::VkSemaphore>,
     swapchains: Vec<SwapchainKhr>,
-    vk_swapchains: Vec<vks::VkSwapchainKHR>,
+    vk_swapchains: Vec<vks::khr_swapchain::VkSwapchainKHR>,
     image_indices: Vec<u32>,
     chain: Option<PresentInfoChainKhrWrapper>,
 }
@@ -199,8 +199,8 @@ impl VkPresentInfoKHRWrapper {
         let (pnext, chain) = PresentInfoChainKhrWrapper::new_optional(&info.chain, with_chain);
 
         VkPresentInfoKHRWrapper {
-            vks_struct: vks::VkPresentInfoKHR {
-                sType: vks::VK_STRUCTURE_TYPE_PRESENT_INFO_KHR,
+            vks_struct: vks::khr_swapchain::VkPresentInfoKHR {
+                sType: vks::core::VK_STRUCTURE_TYPE_PRESENT_INFO_KHR,
                 pNext: pnext,
                 waitSemaphoreCount: wait_semaphores.len() as u32,
                 pWaitSemaphores: wait_semaphores_ptr,

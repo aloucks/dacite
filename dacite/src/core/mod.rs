@@ -86,9 +86,9 @@ pub use self::shader_module::{ShaderModule, FromNativeShaderModuleParameters};
 bitflags! {
     /// See [`VkInstanceCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkInstanceCreateFlags)
     #[derive(Default)]
-    pub struct InstanceCreateFlags: vks::VkInstanceCreateFlags {
+    pub struct InstanceCreateFlags: vks::core::VkInstanceCreateFlags {
         /// See [`VkInstanceCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkInstanceCreateFlags)
-        const INSTANCE_CREATE_FLAG_BITS_MAX_ENUM = vks::VK_INSTANCE_CREATE_FLAG_BITS_MAX_ENUM;
+        const INSTANCE_CREATE_FLAG_BITS_MAX_ENUM = vks::core::VK_INSTANCE_CREATE_FLAG_BITS_MAX_ENUM;
     }
 }
 
@@ -98,52 +98,52 @@ pub type InstanceCreateFlagBits = InstanceCreateFlags;
 bitflags! {
     /// See [`VkFormatFeatureFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkFormatFeatureFlagBits)
     #[derive(Default)]
-    pub struct FormatFeatureFlags: vks::VkFormatFeatureFlags {
+    pub struct FormatFeatureFlags: vks::core::VkFormatFeatureFlags {
         /// See [`VkFormatFeatureFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkFormatFeatureFlagBits)
-        const FORMAT_FEATURE_FLAG_BITS_MAX_ENUM = vks::VK_FORMAT_FEATURE_FLAG_BITS_MAX_ENUM;
+        const FORMAT_FEATURE_FLAG_BITS_MAX_ENUM = vks::core::VK_FORMAT_FEATURE_FLAG_BITS_MAX_ENUM;
 
         /// See [`VkFormatFeatureFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkFormatFeatureFlagBits)
-        const FORMAT_FEATURE_SAMPLED_IMAGE_BIT = vks::VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT;
+        const FORMAT_FEATURE_SAMPLED_IMAGE_BIT = vks::core::VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT;
 
         /// See [`VkFormatFeatureFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkFormatFeatureFlagBits)
-        const FORMAT_FEATURE_STORAGE_IMAGE_BIT = vks::VK_FORMAT_FEATURE_STORAGE_IMAGE_BIT;
+        const FORMAT_FEATURE_STORAGE_IMAGE_BIT = vks::core::VK_FORMAT_FEATURE_STORAGE_IMAGE_BIT;
 
         /// See [`VkFormatFeatureFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkFormatFeatureFlagBits)
-        const FORMAT_FEATURE_STORAGE_IMAGE_ATOMIC_BIT = vks::VK_FORMAT_FEATURE_STORAGE_IMAGE_ATOMIC_BIT;
+        const FORMAT_FEATURE_STORAGE_IMAGE_ATOMIC_BIT = vks::core::VK_FORMAT_FEATURE_STORAGE_IMAGE_ATOMIC_BIT;
 
         /// See [`VkFormatFeatureFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkFormatFeatureFlagBits)
-        const FORMAT_FEATURE_UNIFORM_TEXEL_BUFFER_BIT = vks::VK_FORMAT_FEATURE_UNIFORM_TEXEL_BUFFER_BIT;
+        const FORMAT_FEATURE_UNIFORM_TEXEL_BUFFER_BIT = vks::core::VK_FORMAT_FEATURE_UNIFORM_TEXEL_BUFFER_BIT;
 
         /// See [`VkFormatFeatureFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkFormatFeatureFlagBits)
-        const FORMAT_FEATURE_STORAGE_TEXEL_BUFFER_BIT = vks::VK_FORMAT_FEATURE_STORAGE_TEXEL_BUFFER_BIT;
+        const FORMAT_FEATURE_STORAGE_TEXEL_BUFFER_BIT = vks::core::VK_FORMAT_FEATURE_STORAGE_TEXEL_BUFFER_BIT;
 
         /// See [`VkFormatFeatureFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkFormatFeatureFlagBits)
-        const FORMAT_FEATURE_STORAGE_TEXEL_BUFFER_ATOMIC_BIT = vks::VK_FORMAT_FEATURE_STORAGE_TEXEL_BUFFER_ATOMIC_BIT;
+        const FORMAT_FEATURE_STORAGE_TEXEL_BUFFER_ATOMIC_BIT = vks::core::VK_FORMAT_FEATURE_STORAGE_TEXEL_BUFFER_ATOMIC_BIT;
 
         /// See [`VkFormatFeatureFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkFormatFeatureFlagBits)
-        const FORMAT_FEATURE_VERTEX_BUFFER_BIT = vks::VK_FORMAT_FEATURE_VERTEX_BUFFER_BIT;
+        const FORMAT_FEATURE_VERTEX_BUFFER_BIT = vks::core::VK_FORMAT_FEATURE_VERTEX_BUFFER_BIT;
 
         /// See [`VkFormatFeatureFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkFormatFeatureFlagBits)
-        const FORMAT_FEATURE_COLOR_ATTACHMENT_BIT = vks::VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT;
+        const FORMAT_FEATURE_COLOR_ATTACHMENT_BIT = vks::core::VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT;
 
         /// See [`VkFormatFeatureFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkFormatFeatureFlagBits)
-        const FORMAT_FEATURE_COLOR_ATTACHMENT_BLEND_BIT = vks::VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BLEND_BIT;
+        const FORMAT_FEATURE_COLOR_ATTACHMENT_BLEND_BIT = vks::core::VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BLEND_BIT;
 
         /// See [`VkFormatFeatureFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkFormatFeatureFlagBits)
-        const FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT = vks::VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT;
+        const FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT = vks::core::VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT;
 
         /// See [`VkFormatFeatureFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkFormatFeatureFlagBits)
-        const FORMAT_FEATURE_BLIT_SRC_BIT = vks::VK_FORMAT_FEATURE_BLIT_SRC_BIT;
+        const FORMAT_FEATURE_BLIT_SRC_BIT = vks::core::VK_FORMAT_FEATURE_BLIT_SRC_BIT;
 
         /// See [`VkFormatFeatureFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkFormatFeatureFlagBits)
-        const FORMAT_FEATURE_BLIT_DST_BIT = vks::VK_FORMAT_FEATURE_BLIT_DST_BIT;
+        const FORMAT_FEATURE_BLIT_DST_BIT = vks::core::VK_FORMAT_FEATURE_BLIT_DST_BIT;
 
         /// See [`VkFormatFeatureFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkFormatFeatureFlagBits)
-        const FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_LINEAR_BIT = vks::VK_FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_LINEAR_BIT;
+        const FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_LINEAR_BIT = vks::core::VK_FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_LINEAR_BIT;
 
         /// See [`VkFormatFeatureFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkFormatFeatureFlagBits)
         /// and extension [`VK_IMG_filter_cubic`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_IMG_filter_cubic)
-        const FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_CUBIC_BIT_IMG = vks::VK_FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_CUBIC_BIT_IMG;
+        const FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_CUBIC_BIT_IMG = vks::core::VK_FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_CUBIC_BIT_IMG;
     }
 }
 
@@ -153,33 +153,33 @@ pub type FormatFeatureFlagBits = FormatFeatureFlags;
 bitflags! {
     /// See [`VkImageUsageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageUsageFlagBits)
     #[derive(Default)]
-    pub struct ImageUsageFlags: vks::VkImageUsageFlags {
+    pub struct ImageUsageFlags: vks::core::VkImageUsageFlags {
         /// See [`VkImageUsageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageUsageFlagBits)
-        const IMAGE_USAGE_FLAG_BITS_MAX_ENUM = vks::VK_IMAGE_USAGE_FLAG_BITS_MAX_ENUM;
+        const IMAGE_USAGE_FLAG_BITS_MAX_ENUM = vks::core::VK_IMAGE_USAGE_FLAG_BITS_MAX_ENUM;
 
         /// See [`VkImageUsageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageUsageFlagBits)
-        const IMAGE_USAGE_TRANSFER_SRC_BIT = vks::VK_IMAGE_USAGE_TRANSFER_SRC_BIT;
+        const IMAGE_USAGE_TRANSFER_SRC_BIT = vks::core::VK_IMAGE_USAGE_TRANSFER_SRC_BIT;
 
         /// See [`VkImageUsageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageUsageFlagBits)
-        const IMAGE_USAGE_TRANSFER_DST_BIT = vks::VK_IMAGE_USAGE_TRANSFER_DST_BIT;
+        const IMAGE_USAGE_TRANSFER_DST_BIT = vks::core::VK_IMAGE_USAGE_TRANSFER_DST_BIT;
 
         /// See [`VkImageUsageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageUsageFlagBits)
-        const IMAGE_USAGE_SAMPLED_BIT = vks::VK_IMAGE_USAGE_SAMPLED_BIT;
+        const IMAGE_USAGE_SAMPLED_BIT = vks::core::VK_IMAGE_USAGE_SAMPLED_BIT;
 
         /// See [`VkImageUsageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageUsageFlagBits)
-        const IMAGE_USAGE_STORAGE_BIT = vks::VK_IMAGE_USAGE_STORAGE_BIT;
+        const IMAGE_USAGE_STORAGE_BIT = vks::core::VK_IMAGE_USAGE_STORAGE_BIT;
 
         /// See [`VkImageUsageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageUsageFlagBits)
-        const IMAGE_USAGE_COLOR_ATTACHMENT_BIT = vks::VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+        const IMAGE_USAGE_COLOR_ATTACHMENT_BIT = vks::core::VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
 
         /// See [`VkImageUsageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageUsageFlagBits)
-        const IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT = vks::VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT;
+        const IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT = vks::core::VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT;
 
         /// See [`VkImageUsageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageUsageFlagBits)
-        const IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT = vks::VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT;
+        const IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT = vks::core::VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT;
 
         /// See [`VkImageUsageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageUsageFlagBits)
-        const IMAGE_USAGE_INPUT_ATTACHMENT_BIT = vks::VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT;
+        const IMAGE_USAGE_INPUT_ATTACHMENT_BIT = vks::core::VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT;
     }
 }
 
@@ -189,24 +189,24 @@ pub type ImageUsageFlagBits = ImageUsageFlags;
 bitflags! {
     /// See [`VkImageCreateFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageCreateFlagBits)
     #[derive(Default)]
-    pub struct ImageCreateFlags: vks::VkImageCreateFlags {
+    pub struct ImageCreateFlags: vks::core::VkImageCreateFlags {
         /// See [`VkImageCreateFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageCreateFlagBits)
-        const IMAGE_CREATE_FLAG_BITS_MAX_ENUM = vks::VK_IMAGE_CREATE_FLAG_BITS_MAX_ENUM;
+        const IMAGE_CREATE_FLAG_BITS_MAX_ENUM = vks::core::VK_IMAGE_CREATE_FLAG_BITS_MAX_ENUM;
 
         /// See [`VkImageCreateFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageCreateFlagBits)
-        const IMAGE_CREATE_SPARSE_BINDING_BIT = vks::VK_IMAGE_CREATE_SPARSE_BINDING_BIT;
+        const IMAGE_CREATE_SPARSE_BINDING_BIT = vks::core::VK_IMAGE_CREATE_SPARSE_BINDING_BIT;
 
         /// See [`VkImageCreateFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageCreateFlagBits)
-        const IMAGE_CREATE_SPARSE_RESIDENCY_BIT = vks::VK_IMAGE_CREATE_SPARSE_RESIDENCY_BIT;
+        const IMAGE_CREATE_SPARSE_RESIDENCY_BIT = vks::core::VK_IMAGE_CREATE_SPARSE_RESIDENCY_BIT;
 
         /// See [`VkImageCreateFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageCreateFlagBits)
-        const IMAGE_CREATE_SPARSE_ALIASED_BIT = vks::VK_IMAGE_CREATE_SPARSE_ALIASED_BIT;
+        const IMAGE_CREATE_SPARSE_ALIASED_BIT = vks::core::VK_IMAGE_CREATE_SPARSE_ALIASED_BIT;
 
         /// See [`VkImageCreateFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageCreateFlagBits)
-        const IMAGE_CREATE_MUTABLE_FORMAT_BIT = vks::VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT;
+        const IMAGE_CREATE_MUTABLE_FORMAT_BIT = vks::core::VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT;
 
         /// See [`VkImageCreateFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageCreateFlagBits)
-        const IMAGE_CREATE_CUBE_COMPATIBLE_BIT = vks::VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT;
+        const IMAGE_CREATE_CUBE_COMPATIBLE_BIT = vks::core::VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT;
     }
 }
 
@@ -216,30 +216,30 @@ pub type ImageCreateFlagBits = ImageCreateFlags;
 bitflags! {
     /// See [`VkSampleCountFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSampleCountFlagBits)
     #[derive(Default)]
-    pub struct SampleCountFlags: vks::VkSampleCountFlags {
+    pub struct SampleCountFlags: vks::core::VkSampleCountFlags {
         /// See [`VkSampleCountFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSampleCountFlagBits)
-        const SAMPLE_COUNT_FLAG_BITS_MAX_ENUM = vks::VK_SAMPLE_COUNT_FLAG_BITS_MAX_ENUM;
+        const SAMPLE_COUNT_FLAG_BITS_MAX_ENUM = vks::core::VK_SAMPLE_COUNT_FLAG_BITS_MAX_ENUM;
 
         /// See [`VkSampleCountFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSampleCountFlagBits)
-        const SAMPLE_COUNT_1_BIT = vks::VK_SAMPLE_COUNT_1_BIT;
+        const SAMPLE_COUNT_1_BIT = vks::core::VK_SAMPLE_COUNT_1_BIT;
 
         /// See [`VkSampleCountFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSampleCountFlagBits)
-        const SAMPLE_COUNT_2_BIT = vks::VK_SAMPLE_COUNT_2_BIT;
+        const SAMPLE_COUNT_2_BIT = vks::core::VK_SAMPLE_COUNT_2_BIT;
 
         /// See [`VkSampleCountFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSampleCountFlagBits)
-        const SAMPLE_COUNT_4_BIT = vks::VK_SAMPLE_COUNT_4_BIT;
+        const SAMPLE_COUNT_4_BIT = vks::core::VK_SAMPLE_COUNT_4_BIT;
 
         /// See [`VkSampleCountFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSampleCountFlagBits)
-        const SAMPLE_COUNT_8_BIT = vks::VK_SAMPLE_COUNT_8_BIT;
+        const SAMPLE_COUNT_8_BIT = vks::core::VK_SAMPLE_COUNT_8_BIT;
 
         /// See [`VkSampleCountFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSampleCountFlagBits)
-        const SAMPLE_COUNT_16_BIT = vks::VK_SAMPLE_COUNT_16_BIT;
+        const SAMPLE_COUNT_16_BIT = vks::core::VK_SAMPLE_COUNT_16_BIT;
 
         /// See [`VkSampleCountFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSampleCountFlagBits)
-        const SAMPLE_COUNT_32_BIT = vks::VK_SAMPLE_COUNT_32_BIT;
+        const SAMPLE_COUNT_32_BIT = vks::core::VK_SAMPLE_COUNT_32_BIT;
 
         /// See [`VkSampleCountFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSampleCountFlagBits)
-        const SAMPLE_COUNT_64_BIT = vks::VK_SAMPLE_COUNT_64_BIT;
+        const SAMPLE_COUNT_64_BIT = vks::core::VK_SAMPLE_COUNT_64_BIT;
     }
 }
 
@@ -249,21 +249,21 @@ pub type SampleCountFlagBits = SampleCountFlags;
 bitflags! {
     /// See [`VkQueueFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueueFlagBits)
     #[derive(Default)]
-    pub struct QueueFlags: vks::VkQueueFlags {
+    pub struct QueueFlags: vks::core::VkQueueFlags {
         /// See [`VkQueueFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueueFlagBits)
-        const QUEUE_FLAG_BITS_MAX_ENUM = vks::VK_QUEUE_FLAG_BITS_MAX_ENUM;
+        const QUEUE_FLAG_BITS_MAX_ENUM = vks::core::VK_QUEUE_FLAG_BITS_MAX_ENUM;
 
         /// See [`VkQueueFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueueFlagBits)
-        const QUEUE_GRAPHICS_BIT = vks::VK_QUEUE_GRAPHICS_BIT;
+        const QUEUE_GRAPHICS_BIT = vks::core::VK_QUEUE_GRAPHICS_BIT;
 
         /// See [`VkQueueFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueueFlagBits)
-        const QUEUE_COMPUTE_BIT = vks::VK_QUEUE_COMPUTE_BIT;
+        const QUEUE_COMPUTE_BIT = vks::core::VK_QUEUE_COMPUTE_BIT;
 
         /// See [`VkQueueFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueueFlagBits)
-        const QUEUE_TRANSFER_BIT = vks::VK_QUEUE_TRANSFER_BIT;
+        const QUEUE_TRANSFER_BIT = vks::core::VK_QUEUE_TRANSFER_BIT;
 
         /// See [`VkQueueFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueueFlagBits)
-        const QUEUE_SPARSE_BINDING_BIT = vks::VK_QUEUE_SPARSE_BINDING_BIT;
+        const QUEUE_SPARSE_BINDING_BIT = vks::core::VK_QUEUE_SPARSE_BINDING_BIT;
     }
 }
 
@@ -273,24 +273,24 @@ pub type QueueFlagBits = QueueFlags;
 bitflags! {
     /// See [`VkMemoryPropertyFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkMemoryPropertyFlagBits)
     #[derive(Default)]
-    pub struct MemoryPropertyFlags: vks::VkMemoryPropertyFlags {
+    pub struct MemoryPropertyFlags: vks::core::VkMemoryPropertyFlags {
         /// See [`VkMemoryPropertyFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkMemoryPropertyFlagBits)
-        const MEMORY_PROPERTY_FLAG_BITS_MAX_ENUM = vks::VK_MEMORY_PROPERTY_FLAG_BITS_MAX_ENUM;
+        const MEMORY_PROPERTY_FLAG_BITS_MAX_ENUM = vks::core::VK_MEMORY_PROPERTY_FLAG_BITS_MAX_ENUM;
 
         /// See [`VkMemoryPropertyFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkMemoryPropertyFlagBits)
-        const MEMORY_PROPERTY_DEVICE_LOCAL_BIT = vks::VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
+        const MEMORY_PROPERTY_DEVICE_LOCAL_BIT = vks::core::VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
 
         /// See [`VkMemoryPropertyFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkMemoryPropertyFlagBits)
-        const MEMORY_PROPERTY_HOST_VISIBLE_BIT = vks::VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT;
+        const MEMORY_PROPERTY_HOST_VISIBLE_BIT = vks::core::VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT;
 
         /// See [`VkMemoryPropertyFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkMemoryPropertyFlagBits)
-        const MEMORY_PROPERTY_HOST_COHERENT_BIT = vks::VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
+        const MEMORY_PROPERTY_HOST_COHERENT_BIT = vks::core::VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
 
         /// See [`VkMemoryPropertyFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkMemoryPropertyFlagBits)
-        const MEMORY_PROPERTY_HOST_CACHED_BIT = vks::VK_MEMORY_PROPERTY_HOST_CACHED_BIT;
+        const MEMORY_PROPERTY_HOST_CACHED_BIT = vks::core::VK_MEMORY_PROPERTY_HOST_CACHED_BIT;
 
         /// See [`VkMemoryPropertyFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkMemoryPropertyFlagBits)
-        const MEMORY_PROPERTY_LAZILY_ALLOCATED_BIT = vks::VK_MEMORY_PROPERTY_LAZILY_ALLOCATED_BIT;
+        const MEMORY_PROPERTY_LAZILY_ALLOCATED_BIT = vks::core::VK_MEMORY_PROPERTY_LAZILY_ALLOCATED_BIT;
     }
 }
 
@@ -300,12 +300,12 @@ pub type MemoryPropertyFlagBits = MemoryPropertyFlags;
 bitflags! {
     /// See [`VkMemoryHeapFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkMemoryHeapFlagBits)
     #[derive(Default)]
-    pub struct MemoryHeapFlags: vks::VkMemoryHeapFlags {
+    pub struct MemoryHeapFlags: vks::core::VkMemoryHeapFlags {
         /// See [`VkMemoryHeapFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkMemoryHeapFlagBits)
-        const MEMORY_HEAP_FLAG_BITS_MAX_ENUM = vks::VK_MEMORY_HEAP_FLAG_BITS_MAX_ENUM;
+        const MEMORY_HEAP_FLAG_BITS_MAX_ENUM = vks::core::VK_MEMORY_HEAP_FLAG_BITS_MAX_ENUM;
 
         /// See [`VkMemoryHeapFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkMemoryHeapFlagBits)
-        const MEMORY_HEAP_DEVICE_LOCAL_BIT = vks::VK_MEMORY_HEAP_DEVICE_LOCAL_BIT;
+        const MEMORY_HEAP_DEVICE_LOCAL_BIT = vks::core::VK_MEMORY_HEAP_DEVICE_LOCAL_BIT;
     }
 }
 
@@ -315,9 +315,9 @@ pub type MemoryHeapFlagBits = MemoryHeapFlags;
 bitflags! {
     /// See [`VkDeviceCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDeviceCreateFlags)
     #[derive(Default)]
-    pub struct DeviceCreateFlags: vks::VkDeviceCreateFlags {
+    pub struct DeviceCreateFlags: vks::core::VkDeviceCreateFlags {
         /// See [`VkDeviceCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDeviceCreateFlags)
-        const DEVICE_CREATE_FLAG_BITS_MAX_ENUM = vks::VK_DEVICE_CREATE_FLAG_BITS_MAX_ENUM;
+        const DEVICE_CREATE_FLAG_BITS_MAX_ENUM = vks::core::VK_DEVICE_CREATE_FLAG_BITS_MAX_ENUM;
     }
 }
 
@@ -327,9 +327,9 @@ pub type DeviceCreateFlagBits = DeviceCreateFlags;
 bitflags! {
     /// See [`VkDeviceQueueCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDeviceQueueCreateFlags)
     #[derive(Default)]
-    pub struct DeviceQueueCreateFlags: vks::VkDeviceQueueCreateFlags {
+    pub struct DeviceQueueCreateFlags: vks::core::VkDeviceQueueCreateFlags {
         /// See [`VkDeviceQueueCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDeviceQueueCreateFlags)
-        const DEVICE_QUEUE_CREATE_FLAG_BITS_MAX_ENUM = vks::VK_DEVICE_QUEUE_CREATE_FLAG_BITS_MAX_ENUM;
+        const DEVICE_QUEUE_CREATE_FLAG_BITS_MAX_ENUM = vks::core::VK_DEVICE_QUEUE_CREATE_FLAG_BITS_MAX_ENUM;
     }
 }
 
@@ -339,60 +339,60 @@ pub type DeviceQueueCreateFlagBits = DeviceQueueCreateFlags;
 bitflags! {
     /// See [`VkPipelineStageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineStageFlagBits)
     #[derive(Default)]
-    pub struct PipelineStageFlags: vks::VkPipelineStageFlags {
+    pub struct PipelineStageFlags: vks::core::VkPipelineStageFlags {
         /// See [`VkPipelineStageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineStageFlagBits)
-        const PIPELINE_STAGE_FLAG_BITS_MAX_ENUM = vks::VK_PIPELINE_STAGE_FLAG_BITS_MAX_ENUM;
+        const PIPELINE_STAGE_FLAG_BITS_MAX_ENUM = vks::core::VK_PIPELINE_STAGE_FLAG_BITS_MAX_ENUM;
 
         /// See [`VkPipelineStageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineStageFlagBits)
-        const PIPELINE_STAGE_TOP_OF_PIPE_BIT = vks::VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT;
+        const PIPELINE_STAGE_TOP_OF_PIPE_BIT = vks::core::VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT;
 
         /// See [`VkPipelineStageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineStageFlagBits)
-        const PIPELINE_STAGE_DRAW_INDIRECT_BIT = vks::VK_PIPELINE_STAGE_DRAW_INDIRECT_BIT;
+        const PIPELINE_STAGE_DRAW_INDIRECT_BIT = vks::core::VK_PIPELINE_STAGE_DRAW_INDIRECT_BIT;
 
         /// See [`VkPipelineStageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineStageFlagBits)
-        const PIPELINE_STAGE_VERTEX_INPUT_BIT = vks::VK_PIPELINE_STAGE_VERTEX_INPUT_BIT;
+        const PIPELINE_STAGE_VERTEX_INPUT_BIT = vks::core::VK_PIPELINE_STAGE_VERTEX_INPUT_BIT;
 
         /// See [`VkPipelineStageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineStageFlagBits)
-        const PIPELINE_STAGE_VERTEX_SHADER_BIT = vks::VK_PIPELINE_STAGE_VERTEX_SHADER_BIT;
+        const PIPELINE_STAGE_VERTEX_SHADER_BIT = vks::core::VK_PIPELINE_STAGE_VERTEX_SHADER_BIT;
 
         /// See [`VkPipelineStageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineStageFlagBits)
-        const PIPELINE_STAGE_TESSELLATION_CONTROL_SHADER_BIT = vks::VK_PIPELINE_STAGE_TESSELLATION_CONTROL_SHADER_BIT;
+        const PIPELINE_STAGE_TESSELLATION_CONTROL_SHADER_BIT = vks::core::VK_PIPELINE_STAGE_TESSELLATION_CONTROL_SHADER_BIT;
 
         /// See [`VkPipelineStageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineStageFlagBits)
-        const PIPELINE_STAGE_TESSELLATION_EVALUATION_SHADER_BIT = vks::VK_PIPELINE_STAGE_TESSELLATION_EVALUATION_SHADER_BIT;
+        const PIPELINE_STAGE_TESSELLATION_EVALUATION_SHADER_BIT = vks::core::VK_PIPELINE_STAGE_TESSELLATION_EVALUATION_SHADER_BIT;
 
         /// See [`VkPipelineStageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineStageFlagBits)
-        const PIPELINE_STAGE_GEOMETRY_SHADER_BIT = vks::VK_PIPELINE_STAGE_GEOMETRY_SHADER_BIT;
+        const PIPELINE_STAGE_GEOMETRY_SHADER_BIT = vks::core::VK_PIPELINE_STAGE_GEOMETRY_SHADER_BIT;
 
         /// See [`VkPipelineStageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineStageFlagBits)
-        const PIPELINE_STAGE_FRAGMENT_SHADER_BIT = vks::VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
+        const PIPELINE_STAGE_FRAGMENT_SHADER_BIT = vks::core::VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
 
         /// See [`VkPipelineStageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineStageFlagBits)
-        const PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT = vks::VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT;
+        const PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT = vks::core::VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT;
 
         /// See [`VkPipelineStageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineStageFlagBits)
-        const PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT = vks::VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT;
+        const PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT = vks::core::VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT;
 
         /// See [`VkPipelineStageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineStageFlagBits)
-        const PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT = vks::VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+        const PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT = vks::core::VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
 
         /// See [`VkPipelineStageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineStageFlagBits)
-        const PIPELINE_STAGE_COMPUTE_SHADER_BIT = vks::VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT;
+        const PIPELINE_STAGE_COMPUTE_SHADER_BIT = vks::core::VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT;
 
         /// See [`VkPipelineStageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineStageFlagBits)
-        const PIPELINE_STAGE_TRANSFER_BIT = vks::VK_PIPELINE_STAGE_TRANSFER_BIT;
+        const PIPELINE_STAGE_TRANSFER_BIT = vks::core::VK_PIPELINE_STAGE_TRANSFER_BIT;
 
         /// See [`VkPipelineStageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineStageFlagBits)
-        const PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT = vks::VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT;
+        const PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT = vks::core::VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT;
 
         /// See [`VkPipelineStageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineStageFlagBits)
-        const PIPELINE_STAGE_HOST_BIT = vks::VK_PIPELINE_STAGE_HOST_BIT;
+        const PIPELINE_STAGE_HOST_BIT = vks::core::VK_PIPELINE_STAGE_HOST_BIT;
 
         /// See [`VkPipelineStageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineStageFlagBits)
-        const PIPELINE_STAGE_ALL_GRAPHICS_BIT = vks::VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT;
+        const PIPELINE_STAGE_ALL_GRAPHICS_BIT = vks::core::VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT;
 
         /// See [`VkPipelineStageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineStageFlagBits)
-        const PIPELINE_STAGE_ALL_COMMANDS_BIT = vks::VK_PIPELINE_STAGE_ALL_COMMANDS_BIT;
+        const PIPELINE_STAGE_ALL_COMMANDS_BIT = vks::core::VK_PIPELINE_STAGE_ALL_COMMANDS_BIT;
     }
 }
 
@@ -402,9 +402,9 @@ pub type PipelineStageFlagBits = PipelineStageFlags;
 bitflags! {
     /// See [`VkMemoryMapFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkMemoryMapFlags)
     #[derive(Default)]
-    pub struct MemoryMapFlags: vks::VkMemoryMapFlags {
+    pub struct MemoryMapFlags: vks::core::VkMemoryMapFlags {
         /// See [`VkMemoryMapFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkMemoryMapFlags)
-        const MEMORY_MAP_FLAG_BITS_MAX_ENUM = vks::VK_MEMORY_MAP_FLAG_BITS_MAX_ENUM;
+        const MEMORY_MAP_FLAG_BITS_MAX_ENUM = vks::core::VK_MEMORY_MAP_FLAG_BITS_MAX_ENUM;
     }
 }
 
@@ -414,21 +414,21 @@ pub type MemoryMapFlagBits = MemoryMapFlags;
 bitflags! {
     /// See [`VkImageAspectFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageAspectFlagBits)
     #[derive(Default)]
-    pub struct ImageAspectFlags: vks::VkImageAspectFlags {
+    pub struct ImageAspectFlags: vks::core::VkImageAspectFlags {
         /// See [`VkImageAspectFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageAspectFlagBits)
-        const IMAGE_ASPECT_FLAG_BITS_MAX_ENUM = vks::VK_IMAGE_ASPECT_FLAG_BITS_MAX_ENUM;
+        const IMAGE_ASPECT_FLAG_BITS_MAX_ENUM = vks::core::VK_IMAGE_ASPECT_FLAG_BITS_MAX_ENUM;
 
         /// See [`VkImageAspectFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageAspectFlagBits)
-        const IMAGE_ASPECT_COLOR_BIT = vks::VK_IMAGE_ASPECT_COLOR_BIT;
+        const IMAGE_ASPECT_COLOR_BIT = vks::core::VK_IMAGE_ASPECT_COLOR_BIT;
 
         /// See [`VkImageAspectFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageAspectFlagBits)
-        const IMAGE_ASPECT_DEPTH_BIT = vks::VK_IMAGE_ASPECT_DEPTH_BIT;
+        const IMAGE_ASPECT_DEPTH_BIT = vks::core::VK_IMAGE_ASPECT_DEPTH_BIT;
 
         /// See [`VkImageAspectFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageAspectFlagBits)
-        const IMAGE_ASPECT_STENCIL_BIT = vks::VK_IMAGE_ASPECT_STENCIL_BIT;
+        const IMAGE_ASPECT_STENCIL_BIT = vks::core::VK_IMAGE_ASPECT_STENCIL_BIT;
 
         /// See [`VkImageAspectFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageAspectFlagBits)
-        const IMAGE_ASPECT_METADATA_BIT = vks::VK_IMAGE_ASPECT_METADATA_BIT;
+        const IMAGE_ASPECT_METADATA_BIT = vks::core::VK_IMAGE_ASPECT_METADATA_BIT;
     }
 }
 
@@ -438,18 +438,18 @@ pub type ImageAspectFlagBits = ImageAspectFlags;
 bitflags! {
     /// See [`VkSparseImageFormatFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSparseImageFormatFlagBits)
     #[derive(Default)]
-    pub struct SparseImageFormatFlags: vks::VkSparseImageFormatFlags {
+    pub struct SparseImageFormatFlags: vks::core::VkSparseImageFormatFlags {
         /// See [`VkSparseImageFormatFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSparseImageFormatFlagBits)
-        const SPARSE_IMAGE_FORMAT_FLAG_BITS_MAX_ENUM = vks::VK_SPARSE_IMAGE_FORMAT_FLAG_BITS_MAX_ENUM;
+        const SPARSE_IMAGE_FORMAT_FLAG_BITS_MAX_ENUM = vks::core::VK_SPARSE_IMAGE_FORMAT_FLAG_BITS_MAX_ENUM;
 
         /// See [`VkSparseImageFormatFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSparseImageFormatFlagBits)
-        const SPARSE_IMAGE_FORMAT_SINGLE_MIPTAIL_BIT = vks::VK_SPARSE_IMAGE_FORMAT_SINGLE_MIPTAIL_BIT;
+        const SPARSE_IMAGE_FORMAT_SINGLE_MIPTAIL_BIT = vks::core::VK_SPARSE_IMAGE_FORMAT_SINGLE_MIPTAIL_BIT;
 
         /// See [`VkSparseImageFormatFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSparseImageFormatFlagBits)
-        const SPARSE_IMAGE_FORMAT_ALIGNED_MIP_SIZE_BIT = vks::VK_SPARSE_IMAGE_FORMAT_ALIGNED_MIP_SIZE_BIT;
+        const SPARSE_IMAGE_FORMAT_ALIGNED_MIP_SIZE_BIT = vks::core::VK_SPARSE_IMAGE_FORMAT_ALIGNED_MIP_SIZE_BIT;
 
         /// See [`VkSparseImageFormatFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSparseImageFormatFlagBits)
-        const SPARSE_IMAGE_FORMAT_NONSTANDARD_BLOCK_SIZE_BIT = vks::VK_SPARSE_IMAGE_FORMAT_NONSTANDARD_BLOCK_SIZE_BIT;
+        const SPARSE_IMAGE_FORMAT_NONSTANDARD_BLOCK_SIZE_BIT = vks::core::VK_SPARSE_IMAGE_FORMAT_NONSTANDARD_BLOCK_SIZE_BIT;
     }
 }
 
@@ -459,12 +459,12 @@ pub type SparseImageFormatFlagBits = SparseImageFormatFlags;
 bitflags! {
     /// See [`VkSparseMemoryBindFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSparseMemoryBindFlagBits)
     #[derive(Default)]
-    pub struct SparseMemoryBindFlags: vks::VkSparseMemoryBindFlags {
+    pub struct SparseMemoryBindFlags: vks::core::VkSparseMemoryBindFlags {
         /// See [`VkSparseMemoryBindFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSparseMemoryBindFlagBits)
-        const SPARSE_MEMORY_BIND_FLAG_BITS_MAX_ENUM = vks::VK_SPARSE_MEMORY_BIND_FLAG_BITS_MAX_ENUM;
+        const SPARSE_MEMORY_BIND_FLAG_BITS_MAX_ENUM = vks::core::VK_SPARSE_MEMORY_BIND_FLAG_BITS_MAX_ENUM;
 
         /// See [`VkSparseMemoryBindFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSparseMemoryBindFlagBits)
-        const SPARSE_MEMORY_BIND_METADATA_BIT = vks::VK_SPARSE_MEMORY_BIND_METADATA_BIT;
+        const SPARSE_MEMORY_BIND_METADATA_BIT = vks::core::VK_SPARSE_MEMORY_BIND_METADATA_BIT;
     }
 }
 
@@ -474,12 +474,12 @@ pub type SparseMemoryBindFlagBits = SparseMemoryBindFlags;
 bitflags! {
     /// See [`VkFenceCreateFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkFenceCreateFlagBits)
     #[derive(Default)]
-    pub struct FenceCreateFlags: vks::VkFenceCreateFlags {
+    pub struct FenceCreateFlags: vks::core::VkFenceCreateFlags {
         /// See [`VkFenceCreateFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkFenceCreateFlagBits)
-        const FENCE_CREATE_FLAG_BITS_MAX_ENUM = vks::VK_FENCE_CREATE_FLAG_BITS_MAX_ENUM;
+        const FENCE_CREATE_FLAG_BITS_MAX_ENUM = vks::core::VK_FENCE_CREATE_FLAG_BITS_MAX_ENUM;
 
         /// See [`VkFenceCreateFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkFenceCreateFlagBits)
-        const FENCE_CREATE_SIGNALED_BIT = vks::VK_FENCE_CREATE_SIGNALED_BIT;
+        const FENCE_CREATE_SIGNALED_BIT = vks::core::VK_FENCE_CREATE_SIGNALED_BIT;
     }
 }
 
@@ -489,9 +489,9 @@ pub type FenceCreateFlagBits = FenceCreateFlags;
 bitflags! {
     /// See [`VkSemaphoreCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSemaphoreCreateFlags)
     #[derive(Default)]
-    pub struct SemaphoreCreateFlags: vks::VkSemaphoreCreateFlags {
+    pub struct SemaphoreCreateFlags: vks::core::VkSemaphoreCreateFlags {
         /// See [`VkSemaphoreCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSemaphoreCreateFlags)
-        const SEMAPHORE_CREATE_FLAG_BITS_MAX_ENUM = vks::VK_SEMAPHORE_CREATE_FLAG_BITS_MAX_ENUM;
+        const SEMAPHORE_CREATE_FLAG_BITS_MAX_ENUM = vks::core::VK_SEMAPHORE_CREATE_FLAG_BITS_MAX_ENUM;
     }
 }
 
@@ -501,9 +501,9 @@ pub type SemaphoreCreateFlagBits = SemaphoreCreateFlags;
 bitflags! {
     /// See [`VkEventCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkEventCreateFlags)
     #[derive(Default)]
-    pub struct EventCreateFlags: vks::VkEventCreateFlags {
+    pub struct EventCreateFlags: vks::core::VkEventCreateFlags {
         /// See [`VkEventCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkEventCreateFlags)
-        const EVENT_CREATE_FLAG_BITS_MAX_ENUM = vks::VK_EVENT_CREATE_FLAG_BITS_MAX_ENUM;
+        const EVENT_CREATE_FLAG_BITS_MAX_ENUM = vks::core::VK_EVENT_CREATE_FLAG_BITS_MAX_ENUM;
     }
 }
 
@@ -513,9 +513,9 @@ pub type EventCreateFlagBits = EventCreateFlags;
 bitflags! {
     /// See [`VkQueryPoolCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueryPoolCreateFlags)
     #[derive(Default)]
-    pub struct QueryPoolCreateFlags: vks::VkQueryPoolCreateFlags {
+    pub struct QueryPoolCreateFlags: vks::core::VkQueryPoolCreateFlags {
         /// See [`VkQueryPoolCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueryPoolCreateFlags)
-        const QUERY_POOL_CREATE_FLAG_BITS_MAX_ENUM = vks::VK_QUERY_POOL_CREATE_FLAG_BITS_MAX_ENUM;
+        const QUERY_POOL_CREATE_FLAG_BITS_MAX_ENUM = vks::core::VK_QUERY_POOL_CREATE_FLAG_BITS_MAX_ENUM;
     }
 }
 
@@ -525,42 +525,42 @@ pub type QueryPoolCreateFlagBits = QueryPoolCreateFlags;
 bitflags! {
     /// See [`VkQueryPipelineStatisticFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueryPipelineStatisticFlagBits)
     #[derive(Default)]
-    pub struct QueryPipelineStatisticFlags: vks::VkQueryPipelineStatisticFlags {
+    pub struct QueryPipelineStatisticFlags: vks::core::VkQueryPipelineStatisticFlags {
         /// See [`VkQueryPipelineStatisticFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueryPipelineStatisticFlagBits)
-        const QUERY_PIPELINE_STATISTIC_FLAG_BITS_MAX_ENUM = vks::VK_QUERY_PIPELINE_STATISTIC_FLAG_BITS_MAX_ENUM;
+        const QUERY_PIPELINE_STATISTIC_FLAG_BITS_MAX_ENUM = vks::core::VK_QUERY_PIPELINE_STATISTIC_FLAG_BITS_MAX_ENUM;
 
         /// See [`VkQueryPipelineStatisticFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueryPipelineStatisticFlagBits)
-        const QUERY_PIPELINE_STATISTIC_INPUT_ASSEMBLY_VERTICES_BIT = vks::VK_QUERY_PIPELINE_STATISTIC_INPUT_ASSEMBLY_VERTICES_BIT;
+        const QUERY_PIPELINE_STATISTIC_INPUT_ASSEMBLY_VERTICES_BIT = vks::core::VK_QUERY_PIPELINE_STATISTIC_INPUT_ASSEMBLY_VERTICES_BIT;
 
         /// See [`VkQueryPipelineStatisticFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueryPipelineStatisticFlagBits)
-        const QUERY_PIPELINE_STATISTIC_INPUT_ASSEMBLY_PRIMITIVES_BIT = vks::VK_QUERY_PIPELINE_STATISTIC_INPUT_ASSEMBLY_PRIMITIVES_BIT;
+        const QUERY_PIPELINE_STATISTIC_INPUT_ASSEMBLY_PRIMITIVES_BIT = vks::core::VK_QUERY_PIPELINE_STATISTIC_INPUT_ASSEMBLY_PRIMITIVES_BIT;
 
         /// See [`VkQueryPipelineStatisticFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueryPipelineStatisticFlagBits)
-        const QUERY_PIPELINE_STATISTIC_VERTEX_SHADER_INVOCATIONS_BIT = vks::VK_QUERY_PIPELINE_STATISTIC_VERTEX_SHADER_INVOCATIONS_BIT;
+        const QUERY_PIPELINE_STATISTIC_VERTEX_SHADER_INVOCATIONS_BIT = vks::core::VK_QUERY_PIPELINE_STATISTIC_VERTEX_SHADER_INVOCATIONS_BIT;
 
         /// See [`VkQueryPipelineStatisticFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueryPipelineStatisticFlagBits)
-        const QUERY_PIPELINE_STATISTIC_GEOMETRY_SHADER_INVOCATIONS_BIT = vks::VK_QUERY_PIPELINE_STATISTIC_GEOMETRY_SHADER_INVOCATIONS_BIT;
+        const QUERY_PIPELINE_STATISTIC_GEOMETRY_SHADER_INVOCATIONS_BIT = vks::core::VK_QUERY_PIPELINE_STATISTIC_GEOMETRY_SHADER_INVOCATIONS_BIT;
 
         /// See [`VkQueryPipelineStatisticFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueryPipelineStatisticFlagBits)
-        const QUERY_PIPELINE_STATISTIC_GEOMETRY_SHADER_PRIMITIVES_BIT = vks::VK_QUERY_PIPELINE_STATISTIC_GEOMETRY_SHADER_PRIMITIVES_BIT;
+        const QUERY_PIPELINE_STATISTIC_GEOMETRY_SHADER_PRIMITIVES_BIT = vks::core::VK_QUERY_PIPELINE_STATISTIC_GEOMETRY_SHADER_PRIMITIVES_BIT;
 
         /// See [`VkQueryPipelineStatisticFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueryPipelineStatisticFlagBits)
-        const QUERY_PIPELINE_STATISTIC_CLIPPING_INVOCATIONS_BIT = vks::VK_QUERY_PIPELINE_STATISTIC_CLIPPING_INVOCATIONS_BIT;
+        const QUERY_PIPELINE_STATISTIC_CLIPPING_INVOCATIONS_BIT = vks::core::VK_QUERY_PIPELINE_STATISTIC_CLIPPING_INVOCATIONS_BIT;
 
         /// See [`VkQueryPipelineStatisticFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueryPipelineStatisticFlagBits)
-        const QUERY_PIPELINE_STATISTIC_CLIPPING_PRIMITIVES_BIT = vks::VK_QUERY_PIPELINE_STATISTIC_CLIPPING_PRIMITIVES_BIT;
+        const QUERY_PIPELINE_STATISTIC_CLIPPING_PRIMITIVES_BIT = vks::core::VK_QUERY_PIPELINE_STATISTIC_CLIPPING_PRIMITIVES_BIT;
 
         /// See [`VkQueryPipelineStatisticFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueryPipelineStatisticFlagBits)
-        const QUERY_PIPELINE_STATISTIC_FRAGMENT_SHADER_INVOCATIONS_BIT = vks::VK_QUERY_PIPELINE_STATISTIC_FRAGMENT_SHADER_INVOCATIONS_BIT;
+        const QUERY_PIPELINE_STATISTIC_FRAGMENT_SHADER_INVOCATIONS_BIT = vks::core::VK_QUERY_PIPELINE_STATISTIC_FRAGMENT_SHADER_INVOCATIONS_BIT;
 
         /// See [`VkQueryPipelineStatisticFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueryPipelineStatisticFlagBits)
-        const QUERY_PIPELINE_STATISTIC_TESSELLATION_CONTROL_SHADER_PATCHES_BIT = vks::VK_QUERY_PIPELINE_STATISTIC_TESSELLATION_CONTROL_SHADER_PATCHES_BIT;
+        const QUERY_PIPELINE_STATISTIC_TESSELLATION_CONTROL_SHADER_PATCHES_BIT = vks::core::VK_QUERY_PIPELINE_STATISTIC_TESSELLATION_CONTROL_SHADER_PATCHES_BIT;
 
         /// See [`VkQueryPipelineStatisticFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueryPipelineStatisticFlagBits)
-        const QUERY_PIPELINE_STATISTIC_TESSELLATION_EVALUATION_SHADER_INVOCATIONS_BIT = vks::VK_QUERY_PIPELINE_STATISTIC_TESSELLATION_EVALUATION_SHADER_INVOCATIONS_BIT;
+        const QUERY_PIPELINE_STATISTIC_TESSELLATION_EVALUATION_SHADER_INVOCATIONS_BIT = vks::core::VK_QUERY_PIPELINE_STATISTIC_TESSELLATION_EVALUATION_SHADER_INVOCATIONS_BIT;
 
         /// See [`VkQueryPipelineStatisticFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueryPipelineStatisticFlagBits)
-        const QUERY_PIPELINE_STATISTIC_COMPUTE_SHADER_INVOCATIONS_BIT = vks::VK_QUERY_PIPELINE_STATISTIC_COMPUTE_SHADER_INVOCATIONS_BIT;
+        const QUERY_PIPELINE_STATISTIC_COMPUTE_SHADER_INVOCATIONS_BIT = vks::core::VK_QUERY_PIPELINE_STATISTIC_COMPUTE_SHADER_INVOCATIONS_BIT;
     }
 }
 
@@ -570,21 +570,21 @@ pub type QueryPipelineStatisticFlagBits = QueryPipelineStatisticFlags;
 bitflags! {
     /// See [`VkQueryResultFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueryResultFlagBits)
     #[derive(Default)]
-    pub struct QueryResultFlags: vks::VkQueryResultFlags {
+    pub struct QueryResultFlags: vks::core::VkQueryResultFlags {
         /// See [`VkQueryResultFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueryResultFlagBits)
-        const QUERY_RESULT_FLAG_BITS_MAX_ENUM = vks::VK_QUERY_RESULT_FLAG_BITS_MAX_ENUM;
+        const QUERY_RESULT_FLAG_BITS_MAX_ENUM = vks::core::VK_QUERY_RESULT_FLAG_BITS_MAX_ENUM;
 
         /// See [`VkQueryResultFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueryResultFlagBits)
-        const QUERY_RESULT_64_BIT = vks::VK_QUERY_RESULT_64_BIT;
+        const QUERY_RESULT_64_BIT = vks::core::VK_QUERY_RESULT_64_BIT;
 
         /// See [`VkQueryResultFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueryResultFlagBits)
-        const QUERY_RESULT_WAIT_BIT = vks::VK_QUERY_RESULT_WAIT_BIT;
+        const QUERY_RESULT_WAIT_BIT = vks::core::VK_QUERY_RESULT_WAIT_BIT;
 
         /// See [`VkQueryResultFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueryResultFlagBits)
-        const QUERY_RESULT_WITH_AVAILABILITY_BIT = vks::VK_QUERY_RESULT_WITH_AVAILABILITY_BIT;
+        const QUERY_RESULT_WITH_AVAILABILITY_BIT = vks::core::VK_QUERY_RESULT_WITH_AVAILABILITY_BIT;
 
         /// See [`VkQueryResultFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueryResultFlagBits)
-        const QUERY_RESULT_PARTIAL_BIT = vks::VK_QUERY_RESULT_PARTIAL_BIT;
+        const QUERY_RESULT_PARTIAL_BIT = vks::core::VK_QUERY_RESULT_PARTIAL_BIT;
     }
 }
 
@@ -594,18 +594,18 @@ pub type QueryResultFlagBits = QueryResultFlags;
 bitflags! {
     /// See [`VkBufferCreateFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkBufferCreateFlagBits)
     #[derive(Default)]
-    pub struct BufferCreateFlags: vks::VkBufferCreateFlags {
+    pub struct BufferCreateFlags: vks::core::VkBufferCreateFlags {
         /// See [`VkBufferCreateFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkBufferCreateFlagBits)
-        const BUFFER_CREATE_FLAG_BITS_MAX_ENUM = vks::VK_BUFFER_CREATE_FLAG_BITS_MAX_ENUM;
+        const BUFFER_CREATE_FLAG_BITS_MAX_ENUM = vks::core::VK_BUFFER_CREATE_FLAG_BITS_MAX_ENUM;
 
         /// See [`VkBufferCreateFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkBufferCreateFlagBits)
-        const BUFFER_CREATE_SPARSE_BINDING_BIT = vks::VK_BUFFER_CREATE_SPARSE_BINDING_BIT;
+        const BUFFER_CREATE_SPARSE_BINDING_BIT = vks::core::VK_BUFFER_CREATE_SPARSE_BINDING_BIT;
 
         /// See [`VkBufferCreateFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkBufferCreateFlagBits)
-        const BUFFER_CREATE_SPARSE_RESIDENCY_BIT = vks::VK_BUFFER_CREATE_SPARSE_RESIDENCY_BIT;
+        const BUFFER_CREATE_SPARSE_RESIDENCY_BIT = vks::core::VK_BUFFER_CREATE_SPARSE_RESIDENCY_BIT;
 
         /// See [`VkBufferCreateFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkBufferCreateFlagBits)
-        const BUFFER_CREATE_SPARSE_ALIASED_BIT = vks::VK_BUFFER_CREATE_SPARSE_ALIASED_BIT;
+        const BUFFER_CREATE_SPARSE_ALIASED_BIT = vks::core::VK_BUFFER_CREATE_SPARSE_ALIASED_BIT;
     }
 }
 
@@ -615,36 +615,36 @@ pub type BufferCreateFlagBits = BufferCreateFlags;
 bitflags! {
     /// See [`VkBufferUsageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkBufferUsageFlagBits)
     #[derive(Default)]
-    pub struct BufferUsageFlags: vks::VkBufferUsageFlags {
+    pub struct BufferUsageFlags: vks::core::VkBufferUsageFlags {
         /// See [`VkBufferUsageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkBufferUsageFlagBits)
-        const BUFFER_USAGE_FLAG_BITS_MAX_ENUM = vks::VK_BUFFER_USAGE_FLAG_BITS_MAX_ENUM;
+        const BUFFER_USAGE_FLAG_BITS_MAX_ENUM = vks::core::VK_BUFFER_USAGE_FLAG_BITS_MAX_ENUM;
 
         /// See [`VkBufferUsageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkBufferUsageFlagBits)
-        const BUFFER_USAGE_TRANSFER_SRC_BIT = vks::VK_BUFFER_USAGE_TRANSFER_SRC_BIT;
+        const BUFFER_USAGE_TRANSFER_SRC_BIT = vks::core::VK_BUFFER_USAGE_TRANSFER_SRC_BIT;
 
         /// See [`VkBufferUsageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkBufferUsageFlagBits)
-        const BUFFER_USAGE_TRANSFER_DST_BIT = vks::VK_BUFFER_USAGE_TRANSFER_DST_BIT;
+        const BUFFER_USAGE_TRANSFER_DST_BIT = vks::core::VK_BUFFER_USAGE_TRANSFER_DST_BIT;
 
         /// See [`VkBufferUsageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkBufferUsageFlagBits)
-        const BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT = vks::VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT;
+        const BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT = vks::core::VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT;
 
         /// See [`VkBufferUsageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkBufferUsageFlagBits)
-        const BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT = vks::VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT;
+        const BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT = vks::core::VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT;
 
         /// See [`VkBufferUsageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkBufferUsageFlagBits)
-        const BUFFER_USAGE_UNIFORM_BUFFER_BIT = vks::VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT;
+        const BUFFER_USAGE_UNIFORM_BUFFER_BIT = vks::core::VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT;
 
         /// See [`VkBufferUsageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkBufferUsageFlagBits)
-        const BUFFER_USAGE_STORAGE_BUFFER_BIT = vks::VK_BUFFER_USAGE_STORAGE_BUFFER_BIT;
+        const BUFFER_USAGE_STORAGE_BUFFER_BIT = vks::core::VK_BUFFER_USAGE_STORAGE_BUFFER_BIT;
 
         /// See [`VkBufferUsageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkBufferUsageFlagBits)
-        const BUFFER_USAGE_INDEX_BUFFER_BIT = vks::VK_BUFFER_USAGE_INDEX_BUFFER_BIT;
+        const BUFFER_USAGE_INDEX_BUFFER_BIT = vks::core::VK_BUFFER_USAGE_INDEX_BUFFER_BIT;
 
         /// See [`VkBufferUsageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkBufferUsageFlagBits)
-        const BUFFER_USAGE_VERTEX_BUFFER_BIT = vks::VK_BUFFER_USAGE_VERTEX_BUFFER_BIT;
+        const BUFFER_USAGE_VERTEX_BUFFER_BIT = vks::core::VK_BUFFER_USAGE_VERTEX_BUFFER_BIT;
 
         /// See [`VkBufferUsageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkBufferUsageFlagBits)
-        const BUFFER_USAGE_INDIRECT_BUFFER_BIT = vks::VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT;
+        const BUFFER_USAGE_INDIRECT_BUFFER_BIT = vks::core::VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT;
     }
 }
 
@@ -654,9 +654,9 @@ pub type BufferUsageFlagBits = BufferUsageFlags;
 bitflags! {
     /// See [`VkBufferViewCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkBufferViewCreateFlags)
     #[derive(Default)]
-    pub struct BufferViewCreateFlags: vks::VkBufferViewCreateFlags {
+    pub struct BufferViewCreateFlags: vks::core::VkBufferViewCreateFlags {
         /// See [`VkBufferViewCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkBufferViewCreateFlags)
-        const BUFFER_VIEW_CREATE_FLAG_BITS_MAX_ENUM = vks::VK_BUFFER_VIEW_CREATE_FLAG_BITS_MAX_ENUM;
+        const BUFFER_VIEW_CREATE_FLAG_BITS_MAX_ENUM = vks::core::VK_BUFFER_VIEW_CREATE_FLAG_BITS_MAX_ENUM;
     }
 }
 
@@ -666,9 +666,9 @@ pub type BufferViewCreateFlagBits = BufferViewCreateFlags;
 bitflags! {
     /// See [`VkImageViewCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageViewCreateFlags)
     #[derive(Default)]
-    pub struct ImageViewCreateFlags: vks::VkImageViewCreateFlags {
+    pub struct ImageViewCreateFlags: vks::core::VkImageViewCreateFlags {
         /// See [`VkImageViewCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageViewCreateFlags)
-        const IMAGE_VIEW_CREATE_FLAG_BITS_MAX_ENUM = vks::VK_IMAGE_VIEW_CREATE_FLAG_BITS_MAX_ENUM;
+        const IMAGE_VIEW_CREATE_FLAG_BITS_MAX_ENUM = vks::core::VK_IMAGE_VIEW_CREATE_FLAG_BITS_MAX_ENUM;
     }
 }
 
@@ -678,9 +678,9 @@ pub type ImageViewCreateFlagBits = ImageViewCreateFlags;
 bitflags! {
     /// See [`VkShaderModuleCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkShaderModuleCreateFlags)
     #[derive(Default)]
-    pub struct ShaderModuleCreateFlags: vks::VkShaderModuleCreateFlags {
+    pub struct ShaderModuleCreateFlags: vks::core::VkShaderModuleCreateFlags {
         /// See [`VkShaderModuleCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkShaderModuleCreateFlags)
-        const SHADER_MODULE_CREATE_FLAG_BITS_MAX_ENUM = vks::VK_SHADER_MODULE_CREATE_FLAG_BITS_MAX_ENUM;
+        const SHADER_MODULE_CREATE_FLAG_BITS_MAX_ENUM = vks::core::VK_SHADER_MODULE_CREATE_FLAG_BITS_MAX_ENUM;
     }
 }
 
@@ -690,9 +690,9 @@ pub type ShaderModuleCreateFlagBits = ShaderModuleCreateFlags;
 bitflags! {
     /// See [`VkPipelineCacheCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineCacheCreateFlags)
     #[derive(Default)]
-    pub struct PipelineCacheCreateFlags: vks::VkPipelineCacheCreateFlags {
+    pub struct PipelineCacheCreateFlags: vks::core::VkPipelineCacheCreateFlags {
         /// See [`VkPipelineCacheCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineCacheCreateFlags)
-        const PIPELINE_CACHE_CREATE_FLAG_BITS_MAX_ENUM = vks::VK_PIPELINE_CACHE_CREATE_FLAG_BITS_MAX_ENUM;
+        const PIPELINE_CACHE_CREATE_FLAG_BITS_MAX_ENUM = vks::core::VK_PIPELINE_CACHE_CREATE_FLAG_BITS_MAX_ENUM;
     }
 }
 
@@ -702,18 +702,18 @@ pub type PipelineCacheCreateFlagBits = PipelineCacheCreateFlags;
 bitflags! {
     /// See [`VkPipelineCreateFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineCreateFlagBits)
     #[derive(Default)]
-    pub struct PipelineCreateFlags: vks::VkPipelineCreateFlags {
+    pub struct PipelineCreateFlags: vks::core::VkPipelineCreateFlags {
         /// See [`VkPipelineCreateFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineCreateFlagBits)
-        const PIPELINE_CREATE_FLAG_BITS_MAX_ENUM = vks::VK_PIPELINE_CREATE_FLAG_BITS_MAX_ENUM;
+        const PIPELINE_CREATE_FLAG_BITS_MAX_ENUM = vks::core::VK_PIPELINE_CREATE_FLAG_BITS_MAX_ENUM;
 
         /// See [`VkPipelineCreateFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineCreateFlagBits)
-        const PIPELINE_CREATE_DISABLE_OPTIMIZATION_BIT = vks::VK_PIPELINE_CREATE_DISABLE_OPTIMIZATION_BIT;
+        const PIPELINE_CREATE_DISABLE_OPTIMIZATION_BIT = vks::core::VK_PIPELINE_CREATE_DISABLE_OPTIMIZATION_BIT;
 
         /// See [`VkPipelineCreateFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineCreateFlagBits)
-        const PIPELINE_CREATE_ALLOW_DERIVATIVES_BIT = vks::VK_PIPELINE_CREATE_ALLOW_DERIVATIVES_BIT;
+        const PIPELINE_CREATE_ALLOW_DERIVATIVES_BIT = vks::core::VK_PIPELINE_CREATE_ALLOW_DERIVATIVES_BIT;
 
         /// See [`VkPipelineCreateFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineCreateFlagBits)
-        const PIPELINE_CREATE_DERIVATIVE_BIT = vks::VK_PIPELINE_CREATE_DERIVATIVE_BIT;
+        const PIPELINE_CREATE_DERIVATIVE_BIT = vks::core::VK_PIPELINE_CREATE_DERIVATIVE_BIT;
     }
 }
 
@@ -723,9 +723,9 @@ pub type PipelineCreateFlagBits = PipelineCreateFlags;
 bitflags! {
     /// See [`VkPipelineShaderStageCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineShaderStageCreateFlags)
     #[derive(Default)]
-    pub struct PipelineShaderStageCreateFlags: vks::VkPipelineShaderStageCreateFlags {
+    pub struct PipelineShaderStageCreateFlags: vks::core::VkPipelineShaderStageCreateFlags {
         /// See [`VkPipelineShaderStageCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineShaderStageCreateFlags)
-        const PIPELINE_SHADER_STAGE_CREATE_FLAG_BITS_MAX_ENUM = vks::VK_PIPELINE_SHADER_STAGE_CREATE_FLAG_BITS_MAX_ENUM;
+        const PIPELINE_SHADER_STAGE_CREATE_FLAG_BITS_MAX_ENUM = vks::core::VK_PIPELINE_SHADER_STAGE_CREATE_FLAG_BITS_MAX_ENUM;
     }
 }
 
@@ -735,33 +735,33 @@ pub type PipelineShaderStageCreateFlagBits = PipelineShaderStageCreateFlags;
 bitflags! {
     /// See [`VkShaderStageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkShaderStageFlagBits)
     #[derive(Default)]
-    pub struct ShaderStageFlags: vks::VkShaderStageFlags {
+    pub struct ShaderStageFlags: vks::core::VkShaderStageFlags {
         /// See [`VkShaderStageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkShaderStageFlagBits)
-        const SHADER_STAGE_FLAG_BITS_MAX_ENUM = vks::VK_SHADER_STAGE_FLAG_BITS_MAX_ENUM;
+        const SHADER_STAGE_FLAG_BITS_MAX_ENUM = vks::core::VK_SHADER_STAGE_FLAG_BITS_MAX_ENUM;
 
         /// See [`VkShaderStageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkShaderStageFlagBits)
-        const SHADER_STAGE_VERTEX_BIT = vks::VK_SHADER_STAGE_VERTEX_BIT;
+        const SHADER_STAGE_VERTEX_BIT = vks::core::VK_SHADER_STAGE_VERTEX_BIT;
 
         /// See [`VkShaderStageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkShaderStageFlagBits)
-        const SHADER_STAGE_TESSELLATION_CONTROL_BIT = vks::VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT;
+        const SHADER_STAGE_TESSELLATION_CONTROL_BIT = vks::core::VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT;
 
         /// See [`VkShaderStageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkShaderStageFlagBits)
-        const SHADER_STAGE_TESSELLATION_EVALUATION_BIT = vks::VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT;
+        const SHADER_STAGE_TESSELLATION_EVALUATION_BIT = vks::core::VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT;
 
         /// See [`VkShaderStageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkShaderStageFlagBits)
-        const SHADER_STAGE_GEOMETRY_BIT = vks::VK_SHADER_STAGE_GEOMETRY_BIT;
+        const SHADER_STAGE_GEOMETRY_BIT = vks::core::VK_SHADER_STAGE_GEOMETRY_BIT;
 
         /// See [`VkShaderStageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkShaderStageFlagBits)
-        const SHADER_STAGE_FRAGMENT_BIT = vks::VK_SHADER_STAGE_FRAGMENT_BIT;
+        const SHADER_STAGE_FRAGMENT_BIT = vks::core::VK_SHADER_STAGE_FRAGMENT_BIT;
 
         /// See [`VkShaderStageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkShaderStageFlagBits)
-        const SHADER_STAGE_COMPUTE_BIT = vks::VK_SHADER_STAGE_COMPUTE_BIT;
+        const SHADER_STAGE_COMPUTE_BIT = vks::core::VK_SHADER_STAGE_COMPUTE_BIT;
 
         /// See [`VkShaderStageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkShaderStageFlagBits)
-        const SHADER_STAGE_ALL_GRAPHICS = vks::VK_SHADER_STAGE_ALL_GRAPHICS;
+        const SHADER_STAGE_ALL_GRAPHICS = vks::core::VK_SHADER_STAGE_ALL_GRAPHICS;
 
         /// See [`VkShaderStageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkShaderStageFlagBits)
-        const SHADER_STAGE_ALL = vks::VK_SHADER_STAGE_ALL;
+        const SHADER_STAGE_ALL = vks::core::VK_SHADER_STAGE_ALL;
     }
 }
 
@@ -771,9 +771,9 @@ pub type ShaderStageFlagBits = ShaderStageFlags;
 bitflags! {
     /// See [`VkPipelineVertexInputStateCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineVertexInputStateCreateFlags)
     #[derive(Default)]
-    pub struct PipelineVertexInputStateCreateFlags: vks::VkPipelineVertexInputStateCreateFlags {
+    pub struct PipelineVertexInputStateCreateFlags: vks::core::VkPipelineVertexInputStateCreateFlags {
         /// See [`VkPipelineVertexInputStateCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineVertexInputStateCreateFlags)
-        const PIPELINE_VERTEX_INPUT_STATE_CREATE_FLAG_BITS_MAX_ENUM = vks::VK_PIPELINE_VERTEX_INPUT_STATE_CREATE_FLAG_BITS_MAX_ENUM;
+        const PIPELINE_VERTEX_INPUT_STATE_CREATE_FLAG_BITS_MAX_ENUM = vks::core::VK_PIPELINE_VERTEX_INPUT_STATE_CREATE_FLAG_BITS_MAX_ENUM;
     }
 }
 
@@ -783,9 +783,9 @@ pub type PipelineVertexInputStateCreateFlagBits = PipelineVertexInputStateCreate
 bitflags! {
     /// See [`VkPipelineInputAssemblyStateCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineInputAssemblyStateCreateFlags)
     #[derive(Default)]
-    pub struct PipelineInputAssemblyStateCreateFlags: vks::VkPipelineInputAssemblyStateCreateFlags {
+    pub struct PipelineInputAssemblyStateCreateFlags: vks::core::VkPipelineInputAssemblyStateCreateFlags {
         /// See [`VkPipelineInputAssemblyStateCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineInputAssemblyStateCreateFlags)
-        const PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_FLAG_BITS_MAX_ENUM = vks::VK_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_FLAG_BITS_MAX_ENUM;
+        const PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_FLAG_BITS_MAX_ENUM = vks::core::VK_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_FLAG_BITS_MAX_ENUM;
     }
 }
 
@@ -795,9 +795,9 @@ pub type PipelineInputAssemblyStateCreateFlagBits = PipelineInputAssemblyStateCr
 bitflags! {
     /// See [`VkPipelineTessellationStateCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineTessellationStateCreateFlags)
     #[derive(Default)]
-    pub struct PipelineTessellationStateCreateFlags: vks::VkPipelineTessellationStateCreateFlags {
+    pub struct PipelineTessellationStateCreateFlags: vks::core::VkPipelineTessellationStateCreateFlags {
         /// See [`VkPipelineTessellationStateCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineTessellationStateCreateFlags)
-        const PIPELINE_TESSELLATION_STATE_CREATE_FLAG_BITS_MAX_ENUM = vks::VK_PIPELINE_TESSELLATION_STATE_CREATE_FLAG_BITS_MAX_ENUM;
+        const PIPELINE_TESSELLATION_STATE_CREATE_FLAG_BITS_MAX_ENUM = vks::core::VK_PIPELINE_TESSELLATION_STATE_CREATE_FLAG_BITS_MAX_ENUM;
     }
 }
 
@@ -807,9 +807,9 @@ pub type PipelineTessellationStateCreateFlagBits = PipelineTessellationStateCrea
 bitflags! {
     /// See [`VkPipelineViewportStateCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineViewportStateCreateFlags)
     #[derive(Default)]
-    pub struct PipelineViewportStateCreateFlags: vks::VkPipelineViewportStateCreateFlags {
+    pub struct PipelineViewportStateCreateFlags: vks::core::VkPipelineViewportStateCreateFlags {
         /// See [`VkPipelineViewportStateCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineViewportStateCreateFlags)
-        const PIPELINE_VIEWPORT_STATE_CREATE_FLAG_BITS_MAX_ENUM = vks::VK_PIPELINE_VIEWPORT_STATE_CREATE_FLAG_BITS_MAX_ENUM;
+        const PIPELINE_VIEWPORT_STATE_CREATE_FLAG_BITS_MAX_ENUM = vks::core::VK_PIPELINE_VIEWPORT_STATE_CREATE_FLAG_BITS_MAX_ENUM;
     }
 }
 
@@ -819,9 +819,9 @@ pub type PipelineViewportStateCreateFlagBits = PipelineViewportStateCreateFlags;
 bitflags! {
     /// See [`VkPipelineRasterizationStateCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineRasterizationStateCreateFlags)
     #[derive(Default)]
-    pub struct PipelineRasterizationStateCreateFlags: vks::VkPipelineRasterizationStateCreateFlags {
+    pub struct PipelineRasterizationStateCreateFlags: vks::core::VkPipelineRasterizationStateCreateFlags {
         /// See [`VkPipelineRasterizationStateCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineRasterizationStateCreateFlags)
-        const PIPELINE_RASTERIZATION_STATE_CREATE_FLAG_BITS_MAX_ENUM = vks::VK_PIPELINE_RASTERIZATION_STATE_CREATE_FLAG_BITS_MAX_ENUM;
+        const PIPELINE_RASTERIZATION_STATE_CREATE_FLAG_BITS_MAX_ENUM = vks::core::VK_PIPELINE_RASTERIZATION_STATE_CREATE_FLAG_BITS_MAX_ENUM;
     }
 }
 
@@ -831,21 +831,21 @@ pub type PipelineRasterizationStateCreateFlagBits = PipelineRasterizationStateCr
 bitflags! {
     /// See [`VkCullModeFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCullModeFlagBits)
     #[derive(Default)]
-    pub struct CullModeFlags: vks::VkCullModeFlags {
+    pub struct CullModeFlags: vks::core::VkCullModeFlags {
         /// See [`VkCullModeFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCullModeFlagBits)
-        const CULL_MODE_FLAG_BITS_MAX_ENUM = vks::VK_CULL_MODE_FLAG_BITS_MAX_ENUM;
+        const CULL_MODE_FLAG_BITS_MAX_ENUM = vks::core::VK_CULL_MODE_FLAG_BITS_MAX_ENUM;
 
         /// See [`VkCullModeFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCullModeFlagBits)
-        const CULL_MODE_NONE = vks::VK_CULL_MODE_NONE;
+        const CULL_MODE_NONE = vks::core::VK_CULL_MODE_NONE;
 
         /// See [`VkCullModeFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCullModeFlagBits)
-        const CULL_MODE_FRONT_BIT = vks::VK_CULL_MODE_FRONT_BIT;
+        const CULL_MODE_FRONT_BIT = vks::core::VK_CULL_MODE_FRONT_BIT;
 
         /// See [`VkCullModeFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCullModeFlagBits)
-        const CULL_MODE_BACK_BIT = vks::VK_CULL_MODE_BACK_BIT;
+        const CULL_MODE_BACK_BIT = vks::core::VK_CULL_MODE_BACK_BIT;
 
         /// See [`VkCullModeFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCullModeFlagBits)
-        const CULL_MODE_FRONT_AND_BACK = vks::VK_CULL_MODE_FRONT_AND_BACK;
+        const CULL_MODE_FRONT_AND_BACK = vks::core::VK_CULL_MODE_FRONT_AND_BACK;
     }
 }
 
@@ -855,9 +855,9 @@ pub type CullModeFlagBits = CullModeFlags;
 bitflags! {
     /// See [`VkPipelineMultisampleStateCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineMultisampleStateCreateFlags)
     #[derive(Default)]
-    pub struct PipelineMultisampleStateCreateFlags: vks::VkPipelineMultisampleStateCreateFlags {
+    pub struct PipelineMultisampleStateCreateFlags: vks::core::VkPipelineMultisampleStateCreateFlags {
         /// See [`VkPipelineMultisampleStateCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineMultisampleStateCreateFlags)
-        const PIPELINE_MULTISAMPLE_STATE_CREATE_FLAG_BITS_MAX_ENUM = vks::VK_PIPELINE_MULTISAMPLE_STATE_CREATE_FLAG_BITS_MAX_ENUM;
+        const PIPELINE_MULTISAMPLE_STATE_CREATE_FLAG_BITS_MAX_ENUM = vks::core::VK_PIPELINE_MULTISAMPLE_STATE_CREATE_FLAG_BITS_MAX_ENUM;
     }
 }
 
@@ -867,9 +867,9 @@ pub type PipelineMultisampleStateCreateFlagBits = PipelineMultisampleStateCreate
 bitflags! {
     /// See [`VkPipelineDepthStencilStateCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineDepthStencilStateCreateFlags)
     #[derive(Default)]
-    pub struct PipelineDepthStencilStateCreateFlags: vks::VkPipelineDepthStencilStateCreateFlags {
+    pub struct PipelineDepthStencilStateCreateFlags: vks::core::VkPipelineDepthStencilStateCreateFlags {
         /// See [`VkPipelineDepthStencilStateCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineDepthStencilStateCreateFlags)
-        const PIPELINE_DEPTH_STENCIL_STATE_CREATE_FLAG_BITS_MAX_ENUM = vks::VK_PIPELINE_DEPTH_STENCIL_STATE_CREATE_FLAG_BITS_MAX_ENUM;
+        const PIPELINE_DEPTH_STENCIL_STATE_CREATE_FLAG_BITS_MAX_ENUM = vks::core::VK_PIPELINE_DEPTH_STENCIL_STATE_CREATE_FLAG_BITS_MAX_ENUM;
     }
 }
 
@@ -879,9 +879,9 @@ pub type PipelineDepthStencilStateCreateFlagBits = PipelineDepthStencilStateCrea
 bitflags! {
     /// See [`VkPipelineColorBlendStateCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineColorBlendStateCreateFlags)
     #[derive(Default)]
-    pub struct PipelineColorBlendStateCreateFlags: vks::VkPipelineColorBlendStateCreateFlags {
+    pub struct PipelineColorBlendStateCreateFlags: vks::core::VkPipelineColorBlendStateCreateFlags {
         /// See [`VkPipelineColorBlendStateCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineColorBlendStateCreateFlags)
-        const PIPELINE_COLOR_BLEND_STATE_CREATE_FLAG_BITS_MAX_ENUM = vks::VK_PIPELINE_COLOR_BLEND_STATE_CREATE_FLAG_BITS_MAX_ENUM;
+        const PIPELINE_COLOR_BLEND_STATE_CREATE_FLAG_BITS_MAX_ENUM = vks::core::VK_PIPELINE_COLOR_BLEND_STATE_CREATE_FLAG_BITS_MAX_ENUM;
     }
 }
 
@@ -891,21 +891,21 @@ pub type PipelineColorBlendStateCreateFlagBits = PipelineColorBlendStateCreateFl
 bitflags! {
     /// See [`VkColorComponentFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkColorComponentFlagBits)
     #[derive(Default)]
-    pub struct ColorComponentFlags: vks::VkColorComponentFlags {
+    pub struct ColorComponentFlags: vks::core::VkColorComponentFlags {
         /// See [`VkColorComponentFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkColorComponentFlagBits)
-        const COLOR_COMPONENT_FLAG_BITS_MAX_ENUM = vks::VK_COLOR_COMPONENT_FLAG_BITS_MAX_ENUM;
+        const COLOR_COMPONENT_FLAG_BITS_MAX_ENUM = vks::core::VK_COLOR_COMPONENT_FLAG_BITS_MAX_ENUM;
 
         /// See [`VkColorComponentFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkColorComponentFlagBits)
-        const COLOR_COMPONENT_R_BIT = vks::VK_COLOR_COMPONENT_R_BIT;
+        const COLOR_COMPONENT_R_BIT = vks::core::VK_COLOR_COMPONENT_R_BIT;
 
         /// See [`VkColorComponentFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkColorComponentFlagBits)
-        const COLOR_COMPONENT_G_BIT = vks::VK_COLOR_COMPONENT_G_BIT;
+        const COLOR_COMPONENT_G_BIT = vks::core::VK_COLOR_COMPONENT_G_BIT;
 
         /// See [`VkColorComponentFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkColorComponentFlagBits)
-        const COLOR_COMPONENT_B_BIT = vks::VK_COLOR_COMPONENT_B_BIT;
+        const COLOR_COMPONENT_B_BIT = vks::core::VK_COLOR_COMPONENT_B_BIT;
 
         /// See [`VkColorComponentFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkColorComponentFlagBits)
-        const COLOR_COMPONENT_A_BIT = vks::VK_COLOR_COMPONENT_A_BIT;
+        const COLOR_COMPONENT_A_BIT = vks::core::VK_COLOR_COMPONENT_A_BIT;
     }
 }
 
@@ -915,9 +915,9 @@ pub type ColorComponentFlagBits = ColorComponentFlags;
 bitflags! {
     /// See [`VkPipelineDynamicStateCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineDynamicStateCreateFlags)
     #[derive(Default)]
-    pub struct PipelineDynamicStateCreateFlags: vks::VkPipelineDynamicStateCreateFlags {
+    pub struct PipelineDynamicStateCreateFlags: vks::core::VkPipelineDynamicStateCreateFlags {
         /// See [`VkPipelineDynamicStateCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineDynamicStateCreateFlags)
-        const PIPELINE_DYNAMIC_STATE_CREATE_FLAG_BITS_MAX_ENUM = vks::VK_PIPELINE_DYNAMIC_STATE_CREATE_FLAG_BITS_MAX_ENUM;
+        const PIPELINE_DYNAMIC_STATE_CREATE_FLAG_BITS_MAX_ENUM = vks::core::VK_PIPELINE_DYNAMIC_STATE_CREATE_FLAG_BITS_MAX_ENUM;
     }
 }
 
@@ -927,9 +927,9 @@ pub type PipelineDynamicStateCreateFlagBits = PipelineDynamicStateCreateFlags;
 bitflags! {
     /// See [`VkPipelineLayoutCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineLayoutCreateFlags)
     #[derive(Default)]
-    pub struct PipelineLayoutCreateFlags: vks::VkPipelineLayoutCreateFlags {
+    pub struct PipelineLayoutCreateFlags: vks::core::VkPipelineLayoutCreateFlags {
         /// See [`VkPipelineLayoutCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineLayoutCreateFlags)
-        const PIPELINE_LAYOUT_CREATE_FLAG_BITS_MAX_ENUM = vks::VK_PIPELINE_LAYOUT_CREATE_FLAG_BITS_MAX_ENUM;
+        const PIPELINE_LAYOUT_CREATE_FLAG_BITS_MAX_ENUM = vks::core::VK_PIPELINE_LAYOUT_CREATE_FLAG_BITS_MAX_ENUM;
     }
 }
 
@@ -939,9 +939,9 @@ pub type PipelineLayoutCreateFlagBits = PipelineLayoutCreateFlags;
 bitflags! {
     /// See [`VkSamplerCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSamplerCreateFlags)
     #[derive(Default)]
-    pub struct SamplerCreateFlags: vks::VkSamplerCreateFlags {
+    pub struct SamplerCreateFlags: vks::core::VkSamplerCreateFlags {
         /// See [`VkSamplerCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSamplerCreateFlags)
-        const SAMPLER_CREATE_FLAG_BITS_MAX_ENUM = vks::VK_SAMPLER_CREATE_FLAG_BITS_MAX_ENUM;
+        const SAMPLER_CREATE_FLAG_BITS_MAX_ENUM = vks::core::VK_SAMPLER_CREATE_FLAG_BITS_MAX_ENUM;
     }
 }
 
@@ -951,9 +951,9 @@ pub type SamplerCreateFlagBits = SamplerCreateFlags;
 bitflags! {
     /// See [`VkDescriptorSetLayoutCreateFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDescriptorSetLayoutCreateFlagBits)
     #[derive(Default)]
-    pub struct DescriptorSetLayoutCreateFlags: vks::VkDescriptorSetLayoutCreateFlags {
+    pub struct DescriptorSetLayoutCreateFlags: vks::core::VkDescriptorSetLayoutCreateFlags {
         /// See [`VkDescriptorSetLayoutCreateFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDescriptorSetLayoutCreateFlagBits)
-        const DESCRIPTOR_SET_LAYOUT_CREATE_FLAG_BITS_MAX_ENUM = vks::VK_DESCRIPTOR_SET_LAYOUT_CREATE_FLAG_BITS_MAX_ENUM;
+        const DESCRIPTOR_SET_LAYOUT_CREATE_FLAG_BITS_MAX_ENUM = vks::core::VK_DESCRIPTOR_SET_LAYOUT_CREATE_FLAG_BITS_MAX_ENUM;
     }
 }
 
@@ -963,12 +963,12 @@ pub type DescriptorSetLayoutCreateFlagBits = DescriptorSetLayoutCreateFlags;
 bitflags! {
     /// See [`VkDescriptorPoolCreateFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDescriptorPoolCreateFlagBits)
     #[derive(Default)]
-    pub struct DescriptorPoolCreateFlags: vks::VkDescriptorPoolCreateFlags {
+    pub struct DescriptorPoolCreateFlags: vks::core::VkDescriptorPoolCreateFlags {
         /// See [`VkDescriptorPoolCreateFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDescriptorPoolCreateFlagBits)
-        const DESCRIPTOR_POOL_CREATE_FLAG_BITS_MAX_ENUM = vks::VK_DESCRIPTOR_POOL_CREATE_FLAG_BITS_MAX_ENUM;
+        const DESCRIPTOR_POOL_CREATE_FLAG_BITS_MAX_ENUM = vks::core::VK_DESCRIPTOR_POOL_CREATE_FLAG_BITS_MAX_ENUM;
 
         /// See [`VkDescriptorPoolCreateFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDescriptorPoolCreateFlagBits)
-        const DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT = vks::VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;
+        const DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT = vks::core::VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;
     }
 }
 
@@ -978,9 +978,9 @@ pub type DescriptorPoolCreateFlagBits = DescriptorPoolCreateFlags;
 bitflags! {
     /// See [`VkDescriptorPoolResetFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDescriptorPoolResetFlags)
     #[derive(Default)]
-    pub struct DescriptorPoolResetFlags: vks::VkDescriptorPoolResetFlags {
+    pub struct DescriptorPoolResetFlags: vks::core::VkDescriptorPoolResetFlags {
         /// See [`VkDescriptorPoolResetFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDescriptorPoolResetFlags)
-        const DESCRIPTOR_POOL_RESET_FLAG_BITS_MAX_ENUM = vks::VK_DESCRIPTOR_POOL_RESET_FLAG_BITS_MAX_ENUM;
+        const DESCRIPTOR_POOL_RESET_FLAG_BITS_MAX_ENUM = vks::core::VK_DESCRIPTOR_POOL_RESET_FLAG_BITS_MAX_ENUM;
     }
 }
 
@@ -990,9 +990,9 @@ pub type DescriptorPoolResetFlagBits = DescriptorPoolResetFlags;
 bitflags! {
     /// See [`VkFramebufferCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkFramebufferCreateFlags)
     #[derive(Default)]
-    pub struct FramebufferCreateFlags: vks::VkFramebufferCreateFlags {
+    pub struct FramebufferCreateFlags: vks::core::VkFramebufferCreateFlags {
         /// See [`VkFramebufferCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkFramebufferCreateFlags)
-        const FRAMEBUFFER_CREATE_FLAG_BITS_MAX_ENUM = vks::VK_FRAMEBUFFER_CREATE_FLAG_BITS_MAX_ENUM;
+        const FRAMEBUFFER_CREATE_FLAG_BITS_MAX_ENUM = vks::core::VK_FRAMEBUFFER_CREATE_FLAG_BITS_MAX_ENUM;
     }
 }
 
@@ -1002,9 +1002,9 @@ pub type FramebufferCreateFlagBits = FramebufferCreateFlags;
 bitflags! {
     /// See [`VkRenderPassCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkRenderPassCreateFlags)
     #[derive(Default)]
-    pub struct RenderPassCreateFlags: vks::VkRenderPassCreateFlags {
+    pub struct RenderPassCreateFlags: vks::core::VkRenderPassCreateFlags {
         /// See [`VkRenderPassCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkRenderPassCreateFlags)
-        const RENDER_PASS_CREATE_FLAG_BITS_MAX_ENUM = vks::VK_RENDER_PASS_CREATE_FLAG_BITS_MAX_ENUM;
+        const RENDER_PASS_CREATE_FLAG_BITS_MAX_ENUM = vks::core::VK_RENDER_PASS_CREATE_FLAG_BITS_MAX_ENUM;
     }
 }
 
@@ -1014,12 +1014,12 @@ pub type RenderPassCreateFlagBits = RenderPassCreateFlags;
 bitflags! {
     /// See [`VkAttachmentDescriptionFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkAttachmentDescriptionFlagBits)
     #[derive(Default)]
-    pub struct AttachmentDescriptionFlags: vks::VkAttachmentDescriptionFlags {
+    pub struct AttachmentDescriptionFlags: vks::core::VkAttachmentDescriptionFlags {
         /// See [`VkAttachmentDescriptionFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkAttachmentDescriptionFlagBits)
-        const ATTACHMENT_DESCRIPTION_FLAG_BITS_MAX_ENUM = vks::VK_ATTACHMENT_DESCRIPTION_FLAG_BITS_MAX_ENUM;
+        const ATTACHMENT_DESCRIPTION_FLAG_BITS_MAX_ENUM = vks::core::VK_ATTACHMENT_DESCRIPTION_FLAG_BITS_MAX_ENUM;
 
         /// See [`VkAttachmentDescriptionFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkAttachmentDescriptionFlagBits)
-        const ATTACHMENT_DESCRIPTION_MAY_ALIAS_BIT = vks::VK_ATTACHMENT_DESCRIPTION_MAY_ALIAS_BIT;
+        const ATTACHMENT_DESCRIPTION_MAY_ALIAS_BIT = vks::core::VK_ATTACHMENT_DESCRIPTION_MAY_ALIAS_BIT;
     }
 }
 
@@ -1029,9 +1029,9 @@ pub type AttachmentDescriptionFlagBits = AttachmentDescriptionFlags;
 bitflags! {
     /// See [`VkSubpassDescriptionFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSubpassDescriptionFlagBits)
     #[derive(Default)]
-    pub struct SubpassDescriptionFlags: vks::VkSubpassDescriptionFlags {
+    pub struct SubpassDescriptionFlags: vks::core::VkSubpassDescriptionFlags {
         /// See [`VkSubpassDescriptionFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSubpassDescriptionFlagBits)
-        const SUBPASS_DESCRIPTION_FLAG_BITS_MAX_ENUM = vks::VK_SUBPASS_DESCRIPTION_FLAG_BITS_MAX_ENUM;
+        const SUBPASS_DESCRIPTION_FLAG_BITS_MAX_ENUM = vks::core::VK_SUBPASS_DESCRIPTION_FLAG_BITS_MAX_ENUM;
     }
 }
 
@@ -1041,60 +1041,60 @@ pub type SubpassDescriptionFlagBits = SubpassDescriptionFlags;
 bitflags! {
     /// See [`VkAccessFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkAccessFlagBits)
     #[derive(Default)]
-    pub struct AccessFlags: vks::VkAccessFlags {
+    pub struct AccessFlags: vks::core::VkAccessFlags {
         /// See [`VkAccessFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkAccessFlagBits)
-        const ACCESS_FLAG_BITS_MAX_ENUM = vks::VK_ACCESS_FLAG_BITS_MAX_ENUM;
+        const ACCESS_FLAG_BITS_MAX_ENUM = vks::core::VK_ACCESS_FLAG_BITS_MAX_ENUM;
 
         /// See [`VkAccessFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkAccessFlagBits)
-        const ACCESS_INDIRECT_COMMAND_READ_BIT = vks::VK_ACCESS_INDIRECT_COMMAND_READ_BIT;
+        const ACCESS_INDIRECT_COMMAND_READ_BIT = vks::core::VK_ACCESS_INDIRECT_COMMAND_READ_BIT;
 
         /// See [`VkAccessFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkAccessFlagBits)
-        const ACCESS_INDEX_READ_BIT = vks::VK_ACCESS_INDEX_READ_BIT;
+        const ACCESS_INDEX_READ_BIT = vks::core::VK_ACCESS_INDEX_READ_BIT;
 
         /// See [`VkAccessFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkAccessFlagBits)
-        const ACCESS_VERTEX_ATTRIBUTE_READ_BIT = vks::VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT;
+        const ACCESS_VERTEX_ATTRIBUTE_READ_BIT = vks::core::VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT;
 
         /// See [`VkAccessFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkAccessFlagBits)
-        const ACCESS_UNIFORM_READ_BIT = vks::VK_ACCESS_UNIFORM_READ_BIT;
+        const ACCESS_UNIFORM_READ_BIT = vks::core::VK_ACCESS_UNIFORM_READ_BIT;
 
         /// See [`VkAccessFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkAccessFlagBits)
-        const ACCESS_INPUT_ATTACHMENT_READ_BIT = vks::VK_ACCESS_INPUT_ATTACHMENT_READ_BIT;
+        const ACCESS_INPUT_ATTACHMENT_READ_BIT = vks::core::VK_ACCESS_INPUT_ATTACHMENT_READ_BIT;
 
         /// See [`VkAccessFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkAccessFlagBits)
-        const ACCESS_SHADER_READ_BIT = vks::VK_ACCESS_SHADER_READ_BIT;
+        const ACCESS_SHADER_READ_BIT = vks::core::VK_ACCESS_SHADER_READ_BIT;
 
         /// See [`VkAccessFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkAccessFlagBits)
-        const ACCESS_SHADER_WRITE_BIT = vks::VK_ACCESS_SHADER_WRITE_BIT;
+        const ACCESS_SHADER_WRITE_BIT = vks::core::VK_ACCESS_SHADER_WRITE_BIT;
 
         /// See [`VkAccessFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkAccessFlagBits)
-        const ACCESS_COLOR_ATTACHMENT_READ_BIT = vks::VK_ACCESS_COLOR_ATTACHMENT_READ_BIT;
+        const ACCESS_COLOR_ATTACHMENT_READ_BIT = vks::core::VK_ACCESS_COLOR_ATTACHMENT_READ_BIT;
 
         /// See [`VkAccessFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkAccessFlagBits)
-        const ACCESS_COLOR_ATTACHMENT_WRITE_BIT = vks::VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+        const ACCESS_COLOR_ATTACHMENT_WRITE_BIT = vks::core::VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
 
         /// See [`VkAccessFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkAccessFlagBits)
-        const ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT = vks::VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT;
+        const ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT = vks::core::VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT;
 
         /// See [`VkAccessFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkAccessFlagBits)
-        const ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT = vks::VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
+        const ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT = vks::core::VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
 
         /// See [`VkAccessFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkAccessFlagBits)
-        const ACCESS_TRANSFER_READ_BIT = vks::VK_ACCESS_TRANSFER_READ_BIT;
+        const ACCESS_TRANSFER_READ_BIT = vks::core::VK_ACCESS_TRANSFER_READ_BIT;
 
         /// See [`VkAccessFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkAccessFlagBits)
-        const ACCESS_TRANSFER_WRITE_BIT = vks::VK_ACCESS_TRANSFER_WRITE_BIT;
+        const ACCESS_TRANSFER_WRITE_BIT = vks::core::VK_ACCESS_TRANSFER_WRITE_BIT;
 
         /// See [`VkAccessFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkAccessFlagBits)
-        const ACCESS_HOST_READ_BIT = vks::VK_ACCESS_HOST_READ_BIT;
+        const ACCESS_HOST_READ_BIT = vks::core::VK_ACCESS_HOST_READ_BIT;
 
         /// See [`VkAccessFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkAccessFlagBits)
-        const ACCESS_HOST_WRITE_BIT = vks::VK_ACCESS_HOST_WRITE_BIT;
+        const ACCESS_HOST_WRITE_BIT = vks::core::VK_ACCESS_HOST_WRITE_BIT;
 
         /// See [`VkAccessFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkAccessFlagBits)
-        const ACCESS_MEMORY_READ_BIT = vks::VK_ACCESS_MEMORY_READ_BIT;
+        const ACCESS_MEMORY_READ_BIT = vks::core::VK_ACCESS_MEMORY_READ_BIT;
 
         /// See [`VkAccessFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkAccessFlagBits)
-        const ACCESS_MEMORY_WRITE_BIT = vks::VK_ACCESS_MEMORY_WRITE_BIT;
+        const ACCESS_MEMORY_WRITE_BIT = vks::core::VK_ACCESS_MEMORY_WRITE_BIT;
     }
 }
 
@@ -1104,12 +1104,12 @@ pub type AccessFlagBits = AccessFlags;
 bitflags! {
     /// See [`VkDependencyFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDependencyFlagBits)
     #[derive(Default)]
-    pub struct DependencyFlags: vks::VkDependencyFlags {
+    pub struct DependencyFlags: vks::core::VkDependencyFlags {
         /// See [`VkDependencyFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDependencyFlagBits)
-        const DEPENDENCY_FLAG_BITS_MAX_ENUM = vks::VK_DEPENDENCY_FLAG_BITS_MAX_ENUM;
+        const DEPENDENCY_FLAG_BITS_MAX_ENUM = vks::core::VK_DEPENDENCY_FLAG_BITS_MAX_ENUM;
 
         /// See [`VkDependencyFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDependencyFlagBits)
-        const DEPENDENCY_BY_REGION_BIT = vks::VK_DEPENDENCY_BY_REGION_BIT;
+        const DEPENDENCY_BY_REGION_BIT = vks::core::VK_DEPENDENCY_BY_REGION_BIT;
     }
 }
 
@@ -1119,15 +1119,15 @@ pub type DependencyFlagBits = DependencyFlags;
 bitflags! {
     /// See [`VkCommandPoolCreateFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCommandPoolCreateFlagBits)
     #[derive(Default)]
-    pub struct CommandPoolCreateFlags: vks::VkCommandPoolCreateFlags {
+    pub struct CommandPoolCreateFlags: vks::core::VkCommandPoolCreateFlags {
         /// See [`VkCommandPoolCreateFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCommandPoolCreateFlagBits)
-        const COMMAND_POOL_CREATE_FLAG_BITS_MAX_ENUM = vks::VK_COMMAND_POOL_CREATE_FLAG_BITS_MAX_ENUM;
+        const COMMAND_POOL_CREATE_FLAG_BITS_MAX_ENUM = vks::core::VK_COMMAND_POOL_CREATE_FLAG_BITS_MAX_ENUM;
 
         /// See [`VkCommandPoolCreateFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCommandPoolCreateFlagBits)
-        const COMMAND_POOL_CREATE_TRANSIENT_BIT = vks::VK_COMMAND_POOL_CREATE_TRANSIENT_BIT;
+        const COMMAND_POOL_CREATE_TRANSIENT_BIT = vks::core::VK_COMMAND_POOL_CREATE_TRANSIENT_BIT;
 
         /// See [`VkCommandPoolCreateFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCommandPoolCreateFlagBits)
-        const COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT = vks::VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
+        const COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT = vks::core::VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
     }
 }
 
@@ -1137,12 +1137,12 @@ pub type CommandPoolCreateFlagBits = CommandPoolCreateFlags;
 bitflags! {
     /// See [`VkCommandPoolResetFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCommandPoolResetFlagBits)
     #[derive(Default)]
-    pub struct CommandPoolResetFlags: vks::VkCommandPoolResetFlags {
+    pub struct CommandPoolResetFlags: vks::core::VkCommandPoolResetFlags {
         /// See [`VkCommandPoolResetFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCommandPoolResetFlagBits)
-        const COMMAND_POOL_RESET_FLAG_BITS_MAX_ENUM = vks::VK_COMMAND_POOL_RESET_FLAG_BITS_MAX_ENUM;
+        const COMMAND_POOL_RESET_FLAG_BITS_MAX_ENUM = vks::core::VK_COMMAND_POOL_RESET_FLAG_BITS_MAX_ENUM;
 
         /// See [`VkCommandPoolResetFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCommandPoolResetFlagBits)
-        const COMMAND_POOL_RESET_RELEASE_RESOURCES_BIT = vks::VK_COMMAND_POOL_RESET_RELEASE_RESOURCES_BIT;
+        const COMMAND_POOL_RESET_RELEASE_RESOURCES_BIT = vks::core::VK_COMMAND_POOL_RESET_RELEASE_RESOURCES_BIT;
     }
 }
 
@@ -1152,18 +1152,18 @@ pub type CommandPoolResetFlagBits = CommandPoolResetFlags;
 bitflags! {
     /// See [`VkCommandBufferUsageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCommandBufferUsageFlagBits)
     #[derive(Default)]
-    pub struct CommandBufferUsageFlags: vks::VkCommandBufferUsageFlags {
+    pub struct CommandBufferUsageFlags: vks::core::VkCommandBufferUsageFlags {
         /// See [`VkCommandBufferUsageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCommandBufferUsageFlagBits)
-        const COMMAND_BUFFER_USAGE_FLAG_BITS_MAX_ENUM = vks::VK_COMMAND_BUFFER_USAGE_FLAG_BITS_MAX_ENUM;
+        const COMMAND_BUFFER_USAGE_FLAG_BITS_MAX_ENUM = vks::core::VK_COMMAND_BUFFER_USAGE_FLAG_BITS_MAX_ENUM;
 
         /// See [`VkCommandBufferUsageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCommandBufferUsageFlagBits)
-        const COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT = vks::VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+        const COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT = vks::core::VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
 
         /// See [`VkCommandBufferUsageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCommandBufferUsageFlagBits)
-        const COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT = vks::VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT;
+        const COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT = vks::core::VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT;
 
         /// See [`VkCommandBufferUsageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCommandBufferUsageFlagBits)
-        const COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT = vks::VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT;
+        const COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT = vks::core::VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT;
     }
 }
 
@@ -1173,12 +1173,12 @@ pub type CommandBufferUsageFlagBits = CommandBufferUsageFlags;
 bitflags! {
     /// See [`VkQueryControlFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueryControlFlagBits)
     #[derive(Default)]
-    pub struct QueryControlFlags: vks::VkQueryControlFlags {
+    pub struct QueryControlFlags: vks::core::VkQueryControlFlags {
         /// See [`VkQueryControlFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueryControlFlagBits)
-        const QUERY_CONTROL_FLAG_BITS_MAX_ENUM = vks::VK_QUERY_CONTROL_FLAG_BITS_MAX_ENUM;
+        const QUERY_CONTROL_FLAG_BITS_MAX_ENUM = vks::core::VK_QUERY_CONTROL_FLAG_BITS_MAX_ENUM;
 
         /// See [`VkQueryControlFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueryControlFlagBits)
-        const QUERY_CONTROL_PRECISE_BIT = vks::VK_QUERY_CONTROL_PRECISE_BIT;
+        const QUERY_CONTROL_PRECISE_BIT = vks::core::VK_QUERY_CONTROL_PRECISE_BIT;
     }
 }
 
@@ -1188,12 +1188,12 @@ pub type QueryControlFlagBits = QueryControlFlags;
 bitflags! {
     /// See [`VkCommandBufferResetFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCommandBufferResetFlagBits)
     #[derive(Default)]
-    pub struct CommandBufferResetFlags: vks::VkCommandBufferResetFlags {
+    pub struct CommandBufferResetFlags: vks::core::VkCommandBufferResetFlags {
         /// See [`VkCommandBufferResetFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCommandBufferResetFlagBits)
-        const COMMAND_BUFFER_RESET_FLAG_BITS_MAX_ENUM = vks::VK_COMMAND_BUFFER_RESET_FLAG_BITS_MAX_ENUM;
+        const COMMAND_BUFFER_RESET_FLAG_BITS_MAX_ENUM = vks::core::VK_COMMAND_BUFFER_RESET_FLAG_BITS_MAX_ENUM;
 
         /// See [`VkCommandBufferResetFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCommandBufferResetFlagBits)
-        const COMMAND_BUFFER_RESET_RELEASE_RESOURCES_BIT = vks::VK_COMMAND_BUFFER_RESET_RELEASE_RESOURCES_BIT;
+        const COMMAND_BUFFER_RESET_RELEASE_RESOURCES_BIT = vks::core::VK_COMMAND_BUFFER_RESET_RELEASE_RESOURCES_BIT;
     }
 }
 
@@ -1203,18 +1203,18 @@ pub type CommandBufferResetFlagBits = CommandBufferResetFlags;
 bitflags! {
     /// See [`VkStencilFaceFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkStencilFaceFlagBits)
     #[derive(Default)]
-    pub struct StencilFaceFlags: vks::VkStencilFaceFlags {
+    pub struct StencilFaceFlags: vks::core::VkStencilFaceFlags {
         /// See [`VkStencilFaceFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkStencilFaceFlagBits)
-        const STENCIL_FACE_FLAG_BITS_MAX_ENUM = vks::VK_STENCIL_FACE_FLAG_BITS_MAX_ENUM;
+        const STENCIL_FACE_FLAG_BITS_MAX_ENUM = vks::core::VK_STENCIL_FACE_FLAG_BITS_MAX_ENUM;
 
         /// See [`VkStencilFaceFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkStencilFaceFlagBits)
-        const STENCIL_FACE_FRONT_BIT = vks::VK_STENCIL_FACE_FRONT_BIT;
+        const STENCIL_FACE_FRONT_BIT = vks::core::VK_STENCIL_FACE_FRONT_BIT;
 
         /// See [`VkStencilFaceFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkStencilFaceFlagBits)
-        const STENCIL_FACE_BACK_BIT = vks::VK_STENCIL_FACE_BACK_BIT;
+        const STENCIL_FACE_BACK_BIT = vks::core::VK_STENCIL_FACE_BACK_BIT;
 
         /// See [`VkStencilFaceFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkStencilFaceFlagBits)
-        const STENCIL_FRONT_AND_BACK = vks::VK_STENCIL_FRONT_AND_BACK;
+        const STENCIL_FRONT_AND_BACK = vks::core::VK_STENCIL_FRONT_AND_BACK;
     }
 }
 
@@ -1231,7 +1231,7 @@ impl From<OptionalDeviceSize> for u64 {
     fn from(size: OptionalDeviceSize) -> Self {
         match size {
             OptionalDeviceSize::Size(size) => size,
-            OptionalDeviceSize::WholeSize => vks::VK_WHOLE_SIZE,
+            OptionalDeviceSize::WholeSize => vks::core::VK_WHOLE_SIZE,
         }
     }
 }
@@ -1246,7 +1246,7 @@ impl From<OptionalMipLevels> for u32 {
     fn from(mip_levels: OptionalMipLevels) -> Self {
         match mip_levels {
             OptionalMipLevels::MipLevels(mip_levels) => mip_levels,
-            OptionalMipLevels::Remaining => vks::VK_REMAINING_MIP_LEVELS,
+            OptionalMipLevels::Remaining => vks::core::VK_REMAINING_MIP_LEVELS,
         }
     }
 }
@@ -1261,7 +1261,7 @@ impl From<OptionalArrayLayers> for u32 {
     fn from(array_layers: OptionalArrayLayers) -> Self {
         match array_layers {
             OptionalArrayLayers::ArrayLayers(array_layers) => array_layers,
-            OptionalArrayLayers::Remaining => vks::VK_REMAINING_ARRAY_LAYERS,
+            OptionalArrayLayers::Remaining => vks::core::VK_REMAINING_ARRAY_LAYERS,
         }
     }
 }
@@ -1276,7 +1276,7 @@ impl From<AttachmentIndex> for u32 {
     fn from(index: AttachmentIndex) -> Self {
         match index {
             AttachmentIndex::Index(index) => index,
-            AttachmentIndex::Unused => vks::VK_ATTACHMENT_UNUSED
+            AttachmentIndex::Unused => vks::core::VK_ATTACHMENT_UNUSED
         }
     }
 }
@@ -1284,7 +1284,7 @@ impl From<AttachmentIndex> for u32 {
 impl From<u32> for AttachmentIndex {
     fn from(index: u32) -> Self {
         match index {
-            vks::VK_ATTACHMENT_UNUSED => AttachmentIndex::Unused,
+            vks::core::VK_ATTACHMENT_UNUSED => AttachmentIndex::Unused,
             _ => AttachmentIndex::Index(index),
         }
     }
@@ -1300,7 +1300,7 @@ impl From<QueueFamilyIndex> for u32 {
     fn from(index: QueueFamilyIndex) -> Self {
         match index {
             QueueFamilyIndex::Index(index) => index,
-            QueueFamilyIndex::Ignored => vks::VK_QUEUE_FAMILY_IGNORED,
+            QueueFamilyIndex::Ignored => vks::core::VK_QUEUE_FAMILY_IGNORED,
         }
     }
 }
@@ -1315,7 +1315,7 @@ impl From<SubpassIndex> for u32 {
     fn from(index: SubpassIndex) -> Self {
         match index {
             SubpassIndex::Index(index) => index,
-            SubpassIndex::External => vks::VK_SUBPASS_EXTERNAL,
+            SubpassIndex::External => vks::core::VK_SUBPASS_EXTERNAL,
         }
     }
 }
@@ -1323,7 +1323,7 @@ impl From<SubpassIndex> for u32 {
 impl From<u32> for SubpassIndex {
     fn from(index: u32) -> Self {
         match index {
-            vks::VK_SUBPASS_EXTERNAL => SubpassIndex::External,
+            vks::core::VK_SUBPASS_EXTERNAL => SubpassIndex::External,
             _ => SubpassIndex::Index(index),
         }
     }
@@ -1397,25 +1397,25 @@ impl Version {
     }
 }
 
-pub const LOD_CLAMP_NONE: f32 = vks::VK_LOD_CLAMP_NONE;
-pub const REMAINING_MIP_LEVELS: u32 = vks::VK_REMAINING_MIP_LEVELS;
-pub const REMAINING_ARRAY_LAYERS: u32 = vks::VK_REMAINING_ARRAY_LAYERS;
-pub const WHOLE_SIZE: u64 = vks::VK_WHOLE_SIZE;
-pub const ATTACHMENT_UNUSED: u32 = vks::VK_ATTACHMENT_UNUSED;
-pub const QUEUE_FAMILY_IGNORED: u32 = vks::VK_QUEUE_FAMILY_IGNORED;
-pub const SUBPASS_EXTERNAL: u32 = vks::VK_SUBPASS_EXTERNAL;
-pub const MAX_PHYSICAL_DEVICE_NAME_SIZE: usize = vks::VK_MAX_PHYSICAL_DEVICE_NAME_SIZE;
-pub const UUID_SIZE: usize = vks::VK_UUID_SIZE;
-pub const MAX_MEMORY_TYPES: usize = vks::VK_MAX_MEMORY_TYPES;
-pub const MAX_MEMORY_HEAPS: usize = vks::VK_MAX_MEMORY_HEAPS;
-pub const MAX_EXTENSION_NAME_SIZE: usize = vks::VK_MAX_EXTENSION_NAME_SIZE;
-pub const MAX_DESCRIPTION_SIZE: usize = vks::VK_MAX_DESCRIPTION_SIZE;
+pub const LOD_CLAMP_NONE: f32 = vks::core::VK_LOD_CLAMP_NONE;
+pub const REMAINING_MIP_LEVELS: u32 = vks::core::VK_REMAINING_MIP_LEVELS;
+pub const REMAINING_ARRAY_LAYERS: u32 = vks::core::VK_REMAINING_ARRAY_LAYERS;
+pub const WHOLE_SIZE: u64 = vks::core::VK_WHOLE_SIZE;
+pub const ATTACHMENT_UNUSED: u32 = vks::core::VK_ATTACHMENT_UNUSED;
+pub const QUEUE_FAMILY_IGNORED: u32 = vks::core::VK_QUEUE_FAMILY_IGNORED;
+pub const SUBPASS_EXTERNAL: u32 = vks::core::VK_SUBPASS_EXTERNAL;
+pub const MAX_PHYSICAL_DEVICE_NAME_SIZE: usize = vks::core::VK_MAX_PHYSICAL_DEVICE_NAME_SIZE;
+pub const UUID_SIZE: usize = vks::core::VK_UUID_SIZE;
+pub const MAX_MEMORY_TYPES: usize = vks::core::VK_MAX_MEMORY_TYPES;
+pub const MAX_MEMORY_HEAPS: usize = vks::core::VK_MAX_MEMORY_HEAPS;
+pub const MAX_EXTENSION_NAME_SIZE: usize = vks::core::VK_MAX_EXTENSION_NAME_SIZE;
+pub const MAX_DESCRIPTION_SIZE: usize = vks::core::VK_MAX_DESCRIPTION_SIZE;
 
 /// See [`VkPipelineCacheHeaderVersion`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineCacheHeaderVersion)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum PipelineCacheHeaderVersion {
     One,
-    Unknown(vks::VkPipelineCacheHeaderVersion),
+    Unknown(vks::core::VkPipelineCacheHeaderVersion),
 }
 
 /// See [`VkResult`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkResult)
@@ -1452,7 +1452,7 @@ pub enum Error {
     /// See extension [`VK_NV_glsl_shader`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_NV_glsl_shader)
     InvalidShaderNv,
 
-    Unknown(vks::VkResult),
+    Unknown(vks::core::VkResult),
 }
 
 impl fmt::Display for Error {
@@ -1487,55 +1487,55 @@ impl ::std::error::Error for Error {
     }
 }
 
-impl From<vks::VkResult> for Error {
-    fn from(res: vks::VkResult) -> Self {
+impl From<vks::core::VkResult> for Error {
+    fn from(res: vks::core::VkResult) -> Self {
         debug_assert!(res < 0);
 
         match res {
-            vks::VK_ERROR_OUT_OF_HOST_MEMORY => Error::OutOfHostMemory,
-            vks::VK_ERROR_OUT_OF_DEVICE_MEMORY => Error::OutOfDeviceMemory,
-            vks::VK_ERROR_INITIALIZATION_FAILED => Error::InitializationFailed,
-            vks::VK_ERROR_DEVICE_LOST => Error::DeviceLost,
-            vks::VK_ERROR_MEMORY_MAP_FAILED => Error::MemoryMapFailed,
-            vks::VK_ERROR_LAYER_NOT_PRESENT => Error::LayerNotPresent,
-            vks::VK_ERROR_EXTENSION_NOT_PRESENT => Error::ExtensionNotPresent,
-            vks::VK_ERROR_FEATURE_NOT_PRESENT => Error::FeatureNotPresent,
-            vks::VK_ERROR_INCOMPATIBLE_DRIVER => Error::IncompatibleDriver,
-            vks::VK_ERROR_TOO_MANY_OBJECTS => Error::TooManyObjects,
-            vks::VK_ERROR_FORMAT_NOT_SUPPORTED => Error::FormatNotSupported,
-            vks::VK_ERROR_FRAGMENTED_POOL => Error::FragmentedPool,
-            vks::VK_ERROR_SURFACE_LOST_KHR => Error::SurfaceLostKhr,
-            vks::VK_ERROR_NATIVE_WINDOW_IN_USE_KHR => Error::NativeWindowInUseKhr,
-            vks::VK_ERROR_VALIDATION_FAILED_EXT => Error::ValidationFailedExt,
-            vks::VK_ERROR_OUT_OF_DATE_KHR => Error::OutOfDateKhr,
-            vks::VK_ERROR_INCOMPATIBLE_DISPLAY_KHR => Error::IncompatibleDisplayKhr,
-            vks::VK_ERROR_INVALID_SHADER_NV => Error::InvalidShaderNv,
+            vks::core::VK_ERROR_OUT_OF_HOST_MEMORY => Error::OutOfHostMemory,
+            vks::core::VK_ERROR_OUT_OF_DEVICE_MEMORY => Error::OutOfDeviceMemory,
+            vks::core::VK_ERROR_INITIALIZATION_FAILED => Error::InitializationFailed,
+            vks::core::VK_ERROR_DEVICE_LOST => Error::DeviceLost,
+            vks::core::VK_ERROR_MEMORY_MAP_FAILED => Error::MemoryMapFailed,
+            vks::core::VK_ERROR_LAYER_NOT_PRESENT => Error::LayerNotPresent,
+            vks::core::VK_ERROR_EXTENSION_NOT_PRESENT => Error::ExtensionNotPresent,
+            vks::core::VK_ERROR_FEATURE_NOT_PRESENT => Error::FeatureNotPresent,
+            vks::core::VK_ERROR_INCOMPATIBLE_DRIVER => Error::IncompatibleDriver,
+            vks::core::VK_ERROR_TOO_MANY_OBJECTS => Error::TooManyObjects,
+            vks::core::VK_ERROR_FORMAT_NOT_SUPPORTED => Error::FormatNotSupported,
+            vks::core::VK_ERROR_FRAGMENTED_POOL => Error::FragmentedPool,
+            vks::core::VK_ERROR_SURFACE_LOST_KHR => Error::SurfaceLostKhr,
+            vks::core::VK_ERROR_NATIVE_WINDOW_IN_USE_KHR => Error::NativeWindowInUseKhr,
+            vks::core::VK_ERROR_VALIDATION_FAILED_EXT => Error::ValidationFailedExt,
+            vks::core::VK_ERROR_OUT_OF_DATE_KHR => Error::OutOfDateKhr,
+            vks::core::VK_ERROR_INCOMPATIBLE_DISPLAY_KHR => Error::IncompatibleDisplayKhr,
+            vks::core::VK_ERROR_INVALID_SHADER_NV => Error::InvalidShaderNv,
             _ => Error::Unknown(res),
         }
     }
 }
 
-impl From<Error> for vks::VkResult {
+impl From<Error> for vks::core::VkResult {
     fn from(e: Error) -> Self {
         match e {
-            Error::OutOfHostMemory => vks::VK_ERROR_OUT_OF_HOST_MEMORY,
-            Error::OutOfDeviceMemory => vks::VK_ERROR_OUT_OF_DEVICE_MEMORY,
-            Error::InitializationFailed => vks::VK_ERROR_INITIALIZATION_FAILED,
-            Error::DeviceLost => vks::VK_ERROR_DEVICE_LOST,
-            Error::MemoryMapFailed => vks::VK_ERROR_MEMORY_MAP_FAILED,
-            Error::LayerNotPresent => vks::VK_ERROR_LAYER_NOT_PRESENT,
-            Error::ExtensionNotPresent => vks::VK_ERROR_EXTENSION_NOT_PRESENT,
-            Error::FeatureNotPresent => vks::VK_ERROR_FEATURE_NOT_PRESENT,
-            Error::IncompatibleDriver => vks::VK_ERROR_INCOMPATIBLE_DRIVER,
-            Error::TooManyObjects => vks::VK_ERROR_TOO_MANY_OBJECTS,
-            Error::FormatNotSupported => vks::VK_ERROR_FORMAT_NOT_SUPPORTED,
-            Error::FragmentedPool => vks::VK_ERROR_FRAGMENTED_POOL,
-            Error::SurfaceLostKhr => vks::VK_ERROR_SURFACE_LOST_KHR,
-            Error::NativeWindowInUseKhr => vks::VK_ERROR_NATIVE_WINDOW_IN_USE_KHR,
-            Error::ValidationFailedExt => vks::VK_ERROR_VALIDATION_FAILED_EXT,
-            Error::OutOfDateKhr => vks::VK_ERROR_OUT_OF_DATE_KHR,
-            Error::IncompatibleDisplayKhr => vks::VK_ERROR_INCOMPATIBLE_DISPLAY_KHR,
-            Error::InvalidShaderNv => vks::VK_ERROR_INVALID_SHADER_NV,
+            Error::OutOfHostMemory => vks::core::VK_ERROR_OUT_OF_HOST_MEMORY,
+            Error::OutOfDeviceMemory => vks::core::VK_ERROR_OUT_OF_DEVICE_MEMORY,
+            Error::InitializationFailed => vks::core::VK_ERROR_INITIALIZATION_FAILED,
+            Error::DeviceLost => vks::core::VK_ERROR_DEVICE_LOST,
+            Error::MemoryMapFailed => vks::core::VK_ERROR_MEMORY_MAP_FAILED,
+            Error::LayerNotPresent => vks::core::VK_ERROR_LAYER_NOT_PRESENT,
+            Error::ExtensionNotPresent => vks::core::VK_ERROR_EXTENSION_NOT_PRESENT,
+            Error::FeatureNotPresent => vks::core::VK_ERROR_FEATURE_NOT_PRESENT,
+            Error::IncompatibleDriver => vks::core::VK_ERROR_INCOMPATIBLE_DRIVER,
+            Error::TooManyObjects => vks::core::VK_ERROR_TOO_MANY_OBJECTS,
+            Error::FormatNotSupported => vks::core::VK_ERROR_FORMAT_NOT_SUPPORTED,
+            Error::FragmentedPool => vks::core::VK_ERROR_FRAGMENTED_POOL,
+            Error::SurfaceLostKhr => vks::core::VK_ERROR_SURFACE_LOST_KHR,
+            Error::NativeWindowInUseKhr => vks::core::VK_ERROR_NATIVE_WINDOW_IN_USE_KHR,
+            Error::ValidationFailedExt => vks::core::VK_ERROR_VALIDATION_FAILED_EXT,
+            Error::OutOfDateKhr => vks::core::VK_ERROR_OUT_OF_DATE_KHR,
+            Error::IncompatibleDisplayKhr => vks::core::VK_ERROR_INCOMPATIBLE_DISPLAY_KHR,
+            Error::InvalidShaderNv => vks::core::VK_ERROR_INVALID_SHADER_NV,
             Error::Unknown(res) => res,
         }
     }
@@ -1549,17 +1549,17 @@ pub enum SystemAllocationSope {
     Cache,
     Device,
     Instance,
-    Unknown(vks::VkSystemAllocationScope),
+    Unknown(vks::core::VkSystemAllocationScope),
 }
 
-impl From<vks::VkSystemAllocationScope> for SystemAllocationSope {
-    fn from(scope: vks::VkSystemAllocationScope) -> Self {
+impl From<vks::core::VkSystemAllocationScope> for SystemAllocationSope {
+    fn from(scope: vks::core::VkSystemAllocationScope) -> Self {
         match scope {
-            vks::VK_SYSTEM_ALLOCATION_SCOPE_COMMAND => SystemAllocationSope::Command,
-            vks::VK_SYSTEM_ALLOCATION_SCOPE_OBJECT => SystemAllocationSope::Object,
-            vks::VK_SYSTEM_ALLOCATION_SCOPE_CACHE => SystemAllocationSope::Cache,
-            vks::VK_SYSTEM_ALLOCATION_SCOPE_DEVICE => SystemAllocationSope::Device,
-            vks::VK_SYSTEM_ALLOCATION_SCOPE_INSTANCE => SystemAllocationSope::Instance,
+            vks::core::VK_SYSTEM_ALLOCATION_SCOPE_COMMAND => SystemAllocationSope::Command,
+            vks::core::VK_SYSTEM_ALLOCATION_SCOPE_OBJECT => SystemAllocationSope::Object,
+            vks::core::VK_SYSTEM_ALLOCATION_SCOPE_CACHE => SystemAllocationSope::Cache,
+            vks::core::VK_SYSTEM_ALLOCATION_SCOPE_DEVICE => SystemAllocationSope::Device,
+            vks::core::VK_SYSTEM_ALLOCATION_SCOPE_INSTANCE => SystemAllocationSope::Instance,
             _ => SystemAllocationSope::Unknown(scope),
         }
     }
@@ -1569,13 +1569,13 @@ impl From<vks::VkSystemAllocationScope> for SystemAllocationSope {
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum InternalAllocationType {
     Executable,
-    Unknown(vks::VkInternalAllocationType),
+    Unknown(vks::core::VkInternalAllocationType),
 }
 
-impl From<vks::VkInternalAllocationType> for InternalAllocationType {
-    fn from(allocation_type: vks::VkInternalAllocationType) -> Self {
+impl From<vks::core::VkInternalAllocationType> for InternalAllocationType {
+    fn from(allocation_type: vks::core::VkInternalAllocationType) -> Self {
         match allocation_type {
-            vks::VK_INTERNAL_ALLOCATION_TYPE_EXECUTABLE => InternalAllocationType::Executable,
+            vks::core::VK_INTERNAL_ALLOCATION_TYPE_EXECUTABLE => InternalAllocationType::Executable,
             _ => InternalAllocationType::Unknown(allocation_type),
         }
     }
@@ -1795,406 +1795,406 @@ pub enum Format {
     /// See extension [`VK_IMG_format_pvrtc`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_IMG_format_pvrtc)
     PVRTC2_4BPP_sRGB_Block_Img,
 
-    Unknown(vks::VkFormat),
+    Unknown(vks::core::VkFormat),
 }
 
-impl From<vks::VkFormat> for Format {
-    fn from(format: vks::VkFormat) -> Self {
+impl From<vks::core::VkFormat> for Format {
+    fn from(format: vks::core::VkFormat) -> Self {
         match format {
-            vks::VK_FORMAT_UNDEFINED => Format::Undefined,
-            vks::VK_FORMAT_R4G4_UNORM_PACK8 => Format::R4G4_UNorm_Pack8,
-            vks::VK_FORMAT_R4G4B4A4_UNORM_PACK16 => Format::R4G4B4A4_UNorm_Pack16,
-            vks::VK_FORMAT_B4G4R4A4_UNORM_PACK16 => Format::B4G4R4A4_UNorm_Pack16,
-            vks::VK_FORMAT_R5G6B5_UNORM_PACK16 => Format::R5G6B5_UNorm_Pack16,
-            vks::VK_FORMAT_B5G6R5_UNORM_PACK16 => Format::B5G6R5_UNorm_Pack16,
-            vks::VK_FORMAT_R5G5B5A1_UNORM_PACK16 => Format::R5G5B5A1_UNorm_Pack16,
-            vks::VK_FORMAT_B5G5R5A1_UNORM_PACK16 => Format::B5G5R5A1_UNorm_Pack16,
-            vks::VK_FORMAT_A1R5G5B5_UNORM_PACK16 => Format::A1R5G5B5_UNorm_Pack16,
-            vks::VK_FORMAT_R8_UNORM => Format::R8_UNorm,
-            vks::VK_FORMAT_R8_SNORM => Format::R8_SNorm,
-            vks::VK_FORMAT_R8_USCALED => Format::R8_UScaled,
-            vks::VK_FORMAT_R8_SSCALED => Format::R8_SScaled,
-            vks::VK_FORMAT_R8_UINT => Format::R8_UInt,
-            vks::VK_FORMAT_R8_SINT => Format::R8_SInt,
-            vks::VK_FORMAT_R8_SRGB => Format::R8_sRGB,
-            vks::VK_FORMAT_R8G8_UNORM => Format::R8G8_UNorm,
-            vks::VK_FORMAT_R8G8_SNORM => Format::R8G8_SNorm,
-            vks::VK_FORMAT_R8G8_USCALED => Format::R8G8_UScaled,
-            vks::VK_FORMAT_R8G8_SSCALED => Format::R8G8_SScaled,
-            vks::VK_FORMAT_R8G8_UINT => Format::R8G8_UInt,
-            vks::VK_FORMAT_R8G8_SINT => Format::R8G8_SInt,
-            vks::VK_FORMAT_R8G8_SRGB => Format::R8G8_sRGB,
-            vks::VK_FORMAT_R8G8B8_UNORM => Format::R8G8B8_UNorm,
-            vks::VK_FORMAT_R8G8B8_SNORM => Format::R8G8B8_SNorm,
-            vks::VK_FORMAT_R8G8B8_USCALED => Format::R8G8B8_UScaled,
-            vks::VK_FORMAT_R8G8B8_SSCALED => Format::R8G8B8_SScaled,
-            vks::VK_FORMAT_R8G8B8_UINT => Format::R8G8B8_UInt,
-            vks::VK_FORMAT_R8G8B8_SINT => Format::R8G8B8_SInt,
-            vks::VK_FORMAT_R8G8B8_SRGB => Format::R8G8B8_sRGB,
-            vks::VK_FORMAT_B8G8R8_UNORM => Format::B8G8R8_UNorm,
-            vks::VK_FORMAT_B8G8R8_SNORM => Format::B8G8R8_SNorm,
-            vks::VK_FORMAT_B8G8R8_USCALED => Format::B8G8R8_UScaled,
-            vks::VK_FORMAT_B8G8R8_SSCALED => Format::B8G8R8_SScaled,
-            vks::VK_FORMAT_B8G8R8_UINT => Format::B8G8R8_UInt,
-            vks::VK_FORMAT_B8G8R8_SINT => Format::B8G8R8_SInt,
-            vks::VK_FORMAT_B8G8R8_SRGB => Format::B8G8R8_sRGB,
-            vks::VK_FORMAT_R8G8B8A8_UNORM => Format::R8G8B8A8_UNorm,
-            vks::VK_FORMAT_R8G8B8A8_SNORM => Format::R8G8B8A8_SNorm,
-            vks::VK_FORMAT_R8G8B8A8_USCALED => Format::R8G8B8A8_UScaled,
-            vks::VK_FORMAT_R8G8B8A8_SSCALED => Format::R8G8B8A8_SScaled,
-            vks::VK_FORMAT_R8G8B8A8_UINT => Format::R8G8B8A8_UInt,
-            vks::VK_FORMAT_R8G8B8A8_SINT => Format::R8G8B8A8_SInt,
-            vks::VK_FORMAT_R8G8B8A8_SRGB => Format::R8G8B8A8_sRGB,
-            vks::VK_FORMAT_B8G8R8A8_UNORM => Format::B8G8R8A8_UNorm,
-            vks::VK_FORMAT_B8G8R8A8_SNORM => Format::B8G8R8A8_SNorm,
-            vks::VK_FORMAT_B8G8R8A8_USCALED => Format::B8G8R8A8_UScaled,
-            vks::VK_FORMAT_B8G8R8A8_SSCALED => Format::B8G8R8A8_SScaled,
-            vks::VK_FORMAT_B8G8R8A8_UINT => Format::B8G8R8A8_UInt,
-            vks::VK_FORMAT_B8G8R8A8_SINT => Format::B8G8R8A8_SInt,
-            vks::VK_FORMAT_B8G8R8A8_SRGB => Format::B8G8R8A8_sRGB,
-            vks::VK_FORMAT_A8B8G8R8_UNORM_PACK32 => Format::A8B8G8R8_UNorm_Pack32,
-            vks::VK_FORMAT_A8B8G8R8_SNORM_PACK32 => Format::A8B8G8R8_SNorm_Pack32,
-            vks::VK_FORMAT_A8B8G8R8_USCALED_PACK32 => Format::A8B8G8R8_UScaled_Pack32,
-            vks::VK_FORMAT_A8B8G8R8_SSCALED_PACK32 => Format::A8B8G8R8_SScaled_Pack32,
-            vks::VK_FORMAT_A8B8G8R8_UINT_PACK32 => Format::A8B8G8R8_UInt_Pack32,
-            vks::VK_FORMAT_A8B8G8R8_SINT_PACK32 => Format::A8B8G8R8_SInt_Pack32,
-            vks::VK_FORMAT_A8B8G8R8_SRGB_PACK32 => Format::A8B8G8R8_sRGB_Pack32,
-            vks::VK_FORMAT_A2R10G10B10_UNORM_PACK32 => Format::A2R10G10B10_UNorm_Pack32,
-            vks::VK_FORMAT_A2R10G10B10_SNORM_PACK32 => Format::A2R10G10B10_SNorm_Pack32,
-            vks::VK_FORMAT_A2R10G10B10_USCALED_PACK32 => Format::A2R10G10B10_UScaled_Pack32,
-            vks::VK_FORMAT_A2R10G10B10_SSCALED_PACK32 => Format::A2R10G10B10_SScaled_Pack32,
-            vks::VK_FORMAT_A2R10G10B10_UINT_PACK32 => Format::A2R10G10B10_UInt_Pack32,
-            vks::VK_FORMAT_A2R10G10B10_SINT_PACK32 => Format::A2R10G10B10_SInt_Pack32,
-            vks::VK_FORMAT_A2B10G10R10_UNORM_PACK32 => Format::A2B10G10R10_UNorm_Pack32,
-            vks::VK_FORMAT_A2B10G10R10_SNORM_PACK32 => Format::A2B10G10R10_SNorm_Pack32,
-            vks::VK_FORMAT_A2B10G10R10_USCALED_PACK32 => Format::A2B10G10R10_UScaled_Pack32,
-            vks::VK_FORMAT_A2B10G10R10_SSCALED_PACK32 => Format::A2B10G10R10_SScaled_Pack32,
-            vks::VK_FORMAT_A2B10G10R10_UINT_PACK32 => Format::A2B10G10R10_UInt_Pack32,
-            vks::VK_FORMAT_A2B10G10R10_SINT_PACK32 => Format::A2B10G10R10_SInt_Pack32,
-            vks::VK_FORMAT_R16_UNORM => Format::R16_UNorm,
-            vks::VK_FORMAT_R16_SNORM => Format::R16_SNorm,
-            vks::VK_FORMAT_R16_USCALED => Format::R16_UScaled,
-            vks::VK_FORMAT_R16_SSCALED => Format::R16_SScaled,
-            vks::VK_FORMAT_R16_UINT => Format::R16_UInt,
-            vks::VK_FORMAT_R16_SINT => Format::R16_SInt,
-            vks::VK_FORMAT_R16_SFLOAT => Format::R16_SFloat,
-            vks::VK_FORMAT_R16G16_UNORM => Format::R16G16_UNorm,
-            vks::VK_FORMAT_R16G16_SNORM => Format::R16G16_SNorm,
-            vks::VK_FORMAT_R16G16_USCALED => Format::R16G16_UScaled,
-            vks::VK_FORMAT_R16G16_SSCALED => Format::R16G16_SScaled,
-            vks::VK_FORMAT_R16G16_UINT => Format::R16G16_UInt,
-            vks::VK_FORMAT_R16G16_SINT => Format::R16G16_SInt,
-            vks::VK_FORMAT_R16G16_SFLOAT => Format::R16G16_SFloat,
-            vks::VK_FORMAT_R16G16B16_UNORM => Format::R16G16B16_UNorm,
-            vks::VK_FORMAT_R16G16B16_SNORM => Format::R16G16B16_SNorm,
-            vks::VK_FORMAT_R16G16B16_USCALED => Format::R16G16B16_UScaled,
-            vks::VK_FORMAT_R16G16B16_SSCALED => Format::R16G16B16_SScaled,
-            vks::VK_FORMAT_R16G16B16_UINT => Format::R16G16B16_UInt,
-            vks::VK_FORMAT_R16G16B16_SINT => Format::R16G16B16_SInt,
-            vks::VK_FORMAT_R16G16B16_SFLOAT => Format::R16G16B16_SFloat,
-            vks::VK_FORMAT_R16G16B16A16_UNORM => Format::R16G16B16A16_UNorm,
-            vks::VK_FORMAT_R16G16B16A16_SNORM => Format::R16G16B16A16_SNorm,
-            vks::VK_FORMAT_R16G16B16A16_USCALED => Format::R16G16B16A16_UScaled,
-            vks::VK_FORMAT_R16G16B16A16_SSCALED => Format::R16G16B16A16_SScaled,
-            vks::VK_FORMAT_R16G16B16A16_UINT => Format::R16G16B16A16_UInt,
-            vks::VK_FORMAT_R16G16B16A16_SINT => Format::R16G16B16A16_SInt,
-            vks::VK_FORMAT_R16G16B16A16_SFLOAT => Format::R16G16B16A16_SFloat,
-            vks::VK_FORMAT_R32_UINT => Format::R32_UInt,
-            vks::VK_FORMAT_R32_SINT => Format::R32_SInt,
-            vks::VK_FORMAT_R32_SFLOAT => Format::R32_SFloat,
-            vks::VK_FORMAT_R32G32_UINT => Format::R32G32_UInt,
-            vks::VK_FORMAT_R32G32_SINT => Format::R32G32_SInt,
-            vks::VK_FORMAT_R32G32_SFLOAT => Format::R32G32_SFloat,
-            vks::VK_FORMAT_R32G32B32_UINT => Format::R32G32B32_UInt,
-            vks::VK_FORMAT_R32G32B32_SINT => Format::R32G32B32_SInt,
-            vks::VK_FORMAT_R32G32B32_SFLOAT => Format::R32G32B32_SFloat,
-            vks::VK_FORMAT_R32G32B32A32_UINT => Format::R32G32B32A32_UInt,
-            vks::VK_FORMAT_R32G32B32A32_SINT => Format::R32G32B32A32_SInt,
-            vks::VK_FORMAT_R32G32B32A32_SFLOAT => Format::R32G32B32A32_SFloat,
-            vks::VK_FORMAT_R64_UINT => Format::R64_UInt,
-            vks::VK_FORMAT_R64_SINT => Format::R64_SInt,
-            vks::VK_FORMAT_R64_SFLOAT => Format::R64_SFloat,
-            vks::VK_FORMAT_R64G64_UINT => Format::R64G64_UInt,
-            vks::VK_FORMAT_R64G64_SINT => Format::R64G64_SInt,
-            vks::VK_FORMAT_R64G64_SFLOAT => Format::R64G64_SFloat,
-            vks::VK_FORMAT_R64G64B64_UINT => Format::R64G64B64_UInt,
-            vks::VK_FORMAT_R64G64B64_SINT => Format::R64G64B64_SInt,
-            vks::VK_FORMAT_R64G64B64_SFLOAT => Format::R64G64B64_SFloat,
-            vks::VK_FORMAT_R64G64B64A64_UINT => Format::R64G64B64A64_UInt,
-            vks::VK_FORMAT_R64G64B64A64_SINT => Format::R64G64B64A64_SInt,
-            vks::VK_FORMAT_R64G64B64A64_SFLOAT => Format::R64G64B64A64_SFloat,
-            vks::VK_FORMAT_B10G11R11_UFLOAT_PACK32 => Format::B10G11R11_UFloat_Pack32,
-            vks::VK_FORMAT_E5B9G9R9_UFLOAT_PACK32 => Format::E5B9G9R9_UFloat_Pack32,
-            vks::VK_FORMAT_D16_UNORM => Format::D16_UNorm,
-            vks::VK_FORMAT_X8_D24_UNORM_PACK32 => Format::X8_D24_UNorm_Pack32,
-            vks::VK_FORMAT_D32_SFLOAT => Format::D32_SFloat,
-            vks::VK_FORMAT_S8_UINT => Format::S8_UInt,
-            vks::VK_FORMAT_D16_UNORM_S8_UINT => Format::D16_UNorm_S8_UInt,
-            vks::VK_FORMAT_D24_UNORM_S8_UINT => Format::D24_UNorm_S8_UInt,
-            vks::VK_FORMAT_D32_SFLOAT_S8_UINT => Format::D32_SFloat_S8_UInt,
-            vks::VK_FORMAT_BC1_RGB_UNORM_BLOCK => Format::BC1_RGB_UNorm_Block,
-            vks::VK_FORMAT_BC1_RGB_SRGB_BLOCK => Format::BC1_RGB_sRGB_Block,
-            vks::VK_FORMAT_BC1_RGBA_UNORM_BLOCK => Format::BC1_RGBA_UNorm_Block,
-            vks::VK_FORMAT_BC1_RGBA_SRGB_BLOCK => Format::BC1_RGBA_sRGB_Block,
-            vks::VK_FORMAT_BC2_UNORM_BLOCK => Format::BC2_UNorm_Block,
-            vks::VK_FORMAT_BC2_SRGB_BLOCK => Format::BC2_sRGB_Block,
-            vks::VK_FORMAT_BC3_UNORM_BLOCK => Format::BC3_UNorm_Block,
-            vks::VK_FORMAT_BC3_SRGB_BLOCK => Format::BC3_sRGB_Block,
-            vks::VK_FORMAT_BC4_UNORM_BLOCK => Format::BC4_UNorm_Block,
-            vks::VK_FORMAT_BC4_SNORM_BLOCK => Format::BC4_SNorm_Block,
-            vks::VK_FORMAT_BC5_UNORM_BLOCK => Format::BC5_UNorm_Block,
-            vks::VK_FORMAT_BC5_SNORM_BLOCK => Format::BC5_SNorm_Block,
-            vks::VK_FORMAT_BC6H_UFLOAT_BLOCK => Format::BC6H_UFloat_Block,
-            vks::VK_FORMAT_BC6H_SFLOAT_BLOCK => Format::BC6H_SFloat_Block,
-            vks::VK_FORMAT_BC7_UNORM_BLOCK => Format::BC7_UNorm_Block,
-            vks::VK_FORMAT_BC7_SRGB_BLOCK => Format::BC7_sRGB_Block,
-            vks::VK_FORMAT_ETC2_R8G8B8_UNORM_BLOCK => Format::ETC2_R8G8B8_UNorm_Block,
-            vks::VK_FORMAT_ETC2_R8G8B8_SRGB_BLOCK => Format::ETC2_R8G8B8_sRGB_Block,
-            vks::VK_FORMAT_ETC2_R8G8B8A1_UNORM_BLOCK => Format::ETC2_R8G8B8A1_UNorm_Block,
-            vks::VK_FORMAT_ETC2_R8G8B8A1_SRGB_BLOCK => Format::ETC2_R8G8B8A1_sRGB_Block,
-            vks::VK_FORMAT_ETC2_R8G8B8A8_UNORM_BLOCK => Format::ETC2_R8G8B8A8_UNorm_Block,
-            vks::VK_FORMAT_ETC2_R8G8B8A8_SRGB_BLOCK => Format::ETC2_R8G8B8A8_sRGB_Block,
-            vks::VK_FORMAT_EAC_R11_UNORM_BLOCK => Format::EAC_R11_UNorm_Block,
-            vks::VK_FORMAT_EAC_R11_SNORM_BLOCK => Format::EAC_R11_SNorm_Block,
-            vks::VK_FORMAT_EAC_R11G11_UNORM_BLOCK => Format::EAC_R11G11_UNorm_Block,
-            vks::VK_FORMAT_EAC_R11G11_SNORM_BLOCK => Format::EAC_R11G11_SNorm_Block,
-            vks::VK_FORMAT_ASTC_4x4_UNORM_BLOCK => Format::ASTC_4x4_UNorm_Block,
-            vks::VK_FORMAT_ASTC_4x4_SRGB_BLOCK => Format::ASTC_4x4_sRGB_Block,
-            vks::VK_FORMAT_ASTC_5x4_UNORM_BLOCK => Format::ASTC_5x4_UNorm_Block,
-            vks::VK_FORMAT_ASTC_5x4_SRGB_BLOCK => Format::ASTC_5x4_sRGB_Block,
-            vks::VK_FORMAT_ASTC_5x5_UNORM_BLOCK => Format::ASTC_5x5_UNorm_Block,
-            vks::VK_FORMAT_ASTC_5x5_SRGB_BLOCK => Format::ASTC_5x5_sRGB_Block,
-            vks::VK_FORMAT_ASTC_6x5_UNORM_BLOCK => Format::ASTC_6x5_UNorm_Block,
-            vks::VK_FORMAT_ASTC_6x5_SRGB_BLOCK => Format::ASTC_6x5_sRGB_Block,
-            vks::VK_FORMAT_ASTC_6x6_UNORM_BLOCK => Format::ASTC_6x6_UNorm_Block,
-            vks::VK_FORMAT_ASTC_6x6_SRGB_BLOCK => Format::ASTC_6x6_sRGB_Block,
-            vks::VK_FORMAT_ASTC_8x5_UNORM_BLOCK => Format::ASTC_8x5_UNorm_Block,
-            vks::VK_FORMAT_ASTC_8x5_SRGB_BLOCK => Format::ASTC_8x5_sRGB_Block,
-            vks::VK_FORMAT_ASTC_8x6_UNORM_BLOCK => Format::ASTC_8x6_UNorm_Block,
-            vks::VK_FORMAT_ASTC_8x6_SRGB_BLOCK => Format::ASTC_8x6_sRGB_Block,
-            vks::VK_FORMAT_ASTC_8x8_UNORM_BLOCK => Format::ASTC_8x8_UNorm_Block,
-            vks::VK_FORMAT_ASTC_8x8_SRGB_BLOCK => Format::ASTC_8x8_sRGB_Block,
-            vks::VK_FORMAT_ASTC_10x5_UNORM_BLOCK => Format::ASTC_10x5_UNorm_Block,
-            vks::VK_FORMAT_ASTC_10x5_SRGB_BLOCK => Format::ASTC_10x5_sRGB_Block,
-            vks::VK_FORMAT_ASTC_10x6_UNORM_BLOCK => Format::ASTC_10x6_UNorm_Block,
-            vks::VK_FORMAT_ASTC_10x6_SRGB_BLOCK => Format::ASTC_10x6_sRGB_Block,
-            vks::VK_FORMAT_ASTC_10x8_UNORM_BLOCK => Format::ASTC_10x8_UNorm_Block,
-            vks::VK_FORMAT_ASTC_10x8_SRGB_BLOCK => Format::ASTC_10x8_sRGB_Block,
-            vks::VK_FORMAT_ASTC_10x10_UNORM_BLOCK => Format::ASTC_10x10_UNorm_Block,
-            vks::VK_FORMAT_ASTC_10x10_SRGB_BLOCK => Format::ASTC_10x10_sRGB_Block,
-            vks::VK_FORMAT_ASTC_12x10_UNORM_BLOCK => Format::ASTC_12x10_UNorm_Block,
-            vks::VK_FORMAT_ASTC_12x10_SRGB_BLOCK => Format::ASTC_12x10_sRGB_Block,
-            vks::VK_FORMAT_ASTC_12x12_UNORM_BLOCK => Format::ASTC_12x12_UNorm_Block,
-            vks::VK_FORMAT_ASTC_12x12_SRGB_BLOCK => Format::ASTC_12x12_sRGB_Block,
-            vks::VK_FORMAT_PVRTC1_2BPP_UNORM_BLOCK_IMG => Format::PVRTC1_2BPP_UNorm_Block_Img,
-            vks::VK_FORMAT_PVRTC1_4BPP_UNORM_BLOCK_IMG => Format::PVRTC1_4BPP_UNorm_Block_Img,
-            vks::VK_FORMAT_PVRTC2_2BPP_UNORM_BLOCK_IMG => Format::PVRTC2_2BPP_UNorm_Block_Img,
-            vks::VK_FORMAT_PVRTC2_4BPP_UNORM_BLOCK_IMG => Format::PVRTC2_4BPP_UNorm_Block_Img,
-            vks::VK_FORMAT_PVRTC1_2BPP_SRGB_BLOCK_IMG => Format::PVRTC1_2BPP_sRGB_Block_Img,
-            vks::VK_FORMAT_PVRTC1_4BPP_SRGB_BLOCK_IMG => Format::PVRTC1_4BPP_sRGB_Block_Img,
-            vks::VK_FORMAT_PVRTC2_2BPP_SRGB_BLOCK_IMG => Format::PVRTC2_2BPP_sRGB_Block_Img,
-            vks::VK_FORMAT_PVRTC2_4BPP_SRGB_BLOCK_IMG => Format::PVRTC2_4BPP_sRGB_Block_Img,
+            vks::core::VK_FORMAT_UNDEFINED => Format::Undefined,
+            vks::core::VK_FORMAT_R4G4_UNORM_PACK8 => Format::R4G4_UNorm_Pack8,
+            vks::core::VK_FORMAT_R4G4B4A4_UNORM_PACK16 => Format::R4G4B4A4_UNorm_Pack16,
+            vks::core::VK_FORMAT_B4G4R4A4_UNORM_PACK16 => Format::B4G4R4A4_UNorm_Pack16,
+            vks::core::VK_FORMAT_R5G6B5_UNORM_PACK16 => Format::R5G6B5_UNorm_Pack16,
+            vks::core::VK_FORMAT_B5G6R5_UNORM_PACK16 => Format::B5G6R5_UNorm_Pack16,
+            vks::core::VK_FORMAT_R5G5B5A1_UNORM_PACK16 => Format::R5G5B5A1_UNorm_Pack16,
+            vks::core::VK_FORMAT_B5G5R5A1_UNORM_PACK16 => Format::B5G5R5A1_UNorm_Pack16,
+            vks::core::VK_FORMAT_A1R5G5B5_UNORM_PACK16 => Format::A1R5G5B5_UNorm_Pack16,
+            vks::core::VK_FORMAT_R8_UNORM => Format::R8_UNorm,
+            vks::core::VK_FORMAT_R8_SNORM => Format::R8_SNorm,
+            vks::core::VK_FORMAT_R8_USCALED => Format::R8_UScaled,
+            vks::core::VK_FORMAT_R8_SSCALED => Format::R8_SScaled,
+            vks::core::VK_FORMAT_R8_UINT => Format::R8_UInt,
+            vks::core::VK_FORMAT_R8_SINT => Format::R8_SInt,
+            vks::core::VK_FORMAT_R8_SRGB => Format::R8_sRGB,
+            vks::core::VK_FORMAT_R8G8_UNORM => Format::R8G8_UNorm,
+            vks::core::VK_FORMAT_R8G8_SNORM => Format::R8G8_SNorm,
+            vks::core::VK_FORMAT_R8G8_USCALED => Format::R8G8_UScaled,
+            vks::core::VK_FORMAT_R8G8_SSCALED => Format::R8G8_SScaled,
+            vks::core::VK_FORMAT_R8G8_UINT => Format::R8G8_UInt,
+            vks::core::VK_FORMAT_R8G8_SINT => Format::R8G8_SInt,
+            vks::core::VK_FORMAT_R8G8_SRGB => Format::R8G8_sRGB,
+            vks::core::VK_FORMAT_R8G8B8_UNORM => Format::R8G8B8_UNorm,
+            vks::core::VK_FORMAT_R8G8B8_SNORM => Format::R8G8B8_SNorm,
+            vks::core::VK_FORMAT_R8G8B8_USCALED => Format::R8G8B8_UScaled,
+            vks::core::VK_FORMAT_R8G8B8_SSCALED => Format::R8G8B8_SScaled,
+            vks::core::VK_FORMAT_R8G8B8_UINT => Format::R8G8B8_UInt,
+            vks::core::VK_FORMAT_R8G8B8_SINT => Format::R8G8B8_SInt,
+            vks::core::VK_FORMAT_R8G8B8_SRGB => Format::R8G8B8_sRGB,
+            vks::core::VK_FORMAT_B8G8R8_UNORM => Format::B8G8R8_UNorm,
+            vks::core::VK_FORMAT_B8G8R8_SNORM => Format::B8G8R8_SNorm,
+            vks::core::VK_FORMAT_B8G8R8_USCALED => Format::B8G8R8_UScaled,
+            vks::core::VK_FORMAT_B8G8R8_SSCALED => Format::B8G8R8_SScaled,
+            vks::core::VK_FORMAT_B8G8R8_UINT => Format::B8G8R8_UInt,
+            vks::core::VK_FORMAT_B8G8R8_SINT => Format::B8G8R8_SInt,
+            vks::core::VK_FORMAT_B8G8R8_SRGB => Format::B8G8R8_sRGB,
+            vks::core::VK_FORMAT_R8G8B8A8_UNORM => Format::R8G8B8A8_UNorm,
+            vks::core::VK_FORMAT_R8G8B8A8_SNORM => Format::R8G8B8A8_SNorm,
+            vks::core::VK_FORMAT_R8G8B8A8_USCALED => Format::R8G8B8A8_UScaled,
+            vks::core::VK_FORMAT_R8G8B8A8_SSCALED => Format::R8G8B8A8_SScaled,
+            vks::core::VK_FORMAT_R8G8B8A8_UINT => Format::R8G8B8A8_UInt,
+            vks::core::VK_FORMAT_R8G8B8A8_SINT => Format::R8G8B8A8_SInt,
+            vks::core::VK_FORMAT_R8G8B8A8_SRGB => Format::R8G8B8A8_sRGB,
+            vks::core::VK_FORMAT_B8G8R8A8_UNORM => Format::B8G8R8A8_UNorm,
+            vks::core::VK_FORMAT_B8G8R8A8_SNORM => Format::B8G8R8A8_SNorm,
+            vks::core::VK_FORMAT_B8G8R8A8_USCALED => Format::B8G8R8A8_UScaled,
+            vks::core::VK_FORMAT_B8G8R8A8_SSCALED => Format::B8G8R8A8_SScaled,
+            vks::core::VK_FORMAT_B8G8R8A8_UINT => Format::B8G8R8A8_UInt,
+            vks::core::VK_FORMAT_B8G8R8A8_SINT => Format::B8G8R8A8_SInt,
+            vks::core::VK_FORMAT_B8G8R8A8_SRGB => Format::B8G8R8A8_sRGB,
+            vks::core::VK_FORMAT_A8B8G8R8_UNORM_PACK32 => Format::A8B8G8R8_UNorm_Pack32,
+            vks::core::VK_FORMAT_A8B8G8R8_SNORM_PACK32 => Format::A8B8G8R8_SNorm_Pack32,
+            vks::core::VK_FORMAT_A8B8G8R8_USCALED_PACK32 => Format::A8B8G8R8_UScaled_Pack32,
+            vks::core::VK_FORMAT_A8B8G8R8_SSCALED_PACK32 => Format::A8B8G8R8_SScaled_Pack32,
+            vks::core::VK_FORMAT_A8B8G8R8_UINT_PACK32 => Format::A8B8G8R8_UInt_Pack32,
+            vks::core::VK_FORMAT_A8B8G8R8_SINT_PACK32 => Format::A8B8G8R8_SInt_Pack32,
+            vks::core::VK_FORMAT_A8B8G8R8_SRGB_PACK32 => Format::A8B8G8R8_sRGB_Pack32,
+            vks::core::VK_FORMAT_A2R10G10B10_UNORM_PACK32 => Format::A2R10G10B10_UNorm_Pack32,
+            vks::core::VK_FORMAT_A2R10G10B10_SNORM_PACK32 => Format::A2R10G10B10_SNorm_Pack32,
+            vks::core::VK_FORMAT_A2R10G10B10_USCALED_PACK32 => Format::A2R10G10B10_UScaled_Pack32,
+            vks::core::VK_FORMAT_A2R10G10B10_SSCALED_PACK32 => Format::A2R10G10B10_SScaled_Pack32,
+            vks::core::VK_FORMAT_A2R10G10B10_UINT_PACK32 => Format::A2R10G10B10_UInt_Pack32,
+            vks::core::VK_FORMAT_A2R10G10B10_SINT_PACK32 => Format::A2R10G10B10_SInt_Pack32,
+            vks::core::VK_FORMAT_A2B10G10R10_UNORM_PACK32 => Format::A2B10G10R10_UNorm_Pack32,
+            vks::core::VK_FORMAT_A2B10G10R10_SNORM_PACK32 => Format::A2B10G10R10_SNorm_Pack32,
+            vks::core::VK_FORMAT_A2B10G10R10_USCALED_PACK32 => Format::A2B10G10R10_UScaled_Pack32,
+            vks::core::VK_FORMAT_A2B10G10R10_SSCALED_PACK32 => Format::A2B10G10R10_SScaled_Pack32,
+            vks::core::VK_FORMAT_A2B10G10R10_UINT_PACK32 => Format::A2B10G10R10_UInt_Pack32,
+            vks::core::VK_FORMAT_A2B10G10R10_SINT_PACK32 => Format::A2B10G10R10_SInt_Pack32,
+            vks::core::VK_FORMAT_R16_UNORM => Format::R16_UNorm,
+            vks::core::VK_FORMAT_R16_SNORM => Format::R16_SNorm,
+            vks::core::VK_FORMAT_R16_USCALED => Format::R16_UScaled,
+            vks::core::VK_FORMAT_R16_SSCALED => Format::R16_SScaled,
+            vks::core::VK_FORMAT_R16_UINT => Format::R16_UInt,
+            vks::core::VK_FORMAT_R16_SINT => Format::R16_SInt,
+            vks::core::VK_FORMAT_R16_SFLOAT => Format::R16_SFloat,
+            vks::core::VK_FORMAT_R16G16_UNORM => Format::R16G16_UNorm,
+            vks::core::VK_FORMAT_R16G16_SNORM => Format::R16G16_SNorm,
+            vks::core::VK_FORMAT_R16G16_USCALED => Format::R16G16_UScaled,
+            vks::core::VK_FORMAT_R16G16_SSCALED => Format::R16G16_SScaled,
+            vks::core::VK_FORMAT_R16G16_UINT => Format::R16G16_UInt,
+            vks::core::VK_FORMAT_R16G16_SINT => Format::R16G16_SInt,
+            vks::core::VK_FORMAT_R16G16_SFLOAT => Format::R16G16_SFloat,
+            vks::core::VK_FORMAT_R16G16B16_UNORM => Format::R16G16B16_UNorm,
+            vks::core::VK_FORMAT_R16G16B16_SNORM => Format::R16G16B16_SNorm,
+            vks::core::VK_FORMAT_R16G16B16_USCALED => Format::R16G16B16_UScaled,
+            vks::core::VK_FORMAT_R16G16B16_SSCALED => Format::R16G16B16_SScaled,
+            vks::core::VK_FORMAT_R16G16B16_UINT => Format::R16G16B16_UInt,
+            vks::core::VK_FORMAT_R16G16B16_SINT => Format::R16G16B16_SInt,
+            vks::core::VK_FORMAT_R16G16B16_SFLOAT => Format::R16G16B16_SFloat,
+            vks::core::VK_FORMAT_R16G16B16A16_UNORM => Format::R16G16B16A16_UNorm,
+            vks::core::VK_FORMAT_R16G16B16A16_SNORM => Format::R16G16B16A16_SNorm,
+            vks::core::VK_FORMAT_R16G16B16A16_USCALED => Format::R16G16B16A16_UScaled,
+            vks::core::VK_FORMAT_R16G16B16A16_SSCALED => Format::R16G16B16A16_SScaled,
+            vks::core::VK_FORMAT_R16G16B16A16_UINT => Format::R16G16B16A16_UInt,
+            vks::core::VK_FORMAT_R16G16B16A16_SINT => Format::R16G16B16A16_SInt,
+            vks::core::VK_FORMAT_R16G16B16A16_SFLOAT => Format::R16G16B16A16_SFloat,
+            vks::core::VK_FORMAT_R32_UINT => Format::R32_UInt,
+            vks::core::VK_FORMAT_R32_SINT => Format::R32_SInt,
+            vks::core::VK_FORMAT_R32_SFLOAT => Format::R32_SFloat,
+            vks::core::VK_FORMAT_R32G32_UINT => Format::R32G32_UInt,
+            vks::core::VK_FORMAT_R32G32_SINT => Format::R32G32_SInt,
+            vks::core::VK_FORMAT_R32G32_SFLOAT => Format::R32G32_SFloat,
+            vks::core::VK_FORMAT_R32G32B32_UINT => Format::R32G32B32_UInt,
+            vks::core::VK_FORMAT_R32G32B32_SINT => Format::R32G32B32_SInt,
+            vks::core::VK_FORMAT_R32G32B32_SFLOAT => Format::R32G32B32_SFloat,
+            vks::core::VK_FORMAT_R32G32B32A32_UINT => Format::R32G32B32A32_UInt,
+            vks::core::VK_FORMAT_R32G32B32A32_SINT => Format::R32G32B32A32_SInt,
+            vks::core::VK_FORMAT_R32G32B32A32_SFLOAT => Format::R32G32B32A32_SFloat,
+            vks::core::VK_FORMAT_R64_UINT => Format::R64_UInt,
+            vks::core::VK_FORMAT_R64_SINT => Format::R64_SInt,
+            vks::core::VK_FORMAT_R64_SFLOAT => Format::R64_SFloat,
+            vks::core::VK_FORMAT_R64G64_UINT => Format::R64G64_UInt,
+            vks::core::VK_FORMAT_R64G64_SINT => Format::R64G64_SInt,
+            vks::core::VK_FORMAT_R64G64_SFLOAT => Format::R64G64_SFloat,
+            vks::core::VK_FORMAT_R64G64B64_UINT => Format::R64G64B64_UInt,
+            vks::core::VK_FORMAT_R64G64B64_SINT => Format::R64G64B64_SInt,
+            vks::core::VK_FORMAT_R64G64B64_SFLOAT => Format::R64G64B64_SFloat,
+            vks::core::VK_FORMAT_R64G64B64A64_UINT => Format::R64G64B64A64_UInt,
+            vks::core::VK_FORMAT_R64G64B64A64_SINT => Format::R64G64B64A64_SInt,
+            vks::core::VK_FORMAT_R64G64B64A64_SFLOAT => Format::R64G64B64A64_SFloat,
+            vks::core::VK_FORMAT_B10G11R11_UFLOAT_PACK32 => Format::B10G11R11_UFloat_Pack32,
+            vks::core::VK_FORMAT_E5B9G9R9_UFLOAT_PACK32 => Format::E5B9G9R9_UFloat_Pack32,
+            vks::core::VK_FORMAT_D16_UNORM => Format::D16_UNorm,
+            vks::core::VK_FORMAT_X8_D24_UNORM_PACK32 => Format::X8_D24_UNorm_Pack32,
+            vks::core::VK_FORMAT_D32_SFLOAT => Format::D32_SFloat,
+            vks::core::VK_FORMAT_S8_UINT => Format::S8_UInt,
+            vks::core::VK_FORMAT_D16_UNORM_S8_UINT => Format::D16_UNorm_S8_UInt,
+            vks::core::VK_FORMAT_D24_UNORM_S8_UINT => Format::D24_UNorm_S8_UInt,
+            vks::core::VK_FORMAT_D32_SFLOAT_S8_UINT => Format::D32_SFloat_S8_UInt,
+            vks::core::VK_FORMAT_BC1_RGB_UNORM_BLOCK => Format::BC1_RGB_UNorm_Block,
+            vks::core::VK_FORMAT_BC1_RGB_SRGB_BLOCK => Format::BC1_RGB_sRGB_Block,
+            vks::core::VK_FORMAT_BC1_RGBA_UNORM_BLOCK => Format::BC1_RGBA_UNorm_Block,
+            vks::core::VK_FORMAT_BC1_RGBA_SRGB_BLOCK => Format::BC1_RGBA_sRGB_Block,
+            vks::core::VK_FORMAT_BC2_UNORM_BLOCK => Format::BC2_UNorm_Block,
+            vks::core::VK_FORMAT_BC2_SRGB_BLOCK => Format::BC2_sRGB_Block,
+            vks::core::VK_FORMAT_BC3_UNORM_BLOCK => Format::BC3_UNorm_Block,
+            vks::core::VK_FORMAT_BC3_SRGB_BLOCK => Format::BC3_sRGB_Block,
+            vks::core::VK_FORMAT_BC4_UNORM_BLOCK => Format::BC4_UNorm_Block,
+            vks::core::VK_FORMAT_BC4_SNORM_BLOCK => Format::BC4_SNorm_Block,
+            vks::core::VK_FORMAT_BC5_UNORM_BLOCK => Format::BC5_UNorm_Block,
+            vks::core::VK_FORMAT_BC5_SNORM_BLOCK => Format::BC5_SNorm_Block,
+            vks::core::VK_FORMAT_BC6H_UFLOAT_BLOCK => Format::BC6H_UFloat_Block,
+            vks::core::VK_FORMAT_BC6H_SFLOAT_BLOCK => Format::BC6H_SFloat_Block,
+            vks::core::VK_FORMAT_BC7_UNORM_BLOCK => Format::BC7_UNorm_Block,
+            vks::core::VK_FORMAT_BC7_SRGB_BLOCK => Format::BC7_sRGB_Block,
+            vks::core::VK_FORMAT_ETC2_R8G8B8_UNORM_BLOCK => Format::ETC2_R8G8B8_UNorm_Block,
+            vks::core::VK_FORMAT_ETC2_R8G8B8_SRGB_BLOCK => Format::ETC2_R8G8B8_sRGB_Block,
+            vks::core::VK_FORMAT_ETC2_R8G8B8A1_UNORM_BLOCK => Format::ETC2_R8G8B8A1_UNorm_Block,
+            vks::core::VK_FORMAT_ETC2_R8G8B8A1_SRGB_BLOCK => Format::ETC2_R8G8B8A1_sRGB_Block,
+            vks::core::VK_FORMAT_ETC2_R8G8B8A8_UNORM_BLOCK => Format::ETC2_R8G8B8A8_UNorm_Block,
+            vks::core::VK_FORMAT_ETC2_R8G8B8A8_SRGB_BLOCK => Format::ETC2_R8G8B8A8_sRGB_Block,
+            vks::core::VK_FORMAT_EAC_R11_UNORM_BLOCK => Format::EAC_R11_UNorm_Block,
+            vks::core::VK_FORMAT_EAC_R11_SNORM_BLOCK => Format::EAC_R11_SNorm_Block,
+            vks::core::VK_FORMAT_EAC_R11G11_UNORM_BLOCK => Format::EAC_R11G11_UNorm_Block,
+            vks::core::VK_FORMAT_EAC_R11G11_SNORM_BLOCK => Format::EAC_R11G11_SNorm_Block,
+            vks::core::VK_FORMAT_ASTC_4x4_UNORM_BLOCK => Format::ASTC_4x4_UNorm_Block,
+            vks::core::VK_FORMAT_ASTC_4x4_SRGB_BLOCK => Format::ASTC_4x4_sRGB_Block,
+            vks::core::VK_FORMAT_ASTC_5x4_UNORM_BLOCK => Format::ASTC_5x4_UNorm_Block,
+            vks::core::VK_FORMAT_ASTC_5x4_SRGB_BLOCK => Format::ASTC_5x4_sRGB_Block,
+            vks::core::VK_FORMAT_ASTC_5x5_UNORM_BLOCK => Format::ASTC_5x5_UNorm_Block,
+            vks::core::VK_FORMAT_ASTC_5x5_SRGB_BLOCK => Format::ASTC_5x5_sRGB_Block,
+            vks::core::VK_FORMAT_ASTC_6x5_UNORM_BLOCK => Format::ASTC_6x5_UNorm_Block,
+            vks::core::VK_FORMAT_ASTC_6x5_SRGB_BLOCK => Format::ASTC_6x5_sRGB_Block,
+            vks::core::VK_FORMAT_ASTC_6x6_UNORM_BLOCK => Format::ASTC_6x6_UNorm_Block,
+            vks::core::VK_FORMAT_ASTC_6x6_SRGB_BLOCK => Format::ASTC_6x6_sRGB_Block,
+            vks::core::VK_FORMAT_ASTC_8x5_UNORM_BLOCK => Format::ASTC_8x5_UNorm_Block,
+            vks::core::VK_FORMAT_ASTC_8x5_SRGB_BLOCK => Format::ASTC_8x5_sRGB_Block,
+            vks::core::VK_FORMAT_ASTC_8x6_UNORM_BLOCK => Format::ASTC_8x6_UNorm_Block,
+            vks::core::VK_FORMAT_ASTC_8x6_SRGB_BLOCK => Format::ASTC_8x6_sRGB_Block,
+            vks::core::VK_FORMAT_ASTC_8x8_UNORM_BLOCK => Format::ASTC_8x8_UNorm_Block,
+            vks::core::VK_FORMAT_ASTC_8x8_SRGB_BLOCK => Format::ASTC_8x8_sRGB_Block,
+            vks::core::VK_FORMAT_ASTC_10x5_UNORM_BLOCK => Format::ASTC_10x5_UNorm_Block,
+            vks::core::VK_FORMAT_ASTC_10x5_SRGB_BLOCK => Format::ASTC_10x5_sRGB_Block,
+            vks::core::VK_FORMAT_ASTC_10x6_UNORM_BLOCK => Format::ASTC_10x6_UNorm_Block,
+            vks::core::VK_FORMAT_ASTC_10x6_SRGB_BLOCK => Format::ASTC_10x6_sRGB_Block,
+            vks::core::VK_FORMAT_ASTC_10x8_UNORM_BLOCK => Format::ASTC_10x8_UNorm_Block,
+            vks::core::VK_FORMAT_ASTC_10x8_SRGB_BLOCK => Format::ASTC_10x8_sRGB_Block,
+            vks::core::VK_FORMAT_ASTC_10x10_UNORM_BLOCK => Format::ASTC_10x10_UNorm_Block,
+            vks::core::VK_FORMAT_ASTC_10x10_SRGB_BLOCK => Format::ASTC_10x10_sRGB_Block,
+            vks::core::VK_FORMAT_ASTC_12x10_UNORM_BLOCK => Format::ASTC_12x10_UNorm_Block,
+            vks::core::VK_FORMAT_ASTC_12x10_SRGB_BLOCK => Format::ASTC_12x10_sRGB_Block,
+            vks::core::VK_FORMAT_ASTC_12x12_UNORM_BLOCK => Format::ASTC_12x12_UNorm_Block,
+            vks::core::VK_FORMAT_ASTC_12x12_SRGB_BLOCK => Format::ASTC_12x12_sRGB_Block,
+            vks::core::VK_FORMAT_PVRTC1_2BPP_UNORM_BLOCK_IMG => Format::PVRTC1_2BPP_UNorm_Block_Img,
+            vks::core::VK_FORMAT_PVRTC1_4BPP_UNORM_BLOCK_IMG => Format::PVRTC1_4BPP_UNorm_Block_Img,
+            vks::core::VK_FORMAT_PVRTC2_2BPP_UNORM_BLOCK_IMG => Format::PVRTC2_2BPP_UNorm_Block_Img,
+            vks::core::VK_FORMAT_PVRTC2_4BPP_UNORM_BLOCK_IMG => Format::PVRTC2_4BPP_UNorm_Block_Img,
+            vks::core::VK_FORMAT_PVRTC1_2BPP_SRGB_BLOCK_IMG => Format::PVRTC1_2BPP_sRGB_Block_Img,
+            vks::core::VK_FORMAT_PVRTC1_4BPP_SRGB_BLOCK_IMG => Format::PVRTC1_4BPP_sRGB_Block_Img,
+            vks::core::VK_FORMAT_PVRTC2_2BPP_SRGB_BLOCK_IMG => Format::PVRTC2_2BPP_sRGB_Block_Img,
+            vks::core::VK_FORMAT_PVRTC2_4BPP_SRGB_BLOCK_IMG => Format::PVRTC2_4BPP_sRGB_Block_Img,
             _ => Format::Unknown(format),
         }
     }
 }
 
-impl From<Format> for vks::VkFormat {
+impl From<Format> for vks::core::VkFormat {
     fn from(format: Format) -> Self {
         match format {
-            Format::Undefined => vks::VK_FORMAT_UNDEFINED,
-            Format::R4G4_UNorm_Pack8 => vks::VK_FORMAT_R4G4_UNORM_PACK8,
-            Format::R4G4B4A4_UNorm_Pack16 => vks::VK_FORMAT_R4G4B4A4_UNORM_PACK16,
-            Format::B4G4R4A4_UNorm_Pack16 => vks::VK_FORMAT_B4G4R4A4_UNORM_PACK16,
-            Format::R5G6B5_UNorm_Pack16 => vks::VK_FORMAT_R5G6B5_UNORM_PACK16,
-            Format::B5G6R5_UNorm_Pack16 => vks::VK_FORMAT_B5G6R5_UNORM_PACK16,
-            Format::R5G5B5A1_UNorm_Pack16 => vks::VK_FORMAT_R5G5B5A1_UNORM_PACK16,
-            Format::B5G5R5A1_UNorm_Pack16 => vks::VK_FORMAT_B5G5R5A1_UNORM_PACK16,
-            Format::A1R5G5B5_UNorm_Pack16 => vks::VK_FORMAT_A1R5G5B5_UNORM_PACK16,
-            Format::R8_UNorm => vks::VK_FORMAT_R8_UNORM,
-            Format::R8_SNorm => vks::VK_FORMAT_R8_SNORM,
-            Format::R8_UScaled => vks::VK_FORMAT_R8_USCALED,
-            Format::R8_SScaled => vks::VK_FORMAT_R8_SSCALED,
-            Format::R8_UInt => vks::VK_FORMAT_R8_UINT,
-            Format::R8_SInt => vks::VK_FORMAT_R8_SINT,
-            Format::R8_sRGB => vks::VK_FORMAT_R8_SRGB,
-            Format::R8G8_UNorm => vks::VK_FORMAT_R8G8_UNORM,
-            Format::R8G8_SNorm => vks::VK_FORMAT_R8G8_SNORM,
-            Format::R8G8_UScaled => vks::VK_FORMAT_R8G8_USCALED,
-            Format::R8G8_SScaled => vks::VK_FORMAT_R8G8_SSCALED,
-            Format::R8G8_UInt => vks::VK_FORMAT_R8G8_UINT,
-            Format::R8G8_SInt => vks::VK_FORMAT_R8G8_SINT,
-            Format::R8G8_sRGB => vks::VK_FORMAT_R8G8_SRGB,
-            Format::R8G8B8_UNorm => vks::VK_FORMAT_R8G8B8_UNORM,
-            Format::R8G8B8_SNorm => vks::VK_FORMAT_R8G8B8_SNORM,
-            Format::R8G8B8_UScaled => vks::VK_FORMAT_R8G8B8_USCALED,
-            Format::R8G8B8_SScaled => vks::VK_FORMAT_R8G8B8_SSCALED,
-            Format::R8G8B8_UInt => vks::VK_FORMAT_R8G8B8_UINT,
-            Format::R8G8B8_SInt => vks::VK_FORMAT_R8G8B8_SINT,
-            Format::R8G8B8_sRGB => vks::VK_FORMAT_R8G8B8_SRGB,
-            Format::B8G8R8_UNorm => vks::VK_FORMAT_B8G8R8_UNORM,
-            Format::B8G8R8_SNorm => vks::VK_FORMAT_B8G8R8_SNORM,
-            Format::B8G8R8_UScaled => vks::VK_FORMAT_B8G8R8_USCALED,
-            Format::B8G8R8_SScaled => vks::VK_FORMAT_B8G8R8_SSCALED,
-            Format::B8G8R8_UInt => vks::VK_FORMAT_B8G8R8_UINT,
-            Format::B8G8R8_SInt => vks::VK_FORMAT_B8G8R8_SINT,
-            Format::B8G8R8_sRGB => vks::VK_FORMAT_B8G8R8_SRGB,
-            Format::R8G8B8A8_UNorm => vks::VK_FORMAT_R8G8B8A8_UNORM,
-            Format::R8G8B8A8_SNorm => vks::VK_FORMAT_R8G8B8A8_SNORM,
-            Format::R8G8B8A8_UScaled => vks::VK_FORMAT_R8G8B8A8_USCALED,
-            Format::R8G8B8A8_SScaled => vks::VK_FORMAT_R8G8B8A8_SSCALED,
-            Format::R8G8B8A8_UInt => vks::VK_FORMAT_R8G8B8A8_UINT,
-            Format::R8G8B8A8_SInt => vks::VK_FORMAT_R8G8B8A8_SINT,
-            Format::R8G8B8A8_sRGB => vks::VK_FORMAT_R8G8B8A8_SRGB,
-            Format::B8G8R8A8_UNorm => vks::VK_FORMAT_B8G8R8A8_UNORM,
-            Format::B8G8R8A8_SNorm => vks::VK_FORMAT_B8G8R8A8_SNORM,
-            Format::B8G8R8A8_UScaled => vks::VK_FORMAT_B8G8R8A8_USCALED,
-            Format::B8G8R8A8_SScaled => vks::VK_FORMAT_B8G8R8A8_SSCALED,
-            Format::B8G8R8A8_UInt => vks::VK_FORMAT_B8G8R8A8_UINT,
-            Format::B8G8R8A8_SInt => vks::VK_FORMAT_B8G8R8A8_SINT,
-            Format::B8G8R8A8_sRGB => vks::VK_FORMAT_B8G8R8A8_SRGB,
-            Format::A8B8G8R8_UNorm_Pack32 => vks::VK_FORMAT_A8B8G8R8_UNORM_PACK32,
-            Format::A8B8G8R8_SNorm_Pack32 => vks::VK_FORMAT_A8B8G8R8_SNORM_PACK32,
-            Format::A8B8G8R8_UScaled_Pack32 => vks::VK_FORMAT_A8B8G8R8_USCALED_PACK32,
-            Format::A8B8G8R8_SScaled_Pack32 => vks::VK_FORMAT_A8B8G8R8_SSCALED_PACK32,
-            Format::A8B8G8R8_UInt_Pack32 => vks::VK_FORMAT_A8B8G8R8_UINT_PACK32,
-            Format::A8B8G8R8_SInt_Pack32 => vks::VK_FORMAT_A8B8G8R8_SINT_PACK32,
-            Format::A8B8G8R8_sRGB_Pack32 => vks::VK_FORMAT_A8B8G8R8_SRGB_PACK32,
-            Format::A2R10G10B10_UNorm_Pack32 => vks::VK_FORMAT_A2R10G10B10_UNORM_PACK32,
-            Format::A2R10G10B10_SNorm_Pack32 => vks::VK_FORMAT_A2R10G10B10_SNORM_PACK32,
-            Format::A2R10G10B10_UScaled_Pack32 => vks::VK_FORMAT_A2R10G10B10_USCALED_PACK32,
-            Format::A2R10G10B10_SScaled_Pack32 => vks::VK_FORMAT_A2R10G10B10_SSCALED_PACK32,
-            Format::A2R10G10B10_UInt_Pack32 => vks::VK_FORMAT_A2R10G10B10_UINT_PACK32,
-            Format::A2R10G10B10_SInt_Pack32 => vks::VK_FORMAT_A2R10G10B10_SINT_PACK32,
-            Format::A2B10G10R10_UNorm_Pack32 => vks::VK_FORMAT_A2B10G10R10_UNORM_PACK32,
-            Format::A2B10G10R10_SNorm_Pack32 => vks::VK_FORMAT_A2B10G10R10_SNORM_PACK32,
-            Format::A2B10G10R10_UScaled_Pack32 => vks::VK_FORMAT_A2B10G10R10_USCALED_PACK32,
-            Format::A2B10G10R10_SScaled_Pack32 => vks::VK_FORMAT_A2B10G10R10_SSCALED_PACK32,
-            Format::A2B10G10R10_UInt_Pack32 => vks::VK_FORMAT_A2B10G10R10_UINT_PACK32,
-            Format::A2B10G10R10_SInt_Pack32 => vks::VK_FORMAT_A2B10G10R10_SINT_PACK32,
-            Format::R16_UNorm => vks::VK_FORMAT_R16_UNORM,
-            Format::R16_SNorm => vks::VK_FORMAT_R16_SNORM,
-            Format::R16_UScaled => vks::VK_FORMAT_R16_USCALED,
-            Format::R16_SScaled => vks::VK_FORMAT_R16_SSCALED,
-            Format::R16_UInt => vks::VK_FORMAT_R16_UINT,
-            Format::R16_SInt => vks::VK_FORMAT_R16_SINT,
-            Format::R16_SFloat => vks::VK_FORMAT_R16_SFLOAT,
-            Format::R16G16_UNorm => vks::VK_FORMAT_R16G16_UNORM,
-            Format::R16G16_SNorm => vks::VK_FORMAT_R16G16_SNORM,
-            Format::R16G16_UScaled => vks::VK_FORMAT_R16G16_USCALED,
-            Format::R16G16_SScaled => vks::VK_FORMAT_R16G16_SSCALED,
-            Format::R16G16_UInt => vks::VK_FORMAT_R16G16_UINT,
-            Format::R16G16_SInt => vks::VK_FORMAT_R16G16_SINT,
-            Format::R16G16_SFloat => vks::VK_FORMAT_R16G16_SFLOAT,
-            Format::R16G16B16_UNorm => vks::VK_FORMAT_R16G16B16_UNORM,
-            Format::R16G16B16_SNorm => vks::VK_FORMAT_R16G16B16_SNORM,
-            Format::R16G16B16_UScaled => vks::VK_FORMAT_R16G16B16_USCALED,
-            Format::R16G16B16_SScaled => vks::VK_FORMAT_R16G16B16_SSCALED,
-            Format::R16G16B16_UInt => vks::VK_FORMAT_R16G16B16_UINT,
-            Format::R16G16B16_SInt => vks::VK_FORMAT_R16G16B16_SINT,
-            Format::R16G16B16_SFloat => vks::VK_FORMAT_R16G16B16_SFLOAT,
-            Format::R16G16B16A16_UNorm => vks::VK_FORMAT_R16G16B16A16_UNORM,
-            Format::R16G16B16A16_SNorm => vks::VK_FORMAT_R16G16B16A16_SNORM,
-            Format::R16G16B16A16_UScaled => vks::VK_FORMAT_R16G16B16A16_USCALED,
-            Format::R16G16B16A16_SScaled => vks::VK_FORMAT_R16G16B16A16_SSCALED,
-            Format::R16G16B16A16_UInt => vks::VK_FORMAT_R16G16B16A16_UINT,
-            Format::R16G16B16A16_SInt => vks::VK_FORMAT_R16G16B16A16_SINT,
-            Format::R16G16B16A16_SFloat => vks::VK_FORMAT_R16G16B16A16_SFLOAT,
-            Format::R32_UInt => vks::VK_FORMAT_R32_UINT,
-            Format::R32_SInt => vks::VK_FORMAT_R32_SINT,
-            Format::R32_SFloat => vks::VK_FORMAT_R32_SFLOAT,
-            Format::R32G32_UInt => vks::VK_FORMAT_R32G32_UINT,
-            Format::R32G32_SInt => vks::VK_FORMAT_R32G32_SINT,
-            Format::R32G32_SFloat => vks::VK_FORMAT_R32G32_SFLOAT,
-            Format::R32G32B32_UInt => vks::VK_FORMAT_R32G32B32_UINT,
-            Format::R32G32B32_SInt => vks::VK_FORMAT_R32G32B32_SINT,
-            Format::R32G32B32_SFloat => vks::VK_FORMAT_R32G32B32_SFLOAT,
-            Format::R32G32B32A32_UInt => vks::VK_FORMAT_R32G32B32A32_UINT,
-            Format::R32G32B32A32_SInt => vks::VK_FORMAT_R32G32B32A32_SINT,
-            Format::R32G32B32A32_SFloat => vks::VK_FORMAT_R32G32B32A32_SFLOAT,
-            Format::R64_UInt => vks::VK_FORMAT_R64_UINT,
-            Format::R64_SInt => vks::VK_FORMAT_R64_SINT,
-            Format::R64_SFloat => vks::VK_FORMAT_R64_SFLOAT,
-            Format::R64G64_UInt => vks::VK_FORMAT_R64G64_UINT,
-            Format::R64G64_SInt => vks::VK_FORMAT_R64G64_SINT,
-            Format::R64G64_SFloat => vks::VK_FORMAT_R64G64_SFLOAT,
-            Format::R64G64B64_UInt => vks::VK_FORMAT_R64G64B64_UINT,
-            Format::R64G64B64_SInt => vks::VK_FORMAT_R64G64B64_SINT,
-            Format::R64G64B64_SFloat => vks::VK_FORMAT_R64G64B64_SFLOAT,
-            Format::R64G64B64A64_UInt => vks::VK_FORMAT_R64G64B64A64_UINT,
-            Format::R64G64B64A64_SInt => vks::VK_FORMAT_R64G64B64A64_SINT,
-            Format::R64G64B64A64_SFloat => vks::VK_FORMAT_R64G64B64A64_SFLOAT,
-            Format::B10G11R11_UFloat_Pack32 => vks::VK_FORMAT_B10G11R11_UFLOAT_PACK32,
-            Format::E5B9G9R9_UFloat_Pack32 => vks::VK_FORMAT_E5B9G9R9_UFLOAT_PACK32,
-            Format::D16_UNorm => vks::VK_FORMAT_D16_UNORM,
-            Format::X8_D24_UNorm_Pack32 => vks::VK_FORMAT_X8_D24_UNORM_PACK32,
-            Format::D32_SFloat => vks::VK_FORMAT_D32_SFLOAT,
-            Format::S8_UInt => vks::VK_FORMAT_S8_UINT,
-            Format::D16_UNorm_S8_UInt => vks::VK_FORMAT_D16_UNORM_S8_UINT,
-            Format::D24_UNorm_S8_UInt => vks::VK_FORMAT_D24_UNORM_S8_UINT,
-            Format::D32_SFloat_S8_UInt => vks::VK_FORMAT_D32_SFLOAT_S8_UINT,
-            Format::BC1_RGB_UNorm_Block => vks::VK_FORMAT_BC1_RGB_UNORM_BLOCK,
-            Format::BC1_RGB_sRGB_Block => vks::VK_FORMAT_BC1_RGB_SRGB_BLOCK,
-            Format::BC1_RGBA_UNorm_Block => vks::VK_FORMAT_BC1_RGBA_UNORM_BLOCK,
-            Format::BC1_RGBA_sRGB_Block => vks::VK_FORMAT_BC1_RGBA_SRGB_BLOCK,
-            Format::BC2_UNorm_Block => vks::VK_FORMAT_BC2_UNORM_BLOCK,
-            Format::BC2_sRGB_Block => vks::VK_FORMAT_BC2_SRGB_BLOCK,
-            Format::BC3_UNorm_Block => vks::VK_FORMAT_BC3_UNORM_BLOCK,
-            Format::BC3_sRGB_Block => vks::VK_FORMAT_BC3_SRGB_BLOCK,
-            Format::BC4_UNorm_Block => vks::VK_FORMAT_BC4_UNORM_BLOCK,
-            Format::BC4_SNorm_Block => vks::VK_FORMAT_BC4_SNORM_BLOCK,
-            Format::BC5_UNorm_Block => vks::VK_FORMAT_BC5_UNORM_BLOCK,
-            Format::BC5_SNorm_Block => vks::VK_FORMAT_BC5_SNORM_BLOCK,
-            Format::BC6H_UFloat_Block => vks::VK_FORMAT_BC6H_UFLOAT_BLOCK,
-            Format::BC6H_SFloat_Block => vks::VK_FORMAT_BC6H_SFLOAT_BLOCK,
-            Format::BC7_UNorm_Block => vks::VK_FORMAT_BC7_UNORM_BLOCK,
-            Format::BC7_sRGB_Block => vks::VK_FORMAT_BC7_SRGB_BLOCK,
-            Format::ETC2_R8G8B8_UNorm_Block => vks::VK_FORMAT_ETC2_R8G8B8_UNORM_BLOCK,
-            Format::ETC2_R8G8B8_sRGB_Block => vks::VK_FORMAT_ETC2_R8G8B8_SRGB_BLOCK,
-            Format::ETC2_R8G8B8A1_UNorm_Block => vks::VK_FORMAT_ETC2_R8G8B8A1_UNORM_BLOCK,
-            Format::ETC2_R8G8B8A1_sRGB_Block => vks::VK_FORMAT_ETC2_R8G8B8A1_SRGB_BLOCK,
-            Format::ETC2_R8G8B8A8_UNorm_Block => vks::VK_FORMAT_ETC2_R8G8B8A8_UNORM_BLOCK,
-            Format::ETC2_R8G8B8A8_sRGB_Block => vks::VK_FORMAT_ETC2_R8G8B8A8_SRGB_BLOCK,
-            Format::EAC_R11_UNorm_Block => vks::VK_FORMAT_EAC_R11_UNORM_BLOCK,
-            Format::EAC_R11_SNorm_Block => vks::VK_FORMAT_EAC_R11_SNORM_BLOCK,
-            Format::EAC_R11G11_UNorm_Block => vks::VK_FORMAT_EAC_R11G11_UNORM_BLOCK,
-            Format::EAC_R11G11_SNorm_Block => vks::VK_FORMAT_EAC_R11G11_SNORM_BLOCK,
-            Format::ASTC_4x4_UNorm_Block => vks::VK_FORMAT_ASTC_4x4_UNORM_BLOCK,
-            Format::ASTC_4x4_sRGB_Block => vks::VK_FORMAT_ASTC_4x4_SRGB_BLOCK,
-            Format::ASTC_5x4_UNorm_Block => vks::VK_FORMAT_ASTC_5x4_UNORM_BLOCK,
-            Format::ASTC_5x4_sRGB_Block => vks::VK_FORMAT_ASTC_5x4_SRGB_BLOCK,
-            Format::ASTC_5x5_UNorm_Block => vks::VK_FORMAT_ASTC_5x5_UNORM_BLOCK,
-            Format::ASTC_5x5_sRGB_Block => vks::VK_FORMAT_ASTC_5x5_SRGB_BLOCK,
-            Format::ASTC_6x5_UNorm_Block => vks::VK_FORMAT_ASTC_6x5_UNORM_BLOCK,
-            Format::ASTC_6x5_sRGB_Block => vks::VK_FORMAT_ASTC_6x5_SRGB_BLOCK,
-            Format::ASTC_6x6_UNorm_Block => vks::VK_FORMAT_ASTC_6x6_UNORM_BLOCK,
-            Format::ASTC_6x6_sRGB_Block => vks::VK_FORMAT_ASTC_6x6_SRGB_BLOCK,
-            Format::ASTC_8x5_UNorm_Block => vks::VK_FORMAT_ASTC_8x5_UNORM_BLOCK,
-            Format::ASTC_8x5_sRGB_Block => vks::VK_FORMAT_ASTC_8x5_SRGB_BLOCK,
-            Format::ASTC_8x6_UNorm_Block => vks::VK_FORMAT_ASTC_8x6_UNORM_BLOCK,
-            Format::ASTC_8x6_sRGB_Block => vks::VK_FORMAT_ASTC_8x6_SRGB_BLOCK,
-            Format::ASTC_8x8_UNorm_Block => vks::VK_FORMAT_ASTC_8x8_UNORM_BLOCK,
-            Format::ASTC_8x8_sRGB_Block => vks::VK_FORMAT_ASTC_8x8_SRGB_BLOCK,
-            Format::ASTC_10x5_UNorm_Block => vks::VK_FORMAT_ASTC_10x5_UNORM_BLOCK,
-            Format::ASTC_10x5_sRGB_Block => vks::VK_FORMAT_ASTC_10x5_SRGB_BLOCK,
-            Format::ASTC_10x6_UNorm_Block => vks::VK_FORMAT_ASTC_10x6_UNORM_BLOCK,
-            Format::ASTC_10x6_sRGB_Block => vks::VK_FORMAT_ASTC_10x6_SRGB_BLOCK,
-            Format::ASTC_10x8_UNorm_Block => vks::VK_FORMAT_ASTC_10x8_UNORM_BLOCK,
-            Format::ASTC_10x8_sRGB_Block => vks::VK_FORMAT_ASTC_10x8_SRGB_BLOCK,
-            Format::ASTC_10x10_UNorm_Block => vks::VK_FORMAT_ASTC_10x10_UNORM_BLOCK,
-            Format::ASTC_10x10_sRGB_Block => vks::VK_FORMAT_ASTC_10x10_SRGB_BLOCK,
-            Format::ASTC_12x10_UNorm_Block => vks::VK_FORMAT_ASTC_12x10_UNORM_BLOCK,
-            Format::ASTC_12x10_sRGB_Block => vks::VK_FORMAT_ASTC_12x10_SRGB_BLOCK,
-            Format::ASTC_12x12_UNorm_Block => vks::VK_FORMAT_ASTC_12x12_UNORM_BLOCK,
-            Format::ASTC_12x12_sRGB_Block => vks::VK_FORMAT_ASTC_12x12_SRGB_BLOCK,
-            Format::PVRTC1_2BPP_UNorm_Block_Img => vks::VK_FORMAT_PVRTC1_2BPP_UNORM_BLOCK_IMG,
-            Format::PVRTC1_4BPP_UNorm_Block_Img => vks::VK_FORMAT_PVRTC1_4BPP_UNORM_BLOCK_IMG,
-            Format::PVRTC2_2BPP_UNorm_Block_Img => vks::VK_FORMAT_PVRTC2_2BPP_UNORM_BLOCK_IMG,
-            Format::PVRTC2_4BPP_UNorm_Block_Img => vks::VK_FORMAT_PVRTC2_4BPP_UNORM_BLOCK_IMG,
-            Format::PVRTC1_2BPP_sRGB_Block_Img => vks::VK_FORMAT_PVRTC1_2BPP_SRGB_BLOCK_IMG,
-            Format::PVRTC1_4BPP_sRGB_Block_Img => vks::VK_FORMAT_PVRTC1_4BPP_SRGB_BLOCK_IMG,
-            Format::PVRTC2_2BPP_sRGB_Block_Img => vks::VK_FORMAT_PVRTC2_2BPP_SRGB_BLOCK_IMG,
-            Format::PVRTC2_4BPP_sRGB_Block_Img => vks::VK_FORMAT_PVRTC2_4BPP_SRGB_BLOCK_IMG,
+            Format::Undefined => vks::core::VK_FORMAT_UNDEFINED,
+            Format::R4G4_UNorm_Pack8 => vks::core::VK_FORMAT_R4G4_UNORM_PACK8,
+            Format::R4G4B4A4_UNorm_Pack16 => vks::core::VK_FORMAT_R4G4B4A4_UNORM_PACK16,
+            Format::B4G4R4A4_UNorm_Pack16 => vks::core::VK_FORMAT_B4G4R4A4_UNORM_PACK16,
+            Format::R5G6B5_UNorm_Pack16 => vks::core::VK_FORMAT_R5G6B5_UNORM_PACK16,
+            Format::B5G6R5_UNorm_Pack16 => vks::core::VK_FORMAT_B5G6R5_UNORM_PACK16,
+            Format::R5G5B5A1_UNorm_Pack16 => vks::core::VK_FORMAT_R5G5B5A1_UNORM_PACK16,
+            Format::B5G5R5A1_UNorm_Pack16 => vks::core::VK_FORMAT_B5G5R5A1_UNORM_PACK16,
+            Format::A1R5G5B5_UNorm_Pack16 => vks::core::VK_FORMAT_A1R5G5B5_UNORM_PACK16,
+            Format::R8_UNorm => vks::core::VK_FORMAT_R8_UNORM,
+            Format::R8_SNorm => vks::core::VK_FORMAT_R8_SNORM,
+            Format::R8_UScaled => vks::core::VK_FORMAT_R8_USCALED,
+            Format::R8_SScaled => vks::core::VK_FORMAT_R8_SSCALED,
+            Format::R8_UInt => vks::core::VK_FORMAT_R8_UINT,
+            Format::R8_SInt => vks::core::VK_FORMAT_R8_SINT,
+            Format::R8_sRGB => vks::core::VK_FORMAT_R8_SRGB,
+            Format::R8G8_UNorm => vks::core::VK_FORMAT_R8G8_UNORM,
+            Format::R8G8_SNorm => vks::core::VK_FORMAT_R8G8_SNORM,
+            Format::R8G8_UScaled => vks::core::VK_FORMAT_R8G8_USCALED,
+            Format::R8G8_SScaled => vks::core::VK_FORMAT_R8G8_SSCALED,
+            Format::R8G8_UInt => vks::core::VK_FORMAT_R8G8_UINT,
+            Format::R8G8_SInt => vks::core::VK_FORMAT_R8G8_SINT,
+            Format::R8G8_sRGB => vks::core::VK_FORMAT_R8G8_SRGB,
+            Format::R8G8B8_UNorm => vks::core::VK_FORMAT_R8G8B8_UNORM,
+            Format::R8G8B8_SNorm => vks::core::VK_FORMAT_R8G8B8_SNORM,
+            Format::R8G8B8_UScaled => vks::core::VK_FORMAT_R8G8B8_USCALED,
+            Format::R8G8B8_SScaled => vks::core::VK_FORMAT_R8G8B8_SSCALED,
+            Format::R8G8B8_UInt => vks::core::VK_FORMAT_R8G8B8_UINT,
+            Format::R8G8B8_SInt => vks::core::VK_FORMAT_R8G8B8_SINT,
+            Format::R8G8B8_sRGB => vks::core::VK_FORMAT_R8G8B8_SRGB,
+            Format::B8G8R8_UNorm => vks::core::VK_FORMAT_B8G8R8_UNORM,
+            Format::B8G8R8_SNorm => vks::core::VK_FORMAT_B8G8R8_SNORM,
+            Format::B8G8R8_UScaled => vks::core::VK_FORMAT_B8G8R8_USCALED,
+            Format::B8G8R8_SScaled => vks::core::VK_FORMAT_B8G8R8_SSCALED,
+            Format::B8G8R8_UInt => vks::core::VK_FORMAT_B8G8R8_UINT,
+            Format::B8G8R8_SInt => vks::core::VK_FORMAT_B8G8R8_SINT,
+            Format::B8G8R8_sRGB => vks::core::VK_FORMAT_B8G8R8_SRGB,
+            Format::R8G8B8A8_UNorm => vks::core::VK_FORMAT_R8G8B8A8_UNORM,
+            Format::R8G8B8A8_SNorm => vks::core::VK_FORMAT_R8G8B8A8_SNORM,
+            Format::R8G8B8A8_UScaled => vks::core::VK_FORMAT_R8G8B8A8_USCALED,
+            Format::R8G8B8A8_SScaled => vks::core::VK_FORMAT_R8G8B8A8_SSCALED,
+            Format::R8G8B8A8_UInt => vks::core::VK_FORMAT_R8G8B8A8_UINT,
+            Format::R8G8B8A8_SInt => vks::core::VK_FORMAT_R8G8B8A8_SINT,
+            Format::R8G8B8A8_sRGB => vks::core::VK_FORMAT_R8G8B8A8_SRGB,
+            Format::B8G8R8A8_UNorm => vks::core::VK_FORMAT_B8G8R8A8_UNORM,
+            Format::B8G8R8A8_SNorm => vks::core::VK_FORMAT_B8G8R8A8_SNORM,
+            Format::B8G8R8A8_UScaled => vks::core::VK_FORMAT_B8G8R8A8_USCALED,
+            Format::B8G8R8A8_SScaled => vks::core::VK_FORMAT_B8G8R8A8_SSCALED,
+            Format::B8G8R8A8_UInt => vks::core::VK_FORMAT_B8G8R8A8_UINT,
+            Format::B8G8R8A8_SInt => vks::core::VK_FORMAT_B8G8R8A8_SINT,
+            Format::B8G8R8A8_sRGB => vks::core::VK_FORMAT_B8G8R8A8_SRGB,
+            Format::A8B8G8R8_UNorm_Pack32 => vks::core::VK_FORMAT_A8B8G8R8_UNORM_PACK32,
+            Format::A8B8G8R8_SNorm_Pack32 => vks::core::VK_FORMAT_A8B8G8R8_SNORM_PACK32,
+            Format::A8B8G8R8_UScaled_Pack32 => vks::core::VK_FORMAT_A8B8G8R8_USCALED_PACK32,
+            Format::A8B8G8R8_SScaled_Pack32 => vks::core::VK_FORMAT_A8B8G8R8_SSCALED_PACK32,
+            Format::A8B8G8R8_UInt_Pack32 => vks::core::VK_FORMAT_A8B8G8R8_UINT_PACK32,
+            Format::A8B8G8R8_SInt_Pack32 => vks::core::VK_FORMAT_A8B8G8R8_SINT_PACK32,
+            Format::A8B8G8R8_sRGB_Pack32 => vks::core::VK_FORMAT_A8B8G8R8_SRGB_PACK32,
+            Format::A2R10G10B10_UNorm_Pack32 => vks::core::VK_FORMAT_A2R10G10B10_UNORM_PACK32,
+            Format::A2R10G10B10_SNorm_Pack32 => vks::core::VK_FORMAT_A2R10G10B10_SNORM_PACK32,
+            Format::A2R10G10B10_UScaled_Pack32 => vks::core::VK_FORMAT_A2R10G10B10_USCALED_PACK32,
+            Format::A2R10G10B10_SScaled_Pack32 => vks::core::VK_FORMAT_A2R10G10B10_SSCALED_PACK32,
+            Format::A2R10G10B10_UInt_Pack32 => vks::core::VK_FORMAT_A2R10G10B10_UINT_PACK32,
+            Format::A2R10G10B10_SInt_Pack32 => vks::core::VK_FORMAT_A2R10G10B10_SINT_PACK32,
+            Format::A2B10G10R10_UNorm_Pack32 => vks::core::VK_FORMAT_A2B10G10R10_UNORM_PACK32,
+            Format::A2B10G10R10_SNorm_Pack32 => vks::core::VK_FORMAT_A2B10G10R10_SNORM_PACK32,
+            Format::A2B10G10R10_UScaled_Pack32 => vks::core::VK_FORMAT_A2B10G10R10_USCALED_PACK32,
+            Format::A2B10G10R10_SScaled_Pack32 => vks::core::VK_FORMAT_A2B10G10R10_SSCALED_PACK32,
+            Format::A2B10G10R10_UInt_Pack32 => vks::core::VK_FORMAT_A2B10G10R10_UINT_PACK32,
+            Format::A2B10G10R10_SInt_Pack32 => vks::core::VK_FORMAT_A2B10G10R10_SINT_PACK32,
+            Format::R16_UNorm => vks::core::VK_FORMAT_R16_UNORM,
+            Format::R16_SNorm => vks::core::VK_FORMAT_R16_SNORM,
+            Format::R16_UScaled => vks::core::VK_FORMAT_R16_USCALED,
+            Format::R16_SScaled => vks::core::VK_FORMAT_R16_SSCALED,
+            Format::R16_UInt => vks::core::VK_FORMAT_R16_UINT,
+            Format::R16_SInt => vks::core::VK_FORMAT_R16_SINT,
+            Format::R16_SFloat => vks::core::VK_FORMAT_R16_SFLOAT,
+            Format::R16G16_UNorm => vks::core::VK_FORMAT_R16G16_UNORM,
+            Format::R16G16_SNorm => vks::core::VK_FORMAT_R16G16_SNORM,
+            Format::R16G16_UScaled => vks::core::VK_FORMAT_R16G16_USCALED,
+            Format::R16G16_SScaled => vks::core::VK_FORMAT_R16G16_SSCALED,
+            Format::R16G16_UInt => vks::core::VK_FORMAT_R16G16_UINT,
+            Format::R16G16_SInt => vks::core::VK_FORMAT_R16G16_SINT,
+            Format::R16G16_SFloat => vks::core::VK_FORMAT_R16G16_SFLOAT,
+            Format::R16G16B16_UNorm => vks::core::VK_FORMAT_R16G16B16_UNORM,
+            Format::R16G16B16_SNorm => vks::core::VK_FORMAT_R16G16B16_SNORM,
+            Format::R16G16B16_UScaled => vks::core::VK_FORMAT_R16G16B16_USCALED,
+            Format::R16G16B16_SScaled => vks::core::VK_FORMAT_R16G16B16_SSCALED,
+            Format::R16G16B16_UInt => vks::core::VK_FORMAT_R16G16B16_UINT,
+            Format::R16G16B16_SInt => vks::core::VK_FORMAT_R16G16B16_SINT,
+            Format::R16G16B16_SFloat => vks::core::VK_FORMAT_R16G16B16_SFLOAT,
+            Format::R16G16B16A16_UNorm => vks::core::VK_FORMAT_R16G16B16A16_UNORM,
+            Format::R16G16B16A16_SNorm => vks::core::VK_FORMAT_R16G16B16A16_SNORM,
+            Format::R16G16B16A16_UScaled => vks::core::VK_FORMAT_R16G16B16A16_USCALED,
+            Format::R16G16B16A16_SScaled => vks::core::VK_FORMAT_R16G16B16A16_SSCALED,
+            Format::R16G16B16A16_UInt => vks::core::VK_FORMAT_R16G16B16A16_UINT,
+            Format::R16G16B16A16_SInt => vks::core::VK_FORMAT_R16G16B16A16_SINT,
+            Format::R16G16B16A16_SFloat => vks::core::VK_FORMAT_R16G16B16A16_SFLOAT,
+            Format::R32_UInt => vks::core::VK_FORMAT_R32_UINT,
+            Format::R32_SInt => vks::core::VK_FORMAT_R32_SINT,
+            Format::R32_SFloat => vks::core::VK_FORMAT_R32_SFLOAT,
+            Format::R32G32_UInt => vks::core::VK_FORMAT_R32G32_UINT,
+            Format::R32G32_SInt => vks::core::VK_FORMAT_R32G32_SINT,
+            Format::R32G32_SFloat => vks::core::VK_FORMAT_R32G32_SFLOAT,
+            Format::R32G32B32_UInt => vks::core::VK_FORMAT_R32G32B32_UINT,
+            Format::R32G32B32_SInt => vks::core::VK_FORMAT_R32G32B32_SINT,
+            Format::R32G32B32_SFloat => vks::core::VK_FORMAT_R32G32B32_SFLOAT,
+            Format::R32G32B32A32_UInt => vks::core::VK_FORMAT_R32G32B32A32_UINT,
+            Format::R32G32B32A32_SInt => vks::core::VK_FORMAT_R32G32B32A32_SINT,
+            Format::R32G32B32A32_SFloat => vks::core::VK_FORMAT_R32G32B32A32_SFLOAT,
+            Format::R64_UInt => vks::core::VK_FORMAT_R64_UINT,
+            Format::R64_SInt => vks::core::VK_FORMAT_R64_SINT,
+            Format::R64_SFloat => vks::core::VK_FORMAT_R64_SFLOAT,
+            Format::R64G64_UInt => vks::core::VK_FORMAT_R64G64_UINT,
+            Format::R64G64_SInt => vks::core::VK_FORMAT_R64G64_SINT,
+            Format::R64G64_SFloat => vks::core::VK_FORMAT_R64G64_SFLOAT,
+            Format::R64G64B64_UInt => vks::core::VK_FORMAT_R64G64B64_UINT,
+            Format::R64G64B64_SInt => vks::core::VK_FORMAT_R64G64B64_SINT,
+            Format::R64G64B64_SFloat => vks::core::VK_FORMAT_R64G64B64_SFLOAT,
+            Format::R64G64B64A64_UInt => vks::core::VK_FORMAT_R64G64B64A64_UINT,
+            Format::R64G64B64A64_SInt => vks::core::VK_FORMAT_R64G64B64A64_SINT,
+            Format::R64G64B64A64_SFloat => vks::core::VK_FORMAT_R64G64B64A64_SFLOAT,
+            Format::B10G11R11_UFloat_Pack32 => vks::core::VK_FORMAT_B10G11R11_UFLOAT_PACK32,
+            Format::E5B9G9R9_UFloat_Pack32 => vks::core::VK_FORMAT_E5B9G9R9_UFLOAT_PACK32,
+            Format::D16_UNorm => vks::core::VK_FORMAT_D16_UNORM,
+            Format::X8_D24_UNorm_Pack32 => vks::core::VK_FORMAT_X8_D24_UNORM_PACK32,
+            Format::D32_SFloat => vks::core::VK_FORMAT_D32_SFLOAT,
+            Format::S8_UInt => vks::core::VK_FORMAT_S8_UINT,
+            Format::D16_UNorm_S8_UInt => vks::core::VK_FORMAT_D16_UNORM_S8_UINT,
+            Format::D24_UNorm_S8_UInt => vks::core::VK_FORMAT_D24_UNORM_S8_UINT,
+            Format::D32_SFloat_S8_UInt => vks::core::VK_FORMAT_D32_SFLOAT_S8_UINT,
+            Format::BC1_RGB_UNorm_Block => vks::core::VK_FORMAT_BC1_RGB_UNORM_BLOCK,
+            Format::BC1_RGB_sRGB_Block => vks::core::VK_FORMAT_BC1_RGB_SRGB_BLOCK,
+            Format::BC1_RGBA_UNorm_Block => vks::core::VK_FORMAT_BC1_RGBA_UNORM_BLOCK,
+            Format::BC1_RGBA_sRGB_Block => vks::core::VK_FORMAT_BC1_RGBA_SRGB_BLOCK,
+            Format::BC2_UNorm_Block => vks::core::VK_FORMAT_BC2_UNORM_BLOCK,
+            Format::BC2_sRGB_Block => vks::core::VK_FORMAT_BC2_SRGB_BLOCK,
+            Format::BC3_UNorm_Block => vks::core::VK_FORMAT_BC3_UNORM_BLOCK,
+            Format::BC3_sRGB_Block => vks::core::VK_FORMAT_BC3_SRGB_BLOCK,
+            Format::BC4_UNorm_Block => vks::core::VK_FORMAT_BC4_UNORM_BLOCK,
+            Format::BC4_SNorm_Block => vks::core::VK_FORMAT_BC4_SNORM_BLOCK,
+            Format::BC5_UNorm_Block => vks::core::VK_FORMAT_BC5_UNORM_BLOCK,
+            Format::BC5_SNorm_Block => vks::core::VK_FORMAT_BC5_SNORM_BLOCK,
+            Format::BC6H_UFloat_Block => vks::core::VK_FORMAT_BC6H_UFLOAT_BLOCK,
+            Format::BC6H_SFloat_Block => vks::core::VK_FORMAT_BC6H_SFLOAT_BLOCK,
+            Format::BC7_UNorm_Block => vks::core::VK_FORMAT_BC7_UNORM_BLOCK,
+            Format::BC7_sRGB_Block => vks::core::VK_FORMAT_BC7_SRGB_BLOCK,
+            Format::ETC2_R8G8B8_UNorm_Block => vks::core::VK_FORMAT_ETC2_R8G8B8_UNORM_BLOCK,
+            Format::ETC2_R8G8B8_sRGB_Block => vks::core::VK_FORMAT_ETC2_R8G8B8_SRGB_BLOCK,
+            Format::ETC2_R8G8B8A1_UNorm_Block => vks::core::VK_FORMAT_ETC2_R8G8B8A1_UNORM_BLOCK,
+            Format::ETC2_R8G8B8A1_sRGB_Block => vks::core::VK_FORMAT_ETC2_R8G8B8A1_SRGB_BLOCK,
+            Format::ETC2_R8G8B8A8_UNorm_Block => vks::core::VK_FORMAT_ETC2_R8G8B8A8_UNORM_BLOCK,
+            Format::ETC2_R8G8B8A8_sRGB_Block => vks::core::VK_FORMAT_ETC2_R8G8B8A8_SRGB_BLOCK,
+            Format::EAC_R11_UNorm_Block => vks::core::VK_FORMAT_EAC_R11_UNORM_BLOCK,
+            Format::EAC_R11_SNorm_Block => vks::core::VK_FORMAT_EAC_R11_SNORM_BLOCK,
+            Format::EAC_R11G11_UNorm_Block => vks::core::VK_FORMAT_EAC_R11G11_UNORM_BLOCK,
+            Format::EAC_R11G11_SNorm_Block => vks::core::VK_FORMAT_EAC_R11G11_SNORM_BLOCK,
+            Format::ASTC_4x4_UNorm_Block => vks::core::VK_FORMAT_ASTC_4x4_UNORM_BLOCK,
+            Format::ASTC_4x4_sRGB_Block => vks::core::VK_FORMAT_ASTC_4x4_SRGB_BLOCK,
+            Format::ASTC_5x4_UNorm_Block => vks::core::VK_FORMAT_ASTC_5x4_UNORM_BLOCK,
+            Format::ASTC_5x4_sRGB_Block => vks::core::VK_FORMAT_ASTC_5x4_SRGB_BLOCK,
+            Format::ASTC_5x5_UNorm_Block => vks::core::VK_FORMAT_ASTC_5x5_UNORM_BLOCK,
+            Format::ASTC_5x5_sRGB_Block => vks::core::VK_FORMAT_ASTC_5x5_SRGB_BLOCK,
+            Format::ASTC_6x5_UNorm_Block => vks::core::VK_FORMAT_ASTC_6x5_UNORM_BLOCK,
+            Format::ASTC_6x5_sRGB_Block => vks::core::VK_FORMAT_ASTC_6x5_SRGB_BLOCK,
+            Format::ASTC_6x6_UNorm_Block => vks::core::VK_FORMAT_ASTC_6x6_UNORM_BLOCK,
+            Format::ASTC_6x6_sRGB_Block => vks::core::VK_FORMAT_ASTC_6x6_SRGB_BLOCK,
+            Format::ASTC_8x5_UNorm_Block => vks::core::VK_FORMAT_ASTC_8x5_UNORM_BLOCK,
+            Format::ASTC_8x5_sRGB_Block => vks::core::VK_FORMAT_ASTC_8x5_SRGB_BLOCK,
+            Format::ASTC_8x6_UNorm_Block => vks::core::VK_FORMAT_ASTC_8x6_UNORM_BLOCK,
+            Format::ASTC_8x6_sRGB_Block => vks::core::VK_FORMAT_ASTC_8x6_SRGB_BLOCK,
+            Format::ASTC_8x8_UNorm_Block => vks::core::VK_FORMAT_ASTC_8x8_UNORM_BLOCK,
+            Format::ASTC_8x8_sRGB_Block => vks::core::VK_FORMAT_ASTC_8x8_SRGB_BLOCK,
+            Format::ASTC_10x5_UNorm_Block => vks::core::VK_FORMAT_ASTC_10x5_UNORM_BLOCK,
+            Format::ASTC_10x5_sRGB_Block => vks::core::VK_FORMAT_ASTC_10x5_SRGB_BLOCK,
+            Format::ASTC_10x6_UNorm_Block => vks::core::VK_FORMAT_ASTC_10x6_UNORM_BLOCK,
+            Format::ASTC_10x6_sRGB_Block => vks::core::VK_FORMAT_ASTC_10x6_SRGB_BLOCK,
+            Format::ASTC_10x8_UNorm_Block => vks::core::VK_FORMAT_ASTC_10x8_UNORM_BLOCK,
+            Format::ASTC_10x8_sRGB_Block => vks::core::VK_FORMAT_ASTC_10x8_SRGB_BLOCK,
+            Format::ASTC_10x10_UNorm_Block => vks::core::VK_FORMAT_ASTC_10x10_UNORM_BLOCK,
+            Format::ASTC_10x10_sRGB_Block => vks::core::VK_FORMAT_ASTC_10x10_SRGB_BLOCK,
+            Format::ASTC_12x10_UNorm_Block => vks::core::VK_FORMAT_ASTC_12x10_UNORM_BLOCK,
+            Format::ASTC_12x10_sRGB_Block => vks::core::VK_FORMAT_ASTC_12x10_SRGB_BLOCK,
+            Format::ASTC_12x12_UNorm_Block => vks::core::VK_FORMAT_ASTC_12x12_UNORM_BLOCK,
+            Format::ASTC_12x12_sRGB_Block => vks::core::VK_FORMAT_ASTC_12x12_SRGB_BLOCK,
+            Format::PVRTC1_2BPP_UNorm_Block_Img => vks::core::VK_FORMAT_PVRTC1_2BPP_UNORM_BLOCK_IMG,
+            Format::PVRTC1_4BPP_UNorm_Block_Img => vks::core::VK_FORMAT_PVRTC1_4BPP_UNORM_BLOCK_IMG,
+            Format::PVRTC2_2BPP_UNorm_Block_Img => vks::core::VK_FORMAT_PVRTC2_2BPP_UNORM_BLOCK_IMG,
+            Format::PVRTC2_4BPP_UNorm_Block_Img => vks::core::VK_FORMAT_PVRTC2_4BPP_UNORM_BLOCK_IMG,
+            Format::PVRTC1_2BPP_sRGB_Block_Img => vks::core::VK_FORMAT_PVRTC1_2BPP_SRGB_BLOCK_IMG,
+            Format::PVRTC1_4BPP_sRGB_Block_Img => vks::core::VK_FORMAT_PVRTC1_4BPP_SRGB_BLOCK_IMG,
+            Format::PVRTC2_2BPP_sRGB_Block_Img => vks::core::VK_FORMAT_PVRTC2_2BPP_SRGB_BLOCK_IMG,
+            Format::PVRTC2_4BPP_sRGB_Block_Img => vks::core::VK_FORMAT_PVRTC2_4BPP_SRGB_BLOCK_IMG,
             Format::Unknown(format) => format,
         }
     }
@@ -2206,26 +2206,26 @@ pub enum ImageType {
     Type1D,
     Type2D,
     Type3D,
-    Unknown(vks::VkImageType),
+    Unknown(vks::core::VkImageType),
 }
 
-impl From<ImageType> for vks::VkImageType {
+impl From<ImageType> for vks::core::VkImageType {
     fn from(image_type: ImageType) -> Self {
         match image_type {
-            ImageType::Type1D => vks::VK_IMAGE_TYPE_1D,
-            ImageType::Type2D => vks::VK_IMAGE_TYPE_2D,
-            ImageType::Type3D => vks::VK_IMAGE_TYPE_3D,
+            ImageType::Type1D => vks::core::VK_IMAGE_TYPE_1D,
+            ImageType::Type2D => vks::core::VK_IMAGE_TYPE_2D,
+            ImageType::Type3D => vks::core::VK_IMAGE_TYPE_3D,
             ImageType::Unknown(image_type) => image_type,
         }
     }
 }
 
-impl From<vks::VkImageType> for ImageType {
-    fn from(image_type: vks::VkImageType) -> Self {
+impl From<vks::core::VkImageType> for ImageType {
+    fn from(image_type: vks::core::VkImageType) -> Self {
         match image_type {
-            vks::VK_IMAGE_TYPE_1D => ImageType::Type1D,
-            vks::VK_IMAGE_TYPE_2D => ImageType::Type2D,
-            vks::VK_IMAGE_TYPE_3D => ImageType::Type3D,
+            vks::core::VK_IMAGE_TYPE_1D => ImageType::Type1D,
+            vks::core::VK_IMAGE_TYPE_2D => ImageType::Type2D,
+            vks::core::VK_IMAGE_TYPE_3D => ImageType::Type3D,
             _ => ImageType::Unknown(image_type),
         }
     }
@@ -2236,24 +2236,24 @@ impl From<vks::VkImageType> for ImageType {
 pub enum ImageTiling {
     Optimal,
     Linear,
-    Unknown(vks::VkImageTiling),
+    Unknown(vks::core::VkImageTiling),
 }
 
-impl From<ImageTiling> for vks::VkImageTiling {
+impl From<ImageTiling> for vks::core::VkImageTiling {
     fn from(tiling: ImageTiling) -> Self {
         match tiling {
-            ImageTiling::Optimal => vks::VK_IMAGE_TILING_OPTIMAL,
-            ImageTiling::Linear => vks::VK_IMAGE_TILING_LINEAR,
+            ImageTiling::Optimal => vks::core::VK_IMAGE_TILING_OPTIMAL,
+            ImageTiling::Linear => vks::core::VK_IMAGE_TILING_LINEAR,
             ImageTiling::Unknown(tiling) => tiling,
         }
     }
 }
 
-impl From<vks::VkImageTiling> for ImageTiling {
-    fn from(tiling: vks::VkImageTiling) -> Self {
+impl From<vks::core::VkImageTiling> for ImageTiling {
+    fn from(tiling: vks::core::VkImageTiling) -> Self {
         match tiling {
-            vks::VK_IMAGE_TILING_OPTIMAL => ImageTiling::Optimal,
-            vks::VK_IMAGE_TILING_LINEAR => ImageTiling::Linear,
+            vks::core::VK_IMAGE_TILING_OPTIMAL => ImageTiling::Optimal,
+            vks::core::VK_IMAGE_TILING_LINEAR => ImageTiling::Linear,
             _ => ImageTiling::Unknown(tiling),
         }
     }
@@ -2267,30 +2267,30 @@ pub enum PhysicalDeviceType {
     DiscreteGpu,
     VirtualGpu,
     Cpu,
-    Unknown(vks::VkPhysicalDeviceType),
+    Unknown(vks::core::VkPhysicalDeviceType),
 }
 
-impl From<vks::VkPhysicalDeviceType> for PhysicalDeviceType {
-    fn from(physical_device_type: vks::VkPhysicalDeviceType) -> Self {
+impl From<vks::core::VkPhysicalDeviceType> for PhysicalDeviceType {
+    fn from(physical_device_type: vks::core::VkPhysicalDeviceType) -> Self {
         match physical_device_type {
-            vks::VK_PHYSICAL_DEVICE_TYPE_OTHER => PhysicalDeviceType::Other,
-            vks::VK_PHYSICAL_DEVICE_TYPE_INTEGRATED_GPU => PhysicalDeviceType::IntegratedGpu,
-            vks::VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU => PhysicalDeviceType::DiscreteGpu,
-            vks::VK_PHYSICAL_DEVICE_TYPE_VIRTUAL_GPU => PhysicalDeviceType::VirtualGpu,
-            vks::VK_PHYSICAL_DEVICE_TYPE_CPU => PhysicalDeviceType::Cpu,
+            vks::core::VK_PHYSICAL_DEVICE_TYPE_OTHER => PhysicalDeviceType::Other,
+            vks::core::VK_PHYSICAL_DEVICE_TYPE_INTEGRATED_GPU => PhysicalDeviceType::IntegratedGpu,
+            vks::core::VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU => PhysicalDeviceType::DiscreteGpu,
+            vks::core::VK_PHYSICAL_DEVICE_TYPE_VIRTUAL_GPU => PhysicalDeviceType::VirtualGpu,
+            vks::core::VK_PHYSICAL_DEVICE_TYPE_CPU => PhysicalDeviceType::Cpu,
             _ => PhysicalDeviceType::Unknown(physical_device_type),
         }
     }
 }
 
-impl From<PhysicalDeviceType> for vks::VkPhysicalDeviceType {
+impl From<PhysicalDeviceType> for vks::core::VkPhysicalDeviceType {
     fn from(physical_device_type: PhysicalDeviceType) -> Self {
         match physical_device_type {
-            PhysicalDeviceType::Other => vks::VK_PHYSICAL_DEVICE_TYPE_OTHER,
-            PhysicalDeviceType::IntegratedGpu => vks::VK_PHYSICAL_DEVICE_TYPE_INTEGRATED_GPU,
-            PhysicalDeviceType::DiscreteGpu => vks::VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU,
-            PhysicalDeviceType::VirtualGpu => vks::VK_PHYSICAL_DEVICE_TYPE_VIRTUAL_GPU,
-            PhysicalDeviceType::Cpu => vks::VK_PHYSICAL_DEVICE_TYPE_CPU,
+            PhysicalDeviceType::Other => vks::core::VK_PHYSICAL_DEVICE_TYPE_OTHER,
+            PhysicalDeviceType::IntegratedGpu => vks::core::VK_PHYSICAL_DEVICE_TYPE_INTEGRATED_GPU,
+            PhysicalDeviceType::DiscreteGpu => vks::core::VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU,
+            PhysicalDeviceType::VirtualGpu => vks::core::VK_PHYSICAL_DEVICE_TYPE_VIRTUAL_GPU,
+            PhysicalDeviceType::Cpu => vks::core::VK_PHYSICAL_DEVICE_TYPE_CPU,
             PhysicalDeviceType::Unknown(physical_device_type) => physical_device_type,
         }
     }
@@ -2302,15 +2302,15 @@ pub enum QueryType {
     Occlusion,
     PipelineStatistics,
     Timestamp,
-    Unknown(vks::VkQueryType),
+    Unknown(vks::core::VkQueryType),
 }
 
-impl From<QueryType> for vks::VkQueryType {
+impl From<QueryType> for vks::core::VkQueryType {
     fn from(query_type: QueryType) -> Self {
         match query_type {
-            QueryType::Occlusion => vks::VK_QUERY_TYPE_OCCLUSION,
-            QueryType::PipelineStatistics => vks::VK_QUERY_TYPE_PIPELINE_STATISTICS,
-            QueryType::Timestamp => vks::VK_QUERY_TYPE_TIMESTAMP,
+            QueryType::Occlusion => vks::core::VK_QUERY_TYPE_OCCLUSION,
+            QueryType::PipelineStatistics => vks::core::VK_QUERY_TYPE_PIPELINE_STATISTICS,
+            QueryType::Timestamp => vks::core::VK_QUERY_TYPE_TIMESTAMP,
             QueryType::Unknown(query_type) => query_type,
         }
     }
@@ -2321,24 +2321,24 @@ impl From<QueryType> for vks::VkQueryType {
 pub enum SharingMode {
     Exclusive,
     Concurrent,
-    Unknown(vks::VkSharingMode),
+    Unknown(vks::core::VkSharingMode),
 }
 
-impl From<SharingMode> for vks::VkSharingMode {
+impl From<SharingMode> for vks::core::VkSharingMode {
     fn from(mode: SharingMode) -> Self {
         match mode {
-            SharingMode::Exclusive => vks::VK_SHARING_MODE_EXCLUSIVE,
-            SharingMode::Concurrent => vks::VK_SHARING_MODE_CONCURRENT,
+            SharingMode::Exclusive => vks::core::VK_SHARING_MODE_EXCLUSIVE,
+            SharingMode::Concurrent => vks::core::VK_SHARING_MODE_CONCURRENT,
             SharingMode::Unknown(mode) => mode,
         }
     }
 }
 
-impl From<vks::VkSharingMode> for SharingMode {
-    fn from(mode: vks::VkSharingMode) -> Self {
+impl From<vks::core::VkSharingMode> for SharingMode {
+    fn from(mode: vks::core::VkSharingMode) -> Self {
         match mode {
-            vks::VK_SHARING_MODE_EXCLUSIVE => SharingMode::Exclusive,
-            vks::VK_SHARING_MODE_CONCURRENT => SharingMode::Concurrent,
+            vks::core::VK_SHARING_MODE_EXCLUSIVE => SharingMode::Exclusive,
+            vks::core::VK_SHARING_MODE_CONCURRENT => SharingMode::Concurrent,
             _ => SharingMode::Unknown(mode),
         }
     }
@@ -2360,40 +2360,40 @@ pub enum ImageLayout {
     /// See extension [`VK_KHR_swapchain`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_swapchain)
     PresentSrcKhr,
 
-    Unknown(vks::VkImageLayout),
+    Unknown(vks::core::VkImageLayout),
 }
 
-impl From<ImageLayout> for vks::VkImageLayout {
+impl From<ImageLayout> for vks::core::VkImageLayout {
     fn from(layout: ImageLayout) -> Self {
         match layout {
-            ImageLayout::Undefined => vks::VK_IMAGE_LAYOUT_UNDEFINED,
-            ImageLayout::General => vks::VK_IMAGE_LAYOUT_GENERAL,
-            ImageLayout::ColorAttachmentOptimal => vks::VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
-            ImageLayout::DepthStencilAttachmentOptimal => vks::VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
-            ImageLayout::DepthStencilReadOnlyOptimal => vks::VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL,
-            ImageLayout::ShaderReadOnlyOptimal => vks::VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-            ImageLayout::TransferSrcOptimal => vks::VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
-            ImageLayout::TransferDstOptimal => vks::VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-            ImageLayout::Preinitialized => vks::VK_IMAGE_LAYOUT_PREINITIALIZED,
-            ImageLayout::PresentSrcKhr => vks::VK_IMAGE_LAYOUT_PRESENT_SRC_KHR,
+            ImageLayout::Undefined => vks::core::VK_IMAGE_LAYOUT_UNDEFINED,
+            ImageLayout::General => vks::core::VK_IMAGE_LAYOUT_GENERAL,
+            ImageLayout::ColorAttachmentOptimal => vks::core::VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
+            ImageLayout::DepthStencilAttachmentOptimal => vks::core::VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
+            ImageLayout::DepthStencilReadOnlyOptimal => vks::core::VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL,
+            ImageLayout::ShaderReadOnlyOptimal => vks::core::VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+            ImageLayout::TransferSrcOptimal => vks::core::VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+            ImageLayout::TransferDstOptimal => vks::core::VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+            ImageLayout::Preinitialized => vks::core::VK_IMAGE_LAYOUT_PREINITIALIZED,
+            ImageLayout::PresentSrcKhr => vks::core::VK_IMAGE_LAYOUT_PRESENT_SRC_KHR,
             ImageLayout::Unknown(layout) => layout,
         }
     }
 }
 
-impl From<vks::VkImageLayout> for ImageLayout {
-    fn from(layout: vks::VkImageLayout) -> Self {
+impl From<vks::core::VkImageLayout> for ImageLayout {
+    fn from(layout: vks::core::VkImageLayout) -> Self {
         match layout {
-            vks::VK_IMAGE_LAYOUT_UNDEFINED => ImageLayout::Undefined,
-            vks::VK_IMAGE_LAYOUT_GENERAL => ImageLayout::General,
-            vks::VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL => ImageLayout::ColorAttachmentOptimal,
-            vks::VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL => ImageLayout::DepthStencilAttachmentOptimal,
-            vks::VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL => ImageLayout::DepthStencilReadOnlyOptimal,
-            vks::VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL => ImageLayout::ShaderReadOnlyOptimal,
-            vks::VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL => ImageLayout::TransferSrcOptimal,
-            vks::VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL => ImageLayout::TransferDstOptimal,
-            vks::VK_IMAGE_LAYOUT_PREINITIALIZED => ImageLayout::Preinitialized,
-            vks::VK_IMAGE_LAYOUT_PRESENT_SRC_KHR => ImageLayout::PresentSrcKhr,
+            vks::core::VK_IMAGE_LAYOUT_UNDEFINED => ImageLayout::Undefined,
+            vks::core::VK_IMAGE_LAYOUT_GENERAL => ImageLayout::General,
+            vks::core::VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL => ImageLayout::ColorAttachmentOptimal,
+            vks::core::VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL => ImageLayout::DepthStencilAttachmentOptimal,
+            vks::core::VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL => ImageLayout::DepthStencilReadOnlyOptimal,
+            vks::core::VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL => ImageLayout::ShaderReadOnlyOptimal,
+            vks::core::VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL => ImageLayout::TransferSrcOptimal,
+            vks::core::VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL => ImageLayout::TransferDstOptimal,
+            vks::core::VK_IMAGE_LAYOUT_PREINITIALIZED => ImageLayout::Preinitialized,
+            vks::core::VK_IMAGE_LAYOUT_PRESENT_SRC_KHR => ImageLayout::PresentSrcKhr,
             _ => ImageLayout::Unknown(layout),
         }
     }
@@ -2409,19 +2409,19 @@ pub enum ImageViewType {
     Type1DArray,
     Type2DArray,
     TypeCubeArray,
-    Unknown(vks::VkImageViewType),
+    Unknown(vks::core::VkImageViewType),
 }
 
-impl From<ImageViewType> for vks::VkImageViewType {
+impl From<ImageViewType> for vks::core::VkImageViewType {
     fn from(view_type: ImageViewType) -> Self {
         match view_type {
-            ImageViewType::Type1D => vks::VK_IMAGE_VIEW_TYPE_1D,
-            ImageViewType::Type2D => vks::VK_IMAGE_VIEW_TYPE_2D,
-            ImageViewType::Type3D => vks::VK_IMAGE_VIEW_TYPE_3D,
-            ImageViewType::TypeCube => vks::VK_IMAGE_VIEW_TYPE_CUBE,
-            ImageViewType::Type1DArray => vks::VK_IMAGE_VIEW_TYPE_1D_ARRAY,
-            ImageViewType::Type2DArray => vks::VK_IMAGE_VIEW_TYPE_2D_ARRAY,
-            ImageViewType::TypeCubeArray => vks::VK_IMAGE_VIEW_TYPE_CUBE_ARRAY,
+            ImageViewType::Type1D => vks::core::VK_IMAGE_VIEW_TYPE_1D,
+            ImageViewType::Type2D => vks::core::VK_IMAGE_VIEW_TYPE_2D,
+            ImageViewType::Type3D => vks::core::VK_IMAGE_VIEW_TYPE_3D,
+            ImageViewType::TypeCube => vks::core::VK_IMAGE_VIEW_TYPE_CUBE,
+            ImageViewType::Type1DArray => vks::core::VK_IMAGE_VIEW_TYPE_1D_ARRAY,
+            ImageViewType::Type2DArray => vks::core::VK_IMAGE_VIEW_TYPE_2D_ARRAY,
+            ImageViewType::TypeCubeArray => vks::core::VK_IMAGE_VIEW_TYPE_CUBE_ARRAY,
             ImageViewType::Unknown(view_type) => view_type,
         }
     }
@@ -2437,19 +2437,19 @@ pub enum ComponentSwizzle {
     G,
     B,
     A,
-    Unknown(vks::VkComponentSwizzle),
+    Unknown(vks::core::VkComponentSwizzle),
 }
 
-impl From<ComponentSwizzle> for vks::VkComponentSwizzle {
+impl From<ComponentSwizzle> for vks::core::VkComponentSwizzle {
     fn from(swizzle: ComponentSwizzle) -> Self {
         match swizzle {
-            ComponentSwizzle::Identity => vks::VK_COMPONENT_SWIZZLE_IDENTITY,
-            ComponentSwizzle::Zero => vks::VK_COMPONENT_SWIZZLE_ZERO,
-            ComponentSwizzle::One => vks::VK_COMPONENT_SWIZZLE_ONE,
-            ComponentSwizzle::R => vks::VK_COMPONENT_SWIZZLE_R,
-            ComponentSwizzle::G => vks::VK_COMPONENT_SWIZZLE_G,
-            ComponentSwizzle::B => vks::VK_COMPONENT_SWIZZLE_B,
-            ComponentSwizzle::A => vks::VK_COMPONENT_SWIZZLE_A,
+            ComponentSwizzle::Identity => vks::core::VK_COMPONENT_SWIZZLE_IDENTITY,
+            ComponentSwizzle::Zero => vks::core::VK_COMPONENT_SWIZZLE_ZERO,
+            ComponentSwizzle::One => vks::core::VK_COMPONENT_SWIZZLE_ONE,
+            ComponentSwizzle::R => vks::core::VK_COMPONENT_SWIZZLE_R,
+            ComponentSwizzle::G => vks::core::VK_COMPONENT_SWIZZLE_G,
+            ComponentSwizzle::B => vks::core::VK_COMPONENT_SWIZZLE_B,
+            ComponentSwizzle::A => vks::core::VK_COMPONENT_SWIZZLE_A,
             ComponentSwizzle::Unknown(swizzle) => swizzle,
         }
     }
@@ -2460,14 +2460,14 @@ impl From<ComponentSwizzle> for vks::VkComponentSwizzle {
 pub enum VertexInputRate {
     Vertex,
     Instance,
-    Unknown(vks::VkVertexInputRate),
+    Unknown(vks::core::VkVertexInputRate),
 }
 
-impl From<VertexInputRate> for vks::VkVertexInputRate {
+impl From<VertexInputRate> for vks::core::VkVertexInputRate {
     fn from(rate: VertexInputRate) -> Self {
         match rate {
-            VertexInputRate::Vertex => vks::VK_VERTEX_INPUT_RATE_VERTEX,
-            VertexInputRate::Instance => vks::VK_VERTEX_INPUT_RATE_INSTANCE,
+            VertexInputRate::Vertex => vks::core::VK_VERTEX_INPUT_RATE_VERTEX,
+            VertexInputRate::Instance => vks::core::VK_VERTEX_INPUT_RATE_INSTANCE,
             VertexInputRate::Unknown(rate) => rate,
         }
     }
@@ -2487,23 +2487,23 @@ pub enum PrimitiveTopology {
     TriangleListWithAdjacency,
     TriangleStripWithAdjacency,
     PatchList,
-    Unknown(vks::VkPrimitiveTopology)
+    Unknown(vks::core::VkPrimitiveTopology)
 }
 
-impl From<PrimitiveTopology> for vks::VkPrimitiveTopology {
+impl From<PrimitiveTopology> for vks::core::VkPrimitiveTopology {
     fn from(topology: PrimitiveTopology) -> Self {
         match topology {
-            PrimitiveTopology::PointList => vks::VK_PRIMITIVE_TOPOLOGY_POINT_LIST,
-            PrimitiveTopology::LineList => vks::VK_PRIMITIVE_TOPOLOGY_LINE_LIST,
-            PrimitiveTopology::LineStrip => vks::VK_PRIMITIVE_TOPOLOGY_LINE_STRIP,
-            PrimitiveTopology::TriangleList => vks::VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST,
-            PrimitiveTopology::TriangleStrip => vks::VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP,
-            PrimitiveTopology::TriangleFan => vks::VK_PRIMITIVE_TOPOLOGY_TRIANGLE_FAN,
-            PrimitiveTopology::LineListWithAdjacency => vks::VK_PRIMITIVE_TOPOLOGY_LINE_LIST_WITH_ADJACENCY,
-            PrimitiveTopology::LineStripWithAdjacency => vks::VK_PRIMITIVE_TOPOLOGY_LINE_STRIP_WITH_ADJACENCY,
-            PrimitiveTopology::TriangleListWithAdjacency => vks::VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST_WITH_ADJACENCY,
-            PrimitiveTopology::TriangleStripWithAdjacency => vks::VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP_WITH_ADJACENCY,
-            PrimitiveTopology::PatchList => vks::VK_PRIMITIVE_TOPOLOGY_PATCH_LIST,
+            PrimitiveTopology::PointList => vks::core::VK_PRIMITIVE_TOPOLOGY_POINT_LIST,
+            PrimitiveTopology::LineList => vks::core::VK_PRIMITIVE_TOPOLOGY_LINE_LIST,
+            PrimitiveTopology::LineStrip => vks::core::VK_PRIMITIVE_TOPOLOGY_LINE_STRIP,
+            PrimitiveTopology::TriangleList => vks::core::VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST,
+            PrimitiveTopology::TriangleStrip => vks::core::VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP,
+            PrimitiveTopology::TriangleFan => vks::core::VK_PRIMITIVE_TOPOLOGY_TRIANGLE_FAN,
+            PrimitiveTopology::LineListWithAdjacency => vks::core::VK_PRIMITIVE_TOPOLOGY_LINE_LIST_WITH_ADJACENCY,
+            PrimitiveTopology::LineStripWithAdjacency => vks::core::VK_PRIMITIVE_TOPOLOGY_LINE_STRIP_WITH_ADJACENCY,
+            PrimitiveTopology::TriangleListWithAdjacency => vks::core::VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST_WITH_ADJACENCY,
+            PrimitiveTopology::TriangleStripWithAdjacency => vks::core::VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP_WITH_ADJACENCY,
+            PrimitiveTopology::PatchList => vks::core::VK_PRIMITIVE_TOPOLOGY_PATCH_LIST,
             PrimitiveTopology::Unknown(topology) => topology,
         }
     }
@@ -2515,15 +2515,15 @@ pub enum PolygonMode {
     Fill,
     Line,
     Point,
-    Unknown(vks::VkPolygonMode),
+    Unknown(vks::core::VkPolygonMode),
 }
 
-impl From<PolygonMode> for vks::VkPolygonMode {
+impl From<PolygonMode> for vks::core::VkPolygonMode {
     fn from(mode: PolygonMode) -> Self {
         match mode {
-            PolygonMode::Fill => vks::VK_POLYGON_MODE_FILL,
-            PolygonMode::Line => vks::VK_POLYGON_MODE_LINE,
-            PolygonMode::Point => vks::VK_POLYGON_MODE_POINT,
+            PolygonMode::Fill => vks::core::VK_POLYGON_MODE_FILL,
+            PolygonMode::Line => vks::core::VK_POLYGON_MODE_LINE,
+            PolygonMode::Point => vks::core::VK_POLYGON_MODE_POINT,
             PolygonMode::Unknown(mode) => mode,
         }
     }
@@ -2534,14 +2534,14 @@ impl From<PolygonMode> for vks::VkPolygonMode {
 pub enum FrontFace {
     CounterClockwise,
     Clockwise,
-    Unknown(vks::VkFrontFace),
+    Unknown(vks::core::VkFrontFace),
 }
 
-impl From<FrontFace> for vks::VkFrontFace {
+impl From<FrontFace> for vks::core::VkFrontFace {
     fn from(face: FrontFace) -> Self {
         match face {
-            FrontFace::CounterClockwise => vks::VK_FRONT_FACE_COUNTER_CLOCKWISE,
-            FrontFace::Clockwise => vks::VK_FRONT_FACE_CLOCKWISE,
+            FrontFace::CounterClockwise => vks::core::VK_FRONT_FACE_COUNTER_CLOCKWISE,
+            FrontFace::Clockwise => vks::core::VK_FRONT_FACE_CLOCKWISE,
             FrontFace::Unknown(face) => face,
         }
     }
@@ -2558,20 +2558,20 @@ pub enum CompareOp {
     NotEqual,
     GreaterOrEqual,
     Always,
-    Unknown(vks::VkCompareOp),
+    Unknown(vks::core::VkCompareOp),
 }
 
-impl From<CompareOp> for vks::VkCompareOp {
+impl From<CompareOp> for vks::core::VkCompareOp {
     fn from(op: CompareOp) -> Self {
         match op {
-            CompareOp::Never => vks::VK_COMPARE_OP_NEVER,
-            CompareOp::Less => vks::VK_COMPARE_OP_LESS,
-            CompareOp::Equal => vks::VK_COMPARE_OP_EQUAL,
-            CompareOp::LessOrEqual => vks::VK_COMPARE_OP_LESS_OR_EQUAL,
-            CompareOp::Greater => vks::VK_COMPARE_OP_GREATER,
-            CompareOp::NotEqual => vks::VK_COMPARE_OP_NOT_EQUAL,
-            CompareOp::GreaterOrEqual => vks::VK_COMPARE_OP_GREATER_OR_EQUAL,
-            CompareOp::Always => vks::VK_COMPARE_OP_ALWAYS,
+            CompareOp::Never => vks::core::VK_COMPARE_OP_NEVER,
+            CompareOp::Less => vks::core::VK_COMPARE_OP_LESS,
+            CompareOp::Equal => vks::core::VK_COMPARE_OP_EQUAL,
+            CompareOp::LessOrEqual => vks::core::VK_COMPARE_OP_LESS_OR_EQUAL,
+            CompareOp::Greater => vks::core::VK_COMPARE_OP_GREATER,
+            CompareOp::NotEqual => vks::core::VK_COMPARE_OP_NOT_EQUAL,
+            CompareOp::GreaterOrEqual => vks::core::VK_COMPARE_OP_GREATER_OR_EQUAL,
+            CompareOp::Always => vks::core::VK_COMPARE_OP_ALWAYS,
             CompareOp::Unknown(op) => op,
         }
     }
@@ -2588,20 +2588,20 @@ pub enum StencilOp {
     Invert,
     IncrementAndWrap,
     DecrementAndWrap,
-    Unknown(vks::VkStencilOp),
+    Unknown(vks::core::VkStencilOp),
 }
 
-impl From<StencilOp> for vks::VkStencilOp {
+impl From<StencilOp> for vks::core::VkStencilOp {
     fn from(op: StencilOp) -> Self {
         match op {
-            StencilOp::Keep => vks::VK_STENCIL_OP_KEEP,
-            StencilOp::Zero => vks::VK_STENCIL_OP_ZERO,
-            StencilOp::Replace => vks::VK_STENCIL_OP_REPLACE,
-            StencilOp::IncrementAndClamp => vks::VK_STENCIL_OP_INCREMENT_AND_CLAMP,
-            StencilOp::DecrementAndClamp => vks::VK_STENCIL_OP_DECREMENT_AND_CLAMP,
-            StencilOp::Invert => vks::VK_STENCIL_OP_INVERT,
-            StencilOp::IncrementAndWrap => vks::VK_STENCIL_OP_INCREMENT_AND_WRAP,
-            StencilOp::DecrementAndWrap => vks::VK_STENCIL_OP_DECREMENT_AND_WRAP,
+            StencilOp::Keep => vks::core::VK_STENCIL_OP_KEEP,
+            StencilOp::Zero => vks::core::VK_STENCIL_OP_ZERO,
+            StencilOp::Replace => vks::core::VK_STENCIL_OP_REPLACE,
+            StencilOp::IncrementAndClamp => vks::core::VK_STENCIL_OP_INCREMENT_AND_CLAMP,
+            StencilOp::DecrementAndClamp => vks::core::VK_STENCIL_OP_DECREMENT_AND_CLAMP,
+            StencilOp::Invert => vks::core::VK_STENCIL_OP_INVERT,
+            StencilOp::IncrementAndWrap => vks::core::VK_STENCIL_OP_INCREMENT_AND_WRAP,
+            StencilOp::DecrementAndWrap => vks::core::VK_STENCIL_OP_DECREMENT_AND_WRAP,
             StencilOp::Unknown(op) => op,
         }
     }
@@ -2626,28 +2626,28 @@ pub enum LogicOp {
     OrInverted,
     Nand,
     Set,
-    Unknown(vks::VkLogicOp),
+    Unknown(vks::core::VkLogicOp),
 }
 
-impl From<LogicOp> for vks::VkLogicOp {
+impl From<LogicOp> for vks::core::VkLogicOp {
     fn from(op: LogicOp) -> Self {
         match op {
-            LogicOp::Clear => vks::VK_LOGIC_OP_CLEAR,
-            LogicOp::And => vks::VK_LOGIC_OP_AND,
-            LogicOp::AndReverse => vks::VK_LOGIC_OP_AND_REVERSE,
-            LogicOp::Copy => vks::VK_LOGIC_OP_COPY,
-            LogicOp::AndInverted => vks::VK_LOGIC_OP_AND_INVERTED,
-            LogicOp::NoOp => vks::VK_LOGIC_OP_NO_OP,
-            LogicOp::Xor => vks::VK_LOGIC_OP_XOR,
-            LogicOp::Or => vks::VK_LOGIC_OP_OR,
-            LogicOp::Nor => vks::VK_LOGIC_OP_NOR,
-            LogicOp::Equivalent => vks::VK_LOGIC_OP_EQUIVALENT,
-            LogicOp::Invert => vks::VK_LOGIC_OP_INVERT,
-            LogicOp::OrReverse => vks::VK_LOGIC_OP_OR_REVERSE,
-            LogicOp::CopyInverted => vks::VK_LOGIC_OP_COPY_INVERTED,
-            LogicOp::OrInverted => vks::VK_LOGIC_OP_OR_INVERTED,
-            LogicOp::Nand => vks::VK_LOGIC_OP_NAND,
-            LogicOp::Set => vks::VK_LOGIC_OP_SET,
+            LogicOp::Clear => vks::core::VK_LOGIC_OP_CLEAR,
+            LogicOp::And => vks::core::VK_LOGIC_OP_AND,
+            LogicOp::AndReverse => vks::core::VK_LOGIC_OP_AND_REVERSE,
+            LogicOp::Copy => vks::core::VK_LOGIC_OP_COPY,
+            LogicOp::AndInverted => vks::core::VK_LOGIC_OP_AND_INVERTED,
+            LogicOp::NoOp => vks::core::VK_LOGIC_OP_NO_OP,
+            LogicOp::Xor => vks::core::VK_LOGIC_OP_XOR,
+            LogicOp::Or => vks::core::VK_LOGIC_OP_OR,
+            LogicOp::Nor => vks::core::VK_LOGIC_OP_NOR,
+            LogicOp::Equivalent => vks::core::VK_LOGIC_OP_EQUIVALENT,
+            LogicOp::Invert => vks::core::VK_LOGIC_OP_INVERT,
+            LogicOp::OrReverse => vks::core::VK_LOGIC_OP_OR_REVERSE,
+            LogicOp::CopyInverted => vks::core::VK_LOGIC_OP_COPY_INVERTED,
+            LogicOp::OrInverted => vks::core::VK_LOGIC_OP_OR_INVERTED,
+            LogicOp::Nand => vks::core::VK_LOGIC_OP_NAND,
+            LogicOp::Set => vks::core::VK_LOGIC_OP_SET,
             LogicOp::Unknown(op) => op,
         }
     }
@@ -2675,31 +2675,31 @@ pub enum BlendFactor {
     OneMinusSrc1Color,
     Src1Alpha,
     OneMinusSrc1Alpha,
-    Unknown(vks::VkBlendFactor),
+    Unknown(vks::core::VkBlendFactor),
 }
 
-impl From<BlendFactor> for vks::VkBlendFactor {
+impl From<BlendFactor> for vks::core::VkBlendFactor {
     fn from(factor: BlendFactor) -> Self {
         match factor {
-            BlendFactor::Zero => vks::VK_BLEND_FACTOR_ZERO,
-            BlendFactor::One => vks::VK_BLEND_FACTOR_ONE,
-            BlendFactor::SrcColor => vks::VK_BLEND_FACTOR_SRC_COLOR,
-            BlendFactor::OneMinusSrcColor => vks::VK_BLEND_FACTOR_ONE_MINUS_SRC_COLOR,
-            BlendFactor::DstColor => vks::VK_BLEND_FACTOR_DST_COLOR,
-            BlendFactor::OneMinusDstColor => vks::VK_BLEND_FACTOR_ONE_MINUS_DST_COLOR,
-            BlendFactor::SrcAlpha => vks::VK_BLEND_FACTOR_SRC_ALPHA,
-            BlendFactor::OneMinusSrcAlpha => vks::VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
-            BlendFactor::DstAlpha => vks::VK_BLEND_FACTOR_DST_ALPHA,
-            BlendFactor::OneMinusDstAlpha => vks::VK_BLEND_FACTOR_ONE_MINUS_DST_ALPHA,
-            BlendFactor::ConstantColor => vks::VK_BLEND_FACTOR_CONSTANT_COLOR,
-            BlendFactor::OneMinusConstantColor => vks::VK_BLEND_FACTOR_ONE_MINUS_CONSTANT_COLOR,
-            BlendFactor::ConstantAlpha => vks::VK_BLEND_FACTOR_CONSTANT_ALPHA,
-            BlendFactor::OneMinusConstantAlpha => vks::VK_BLEND_FACTOR_ONE_MINUS_CONSTANT_ALPHA,
-            BlendFactor::SrcAlphaSaturate => vks::VK_BLEND_FACTOR_SRC_ALPHA_SATURATE,
-            BlendFactor::Src1Color => vks::VK_BLEND_FACTOR_SRC1_COLOR,
-            BlendFactor::OneMinusSrc1Color => vks::VK_BLEND_FACTOR_ONE_MINUS_SRC1_COLOR,
-            BlendFactor::Src1Alpha => vks::VK_BLEND_FACTOR_SRC1_ALPHA,
-            BlendFactor::OneMinusSrc1Alpha => vks::VK_BLEND_FACTOR_ONE_MINUS_SRC1_ALPHA,
+            BlendFactor::Zero => vks::core::VK_BLEND_FACTOR_ZERO,
+            BlendFactor::One => vks::core::VK_BLEND_FACTOR_ONE,
+            BlendFactor::SrcColor => vks::core::VK_BLEND_FACTOR_SRC_COLOR,
+            BlendFactor::OneMinusSrcColor => vks::core::VK_BLEND_FACTOR_ONE_MINUS_SRC_COLOR,
+            BlendFactor::DstColor => vks::core::VK_BLEND_FACTOR_DST_COLOR,
+            BlendFactor::OneMinusDstColor => vks::core::VK_BLEND_FACTOR_ONE_MINUS_DST_COLOR,
+            BlendFactor::SrcAlpha => vks::core::VK_BLEND_FACTOR_SRC_ALPHA,
+            BlendFactor::OneMinusSrcAlpha => vks::core::VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
+            BlendFactor::DstAlpha => vks::core::VK_BLEND_FACTOR_DST_ALPHA,
+            BlendFactor::OneMinusDstAlpha => vks::core::VK_BLEND_FACTOR_ONE_MINUS_DST_ALPHA,
+            BlendFactor::ConstantColor => vks::core::VK_BLEND_FACTOR_CONSTANT_COLOR,
+            BlendFactor::OneMinusConstantColor => vks::core::VK_BLEND_FACTOR_ONE_MINUS_CONSTANT_COLOR,
+            BlendFactor::ConstantAlpha => vks::core::VK_BLEND_FACTOR_CONSTANT_ALPHA,
+            BlendFactor::OneMinusConstantAlpha => vks::core::VK_BLEND_FACTOR_ONE_MINUS_CONSTANT_ALPHA,
+            BlendFactor::SrcAlphaSaturate => vks::core::VK_BLEND_FACTOR_SRC_ALPHA_SATURATE,
+            BlendFactor::Src1Color => vks::core::VK_BLEND_FACTOR_SRC1_COLOR,
+            BlendFactor::OneMinusSrc1Color => vks::core::VK_BLEND_FACTOR_ONE_MINUS_SRC1_COLOR,
+            BlendFactor::Src1Alpha => vks::core::VK_BLEND_FACTOR_SRC1_ALPHA,
+            BlendFactor::OneMinusSrc1Alpha => vks::core::VK_BLEND_FACTOR_ONE_MINUS_SRC1_ALPHA,
             BlendFactor::Unknown(factor) => factor,
         }
     }
@@ -2713,17 +2713,17 @@ pub enum BlendOp {
     ReverseSubtract,
     Min,
     Max,
-    Unknown(vks::VkBlendOp),
+    Unknown(vks::core::VkBlendOp),
 }
 
-impl From<BlendOp> for vks::VkBlendOp {
+impl From<BlendOp> for vks::core::VkBlendOp {
     fn from(op: BlendOp) -> Self {
         match op {
-            BlendOp::Add => vks::VK_BLEND_OP_ADD,
-            BlendOp::Subtract => vks::VK_BLEND_OP_SUBTRACT,
-            BlendOp::ReverseSubtract => vks::VK_BLEND_OP_REVERSE_SUBTRACT,
-            BlendOp::Min => vks::VK_BLEND_OP_MIN,
-            BlendOp::Max => vks::VK_BLEND_OP_MAX,
+            BlendOp::Add => vks::core::VK_BLEND_OP_ADD,
+            BlendOp::Subtract => vks::core::VK_BLEND_OP_SUBTRACT,
+            BlendOp::ReverseSubtract => vks::core::VK_BLEND_OP_REVERSE_SUBTRACT,
+            BlendOp::Min => vks::core::VK_BLEND_OP_MIN,
+            BlendOp::Max => vks::core::VK_BLEND_OP_MAX,
             BlendOp::Unknown(op) => op,
         }
     }
@@ -2741,21 +2741,21 @@ pub enum DynamicState {
     StencilCompareMask,
     StencilWriteMask,
     StencilReference,
-    Unknown(vks::VkDynamicState),
+    Unknown(vks::core::VkDynamicState),
 }
 
-impl From<DynamicState> for vks::VkDynamicState {
+impl From<DynamicState> for vks::core::VkDynamicState {
     fn from(state: DynamicState) -> Self {
         match state {
-            DynamicState::Viewport => vks::VK_DYNAMIC_STATE_VIEWPORT,
-            DynamicState::Scissor => vks::VK_DYNAMIC_STATE_SCISSOR,
-            DynamicState::LineWidth => vks::VK_DYNAMIC_STATE_LINE_WIDTH,
-            DynamicState::DepthBias => vks::VK_DYNAMIC_STATE_DEPTH_BIAS,
-            DynamicState::BlendConstants => vks::VK_DYNAMIC_STATE_BLEND_CONSTANTS,
-            DynamicState::DepthBounds => vks::VK_DYNAMIC_STATE_DEPTH_BOUNDS,
-            DynamicState::StencilCompareMask => vks::VK_DYNAMIC_STATE_STENCIL_COMPARE_MASK,
-            DynamicState::StencilWriteMask => vks::VK_DYNAMIC_STATE_STENCIL_WRITE_MASK,
-            DynamicState::StencilReference => vks::VK_DYNAMIC_STATE_STENCIL_REFERENCE,
+            DynamicState::Viewport => vks::core::VK_DYNAMIC_STATE_VIEWPORT,
+            DynamicState::Scissor => vks::core::VK_DYNAMIC_STATE_SCISSOR,
+            DynamicState::LineWidth => vks::core::VK_DYNAMIC_STATE_LINE_WIDTH,
+            DynamicState::DepthBias => vks::core::VK_DYNAMIC_STATE_DEPTH_BIAS,
+            DynamicState::BlendConstants => vks::core::VK_DYNAMIC_STATE_BLEND_CONSTANTS,
+            DynamicState::DepthBounds => vks::core::VK_DYNAMIC_STATE_DEPTH_BOUNDS,
+            DynamicState::StencilCompareMask => vks::core::VK_DYNAMIC_STATE_STENCIL_COMPARE_MASK,
+            DynamicState::StencilWriteMask => vks::core::VK_DYNAMIC_STATE_STENCIL_WRITE_MASK,
+            DynamicState::StencilReference => vks::core::VK_DYNAMIC_STATE_STENCIL_REFERENCE,
             DynamicState::Unknown(state) => state,
         }
     }
@@ -2767,15 +2767,15 @@ pub enum Filter {
     Nearest,
     Linear,
     CubicImg,
-    Unknown(vks::VkFilter),
+    Unknown(vks::core::VkFilter),
 }
 
-impl From<Filter> for vks::VkFilter {
+impl From<Filter> for vks::core::VkFilter {
     fn from(filter: Filter) -> Self {
         match filter {
-            Filter::Nearest => vks::VK_FILTER_NEAREST,
-            Filter::Linear => vks::VK_FILTER_LINEAR,
-            Filter::CubicImg => vks::VK_FILTER_CUBIC_IMG,
+            Filter::Nearest => vks::core::VK_FILTER_NEAREST,
+            Filter::Linear => vks::core::VK_FILTER_LINEAR,
+            Filter::CubicImg => vks::core::VK_FILTER_CUBIC_IMG,
             Filter::Unknown(filter) => filter,
         }
     }
@@ -2786,14 +2786,14 @@ impl From<Filter> for vks::VkFilter {
 pub enum SamplerMipmapMode {
     Nearest,
     Linear,
-    Unknown(vks::VkSamplerMipmapMode),
+    Unknown(vks::core::VkSamplerMipmapMode),
 }
 
-impl From<SamplerMipmapMode> for vks::VkSamplerMipmapMode {
+impl From<SamplerMipmapMode> for vks::core::VkSamplerMipmapMode {
     fn from(mode: SamplerMipmapMode) -> Self {
         match mode {
-            SamplerMipmapMode::Nearest => vks::VK_SAMPLER_MIPMAP_MODE_NEAREST,
-            SamplerMipmapMode::Linear => vks::VK_SAMPLER_MIPMAP_MODE_LINEAR,
+            SamplerMipmapMode::Nearest => vks::core::VK_SAMPLER_MIPMAP_MODE_NEAREST,
+            SamplerMipmapMode::Linear => vks::core::VK_SAMPLER_MIPMAP_MODE_LINEAR,
             SamplerMipmapMode::Unknown(mode) => mode,
         }
     }
@@ -2807,17 +2807,17 @@ pub enum SamplerAddressMode {
     ClampToEdge,
     ClampToBorder,
     MirrorClampToEdge,
-    Unknown(vks::VkSamplerAddressMode),
+    Unknown(vks::core::VkSamplerAddressMode),
 }
 
-impl From<SamplerAddressMode> for vks::VkSamplerAddressMode {
+impl From<SamplerAddressMode> for vks::core::VkSamplerAddressMode {
     fn from(mode: SamplerAddressMode) -> Self {
         match mode {
-            SamplerAddressMode::Repeat => vks::VK_SAMPLER_ADDRESS_MODE_REPEAT,
-            SamplerAddressMode::MirroredRepeat => vks::VK_SAMPLER_ADDRESS_MODE_MIRRORED_REPEAT,
-            SamplerAddressMode::ClampToEdge => vks::VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE,
-            SamplerAddressMode::ClampToBorder => vks::VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER,
-            SamplerAddressMode::MirrorClampToEdge => vks::VK_SAMPLER_ADDRESS_MODE_MIRROR_CLAMP_TO_EDGE,
+            SamplerAddressMode::Repeat => vks::core::VK_SAMPLER_ADDRESS_MODE_REPEAT,
+            SamplerAddressMode::MirroredRepeat => vks::core::VK_SAMPLER_ADDRESS_MODE_MIRRORED_REPEAT,
+            SamplerAddressMode::ClampToEdge => vks::core::VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE,
+            SamplerAddressMode::ClampToBorder => vks::core::VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER,
+            SamplerAddressMode::MirrorClampToEdge => vks::core::VK_SAMPLER_ADDRESS_MODE_MIRROR_CLAMP_TO_EDGE,
             SamplerAddressMode::Unknown(mode) => mode,
         }
     }
@@ -2832,18 +2832,18 @@ pub enum BorderColor {
     IntOpaqueBlack,
     FloatOpaqueWhite,
     IntOpaqueWhite,
-    Unknown(vks::VkBorderColor),
+    Unknown(vks::core::VkBorderColor),
 }
 
-impl From<BorderColor> for vks::VkBorderColor {
+impl From<BorderColor> for vks::core::VkBorderColor {
     fn from(color: BorderColor) -> Self {
         match color {
-            BorderColor::FloatTransparentBlack => vks::VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK,
-            BorderColor::IntTransparentBlack => vks::VK_BORDER_COLOR_INT_TRANSPARENT_BLACK,
-            BorderColor::FloatOpaqueBlack => vks::VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK,
-            BorderColor::IntOpaqueBlack => vks::VK_BORDER_COLOR_INT_OPAQUE_BLACK,
-            BorderColor::FloatOpaqueWhite => vks::VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE,
-            BorderColor::IntOpaqueWhite => vks::VK_BORDER_COLOR_INT_OPAQUE_WHITE,
+            BorderColor::FloatTransparentBlack => vks::core::VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK,
+            BorderColor::IntTransparentBlack => vks::core::VK_BORDER_COLOR_INT_TRANSPARENT_BLACK,
+            BorderColor::FloatOpaqueBlack => vks::core::VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK,
+            BorderColor::IntOpaqueBlack => vks::core::VK_BORDER_COLOR_INT_OPAQUE_BLACK,
+            BorderColor::FloatOpaqueWhite => vks::core::VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE,
+            BorderColor::IntOpaqueWhite => vks::core::VK_BORDER_COLOR_INT_OPAQUE_WHITE,
             BorderColor::Unknown(color) => color,
         }
     }
@@ -2863,23 +2863,23 @@ pub enum DescriptorType {
     UniformBufferDynamic,
     StorageBufferDynamic,
     InputAttachment,
-    Unknown(vks::VkDescriptorType),
+    Unknown(vks::core::VkDescriptorType),
 }
 
-impl From<DescriptorType> for vks::VkDescriptorType {
+impl From<DescriptorType> for vks::core::VkDescriptorType {
     fn from(descriptor_type: DescriptorType) -> Self {
         match descriptor_type {
-            DescriptorType::Sampler => vks::VK_DESCRIPTOR_TYPE_SAMPLER,
-            DescriptorType::CombinedImageSampler => vks::VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-            DescriptorType::SampledImage => vks::VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE,
-            DescriptorType::StorageImage => vks::VK_DESCRIPTOR_TYPE_STORAGE_IMAGE,
-            DescriptorType::UniformTexelBuffer => vks::VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER,
-            DescriptorType::StorageTexelBuffer => vks::VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER,
-            DescriptorType::UniformBuffer => vks::VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,
-            DescriptorType::StorageBuffer => vks::VK_DESCRIPTOR_TYPE_STORAGE_BUFFER,
-            DescriptorType::UniformBufferDynamic => vks::VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC,
-            DescriptorType::StorageBufferDynamic => vks::VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC,
-            DescriptorType::InputAttachment => vks::VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT,
+            DescriptorType::Sampler => vks::core::VK_DESCRIPTOR_TYPE_SAMPLER,
+            DescriptorType::CombinedImageSampler => vks::core::VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
+            DescriptorType::SampledImage => vks::core::VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE,
+            DescriptorType::StorageImage => vks::core::VK_DESCRIPTOR_TYPE_STORAGE_IMAGE,
+            DescriptorType::UniformTexelBuffer => vks::core::VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER,
+            DescriptorType::StorageTexelBuffer => vks::core::VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER,
+            DescriptorType::UniformBuffer => vks::core::VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,
+            DescriptorType::StorageBuffer => vks::core::VK_DESCRIPTOR_TYPE_STORAGE_BUFFER,
+            DescriptorType::UniformBufferDynamic => vks::core::VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC,
+            DescriptorType::StorageBufferDynamic => vks::core::VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC,
+            DescriptorType::InputAttachment => vks::core::VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT,
             DescriptorType::Unknown(descriptor_type) => descriptor_type,
         }
     }
@@ -2891,26 +2891,26 @@ pub enum AttachmentLoadOp {
     Load,
     Clear,
     DontCare,
-    Unknown(vks::VkAttachmentLoadOp),
+    Unknown(vks::core::VkAttachmentLoadOp),
 }
 
-impl From<AttachmentLoadOp> for vks::VkAttachmentLoadOp {
+impl From<AttachmentLoadOp> for vks::core::VkAttachmentLoadOp {
     fn from(op: AttachmentLoadOp) -> Self {
         match op {
-            AttachmentLoadOp::Load => vks::VK_ATTACHMENT_LOAD_OP_LOAD,
-            AttachmentLoadOp::Clear => vks::VK_ATTACHMENT_LOAD_OP_CLEAR,
-            AttachmentLoadOp::DontCare => vks::VK_ATTACHMENT_LOAD_OP_DONT_CARE,
+            AttachmentLoadOp::Load => vks::core::VK_ATTACHMENT_LOAD_OP_LOAD,
+            AttachmentLoadOp::Clear => vks::core::VK_ATTACHMENT_LOAD_OP_CLEAR,
+            AttachmentLoadOp::DontCare => vks::core::VK_ATTACHMENT_LOAD_OP_DONT_CARE,
             AttachmentLoadOp::Unknown(op) => op,
         }
     }
 }
 
-impl From<vks::VkAttachmentLoadOp> for AttachmentLoadOp {
-    fn from(op: vks::VkAttachmentLoadOp) -> Self {
+impl From<vks::core::VkAttachmentLoadOp> for AttachmentLoadOp {
+    fn from(op: vks::core::VkAttachmentLoadOp) -> Self {
         match op {
-            vks::VK_ATTACHMENT_LOAD_OP_LOAD => AttachmentLoadOp::Load,
-            vks::VK_ATTACHMENT_LOAD_OP_CLEAR => AttachmentLoadOp::Clear,
-            vks::VK_ATTACHMENT_LOAD_OP_DONT_CARE => AttachmentLoadOp::DontCare,
+            vks::core::VK_ATTACHMENT_LOAD_OP_LOAD => AttachmentLoadOp::Load,
+            vks::core::VK_ATTACHMENT_LOAD_OP_CLEAR => AttachmentLoadOp::Clear,
+            vks::core::VK_ATTACHMENT_LOAD_OP_DONT_CARE => AttachmentLoadOp::DontCare,
             _ => AttachmentLoadOp::Unknown(op),
         }
     }
@@ -2921,24 +2921,24 @@ impl From<vks::VkAttachmentLoadOp> for AttachmentLoadOp {
 pub enum AttachmentStoreOp {
     Store,
     DontCare,
-    Unknown(vks::VkAttachmentStoreOp),
+    Unknown(vks::core::VkAttachmentStoreOp),
 }
 
-impl From<AttachmentStoreOp> for vks::VkAttachmentStoreOp {
+impl From<AttachmentStoreOp> for vks::core::VkAttachmentStoreOp {
     fn from(op: AttachmentStoreOp) -> Self {
         match op {
-            AttachmentStoreOp::Store => vks::VK_ATTACHMENT_STORE_OP_STORE,
-            AttachmentStoreOp::DontCare => vks::VK_ATTACHMENT_STORE_OP_DONT_CARE,
+            AttachmentStoreOp::Store => vks::core::VK_ATTACHMENT_STORE_OP_STORE,
+            AttachmentStoreOp::DontCare => vks::core::VK_ATTACHMENT_STORE_OP_DONT_CARE,
             AttachmentStoreOp::Unknown(op) => op,
         }
     }
 }
 
-impl From<vks::VkAttachmentStoreOp> for AttachmentStoreOp {
-    fn from(op: vks::VkAttachmentStoreOp) -> Self {
+impl From<vks::core::VkAttachmentStoreOp> for AttachmentStoreOp {
+    fn from(op: vks::core::VkAttachmentStoreOp) -> Self {
         match op {
-            vks::VK_ATTACHMENT_STORE_OP_STORE => AttachmentStoreOp::Store,
-            vks::VK_ATTACHMENT_STORE_OP_DONT_CARE => AttachmentStoreOp::DontCare,
+            vks::core::VK_ATTACHMENT_STORE_OP_STORE => AttachmentStoreOp::Store,
+            vks::core::VK_ATTACHMENT_STORE_OP_DONT_CARE => AttachmentStoreOp::DontCare,
             _ => AttachmentStoreOp::Unknown(op),
         }
     }
@@ -2949,24 +2949,24 @@ impl From<vks::VkAttachmentStoreOp> for AttachmentStoreOp {
 pub enum PipelineBindPoint {
     Graphics,
     Compute,
-    Unknown(vks::VkPipelineBindPoint),
+    Unknown(vks::core::VkPipelineBindPoint),
 }
 
-impl From<PipelineBindPoint> for vks::VkPipelineBindPoint {
+impl From<PipelineBindPoint> for vks::core::VkPipelineBindPoint {
     fn from(bind_point: PipelineBindPoint) -> Self {
         match bind_point {
-            PipelineBindPoint::Graphics => vks::VK_PIPELINE_BIND_POINT_GRAPHICS,
-            PipelineBindPoint::Compute => vks::VK_PIPELINE_BIND_POINT_COMPUTE,
+            PipelineBindPoint::Graphics => vks::core::VK_PIPELINE_BIND_POINT_GRAPHICS,
+            PipelineBindPoint::Compute => vks::core::VK_PIPELINE_BIND_POINT_COMPUTE,
             PipelineBindPoint::Unknown(bind_point) => bind_point,
         }
     }
 }
 
-impl From<vks::VkPipelineBindPoint> for PipelineBindPoint {
-    fn from(bind_point: vks::VkPipelineBindPoint) -> Self {
+impl From<vks::core::VkPipelineBindPoint> for PipelineBindPoint {
+    fn from(bind_point: vks::core::VkPipelineBindPoint) -> Self {
         match bind_point {
-            vks::VK_PIPELINE_BIND_POINT_GRAPHICS => PipelineBindPoint::Graphics,
-            vks::VK_PIPELINE_BIND_POINT_COMPUTE => PipelineBindPoint::Compute,
+            vks::core::VK_PIPELINE_BIND_POINT_GRAPHICS => PipelineBindPoint::Graphics,
+            vks::core::VK_PIPELINE_BIND_POINT_COMPUTE => PipelineBindPoint::Compute,
             _ => PipelineBindPoint::Unknown(bind_point),
         }
     }
@@ -2977,14 +2977,14 @@ impl From<vks::VkPipelineBindPoint> for PipelineBindPoint {
 pub enum CommandBufferLevel {
     Primary,
     Secondary,
-    Unknown(vks::VkCommandBufferLevel),
+    Unknown(vks::core::VkCommandBufferLevel),
 }
 
-impl From<CommandBufferLevel> for vks::VkCommandBufferLevel {
+impl From<CommandBufferLevel> for vks::core::VkCommandBufferLevel {
     fn from(level: CommandBufferLevel) -> Self {
         match level {
-            CommandBufferLevel::Primary => vks::VK_COMMAND_BUFFER_LEVEL_PRIMARY,
-            CommandBufferLevel::Secondary => vks::VK_COMMAND_BUFFER_LEVEL_SECONDARY,
+            CommandBufferLevel::Primary => vks::core::VK_COMMAND_BUFFER_LEVEL_PRIMARY,
+            CommandBufferLevel::Secondary => vks::core::VK_COMMAND_BUFFER_LEVEL_SECONDARY,
             CommandBufferLevel::Unknown(level) => level,
         }
     }
@@ -2995,14 +2995,14 @@ impl From<CommandBufferLevel> for vks::VkCommandBufferLevel {
 pub enum IndexType {
     UInt16,
     UInt32,
-    Unknown(vks::VkIndexType),
+    Unknown(vks::core::VkIndexType),
 }
 
-impl From<IndexType> for vks::VkIndexType {
+impl From<IndexType> for vks::core::VkIndexType {
     fn from(index_type: IndexType) -> Self {
         match index_type {
-            IndexType::UInt16 => vks::VK_INDEX_TYPE_UINT16,
-            IndexType::UInt32 => vks::VK_INDEX_TYPE_UINT32,
+            IndexType::UInt16 => vks::core::VK_INDEX_TYPE_UINT16,
+            IndexType::UInt32 => vks::core::VK_INDEX_TYPE_UINT32,
             IndexType::Unknown(index_type) => index_type,
         }
     }
@@ -3013,14 +3013,14 @@ impl From<IndexType> for vks::VkIndexType {
 pub enum SubpassContents {
     Inline,
     SecondaryCommandBuffers,
-    Unknown(vks::VkSubpassContents),
+    Unknown(vks::core::VkSubpassContents),
 }
 
-impl From<SubpassContents> for vks::VkSubpassContents {
+impl From<SubpassContents> for vks::core::VkSubpassContents {
     fn from(contents: SubpassContents) -> Self {
         match contents {
-            SubpassContents::Inline => vks::VK_SUBPASS_CONTENTS_INLINE,
-            SubpassContents::SecondaryCommandBuffers => vks::VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS,
+            SubpassContents::Inline => vks::core::VK_SUBPASS_CONTENTS_INLINE,
+            SubpassContents::SecondaryCommandBuffers => vks::core::VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS,
             SubpassContents::Unknown(contents) => contents,
         }
     }
@@ -3029,7 +3029,7 @@ impl From<SubpassContents> for vks::VkSubpassContents {
 gen_chain_struct! {
     name: ApplicationInfoChain [ApplicationInfoChainWrapper],
     query: ApplicationInfoChainQuery [ApplicationInfoChainQueryWrapper],
-    vks: VkApplicationInfo,
+    vks: vks::core::VkApplicationInfo,
     input: true,
     output: false,
 }
@@ -3047,7 +3047,7 @@ pub struct ApplicationInfo {
 
 #[derive(Debug)]
 struct VkApplicationInfoWrapper {
-    pub vks_struct: vks::VkApplicationInfo,
+    pub vks_struct: vks::core::VkApplicationInfo,
     application_name_cstr: Option<CString>,
     engine_name_cstr: Option<CString>,
     chain: Option<ApplicationInfoChainWrapper>,
@@ -3060,8 +3060,8 @@ impl VkApplicationInfoWrapper {
         let (pnext, chain) = ApplicationInfoChainWrapper::new_optional(&info.chain, with_chain);
 
         VkApplicationInfoWrapper {
-            vks_struct: vks::VkApplicationInfo {
-                sType: vks::VK_STRUCTURE_TYPE_APPLICATION_INFO,
+            vks_struct: vks::core::VkApplicationInfo {
+                sType: vks::core::VK_STRUCTURE_TYPE_APPLICATION_INFO,
                 pNext: pnext,
                 pApplicationName: application_name_cstr.1,
                 applicationVersion: info.application_version,
@@ -3079,7 +3079,7 @@ impl VkApplicationInfoWrapper {
 gen_chain_struct! {
     name: InstanceCreateInfoChain [InstanceCreateInfoChainWrapper],
     query: InstanceCreateInfoChainQuery [InstanceCreateInfoChainQueryWrapper],
-    vks: VkInstanceCreateInfo,
+    vks: vks::core::VkInstanceCreateInfo,
     input: true,
     output: false,
 
@@ -3089,8 +3089,8 @@ gen_chain_struct! {
         fn_has: has_debug_report_callback_create_info_ext,
         fn_get: get_debug_report_callback_create_info_ext,
         wrapper: VkDebugReportCallbackCreateInfoEXTWrapper,
-        vks: VkDebugReportCallbackCreateInfoEXT,
-        stype: vks::VK_STRUCTURE_TYPE_DEBUG_REPORT_CALLBACK_CREATE_INFO_EXT,
+        vks: vks::ext_debug_report::VkDebugReportCallbackCreateInfoEXT,
+        stype: vks::core::VK_STRUCTURE_TYPE_DEBUG_REPORT_CALLBACK_CREATE_INFO_EXT,
     }
 
     validation_flags_ext: ValidationFlagsExt {
@@ -3099,8 +3099,8 @@ gen_chain_struct! {
         fn_has: has_validation_flags_ext,
         fn_get: get_validation_flags_ext,
         wrapper: VkValidationFlagsEXTWrapper,
-        vks: VkValidationFlagsEXT,
-        stype: vks::VK_STRUCTURE_TYPE_VALIDATION_FLAGS_EXT,
+        vks: vks::ext_validation_flags::VkValidationFlagsEXT,
+        stype: vks::core::VK_STRUCTURE_TYPE_VALIDATION_FLAGS_EXT,
     }
 }
 
@@ -3116,7 +3116,7 @@ pub struct InstanceCreateInfo {
 
 #[derive(Debug)]
 struct VkInstanceCreateInfoWrapper {
-    pub vks_struct: vks::VkInstanceCreateInfo,
+    pub vks_struct: vks::core::VkInstanceCreateInfo,
     application_info: Option<Box<VkApplicationInfoWrapper>>,
     enabled_layers: Vec<CString>,
     enabled_layers_ptrs: Vec<*const c_char>,
@@ -3167,8 +3167,8 @@ impl VkInstanceCreateInfoWrapper {
         let (pnext, chain) = InstanceCreateInfoChainWrapper::new_optional(&create_info.chain, with_chain);
 
         VkInstanceCreateInfoWrapper {
-            vks_struct: vks::VkInstanceCreateInfo {
-                sType: vks::VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO,
+            vks_struct: vks::core::VkInstanceCreateInfo {
+                sType: vks::core::VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO,
                 pNext: pnext,
                 flags: create_info.flags.bits,
                 pApplicationInfo: application_info_ptr,
@@ -3268,8 +3268,8 @@ pub struct PhysicalDeviceFeatures {
     pub inherited_queries: bool,
 }
 
-impl<'a> From<&'a vks::VkPhysicalDeviceFeatures> for PhysicalDeviceFeatures {
-    fn from(featurs: &'a vks::VkPhysicalDeviceFeatures) -> Self {
+impl<'a> From<&'a vks::core::VkPhysicalDeviceFeatures> for PhysicalDeviceFeatures {
+    fn from(featurs: &'a vks::core::VkPhysicalDeviceFeatures) -> Self {
         PhysicalDeviceFeatures {
             robust_buffer_access: utils::from_vk_bool(featurs.robustBufferAccess),
             full_draw_index_uint32: utils::from_vk_bool(featurs.fullDrawIndexUint32),
@@ -3330,9 +3330,9 @@ impl<'a> From<&'a vks::VkPhysicalDeviceFeatures> for PhysicalDeviceFeatures {
     }
 }
 
-impl<'a> From<&'a PhysicalDeviceFeatures> for vks::VkPhysicalDeviceFeatures {
+impl<'a> From<&'a PhysicalDeviceFeatures> for vks::core::VkPhysicalDeviceFeatures {
     fn from(featurs: &'a PhysicalDeviceFeatures) -> Self {
-        vks::VkPhysicalDeviceFeatures {
+        vks::core::VkPhysicalDeviceFeatures {
             robustBufferAccess: utils::to_vk_bool(featurs.robust_buffer_access),
             fullDrawIndexUint32: utils::to_vk_bool(featurs.full_draw_index_uint32),
             imageCubeArray: utils::to_vk_bool(featurs.image_cube_array),
@@ -3711,8 +3711,8 @@ pub struct FormatProperties {
     pub buffer_features: FormatFeatureFlags,
 }
 
-impl<'a> From<&'a vks::VkFormatProperties> for FormatProperties {
-    fn from(properties: &'a vks::VkFormatProperties) -> Self {
+impl<'a> From<&'a vks::core::VkFormatProperties> for FormatProperties {
+    fn from(properties: &'a vks::core::VkFormatProperties) -> Self {
         FormatProperties {
             linear_tiling_features: FormatFeatureFlags::from_bits_truncate(properties.linearTilingFeatures),
             optimal_tiling_features: FormatFeatureFlags::from_bits_truncate(properties.optimalTilingFeatures),
@@ -3721,9 +3721,9 @@ impl<'a> From<&'a vks::VkFormatProperties> for FormatProperties {
     }
 }
 
-impl<'a> From<&'a FormatProperties> for vks::VkFormatProperties {
+impl<'a> From<&'a FormatProperties> for vks::core::VkFormatProperties {
     fn from(properties: &'a FormatProperties) -> Self {
-        vks::VkFormatProperties {
+        vks::core::VkFormatProperties {
             linearTilingFeatures: properties.linear_tiling_features.bits(),
             optimalTilingFeatures: properties.optimal_tiling_features.bits(),
             bufferFeatures: properties.buffer_features.bits(),
@@ -3739,8 +3739,8 @@ pub struct Extent3D {
     pub depth: u32,
 }
 
-impl<'a> From<&'a vks::VkExtent3D> for Extent3D {
-    fn from(extent: &'a vks::VkExtent3D) -> Self {
+impl<'a> From<&'a vks::core::VkExtent3D> for Extent3D {
+    fn from(extent: &'a vks::core::VkExtent3D) -> Self {
         Extent3D {
             width: extent.width,
             height: extent.height,
@@ -3749,9 +3749,9 @@ impl<'a> From<&'a vks::VkExtent3D> for Extent3D {
     }
 }
 
-impl<'a> From<&'a Extent3D> for vks::VkExtent3D {
+impl<'a> From<&'a Extent3D> for vks::core::VkExtent3D {
     fn from(extent: &'a Extent3D) -> Self {
-        vks::VkExtent3D {
+        vks::core::VkExtent3D {
             width: extent.width,
             height: extent.height,
             depth: extent.depth,
@@ -3801,8 +3801,8 @@ pub struct ImageFormatProperties {
     pub max_resource_size: u64,
 }
 
-impl<'a> From<&'a vks::VkImageFormatProperties> for ImageFormatProperties {
-    fn from(properties: &'a vks::VkImageFormatProperties) -> Self {
+impl<'a> From<&'a vks::core::VkImageFormatProperties> for ImageFormatProperties {
+    fn from(properties: &'a vks::core::VkImageFormatProperties) -> Self {
         ImageFormatProperties {
             max_extent: (&properties.maxExtent).into(),
             max_mip_levels: properties.maxMipLevels,
@@ -3813,9 +3813,9 @@ impl<'a> From<&'a vks::VkImageFormatProperties> for ImageFormatProperties {
     }
 }
 
-impl<'a> From<&'a ImageFormatProperties> for vks::VkImageFormatProperties {
+impl<'a> From<&'a ImageFormatProperties> for vks::core::VkImageFormatProperties {
     fn from(properties: &'a ImageFormatProperties) -> Self {
-        vks::VkImageFormatProperties {
+        vks::core::VkImageFormatProperties {
             maxExtent: (&properties.max_extent).into(),
             maxMipLevels: properties.max_mip_levels,
             maxArrayLayers: properties.max_array_layers,
@@ -3936,8 +3936,8 @@ pub struct PhysicalDeviceLimits {
     pub non_coherent_atom_size: u64,
 }
 
-impl<'a> From<&'a vks::VkPhysicalDeviceLimits> for PhysicalDeviceLimits {
-    fn from(limits: &'a vks::VkPhysicalDeviceLimits) -> Self {
+impl<'a> From<&'a vks::core::VkPhysicalDeviceLimits> for PhysicalDeviceLimits {
+    fn from(limits: &'a vks::core::VkPhysicalDeviceLimits) -> Self {
         PhysicalDeviceLimits {
             max_image_dimension_1d: limits.maxImageDimension1D,
             max_image_dimension_2d: limits.maxImageDimension2D,
@@ -4049,9 +4049,9 @@ impl<'a> From<&'a vks::VkPhysicalDeviceLimits> for PhysicalDeviceLimits {
     }
 }
 
-impl<'a> From<&'a PhysicalDeviceLimits> for vks::VkPhysicalDeviceLimits {
+impl<'a> From<&'a PhysicalDeviceLimits> for vks::core::VkPhysicalDeviceLimits {
     fn from(limits: &'a PhysicalDeviceLimits) -> Self {
-        vks::VkPhysicalDeviceLimits {
+        vks::core::VkPhysicalDeviceLimits {
             maxImageDimension1D: limits.max_image_dimension_1d,
             maxImageDimension2D: limits.max_image_dimension_2d,
             maxImageDimension3D: limits.max_image_dimension_3d,
@@ -4172,8 +4172,8 @@ pub struct PhysicalDeviceSparseProperties {
     pub residency_non_resident_strict: bool,
 }
 
-impl<'a> From<&'a vks::VkPhysicalDeviceSparseProperties> for PhysicalDeviceSparseProperties {
-    fn from(properties: &'a vks::VkPhysicalDeviceSparseProperties) -> Self {
+impl<'a> From<&'a vks::core::VkPhysicalDeviceSparseProperties> for PhysicalDeviceSparseProperties {
+    fn from(properties: &'a vks::core::VkPhysicalDeviceSparseProperties) -> Self {
         PhysicalDeviceSparseProperties {
             residency_standard_2d_block_shape: utils::from_vk_bool(properties.residencyStandard2DBlockShape),
             residency_standard_2d_multisample_block_shape: utils::from_vk_bool(properties.residencyStandard2DMultisampleBlockShape),
@@ -4184,9 +4184,9 @@ impl<'a> From<&'a vks::VkPhysicalDeviceSparseProperties> for PhysicalDeviceSpars
     }
 }
 
-impl<'a> From<&'a PhysicalDeviceSparseProperties> for vks::VkPhysicalDeviceSparseProperties {
+impl<'a> From<&'a PhysicalDeviceSparseProperties> for vks::core::VkPhysicalDeviceSparseProperties {
     fn from(properties: &'a PhysicalDeviceSparseProperties) -> Self {
-        vks::VkPhysicalDeviceSparseProperties {
+        vks::core::VkPhysicalDeviceSparseProperties {
             residencyStandard2DBlockShape: utils::to_vk_bool(properties.residency_standard_2d_block_shape),
             residencyStandard2DMultisampleBlockShape: utils::to_vk_bool(properties.residency_standard_2d_multisample_block_shape),
             residencyStandard3DBlockShape: utils::to_vk_bool(properties.residency_standard_3d_block_shape),
@@ -4210,8 +4210,8 @@ pub struct PhysicalDeviceProperties {
     pub sparse_properties: PhysicalDeviceSparseProperties,
 }
 
-impl<'a> From<&'a vks::VkPhysicalDeviceProperties> for PhysicalDeviceProperties {
-    fn from(properties: &'a vks::VkPhysicalDeviceProperties) -> Self {
+impl<'a> From<&'a vks::core::VkPhysicalDeviceProperties> for PhysicalDeviceProperties {
+    fn from(properties: &'a vks::core::VkPhysicalDeviceProperties) -> Self {
         let device_name = unsafe {
             CStr::from_ptr(properties.deviceName.as_ptr()).to_str().unwrap().to_owned()
         };
@@ -4230,18 +4230,18 @@ impl<'a> From<&'a vks::VkPhysicalDeviceProperties> for PhysicalDeviceProperties 
     }
 }
 
-impl<'a> From<&'a PhysicalDeviceProperties> for vks::VkPhysicalDeviceProperties {
+impl<'a> From<&'a PhysicalDeviceProperties> for vks::core::VkPhysicalDeviceProperties {
     fn from(properties: &'a PhysicalDeviceProperties) -> Self {
-        debug_assert!(properties.device_name.len() < vks::VK_MAX_PHYSICAL_DEVICE_NAME_SIZE);
+        debug_assert!(properties.device_name.len() < vks::core::VK_MAX_PHYSICAL_DEVICE_NAME_SIZE);
 
         let device_name = unsafe {
-            let mut device_name: [c_char; vks::VK_MAX_PHYSICAL_DEVICE_NAME_SIZE] = mem::uninitialized();
+            let mut device_name: [c_char; vks::core::VK_MAX_PHYSICAL_DEVICE_NAME_SIZE] = mem::uninitialized();
             ptr::copy_nonoverlapping(properties.device_name.as_ptr(), device_name.as_mut_ptr() as *mut _, properties.device_name.len());
             device_name[properties.device_name.len()] = 0;
             device_name
         };
 
-        vks::VkPhysicalDeviceProperties {
+        vks::core::VkPhysicalDeviceProperties {
             apiVersion: properties.api_version.as_api_version(),
             driverVersion: properties.driver_version,
             vendorID: properties.vendor_id,
@@ -4264,8 +4264,8 @@ pub struct QueueFamilyProperties {
     pub min_image_transfer_granularity: Extent3D,
 }
 
-impl<'a> From<&'a vks::VkQueueFamilyProperties> for QueueFamilyProperties {
-    fn from(properties: &'a vks::VkQueueFamilyProperties) -> Self {
+impl<'a> From<&'a vks::core::VkQueueFamilyProperties> for QueueFamilyProperties {
+    fn from(properties: &'a vks::core::VkQueueFamilyProperties) -> Self {
         QueueFamilyProperties {
             queue_flags: QueueFlags::from_bits_truncate(properties.queueFlags),
             queue_count: properties.queueCount,
@@ -4275,9 +4275,9 @@ impl<'a> From<&'a vks::VkQueueFamilyProperties> for QueueFamilyProperties {
     }
 }
 
-impl<'a> From<&'a QueueFamilyProperties> for vks::VkQueueFamilyProperties {
+impl<'a> From<&'a QueueFamilyProperties> for vks::core::VkQueueFamilyProperties {
     fn from(properties: &'a QueueFamilyProperties) -> Self {
-        vks::VkQueueFamilyProperties {
+        vks::core::VkQueueFamilyProperties {
             queueFlags: properties.queue_flags.bits(),
             queueCount: properties.queue_count,
             timestampValidBits: properties.timestamp_valid_bits,
@@ -4293,8 +4293,8 @@ pub struct MemoryType {
     pub heap_index: u32,
 }
 
-impl<'a> From<&'a vks::VkMemoryType> for MemoryType {
-    fn from(memory_type: &'a vks::VkMemoryType) -> Self {
+impl<'a> From<&'a vks::core::VkMemoryType> for MemoryType {
+    fn from(memory_type: &'a vks::core::VkMemoryType) -> Self {
         MemoryType {
             property_flags: MemoryPropertyFlags::from_bits_truncate(memory_type.propertyFlags),
             heap_index: memory_type.heapIndex,
@@ -4302,9 +4302,9 @@ impl<'a> From<&'a vks::VkMemoryType> for MemoryType {
     }
 }
 
-impl<'a> From<&'a MemoryType> for vks::VkMemoryType {
+impl<'a> From<&'a MemoryType> for vks::core::VkMemoryType {
     fn from(memory_type: &'a MemoryType) -> Self {
-        vks::VkMemoryType {
+        vks::core::VkMemoryType {
             propertyFlags: memory_type.property_flags.bits(),
             heapIndex: memory_type.heap_index,
         }
@@ -4318,8 +4318,8 @@ pub struct MemoryHeap {
     pub flags: MemoryHeapFlags,
 }
 
-impl<'a> From<&'a vks::VkMemoryHeap> for MemoryHeap {
-    fn from(heap: &'a vks::VkMemoryHeap) -> Self {
+impl<'a> From<&'a vks::core::VkMemoryHeap> for MemoryHeap {
+    fn from(heap: &'a vks::core::VkMemoryHeap) -> Self {
         MemoryHeap {
             size: heap.size,
             flags: MemoryHeapFlags::from_bits_truncate(heap.flags),
@@ -4327,9 +4327,9 @@ impl<'a> From<&'a vks::VkMemoryHeap> for MemoryHeap {
     }
 }
 
-impl<'a> From<&'a MemoryHeap> for vks::VkMemoryHeap {
+impl<'a> From<&'a MemoryHeap> for vks::core::VkMemoryHeap {
     fn from(heap: &'a MemoryHeap) -> Self {
-        vks::VkMemoryHeap {
+        vks::core::VkMemoryHeap {
             size: heap.size,
             flags: heap.flags.bits(),
         }
@@ -4343,8 +4343,8 @@ pub struct PhysicalDeviceMemoryProperties {
     pub memory_heaps: Vec<MemoryHeap>,
 }
 
-impl<'a> From<&'a vks::VkPhysicalDeviceMemoryProperties> for PhysicalDeviceMemoryProperties {
-    fn from(properties: &'a vks::VkPhysicalDeviceMemoryProperties) -> Self {
+impl<'a> From<&'a vks::core::VkPhysicalDeviceMemoryProperties> for PhysicalDeviceMemoryProperties {
+    fn from(properties: &'a vks::core::VkPhysicalDeviceMemoryProperties) -> Self {
         let memory_types = properties.memoryTypes[..properties.memoryTypeCount as usize]
             .iter()
             .map(From::from)
@@ -4362,12 +4362,12 @@ impl<'a> From<&'a vks::VkPhysicalDeviceMemoryProperties> for PhysicalDeviceMemor
     }
 }
 
-impl<'a> From<&'a PhysicalDeviceMemoryProperties> for vks::VkPhysicalDeviceMemoryProperties {
+impl<'a> From<&'a PhysicalDeviceMemoryProperties> for vks::core::VkPhysicalDeviceMemoryProperties {
     fn from(properties: &'a PhysicalDeviceMemoryProperties) -> Self {
-        debug_assert!(properties.memory_types.len() <= vks::VK_MAX_MEMORY_TYPES);
-        debug_assert!(properties.memory_heaps.len() <= vks::VK_MAX_MEMORY_HEAPS);
+        debug_assert!(properties.memory_types.len() <= vks::core::VK_MAX_MEMORY_TYPES);
+        debug_assert!(properties.memory_heaps.len() <= vks::core::VK_MAX_MEMORY_HEAPS);
 
-        let mut res = vks::VkPhysicalDeviceMemoryProperties {
+        let mut res = vks::core::VkPhysicalDeviceMemoryProperties {
             memoryTypeCount: properties.memory_types.len() as u32,
             memoryTypes: unsafe { mem::uninitialized() },
             memoryHeapCount: properties.memory_heaps.len() as u32,
@@ -4389,7 +4389,7 @@ impl<'a> From<&'a PhysicalDeviceMemoryProperties> for vks::VkPhysicalDeviceMemor
 gen_chain_struct! {
     name: DeviceQueueCreateInfoChain [DeviceQueueCreateInfoChainWrapper],
     query: DeviceQueueCreateInfoChainQuery [DeviceQueueCreateInfoChainQueryWrapper],
-    vks: VkDeviceQueueCreateInfo,
+    vks: vks::core::VkDeviceQueueCreateInfo,
     input: true,
     output: false,
 }
@@ -4405,7 +4405,7 @@ pub struct DeviceQueueCreateInfo {
 
 #[derive(Debug)]
 struct VkDeviceQueueCreateInfoWrapper {
-    pub vks_struct: vks::VkDeviceQueueCreateInfo,
+    pub vks_struct: vks::core::VkDeviceQueueCreateInfo,
     queue_priorities: Vec<f32>,
     chain: Option<DeviceQueueCreateInfoChainWrapper>,
 }
@@ -4416,8 +4416,8 @@ impl VkDeviceQueueCreateInfoWrapper {
         let (pnext, chain) = DeviceQueueCreateInfoChainWrapper::new_optional(&create_info.chain, with_chain);
 
         VkDeviceQueueCreateInfoWrapper {
-            vks_struct: vks::VkDeviceQueueCreateInfo {
-                sType: vks::VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO,
+            vks_struct: vks::core::VkDeviceQueueCreateInfo {
+                sType: vks::core::VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO,
                 pNext: pnext,
                 flags: create_info.flags.bits(),
                 queueFamilyIndex: create_info.queue_family_index,
@@ -4433,7 +4433,7 @@ impl VkDeviceQueueCreateInfoWrapper {
 gen_chain_struct! {
     name: DeviceCreateInfoChain [DeviceCreateInfoChainWrapper],
     query: DeviceCreateInfoChainQuery [DeviceCreateInfoChainQueryWrapper],
-    vks: VkDeviceCreateInfo,
+    vks: vks::core::VkDeviceCreateInfo,
     input: true,
     output: false,
 
@@ -4443,8 +4443,8 @@ gen_chain_struct! {
         fn_has: has_physical_device_features2_khr,
         fn_get: get_physical_device_features2_khr,
         wrapper: VkPhysicalDeviceFeatures2KHRWrapper,
-        vks: VkPhysicalDeviceFeatures2KHR,
-        stype: vks::VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2_KHR,
+        vks: vks::khr_get_physical_device_properties2::VkPhysicalDeviceFeatures2KHR,
+        stype: vks::core::VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2_KHR,
     }
 }
 
@@ -4461,14 +4461,14 @@ pub struct DeviceCreateInfo {
 
 #[derive(Debug)]
 struct VkDeviceCreateInfoWrapper {
-    pub vks_struct: vks::VkDeviceCreateInfo,
+    pub vks_struct: vks::core::VkDeviceCreateInfo,
     queue_create_infos_wrappers: Vec<VkDeviceQueueCreateInfoWrapper>,
-    queue_create_infos: Vec<vks::VkDeviceQueueCreateInfo>,
+    queue_create_infos: Vec<vks::core::VkDeviceQueueCreateInfo>,
     enabled_layers: Vec<CString>,
     enabled_layers_ptrs: Vec<*const c_char>,
     enabled_extensions: Vec<CString>,
     enabled_extensions_ptrs: Vec<*const c_char>,
-    enabled_features: Option<Box<vks::VkPhysicalDeviceFeatures>>,
+    enabled_features: Option<Box<vks::core::VkPhysicalDeviceFeatures>>,
     chain: Option<DeviceCreateInfoChainWrapper>,
 }
 
@@ -4479,7 +4479,7 @@ impl VkDeviceCreateInfoWrapper {
             .map(|q| VkDeviceQueueCreateInfoWrapper::new(q, true))
             .collect();
 
-        let queue_create_infos: Vec<vks::VkDeviceQueueCreateInfo> = queue_create_infos_wrappers
+        let queue_create_infos: Vec<vks::core::VkDeviceQueueCreateInfo> = queue_create_infos_wrappers
             .iter()
             .map(|q| q.vks_struct)
             .collect();
@@ -4516,7 +4516,7 @@ impl VkDeviceCreateInfoWrapper {
         let enabled_features_ptr;
         let enabled_features = match create_info.enabled_features {
             Some(ref enabled_features) => {
-                let enabled_features: Box<vks::VkPhysicalDeviceFeatures> = Box::new(enabled_features.into());
+                let enabled_features: Box<vks::core::VkPhysicalDeviceFeatures> = Box::new(enabled_features.into());
                 enabled_features_ptr = &*enabled_features as *const _;
                 Some(enabled_features)
             }
@@ -4530,8 +4530,8 @@ impl VkDeviceCreateInfoWrapper {
         let (pnext, chain) = DeviceCreateInfoChainWrapper::new_optional(&create_info.chain, with_chain);
 
         VkDeviceCreateInfoWrapper {
-            vks_struct: vks::VkDeviceCreateInfo {
-                sType: vks::VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO,
+            vks_struct: vks::core::VkDeviceCreateInfo {
+                sType: vks::core::VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO,
                 pNext: pnext,
                 flags: create_info.flags.bits(),
                 queueCreateInfoCount: queue_create_infos.len() as u32,
@@ -4559,7 +4559,7 @@ gen_extension_structs!{
     pub struct InstanceExtensionsProperties;
 
     ext_debug_report {
-        name: vks::VK_EXT_DEBUG_REPORT_EXTENSION_NAME_STR,
+        name: vks::ext_debug_report::VK_EXT_DEBUG_REPORT_EXTENSION_NAME_STR,
         fn_add: add_ext_debug_report,
         fn_has: has_ext_debug_report,
         fn_get: get_ext_debug_report,
@@ -4567,14 +4567,14 @@ gen_extension_structs!{
     }
 
     ext_validation_flags {
-        name: vks::VK_EXT_VALIDATION_FLAGS_EXTENSION_NAME_STR,
+        name: vks::ext_validation_flags::VK_EXT_VALIDATION_FLAGS_EXTENSION_NAME_STR,
         fn_add: add_ext_validation_flags,
         fn_has: has_ext_validation_flags,
         fn_get: get_ext_validation_flags,
     }
 
     khr_android_surface {
-        name: vks::VK_KHR_ANDROID_SURFACE_EXTENSION_NAME_STR,
+        name: vks::khr_android_surface::VK_KHR_ANDROID_SURFACE_EXTENSION_NAME_STR,
         fn_add: add_khr_android_surface,
         fn_has: has_khr_android_surface,
         fn_get: get_khr_android_surface,
@@ -4582,7 +4582,7 @@ gen_extension_structs!{
     }
 
     khr_display {
-        name: vks::VK_KHR_DISPLAY_EXTENSION_NAME_STR,
+        name: vks::khr_display::VK_KHR_DISPLAY_EXTENSION_NAME_STR,
         fn_add: add_khr_display,
         fn_has: has_khr_display,
         fn_get: get_khr_display,
@@ -4590,7 +4590,7 @@ gen_extension_structs!{
     }
 
     khr_get_physical_device_properties2 {
-        name: vks::VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME_STR,
+        name: vks::khr_get_physical_device_properties2::VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME_STR,
         fn_add: add_khr_get_physical_device_properties2,
         fn_has: has_khr_get_physical_device_properties2,
         fn_get: get_khr_get_physical_device_properties2,
@@ -4598,7 +4598,7 @@ gen_extension_structs!{
     }
 
     khr_mir_surface {
-        name: vks::VK_KHR_MIR_SURFACE_EXTENSION_NAME_STR,
+        name: vks::khr_mir_surface::VK_KHR_MIR_SURFACE_EXTENSION_NAME_STR,
         fn_add: add_khr_mir_surface,
         fn_has: has_khr_mir_surface,
         fn_get: get_khr_mir_surface,
@@ -4606,7 +4606,7 @@ gen_extension_structs!{
     }
 
     khr_surface {
-        name: vks::VK_KHR_SURFACE_EXTENSION_NAME_STR,
+        name: vks::khr_surface::VK_KHR_SURFACE_EXTENSION_NAME_STR,
         fn_add: add_khr_surface,
         fn_has: has_khr_surface,
         fn_get: get_khr_surface,
@@ -4614,7 +4614,7 @@ gen_extension_structs!{
     }
 
     khr_wayland_surface {
-        name: vks::VK_KHR_WAYLAND_SURFACE_EXTENSION_NAME_STR,
+        name: vks::khr_wayland_surface::VK_KHR_WAYLAND_SURFACE_EXTENSION_NAME_STR,
         fn_add: add_khr_wayland_surface,
         fn_has: has_khr_wayland_surface,
         fn_get: get_khr_wayland_surface,
@@ -4622,7 +4622,7 @@ gen_extension_structs!{
     }
 
     khr_win32_surface {
-        name: vks::VK_KHR_WIN32_SURFACE_EXTENSION_NAME_STR,
+        name: vks::khr_win32_surface::VK_KHR_WIN32_SURFACE_EXTENSION_NAME_STR,
         fn_add: add_khr_win32_surface,
         fn_has: has_khr_win32_surface,
         fn_get: get_khr_win32_surface,
@@ -4630,7 +4630,7 @@ gen_extension_structs!{
     }
 
     khr_xcb_surface {
-        name: vks::VK_KHR_XCB_SURFACE_EXTENSION_NAME_STR,
+        name: vks::khr_xcb_surface::VK_KHR_XCB_SURFACE_EXTENSION_NAME_STR,
         fn_add: add_khr_xcb_surface,
         fn_has: has_khr_xcb_surface,
         fn_get: get_khr_xcb_surface,
@@ -4638,7 +4638,7 @@ gen_extension_structs!{
     }
 
     khr_xlib_surface {
-        name: vks::VK_KHR_XLIB_SURFACE_EXTENSION_NAME_STR,
+        name: vks::khr_xlib_surface::VK_KHR_XLIB_SURFACE_EXTENSION_NAME_STR,
         fn_add: add_khr_xlib_surface,
         fn_has: has_khr_xlib_surface,
         fn_get: get_khr_xlib_surface,
@@ -4646,7 +4646,7 @@ gen_extension_structs!{
     }
 
     nv_external_memory_capabilities {
-        name: vks::VK_NV_EXTERNAL_MEMORY_CAPABILITIES_EXTENSION_NAME_STR,
+        name: vks::nv_external_memory_capabilities::VK_NV_EXTERNAL_MEMORY_CAPABILITIES_EXTENSION_NAME_STR,
         fn_add: add_nv_external_memory_capabilities,
         fn_has: has_nv_external_memory_capabilities,
         fn_get: get_nv_external_memory_capabilities,
@@ -4659,7 +4659,7 @@ gen_extension_structs!{
     pub struct DeviceExtensionsProperties;
 
     amd_draw_indirect_count {
-        name: vks::VK_AMD_DRAW_INDIRECT_COUNT_EXTENSION_NAME_STR,
+        name: vks::amd_draw_indirect_count::VK_AMD_DRAW_INDIRECT_COUNT_EXTENSION_NAME_STR,
         fn_add: add_amd_draw_indirect_count,
         fn_has: has_amd_draw_indirect_count,
         fn_get: get_amd_draw_indirect_count,
@@ -4667,42 +4667,42 @@ gen_extension_structs!{
     }
 
     amd_gcn_shader {
-        name: vks::VK_AMD_GCN_SHADER_EXTENSION_NAME_STR,
+        name: vks::amd_gcn_shader::VK_AMD_GCN_SHADER_EXTENSION_NAME_STR,
         fn_add: add_amd_gcn_shader,
         fn_has: has_amd_gcn_shader,
         fn_get: get_amd_gcn_shader,
     }
 
     amd_gpu_shader_half_float {
-        name: vks::VK_AMD_GPU_SHADER_HALF_FLOAT_EXTENSION_NAME_STR,
+        name: vks::amd_gpu_shader_half_float::VK_AMD_GPU_SHADER_HALF_FLOAT_EXTENSION_NAME_STR,
         fn_add: add_amd_gpu_shader_half_float,
         fn_has: has_amd_gpu_shader_half_float,
         fn_get: get_amd_gpu_shader_half_float,
     }
 
     amd_rasterization_order {
-        name: vks::VK_AMD_RASTERIZATION_ORDER_EXTENSION_NAME_STR,
+        name: vks::amd_rasterization_order::VK_AMD_RASTERIZATION_ORDER_EXTENSION_NAME_STR,
         fn_add: add_amd_rasterization_order,
         fn_has: has_amd_rasterization_order,
         fn_get: get_amd_rasterization_order,
     }
 
     amd_shader_explicit_vertex_parameter {
-        name: vks::VK_AMD_SHADER_EXPLICIT_VERTEX_PARAMETER_EXTENSION_NAME_STR,
+        name: vks::amd_shader_explicit_vertex_parameter::VK_AMD_SHADER_EXPLICIT_VERTEX_PARAMETER_EXTENSION_NAME_STR,
         fn_add: add_amd_shader_explicit_vertex_parameter,
         fn_has: has_amd_shader_explicit_vertex_parameter,
         fn_get: get_amd_shader_explicit_vertex_parameter,
     }
 
     amd_shader_trinary_minmax {
-        name: vks::VK_AMD_SHADER_TRINARY_MINMAX_EXTENSION_NAME_STR,
+        name: vks::amd_shader_trinary_minmax::VK_AMD_SHADER_TRINARY_MINMAX_EXTENSION_NAME_STR,
         fn_add: add_amd_shader_trinary_minmax,
         fn_has: has_amd_shader_trinary_minmax,
         fn_get: get_amd_shader_trinary_minmax,
     }
 
     ext_debug_marker {
-        name: vks::VK_EXT_DEBUG_MARKER_EXTENSION_NAME_STR,
+        name: vks::ext_debug_marker::VK_EXT_DEBUG_MARKER_EXTENSION_NAME_STR,
         fn_add: add_ext_debug_marker,
         fn_has: has_ext_debug_marker,
         fn_get: get_ext_debug_marker,
@@ -4710,21 +4710,21 @@ gen_extension_structs!{
     }
 
     img_filter_cubic {
-        name: vks::VK_IMG_FILTER_CUBIC_EXTENSION_NAME_STR,
+        name: vks::img_filter_cubic::VK_IMG_FILTER_CUBIC_EXTENSION_NAME_STR,
         fn_add: add_img_filter_cubic,
         fn_has: has_img_filter_cubic,
         fn_get: get_img_filter_cubic,
     }
 
     img_format_pvrtc {
-        name: vks::VK_IMG_FORMAT_PVRTC_EXTENSION_NAME_STR,
+        name: vks::img_format_pvrtc::VK_IMG_FORMAT_PVRTC_EXTENSION_NAME_STR,
         fn_add: add_img_format_pvrtc,
         fn_has: has_img_format_pvrtc,
         fn_get: get_img_format_pvrtc,
     }
 
     khr_swapchain {
-        name: vks::VK_KHR_SWAPCHAIN_EXTENSION_NAME_STR,
+        name: vks::khr_swapchain::VK_KHR_SWAPCHAIN_EXTENSION_NAME_STR,
         fn_add: add_khr_swapchain,
         fn_has: has_khr_swapchain,
         fn_get: get_khr_swapchain,
@@ -4732,7 +4732,7 @@ gen_extension_structs!{
     }
 
     khr_display_swapchain {
-        name: vks::VK_KHR_DISPLAY_SWAPCHAIN_EXTENSION_NAME_STR,
+        name: vks::khr_display_swapchain::VK_KHR_DISPLAY_SWAPCHAIN_EXTENSION_NAME_STR,
         fn_add: add_khr_display_swapchain,
         fn_has: has_khr_display_swapchain,
         fn_get: get_khr_display_swapchain,
@@ -4740,28 +4740,28 @@ gen_extension_structs!{
     }
 
     khr_sampler_mirror_clamp_to_edge {
-        name: vks::VK_KHR_SAMPLER_MIRROR_CLAMP_TO_EDGE_EXTENSION_NAME_STR,
+        name: vks::khr_sampler_mirror_clamp_to_edge::VK_KHR_SAMPLER_MIRROR_CLAMP_TO_EDGE_EXTENSION_NAME_STR,
         fn_add: add_khr_sampler_mirror_clamp_to_edge,
         fn_has: has_khr_sampler_mirror_clamp_to_edge,
         fn_get: get_khr_sampler_mirror_clamp_to_edge,
     }
 
     nv_dedicated_allocation {
-        name: vks::VK_NV_DEDICATED_ALLOCATION_EXTENSION_NAME_STR,
+        name: vks::nv_dedicated_allocation::VK_NV_DEDICATED_ALLOCATION_EXTENSION_NAME_STR,
         fn_add: add_nv_dedicated_allocation,
         fn_has: has_nv_dedicated_allocation,
         fn_get: get_nv_dedicated_allocation,
     }
 
     nv_external_memory {
-        name: vks::VK_NV_EXTERNAL_MEMORY_EXTENSION_NAME_STR,
+        name: vks::nv_external_memory::VK_NV_EXTERNAL_MEMORY_EXTENSION_NAME_STR,
         fn_add: add_nv_external_memory,
         fn_has: has_nv_external_memory,
         fn_get: get_nv_external_memory,
     }
 
     nv_external_memory_win32 {
-        name: vks::VK_NV_EXTERNAL_MEMORY_WIN32_EXTENSION_NAME_STR,
+        name: vks::nv_external_memory_win32::VK_NV_EXTERNAL_MEMORY_WIN32_EXTENSION_NAME_STR,
         fn_add: add_nv_external_memory_win32,
         fn_has: has_nv_external_memory_win32,
         fn_get: get_nv_external_memory_win32,
@@ -4769,14 +4769,14 @@ gen_extension_structs!{
     }
 
     nv_glsl_shader {
-        name: vks::VK_NV_GLSL_SHADER_EXTENSION_NAME_STR,
+        name: vks::nv_glsl_shader::VK_NV_GLSL_SHADER_EXTENSION_NAME_STR,
         fn_add: add_nv_glsl_shader,
         fn_has: has_nv_glsl_shader,
         fn_get: get_nv_glsl_shader,
     }
 
     nv_win32_keyed_mutex {
-        name: vks::VK_NV_WIN32_KEYED_MUTEX_EXTENSION_NAME_STR,
+        name: vks::nv_win32_keyed_mutex::VK_NV_WIN32_KEYED_MUTEX_EXTENSION_NAME_STR,
         fn_add: add_nv_win32_keyed_mutex,
         fn_has: has_nv_win32_keyed_mutex,
         fn_get: get_nv_win32_keyed_mutex,
@@ -4792,8 +4792,8 @@ pub struct LayerProperties {
     pub description: String,
 }
 
-impl<'a> From<&'a vks::VkLayerProperties> for LayerProperties {
-    fn from(layer_properties: &'a vks::VkLayerProperties) -> Self {
+impl<'a> From<&'a vks::core::VkLayerProperties> for LayerProperties {
+    fn from(layer_properties: &'a vks::core::VkLayerProperties) -> Self {
         unsafe {
             LayerProperties {
                 layer_name: CStr::from_ptr(layer_properties.layerName.as_ptr()).to_str().unwrap().to_owned(),
@@ -4808,7 +4808,7 @@ impl<'a> From<&'a vks::VkLayerProperties> for LayerProperties {
 gen_chain_struct! {
     name: SubmitInfoChain [SubmitInfoChainWrapper],
     query: SubmitInfoChainQuery [SubmitInfoChainQueryWrapper],
-    vks: VkSubmitInfo,
+    vks: vks::core::VkSubmitInfo,
     input: true,
     output: false,
 
@@ -4818,8 +4818,8 @@ gen_chain_struct! {
         fn_has: has_win32_keyed_mutex_acquire_release_info_nv,
         fn_get: get_win32_keyed_mutex_acquire_release_info_nv,
         wrapper: VkWin32KeyedMutexAcquireReleaseInfoNVWrapper,
-        vks: VkWin32KeyedMutexAcquireReleaseInfoNV,
-        stype: vks::VK_STRUCTURE_TYPE_WIN32_KEYED_MUTEX_ACQUIRE_RELEASE_INFO_NV,
+        vks: vks::nv_win32_keyed_mutex::VkWin32KeyedMutexAcquireReleaseInfoNV,
+        stype: vks::core::VK_STRUCTURE_TYPE_WIN32_KEYED_MUTEX_ACQUIRE_RELEASE_INFO_NV,
     }
 }
 
@@ -4835,14 +4835,14 @@ pub struct SubmitInfo {
 
 #[derive(Debug)]
 struct VkSubmitInfoWrapper {
-    pub vks_struct: vks::VkSubmitInfo,
+    pub vks_struct: vks::core::VkSubmitInfo,
     wait_semaphores: Vec<Semaphore>,
-    wait_vk_semaphores: Vec<vks::VkSemaphore>,
-    wait_dst_stage_mask: Vec<vks::VkPipelineStageFlags>,
+    wait_vk_semaphores: Vec<vks::core::VkSemaphore>,
+    wait_dst_stage_mask: Vec<vks::core::VkPipelineStageFlags>,
     command_buffers: Vec<CommandBuffer>,
-    vk_command_buffers: Vec<vks::VkCommandBuffer>,
+    vk_command_buffers: Vec<vks::core::VkCommandBuffer>,
     signal_semaphores: Vec<Semaphore>,
-    signal_vk_semaphores: Vec<vks::VkSemaphore>,
+    signal_vk_semaphores: Vec<vks::core::VkSemaphore>,
     chain: Option<SubmitInfoChainWrapper>,
 }
 
@@ -4880,8 +4880,8 @@ impl VkSubmitInfoWrapper {
         let (pnext, chain) = SubmitInfoChainWrapper::new_optional(&info.chain, with_chain);
 
         VkSubmitInfoWrapper {
-            vks_struct: vks::VkSubmitInfo {
-                sType: vks::VK_STRUCTURE_TYPE_SUBMIT_INFO,
+            vks_struct: vks::core::VkSubmitInfo {
+                sType: vks::core::VK_STRUCTURE_TYPE_SUBMIT_INFO,
                 pNext: pnext,
                 waitSemaphoreCount: wait_semaphores.len() as u32,
                 pWaitSemaphores: wait_vk_semaphores_ptr,
@@ -4906,7 +4906,7 @@ impl VkSubmitInfoWrapper {
 gen_chain_struct! {
     name: MemoryAllocateInfoChain [MemoryAllocateInfoChainWrapper],
     query: MemoryAllocateInfoChainQuery [MemoryAllocateInfoChainQueryWrapper],
-    vks: VkMemoryAllocateInfo,
+    vks: vks::core::VkMemoryAllocateInfo,
     input: true,
     output: false,
 
@@ -4916,8 +4916,8 @@ gen_chain_struct! {
         fn_has: has_dedicated_allocation_memory_allocate_info_nv,
         fn_get: get_dedicated_allocation_memory_allocate_info_nv,
         wrapper: VkDedicatedAllocationMemoryAllocateInfoNVWrapper,
-        vks: VkDedicatedAllocationMemoryAllocateInfoNV,
-        stype: vks::VK_STRUCTURE_TYPE_DEDICATED_ALLOCATION_MEMORY_ALLOCATE_INFO_NV,
+        vks: vks::nv_dedicated_allocation::VkDedicatedAllocationMemoryAllocateInfoNV,
+        stype: vks::core::VK_STRUCTURE_TYPE_DEDICATED_ALLOCATION_MEMORY_ALLOCATE_INFO_NV,
     }
 
     export_memory_allocate_info_nv: ExportMemoryAllocateInfoNv {
@@ -4926,8 +4926,8 @@ gen_chain_struct! {
         fn_has: has_export_memory_allocate_info_nv,
         fn_get: get_export_memory_allocate_info_nv,
         wrapper: VkExportMemoryAllocateInfoNVWrapper,
-        vks: VkExportMemoryAllocateInfoNV,
-        stype: vks::VK_STRUCTURE_TYPE_EXPORT_MEMORY_ALLOCATE_INFO_NV,
+        vks: vks::nv_external_memory::VkExportMemoryAllocateInfoNV,
+        stype: vks::core::VK_STRUCTURE_TYPE_EXPORT_MEMORY_ALLOCATE_INFO_NV,
     }
 
     import_memory_win32_handle_info_nv: ImportMemoryWin32HandleInfoNv {
@@ -4936,8 +4936,8 @@ gen_chain_struct! {
         fn_has: has_import_memory_win32_handle_info_nv,
         fn_get: get_import_memory_win32_handle_info_nv,
         wrapper: VkImportMemoryWin32HandleInfoNVWrapper,
-        vks: VkImportMemoryWin32HandleInfoNV,
-        stype: vks::VK_STRUCTURE_TYPE_IMPORT_MEMORY_WIN32_HANDLE_INFO_NV,
+        vks: vks::nv_external_memory_win32::VkImportMemoryWin32HandleInfoNV,
+        stype: vks::core::VK_STRUCTURE_TYPE_IMPORT_MEMORY_WIN32_HANDLE_INFO_NV,
     }
 
     export_memory_win32_handle_info_nv: ExportMemoryWin32HandleInfoNv {
@@ -4946,8 +4946,8 @@ gen_chain_struct! {
         fn_has: has_export_memory_win32_handle_info_nv,
         fn_get: get_export_memory_win32_handle_info_nv,
         wrapper: VkExportMemoryWin32HandleInfoNVWrapper,
-        vks: VkExportMemoryWin32HandleInfoNV,
-        stype: vks::VK_STRUCTURE_TYPE_EXPORT_MEMORY_WIN32_HANDLE_INFO_NV,
+        vks: vks::nv_external_memory_win32::VkExportMemoryWin32HandleInfoNV,
+        stype: vks::core::VK_STRUCTURE_TYPE_EXPORT_MEMORY_WIN32_HANDLE_INFO_NV,
     }
 }
 
@@ -4961,7 +4961,7 @@ pub struct MemoryAllocateInfo {
 
 #[derive(Debug)]
 struct VkMemoryAllocateInfoWrapper {
-    pub vks_struct: vks::VkMemoryAllocateInfo,
+    pub vks_struct: vks::core::VkMemoryAllocateInfo,
     chain: Option<MemoryAllocateInfoChainWrapper>,
 }
 
@@ -4970,8 +4970,8 @@ impl VkMemoryAllocateInfoWrapper {
         let (pnext, chain) = MemoryAllocateInfoChainWrapper::new_optional(&info.chain, with_chain);
 
         VkMemoryAllocateInfoWrapper {
-            vks_struct: vks::VkMemoryAllocateInfo {
-                sType: vks::VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO,
+            vks_struct: vks::core::VkMemoryAllocateInfo {
+                sType: vks::core::VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO,
                 pNext: pnext,
                 allocationSize: info.allocation_size,
                 memoryTypeIndex: info.memory_type_index,
@@ -4984,7 +4984,7 @@ impl VkMemoryAllocateInfoWrapper {
 gen_chain_struct! {
     name: MappedMemoryRangeChain [MappedMemoryRangeChainWrapper],
     query: MappedMemoryRangeChainQuery [MappedMemoryRangeChainQueryWrapper],
-    vks: VkMappedMemoryRange,
+    vks: vks::core::VkMappedMemoryRange,
     input: true,
     output: false,
 }
@@ -5000,7 +5000,7 @@ pub struct MappedMemoryRange {
 
 #[derive(Debug)]
 struct VkMappedMemoryRangeWrapper {
-    pub vks_struct: vks::VkMappedMemoryRange,
+    pub vks_struct: vks::core::VkMappedMemoryRange,
     memory: DeviceMemory,
     chain: Option<MappedMemoryRangeChainWrapper>,
 }
@@ -5010,8 +5010,8 @@ impl VkMappedMemoryRangeWrapper {
         let (pnext, chain) = MappedMemoryRangeChainWrapper::new_optional(&range.chain, with_chain);
 
         VkMappedMemoryRangeWrapper {
-            vks_struct: vks::VkMappedMemoryRange {
-                sType: vks::VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE,
+            vks_struct: vks::core::VkMappedMemoryRange {
+                sType: vks::core::VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE,
                 pNext: pnext,
                 memory: range.memory.handle(),
                 offset: range.offset,
@@ -5031,8 +5031,8 @@ pub struct MemoryRequirements {
     pub memory_type_bits: u32,
 }
 
-impl<'a> From<&'a vks::VkMemoryRequirements> for MemoryRequirements {
-    fn from(requirements: &'a vks::VkMemoryRequirements) -> Self {
+impl<'a> From<&'a vks::core::VkMemoryRequirements> for MemoryRequirements {
+    fn from(requirements: &'a vks::core::VkMemoryRequirements) -> Self {
         MemoryRequirements {
             size: requirements.size,
             alignment: requirements.alignment,
@@ -5041,9 +5041,9 @@ impl<'a> From<&'a vks::VkMemoryRequirements> for MemoryRequirements {
     }
 }
 
-impl<'a> From<&'a MemoryRequirements> for vks::VkMemoryRequirements {
+impl<'a> From<&'a MemoryRequirements> for vks::core::VkMemoryRequirements {
     fn from(requirements: &'a MemoryRequirements) -> Self {
-        vks::VkMemoryRequirements {
+        vks::core::VkMemoryRequirements {
             size: requirements.size,
             alignment: requirements.alignment,
             memoryTypeBits: requirements.memory_type_bits,
@@ -5059,8 +5059,8 @@ pub struct SparseImageFormatProperties {
     pub flags: SparseImageFormatFlags,
 }
 
-impl<'a> From<&'a vks::VkSparseImageFormatProperties> for SparseImageFormatProperties {
-    fn from(properties: &'a vks::VkSparseImageFormatProperties) -> Self {
+impl<'a> From<&'a vks::core::VkSparseImageFormatProperties> for SparseImageFormatProperties {
+    fn from(properties: &'a vks::core::VkSparseImageFormatProperties) -> Self {
         SparseImageFormatProperties {
             aspect_mask: ImageAspectFlags::from_bits_truncate(properties.aspectMask),
             image_granularity: (&properties.imageGranularity).into(),
@@ -5079,8 +5079,8 @@ pub struct SparseImageMemoryRequirements {
     pub image_mip_tail_stride: u64,
 }
 
-impl<'a> From<&'a vks::VkSparseImageMemoryRequirements> for SparseImageMemoryRequirements {
-    fn from(requirements: &'a vks::VkSparseImageMemoryRequirements) -> Self {
+impl<'a> From<&'a vks::core::VkSparseImageMemoryRequirements> for SparseImageMemoryRequirements {
+    fn from(requirements: &'a vks::core::VkSparseImageMemoryRequirements) -> Self {
         SparseImageMemoryRequirements {
             format_properties: (&requirements.formatProperties).into(),
             image_mip_tail_first_lod: requirements.imageMipTailFirstLod,
@@ -5103,7 +5103,7 @@ pub struct SparseMemoryBind {
 
 #[derive(Debug)]
 struct VkSparseMemoryBindWrapper {
-    pub vks_struct: vks::VkSparseMemoryBind,
+    pub vks_struct: vks::core::VkSparseMemoryBind,
     memory: Option<DeviceMemory>,
 }
 
@@ -5115,7 +5115,7 @@ impl<'a> From<&'a SparseMemoryBind> for VkSparseMemoryBindWrapper {
         };
 
         VkSparseMemoryBindWrapper {
-            vks_struct: vks::VkSparseMemoryBind {
+            vks_struct: vks::core::VkSparseMemoryBind {
                 resourceOffset: bind.resource_offset,
                 size: bind.size,
                 memory: vk_memory,
@@ -5136,10 +5136,10 @@ pub struct SparseBufferMemoryBindInfo {
 
 #[derive(Debug)]
 struct VkSparseBufferMemoryBindInfoWrapper {
-    pub vks_struct: vks::VkSparseBufferMemoryBindInfo,
+    pub vks_struct: vks::core::VkSparseBufferMemoryBindInfo,
     buffer: Buffer,
     binds: Vec<VkSparseMemoryBindWrapper>,
-    binds_vk: Vec<vks::VkSparseMemoryBind>,
+    binds_vk: Vec<vks::core::VkSparseMemoryBind>,
 }
 
 impl<'a> From<&'a SparseBufferMemoryBindInfo> for VkSparseBufferMemoryBindInfoWrapper {
@@ -5148,7 +5148,7 @@ impl<'a> From<&'a SparseBufferMemoryBindInfo> for VkSparseBufferMemoryBindInfoWr
         let binds_vk: Vec<_> = binds.iter().map(|b| b.vks_struct).collect();
 
         VkSparseBufferMemoryBindInfoWrapper {
-            vks_struct: vks::VkSparseBufferMemoryBindInfo {
+            vks_struct: vks::core::VkSparseBufferMemoryBindInfo {
                 buffer: info.buffer.handle(),
                 bindCount: binds.len() as u32,
                 pBinds: binds_vk.as_ptr(),
@@ -5169,10 +5169,10 @@ pub struct SparseImageOpaqueMemoryBindInfo {
 
 #[derive(Debug)]
 struct VkSparseImageOpaqueMemoryBindInfoWrapper {
-    pub vks_struct: vks::VkSparseImageOpaqueMemoryBindInfo,
+    pub vks_struct: vks::core::VkSparseImageOpaqueMemoryBindInfo,
     image: Image,
     binds: Vec<VkSparseMemoryBindWrapper>,
-    binds_vk: Vec<vks::VkSparseMemoryBind>,
+    binds_vk: Vec<vks::core::VkSparseMemoryBind>,
 }
 
 impl<'a> From<&'a SparseImageOpaqueMemoryBindInfo> for VkSparseImageOpaqueMemoryBindInfoWrapper {
@@ -5181,7 +5181,7 @@ impl<'a> From<&'a SparseImageOpaqueMemoryBindInfo> for VkSparseImageOpaqueMemory
         let binds_vk: Vec<_> = binds.iter().map(|b| b.vks_struct).collect();
 
         VkSparseImageOpaqueMemoryBindInfoWrapper {
-            vks_struct: vks::VkSparseImageOpaqueMemoryBindInfo {
+            vks_struct: vks::core::VkSparseImageOpaqueMemoryBindInfo {
                 image: info.image.handle(),
                 bindCount: binds.len() as u32,
                 pBinds: binds_vk.as_ptr(),
@@ -5201,9 +5201,9 @@ pub struct ImageSubresource {
     pub array_layer: u32,
 }
 
-impl<'a> From<&'a ImageSubresource> for vks::VkImageSubresource {
+impl<'a> From<&'a ImageSubresource> for vks::core::VkImageSubresource {
     fn from(subresource: &'a ImageSubresource) -> Self {
-        vks::VkImageSubresource {
+        vks::core::VkImageSubresource {
             aspectMask: subresource.aspect_mask.bits(),
             mipLevel: subresource.mip_level,
             arrayLayer: subresource.array_layer,
@@ -5219,9 +5219,9 @@ pub struct Offset3D {
     pub z: i32,
 }
 
-impl<'a> From<&'a Offset3D> for vks::VkOffset3D {
+impl<'a> From<&'a Offset3D> for vks::core::VkOffset3D {
     fn from(offset: &'a Offset3D) -> Self {
-        vks::VkOffset3D {
+        vks::core::VkOffset3D {
             x: offset.x,
             y: offset.y,
             z: offset.z,
@@ -5274,7 +5274,7 @@ pub struct SparseImageMemoryBind {
 
 #[derive(Debug)]
 struct VkSparseImageMemoryBindWrapper {
-    pub vks_struct: vks::VkSparseImageMemoryBind,
+    pub vks_struct: vks::core::VkSparseImageMemoryBind,
     memory: Option<DeviceMemory>,
 }
 
@@ -5286,7 +5286,7 @@ impl<'a> From<&'a SparseImageMemoryBind> for VkSparseImageMemoryBindWrapper {
         };
 
         VkSparseImageMemoryBindWrapper {
-            vks_struct: vks::VkSparseImageMemoryBind {
+            vks_struct: vks::core::VkSparseImageMemoryBind {
                 subresource: (&bind.subresource).into(),
                 offset: (&bind.offset).into(),
                 extent: (&bind.extent).into(),
@@ -5308,10 +5308,10 @@ pub struct SparseImageMemoryBindInfo {
 
 #[derive(Debug)]
 struct VkSparseImageMemoryBindInfoWrapper {
-    pub vks_struct: vks::VkSparseImageMemoryBindInfo,
+    pub vks_struct: vks::core::VkSparseImageMemoryBindInfo,
     image: Image,
     binds: Vec<VkSparseImageMemoryBindWrapper>,
-    binds_vk: Vec<vks::VkSparseImageMemoryBind>,
+    binds_vk: Vec<vks::core::VkSparseImageMemoryBind>,
 }
 
 impl<'a> From<&'a SparseImageMemoryBindInfo> for VkSparseImageMemoryBindInfoWrapper {
@@ -5320,7 +5320,7 @@ impl<'a> From<&'a SparseImageMemoryBindInfo> for VkSparseImageMemoryBindInfoWrap
         let binds_vk: Vec<_> = binds.iter().map(|b| b.vks_struct).collect();
 
         VkSparseImageMemoryBindInfoWrapper {
-            vks_struct: vks::VkSparseImageMemoryBindInfo {
+            vks_struct: vks::core::VkSparseImageMemoryBindInfo {
                 image: info.image.handle(),
                 bindCount: binds.len() as u32,
                 pBinds: binds_vk.as_ptr(),
@@ -5335,7 +5335,7 @@ impl<'a> From<&'a SparseImageMemoryBindInfo> for VkSparseImageMemoryBindInfoWrap
 gen_chain_struct! {
     name: BindSparseInfoChain [BindSparseInfoChainWrapper],
     query: BindSparseInfoChainQuery [BindSparseInfoChainQueryWrapper],
-    vks: VkBindSparseInfo,
+    vks: vks::core::VkBindSparseInfo,
     input: true,
     output: false,
 }
@@ -5353,17 +5353,17 @@ pub struct BindSparseInfo {
 
 #[derive(Debug)]
 struct VkBindSparseInfoWrapper {
-    pub vks_struct: vks::VkBindSparseInfo,
+    pub vks_struct: vks::core::VkBindSparseInfo,
     wait_semaphores: Vec<Semaphore>,
-    wait_vk_semaphores: Vec<vks::VkSemaphore>,
+    wait_vk_semaphores: Vec<vks::core::VkSemaphore>,
     buffer_binds: Vec<VkSparseBufferMemoryBindInfoWrapper>,
-    vk_buffer_binds: Vec<vks::VkSparseBufferMemoryBindInfo>,
+    vk_buffer_binds: Vec<vks::core::VkSparseBufferMemoryBindInfo>,
     image_opaque_binds: Vec<VkSparseImageOpaqueMemoryBindInfoWrapper>,
-    vk_image_opaque_binds: Vec<vks::VkSparseImageOpaqueMemoryBindInfo>,
+    vk_image_opaque_binds: Vec<vks::core::VkSparseImageOpaqueMemoryBindInfo>,
     image_binds: Vec<VkSparseImageMemoryBindInfoWrapper>,
-    vk_image_binds: Vec<vks::VkSparseImageMemoryBindInfo>,
+    vk_image_binds: Vec<vks::core::VkSparseImageMemoryBindInfo>,
     signal_semaphores: Vec<Semaphore>,
-    signal_vk_semaphores: Vec<vks::VkSemaphore>,
+    signal_vk_semaphores: Vec<vks::core::VkSemaphore>,
     chain: Option<BindSparseInfoChainWrapper>,
 }
 
@@ -5417,8 +5417,8 @@ impl VkBindSparseInfoWrapper {
         let (pnext, chain) = BindSparseInfoChainWrapper::new_optional(&info.chain, with_chain);
 
         VkBindSparseInfoWrapper {
-            vks_struct: vks::VkBindSparseInfo {
-                sType: vks::VK_STRUCTURE_TYPE_BIND_SPARSE_INFO,
+            vks_struct: vks::core::VkBindSparseInfo {
+                sType: vks::core::VK_STRUCTURE_TYPE_BIND_SPARSE_INFO,
                 pNext: pnext,
                 waitSemaphoreCount: wait_semaphores.len() as u32,
                 pWaitSemaphores: wait_vk_semaphores_ptr,
@@ -5449,7 +5449,7 @@ impl VkBindSparseInfoWrapper {
 gen_chain_struct! {
     name: FenceCreateInfoChain [FenceCreateInfoChainWrapper],
     query: FenceCreateInfoChainQuery [FenceCreateInfoChainQueryWrapper],
-    vks: VkFenceCreateInfo,
+    vks: vks::core::VkFenceCreateInfo,
     input: true,
     output: false,
 }
@@ -5463,7 +5463,7 @@ pub struct FenceCreateInfo {
 
 #[derive(Debug)]
 struct VkFenceCreateInfoWrapper {
-    pub vks_struct: vks::VkFenceCreateInfo,
+    pub vks_struct: vks::core::VkFenceCreateInfo,
     chain: Option<FenceCreateInfoChainWrapper>,
 }
 
@@ -5472,8 +5472,8 @@ impl VkFenceCreateInfoWrapper {
         let (pnext, chain) = FenceCreateInfoChainWrapper::new_optional(&create_info.chain, with_chain);
 
         VkFenceCreateInfoWrapper {
-            vks_struct: vks::VkFenceCreateInfo {
-                sType: vks::VK_STRUCTURE_TYPE_FENCE_CREATE_INFO,
+            vks_struct: vks::core::VkFenceCreateInfo {
+                sType: vks::core::VK_STRUCTURE_TYPE_FENCE_CREATE_INFO,
                 pNext: pnext,
                 flags: create_info.flags.bits(),
             },
@@ -5485,7 +5485,7 @@ impl VkFenceCreateInfoWrapper {
 gen_chain_struct! {
     name: SemaphoreCreateInfoChain [SemaphoreCreateInfoChainWrapper],
     query: SemaphoreCreateInfoChainQuery [SemaphoreCreateInfoChainQueryWrapper],
-    vks: VkSemaphoreCreateInfo,
+    vks: vks::core::VkSemaphoreCreateInfo,
     input: true,
     output: false,
 }
@@ -5499,7 +5499,7 @@ pub struct SemaphoreCreateInfo {
 
 #[derive(Debug)]
 struct VkSemaphoreCreateInfoWrapper {
-    pub vks_struct: vks::VkSemaphoreCreateInfo,
+    pub vks_struct: vks::core::VkSemaphoreCreateInfo,
     chain: Option<SemaphoreCreateInfoChainWrapper>,
 }
 
@@ -5508,8 +5508,8 @@ impl VkSemaphoreCreateInfoWrapper {
         let (pnext, chain) = SemaphoreCreateInfoChainWrapper::new_optional(&create_info.chain, with_chain);
 
         VkSemaphoreCreateInfoWrapper {
-            vks_struct: vks::VkSemaphoreCreateInfo {
-                sType: vks::VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO,
+            vks_struct: vks::core::VkSemaphoreCreateInfo {
+                sType: vks::core::VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO,
                 pNext: pnext,
                 flags: create_info.flags.bits(),
             },
@@ -5521,7 +5521,7 @@ impl VkSemaphoreCreateInfoWrapper {
 gen_chain_struct! {
     name: EventCreateInfoChain [EventCreateInfoChainWrapper],
     query: EventCreateInfoChainQuery [EventCreateInfoChainQueryWrapper],
-    vks: VkEventCreateInfo,
+    vks: vks::core::VkEventCreateInfo,
     input: true,
     output: false,
 }
@@ -5535,7 +5535,7 @@ pub struct EventCreateInfo {
 
 #[derive(Debug)]
 struct VkEventCreateInfoWrapper {
-    pub vks_struct: vks::VkEventCreateInfo,
+    pub vks_struct: vks::core::VkEventCreateInfo,
     chain: Option<EventCreateInfoChainWrapper>,
 }
 
@@ -5544,8 +5544,8 @@ impl VkEventCreateInfoWrapper {
         let (pnext, chain) = EventCreateInfoChainWrapper::new_optional(&create_info.chain, with_chain);
 
         VkEventCreateInfoWrapper {
-            vks_struct: vks::VkEventCreateInfo {
-                sType: vks::VK_STRUCTURE_TYPE_FENCE_CREATE_INFO,
+            vks_struct: vks::core::VkEventCreateInfo {
+                sType: vks::core::VK_STRUCTURE_TYPE_FENCE_CREATE_INFO,
                 pNext: pnext,
                 flags: create_info.flags.bits(),
             },
@@ -5557,7 +5557,7 @@ impl VkEventCreateInfoWrapper {
 gen_chain_struct! {
     name: QueryPoolCreateInfoChain [QueryPoolCreateInfoChainWrapper],
     query: QueryPoolCreateInfoChainQuery [QueryPoolCreateInfoChainQueryWrapper],
-    vks: VkQueryPoolCreateInfo,
+    vks: vks::core::VkQueryPoolCreateInfo,
     input: true,
     output: false,
 }
@@ -5574,7 +5574,7 @@ pub struct QueryPoolCreateInfo {
 
 #[derive(Debug)]
 struct VkQueryPoolCreateInfoWrapper {
-    pub vks_struct: vks::VkQueryPoolCreateInfo,
+    pub vks_struct: vks::core::VkQueryPoolCreateInfo,
     chain: Option<QueryPoolCreateInfoChainWrapper>,
 }
 
@@ -5583,8 +5583,8 @@ impl VkQueryPoolCreateInfoWrapper {
         let (pnext, chain) = QueryPoolCreateInfoChainWrapper::new_optional(&create_info.chain, with_chain);
 
         VkQueryPoolCreateInfoWrapper {
-            vks_struct: vks::VkQueryPoolCreateInfo {
-                sType: vks::VK_STRUCTURE_TYPE_QUERY_POOL_CREATE_INFO,
+            vks_struct: vks::core::VkQueryPoolCreateInfo {
+                sType: vks::core::VK_STRUCTURE_TYPE_QUERY_POOL_CREATE_INFO,
                 pNext: pnext,
                 flags: create_info.flags.bits(),
                 queryType: create_info.query_type.into(),
@@ -5599,7 +5599,7 @@ impl VkQueryPoolCreateInfoWrapper {
 gen_chain_struct! {
     name: BufferCreateInfoChain [BufferCreateInfoChainWrapper],
     query: BufferCreateInfoChainQuery [BufferCreateInfoChainQueryWrapper],
-    vks: VkBufferCreateInfo,
+    vks: vks::core::VkBufferCreateInfo,
     input: true,
     output: false,
 
@@ -5609,8 +5609,8 @@ gen_chain_struct! {
         fn_has: has_dedicated_allocation_buffer_create_info_nv,
         fn_get: get_dedicated_allocation_buffer_create_info_nv,
         wrapper: VkDedicatedAllocationBufferCreateInfoNVWrapper,
-        vks: VkDedicatedAllocationBufferCreateInfoNV,
-        stype: vks::VK_STRUCTURE_TYPE_DEDICATED_ALLOCATION_BUFFER_CREATE_INFO_NV,
+        vks: vks::nv_dedicated_allocation::VkDedicatedAllocationBufferCreateInfoNV,
+        stype: vks::core::VK_STRUCTURE_TYPE_DEDICATED_ALLOCATION_BUFFER_CREATE_INFO_NV,
     }
 }
 
@@ -5627,7 +5627,7 @@ pub struct BufferCreateInfo {
 
 #[derive(Debug)]
 struct VkBufferCreateInfoWrapper {
-    pub vks_struct: vks::VkBufferCreateInfo,
+    pub vks_struct: vks::core::VkBufferCreateInfo,
     queue_family_indices: Vec<u32>,
     chain: Option<BufferCreateInfoChainWrapper>,
 }
@@ -5645,8 +5645,8 @@ impl VkBufferCreateInfoWrapper {
         let (pnext, chain) = BufferCreateInfoChainWrapper::new_optional(&create_info.chain, with_chain);
 
         VkBufferCreateInfoWrapper {
-            vks_struct: vks::VkBufferCreateInfo {
-                sType: vks::VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO,
+            vks_struct: vks::core::VkBufferCreateInfo {
+                sType: vks::core::VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO,
                 pNext: pnext,
                 flags: create_info.flags.bits(),
                 size: create_info.size,
@@ -5664,7 +5664,7 @@ impl VkBufferCreateInfoWrapper {
 gen_chain_struct! {
     name: BufferViewCreateInfoChain [BufferViewCreateInfoChainWrapper],
     query: BufferViewCreateInfoChainQuery [BufferViewCreateInfoChainQueryWrapper],
-    vks: VkBufferViewCreateInfo,
+    vks: vks::core::VkBufferViewCreateInfo,
     input: true,
     output: false,
 }
@@ -5682,7 +5682,7 @@ pub struct BufferViewCreateInfo {
 
 #[derive(Debug)]
 struct VkBufferViewCreateInfoWrapper {
-    pub vks_struct: vks::VkBufferViewCreateInfo,
+    pub vks_struct: vks::core::VkBufferViewCreateInfo,
     buffer: Buffer,
     chain: Option<BufferViewCreateInfoChainWrapper>,
 }
@@ -5692,8 +5692,8 @@ impl VkBufferViewCreateInfoWrapper {
         let (pnext, chain) = BufferViewCreateInfoChainWrapper::new_optional(&create_info.chain, with_chain);
 
         VkBufferViewCreateInfoWrapper {
-            vks_struct: vks::VkBufferViewCreateInfo {
-                sType: vks::VK_STRUCTURE_TYPE_BUFFER_VIEW_CREATE_INFO,
+            vks_struct: vks::core::VkBufferViewCreateInfo {
+                sType: vks::core::VK_STRUCTURE_TYPE_BUFFER_VIEW_CREATE_INFO,
                 pNext: pnext,
                 flags: create_info.flags.bits(),
                 buffer: create_info.buffer.handle(),
@@ -5710,7 +5710,7 @@ impl VkBufferViewCreateInfoWrapper {
 gen_chain_struct! {
     name: ImageCreateInfoChain [ImageCreateInfoChainWrapper],
     query: ImageCreateInfoChainQuery [ImageCreateInfoChainQueryWrapper],
-    vks: VkImageCreateInfo,
+    vks: vks::core::VkImageCreateInfo,
     input: true,
     output: false,
 
@@ -5720,8 +5720,8 @@ gen_chain_struct! {
         fn_has: has_dedicated_allocation_image_create_info_nv,
         fn_get: get_dedicated_allocation_image_create_info_nv,
         wrapper: VkDedicatedAllocationImageCreateInfoNVWrapper,
-        vks: VkDedicatedAllocationImageCreateInfoNV,
-        stype: vks::VK_STRUCTURE_TYPE_DEDICATED_ALLOCATION_IMAGE_CREATE_INFO_NV,
+        vks: vks::nv_dedicated_allocation::VkDedicatedAllocationImageCreateInfoNV,
+        stype: vks::core::VK_STRUCTURE_TYPE_DEDICATED_ALLOCATION_IMAGE_CREATE_INFO_NV,
     }
 
     external_memory_image_create_info_nv: ExternalMemoryImageCreateInfoNv {
@@ -5730,8 +5730,8 @@ gen_chain_struct! {
         fn_has: has_external_memory_image_create_info_nv,
         fn_get: get_external_memory_image_create_info_nv,
         wrapper: VkExternalMemoryImageCreateInfoNVWrapper,
-        vks: VkExternalMemoryImageCreateInfoNV,
-        stype: vks::VK_STRUCTURE_TYPE_EXTERNAL_MEMORY_IMAGE_CREATE_INFO_NV,
+        vks: vks::nv_external_memory::VkExternalMemoryImageCreateInfoNV,
+        stype: vks::core::VK_STRUCTURE_TYPE_EXTERNAL_MEMORY_IMAGE_CREATE_INFO_NV,
     }
 }
 
@@ -5755,7 +5755,7 @@ pub struct ImageCreateInfo {
 
 #[derive(Debug)]
 struct VkImageCreateInfoWrapper {
-    pub vks_struct: vks::VkImageCreateInfo,
+    pub vks_struct: vks::core::VkImageCreateInfo,
     queue_family_indices: Vec<u32>,
     chain: Option<ImageCreateInfoChainWrapper>,
 }
@@ -5773,8 +5773,8 @@ impl VkImageCreateInfoWrapper {
         let (pnext, chain) = ImageCreateInfoChainWrapper::new_optional(&create_info.chain, with_chain);
 
         VkImageCreateInfoWrapper {
-            vks_struct: vks::VkImageCreateInfo {
-                sType: vks::VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO,
+            vks_struct: vks::core::VkImageCreateInfo {
+                sType: vks::core::VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO,
                 pNext: pnext,
                 flags: create_info.flags.bits(),
                 imageType: create_info.image_type.into(),
@@ -5806,8 +5806,8 @@ pub struct SubresourceLayout {
     pub depth_pitch: u64,
 }
 
-impl<'a> From<&'a vks::VkSubresourceLayout> for SubresourceLayout {
-    fn from(layout: &'a vks::VkSubresourceLayout) -> Self {
+impl<'a> From<&'a vks::core::VkSubresourceLayout> for SubresourceLayout {
+    fn from(layout: &'a vks::core::VkSubresourceLayout) -> Self {
         SubresourceLayout {
             offset: layout.offset,
             size: layout.size,
@@ -5827,9 +5827,9 @@ pub struct ComponentMapping {
     pub a: ComponentSwizzle,
 }
 
-impl<'a> From<&'a ComponentMapping> for vks::VkComponentMapping {
+impl<'a> From<&'a ComponentMapping> for vks::core::VkComponentMapping {
     fn from(mapping: &'a ComponentMapping) -> Self {
-        vks::VkComponentMapping {
+        vks::core::VkComponentMapping {
             r: mapping.r.into(),
             g: mapping.g.into(),
             b: mapping.b.into(),
@@ -5862,9 +5862,9 @@ pub struct ImageSubresourceRange {
     pub layer_count: OptionalArrayLayers,
 }
 
-impl<'a> From<&'a ImageSubresourceRange> for vks::VkImageSubresourceRange {
+impl<'a> From<&'a ImageSubresourceRange> for vks::core::VkImageSubresourceRange {
     fn from(range: &'a ImageSubresourceRange) -> Self {
-        vks::VkImageSubresourceRange {
+        vks::core::VkImageSubresourceRange {
             aspectMask: range.aspect_mask.bits(),
             baseMipLevel: range.base_mip_level,
             levelCount: range.level_count.into(),
@@ -5877,7 +5877,7 @@ impl<'a> From<&'a ImageSubresourceRange> for vks::VkImageSubresourceRange {
 gen_chain_struct! {
     name: ImageViewCreateInfoChain [ImageViewCreateInfoChainWrapper],
     query: ImageViewCreateInfoChainQuery [ImageViewCreateInfoChainQueryWrapper],
-    vks: VkImageViewCreateInfo,
+    vks: vks::core::VkImageViewCreateInfo,
     input: true,
     output: false,
 }
@@ -5896,7 +5896,7 @@ pub struct ImageViewCreateInfo {
 
 #[derive(Debug)]
 struct VkImageViewCreateInfoWrapper {
-    pub vks_struct: vks::VkImageViewCreateInfo,
+    pub vks_struct: vks::core::VkImageViewCreateInfo,
     image: Image,
     chain: Option<ImageViewCreateInfoChainWrapper>,
 }
@@ -5906,8 +5906,8 @@ impl VkImageViewCreateInfoWrapper {
         let (pnext, chain) = ImageViewCreateInfoChainWrapper::new_optional(&create_info.chain, with_chain);
 
         VkImageViewCreateInfoWrapper {
-            vks_struct: vks::VkImageViewCreateInfo {
-                sType: vks::VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO,
+            vks_struct: vks::core::VkImageViewCreateInfo {
+                sType: vks::core::VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO,
                 pNext: pnext,
                 flags: create_info.flags.bits(),
                 image: create_info.image.handle(),
@@ -5925,7 +5925,7 @@ impl VkImageViewCreateInfoWrapper {
 gen_chain_struct! {
     name: ShaderModuleCreateInfoChain [ShaderModuleCreateInfoChainWrapper],
     query: ShaderModuleCreateInfoChainQuery [ShaderModuleCreateInfoChainQueryWrapper],
-    vks: VkShaderModuleCreateInfo,
+    vks: vks::core::VkShaderModuleCreateInfo,
     input: true,
     output: false,
 }
@@ -5940,7 +5940,7 @@ pub struct ShaderModuleCreateInfo {
 
 #[derive(Debug)]
 struct VkShaderModuleCreateInfoWrapper {
-    pub vks_struct: vks::VkShaderModuleCreateInfo,
+    pub vks_struct: vks::core::VkShaderModuleCreateInfo,
     code: Vec<u32>,
     chain: Option<ShaderModuleCreateInfoChainWrapper>,
 }
@@ -5963,8 +5963,8 @@ impl VkShaderModuleCreateInfoWrapper {
         let (pnext, chain) = ShaderModuleCreateInfoChainWrapper::new_optional(&create_info.chain, with_chain);
 
         VkShaderModuleCreateInfoWrapper {
-            vks_struct: vks::VkShaderModuleCreateInfo {
-                sType: vks::VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO,
+            vks_struct: vks::core::VkShaderModuleCreateInfo {
+                sType: vks::core::VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO,
                 pNext: pnext,
                 flags: create_info.flags.bits(),
                 codeSize: create_info.code.len(),
@@ -5979,7 +5979,7 @@ impl VkShaderModuleCreateInfoWrapper {
 gen_chain_struct! {
     name: PipelineCacheCreateInfoChain [PipelineCacheCreateInfoChainWrapper],
     query: PipelineCacheCreateInfoChainQuery [PipelineCacheCreateInfoChainQueryWrapper],
-    vks: VkPipelineCacheCreateInfo,
+    vks: vks::core::VkPipelineCacheCreateInfo,
     input: true,
     output: false,
 }
@@ -5994,7 +5994,7 @@ pub struct PipelineCacheCreateInfo {
 
 #[derive(Debug)]
 struct VkPipelineCacheCreateInfoWrapper {
-    pub vks_struct: vks::VkPipelineCacheCreateInfo,
+    pub vks_struct: vks::core::VkPipelineCacheCreateInfo,
     initial_data: Vec<u8>,
     chain: Option<PipelineCacheCreateInfoChainWrapper>,
 }
@@ -6012,8 +6012,8 @@ impl VkPipelineCacheCreateInfoWrapper {
         let (pnext, chain) = PipelineCacheCreateInfoChainWrapper::new_optional(&create_info.chain, with_chain);
 
         VkPipelineCacheCreateInfoWrapper {
-            vks_struct: vks::VkPipelineCacheCreateInfo {
-                sType: vks::VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO,
+            vks_struct: vks::core::VkPipelineCacheCreateInfo {
+                sType: vks::core::VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO,
                 pNext: pnext,
                 flags: create_info.flags.bits(),
                 initialDataSize: initial_data.len(),
@@ -6033,9 +6033,9 @@ pub struct SpecializationMapEntry {
     pub size: usize,
 }
 
-impl<'a> From<&'a SpecializationMapEntry> for vks::VkSpecializationMapEntry {
+impl<'a> From<&'a SpecializationMapEntry> for vks::core::VkSpecializationMapEntry {
     fn from(entry: &'a SpecializationMapEntry) -> Self {
-        vks::VkSpecializationMapEntry {
+        vks::core::VkSpecializationMapEntry {
             constantID: entry.constant_id,
             offset: entry.offset,
             size: entry.size,
@@ -6077,8 +6077,8 @@ impl SpecializationInfo {
 
 #[derive(Debug)]
 struct VkSpecializationInfoWrapper {
-    pub vks_struct: vks::VkSpecializationInfo,
-    map_entries: Vec<vks::VkSpecializationMapEntry>,
+    pub vks_struct: vks::core::VkSpecializationInfo,
+    map_entries: Vec<vks::core::VkSpecializationMapEntry>,
     data: Vec<u8>,
 }
 
@@ -6101,7 +6101,7 @@ impl<'a> From<&'a SpecializationInfo> for VkSpecializationInfoWrapper {
         };
 
         VkSpecializationInfoWrapper {
-            vks_struct: vks::VkSpecializationInfo {
+            vks_struct: vks::core::VkSpecializationInfo {
                 mapEntryCount: map_entries.len() as u32,
                 pMapEntries: map_entries_ptr,
                 dataSize: data.len(),
@@ -6116,7 +6116,7 @@ impl<'a> From<&'a SpecializationInfo> for VkSpecializationInfoWrapper {
 gen_chain_struct! {
     name: PipelineShaderStageCreateInfoChain [PipelineShaderStageCreateInfoChainWrapper],
     query: PipelineShaderStageCreateInfoChainQuery [PipelineShaderStageCreateInfoChainQueryWrapper],
-    vks: VkPipelineShaderStageCreateInfo,
+    vks: vks::core::VkPipelineShaderStageCreateInfo,
     input: true,
     output: false,
 }
@@ -6134,7 +6134,7 @@ pub struct PipelineShaderStageCreateInfo {
 
 #[derive(Debug)]
 struct VkPipelineShaderStageCreateInfoWrapper {
-    pub vks_struct: vks::VkPipelineShaderStageCreateInfo,
+    pub vks_struct: vks::core::VkPipelineShaderStageCreateInfo,
     module: ShaderModule,
     name: CString,
     specialization_info: Option<Box<VkSpecializationInfoWrapper>>,
@@ -6157,8 +6157,8 @@ impl VkPipelineShaderStageCreateInfoWrapper {
         let (pnext, chain) = PipelineShaderStageCreateInfoChainWrapper::new_optional(&create_info.chain, with_chain);
 
         VkPipelineShaderStageCreateInfoWrapper {
-            vks_struct: vks::VkPipelineShaderStageCreateInfo {
-                sType: vks::VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
+            vks_struct: vks::core::VkPipelineShaderStageCreateInfo {
+                sType: vks::core::VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
                 pNext: pnext,
                 flags: create_info.flags.bits(),
                 stage: create_info.stage.bits(),
@@ -6182,9 +6182,9 @@ pub struct VertexInputBindingDescription {
     pub input_rate: VertexInputRate,
 }
 
-impl<'a> From<&'a VertexInputBindingDescription> for vks::VkVertexInputBindingDescription {
+impl<'a> From<&'a VertexInputBindingDescription> for vks::core::VkVertexInputBindingDescription {
     fn from(description: &'a VertexInputBindingDescription) -> Self {
-        vks::VkVertexInputBindingDescription {
+        vks::core::VkVertexInputBindingDescription {
             binding: description.binding,
             stride: description.stride,
             inputRate: description.input_rate.into(),
@@ -6201,9 +6201,9 @@ pub struct VertexInputAttributeDescription {
     pub offset: u32,
 }
 
-impl<'a> From<&'a VertexInputAttributeDescription> for vks::VkVertexInputAttributeDescription {
+impl<'a> From<&'a VertexInputAttributeDescription> for vks::core::VkVertexInputAttributeDescription {
     fn from(description: &'a VertexInputAttributeDescription) -> Self {
-        vks::VkVertexInputAttributeDescription {
+        vks::core::VkVertexInputAttributeDescription {
             location: description.location,
             binding: description.binding,
             format: description.format.into(),
@@ -6215,7 +6215,7 @@ impl<'a> From<&'a VertexInputAttributeDescription> for vks::VkVertexInputAttribu
 gen_chain_struct! {
     name: PipelineVertexInputStateCreateInfoChain [PipelineVertexInputStateCreateInfoChainWrapper],
     query: PipelineVertexInputStateCreateInfoChainQuery [PipelineVertexInputStateCreateInfoChainQueryWrapper],
-    vks: VkPipelineVertexInputStateCreateInfo,
+    vks: vks::core::VkPipelineVertexInputStateCreateInfo,
     input: true,
     output: false,
 }
@@ -6231,9 +6231,9 @@ pub struct PipelineVertexInputStateCreateInfo {
 
 #[derive(Debug)]
 struct VkPipelineVertexInputStateCreateInfoWrapper {
-    pub vks_struct: vks::VkPipelineVertexInputStateCreateInfo,
-    vertex_binding_descriptions: Vec<vks::VkVertexInputBindingDescription>,
-    vertex_attribute_descriptions: Vec<vks::VkVertexInputAttributeDescription>,
+    pub vks_struct: vks::core::VkPipelineVertexInputStateCreateInfo,
+    vertex_binding_descriptions: Vec<vks::core::VkVertexInputBindingDescription>,
+    vertex_attribute_descriptions: Vec<vks::core::VkVertexInputAttributeDescription>,
     chain: Option<PipelineVertexInputStateCreateInfoChainWrapper>,
 }
 
@@ -6258,8 +6258,8 @@ impl VkPipelineVertexInputStateCreateInfoWrapper {
         let (pnext, chain) = PipelineVertexInputStateCreateInfoChainWrapper::new_optional(&create_info.chain, with_chain);
 
         VkPipelineVertexInputStateCreateInfoWrapper {
-            vks_struct: vks::VkPipelineVertexInputStateCreateInfo {
-                sType: vks::VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO,
+            vks_struct: vks::core::VkPipelineVertexInputStateCreateInfo {
+                sType: vks::core::VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO,
                 pNext: pnext,
                 flags: create_info.flags.bits(),
                 vertexBindingDescriptionCount: vertex_binding_descriptions.len() as u32,
@@ -6277,7 +6277,7 @@ impl VkPipelineVertexInputStateCreateInfoWrapper {
 gen_chain_struct! {
     name: PipelineInputAssemblyStateCreateInfoChain [PipelineInputAssemblyStateCreateInfoChainWrapper],
     query: PipelineInputAssemblyStateCreateInfoChainQuery [PipelineInputAssemblyStateCreateInfoChainQueryWrapper],
-    vks: VkPipelineInputAssemblyStateCreateInfo,
+    vks: vks::core::VkPipelineInputAssemblyStateCreateInfo,
     input: true,
     output: false,
 }
@@ -6293,7 +6293,7 @@ pub struct PipelineInputAssemblyStateCreateInfo {
 
 #[derive(Debug)]
 struct VkPipelineInputAssemblyStateCreateInfoWrapper {
-    pub vks_struct: vks::VkPipelineInputAssemblyStateCreateInfo,
+    pub vks_struct: vks::core::VkPipelineInputAssemblyStateCreateInfo,
     chain: Option<PipelineInputAssemblyStateCreateInfoChainWrapper>,
 }
 
@@ -6302,8 +6302,8 @@ impl VkPipelineInputAssemblyStateCreateInfoWrapper {
         let (pnext, chain) = PipelineInputAssemblyStateCreateInfoChainWrapper::new_optional(&create_info.chain, with_chain);
 
         VkPipelineInputAssemblyStateCreateInfoWrapper {
-            vks_struct: vks::VkPipelineInputAssemblyStateCreateInfo {
-                sType: vks::VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO,
+            vks_struct: vks::core::VkPipelineInputAssemblyStateCreateInfo {
+                sType: vks::core::VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO,
                 pNext: pnext,
                 flags: create_info.flags.bits(),
                 topology: create_info.topology.into(),
@@ -6317,7 +6317,7 @@ impl VkPipelineInputAssemblyStateCreateInfoWrapper {
 gen_chain_struct! {
     name: PipelineTessellationStateCreateInfoChain [PipelineTessellationStateCreateInfoChainWrapper],
     query: PipelineTessellationStateCreateInfoChainQuery [PipelineTessellationStateCreateInfoChainQueryWrapper],
-    vks: VkPipelineTessellationStateCreateInfo,
+    vks: vks::core::VkPipelineTessellationStateCreateInfo,
     input: true,
     output: false,
 }
@@ -6332,7 +6332,7 @@ pub struct PipelineTessellationStateCreateInfo {
 
 #[derive(Debug)]
 struct VkPipelineTessellationStateCreateInfoWrapper {
-    pub vks_struct: vks::VkPipelineTessellationStateCreateInfo,
+    pub vks_struct: vks::core::VkPipelineTessellationStateCreateInfo,
     chain: Option<PipelineTessellationStateCreateInfoChainWrapper>,
 }
 
@@ -6341,8 +6341,8 @@ impl VkPipelineTessellationStateCreateInfoWrapper {
         let (pnext, chain) = PipelineTessellationStateCreateInfoChainWrapper::new_optional(&create_info.chain, with_chain);
 
         VkPipelineTessellationStateCreateInfoWrapper {
-            vks_struct: vks::VkPipelineTessellationStateCreateInfo {
-                sType: vks::VK_STRUCTURE_TYPE_PIPELINE_TESSELLATION_STATE_CREATE_INFO,
+            vks_struct: vks::core::VkPipelineTessellationStateCreateInfo {
+                sType: vks::core::VK_STRUCTURE_TYPE_PIPELINE_TESSELLATION_STATE_CREATE_INFO,
                 pNext: pnext,
                 flags: create_info.flags.bits(),
                 patchControlPoints: create_info.patch_control_points,
@@ -6363,9 +6363,9 @@ pub struct Viewport {
     pub max_depth: f32,
 }
 
-impl<'a> From<&'a Viewport> for vks::VkViewport {
+impl<'a> From<&'a Viewport> for vks::core::VkViewport {
     fn from(viewport: &'a Viewport) -> Self {
-        vks::VkViewport {
+        vks::core::VkViewport {
             x: viewport.x,
             y: viewport.y,
             width: viewport.width,
@@ -6383,8 +6383,8 @@ pub struct Offset2D {
     pub y: i32,
 }
 
-impl<'a> From<&'a vks::VkOffset2D> for Offset2D {
-    fn from(offset: &'a vks::VkOffset2D) -> Self {
+impl<'a> From<&'a vks::core::VkOffset2D> for Offset2D {
+    fn from(offset: &'a vks::core::VkOffset2D) -> Self {
         Offset2D {
             x: offset.x,
             y: offset.y,
@@ -6392,9 +6392,9 @@ impl<'a> From<&'a vks::VkOffset2D> for Offset2D {
     }
 }
 
-impl<'a> From<&'a Offset2D> for vks::VkOffset2D {
+impl<'a> From<&'a Offset2D> for vks::core::VkOffset2D {
     fn from(offset: &'a Offset2D) -> Self {
-        vks::VkOffset2D {
+        vks::core::VkOffset2D {
             x: offset.x,
             y: offset.y,
         }
@@ -6437,8 +6437,8 @@ pub struct Extent2D {
     pub height: u32,
 }
 
-impl<'a> From<&'a vks::VkExtent2D> for Extent2D {
-    fn from(extent: &'a vks::VkExtent2D) -> Self {
+impl<'a> From<&'a vks::core::VkExtent2D> for Extent2D {
+    fn from(extent: &'a vks::core::VkExtent2D) -> Self {
         Extent2D {
             width: extent.width,
             height: extent.height,
@@ -6446,9 +6446,9 @@ impl<'a> From<&'a vks::VkExtent2D> for Extent2D {
     }
 }
 
-impl<'a> From<&'a Extent2D> for vks::VkExtent2D {
+impl<'a> From<&'a Extent2D> for vks::core::VkExtent2D {
     fn from(extent: &'a Extent2D) -> Self {
-        vks::VkExtent2D {
+        vks::core::VkExtent2D {
             width: extent.width,
             height: extent.height,
         }
@@ -6491,9 +6491,9 @@ pub struct Rect2D {
     pub extent: Extent2D,
 }
 
-impl<'a> From<&'a Rect2D> for vks::VkRect2D {
+impl<'a> From<&'a Rect2D> for vks::core::VkRect2D {
     fn from(rect: &'a Rect2D) -> Self {
-        vks::VkRect2D {
+        vks::core::VkRect2D {
             offset: (&rect.offset).into(),
             extent: (&rect.extent).into(),
         }
@@ -6514,7 +6514,7 @@ impl Rect2D {
 gen_chain_struct! {
     name: PipelineViewportStateCreateInfoChain [PipelineViewportStateCreateInfoChainWrapper],
     query: PipelineViewportStateCreateInfoChainQuery [PipelineViewportStateCreateInfoChainQueryWrapper],
-    vks: VkPipelineViewportStateCreateInfo,
+    vks: vks::core::VkPipelineViewportStateCreateInfo,
     input: true,
     output: false,
 }
@@ -6530,9 +6530,9 @@ pub struct PipelineViewportStateCreateInfo {
 
 #[derive(Debug)]
 struct VkPipelineViewportStateCreateInfoWrapper {
-    pub vks_struct: vks::VkPipelineViewportStateCreateInfo,
-    viewports: Vec<vks::VkViewport>,
-    scissors: Vec<vks::VkRect2D>,
+    pub vks_struct: vks::core::VkPipelineViewportStateCreateInfo,
+    viewports: Vec<vks::core::VkViewport>,
+    scissors: Vec<vks::core::VkRect2D>,
     chain: Option<PipelineViewportStateCreateInfoChainWrapper>,
 }
 
@@ -6543,8 +6543,8 @@ impl VkPipelineViewportStateCreateInfoWrapper {
         let (pnext, chain) = PipelineViewportStateCreateInfoChainWrapper::new_optional(&create_info.chain, with_chain);
 
         VkPipelineViewportStateCreateInfoWrapper {
-            vks_struct: vks::VkPipelineViewportStateCreateInfo {
-                sType: vks::VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO,
+            vks_struct: vks::core::VkPipelineViewportStateCreateInfo {
+                sType: vks::core::VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO,
                 pNext: pnext,
                 flags: create_info.flags.bits(),
                 viewportCount: viewports.len() as u32,
@@ -6562,7 +6562,7 @@ impl VkPipelineViewportStateCreateInfoWrapper {
 gen_chain_struct! {
     name: PipelineRasterizationStateCreateInfoChain [PipelineRasterizationStateCreateInfoChainWrapper],
     query: PipelineRasterizationStateCreateInfoChainQuery [PipelineRasterizationStateCreateInfoChainQueryWrapper],
-    vks: VkPipelineRasterizationStateCreateInfo,
+    vks: vks::core::VkPipelineRasterizationStateCreateInfo,
     input: true,
     output: false,
 
@@ -6572,8 +6572,8 @@ gen_chain_struct! {
         fn_has: has_pipeline_rasterization_state_rasterization_order_amd,
         fn_get: get_pipeline_rasterization_state_rasterization_order_amd,
         wrapper: VkPipelineRasterizationStateRasterizationOrderAMDWrapper,
-        vks: VkPipelineRasterizationStateRasterizationOrderAMD,
-        stype: vks::VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_RASTERIZATION_ORDER_AMD,
+        vks: vks::amd_rasterization_order::VkPipelineRasterizationStateRasterizationOrderAMD,
+        stype: vks::core::VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_RASTERIZATION_ORDER_AMD,
     }
 }
 
@@ -6596,7 +6596,7 @@ pub struct PipelineRasterizationStateCreateInfo {
 
 #[derive(Debug)]
 struct VkPipelineRasterizationStateCreateInfoWrapper {
-    pub vks_struct: vks::VkPipelineRasterizationStateCreateInfo,
+    pub vks_struct: vks::core::VkPipelineRasterizationStateCreateInfo,
     chain: Option<PipelineRasterizationStateCreateInfoChainWrapper>,
 }
 
@@ -6605,8 +6605,8 @@ impl VkPipelineRasterizationStateCreateInfoWrapper {
         let (pnext, chain) = PipelineRasterizationStateCreateInfoChainWrapper::new_optional(&create_info.chain, with_chain);
 
         VkPipelineRasterizationStateCreateInfoWrapper {
-            vks_struct: vks::VkPipelineRasterizationStateCreateInfo {
-                sType: vks::VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO,
+            vks_struct: vks::core::VkPipelineRasterizationStateCreateInfo {
+                sType: vks::core::VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO,
                 pNext: pnext,
                 flags: create_info.flags.bits(),
                 depthClampEnable: utils::to_vk_bool(create_info.depth_clamp_enable),
@@ -6628,7 +6628,7 @@ impl VkPipelineRasterizationStateCreateInfoWrapper {
 gen_chain_struct! {
     name: PipelineMultisampleStateCreateInfoChain [PipelineMultisampleStateCreateInfoChainWrapper],
     query: PipelineMultisampleStateCreateInfoChainQuery [PipelineMultisampleStateCreateInfoChainQueryWrapper],
-    vks: VkPipelineMultisampleStateCreateInfo,
+    vks: vks::core::VkPipelineMultisampleStateCreateInfo,
     input: true,
     output: false,
 }
@@ -6648,7 +6648,7 @@ pub struct PipelineMultisampleStateCreateInfo {
 
 #[derive(Debug)]
 struct VkPipelineMultisampleStateCreateInfoWrapper {
-    pub vks_struct: vks::VkPipelineMultisampleStateCreateInfo,
+    pub vks_struct: vks::core::VkPipelineMultisampleStateCreateInfo,
     sample_mask: Vec<u32>,
     chain: Option<PipelineMultisampleStateCreateInfoChainWrapper>,
 }
@@ -6666,8 +6666,8 @@ impl VkPipelineMultisampleStateCreateInfoWrapper {
         let (pnext, chain) = PipelineMultisampleStateCreateInfoChainWrapper::new_optional(&create_info.chain, with_chain);
 
         VkPipelineMultisampleStateCreateInfoWrapper {
-            vks_struct: vks::VkPipelineMultisampleStateCreateInfo {
-                sType: vks::VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO,
+            vks_struct: vks::core::VkPipelineMultisampleStateCreateInfo {
+                sType: vks::core::VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO,
                 pNext: pnext,
                 flags: create_info.flags.bits(),
                 rasterizationSamples: create_info.rasterization_samples.bits(),
@@ -6695,9 +6695,9 @@ pub struct StencilOpState {
     pub reference: u32,
 }
 
-impl<'a> From<&'a StencilOpState> for vks::VkStencilOpState {
+impl<'a> From<&'a StencilOpState> for vks::core::VkStencilOpState {
     fn from(state: &'a StencilOpState) -> Self {
-        vks::VkStencilOpState {
+        vks::core::VkStencilOpState {
             failOp: state.fail_op.into(),
             passOp: state.pass_op.into(),
             depthFailOp: state.depth_fail_op.into(),
@@ -6712,7 +6712,7 @@ impl<'a> From<&'a StencilOpState> for vks::VkStencilOpState {
 gen_chain_struct! {
     name: PipelineDepthStencilStateCreateInfoChain [PipelineDepthStencilStateCreateInfoChainWrapper],
     query: PipelineDepthStencilStateCreateInfoChainQuery [PipelineDepthStencilStateCreateInfoChainQueryWrapper],
-    vks: VkPipelineDepthStencilStateCreateInfo,
+    vks: vks::core::VkPipelineDepthStencilStateCreateInfo,
     input: true,
     output: false,
 }
@@ -6735,7 +6735,7 @@ pub struct PipelineDepthStencilStateCreateInfo {
 
 #[derive(Debug)]
 struct VkPipelineDepthStencilStateCreateInfoWrapper {
-    pub vks_struct: vks::VkPipelineDepthStencilStateCreateInfo,
+    pub vks_struct: vks::core::VkPipelineDepthStencilStateCreateInfo,
     chain: Option<PipelineDepthStencilStateCreateInfoChainWrapper>,
 }
 
@@ -6744,8 +6744,8 @@ impl VkPipelineDepthStencilStateCreateInfoWrapper {
         let (pnext, chain) = PipelineDepthStencilStateCreateInfoChainWrapper::new_optional(&create_info.chain, with_chain);
 
         VkPipelineDepthStencilStateCreateInfoWrapper {
-            vks_struct: vks::VkPipelineDepthStencilStateCreateInfo {
-                sType: vks::VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO,
+            vks_struct: vks::core::VkPipelineDepthStencilStateCreateInfo {
+                sType: vks::core::VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO,
                 pNext: pnext,
                 flags: create_info.flags.bits(),
                 depthTestEnable: utils::to_vk_bool(create_info.depth_test_enable),
@@ -6776,9 +6776,9 @@ pub struct PipelineColorBlendAttachmentState {
     pub color_write_mask: ColorComponentFlags,
 }
 
-impl<'a> From<&'a PipelineColorBlendAttachmentState> for vks::VkPipelineColorBlendAttachmentState {
+impl<'a> From<&'a PipelineColorBlendAttachmentState> for vks::core::VkPipelineColorBlendAttachmentState {
     fn from(state: &'a PipelineColorBlendAttachmentState) -> Self {
-        vks::VkPipelineColorBlendAttachmentState {
+        vks::core::VkPipelineColorBlendAttachmentState {
             blendEnable: utils::to_vk_bool(state.blend_enable),
             srcColorBlendFactor: state.src_color_blend_factor.into(),
             dstColorBlendFactor: state.dst_color_blend_factor.into(),
@@ -6794,7 +6794,7 @@ impl<'a> From<&'a PipelineColorBlendAttachmentState> for vks::VkPipelineColorBle
 gen_chain_struct! {
     name: PipelineColorBlendStateCreateInfoChain [PipelineColorBlendStateCreateInfoChainWrapper],
     query: PipelineColorBlendStateCreateInfoChainQuery [PipelineColorBlendStateCreateInfoChainQueryWrapper],
-    vks: VkPipelineColorBlendStateCreateInfo,
+    vks: vks::core::VkPipelineColorBlendStateCreateInfo,
     input: true,
     output: false,
 }
@@ -6812,8 +6812,8 @@ pub struct PipelineColorBlendStateCreateInfo {
 
 #[derive(Debug)]
 struct VkPipelineColorBlendStateCreateInfoWrapper {
-    pub vks_struct: vks::VkPipelineColorBlendStateCreateInfo,
-    attachments: Vec<vks::VkPipelineColorBlendAttachmentState>,
+    pub vks_struct: vks::core::VkPipelineColorBlendStateCreateInfo,
+    attachments: Vec<vks::core::VkPipelineColorBlendAttachmentState>,
     chain: Option<PipelineColorBlendStateCreateInfoChainWrapper>,
 }
 
@@ -6830,8 +6830,8 @@ impl VkPipelineColorBlendStateCreateInfoWrapper {
         let (pnext, chain) = PipelineColorBlendStateCreateInfoChainWrapper::new_optional(&create_info.chain, with_chain);
 
         VkPipelineColorBlendStateCreateInfoWrapper {
-            vks_struct: vks::VkPipelineColorBlendStateCreateInfo {
-                sType: vks::VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO,
+            vks_struct: vks::core::VkPipelineColorBlendStateCreateInfo {
+                sType: vks::core::VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO,
                 pNext: pnext,
                 flags: create_info.flags.bits(),
                 logicOpEnable: utils::to_vk_bool(create_info.logic_op_enable),
@@ -6849,7 +6849,7 @@ impl VkPipelineColorBlendStateCreateInfoWrapper {
 gen_chain_struct! {
     name: PipelineDynamicStateCreateInfoChain [PipelineDynamicStateCreateInfoChainWrapper],
     query: PipelineDynamicStateCreateInfoChainQuery [PipelineDynamicStateCreateInfoChainQueryWrapper],
-    vks: VkPipelineDynamicStateCreateInfo,
+    vks: vks::core::VkPipelineDynamicStateCreateInfo,
     input: true,
     output: false,
 }
@@ -6864,8 +6864,8 @@ pub struct PipelineDynamicStateCreateInfo {
 
 #[derive(Debug)]
 struct VkPipelineDynamicStateCreateInfoWrapper {
-    pub vks_struct: vks::VkPipelineDynamicStateCreateInfo,
-    dynamic_states: Vec<vks::VkDynamicState>,
+    pub vks_struct: vks::core::VkPipelineDynamicStateCreateInfo,
+    dynamic_states: Vec<vks::core::VkDynamicState>,
     chain: Option<PipelineDynamicStateCreateInfoChainWrapper>,
 }
 
@@ -6880,8 +6880,8 @@ impl VkPipelineDynamicStateCreateInfoWrapper {
         let (pnext, chain) = PipelineDynamicStateCreateInfoChainWrapper::new_optional(&create_info.chain, with_chain);
 
         VkPipelineDynamicStateCreateInfoWrapper {
-            vks_struct: vks::VkPipelineDynamicStateCreateInfo {
-                sType: vks::VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO,
+            vks_struct: vks::core::VkPipelineDynamicStateCreateInfo {
+                sType: vks::core::VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO,
                 pNext: pnext,
                 flags: create_info.flags.bits(),
                 dynamicStateCount: dynamic_states.len() as u32,
@@ -6896,7 +6896,7 @@ impl VkPipelineDynamicStateCreateInfoWrapper {
 gen_chain_struct! {
     name: GraphicsPipelineCreateInfoChain [GraphicsPipelineCreateInfoChainWrapper],
     query: GraphicsPipelineCreateInfoChainQuery [GraphicsPipelineCreateInfoChainQueryWrapper],
-    vks: VkGraphicsPipelineCreateInfo,
+    vks: vks::core::VkGraphicsPipelineCreateInfo,
     input: true,
     output: false,
 }
@@ -6925,9 +6925,9 @@ pub struct GraphicsPipelineCreateInfo {
 
 #[derive(Debug)]
 struct VkGraphicsPipelineCreateInfoWrapper {
-    pub vks_struct: vks::VkGraphicsPipelineCreateInfo,
+    pub vks_struct: vks::core::VkGraphicsPipelineCreateInfo,
     stages: Vec<VkPipelineShaderStageCreateInfoWrapper>,
-    vk_stages: Vec<vks::VkPipelineShaderStageCreateInfo>,
+    vk_stages: Vec<vks::core::VkPipelineShaderStageCreateInfo>,
     vertex_input_state: Box<VkPipelineVertexInputStateCreateInfoWrapper>,
     input_assembly_state: Box<VkPipelineInputAssemblyStateCreateInfoWrapper>,
     tessellation_state: Option<Box<VkPipelineTessellationStateCreateInfoWrapper>>,
@@ -7019,8 +7019,8 @@ impl VkGraphicsPipelineCreateInfoWrapper {
         let (pnext, chain) = GraphicsPipelineCreateInfoChainWrapper::new_optional(&create_info.chain, with_chain);
 
         VkGraphicsPipelineCreateInfoWrapper {
-            vks_struct: vks::VkGraphicsPipelineCreateInfo {
-                sType: vks::VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO,
+            vks_struct: vks::core::VkGraphicsPipelineCreateInfo {
+                sType: vks::core::VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO,
                 pNext: pnext,
                 flags: create_info.flags.bits(),
                 stageCount: stages.len() as u32,
@@ -7062,7 +7062,7 @@ impl VkGraphicsPipelineCreateInfoWrapper {
 gen_chain_struct! {
     name: ComputePipelineCreateInfoChain [ComputePipelineCreateInfoChainWrapper],
     query: ComputePipelineCreateInfoChainQuery [ComputePipelineCreateInfoChainQueryWrapper],
-    vks: VkComputePipelineCreateInfo,
+    vks: vks::core::VkComputePipelineCreateInfo,
     input: true,
     output: false,
 }
@@ -7080,7 +7080,7 @@ pub struct ComputePipelineCreateInfo {
 
 #[derive(Debug)]
 struct VkComputePipelineCreateInfoWrapper {
-    pub vks_struct: vks::VkComputePipelineCreateInfo,
+    pub vks_struct: vks::core::VkComputePipelineCreateInfo,
     stage: VkPipelineShaderStageCreateInfoWrapper,
     layout: PipelineLayout,
     base_pipeline: Option<Pipeline>,
@@ -7104,8 +7104,8 @@ impl VkComputePipelineCreateInfoWrapper {
         let (pnext, chain) = ComputePipelineCreateInfoChainWrapper::new_optional(&create_info.chain, with_chain);
 
         VkComputePipelineCreateInfoWrapper {
-            vks_struct: vks::VkComputePipelineCreateInfo {
-                sType: vks::VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO,
+            vks_struct: vks::core::VkComputePipelineCreateInfo {
+                sType: vks::core::VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO,
                 pNext: pnext,
                 flags: create_info.flags.bits(),
                 stage: stage.vks_struct,
@@ -7129,9 +7129,9 @@ pub struct PushConstantRange {
     pub size: u32,
 }
 
-impl<'a> From<&'a PushConstantRange> for vks::VkPushConstantRange {
+impl<'a> From<&'a PushConstantRange> for vks::core::VkPushConstantRange {
     fn from(range: &'a PushConstantRange) -> Self {
-        vks::VkPushConstantRange {
+        vks::core::VkPushConstantRange {
             stageFlags: range.stage_flags.bits(),
             offset: range.offset,
             size: range.size,
@@ -7142,7 +7142,7 @@ impl<'a> From<&'a PushConstantRange> for vks::VkPushConstantRange {
 gen_chain_struct! {
     name: PipelineLayoutCreateInfoChain [PipelineLayoutCreateInfoChainWrapper],
     query: PipelineLayoutCreateInfoChainQuery [PipelineLayoutCreateInfoChainQueryWrapper],
-    vks: VkPipelineLayoutCreateInfo,
+    vks: vks::core::VkPipelineLayoutCreateInfo,
     input: true,
     output: false,
 }
@@ -7158,10 +7158,10 @@ pub struct PipelineLayoutCreateInfo {
 
 #[derive(Debug)]
 struct VkPipelineLayoutCreateInfoWrapper {
-    pub vks_struct: vks::VkPipelineLayoutCreateInfo,
+    pub vks_struct: vks::core::VkPipelineLayoutCreateInfo,
     set_layouts: Vec<DescriptorSetLayout>,
-    vk_set_layouts: Vec<vks::VkDescriptorSetLayout>,
-    push_constant_ranges: Vec<vks::VkPushConstantRange>,
+    vk_set_layouts: Vec<vks::core::VkDescriptorSetLayout>,
+    push_constant_ranges: Vec<vks::core::VkPushConstantRange>,
     chain: Option<PipelineLayoutCreateInfoChainWrapper>,
 }
 
@@ -7187,8 +7187,8 @@ impl VkPipelineLayoutCreateInfoWrapper {
         let (pnext, chain) = PipelineLayoutCreateInfoChainWrapper::new_optional(&create_info.chain, with_chain);
 
         VkPipelineLayoutCreateInfoWrapper {
-            vks_struct: vks::VkPipelineLayoutCreateInfo {
-                sType: vks::VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO,
+            vks_struct: vks::core::VkPipelineLayoutCreateInfo {
+                sType: vks::core::VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO,
                 pNext: pnext,
                 flags: create_info.flags.bits(),
                 setLayoutCount: set_layouts.len() as u32,
@@ -7207,7 +7207,7 @@ impl VkPipelineLayoutCreateInfoWrapper {
 gen_chain_struct! {
     name: SamplerCreateInfoChain [SamplerCreateInfoChainWrapper],
     query: SamplerCreateInfoChainQuery [SamplerCreateInfoChainQueryWrapper],
-    vks: VkSamplerCreateInfo,
+    vks: vks::core::VkSamplerCreateInfo,
     input: true,
     output: false,
 }
@@ -7236,7 +7236,7 @@ pub struct SamplerCreateInfo {
 
 #[derive(Debug)]
 struct VkSamplerCreateInfoWrapper {
-    pub vks_struct: vks::VkSamplerCreateInfo,
+    pub vks_struct: vks::core::VkSamplerCreateInfo,
     chain: Option<SamplerCreateInfoChainWrapper>,
 }
 
@@ -7245,8 +7245,8 @@ impl VkSamplerCreateInfoWrapper {
         let (pnext, chain) = SamplerCreateInfoChainWrapper::new_optional(&create_info.chain, with_chain);
 
         VkSamplerCreateInfoWrapper {
-            vks_struct: vks::VkSamplerCreateInfo {
-                sType: vks::VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO,
+            vks_struct: vks::core::VkSamplerCreateInfo {
+                sType: vks::core::VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO,
                 pNext: pnext,
                 flags: create_info.flags.bits(),
                 magFilter: create_info.mag_filter.into(),
@@ -7282,9 +7282,9 @@ pub struct DescriptorSetLayoutBinding {
 
 #[derive(Debug)]
 struct VkDescriptorSetLayoutBindingWrapper {
-    pub vks_struct: vks::VkDescriptorSetLayoutBinding,
+    pub vks_struct: vks::core::VkDescriptorSetLayoutBinding,
     immutable_samplers: Vec<Sampler>,
-    immutable_vk_samplers: Vec<vks::VkSampler>,
+    immutable_vk_samplers: Vec<vks::core::VkSampler>,
 }
 
 impl<'a> From<&'a DescriptorSetLayoutBinding> for VkDescriptorSetLayoutBindingWrapper {
@@ -7299,7 +7299,7 @@ impl<'a> From<&'a DescriptorSetLayoutBinding> for VkDescriptorSetLayoutBindingWr
         };
 
         VkDescriptorSetLayoutBindingWrapper {
-            vks_struct: vks::VkDescriptorSetLayoutBinding {
+            vks_struct: vks::core::VkDescriptorSetLayoutBinding {
                 binding: binding.binding,
                 descriptorType: binding.descriptor_type.into(),
                 descriptorCount: binding.descriptor_count,
@@ -7315,7 +7315,7 @@ impl<'a> From<&'a DescriptorSetLayoutBinding> for VkDescriptorSetLayoutBindingWr
 gen_chain_struct! {
     name: DescriptorSetLayoutCreateInfoChain [DescriptorSetLayoutCreateInfoChainWrapper],
     query: DescriptorSetLayoutCreateInfoChainQuery [DescriptorSetLayoutCreateInfoChainQueryWrapper],
-    vks: VkDescriptorSetLayoutCreateInfo,
+    vks: vks::core::VkDescriptorSetLayoutCreateInfo,
     input: true,
     output: false,
 }
@@ -7330,9 +7330,9 @@ pub struct DescriptorSetLayoutCreateInfo {
 
 #[derive(Debug)]
 struct VkDescriptorSetLayoutCreateInfoWrapper {
-    pub vks_struct: vks::VkDescriptorSetLayoutCreateInfo,
+    pub vks_struct: vks::core::VkDescriptorSetLayoutCreateInfo,
     bindings: Vec<VkDescriptorSetLayoutBindingWrapper>,
-    vk_bindings: Vec<vks::VkDescriptorSetLayoutBinding>,
+    vk_bindings: Vec<vks::core::VkDescriptorSetLayoutBinding>,
     chain: Option<DescriptorSetLayoutCreateInfoChainWrapper>,
 }
 
@@ -7350,8 +7350,8 @@ impl VkDescriptorSetLayoutCreateInfoWrapper {
         let (pnext, chain) = DescriptorSetLayoutCreateInfoChainWrapper::new_optional(&create_info.chain, with_chain);
 
         VkDescriptorSetLayoutCreateInfoWrapper {
-            vks_struct: vks::VkDescriptorSetLayoutCreateInfo {
-                sType: vks::VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO,
+            vks_struct: vks::core::VkDescriptorSetLayoutCreateInfo {
+                sType: vks::core::VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO,
                 pNext: pnext,
                 flags: create_info.flags.bits(),
                 bindingCount: bindings.len() as u32,
@@ -7371,9 +7371,9 @@ pub struct DescriptorPoolSize {
     pub descriptor_count: u32,
 }
 
-impl<'a> From<&'a DescriptorPoolSize> for vks::VkDescriptorPoolSize {
+impl<'a> From<&'a DescriptorPoolSize> for vks::core::VkDescriptorPoolSize {
     fn from(size: &'a DescriptorPoolSize) -> Self {
-        vks::VkDescriptorPoolSize {
+        vks::core::VkDescriptorPoolSize {
             type_: size.descriptor_type.into(),
             descriptorCount: size.descriptor_count,
         }
@@ -7383,7 +7383,7 @@ impl<'a> From<&'a DescriptorPoolSize> for vks::VkDescriptorPoolSize {
 gen_chain_struct! {
     name: DescriptorPoolCreateInfoChain [DescriptorPoolCreateInfoChainWrapper],
     query: DescriptorPoolCreateInfoChainQuery [DescriptorPoolCreateInfoChainQueryWrapper],
-    vks: VkDescriptorPoolCreateInfo,
+    vks: vks::core::VkDescriptorPoolCreateInfo,
     input: true,
     output: false,
 }
@@ -7399,8 +7399,8 @@ pub struct DescriptorPoolCreateInfo {
 
 #[derive(Debug)]
 struct VkDescriptorPoolCreateInfoWrapper {
-    pub vks_struct: vks::VkDescriptorPoolCreateInfo,
-    pool_sizes: Vec<vks::VkDescriptorPoolSize>,
+    pub vks_struct: vks::core::VkDescriptorPoolCreateInfo,
+    pool_sizes: Vec<vks::core::VkDescriptorPoolSize>,
     chain: Option<DescriptorPoolCreateInfoChainWrapper>,
 }
 
@@ -7414,8 +7414,8 @@ impl VkDescriptorPoolCreateInfoWrapper {
         let (pnext, chain) = DescriptorPoolCreateInfoChainWrapper::new_optional(&create_info.chain, with_chain);
 
         VkDescriptorPoolCreateInfoWrapper {
-            vks_struct: vks::VkDescriptorPoolCreateInfo {
-                sType: vks::VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO,
+            vks_struct: vks::core::VkDescriptorPoolCreateInfo {
+                sType: vks::core::VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO,
                 pNext: pnext,
                 flags: create_info.flags.bits(),
                 maxSets: create_info.max_sets,
@@ -7431,7 +7431,7 @@ impl VkDescriptorPoolCreateInfoWrapper {
 gen_chain_struct! {
     name: DescriptorSetAllocateInfoChain [DescriptorSetAllocateInfoChainWrapper],
     query: DescriptorSetAllocateInfoChainQuery [DescriptorSetAllocateInfoChainQueryWrapper],
-    vks: VkDescriptorSetAllocateInfo,
+    vks: vks::core::VkDescriptorSetAllocateInfo,
     input: true,
     output: false,
 }
@@ -7446,10 +7446,10 @@ pub struct DescriptorSetAllocateInfo {
 
 #[derive(Debug)]
 struct VkDescriptorSetAllocateInfoWrapper {
-    pub vks_struct: vks::VkDescriptorSetAllocateInfo,
+    pub vks_struct: vks::core::VkDescriptorSetAllocateInfo,
     descriptor_pool: DescriptorPool,
     set_layouts: Vec<DescriptorSetLayout>,
-    vk_set_layouts: Vec<vks::VkDescriptorSetLayout>,
+    vk_set_layouts: Vec<vks::core::VkDescriptorSetLayout>,
     chain: Option<DescriptorSetAllocateInfoChainWrapper>,
 }
 
@@ -7459,8 +7459,8 @@ impl VkDescriptorSetAllocateInfoWrapper {
         let (pnext, chain) = DescriptorSetAllocateInfoChainWrapper::new_optional(&allocate_info.chain, with_chain);
 
         VkDescriptorSetAllocateInfoWrapper {
-            vks_struct: vks::VkDescriptorSetAllocateInfo {
-                sType: vks::VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO,
+            vks_struct: vks::core::VkDescriptorSetAllocateInfo {
+                sType: vks::core::VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO,
                 pNext: pnext,
                 descriptorPool: allocate_info.descriptor_pool.handle(),
                 descriptorSetCount: vk_set_layouts.len() as u32,
@@ -7484,7 +7484,7 @@ pub struct DescriptorImageInfo {
 
 #[derive(Debug)]
 struct VkDescriptorImageInfoWrapper {
-    pub vks_struct: vks::VkDescriptorImageInfo,
+    pub vks_struct: vks::core::VkDescriptorImageInfo,
     sampler: Option<Sampler>,
     image_view: Option<ImageView>,
 }
@@ -7502,7 +7502,7 @@ impl<'a> From<&'a DescriptorImageInfo> for VkDescriptorImageInfoWrapper {
         };
 
         VkDescriptorImageInfoWrapper {
-            vks_struct: vks::VkDescriptorImageInfo {
+            vks_struct: vks::core::VkDescriptorImageInfo {
                 sampler: vk_sampler,
                 imageView: vk_image_view,
                 imageLayout: info.image_layout.into(),
@@ -7523,14 +7523,14 @@ pub struct DescriptorBufferInfo {
 
 #[derive(Debug)]
 struct VkDescriptorBufferInfoWrapper {
-    pub vks_struct: vks::VkDescriptorBufferInfo,
+    pub vks_struct: vks::core::VkDescriptorBufferInfo,
     buffer: Buffer,
 }
 
 impl<'a> From<&'a DescriptorBufferInfo> for VkDescriptorBufferInfoWrapper {
     fn from(info: &'a DescriptorBufferInfo) -> Self {
         VkDescriptorBufferInfoWrapper {
-            vks_struct: vks::VkDescriptorBufferInfo {
+            vks_struct: vks::core::VkDescriptorBufferInfo {
                 buffer: info.buffer.handle(),
                 offset: info.offset,
                 range: info.range.into(),
@@ -7543,7 +7543,7 @@ impl<'a> From<&'a DescriptorBufferInfo> for VkDescriptorBufferInfoWrapper {
 gen_chain_struct! {
     name: WriteDescriptorSetChain [WriteDescriptorSetChainWrapper],
     query: WriteDescriptorSetChainQuery [WriteDescriptorSetChainQueryWrapper],
-    vks: VkWriteDescriptorSet,
+    vks: vks::core::VkWriteDescriptorSet,
     input: true,
     output: false,
 }
@@ -7569,14 +7569,14 @@ pub struct WriteDescriptorSet {
 
 #[derive(Debug)]
 struct VkWriteDescriptorSetWrapper {
-    pub vks_struct: vks::VkWriteDescriptorSet,
+    pub vks_struct: vks::core::VkWriteDescriptorSet,
     dst_set: DescriptorSet,
     image_info: Vec<VkDescriptorImageInfoWrapper>,
-    vk_image_info: Vec<vks::VkDescriptorImageInfo>,
+    vk_image_info: Vec<vks::core::VkDescriptorImageInfo>,
     buffer_info: Vec<VkDescriptorBufferInfoWrapper>,
-    vk_buffer_info: Vec<vks::VkDescriptorBufferInfo>,
+    vk_buffer_info: Vec<vks::core::VkDescriptorBufferInfo>,
     texel_buffer_view: Vec<BufferView>,
-    vk_texel_buffer_view: Vec<vks::VkBufferView>,
+    vk_texel_buffer_view: Vec<vks::core::VkBufferView>,
     chain: Option<WriteDescriptorSetChainWrapper>,
 }
 
@@ -7614,8 +7614,8 @@ impl VkWriteDescriptorSetWrapper {
         let (pnext, chain) = WriteDescriptorSetChainWrapper::new_optional(&write.chain, with_chain);
 
         VkWriteDescriptorSetWrapper {
-            vks_struct: vks::VkWriteDescriptorSet {
-                sType: vks::VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET,
+            vks_struct: vks::core::VkWriteDescriptorSet {
+                sType: vks::core::VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET,
                 pNext: pnext,
                 dstSet: write.dst_set.handle(),
                 dstBinding: write.dst_binding,
@@ -7641,7 +7641,7 @@ impl VkWriteDescriptorSetWrapper {
 gen_chain_struct! {
     name: CopyDescriptorSetChain [CopyDescriptorSetChainWrapper],
     query: CopyDescriptorSetChainQuery [CopyDescriptorSetChainQueryWrapper],
-    vks: VkCopyDescriptorSet,
+    vks: vks::core::VkCopyDescriptorSet,
     input: true,
     output: false,
 }
@@ -7661,7 +7661,7 @@ pub struct CopyDescriptorSet {
 
 #[derive(Debug)]
 struct VkCopyDescriptorSetWrapper {
-    pub vks_struct: vks::VkCopyDescriptorSet,
+    pub vks_struct: vks::core::VkCopyDescriptorSet,
     src_set: DescriptorSet,
     dst_set: DescriptorSet,
     chain: Option<CopyDescriptorSetChainWrapper>,
@@ -7672,8 +7672,8 @@ impl VkCopyDescriptorSetWrapper {
         let (pnext, chain) = CopyDescriptorSetChainWrapper::new_optional(&copy.chain, with_chain);
 
         VkCopyDescriptorSetWrapper {
-            vks_struct: vks::VkCopyDescriptorSet {
-                sType: vks::VK_STRUCTURE_TYPE_COPY_DESCRIPTOR_SET,
+            vks_struct: vks::core::VkCopyDescriptorSet {
+                sType: vks::core::VK_STRUCTURE_TYPE_COPY_DESCRIPTOR_SET,
                 pNext: pnext,
                 srcSet: copy.src_set.handle(),
                 srcBinding: copy.src_binding,
@@ -7693,7 +7693,7 @@ impl VkCopyDescriptorSetWrapper {
 gen_chain_struct! {
     name: FramebufferCreateInfoChain [FramebufferCreateInfoChainWrapper],
     query: FramebufferCreateInfoChainQuery [FramebufferCreateInfoChainQueryWrapper],
-    vks: VkFramebufferCreateInfo,
+    vks: vks::core::VkFramebufferCreateInfo,
     input: true,
     output: false,
 }
@@ -7712,10 +7712,10 @@ pub struct FramebufferCreateInfo {
 
 #[derive(Debug)]
 struct VkFramebufferCreateInfoWrapper {
-    pub vks_struct: vks::VkFramebufferCreateInfo,
+    pub vks_struct: vks::core::VkFramebufferCreateInfo,
     render_pass: RenderPass,
     attachments: Vec<ImageView>,
-    vk_attachments: Vec<vks::VkImageView>,
+    vk_attachments: Vec<vks::core::VkImageView>,
     chain: Option<FramebufferCreateInfoChainWrapper>,
 }
 
@@ -7733,8 +7733,8 @@ impl VkFramebufferCreateInfoWrapper {
         let (pnext, chain) = FramebufferCreateInfoChainWrapper::new_optional(&create_info.chain, with_chain);
 
         VkFramebufferCreateInfoWrapper {
-            vks_struct: vks::VkFramebufferCreateInfo {
-                sType: vks::VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO,
+            vks_struct: vks::core::VkFramebufferCreateInfo {
+                sType: vks::core::VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO,
                 pNext: pnext,
                 flags: create_info.flags.bits(),
                 renderPass: create_info.render_pass.handle(),
@@ -7766,9 +7766,9 @@ pub struct AttachmentDescription {
     pub final_layout: ImageLayout,
 }
 
-impl<'a> From<&'a AttachmentDescription> for vks::VkAttachmentDescription {
+impl<'a> From<&'a AttachmentDescription> for vks::core::VkAttachmentDescription {
     fn from(description: &'a AttachmentDescription) -> Self {
-        vks::VkAttachmentDescription {
+        vks::core::VkAttachmentDescription {
             flags: description.flags.bits(),
             format: description.format.into(),
             samples: description.samples.bits(),
@@ -7782,8 +7782,8 @@ impl<'a> From<&'a AttachmentDescription> for vks::VkAttachmentDescription {
     }
 }
 
-impl<'a> From<&'a vks::VkAttachmentDescription> for AttachmentDescription {
-    fn from(description: &'a vks::VkAttachmentDescription) -> Self {
+impl<'a> From<&'a vks::core::VkAttachmentDescription> for AttachmentDescription {
+    fn from(description: &'a vks::core::VkAttachmentDescription) -> Self {
         AttachmentDescription {
             flags: AttachmentDescriptionFlags::from_bits_truncate(description.flags),
             format: description.format.into(),
@@ -7805,17 +7805,17 @@ pub struct AttachmentReference {
     pub layout: ImageLayout,
 }
 
-impl<'a> From<&'a AttachmentReference> for vks::VkAttachmentReference {
+impl<'a> From<&'a AttachmentReference> for vks::core::VkAttachmentReference {
     fn from(reference: &'a AttachmentReference) -> Self {
-        vks::VkAttachmentReference {
+        vks::core::VkAttachmentReference {
             attachment: reference.attachment.into(),
             layout: reference.layout.into(),
         }
     }
 }
 
-impl<'a> From<&'a vks::VkAttachmentReference> for AttachmentReference {
-    fn from(reference: &'a vks::VkAttachmentReference) -> Self {
+impl<'a> From<&'a vks::core::VkAttachmentReference> for AttachmentReference {
+    fn from(reference: &'a vks::core::VkAttachmentReference) -> Self {
         AttachmentReference {
             attachment: reference.attachment.into(),
             layout: reference.layout.into(),
@@ -7835,8 +7835,8 @@ pub struct SubpassDescription {
     pub preserve_attachments: Vec<u32>,
 }
 
-impl<'a> From<&'a vks::VkSubpassDescription> for SubpassDescription {
-    fn from(description: &'a vks::VkSubpassDescription) -> Self {
+impl<'a> From<&'a vks::core::VkSubpassDescription> for SubpassDescription {
+    fn from(description: &'a vks::core::VkSubpassDescription) -> Self {
         let input_attachments = if !description.pInputAttachments.is_null() {
             let input_attachments = unsafe { slice::from_raw_parts(description.pInputAttachments, description.inputAttachmentCount as usize) };
             input_attachments.iter().map(AttachmentReference::from).collect()
@@ -7889,11 +7889,11 @@ impl<'a> From<&'a vks::VkSubpassDescription> for SubpassDescription {
 
 #[derive(Debug)]
 struct VkSubpassDescriptionWrapper {
-    pub vks_struct: vks::VkSubpassDescription,
-    input_attachments: Vec<vks::VkAttachmentReference>,
-    color_attachments: Vec<vks::VkAttachmentReference>,
-    resolve_attachments: Vec<vks::VkAttachmentReference>,
-    depth_stencil_attachment: Option<Box<vks::VkAttachmentReference>>,
+    pub vks_struct: vks::core::VkSubpassDescription,
+    input_attachments: Vec<vks::core::VkAttachmentReference>,
+    color_attachments: Vec<vks::core::VkAttachmentReference>,
+    resolve_attachments: Vec<vks::core::VkAttachmentReference>,
+    depth_stencil_attachment: Option<Box<vks::core::VkAttachmentReference>>,
     preserve_attachments: Vec<u32>,
 }
 
@@ -7941,7 +7941,7 @@ impl<'a> From<&'a SubpassDescription> for VkSubpassDescriptionWrapper {
         };
 
         VkSubpassDescriptionWrapper {
-            vks_struct: vks::VkSubpassDescription {
+            vks_struct: vks::core::VkSubpassDescription {
                 flags: description.flags.bits(),
                 pipelineBindPoint: description.pipeline_bind_point.into(),
                 inputAttachmentCount: input_attachments.len() as u32,
@@ -7974,9 +7974,9 @@ pub struct SubpassDependency {
     pub dependency_flags: DependencyFlags,
 }
 
-impl<'a> From<&'a SubpassDependency> for vks::VkSubpassDependency {
+impl<'a> From<&'a SubpassDependency> for vks::core::VkSubpassDependency {
     fn from(dependency: &'a SubpassDependency) -> Self {
-        vks::VkSubpassDependency {
+        vks::core::VkSubpassDependency {
             srcSubpass: dependency.src_subpass.into(),
             dstSubpass: dependency.dst_subpass.into(),
             srcStageMask: dependency.src_stage_mask.bits(),
@@ -7988,8 +7988,8 @@ impl<'a> From<&'a SubpassDependency> for vks::VkSubpassDependency {
     }
 }
 
-impl<'a> From<&'a vks::VkSubpassDependency> for SubpassDependency {
-    fn from(dependency: &'a vks::VkSubpassDependency) -> Self {
+impl<'a> From<&'a vks::core::VkSubpassDependency> for SubpassDependency {
+    fn from(dependency: &'a vks::core::VkSubpassDependency) -> Self {
         SubpassDependency {
             src_subpass: dependency.srcSubpass.into(),
             dst_subpass: dependency.dstSubpass.into(),
@@ -8005,7 +8005,7 @@ impl<'a> From<&'a vks::VkSubpassDependency> for SubpassDependency {
 gen_chain_struct! {
     name: RenderPassCreateInfoChain [RenderPassCreateInfoChainWrapper],
     query: RenderPassCreateInfoChainQuery [RenderPassCreateInfoChainQueryWrapper],
-    vks: VkRenderPassCreateInfo,
+    vks: vks::core::VkRenderPassCreateInfo,
     input: true,
     output: false,
 }
@@ -8022,11 +8022,11 @@ pub struct RenderPassCreateInfo {
 
 #[derive(Debug)]
 struct VkRenderPassCreateInfoWrapper {
-    pub vks_struct: vks::VkRenderPassCreateInfo,
-    attachments: Vec<vks::VkAttachmentDescription>,
+    pub vks_struct: vks::core::VkRenderPassCreateInfo,
+    attachments: Vec<vks::core::VkAttachmentDescription>,
     subpasses: Vec<VkSubpassDescriptionWrapper>,
-    vk_subpasses: Vec<vks::VkSubpassDescription>,
-    dependencies: Vec<vks::VkSubpassDependency>,
+    vk_subpasses: Vec<vks::core::VkSubpassDescription>,
+    dependencies: Vec<vks::core::VkSubpassDependency>,
     chain: Option<RenderPassCreateInfoChainWrapper>,
 }
 
@@ -8041,7 +8041,7 @@ impl VkRenderPassCreateInfoWrapper {
         };
 
         let subpasses: Vec<VkSubpassDescriptionWrapper> = create_info.subpasses.iter().map(From::from).collect();
-        let vk_subpasses: Vec<vks::VkSubpassDescription> = subpasses.iter().map(|s| s.vks_struct).collect();
+        let vk_subpasses: Vec<vks::core::VkSubpassDescription> = subpasses.iter().map(|s| s.vks_struct).collect();
 
         let dependencies: Vec<_> = create_info.dependencies.iter().map(From::from).collect();
         let dependencies_ptr = if !dependencies.is_empty() {
@@ -8054,8 +8054,8 @@ impl VkRenderPassCreateInfoWrapper {
         let (pnext, chain) = RenderPassCreateInfoChainWrapper::new_optional(&create_info.chain, with_chain);
 
         VkRenderPassCreateInfoWrapper {
-            vks_struct: vks::VkRenderPassCreateInfo {
-                sType: vks::VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO,
+            vks_struct: vks::core::VkRenderPassCreateInfo {
+                sType: vks::core::VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO,
                 pNext: pnext,
                 flags: create_info.flags.bits(),
                 attachmentCount: attachments.len() as u32,
@@ -8077,7 +8077,7 @@ impl VkRenderPassCreateInfoWrapper {
 gen_chain_struct! {
     name: CommandPoolCreateInfoChain [CommandPoolCreateInfoChainWrapper],
     query: CommandPoolCreateInfoChainQuery [CommandPoolCreateInfoChainQueryWrapper],
-    vks: VkCommandPoolCreateInfo,
+    vks: vks::core::VkCommandPoolCreateInfo,
     input: true,
     output: false,
 }
@@ -8092,7 +8092,7 @@ pub struct CommandPoolCreateInfo {
 
 #[derive(Debug)]
 struct VkCommandPoolCreateInfoWrapper {
-    pub vks_struct: vks::VkCommandPoolCreateInfo,
+    pub vks_struct: vks::core::VkCommandPoolCreateInfo,
     chain: Option<CommandPoolCreateInfoChainWrapper>,
 }
 
@@ -8101,8 +8101,8 @@ impl VkCommandPoolCreateInfoWrapper {
         let (pnext, chain) = CommandPoolCreateInfoChainWrapper::new_optional(&create_info.chain, with_chain);
 
         VkCommandPoolCreateInfoWrapper {
-            vks_struct: vks::VkCommandPoolCreateInfo {
-                sType: vks::VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO,
+            vks_struct: vks::core::VkCommandPoolCreateInfo {
+                sType: vks::core::VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO,
                 pNext: pnext,
                 flags: create_info.flags.bits(),
                 queueFamilyIndex: create_info.queue_family_index,
@@ -8115,7 +8115,7 @@ impl VkCommandPoolCreateInfoWrapper {
 gen_chain_struct! {
     name: CommandBufferAllocateInfoChain [CommandBufferAllocateInfoChainWrapper],
     query: CommandBufferAllocateInfoChainQuery [CommandBufferAllocateInfoChainQueryWrapper],
-    vks: VkCommandBufferAllocateInfo,
+    vks: vks::core::VkCommandBufferAllocateInfo,
     input: true,
     output: false,
 }
@@ -8131,7 +8131,7 @@ pub struct CommandBufferAllocateInfo {
 
 #[derive(Debug)]
 struct VkCommandBufferAllocateInfoWrapper {
-    pub vks_struct: vks::VkCommandBufferAllocateInfo,
+    pub vks_struct: vks::core::VkCommandBufferAllocateInfo,
     command_pool: CommandPool,
     chain: Option<CommandBufferAllocateInfoChainWrapper>,
 }
@@ -8141,8 +8141,8 @@ impl VkCommandBufferAllocateInfoWrapper {
         let (pnext, chain) = CommandBufferAllocateInfoChainWrapper::new_optional(&info.chain, with_chain);
 
         VkCommandBufferAllocateInfoWrapper {
-            vks_struct: vks::VkCommandBufferAllocateInfo {
-                sType: vks::VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO,
+            vks_struct: vks::core::VkCommandBufferAllocateInfo {
+                sType: vks::core::VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO,
                 pNext: pnext,
                 commandPool: info.command_pool.handle(),
                 level: info.level.into(),
@@ -8157,7 +8157,7 @@ impl VkCommandBufferAllocateInfoWrapper {
 gen_chain_struct! {
     name: CommandBufferInheritanceInfoChain [CommandBufferInheritanceInfoChainWrapper],
     query: CommandBufferInheritanceInfoChainQuery [CommandBufferInheritanceInfoChainQueryWrapper],
-    vks: VkCommandBufferInheritanceInfo,
+    vks: vks::core::VkCommandBufferInheritanceInfo,
     input: true,
     output: false,
 }
@@ -8176,7 +8176,7 @@ pub struct CommandBufferInheritanceInfo {
 
 #[derive(Debug)]
 struct VkCommandBufferInheritanceInfoWrapper {
-    pub vks_struct: vks::VkCommandBufferInheritanceInfo,
+    pub vks_struct: vks::core::VkCommandBufferInheritanceInfo,
     render_pass: Option<RenderPass>,
     framebuffer: Option<Framebuffer>,
     chain: Option<CommandBufferInheritanceInfoChainWrapper>,
@@ -8197,8 +8197,8 @@ impl VkCommandBufferInheritanceInfoWrapper {
         let (pnext, chain) = CommandBufferInheritanceInfoChainWrapper::new_optional(&info.chain, with_chain);
 
         VkCommandBufferInheritanceInfoWrapper {
-            vks_struct: vks::VkCommandBufferInheritanceInfo {
-                sType: vks::VK_STRUCTURE_TYPE_COMMAND_BUFFER_INHERITANCE_INFO,
+            vks_struct: vks::core::VkCommandBufferInheritanceInfo {
+                sType: vks::core::VK_STRUCTURE_TYPE_COMMAND_BUFFER_INHERITANCE_INFO,
                 pNext: pnext,
                 renderPass: render_pass_handle,
                 subpass: info.subpass,
@@ -8217,7 +8217,7 @@ impl VkCommandBufferInheritanceInfoWrapper {
 gen_chain_struct! {
     name: CommandBufferBeginInfoChain [CommandBufferBeginInfoChainWrapper],
     query: CommandBufferBeginInfoChainQuery [CommandBufferBeginInfoChainQueryWrapper],
-    vks: VkCommandBufferBeginInfo,
+    vks: vks::core::VkCommandBufferBeginInfo,
     input: true,
     output: false,
 }
@@ -8232,7 +8232,7 @@ pub struct CommandBufferBeginInfo {
 
 #[derive(Debug)]
 struct VkCommandBufferBeginInfoWrapper {
-    pub vks_struct: vks::VkCommandBufferBeginInfo,
+    pub vks_struct: vks::core::VkCommandBufferBeginInfo,
     inheritance_info: Option<Box<VkCommandBufferInheritanceInfoWrapper>>,
     chain: Option<CommandBufferBeginInfoChainWrapper>,
 }
@@ -8251,8 +8251,8 @@ impl VkCommandBufferBeginInfoWrapper {
         let (pnext, chain) = CommandBufferBeginInfoChainWrapper::new_optional(&begin_info.chain, with_chain);
 
         VkCommandBufferBeginInfoWrapper {
-            vks_struct: vks::VkCommandBufferBeginInfo {
-                sType: vks::VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO,
+            vks_struct: vks::core::VkCommandBufferBeginInfo {
+                sType: vks::core::VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO,
                 pNext: pnext,
                 flags: begin_info.flags.bits(),
                 pInheritanceInfo: inheritance_info_ptr,
@@ -8271,9 +8271,9 @@ pub struct BufferCopy {
     pub size: u64,
 }
 
-impl<'a> From<&'a BufferCopy> for vks::VkBufferCopy {
+impl<'a> From<&'a BufferCopy> for vks::core::VkBufferCopy {
     fn from(copy: &'a BufferCopy) -> Self {
-        vks::VkBufferCopy {
+        vks::core::VkBufferCopy {
             srcOffset: copy.src_offset,
             dstOffset: copy.dst_offset,
             size: copy.size,
@@ -8290,9 +8290,9 @@ pub struct ImageSubresourceLayers {
     pub layer_count: u32,
 }
 
-impl<'a> From<&'a ImageSubresourceLayers> for vks::VkImageSubresourceLayers {
+impl<'a> From<&'a ImageSubresourceLayers> for vks::core::VkImageSubresourceLayers {
     fn from(layers: &'a ImageSubresourceLayers) -> Self {
-        vks::VkImageSubresourceLayers {
+        vks::core::VkImageSubresourceLayers {
             aspectMask: layers.aspect_mask.bits(),
             mipLevel: layers.mip_level,
             baseArrayLayer: layers.base_array_layer,
@@ -8311,9 +8311,9 @@ pub struct ImageCopy {
     pub extent: Extent3D,
 }
 
-impl<'a> From<&'a ImageCopy> for vks::VkImageCopy {
+impl<'a> From<&'a ImageCopy> for vks::core::VkImageCopy {
     fn from(copy: &'a ImageCopy) -> Self {
-        vks::VkImageCopy {
+        vks::core::VkImageCopy {
             srcSubresource: (&copy.src_subresource).into(),
             srcOffset: (&copy.src_offset).into(),
             dstSubresource: (&copy.dst_subresource).into(),
@@ -8332,12 +8332,12 @@ pub struct ImageBlit {
     pub dst_offsets: [Offset3D; 2],
 }
 
-impl<'a> From<&'a ImageBlit> for vks::VkImageBlit {
+impl<'a> From<&'a ImageBlit> for vks::core::VkImageBlit {
     fn from(blit: &'a ImageBlit) -> Self {
         let src_offsets = [(&blit.src_offsets[0]).into(), (&blit.src_offsets[1]).into()];
         let dst_offsets = [(&blit.dst_offsets[0]).into(), (&blit.dst_offsets[1]).into()];
 
-        vks::VkImageBlit {
+        vks::core::VkImageBlit {
             srcSubresource: (&blit.src_subresource).into(),
             srcOffsets: src_offsets,
             dstSubresource: (&blit.dst_subresource).into(),
@@ -8357,9 +8357,9 @@ pub struct BufferImageCopy {
     pub image_extent: Extent3D,
 }
 
-impl<'a> From<&'a BufferImageCopy> for vks::VkBufferImageCopy {
+impl<'a> From<&'a BufferImageCopy> for vks::core::VkBufferImageCopy {
     fn from(copy: &'a BufferImageCopy) -> Self {
-        vks::VkBufferImageCopy {
+        vks::core::VkBufferImageCopy {
             bufferOffset: copy.buffer_offset,
             bufferRowLength: copy.buffer_row_length,
             bufferImageHeight: copy.buffer_image_height,
@@ -8378,19 +8378,13 @@ pub enum ClearColorValue {
     UInt32([u32; 4]),
 }
 
-impl<'a> From<&'a ClearColorValue> for vks::VkClearColorValue {
+impl<'a> From<&'a ClearColorValue> for vks::core::VkClearColorValue {
     fn from(value: &'a ClearColorValue) -> Self {
-        let mut res = vks::VkClearColorValue::default();
-
-        unsafe {
-            match *value {
-                ClearColorValue::Float32(ref value) => { *res.float32.as_mut() = *value; }
-                ClearColorValue::Int32(ref value) => { *res.int32.as_mut() = *value; }
-                ClearColorValue::UInt32(ref value) => { *res.uint32.as_mut() = *value; }
-            }
+        match *value {
+            ClearColorValue::Float32(value) => vks::core::VkClearColorValue { float32: value },
+            ClearColorValue::Int32(value) => vks::core::VkClearColorValue { int32: value },
+            ClearColorValue::UInt32(value) => vks::core::VkClearColorValue { uint32: value },
         }
-
-        res
     }
 }
 
@@ -8401,9 +8395,9 @@ pub struct ClearDepthStencilValue {
     pub stencil: u32,
 }
 
-impl<'a> From<&'a ClearDepthStencilValue> for vks::VkClearDepthStencilValue {
+impl<'a> From<&'a ClearDepthStencilValue> for vks::core::VkClearDepthStencilValue {
     fn from(value: &'a ClearDepthStencilValue) -> Self {
-        vks::VkClearDepthStencilValue {
+        vks::core::VkClearDepthStencilValue {
             depth: value.depth,
             stencil: value.stencil,
         }
@@ -8417,18 +8411,12 @@ pub enum ClearValue {
     DepthStencil(ClearDepthStencilValue),
 }
 
-impl<'a> From<&'a ClearValue> for vks::VkClearValue {
+impl<'a> From<&'a ClearValue> for vks::core::VkClearValue {
     fn from(value: &'a ClearValue) -> Self {
-        let mut res = vks::VkClearValue::default();
-
-        unsafe {
-            match *value {
-                ClearValue::Color(ref value) => { *res.color.as_mut() = value.into(); }
-                ClearValue::DepthStencil(ref value) => { *res.depthStencil.as_mut() = value.into(); }
-            }
+        match *value {
+            ClearValue::Color(ref value) => vks::core::VkClearValue { color: value.into() },
+            ClearValue::DepthStencil(ref value) => vks::core::VkClearValue { depthStencil: value.into() },
         }
-
-        res
     }
 }
 
@@ -8440,9 +8428,9 @@ pub struct ClearAttachment {
     pub clear_value: ClearValue,
 }
 
-impl<'a> From<&'a ClearAttachment> for vks::VkClearAttachment {
+impl<'a> From<&'a ClearAttachment> for vks::core::VkClearAttachment {
     fn from(foobar: &'a ClearAttachment) -> Self {
-        vks::VkClearAttachment {
+        vks::core::VkClearAttachment {
             aspectMask: foobar.aspect_mask.bits(),
             colorAttachment: foobar.color_attachment.into(),
             clearValue: (&foobar.clear_value).into(),
@@ -8458,9 +8446,9 @@ pub struct ClearRect {
     pub layer_count: u32,
 }
 
-impl<'a> From<&'a ClearRect> for vks::VkClearRect {
+impl<'a> From<&'a ClearRect> for vks::core::VkClearRect {
     fn from(rect: &'a ClearRect) -> Self {
-        vks::VkClearRect {
+        vks::core::VkClearRect {
             rect: (&rect.rect).into(),
             baseArrayLayer: rect.base_array_layer,
             layerCount: rect.layer_count,
@@ -8478,9 +8466,9 @@ pub struct ImageResolve {
     pub extent: Extent3D,
 }
 
-impl<'a> From<&'a ImageResolve> for vks::VkImageResolve {
+impl<'a> From<&'a ImageResolve> for vks::core::VkImageResolve {
     fn from(resolve: &'a ImageResolve) -> Self {
-        vks::VkImageResolve {
+        vks::core::VkImageResolve {
             srcSubresource: (&resolve.src_subresource).into(),
             srcOffset: (&resolve.src_offset).into(),
             dstSubresource: (&resolve.dst_subresource).into(),
@@ -8493,7 +8481,7 @@ impl<'a> From<&'a ImageResolve> for vks::VkImageResolve {
 gen_chain_struct! {
     name: MemoryBarrierChain [MemoryBarrierChainWrapper],
     query: MemoryBarrierChainQuery [MemoryBarrierChainQueryWrapper],
-    vks: VkMemoryBarrier,
+    vks: vks::core::VkMemoryBarrier,
     input: true,
     output: false,
 }
@@ -8508,7 +8496,7 @@ pub struct MemoryBarrier {
 
 #[derive(Debug)]
 struct VkMemoryBarrierWrapper {
-    pub vks_struct: vks::VkMemoryBarrier,
+    pub vks_struct: vks::core::VkMemoryBarrier,
     chain: Option<MemoryBarrierChainWrapper>,
 }
 
@@ -8517,8 +8505,8 @@ impl VkMemoryBarrierWrapper {
         let (pnext, chain) = MemoryBarrierChainWrapper::new_optional(&barrier.chain, with_chain);
 
         VkMemoryBarrierWrapper {
-            vks_struct: vks::VkMemoryBarrier {
-                sType: vks::VK_STRUCTURE_TYPE_MEMORY_BARRIER,
+            vks_struct: vks::core::VkMemoryBarrier {
+                sType: vks::core::VK_STRUCTURE_TYPE_MEMORY_BARRIER,
                 pNext: pnext,
                 srcAccessMask: barrier.src_access_mask.bits(),
                 dstAccessMask: barrier.dst_access_mask.bits(),
@@ -8531,7 +8519,7 @@ impl VkMemoryBarrierWrapper {
 gen_chain_struct! {
     name: BufferMemoryBarrierChain [BufferMemoryBarrierChainWrapper],
     query: BufferMemoryBarrierChainQuery [BufferMemoryBarrierChainQueryWrapper],
-    vks: VkBufferMemoryBarrier,
+    vks: vks::core::VkBufferMemoryBarrier,
     input: true,
     output: false,
 }
@@ -8551,7 +8539,7 @@ pub struct BufferMemoryBarrier {
 
 #[derive(Debug)]
 struct VkBufferMemoryBarrierWrapper {
-    pub vks_struct: vks::VkBufferMemoryBarrier,
+    pub vks_struct: vks::core::VkBufferMemoryBarrier,
     buffer: Buffer,
     chain: Option<BufferMemoryBarrierChainWrapper>,
 }
@@ -8561,8 +8549,8 @@ impl VkBufferMemoryBarrierWrapper {
         let (pnext, chain) = BufferMemoryBarrierChainWrapper::new_optional(&barrier.chain, with_chain);
 
         VkBufferMemoryBarrierWrapper {
-            vks_struct: vks::VkBufferMemoryBarrier {
-                sType: vks::VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER,
+            vks_struct: vks::core::VkBufferMemoryBarrier {
+                sType: vks::core::VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER,
                 pNext: pnext,
                 srcAccessMask: barrier.src_access_mask.bits(),
                 dstAccessMask: barrier.dst_access_mask.bits(),
@@ -8581,7 +8569,7 @@ impl VkBufferMemoryBarrierWrapper {
 gen_chain_struct! {
     name: ImageMemoryBarrierChain [ImageMemoryBarrierChainWrapper],
     query: ImageMemoryBarrierChainQuery [ImageMemoryBarrierChainQueryWrapper],
-    vks: VkImageMemoryBarrier,
+    vks: vks::core::VkImageMemoryBarrier,
     input: true,
     output: false,
 }
@@ -8602,7 +8590,7 @@ pub struct ImageMemoryBarrier {
 
 #[derive(Debug)]
 struct VkImageMemoryBarrierWrapper {
-    pub vks_struct: vks::VkImageMemoryBarrier,
+    pub vks_struct: vks::core::VkImageMemoryBarrier,
     image: Image,
     chain: Option<ImageMemoryBarrierChainWrapper>,
 }
@@ -8612,8 +8600,8 @@ impl VkImageMemoryBarrierWrapper {
         let (pnext, chain) = ImageMemoryBarrierChainWrapper::new_optional(&barrier.chain, with_chain);
 
         VkImageMemoryBarrierWrapper {
-            vks_struct: vks::VkImageMemoryBarrier {
-                sType: vks::VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER,
+            vks_struct: vks::core::VkImageMemoryBarrier {
+                sType: vks::core::VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER,
                 pNext: pnext,
                 srcAccessMask: barrier.src_access_mask.bits(),
                 dstAccessMask: barrier.dst_access_mask.bits(),
@@ -8633,7 +8621,7 @@ impl VkImageMemoryBarrierWrapper {
 gen_chain_struct! {
     name: RenderPassBeginInfoChain [RenderPassBeginInfoChainWrapper],
     query: RenderPassBeginInfoChainQuery [RenderPassBeginInfoChainQueryWrapper],
-    vks: VkRenderPassBeginInfo,
+    vks: vks::core::VkRenderPassBeginInfo,
     input: true,
     output: false,
 }
@@ -8650,10 +8638,10 @@ pub struct RenderPassBeginInfo {
 
 #[derive(Debug)]
 struct VkRenderPassBeginInfoWrapper {
-    pub vks_struct: vks::VkRenderPassBeginInfo,
+    pub vks_struct: vks::core::VkRenderPassBeginInfo,
     render_pass: RenderPass,
     framebuffer: Framebuffer,
-    clear_values: Vec<vks::VkClearValue>,
+    clear_values: Vec<vks::core::VkClearValue>,
     chain: Option<RenderPassBeginInfoChainWrapper>,
 }
 
@@ -8670,8 +8658,8 @@ impl VkRenderPassBeginInfoWrapper {
         let (pnext, chain) = RenderPassBeginInfoChainWrapper::new_optional(&begin_info.chain, with_chain);
 
         VkRenderPassBeginInfoWrapper {
-            vks_struct: vks::VkRenderPassBeginInfo {
-                sType: vks::VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO,
+            vks_struct: vks::core::VkRenderPassBeginInfo {
+                sType: vks::core::VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO,
                 pNext: pnext,
                 renderPass: begin_info.render_pass.handle(),
                 framebuffer: begin_info.framebuffer.handle(),

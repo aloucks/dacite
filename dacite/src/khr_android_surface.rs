@@ -14,15 +14,15 @@
 
 //! See extension [`VK_KHR_android_surface`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_android_surface)
 
-use android_wrapper;
+use android_types;
 use vks;
 
 bitflags! {
     /// See [`VkAndroidSurfaceCreateFlagsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkAndroidSurfaceCreateFlagsKHR)
     #[derive(Default)]
-    pub struct AndroidSurfaceCreateFlagsKhr: vks::VkAndroidSurfaceCreateFlagsKHR {
+    pub struct AndroidSurfaceCreateFlagsKhr: vks::khr_android_surface::VkAndroidSurfaceCreateFlagsKHR {
         /// See [`VkAndroidSurfaceCreateFlagsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkAndroidSurfaceCreateFlagsKHR)
-        const ANDROID_SURFACE_CREATE_FLAG_BITS_MAX_ENUM_KHR = vks::VK_ANDROID_SURFACE_CREATE_FLAG_BITS_MAX_ENUM_KHR;
+        const ANDROID_SURFACE_CREATE_FLAG_BITS_MAX_ENUM_KHR = vks::khr_android_surface::VK_ANDROID_SURFACE_CREATE_FLAG_BITS_MAX_ENUM_KHR;
     }
 }
 
@@ -32,7 +32,7 @@ pub type AndroidSurfaceCreateFlagBitsKhr = AndroidSurfaceCreateFlagsKhr;
 gen_chain_struct! {
     name: AndroidSurfaceCreateInfoChainKhr [AndroidSurfaceCreateInfoChainKhrWrapper],
     query: AndroidSurfaceCreateInfoChainQueryKhr [AndroidSurfaceCreateInfoChainQueryKhrWrapper],
-    vks: VkAndroidSurfaceCreateInfoKHR,
+    vks: vks::khr_android_surface::VkAndroidSurfaceCreateInfoKHR,
     input: true,
     output: false,
 }
@@ -41,13 +41,13 @@ gen_chain_struct! {
 #[derive(Debug, Clone, PartialEq)]
 pub struct AndroidSurfaceCreateInfoKhr {
     pub flags: AndroidSurfaceCreateFlagsKhr,
-    pub window: *mut android_wrapper::ANativeWindow,
+    pub window: *mut android_types::ANativeWindow,
     pub chain: Option<AndroidSurfaceCreateInfoChainKhr>,
 }
 
 #[derive(Debug)]
 pub(crate) struct VkAndroidSurfaceCreateInfoKHRWrapper {
-    pub vks_struct: vks::VkAndroidSurfaceCreateInfoKHR,
+    pub vks_struct: vks::khr_android_surface::VkAndroidSurfaceCreateInfoKHR,
     chain: Option<AndroidSurfaceCreateInfoChainKhrWrapper>,
 }
 
@@ -56,8 +56,8 @@ impl VkAndroidSurfaceCreateInfoKHRWrapper {
         let (pnext, chain) = AndroidSurfaceCreateInfoChainKhrWrapper::new_optional(&create_info.chain, with_chain);
 
         VkAndroidSurfaceCreateInfoKHRWrapper {
-            vks_struct: vks::VkAndroidSurfaceCreateInfoKHR {
-                sType: vks::VK_STRUCTURE_TYPE_ANDROID_SURFACE_CREATE_INFO_KHR,
+            vks_struct: vks::khr_android_surface::VkAndroidSurfaceCreateInfoKHR {
+                sType: vks::core::VK_STRUCTURE_TYPE_ANDROID_SURFACE_CREATE_INFO_KHR,
                 pNext: pnext,
                 flags: create_info.flags.bits(),
                 window: create_info.window,

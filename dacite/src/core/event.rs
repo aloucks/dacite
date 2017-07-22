@@ -29,7 +29,7 @@ use vks;
 pub struct Event(Arc<Inner>);
 
 impl VulkanObject for Event {
-    type NativeVulkanObject = vks::VkEvent;
+    type NativeVulkanObject = vks::core::VkEvent;
 
     #[inline]
     fn id(&self) -> u64 {
@@ -85,7 +85,7 @@ impl FromNativeObject for Event {
 }
 
 impl Event {
-    pub(crate) fn new(handle: vks::VkEvent, owned: bool, device: Device, allocator: Option<AllocatorHelper>) -> Self {
+    pub(crate) fn new(handle: vks::core::VkEvent, owned: bool, device: Device, allocator: Option<AllocatorHelper>) -> Self {
         Event(Arc::new(Inner {
             handle: handle,
             owned: owned,
@@ -95,7 +95,7 @@ impl Event {
     }
 
     #[inline]
-    pub(crate) fn handle(&self) -> vks::VkEvent {
+    pub(crate) fn handle(&self) -> vks::core::VkEvent {
         self.0.handle
     }
 
@@ -105,7 +105,7 @@ impl Event {
     }
 
     #[inline]
-    pub(crate) fn device_handle(&self) -> vks::VkDevice {
+    pub(crate) fn device_handle(&self) -> vks::core::VkDevice {
         self.0.device.handle()
     }
 
@@ -116,8 +116,8 @@ impl Event {
         };
 
         match res {
-            vks::VK_EVENT_SET => Ok(true),
-            vks::VK_EVENT_RESET => Ok(false),
+            vks::core::VK_EVENT_SET => Ok(true),
+            vks::core::VK_EVENT_RESET => Ok(false),
             _ => Err(res.into()),
         }
     }
@@ -128,7 +128,7 @@ impl Event {
             (self.loader().core.vkSetEvent)(self.device_handle(), self.handle())
         };
 
-        if res == vks::VK_SUCCESS {
+        if res == vks::core::VK_SUCCESS {
             Ok(())
         }
         else {
@@ -142,7 +142,7 @@ impl Event {
             (self.loader().core.vkResetEvent)(self.device_handle(), self.handle())
         };
 
-        if res == vks::VK_SUCCESS {
+        if res == vks::core::VK_SUCCESS {
             Ok(())
         }
         else {
@@ -153,7 +153,7 @@ impl Event {
 
 #[derive(Debug)]
 struct Inner {
-    handle: vks::VkEvent,
+    handle: vks::core::VkEvent,
     owned: bool,
     device: Device,
     allocator: Option<AllocatorHelper>,

@@ -25,22 +25,22 @@ pub use self::surface::{SurfaceKhr, FromNativeSurfaceKhrParameters};
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum ColorSpaceKhr {
     SRGBNonLinear,
-    Unknown(vks::VkColorSpaceKHR),
+    Unknown(vks::khr_surface::VkColorSpaceKHR),
 }
 
-impl From<vks::VkColorSpaceKHR> for ColorSpaceKhr {
-    fn from(color_space: vks::VkColorSpaceKHR) -> Self {
+impl From<vks::khr_surface::VkColorSpaceKHR> for ColorSpaceKhr {
+    fn from(color_space: vks::khr_surface::VkColorSpaceKHR) -> Self {
         match color_space {
-            vks::VK_COLORSPACE_SRGB_NONLINEAR_KHR => ColorSpaceKhr::SRGBNonLinear,
+            vks::khr_surface::VK_COLORSPACE_SRGB_NONLINEAR_KHR => ColorSpaceKhr::SRGBNonLinear,
             _ => ColorSpaceKhr::Unknown(color_space),
         }
     }
 }
 
-impl From<ColorSpaceKhr> for vks::VkColorSpaceKHR {
+impl From<ColorSpaceKhr> for vks::khr_surface::VkColorSpaceKHR {
     fn from(color_space: ColorSpaceKhr) -> Self {
         match color_space {
-            ColorSpaceKhr::SRGBNonLinear => vks::VK_COLORSPACE_SRGB_NONLINEAR_KHR,
+            ColorSpaceKhr::SRGBNonLinear => vks::khr_surface::VK_COLORSPACE_SRGB_NONLINEAR_KHR,
             ColorSpaceKhr::Unknown(color_space) => color_space,
         }
     }
@@ -53,28 +53,28 @@ pub enum PresentModeKhr {
     Mailbox,
     Fifo,
     FifoRelaxed,
-    Unknown(vks::VkPresentModeKHR),
+    Unknown(vks::khr_surface::VkPresentModeKHR),
 }
 
-impl From<vks::VkPresentModeKHR> for PresentModeKhr {
-    fn from(mode: vks::VkPresentModeKHR) -> Self {
+impl From<vks::khr_surface::VkPresentModeKHR> for PresentModeKhr {
+    fn from(mode: vks::khr_surface::VkPresentModeKHR) -> Self {
         match mode {
-            vks::VK_PRESENT_MODE_IMMEDIATE_KHR => PresentModeKhr::Immediate,
-            vks::VK_PRESENT_MODE_MAILBOX_KHR => PresentModeKhr::Mailbox,
-            vks::VK_PRESENT_MODE_FIFO_KHR => PresentModeKhr::Fifo,
-            vks::VK_PRESENT_MODE_FIFO_RELAXED_KHR => PresentModeKhr::FifoRelaxed,
+            vks::khr_surface::VK_PRESENT_MODE_IMMEDIATE_KHR => PresentModeKhr::Immediate,
+            vks::khr_surface::VK_PRESENT_MODE_MAILBOX_KHR => PresentModeKhr::Mailbox,
+            vks::khr_surface::VK_PRESENT_MODE_FIFO_KHR => PresentModeKhr::Fifo,
+            vks::khr_surface::VK_PRESENT_MODE_FIFO_RELAXED_KHR => PresentModeKhr::FifoRelaxed,
             _ => PresentModeKhr::Unknown(mode),
         }
     }
 }
 
-impl From<PresentModeKhr> for vks::VkPresentModeKHR {
+impl From<PresentModeKhr> for vks::khr_surface::VkPresentModeKHR {
     fn from(mode: PresentModeKhr) -> Self {
         match mode {
-            PresentModeKhr::Immediate => vks::VK_PRESENT_MODE_IMMEDIATE_KHR,
-            PresentModeKhr::Mailbox => vks::VK_PRESENT_MODE_MAILBOX_KHR,
-            PresentModeKhr::Fifo => vks::VK_PRESENT_MODE_FIFO_KHR,
-            PresentModeKhr::FifoRelaxed => vks::VK_PRESENT_MODE_FIFO_RELAXED_KHR,
+            PresentModeKhr::Immediate => vks::khr_surface::VK_PRESENT_MODE_IMMEDIATE_KHR,
+            PresentModeKhr::Mailbox => vks::khr_surface::VK_PRESENT_MODE_MAILBOX_KHR,
+            PresentModeKhr::Fifo => vks::khr_surface::VK_PRESENT_MODE_FIFO_KHR,
+            PresentModeKhr::FifoRelaxed => vks::khr_surface::VK_PRESENT_MODE_FIFO_RELAXED_KHR,
             PresentModeKhr::Unknown(mode) => mode,
         }
     }
@@ -83,36 +83,36 @@ impl From<PresentModeKhr> for vks::VkPresentModeKHR {
 bitflags! {
     /// See [`VkSurfaceTransformFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSurfaceTransformFlagBitsKHR)
     #[derive(Default)]
-    pub struct SurfaceTransformFlagsKhr: vks::VkSurfaceTransformFlagsKHR {
+    pub struct SurfaceTransformFlagsKhr: vks::khr_surface::VkSurfaceTransformFlagsKHR {
         /// See [`VkSurfaceTransformFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSurfaceTransformFlagBitsKHR)
-        const SURFACE_TRANSFORM_FLAG_BITS_MAX_ENUM_KHR = vks::VK_SURFACE_TRANSFORM_FLAG_BITS_MAX_ENUM_KHR;
+        const SURFACE_TRANSFORM_FLAG_BITS_MAX_ENUM_KHR = vks::khr_surface::VK_SURFACE_TRANSFORM_FLAG_BITS_MAX_ENUM_KHR;
 
         /// See [`VkSurfaceTransformFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSurfaceTransformFlagBitsKHR)
-        const SURFACE_TRANSFORM_IDENTITY_BIT_KHR = vks::VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR;
+        const SURFACE_TRANSFORM_IDENTITY_BIT_KHR = vks::khr_surface::VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR;
 
         /// See [`VkSurfaceTransformFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSurfaceTransformFlagBitsKHR)
-        const SURFACE_TRANSFORM_ROTATE_90_BIT_KHR = vks::VK_SURFACE_TRANSFORM_ROTATE_90_BIT_KHR;
+        const SURFACE_TRANSFORM_ROTATE_90_BIT_KHR = vks::khr_surface::VK_SURFACE_TRANSFORM_ROTATE_90_BIT_KHR;
 
         /// See [`VkSurfaceTransformFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSurfaceTransformFlagBitsKHR)
-        const SURFACE_TRANSFORM_ROTATE_180_BIT_KHR = vks::VK_SURFACE_TRANSFORM_ROTATE_180_BIT_KHR;
+        const SURFACE_TRANSFORM_ROTATE_180_BIT_KHR = vks::khr_surface::VK_SURFACE_TRANSFORM_ROTATE_180_BIT_KHR;
 
         /// See [`VkSurfaceTransformFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSurfaceTransformFlagBitsKHR)
-        const SURFACE_TRANSFORM_ROTATE_270_BIT_KHR = vks::VK_SURFACE_TRANSFORM_ROTATE_270_BIT_KHR;
+        const SURFACE_TRANSFORM_ROTATE_270_BIT_KHR = vks::khr_surface::VK_SURFACE_TRANSFORM_ROTATE_270_BIT_KHR;
 
         /// See [`VkSurfaceTransformFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSurfaceTransformFlagBitsKHR)
-        const SURFACE_TRANSFORM_HORIZONTAL_MIRROR_BIT_KHR = vks::VK_SURFACE_TRANSFORM_HORIZONTAL_MIRROR_BIT_KHR;
+        const SURFACE_TRANSFORM_HORIZONTAL_MIRROR_BIT_KHR = vks::khr_surface::VK_SURFACE_TRANSFORM_HORIZONTAL_MIRROR_BIT_KHR;
 
         /// See [`VkSurfaceTransformFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSurfaceTransformFlagBitsKHR)
-        const SURFACE_TRANSFORM_HORIZONTAL_MIRROR_ROTATE_90_BIT_KHR = vks::VK_SURFACE_TRANSFORM_HORIZONTAL_MIRROR_ROTATE_90_BIT_KHR;
+        const SURFACE_TRANSFORM_HORIZONTAL_MIRROR_ROTATE_90_BIT_KHR = vks::khr_surface::VK_SURFACE_TRANSFORM_HORIZONTAL_MIRROR_ROTATE_90_BIT_KHR;
 
         /// See [`VkSurfaceTransformFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSurfaceTransformFlagBitsKHR)
-        const SURFACE_TRANSFORM_HORIZONTAL_MIRROR_ROTATE_180_BIT_KHR = vks::VK_SURFACE_TRANSFORM_HORIZONTAL_MIRROR_ROTATE_180_BIT_KHR;
+        const SURFACE_TRANSFORM_HORIZONTAL_MIRROR_ROTATE_180_BIT_KHR = vks::khr_surface::VK_SURFACE_TRANSFORM_HORIZONTAL_MIRROR_ROTATE_180_BIT_KHR;
 
         /// See [`VkSurfaceTransformFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSurfaceTransformFlagBitsKHR)
-        const SURFACE_TRANSFORM_HORIZONTAL_MIRROR_ROTATE_270_BIT_KHR = vks::VK_SURFACE_TRANSFORM_HORIZONTAL_MIRROR_ROTATE_270_BIT_KHR;
+        const SURFACE_TRANSFORM_HORIZONTAL_MIRROR_ROTATE_270_BIT_KHR = vks::khr_surface::VK_SURFACE_TRANSFORM_HORIZONTAL_MIRROR_ROTATE_270_BIT_KHR;
 
         /// See [`VkSurfaceTransformFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSurfaceTransformFlagBitsKHR)
-        const SURFACE_TRANSFORM_INHERIT_BIT_KHR = vks::VK_SURFACE_TRANSFORM_INHERIT_BIT_KHR;
+        const SURFACE_TRANSFORM_INHERIT_BIT_KHR = vks::khr_surface::VK_SURFACE_TRANSFORM_INHERIT_BIT_KHR;
     }
 }
 
@@ -122,21 +122,21 @@ pub type SurfaceTransformFlagBitsKhr = SurfaceTransformFlagsKhr;
 bitflags! {
     /// See [`VkCompositeAlphaFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCompositeAlphaFlagBitsKHR)
     #[derive(Default)]
-    pub struct CompositeAlphaFlagsKhr: vks::VkCompositeAlphaFlagsKHR {
+    pub struct CompositeAlphaFlagsKhr: vks::khr_surface::VkCompositeAlphaFlagsKHR {
         /// See [`VkCompositeAlphaFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCompositeAlphaFlagBitsKHR)
-        const COMPOSITE_ALPHA_FLAG_BITS_MAX_ENUM_KHR = vks::VK_COMPOSITE_ALPHA_FLAG_BITS_MAX_ENUM_KHR;
+        const COMPOSITE_ALPHA_FLAG_BITS_MAX_ENUM_KHR = vks::khr_surface::VK_COMPOSITE_ALPHA_FLAG_BITS_MAX_ENUM_KHR;
 
         /// See [`VkCompositeAlphaFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCompositeAlphaFlagBitsKHR)
-        const COMPOSITE_ALPHA_OPAQUE_BIT_KHR = vks::VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
+        const COMPOSITE_ALPHA_OPAQUE_BIT_KHR = vks::khr_surface::VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
 
         /// See [`VkCompositeAlphaFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCompositeAlphaFlagBitsKHR)
-        const COMPOSITE_ALPHA_PRE_MULTIPLIED_BIT_KHR = vks::VK_COMPOSITE_ALPHA_PRE_MULTIPLIED_BIT_KHR;
+        const COMPOSITE_ALPHA_PRE_MULTIPLIED_BIT_KHR = vks::khr_surface::VK_COMPOSITE_ALPHA_PRE_MULTIPLIED_BIT_KHR;
 
         /// See [`VkCompositeAlphaFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCompositeAlphaFlagBitsKHR)
-        const COMPOSITE_ALPHA_POST_MULTIPLIED_BIT_KHR = vks::VK_COMPOSITE_ALPHA_POST_MULTIPLIED_BIT_KHR;
+        const COMPOSITE_ALPHA_POST_MULTIPLIED_BIT_KHR = vks::khr_surface::VK_COMPOSITE_ALPHA_POST_MULTIPLIED_BIT_KHR;
 
         /// See [`VkCompositeAlphaFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCompositeAlphaFlagBitsKHR)
-        const COMPOSITE_ALPHA_INHERIT_BIT_KHR = vks::VK_COMPOSITE_ALPHA_INHERIT_BIT_KHR;
+        const COMPOSITE_ALPHA_INHERIT_BIT_KHR = vks::khr_surface::VK_COMPOSITE_ALPHA_INHERIT_BIT_KHR;
     }
 }
 
@@ -158,8 +158,8 @@ pub struct SurfaceCapabilitiesKhr {
     pub supported_usage_flags: core::ImageUsageFlags,
 }
 
-impl<'a> From<&'a vks::VkSurfaceCapabilitiesKHR> for SurfaceCapabilitiesKhr {
-    fn from(capabilities: &'a vks::VkSurfaceCapabilitiesKHR) -> Self {
+impl<'a> From<&'a vks::khr_surface::VkSurfaceCapabilitiesKHR> for SurfaceCapabilitiesKhr {
+    fn from(capabilities: &'a vks::khr_surface::VkSurfaceCapabilitiesKHR) -> Self {
         let max_image_count = if capabilities.maxImageCount > 0 {
             Some(capabilities.maxImageCount)
         }
@@ -196,8 +196,8 @@ pub struct SurfaceFormatKhr {
     pub color_space: ColorSpaceKhr,
 }
 
-impl<'a> From<&'a vks::VkSurfaceFormatKHR> for SurfaceFormatKhr {
-    fn from(format: &'a vks::VkSurfaceFormatKHR) -> Self {
+impl<'a> From<&'a vks::khr_surface::VkSurfaceFormatKHR> for SurfaceFormatKhr {
+    fn from(format: &'a vks::khr_surface::VkSurfaceFormatKHR) -> Self {
         SurfaceFormatKhr {
             format: format.format.into(),
             color_space: format.colorSpace.into(),

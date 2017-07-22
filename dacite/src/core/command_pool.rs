@@ -29,7 +29,7 @@ use vks;
 pub struct CommandPool(Arc<Inner>);
 
 impl VulkanObject for CommandPool {
-    type NativeVulkanObject = vks::VkCommandPool;
+    type NativeVulkanObject = vks::core::VkCommandPool;
 
     #[inline]
     fn id(&self) -> u64 {
@@ -85,7 +85,7 @@ impl FromNativeObject for CommandPool {
 }
 
 impl CommandPool {
-    pub(crate) fn new(handle: vks::VkCommandPool, owned: bool, device: Device, allocator: Option<AllocatorHelper>) -> Self {
+    pub(crate) fn new(handle: vks::core::VkCommandPool, owned: bool, device: Device, allocator: Option<AllocatorHelper>) -> Self {
         CommandPool(Arc::new(Inner {
             handle: handle,
             owned: owned,
@@ -95,7 +95,7 @@ impl CommandPool {
     }
 
     #[inline]
-    pub(crate) fn handle(&self) -> vks::VkCommandPool {
+    pub(crate) fn handle(&self) -> vks::core::VkCommandPool {
         self.0.handle
     }
 
@@ -105,7 +105,7 @@ impl CommandPool {
     }
 
     #[inline]
-    pub(crate) fn device_handle(&self) -> vks::VkDevice {
+    pub(crate) fn device_handle(&self) -> vks::core::VkDevice {
         self.0.device.handle()
     }
 
@@ -115,7 +115,7 @@ impl CommandPool {
             (self.loader().core.vkResetCommandPool)(self.device_handle(), self.handle(), flags.bits())
         };
 
-        if res == vks::VK_SUCCESS {
+        if res == vks::core::VK_SUCCESS {
             Ok(())
         }
         else {
@@ -134,7 +134,7 @@ impl CommandPool {
             (command_pool.loader().core.vkAllocateCommandBuffers)(command_pool.device_handle(), &allocate_info_wrapper.vks_struct, command_buffers.as_mut_ptr())
         };
 
-        if res == vks::VK_SUCCESS {
+        if res == vks::core::VK_SUCCESS {
             Ok(command_buffers.iter().map(|&c| CommandBuffer::new(c, true, command_pool.clone())).collect())
         }
         else {
@@ -145,7 +145,7 @@ impl CommandPool {
 
 #[derive(Debug)]
 struct Inner {
-    handle: vks::VkCommandPool,
+    handle: vks::core::VkCommandPool,
     owned: bool,
     device: Device,
     allocator: Option<AllocatorHelper>,

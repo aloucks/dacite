@@ -47,12 +47,12 @@ pub mod nv_external_memory_capabilities;
 pub mod nv_external_memory_win32;
 pub mod nv_win32_keyed_mutex;
 
-pub use vks::android_wrapper;
-pub use vks::mir_wrapper;
-pub use vks::wayland_wrapper;
-pub use vks::win32_wrapper;
-pub use vks::xcb_wrapper;
-pub use vks::xlib_wrapper;
+pub use vks::android_types;
+pub use vks::mir_types;
+pub use vks::wayland_types;
+pub use vks::win32_types;
+pub use vks::xcb_types;
+pub use vks::xlib_types;
 
 pub use vulkan_object::{
     TryDestroyError,

@@ -21,13 +21,13 @@ use vks;
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum ValidationCheckExt {
     All,
-    Unknown(vks::VkValidationCheckEXT),
+    Unknown(vks::ext_validation_flags::VkValidationCheckEXT),
 }
 
-impl From<ValidationCheckExt> for vks::VkValidationCheckEXT {
+impl From<ValidationCheckExt> for vks::ext_validation_flags::VkValidationCheckEXT {
     fn from(check: ValidationCheckExt) -> Self {
         match check {
-            ValidationCheckExt::All => vks::VK_VALIDATION_CHECK_ALL_EXT,
+            ValidationCheckExt::All => vks::ext_validation_flags::VK_VALIDATION_CHECK_ALL_EXT,
             ValidationCheckExt::Unknown(check) => check,
         }
     }
@@ -36,7 +36,7 @@ impl From<ValidationCheckExt> for vks::VkValidationCheckEXT {
 gen_chain_struct! {
     name: ValidationFlagsChainExt [ValidationFlagsChainExtWrapper],
     query: ValidationFlagsChainQueryExt [ValidationFlagsChainQueryExtWrapper],
-    vks: VkValidationFlagsEXT,
+    vks: vks::ext_validation_flags::VkValidationFlagsEXT,
     input: true,
     output: false,
 }
@@ -50,8 +50,8 @@ pub struct ValidationFlagsExt {
 
 #[derive(Debug)]
 pub(crate) struct VkValidationFlagsEXTWrapper {
-    pub vks_struct: vks::VkValidationFlagsEXT,
-    vk_disabled_validation_checks: Vec<vks::VkValidationCheckEXT>,
+    pub vks_struct: vks::ext_validation_flags::VkValidationFlagsEXT,
+    vk_disabled_validation_checks: Vec<vks::ext_validation_flags::VkValidationCheckEXT>,
     chain: Option<ValidationFlagsChainExtWrapper>,
 }
 
@@ -68,8 +68,8 @@ impl VkValidationFlagsEXTWrapper {
         let (pnext, chain) = ValidationFlagsChainExtWrapper::new_optional(&flags.chain, with_chain);
 
         VkValidationFlagsEXTWrapper {
-            vks_struct: vks::VkValidationFlagsEXT {
-                sType: vks::VK_STRUCTURE_TYPE_VALIDATION_FLAGS_EXT,
+            vks_struct: vks::ext_validation_flags::VkValidationFlagsEXT {
+                sType: vks::core::VK_STRUCTURE_TYPE_VALIDATION_FLAGS_EXT,
                 pNext: pnext,
                 disabledValidationCheckCount: vk_disabled_validation_checks.len() as u32,
                 pDisabledValidationChecks: vk_disabled_validation_checks_ptr,

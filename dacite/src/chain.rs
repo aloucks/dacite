@@ -16,7 +16,7 @@ macro_rules! gen_chain_struct {
     (
         name: $name:ident [$wrapper_name:ident],
         query: $query_name:ident [$query_wrapper_name:ident],
-        vks: $vks_ty:ident,
+        vks: $vks_ty:ty,
         input: $is_input:ident,
         output: $is_output:ident,
 
@@ -27,7 +27,7 @@ macro_rules! gen_chain_struct {
                 fn_has: $field_fn_has:ident,
                 fn_get: $field_fn_get:ident,
                 wrapper: $field_wrapper_ty:ident,
-                vks: $field_vks_ty:ident,
+                vks: $field_vks_ty:ty,
                 stype: $field_stype:pat,
             }
         )*
@@ -135,7 +135,7 @@ macro_rules! gen_chain_struct {
 
         name: $name:ident [$wrapper_name:ident],
         query: $query_name:ident [$query_wrapper_name:ident],
-        vks: $vks_ty:ident,
+        vks: $vks_ty:ty,
         input: $is_input:ident,
         output: true,
 
@@ -146,7 +146,7 @@ macro_rules! gen_chain_struct {
                 fn_has: $field_fn_has:ident,
                 fn_get: $field_fn_get:ident,
                 wrapper: $field_wrapper_ty:ident,
-                vks: $field_vks_ty:ident,
+                vks: $field_vks_ty:ty,
                 stype: $field_stype:pat,
             }
         )*
@@ -159,14 +159,14 @@ macro_rules! gen_chain_struct {
                 #[allow(non_snake_case)]
                 #[repr(C)]
                 pub struct VkStructure {
-                    pub sType: vks::VkStructureType,
+                    pub sType: vks::core::VkStructureType,
                     pub pNext: *mut ::libc::c_void,
                 }
 
                 while !pnext.is_null() {
                     let tmp = &*(pnext as *const VkStructure);
                     match tmp.sType {
-                        $( $field_stype => res.$field_name = Some(::$field_mod::$field_ty::from_vks(&*(pnext as *const vks::$field_vks_ty), false)), )*
+                        $( $field_stype => res.$field_name = Some(::$field_mod::$field_ty::from_vks(&*(pnext as *const $field_vks_ty), false)), )*
                         _ => { }
                     }
 
@@ -193,7 +193,7 @@ macro_rules! gen_chain_struct {
 
         name: $name:ident [$wrapper_name:ident],
         query: $query_name:ident [$query_wrapper_name:ident],
-        vks: $vks_ty:ident,
+        vks: $vks_ty:ty,
         input: $is_input:ident,
         output: false,
 
@@ -204,7 +204,7 @@ macro_rules! gen_chain_struct {
                 fn_has: $field_fn_has:ident,
                 fn_get: $field_fn_get:ident,
                 wrapper: $field_wrapper_ty:ident,
-                vks: $field_vks_ty:ident,
+                vks: $field_vks_ty:ty,
                 stype: $field_stype:pat,
             }
         )*
@@ -215,7 +215,7 @@ macro_rules! gen_chain_struct {
 
         name: $name:ident [$wrapper_name:ident],
         query: $query_name:ident [$query_wrapper_name:ident],
-        vks: $vks_ty:ident,
+        vks: $vks_ty:ty,
         input: true,
         output: $is_output:ident,
 
@@ -226,7 +226,7 @@ macro_rules! gen_chain_struct {
                 fn_has: $field_fn_has:ident,
                 fn_get: $field_fn_get:ident,
                 wrapper: $field_wrapper_ty:ident,
-                vks: $field_vks_ty:ident,
+                vks: $field_vks_ty:ty,
                 stype: $field_stype:pat,
             }
         )*
@@ -281,7 +281,7 @@ macro_rules! gen_chain_struct {
 
         name: $name:ident [$wrapper_name:ident],
         query: $query_name:ident [$query_wrapper_name:ident],
-        vks: $vks_ty:ident,
+        vks: $vks_ty:ty,
         input: false,
         output: $is_output:ident,
 
@@ -292,7 +292,7 @@ macro_rules! gen_chain_struct {
                 fn_has: $field_fn_has:ident,
                 fn_get: $field_fn_get:ident,
                 wrapper: $field_wrapper_ty:ident,
-                vks: $field_vks_ty:ident,
+                vks: $field_vks_ty:ty,
                 stype: $field_stype:pat,
             }
         )*
@@ -303,7 +303,7 @@ macro_rules! gen_chain_struct {
 
         name: $name:ident [$wrapper_name:ident],
         query: $query_name:ident [$query_wrapper_name:ident],
-        vks: $vks_ty:ident,
+        vks: $vks_ty:ty,
         input: $is_input:ident,
         output: true,
 
@@ -314,7 +314,7 @@ macro_rules! gen_chain_struct {
                 fn_has: $field_fn_has:ident,
                 fn_get: $field_fn_get:ident,
                 wrapper: $field_wrapper_ty:ident,
-                vks: $field_vks_ty:ident,
+                vks: $field_vks_ty:ty,
                 stype: $field_stype:pat,
             }
         )*
@@ -342,22 +342,22 @@ macro_rules! gen_chain_struct {
 
         #[derive(Debug, Default)]
         pub(crate) struct $query_wrapper_name {
-            pub vks_struct: vks::$vks_ty,
-            $( $field_name: Option<Box<vks::$field_vks_ty>>, )*
+            pub vks_struct: $vks_ty,
+            $( $field_name: Option<Box<$field_vks_ty>>, )*
         }
 
         impl $query_wrapper_name {
             #[allow(unused_mut)]
             #[allow(unused_variables)]
             pub fn new(query: &$query_name) -> Self {
-                let mut vks_struct: vks::$vks_ty = Default::default();
+                let mut vks_struct: $vks_ty = Default::default();
                 let mut pnext: *mut *mut ::libc::c_void = &mut (vks_struct.pNext as *mut _);
 
                 $(
                     let $field_name = if query.$field_name {
-                        let mut $field_name: Box<vks::$field_vks_ty> = Default::default();
+                        let mut $field_name: Box<$field_vks_ty> = Default::default();
                         unsafe {
-                            let $field_name: &mut vks::$field_vks_ty = &mut $field_name;
+                            let $field_name: &mut $field_vks_ty = &mut $field_name;
                             *pnext = $field_name as *mut _ as *mut ::libc::c_void;
                         }
                         pnext = &mut ($field_name.pNext as *mut _);
@@ -389,7 +389,7 @@ macro_rules! gen_chain_struct {
 
         name: $name:ident [$wrapper_name:ident],
         query: $query_name:ident [$query_wrapper_name:ident],
-        vks: $vks_ty:ident,
+        vks: $vks_ty:ty,
         input: $is_input:ident,
         output: false,
 
@@ -400,7 +400,7 @@ macro_rules! gen_chain_struct {
                 fn_has: $field_fn_has:ident,
                 fn_get: $field_fn_get:ident,
                 wrapper: $field_wrapper_ty:ident,
-                vks: $field_vks_ty:ident,
+                vks: $field_vks_ty:ty,
                 stype: $field_stype:pat,
             }
         )*

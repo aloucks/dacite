@@ -29,7 +29,7 @@ use vks;
 pub struct SurfaceKhr(Arc<Inner>);
 
 impl VulkanObject for SurfaceKhr {
-    type NativeVulkanObject = vks::VkSurfaceKHR;
+    type NativeVulkanObject = vks::khr_surface::VkSurfaceKHR;
 
     #[inline]
     fn id(&self) -> u64 {
@@ -85,7 +85,7 @@ impl FromNativeObject for SurfaceKhr {
 }
 
 impl SurfaceKhr {
-    pub(crate) fn new(handle: vks::VkSurfaceKHR, owned: bool, instance: Instance, allocator: Option<AllocatorHelper>) -> Self {
+    pub(crate) fn new(handle: vks::khr_surface::VkSurfaceKHR, owned: bool, instance: Instance, allocator: Option<AllocatorHelper>) -> Self {
         SurfaceKhr(Arc::new(Inner {
             handle: handle,
             owned: owned,
@@ -95,14 +95,14 @@ impl SurfaceKhr {
     }
 
     #[inline]
-    pub(crate) fn handle(&self) -> vks::VkSurfaceKHR {
+    pub(crate) fn handle(&self) -> vks::khr_surface::VkSurfaceKHR {
         self.0.handle
     }
 }
 
 #[derive(Debug)]
 struct Inner {
-    handle: vks::VkSurfaceKHR,
+    handle: vks::khr_surface::VkSurfaceKHR,
     owned: bool,
     instance: Instance,
     allocator: Option<AllocatorHelper>,

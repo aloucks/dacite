@@ -21,14 +21,14 @@ use vks;
 pub enum RasterizationOrderAmd {
     Strict,
     Relaxed,
-    Unknown(vks::VkRasterizationOrderAMD),
+    Unknown(vks::amd_rasterization_order::VkRasterizationOrderAMD),
 }
 
-impl From<RasterizationOrderAmd> for vks::VkRasterizationOrderAMD {
+impl From<RasterizationOrderAmd> for vks::amd_rasterization_order::VkRasterizationOrderAMD {
     fn from(order: RasterizationOrderAmd) -> Self {
         match order {
-            RasterizationOrderAmd::Strict => vks::VK_RASTERIZATION_ORDER_STRICT_AMD,
-            RasterizationOrderAmd::Relaxed => vks::VK_RASTERIZATION_ORDER_RELAXED_AMD,
+            RasterizationOrderAmd::Strict => vks::amd_rasterization_order::VK_RASTERIZATION_ORDER_STRICT_AMD,
+            RasterizationOrderAmd::Relaxed => vks::amd_rasterization_order::VK_RASTERIZATION_ORDER_RELAXED_AMD,
             RasterizationOrderAmd::Unknown(order) => order,
         }
     }
@@ -37,7 +37,7 @@ impl From<RasterizationOrderAmd> for vks::VkRasterizationOrderAMD {
 gen_chain_struct! {
     name: PipelineRasterizationStateRasterizationOrderChainAmd [PipelineRasterizationStateRasterizationOrderChainAmdWrapper],
     query: PipelineRasterizationStateRasterizationOrderChainQueryAmd [PipelineRasterizationStateRasterizationOrderChainQueryAmdWrapper],
-    vks: VkPipelineRasterizationStateRasterizationOrderAMD,
+    vks: vks::amd_rasterization_order::VkPipelineRasterizationStateRasterizationOrderAMD,
     input: true,
     output: false,
 }
@@ -51,7 +51,7 @@ pub struct PipelineRasterizationStateRasterizationOrderAmd {
 
 #[derive(Debug)]
 pub(crate) struct VkPipelineRasterizationStateRasterizationOrderAMDWrapper {
-    pub vks_struct: vks::VkPipelineRasterizationStateRasterizationOrderAMD,
+    pub vks_struct: vks::amd_rasterization_order::VkPipelineRasterizationStateRasterizationOrderAMD,
     chain: Option<PipelineRasterizationStateRasterizationOrderChainAmdWrapper>,
 }
 
@@ -60,8 +60,8 @@ impl VkPipelineRasterizationStateRasterizationOrderAMDWrapper {
         let (pnext, chain) = PipelineRasterizationStateRasterizationOrderChainAmdWrapper::new_optional(&order.chain, with_chain);
 
         VkPipelineRasterizationStateRasterizationOrderAMDWrapper {
-            vks_struct: vks::VkPipelineRasterizationStateRasterizationOrderAMD {
-                sType: vks::VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_RASTERIZATION_ORDER_AMD,
+            vks_struct: vks::amd_rasterization_order::VkPipelineRasterizationStateRasterizationOrderAMD {
+                sType: vks::core::VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_RASTERIZATION_ORDER_AMD,
                 pNext: pnext,
                 rasterizationOrder: order.rasterization_order.into(),
             },

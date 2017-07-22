@@ -29,7 +29,7 @@ use vks;
 pub struct Framebuffer(Arc<Inner>);
 
 impl VulkanObject for Framebuffer {
-    type NativeVulkanObject = vks::VkFramebuffer;
+    type NativeVulkanObject = vks::core::VkFramebuffer;
 
     #[inline]
     fn id(&self) -> u64 {
@@ -85,7 +85,7 @@ impl FromNativeObject for Framebuffer {
 }
 
 impl Framebuffer {
-    pub(crate) fn new(handle: vks::VkFramebuffer, owned: bool, device: Device, allocator: Option<AllocatorHelper>) -> Self {
+    pub(crate) fn new(handle: vks::core::VkFramebuffer, owned: bool, device: Device, allocator: Option<AllocatorHelper>) -> Self {
         Framebuffer(Arc::new(Inner {
             handle: handle,
             owned: owned,
@@ -95,14 +95,14 @@ impl Framebuffer {
     }
 
     #[inline]
-    pub(crate) fn handle(&self) -> vks::VkFramebuffer {
+    pub(crate) fn handle(&self) -> vks::core::VkFramebuffer {
         self.0.handle
     }
 }
 
 #[derive(Debug)]
 struct Inner {
-    handle: vks::VkFramebuffer,
+    handle: vks::core::VkFramebuffer,
     owned: bool,
     device: Device,
     allocator: Option<AllocatorHelper>,

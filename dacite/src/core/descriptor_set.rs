@@ -25,12 +25,12 @@ use vks;
 /// See [`VkDescriptorSet`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDescriptorSet)
 #[derive(Debug, Clone)]
 pub struct DescriptorSet {
-    handle: vks::VkDescriptorSet,
+    handle: vks::core::VkDescriptorSet,
     descriptor_pool: DescriptorPool,
 }
 
 impl VulkanObject for DescriptorSet {
-    type NativeVulkanObject = vks::VkDescriptorSet;
+    type NativeVulkanObject = vks::core::VkDescriptorSet;
 
     #[inline]
     fn id(&self) -> u64 {
@@ -90,7 +90,7 @@ impl Hash for DescriptorSet {
 }
 
 impl DescriptorSet {
-    pub(crate) fn new(handle: vks::VkDescriptorSet, descriptor_pool: DescriptorPool) -> Self {
+    pub(crate) fn new(handle: vks::core::VkDescriptorSet, descriptor_pool: DescriptorPool) -> Self {
         DescriptorSet {
             handle: handle,
             descriptor_pool: descriptor_pool,
@@ -98,7 +98,7 @@ impl DescriptorSet {
     }
 
     #[inline]
-    pub(crate) fn handle(&self) -> vks::VkDescriptorSet {
+    pub(crate) fn handle(&self) -> vks::core::VkDescriptorSet {
         self.handle
     }
 
@@ -108,7 +108,7 @@ impl DescriptorSet {
     }
 
     #[inline]
-    pub(crate) fn device_handle(&self) -> vks::VkDevice {
+    pub(crate) fn device_handle(&self) -> vks::core::VkDevice {
         self.descriptor_pool.device_handle()
     }
 
@@ -153,7 +153,7 @@ impl DescriptorSet {
             (self.loader().core.vkFreeDescriptorSets)(self.device_handle(), self.descriptor_pool.handle(), 1, &self.handle)
         };
 
-        if res == vks::VK_SUCCESS {
+        if res == vks::core::VK_SUCCESS {
             Ok(())
         }
         else {

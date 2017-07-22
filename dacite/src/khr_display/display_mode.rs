@@ -26,7 +26,7 @@ use vks;
 /// See [`VkDisplayKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDisplayKHR)
 #[derive(Debug, Clone)]
 pub struct DisplayModeKhr {
-    pub(crate) handle: vks::VkDisplayModeKHR,
+    pub(crate) handle: vks::khr_display::VkDisplayModeKHR,
     display: DisplayKhr,
 }
 
@@ -65,7 +65,7 @@ impl Hash for DisplayModeKhr {
 }
 
 impl VulkanObject for DisplayModeKhr {
-    type NativeVulkanObject = vks::VkDisplayModeKHR;
+    type NativeVulkanObject = vks::khr_display::VkDisplayModeKHR;
 
     #[inline]
     fn id(&self) -> u64 {
@@ -91,7 +91,7 @@ impl FromNativeObject for DisplayModeKhr {
 }
 
 impl DisplayModeKhr {
-    pub(crate) fn new(display_mode: vks::VkDisplayModeKHR, display: DisplayKhr) -> Self {
+    pub(crate) fn new(display_mode: vks::khr_display::VkDisplayModeKHR, display: DisplayKhr) -> Self {
         DisplayModeKhr {
             handle: display_mode,
             display: display,
@@ -104,7 +104,7 @@ impl DisplayModeKhr {
     }
 
     #[inline]
-    pub(crate) fn physical_device_handle(&self) -> vks::VkPhysicalDevice {
+    pub(crate) fn physical_device_handle(&self) -> vks::core::VkPhysicalDevice {
         self.display.physical_device_handle()
     }
 
@@ -114,7 +114,7 @@ impl DisplayModeKhr {
             let mut capabilities = mem::uninitialized();
             let res = (self.loader().khr_display.vkGetDisplayPlaneCapabilitiesKHR)(self.physical_device_handle(), self.handle, plane_index, &mut capabilities);
 
-            if res == vks::VK_SUCCESS {
+            if res == vks::core::VK_SUCCESS {
                 Ok((&capabilities).into())
             }
             else {

@@ -15,14 +15,14 @@
 //! See extension [`VK_KHR_xlib_surface`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_xlib_surface)
 
 use vks;
-use xlib_wrapper;
+use xlib_types;
 
 bitflags! {
     /// See [`VkXlibSurfaceCreateFlagsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkXlibSurfaceCreateFlagsKHR)
     #[derive(Default)]
-    pub struct XlibSurfaceCreateFlagsKhr: vks::VkXlibSurfaceCreateFlagsKHR {
+    pub struct XlibSurfaceCreateFlagsKhr: vks::khr_xlib_surface::VkXlibSurfaceCreateFlagsKHR {
         /// See [`VkXlibSurfaceCreateFlagsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkXlibSurfaceCreateFlagsKHR)
-        const XLIB_SURFACE_CREATE_FLAG_BITS_MAX_ENUM_KHR = vks::VK_XLIB_SURFACE_CREATE_FLAG_BITS_MAX_ENUM_KHR;
+        const XLIB_SURFACE_CREATE_FLAG_BITS_MAX_ENUM_KHR = vks::khr_xlib_surface::VK_XLIB_SURFACE_CREATE_FLAG_BITS_MAX_ENUM_KHR;
     }
 }
 
@@ -32,7 +32,7 @@ pub type XlibSurfaceCreateFlagBitsKhr = XlibSurfaceCreateFlagsKhr;
 gen_chain_struct! {
     name: XlibSurfaceCreateInfoChainKhr [XlibSurfaceCreateInfoChainKhrWrapper],
     query: XlibSurfaceCreateInfoChainQueryKhr [XlibSurfaceCreateInfoChainQueryKhrWrapper],
-    vks: VkXlibSurfaceCreateInfoKHR,
+    vks: vks::khr_xlib_surface::VkXlibSurfaceCreateInfoKHR,
     input: true,
     output: false,
 }
@@ -41,14 +41,14 @@ gen_chain_struct! {
 #[derive(Debug, Clone, PartialEq)]
 pub struct XlibSurfaceCreateInfoKhr {
     pub flags: XlibSurfaceCreateFlagsKhr,
-    pub dpy: *mut xlib_wrapper::Display,
-    pub window: xlib_wrapper::Window,
+    pub dpy: *mut xlib_types::Display,
+    pub window: xlib_types::Window,
     pub chain: Option<XlibSurfaceCreateInfoChainKhr>,
 }
 
 #[derive(Debug)]
 pub(crate) struct VkXlibSurfaceCreateInfoKHRWrapper {
-    pub vks_struct: vks::VkXlibSurfaceCreateInfoKHR,
+    pub vks_struct: vks::khr_xlib_surface::VkXlibSurfaceCreateInfoKHR,
     chain: Option<XlibSurfaceCreateInfoChainKhrWrapper>,
 }
 
@@ -57,8 +57,8 @@ impl VkXlibSurfaceCreateInfoKHRWrapper {
         let (pnext, chain) = XlibSurfaceCreateInfoChainKhrWrapper::new_optional(&create_info.chain, with_chain);
 
         VkXlibSurfaceCreateInfoKHRWrapper {
-            vks_struct: vks::VkXlibSurfaceCreateInfoKHR {
-                sType: vks::VK_STRUCTURE_TYPE_XLIB_SURFACE_CREATE_INFO_KHR,
+            vks_struct: vks::khr_xlib_surface::VkXlibSurfaceCreateInfoKHR {
+                sType: vks::core::VK_STRUCTURE_TYPE_XLIB_SURFACE_CREATE_INFO_KHR,
                 pNext: pnext,
                 flags: create_info.flags.bits(),
                 dpy: create_info.dpy,

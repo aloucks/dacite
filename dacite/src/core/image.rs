@@ -31,7 +31,7 @@ use vks;
 pub struct Image(Arc<Inner>);
 
 impl VulkanObject for Image {
-    type NativeVulkanObject = vks::VkImage;
+    type NativeVulkanObject = vks::core::VkImage;
 
     #[inline]
     fn id(&self) -> u64 {
@@ -92,7 +92,7 @@ impl FromNativeObject for Image {
 }
 
 impl Image {
-    pub(crate) fn new(handle: vks::VkImage, owned: bool, device: Device, allocator: Option<AllocatorHelper>) -> Self {
+    pub(crate) fn new(handle: vks::core::VkImage, owned: bool, device: Device, allocator: Option<AllocatorHelper>) -> Self {
         Image(Arc::new(Inner {
             handle: handle,
             owned: owned,
@@ -102,7 +102,7 @@ impl Image {
     }
 
     #[inline]
-    pub(crate) fn handle(&self) -> vks::VkImage {
+    pub(crate) fn handle(&self) -> vks::core::VkImage {
         self.0.handle
     }
 
@@ -112,7 +112,7 @@ impl Image {
     }
 
     #[inline]
-    pub(crate) fn device_handle(&self) -> vks::VkDevice {
+    pub(crate) fn device_handle(&self) -> vks::core::VkDevice {
         self.0.device.handle()
     }
 
@@ -122,7 +122,7 @@ impl Image {
             (self.loader().core.vkBindImageMemory)(self.device_handle(), self.handle(), memory.handle(), offset)
         };
 
-        if res == vks::VK_SUCCESS {
+        if res == vks::core::VK_SUCCESS {
             Ok(())
         }
         else {
@@ -171,7 +171,7 @@ impl Image {
 
 #[derive(Debug)]
 struct Inner {
-    handle: vks::VkImage,
+    handle: vks::core::VkImage,
     owned: bool,
     device: Device,
     allocator: Option<AllocatorHelper>,

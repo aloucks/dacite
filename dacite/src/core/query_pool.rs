@@ -31,7 +31,7 @@ use vks;
 pub struct QueryPool(Arc<Inner>);
 
 impl VulkanObject for QueryPool {
-    type NativeVulkanObject = vks::VkQueryPool;
+    type NativeVulkanObject = vks::core::VkQueryPool;
 
     #[inline]
     fn id(&self) -> u64 {
@@ -87,7 +87,7 @@ impl FromNativeObject for QueryPool {
 }
 
 impl QueryPool {
-    pub(crate) fn new(handle: vks::VkQueryPool, owned: bool, device: Device, allocator: Option<AllocatorHelper>) -> Self {
+    pub(crate) fn new(handle: vks::core::VkQueryPool, owned: bool, device: Device, allocator: Option<AllocatorHelper>) -> Self {
         QueryPool(Arc::new(Inner {
             handle: handle,
             owned: owned,
@@ -97,7 +97,7 @@ impl QueryPool {
     }
 
     #[inline]
-    pub(crate) fn handle(&self) -> vks::VkQueryPool {
+    pub(crate) fn handle(&self) -> vks::core::VkQueryPool {
         self.0.handle
     }
 
@@ -107,7 +107,7 @@ impl QueryPool {
     }
 
     #[inline]
-    pub(crate) fn device_handle(&self) -> vks::VkDevice {
+    pub(crate) fn device_handle(&self) -> vks::core::VkDevice {
         self.0.device.handle()
     }
 
@@ -124,7 +124,7 @@ impl QueryPool {
             };
 
             match res {
-                vks::VK_SUCCESS => {
+                vks::core::VK_SUCCESS => {
                     for (&src, dst) in data.iter().zip(results.iter_mut()) {
                         *dst = core::QueryResult::U64(src);
                     }
@@ -132,7 +132,7 @@ impl QueryPool {
                     Ok(true)
                 }
 
-                vks::VK_NOT_READY => Ok(false),
+                vks::core::VK_NOT_READY => Ok(false),
                 _ => Err(res.into()),
             }
         }
@@ -147,7 +147,7 @@ impl QueryPool {
             };
 
             match res {
-                vks::VK_SUCCESS => {
+                vks::core::VK_SUCCESS => {
                     for (&src, dst) in data.iter().zip(results.iter_mut()) {
                         *dst = core::QueryResult::U32(src);
                     }
@@ -155,7 +155,7 @@ impl QueryPool {
                     Ok(true)
                 }
 
-                vks::VK_NOT_READY => Ok(false),
+                vks::core::VK_NOT_READY => Ok(false),
                 _ => Err(res.into()),
             }
         }
@@ -164,7 +164,7 @@ impl QueryPool {
 
 #[derive(Debug)]
 struct Inner {
-    handle: vks::VkQueryPool,
+    handle: vks::core::VkQueryPool,
     owned: bool,
     device: Device,
     allocator: Option<AllocatorHelper>,

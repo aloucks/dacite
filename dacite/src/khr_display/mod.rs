@@ -28,21 +28,21 @@ pub use self::display_mode::DisplayModeKhr;
 bitflags! {
     /// See [`VkDisplayPlaneAlphaFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDisplayPlaneAlphaFlagBitsKHR)
     #[derive(Default)]
-    pub struct DisplayPlaneAlphaFlagsKhr: vks::VkDisplayPlaneAlphaFlagsKHR {
+    pub struct DisplayPlaneAlphaFlagsKhr: vks::khr_display::VkDisplayPlaneAlphaFlagsKHR {
         /// See [`VkDisplayPlaneAlphaFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDisplayPlaneAlphaFlagBitsKHR)
-        const DISPLAY_PLANE_ALPHA_FLAG_BITS_MAX_ENUM_KHR = vks::VK_DISPLAY_PLANE_ALPHA_FLAG_BITS_MAX_ENUM_KHR;
+        const DISPLAY_PLANE_ALPHA_FLAG_BITS_MAX_ENUM_KHR = vks::khr_display::VK_DISPLAY_PLANE_ALPHA_FLAG_BITS_MAX_ENUM_KHR;
 
         /// See [`VkDisplayPlaneAlphaFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDisplayPlaneAlphaFlagBitsKHR)
-        const DISPLAY_PLANE_ALPHA_OPAQUE_BIT_KHR = vks::VK_DISPLAY_PLANE_ALPHA_OPAQUE_BIT_KHR;
+        const DISPLAY_PLANE_ALPHA_OPAQUE_BIT_KHR = vks::khr_display::VK_DISPLAY_PLANE_ALPHA_OPAQUE_BIT_KHR;
 
         /// See [`VkDisplayPlaneAlphaFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDisplayPlaneAlphaFlagBitsKHR)
-        const DISPLAY_PLANE_ALPHA_GLOBAL_BIT_KHR = vks::VK_DISPLAY_PLANE_ALPHA_GLOBAL_BIT_KHR;
+        const DISPLAY_PLANE_ALPHA_GLOBAL_BIT_KHR = vks::khr_display::VK_DISPLAY_PLANE_ALPHA_GLOBAL_BIT_KHR;
 
         /// See [`VkDisplayPlaneAlphaFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDisplayPlaneAlphaFlagBitsKHR)
-        const DISPLAY_PLANE_ALPHA_PER_PIXEL_BIT_KHR = vks::VK_DISPLAY_PLANE_ALPHA_PER_PIXEL_BIT_KHR;
+        const DISPLAY_PLANE_ALPHA_PER_PIXEL_BIT_KHR = vks::khr_display::VK_DISPLAY_PLANE_ALPHA_PER_PIXEL_BIT_KHR;
 
         /// See [`VkDisplayPlaneAlphaFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDisplayPlaneAlphaFlagBitsKHR)
-        const DISPLAY_PLANE_ALPHA_PER_PIXEL_PREMULTIPLIED_BIT_KHR = vks::VK_DISPLAY_PLANE_ALPHA_PER_PIXEL_PREMULTIPLIED_BIT_KHR;
+        const DISPLAY_PLANE_ALPHA_PER_PIXEL_PREMULTIPLIED_BIT_KHR = vks::khr_display::VK_DISPLAY_PLANE_ALPHA_PER_PIXEL_PREMULTIPLIED_BIT_KHR;
     }
 }
 
@@ -52,9 +52,9 @@ pub type DisplayPlaneAlphaFlagBitsKhr = DisplayPlaneAlphaFlagsKhr;
 bitflags! {
     /// See [`VkDisplayModeCreateFlagsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDisplayModeCreateFlagsKHR)
     #[derive(Default)]
-    pub struct DisplayModeCreateFlagsKhr: vks::VkDisplayModeCreateFlagsKHR {
+    pub struct DisplayModeCreateFlagsKhr: vks::khr_display::VkDisplayModeCreateFlagsKHR {
         /// See [`VkDisplayModeCreateFlagsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDisplayModeCreateFlagsKHR)
-        const DISPLAY_MODE_CREATE_FLAG_BITS_MAX_ENUM_KHR = vks::VK_DISPLAY_MODE_CREATE_FLAG_BITS_MAX_ENUM_KHR;
+        const DISPLAY_MODE_CREATE_FLAG_BITS_MAX_ENUM_KHR = vks::khr_display::VK_DISPLAY_MODE_CREATE_FLAG_BITS_MAX_ENUM_KHR;
     }
 }
 
@@ -64,9 +64,9 @@ pub type DisplayModeCreateFlagBitsKhr = DisplayModeCreateFlagsKhr;
 bitflags! {
     /// See [`VkDisplaySurfaceCreateFlagsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDisplaySurfaceCreateFlagsKHR)
     #[derive(Default)]
-    pub struct DisplaySurfaceCreateFlagsKhr: vks::VkDisplaySurfaceCreateFlagsKHR {
+    pub struct DisplaySurfaceCreateFlagsKhr: vks::khr_display::VkDisplaySurfaceCreateFlagsKHR {
         /// See [`VkDisplaySurfaceCreateFlagsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDisplaySurfaceCreateFlagsKHR)
-        const DISPLAY_SURFACE_CREATE_FLAG_BITS_MAX_ENUM_KHR = vks::VK_DISPLAY_SURFACE_CREATE_FLAG_BITS_MAX_ENUM_KHR;
+        const DISPLAY_SURFACE_CREATE_FLAG_BITS_MAX_ENUM_KHR = vks::khr_display::VK_DISPLAY_SURFACE_CREATE_FLAG_BITS_MAX_ENUM_KHR;
     }
 }
 
@@ -86,7 +86,7 @@ pub struct DisplayPropertiesKhr {
 }
 
 impl DisplayPropertiesKhr {
-    pub(crate) unsafe fn from_vks(properties: &vks::VkDisplayPropertiesKHR, physical_device: core::PhysicalDevice) -> Self {
+    pub(crate) unsafe fn from_vks(properties: &vks::khr_display::VkDisplayPropertiesKHR, physical_device: core::PhysicalDevice) -> Self {
         DisplayPropertiesKhr {
             display: DisplayKhr::new(properties.display, physical_device),
             display_name: utils::string_from_cstr(properties.displayName),
@@ -106,8 +106,8 @@ pub struct DisplayModeParametersKhr {
     pub refresh_rate: u32,
 }
 
-impl<'a> From<&'a vks::VkDisplayModeParametersKHR> for DisplayModeParametersKhr {
-    fn from(parameters: &'a vks::VkDisplayModeParametersKHR) -> Self {
+impl<'a> From<&'a vks::khr_display::VkDisplayModeParametersKHR> for DisplayModeParametersKhr {
+    fn from(parameters: &'a vks::khr_display::VkDisplayModeParametersKHR) -> Self {
         DisplayModeParametersKhr {
             visible_region: (&parameters.visibleRegion).into(),
             refresh_rate: parameters.refreshRate,
@@ -115,9 +115,9 @@ impl<'a> From<&'a vks::VkDisplayModeParametersKHR> for DisplayModeParametersKhr 
     }
 }
 
-impl<'a> From<&'a DisplayModeParametersKhr> for vks::VkDisplayModeParametersKHR {
+impl<'a> From<&'a DisplayModeParametersKhr> for vks::khr_display::VkDisplayModeParametersKHR {
     fn from(parameters: &'a DisplayModeParametersKhr) -> Self {
-        vks::VkDisplayModeParametersKHR {
+        vks::khr_display::VkDisplayModeParametersKHR {
             visibleRegion: (&parameters.visible_region).into(),
             refreshRate: parameters.refresh_rate,
         }
@@ -132,7 +132,7 @@ pub struct DisplayModePropertiesKhr {
 }
 
 impl DisplayModePropertiesKhr {
-    pub(crate) fn from_vks(properties: &vks::VkDisplayModePropertiesKHR, display: DisplayKhr) -> Self {
+    pub(crate) fn from_vks(properties: &vks::khr_display::VkDisplayModePropertiesKHR, display: DisplayKhr) -> Self {
         DisplayModePropertiesKhr {
             display_mode: DisplayModeKhr::new(properties.displayMode, display),
             parameters: (&properties.parameters).into(),
@@ -143,7 +143,7 @@ impl DisplayModePropertiesKhr {
 gen_chain_struct! {
     name: DisplayModeCreateInfoChainKhr [DisplayModeCreateInfoChainKhrWrapper],
     query: DisplayModeCreateInfoChainQueryKhr [DisplayModeCreateInfoChainQueryKhrWrapper],
-    vks: VkDisplayModeCreateInfoKHR,
+    vks: vks::khr_display::VkDisplayModeCreateInfoKHR,
     input: true,
     output: false,
 }
@@ -158,7 +158,7 @@ pub struct DisplayModeCreateInfoKhr {
 
 #[derive(Debug)]
 struct VkDisplayModeCreateInfoKHRWrapper {
-    pub vks_struct: vks::VkDisplayModeCreateInfoKHR,
+    pub vks_struct: vks::khr_display::VkDisplayModeCreateInfoKHR,
     chain: Option<DisplayModeCreateInfoChainKhrWrapper>,
 }
 
@@ -167,8 +167,8 @@ impl VkDisplayModeCreateInfoKHRWrapper {
         let (pnext, chain) = DisplayModeCreateInfoChainKhrWrapper::new_optional(&create_info.chain, with_chain);
 
         VkDisplayModeCreateInfoKHRWrapper {
-            vks_struct: vks::VkDisplayModeCreateInfoKHR {
-                sType: vks::VK_STRUCTURE_TYPE_DISPLAY_MODE_CREATE_INFO_KHR,
+            vks_struct: vks::khr_display::VkDisplayModeCreateInfoKHR {
+                sType: vks::core::VK_STRUCTURE_TYPE_DISPLAY_MODE_CREATE_INFO_KHR,
                 pNext: pnext,
                 flags: create_info.flags.bits(),
                 parameters: (&create_info.parameters).into(),
@@ -192,8 +192,8 @@ pub struct DisplayPlaneCapabilitiesKhr {
     pub max_dst_extent: core::Extent2D,
 }
 
-impl<'a> From<&'a vks::VkDisplayPlaneCapabilitiesKHR> for DisplayPlaneCapabilitiesKhr {
-    fn from(capabilities: &'a vks::VkDisplayPlaneCapabilitiesKHR) -> Self {
+impl<'a> From<&'a vks::khr_display::VkDisplayPlaneCapabilitiesKHR> for DisplayPlaneCapabilitiesKhr {
+    fn from(capabilities: &'a vks::khr_display::VkDisplayPlaneCapabilitiesKHR) -> Self {
         DisplayPlaneCapabilitiesKhr {
             supported_alpha: DisplayPlaneAlphaFlagsKhr::from_bits_truncate(capabilities.supportedAlpha),
             min_src_position: (&capabilities.minSrcPosition).into(),
@@ -216,7 +216,7 @@ pub struct DisplayPlanePropertiesKhr {
 }
 
 impl DisplayPlanePropertiesKhr {
-    pub(crate) unsafe fn from_vks(properties: &vks::VkDisplayPlanePropertiesKHR, physical_device: &core::PhysicalDevice) -> Self {
+    pub(crate) unsafe fn from_vks(properties: &vks::khr_display::VkDisplayPlanePropertiesKHR, physical_device: &core::PhysicalDevice) -> Self {
         let current_display = if properties.currentDisplay != 0 {
             Some(DisplayKhr::new(properties.currentDisplay, physical_device.clone()))
         }
@@ -234,7 +234,7 @@ impl DisplayPlanePropertiesKhr {
 gen_chain_struct! {
     name: DisplaySurfaceCreateInfoChainKhr [DisplaySurfaceCreateInfoChainKhrWrapper],
     query: DisplaySurfaceCreateInfoChainQueryKhr [DisplaySurfaceCreateInfoChainQueryKhrWrapper],
-    vks: VkDisplaySurfaceCreateInfoKHR,
+    vks: vks::khr_display::VkDisplaySurfaceCreateInfoKHR,
     input: true,
     output: false,
 }
@@ -255,7 +255,7 @@ pub struct DisplaySurfaceCreateInfoKhr {
 
 #[derive(Debug)]
 pub(crate) struct VkDisplaySurfaceCreateInfoKHRWrapper {
-    pub vks_struct: vks::VkDisplaySurfaceCreateInfoKHR,
+    pub vks_struct: vks::khr_display::VkDisplaySurfaceCreateInfoKHR,
     chain: Option<DisplaySurfaceCreateInfoChainKhrWrapper>,
 }
 
@@ -264,8 +264,8 @@ impl VkDisplaySurfaceCreateInfoKHRWrapper {
         let (pnext, chain) = DisplaySurfaceCreateInfoChainKhrWrapper::new_optional(&create_info.chain, with_chain);
 
         VkDisplaySurfaceCreateInfoKHRWrapper {
-            vks_struct: vks::VkDisplaySurfaceCreateInfoKHR {
-                sType: vks::VK_STRUCTURE_TYPE_DISPLAY_SURFACE_CREATE_INFO_KHR,
+            vks_struct: vks::khr_display::VkDisplaySurfaceCreateInfoKHR {
+                sType: vks::core::VK_STRUCTURE_TYPE_DISPLAY_SURFACE_CREATE_INFO_KHR,
                 pNext: pnext,
                 flags: create_info.flags.bits(),
                 displayMode: create_info.display_mode.handle,

@@ -21,7 +21,7 @@ use vks;
 gen_chain_struct! {
     name: DedicatedAllocationImageCreateInfoChainNv [DedicatedAllocationImageCreateInfoChainNvWrapper],
     query: DedicatedAllocationImageCreateInfoChainQueryNv [DedicatedAllocationImageCreateInfoChainQueryNvWrapper],
-    vks: VkDedicatedAllocationImageCreateInfoNV,
+    vks: vks::nv_dedicated_allocation::VkDedicatedAllocationImageCreateInfoNV,
     input: true,
     output: false,
 }
@@ -35,7 +35,7 @@ pub struct DedicatedAllocationImageCreateInfoNv {
 
 #[derive(Debug)]
 pub(crate) struct VkDedicatedAllocationImageCreateInfoNVWrapper {
-    pub vks_struct: vks::VkDedicatedAllocationImageCreateInfoNV,
+    pub vks_struct: vks::nv_dedicated_allocation::VkDedicatedAllocationImageCreateInfoNV,
     chain: Option<DedicatedAllocationImageCreateInfoChainNvWrapper>,
 }
 
@@ -44,8 +44,8 @@ impl VkDedicatedAllocationImageCreateInfoNVWrapper {
         let (pnext, chain) = DedicatedAllocationImageCreateInfoChainNvWrapper::new_optional(&create_info.chain, with_chain);
 
         VkDedicatedAllocationImageCreateInfoNVWrapper {
-            vks_struct: vks::VkDedicatedAllocationImageCreateInfoNV {
-                sType: vks::VK_STRUCTURE_TYPE_DEDICATED_ALLOCATION_IMAGE_CREATE_INFO_NV,
+            vks_struct: vks::nv_dedicated_allocation::VkDedicatedAllocationImageCreateInfoNV {
+                sType: vks::core::VK_STRUCTURE_TYPE_DEDICATED_ALLOCATION_IMAGE_CREATE_INFO_NV,
                 pNext: pnext,
                 dedicatedAllocation: utils::to_vk_bool(create_info.dedicated_allocation),
             },
@@ -57,7 +57,7 @@ impl VkDedicatedAllocationImageCreateInfoNVWrapper {
 gen_chain_struct! {
     name: DedicatedAllocationBufferCreateInfoChainNv [DedicatedAllocationBufferCreateInfoChainNvWrapper],
     query: DedicatedAllocationBufferCreateInfoChainQueryNv [DedicatedAllocationBufferCreateInfoChainQueryNvWrapper],
-    vks: VkDedicatedAllocationBufferCreateInfoNV,
+    vks: vks::nv_dedicated_allocation::VkDedicatedAllocationBufferCreateInfoNV,
     input: true,
     output: false,
 }
@@ -71,7 +71,7 @@ pub struct DedicatedAllocationBufferCreateInfoNv {
 
 #[derive(Debug)]
 pub(crate) struct VkDedicatedAllocationBufferCreateInfoNVWrapper {
-    pub vks_struct: vks::VkDedicatedAllocationBufferCreateInfoNV,
+    pub vks_struct: vks::nv_dedicated_allocation::VkDedicatedAllocationBufferCreateInfoNV,
     chain: Option<DedicatedAllocationBufferCreateInfoChainNvWrapper>,
 }
 
@@ -80,8 +80,8 @@ impl VkDedicatedAllocationBufferCreateInfoNVWrapper {
         let (pnext, chain) = DedicatedAllocationBufferCreateInfoChainNvWrapper::new_optional(&create_info.chain, with_chain);
 
         VkDedicatedAllocationBufferCreateInfoNVWrapper {
-            vks_struct: vks::VkDedicatedAllocationBufferCreateInfoNV {
-                sType: vks::VK_STRUCTURE_TYPE_DEDICATED_ALLOCATION_BUFFER_CREATE_INFO_NV,
+            vks_struct: vks::nv_dedicated_allocation::VkDedicatedAllocationBufferCreateInfoNV {
+                sType: vks::core::VK_STRUCTURE_TYPE_DEDICATED_ALLOCATION_BUFFER_CREATE_INFO_NV,
                 pNext: pnext,
                 dedicatedAllocation: utils::to_vk_bool(create_info.dedicated_allocation),
             },
@@ -93,7 +93,7 @@ impl VkDedicatedAllocationBufferCreateInfoNVWrapper {
 gen_chain_struct! {
     name: DedicatedAllocationMemoryAllocateInfoChainNv [DedicatedAllocationMemoryAllocateInfoChainNvWrapper],
     query: DedicatedAllocationMemoryAllocateInfoChainQueryNv [DedicatedAllocationMemoryAllocateInfoChainQueryNvWrapper],
-    vks: VkDedicatedAllocationMemoryAllocateInfoNV,
+    vks: vks::nv_dedicated_allocation::VkDedicatedAllocationMemoryAllocateInfoNV,
     input: true,
     output: false,
 }
@@ -108,7 +108,7 @@ pub struct DedicatedAllocationMemoryAllocateInfoNv {
 
 #[derive(Debug)]
 pub(crate) struct VkDedicatedAllocationMemoryAllocateInfoNVWrapper {
-    pub vks_struct: vks::VkDedicatedAllocationMemoryAllocateInfoNV,
+    pub vks_struct: vks::nv_dedicated_allocation::VkDedicatedAllocationMemoryAllocateInfoNV,
     image: Option<core::Image>,
     buffer: Option<core::Buffer>,
     chain: Option<DedicatedAllocationMemoryAllocateInfoChainNvWrapper>,
@@ -119,8 +119,8 @@ impl VkDedicatedAllocationMemoryAllocateInfoNVWrapper {
         let (pnext, chain) = DedicatedAllocationMemoryAllocateInfoChainNvWrapper::new_optional(&info.chain, with_chain);
 
         VkDedicatedAllocationMemoryAllocateInfoNVWrapper {
-            vks_struct: vks::VkDedicatedAllocationMemoryAllocateInfoNV {
-                sType: vks::VK_STRUCTURE_TYPE_DEDICATED_ALLOCATION_MEMORY_ALLOCATE_INFO_NV,
+            vks_struct: vks::nv_dedicated_allocation::VkDedicatedAllocationMemoryAllocateInfoNV {
+                sType: vks::core::VK_STRUCTURE_TYPE_DEDICATED_ALLOCATION_MEMORY_ALLOCATE_INFO_NV,
                 pNext: pnext,
                 image: info.image.as_ref().map_or(Default::default(), core::Image::handle),
                 buffer: info.buffer.as_ref().map_or(Default::default(), core::Buffer::handle),

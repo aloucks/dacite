@@ -21,7 +21,7 @@ use vks;
 gen_chain_struct! {
     name: Win32KeyedMutexAcquireReleaseInfoChainNv [Win32KeyedMutexAcquireReleaseInfoChainNvWrapper],
     query: Win32KeyedMutexAcquireReleaseInfoChainQueryNv [Win32KeyedMutexAcquireReleaseInfoChainQueryNvWrapper],
-    vks: VkWin32KeyedMutexAcquireReleaseInfoNV,
+    vks: vks::nv_win32_keyed_mutex::VkWin32KeyedMutexAcquireReleaseInfoNV,
     input: true,
     output: false,
 }
@@ -39,13 +39,13 @@ pub struct Win32KeyedMutexAcquireReleaseInfoNv {
 
 #[derive(Debug)]
 pub(crate) struct VkWin32KeyedMutexAcquireReleaseInfoNVWrapper {
-    pub vks_struct: vks::VkWin32KeyedMutexAcquireReleaseInfoNV,
+    pub vks_struct: vks::nv_win32_keyed_mutex::VkWin32KeyedMutexAcquireReleaseInfoNV,
     acquire_syncs: Vec<core::DeviceMemory>,
-    vk_acquire_syncs: Vec<vks::VkDeviceMemory>,
+    vk_acquire_syncs: Vec<vks::core::VkDeviceMemory>,
     acquire_keys: Vec<u64>,
     acquire_timeout_milliseconds: Vec<u32>,
     release_syncs: Vec<core::DeviceMemory>,
-    vk_release_syncs: Vec<vks::VkDeviceMemory>,
+    vk_release_syncs: Vec<vks::core::VkDeviceMemory>,
     release_keys: Vec<u64>,
     chain: Option<Win32KeyedMutexAcquireReleaseInfoChainNvWrapper>,
 }
@@ -78,8 +78,8 @@ impl VkWin32KeyedMutexAcquireReleaseInfoNVWrapper {
         let (pnext, chain) = Win32KeyedMutexAcquireReleaseInfoChainNvWrapper::new_optional(&info.chain, with_chain);
 
         VkWin32KeyedMutexAcquireReleaseInfoNVWrapper {
-            vks_struct: vks::VkWin32KeyedMutexAcquireReleaseInfoNV {
-                sType: vks::VK_STRUCTURE_TYPE_WIN32_KEYED_MUTEX_ACQUIRE_RELEASE_INFO_NV,
+            vks_struct: vks::nv_win32_keyed_mutex::VkWin32KeyedMutexAcquireReleaseInfoNV {
+                sType: vks::core::VK_STRUCTURE_TYPE_WIN32_KEYED_MUTEX_ACQUIRE_RELEASE_INFO_NV,
                 pNext: pnext,
                 acquireCount: acquire_syncs.len() as u32,
                 pAcquireSyncs: vk_acquire_syncs_ptr,

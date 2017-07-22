@@ -22,7 +22,7 @@ use vks;
 gen_chain_struct! {
     name: DebugMarkerObjectNameInfoChainExt [DebugMarkerObjectNameInfoChainExtWrapper],
     query: DebugMarkerObjectNameInfoChainQueryExt [DebugMarkerObjectNameInfoChainQueryExtWrapper],
-    vks: VkDebugMarkerObjectNameInfoEXT,
+    vks: vks::ext_debug_marker::VkDebugMarkerObjectNameInfoEXT,
     input: true,
     output: false,
 }
@@ -38,7 +38,7 @@ pub struct DebugMarkerObjectNameInfoExt {
 
 #[derive(Debug)]
 pub(crate) struct VkDebugMarkerObjectNameInfoEXTWrapper {
-    pub vks_struct: vks::VkDebugMarkerObjectNameInfoEXT,
+    pub vks_struct: vks::ext_debug_marker::VkDebugMarkerObjectNameInfoEXT,
     object_name: CString,
     chain: Option<DebugMarkerObjectNameInfoChainExtWrapper>,
 }
@@ -49,8 +49,8 @@ impl VkDebugMarkerObjectNameInfoEXTWrapper {
         let (pnext, chain) = DebugMarkerObjectNameInfoChainExtWrapper::new_optional(&info.chain, with_chain);
 
         VkDebugMarkerObjectNameInfoEXTWrapper {
-            vks_struct: vks::VkDebugMarkerObjectNameInfoEXT {
-                sType: vks::VK_STRUCTURE_TYPE_DEBUG_MARKER_OBJECT_NAME_INFO_EXT,
+            vks_struct: vks::ext_debug_marker::VkDebugMarkerObjectNameInfoEXT {
+                sType: vks::core::VK_STRUCTURE_TYPE_DEBUG_MARKER_OBJECT_NAME_INFO_EXT,
                 pNext: pnext,
                 objectType: info.object_type.into(),
                 object: info.object,
@@ -65,7 +65,7 @@ impl VkDebugMarkerObjectNameInfoEXTWrapper {
 gen_chain_struct! {
     name: DebugMarkerObjectTagInfoChainExt [DebugMarkerObjectTagInfoChainExtWrapper],
     query: DebugMarkerObjectTagInfoChainQueryExt [DebugMarkerObjectTagInfoChainQueryExtWrapper],
-    vks: VkDebugMarkerObjectTagInfoEXT,
+    vks: vks::ext_debug_marker::VkDebugMarkerObjectTagInfoEXT,
     input: true,
     output: false,
 }
@@ -82,7 +82,7 @@ pub struct DebugMarkerObjectTagInfoExt {
 
 #[derive(Debug)]
 pub(crate) struct VkDebugMarkerObjectTagInfoEXTWrapper {
-    pub vks_struct: vks::VkDebugMarkerObjectTagInfoEXT,
+    pub vks_struct: vks::ext_debug_marker::VkDebugMarkerObjectTagInfoEXT,
     tag: Vec<u8>,
     chain: Option<DebugMarkerObjectTagInfoChainExtWrapper>,
 }
@@ -93,8 +93,8 @@ impl VkDebugMarkerObjectTagInfoEXTWrapper {
         let (pnext, chain) = DebugMarkerObjectTagInfoChainExtWrapper::new_optional(&info.chain, with_chain);
 
         VkDebugMarkerObjectTagInfoEXTWrapper {
-            vks_struct: vks::VkDebugMarkerObjectTagInfoEXT {
-                sType: vks::VK_STRUCTURE_TYPE_DEBUG_MARKER_OBJECT_TAG_INFO_EXT,
+            vks_struct: vks::ext_debug_marker::VkDebugMarkerObjectTagInfoEXT {
+                sType: vks::core::VK_STRUCTURE_TYPE_DEBUG_MARKER_OBJECT_TAG_INFO_EXT,
                 pNext: pnext,
                 objectType: info.object_type.into(),
                 object: info.object,
@@ -111,7 +111,7 @@ impl VkDebugMarkerObjectTagInfoEXTWrapper {
 gen_chain_struct! {
     name: DebugMarkerMarkerInfoChainExt [DebugMarkerMarkerInfoChainExtWrapper],
     query: DebugMarkerMarkerInfoChainQueryExt [DebugMarkerMarkerInfoChainQueryExtWrapper],
-    vks: VkDebugMarkerMarkerInfoEXT,
+    vks: vks::ext_debug_marker::VkDebugMarkerMarkerInfoEXT,
     input: true,
     output: false,
 }
@@ -126,7 +126,7 @@ pub struct DebugMarkerMarkerInfoExt {
 
 #[derive(Debug)]
 pub(crate) struct VkDebugMarkerMarkerInfoEXTWrapper {
-    pub vks_struct: vks::VkDebugMarkerMarkerInfoEXT,
+    pub vks_struct: vks::ext_debug_marker::VkDebugMarkerMarkerInfoEXT,
     marker_name: CString,
     chain: Option<DebugMarkerMarkerInfoChainExtWrapper>,
 }
@@ -137,8 +137,8 @@ impl VkDebugMarkerMarkerInfoEXTWrapper {
         let (pnext, chain) = DebugMarkerMarkerInfoChainExtWrapper::new_optional(&info.chain, with_chain);
 
         VkDebugMarkerMarkerInfoEXTWrapper {
-            vks_struct: vks::VkDebugMarkerMarkerInfoEXT {
-                sType: vks::VK_STRUCTURE_TYPE_DEBUG_MARKER_MARKER_INFO_EXT,
+            vks_struct: vks::ext_debug_marker::VkDebugMarkerMarkerInfoEXT {
+                sType: vks::core::VK_STRUCTURE_TYPE_DEBUG_MARKER_MARKER_INFO_EXT,
                 pNext: pnext,
                 pMarkerName: marker_name.as_ptr(),
                 color: info.color,

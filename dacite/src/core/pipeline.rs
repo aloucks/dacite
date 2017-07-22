@@ -29,7 +29,7 @@ use vks;
 pub struct Pipeline(Arc<Inner>);
 
 impl VulkanObject for Pipeline {
-    type NativeVulkanObject = vks::VkPipeline;
+    type NativeVulkanObject = vks::core::VkPipeline;
 
     #[inline]
     fn id(&self) -> u64 {
@@ -85,7 +85,7 @@ impl FromNativeObject for Pipeline {
 }
 
 impl Pipeline {
-    pub(crate) fn new(handle: vks::VkPipeline, owned: bool, device: Device, allocator: Option<AllocatorHelper>) -> Self {
+    pub(crate) fn new(handle: vks::core::VkPipeline, owned: bool, device: Device, allocator: Option<AllocatorHelper>) -> Self {
         Pipeline(Arc::new(Inner {
             handle: handle,
             owned: owned,
@@ -95,14 +95,14 @@ impl Pipeline {
     }
 
     #[inline]
-    pub(crate) fn handle(&self) -> vks::VkPipeline {
+    pub(crate) fn handle(&self) -> vks::core::VkPipeline {
         self.0.handle
     }
 }
 
 #[derive(Debug)]
 struct Inner {
-    handle: vks::VkPipeline,
+    handle: vks::core::VkPipeline,
     owned: bool,
     device: Device,
     allocator: Option<AllocatorHelper>,

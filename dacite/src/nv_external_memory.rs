@@ -20,7 +20,7 @@ use vks;
 gen_chain_struct! {
     name: ExternalMemoryImageCreateInfoChainNv [ExternalMemoryImageCreateInfoChainNvWrapper],
     query: ExternalMemoryImageCreateInfoChainQueryNv [ExternalMemoryImageCreateInfoChainQueryNvWrapper],
-    vks: VkExternalMemoryImageCreateInfoNV,
+    vks: vks::nv_external_memory::VkExternalMemoryImageCreateInfoNV,
     input: true,
     output: false,
 }
@@ -34,7 +34,7 @@ pub struct ExternalMemoryImageCreateInfoNv {
 
 #[derive(Debug)]
 pub(crate) struct VkExternalMemoryImageCreateInfoNVWrapper {
-    pub vks_struct: vks::VkExternalMemoryImageCreateInfoNV,
+    pub vks_struct: vks::nv_external_memory::VkExternalMemoryImageCreateInfoNV,
     chain: Option<ExternalMemoryImageCreateInfoChainNvWrapper>,
 }
 
@@ -43,8 +43,8 @@ impl VkExternalMemoryImageCreateInfoNVWrapper {
         let (pnext, chain) = ExternalMemoryImageCreateInfoChainNvWrapper::new_optional(&create_info.chain, with_chain);
 
         VkExternalMemoryImageCreateInfoNVWrapper {
-            vks_struct: vks::VkExternalMemoryImageCreateInfoNV {
-                sType: vks::VK_STRUCTURE_TYPE_EXTERNAL_MEMORY_IMAGE_CREATE_INFO_NV,
+            vks_struct: vks::nv_external_memory::VkExternalMemoryImageCreateInfoNV {
+                sType: vks::core::VK_STRUCTURE_TYPE_EXTERNAL_MEMORY_IMAGE_CREATE_INFO_NV,
                 pNext: pnext,
                 handleTypes: create_info.handle_types.bits(),
             },
@@ -56,7 +56,7 @@ impl VkExternalMemoryImageCreateInfoNVWrapper {
 gen_chain_struct! {
     name: ExportMemoryAllocateInfoChainNv [ExportMemoryAllocateInfoChainNvWrapper],
     query: ExportMemoryAllocateInfoChainQueryNv [ExportMemoryAllocateInfoChainQueryNvWrapper],
-    vks: VkExportMemoryAllocateInfoNV,
+    vks: vks::nv_external_memory::VkExportMemoryAllocateInfoNV,
     input: true,
     output: false,
 }
@@ -70,7 +70,7 @@ pub struct ExportMemoryAllocateInfoNv {
 
 #[derive(Debug)]
 pub(crate) struct VkExportMemoryAllocateInfoNVWrapper {
-    pub vks_struct: vks::VkExportMemoryAllocateInfoNV,
+    pub vks_struct: vks::nv_external_memory::VkExportMemoryAllocateInfoNV,
     chain: Option<ExportMemoryAllocateInfoChainNvWrapper>,
 }
 
@@ -79,8 +79,8 @@ impl VkExportMemoryAllocateInfoNVWrapper {
         let (pnext, chain) = ExportMemoryAllocateInfoChainNvWrapper::new_optional(&info.chain, with_chain);
 
         VkExportMemoryAllocateInfoNVWrapper {
-            vks_struct: vks::VkExportMemoryAllocateInfoNV {
-                sType: vks::VK_STRUCTURE_TYPE_EXPORT_MEMORY_ALLOCATE_INFO_NV,
+            vks_struct: vks::nv_external_memory::VkExportMemoryAllocateInfoNV {
+                sType: vks::core::VK_STRUCTURE_TYPE_EXPORT_MEMORY_ALLOCATE_INFO_NV,
                 pNext: pnext,
                 handleTypes: info.handle_types.bits(),
             },

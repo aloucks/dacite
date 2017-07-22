@@ -30,7 +30,7 @@ use vks;
 pub struct RenderPass(Arc<Inner>);
 
 impl VulkanObject for RenderPass {
-    type NativeVulkanObject = vks::VkRenderPass;
+    type NativeVulkanObject = vks::core::VkRenderPass;
 
     #[inline]
     fn id(&self) -> u64 {
@@ -86,7 +86,7 @@ impl FromNativeObject for RenderPass {
 }
 
 impl RenderPass {
-    pub(crate) fn new(handle: vks::VkRenderPass, owned: bool, device: Device, allocator: Option<AllocatorHelper>) -> Self {
+    pub(crate) fn new(handle: vks::core::VkRenderPass, owned: bool, device: Device, allocator: Option<AllocatorHelper>) -> Self {
         RenderPass(Arc::new(Inner {
             handle: handle,
             owned: owned,
@@ -96,7 +96,7 @@ impl RenderPass {
     }
 
     #[inline]
-    pub(crate) fn handle(&self) -> vks::VkRenderPass {
+    pub(crate) fn handle(&self) -> vks::core::VkRenderPass {
         self.0.handle
     }
 
@@ -106,7 +106,7 @@ impl RenderPass {
     }
 
     #[inline]
-    pub(crate) fn device_handle(&self) -> vks::VkDevice {
+    pub(crate) fn device_handle(&self) -> vks::core::VkDevice {
         self.0.device.handle()
     }
 
@@ -122,7 +122,7 @@ impl RenderPass {
 
 #[derive(Debug)]
 struct Inner {
-    handle: vks::VkRenderPass,
+    handle: vks::core::VkRenderPass,
     owned: bool,
     device: Device,
     allocator: Option<AllocatorHelper>,

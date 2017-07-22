@@ -29,7 +29,7 @@ use vks;
 pub struct ShaderModule(Arc<Inner>);
 
 impl VulkanObject for ShaderModule {
-    type NativeVulkanObject = vks::VkShaderModule;
+    type NativeVulkanObject = vks::core::VkShaderModule;
 
     #[inline]
     fn id(&self) -> u64 {
@@ -85,7 +85,7 @@ impl FromNativeObject for ShaderModule {
 }
 
 impl ShaderModule {
-    pub(crate) fn new(handle: vks::VkShaderModule, owned: bool, device: Device, allocator: Option<AllocatorHelper>) -> Self {
+    pub(crate) fn new(handle: vks::core::VkShaderModule, owned: bool, device: Device, allocator: Option<AllocatorHelper>) -> Self {
         ShaderModule(Arc::new(Inner {
             handle: handle,
             owned: owned,
@@ -95,14 +95,14 @@ impl ShaderModule {
     }
 
     #[inline]
-    pub(crate) fn handle(&self) -> vks::VkShaderModule {
+    pub(crate) fn handle(&self) -> vks::core::VkShaderModule {
         self.0.handle
     }
 }
 
 #[derive(Debug)]
 struct Inner {
-    handle: vks::VkShaderModule,
+    handle: vks::core::VkShaderModule,
     owned: bool,
     device: Device,
     allocator: Option<AllocatorHelper>,

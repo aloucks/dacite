@@ -27,7 +27,7 @@ use vks;
 /// See [`VkDisplayKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDisplayKHR)
 #[derive(Debug, Clone)]
 pub struct DisplayKhr {
-    pub(crate) handle: vks::VkDisplayKHR,
+    pub(crate) handle: vks::khr_display::VkDisplayKHR,
     physical_device: core::PhysicalDevice,
 }
 
@@ -66,7 +66,7 @@ impl Hash for DisplayKhr {
 }
 
 impl VulkanObject for DisplayKhr {
-    type NativeVulkanObject = vks::VkDisplayKHR;
+    type NativeVulkanObject = vks::khr_display::VkDisplayKHR;
 
     #[inline]
     fn id(&self) -> u64 {
@@ -92,7 +92,7 @@ impl FromNativeObject for DisplayKhr {
 }
 
 impl DisplayKhr {
-    pub(crate) fn new(display: vks::VkDisplayKHR, physical_device: core::PhysicalDevice) -> Self {
+    pub(crate) fn new(display: vks::khr_display::VkDisplayKHR, physical_device: core::PhysicalDevice) -> Self {
         DisplayKhr {
             handle: display,
             physical_device: physical_device,
@@ -105,7 +105,7 @@ impl DisplayKhr {
     }
 
     #[inline]
-    pub(crate) fn physical_device_handle(&self) -> vks::VkPhysicalDevice {
+    pub(crate) fn physical_device_handle(&self) -> vks::core::VkPhysicalDevice {
         self.physical_device.handle
     }
 
@@ -121,7 +121,7 @@ impl DisplayKhr {
             (self.loader().khr_display.vkGetDisplayModePropertiesKHR)(self.physical_device_handle(), self.handle, &mut len, ptr::null_mut())
         };
 
-        if res != vks::VK_SUCCESS {
+        if res != vks::core::VK_SUCCESS {
             return Err(res.into());
         }
 
@@ -131,7 +131,7 @@ impl DisplayKhr {
             (self.loader().khr_display.vkGetDisplayModePropertiesKHR)(self.physical_device_handle(), self.handle, &mut len, properties.as_mut_ptr())
         };
 
-        if res == vks::VK_SUCCESS {
+        if res == vks::core::VK_SUCCESS {
             Ok(properties.iter().map(|p| khr_display::DisplayModePropertiesKhr::from_vks(p, self.clone())).collect())
         }
         else {
@@ -150,7 +150,7 @@ impl DisplayKhr {
             (self.loader().khr_display.vkCreateDisplayModeKHR)(self.physical_device_handle(), self.handle, &create_info_wrapper.vks_struct, allocation_callbacks, &mut display_mode)
         };
 
-        if res == vks::VK_SUCCESS {
+        if res == vks::core::VK_SUCCESS {
             if let Some(allocator_helper) = allocator_helper {
                 self.instance().add_display_mode_allocator(allocator_helper);
             }

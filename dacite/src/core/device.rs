@@ -51,7 +51,7 @@ use {TryDestroyError, TryDestroyErrorKind, VulkanObject};
 pub struct Device(Arc<Inner>);
 
 impl VulkanObject for Device {
-    type NativeVulkanObject = vks::VkDevice;
+    type NativeVulkanObject = vks::core::VkDevice;
 
     #[inline]
     fn id(&self) -> u64 {
@@ -75,7 +75,7 @@ impl VulkanObject for Device {
 }
 
 impl Device {
-    pub(crate) fn new(handle: vks::VkDevice, instance: Instance, allocator: Option<AllocatorHelper>, loader: vks::DeviceProcAddrLoader, enabled_extensions: core::DeviceExtensions) -> Self {
+    pub(crate) fn new(handle: vks::core::VkDevice, instance: Instance, allocator: Option<AllocatorHelper>, loader: vks::DeviceProcAddrLoader, enabled_extensions: core::DeviceExtensions) -> Self {
         Device(Arc::new(Inner {
             handle: handle,
             instance: instance,
@@ -86,7 +86,7 @@ impl Device {
     }
 
     #[inline]
-    pub(crate) fn handle(&self) -> vks::VkDevice {
+    pub(crate) fn handle(&self) -> vks::core::VkDevice {
         self.0.handle
     }
 
@@ -125,7 +125,7 @@ impl Device {
             (self.loader().core.vkCreateCommandPool)(self.handle(), &create_info.vks_struct, allocation_callbacks, &mut command_pool)
         };
 
-        if res == vks::VK_SUCCESS {
+        if res == vks::core::VK_SUCCESS {
             Ok(CommandPool::new(command_pool, true, self.clone(), allocator_helper))
         }
         else {
@@ -145,7 +145,7 @@ impl Device {
             (self.loader().core.vkCreateFence)(self.handle(), &create_info.vks_struct, allocation_callbacks, &mut fence)
         };
 
-        if res == vks::VK_SUCCESS {
+        if res == vks::core::VK_SUCCESS {
             Ok(Fence::new(fence, true, self.clone(), allocator_helper))
         }
         else {
@@ -165,7 +165,7 @@ impl Device {
             (self.loader().core.vkCreateSemaphore)(self.handle(), &create_info.vks_struct, allocation_callbacks, &mut semaphore)
         };
 
-        if res == vks::VK_SUCCESS {
+        if res == vks::core::VK_SUCCESS {
             Ok(Semaphore::new(semaphore, true, self.clone(), allocator_helper))
         }
         else {
@@ -185,7 +185,7 @@ impl Device {
             (self.loader().core.vkCreateEvent)(self.handle(), &create_info.vks_struct, allocation_callbacks, &mut event)
         };
 
-        if res == vks::VK_SUCCESS {
+        if res == vks::core::VK_SUCCESS {
             Ok(Event::new(event, true, self.clone(), allocator_helper))
         }
         else {
@@ -205,7 +205,7 @@ impl Device {
             (self.loader().core.vkCreateQueryPool)(self.handle(), &create_info.vks_struct, allocation_callbacks, &mut query_pool)
         };
 
-        if res == vks::VK_SUCCESS {
+        if res == vks::core::VK_SUCCESS {
             Ok(QueryPool::new(query_pool, true, self.clone(), allocator_helper))
         }
         else {
@@ -225,7 +225,7 @@ impl Device {
             (self.loader().core.vkCreateBuffer)(self.handle(), &create_info.vks_struct, allocation_callbacks, &mut buffer)
         };
 
-        if res == vks::VK_SUCCESS {
+        if res == vks::core::VK_SUCCESS {
             Ok(Buffer::new(buffer, true, self.clone(), allocator_helper))
         }
         else {
@@ -245,7 +245,7 @@ impl Device {
             (self.loader().core.vkCreateImage)(self.handle(), &create_info.vks_struct, allocation_callbacks, &mut image)
         };
 
-        if res == vks::VK_SUCCESS {
+        if res == vks::core::VK_SUCCESS {
             Ok(Image::new(image, true, self.clone(), allocator_helper))
         }
         else {
@@ -265,7 +265,7 @@ impl Device {
             (self.loader().core.vkCreateBufferView)(self.handle(), &create_info_wrapper.vks_struct, allocation_callbacks, &mut buffer_view)
         };
 
-        if res == vks::VK_SUCCESS {
+        if res == vks::core::VK_SUCCESS {
             Ok(BufferView::new(buffer_view, true, self.clone(), allocator_helper))
         }
         else {
@@ -285,7 +285,7 @@ impl Device {
             (self.loader().core.vkCreateImageView)(self.handle(), &create_info_wrapper.vks_struct, allocation_callbacks, &mut image_view)
         };
 
-        if res == vks::VK_SUCCESS {
+        if res == vks::core::VK_SUCCESS {
             Ok(ImageView::new(image_view, true, self.clone(), allocator_helper))
         }
         else {
@@ -305,7 +305,7 @@ impl Device {
             (self.loader().core.vkCreateShaderModule)(self.handle(), &create_info.vks_struct, allocation_callbacks, &mut shader_module)
         };
 
-        if res == vks::VK_SUCCESS {
+        if res == vks::core::VK_SUCCESS {
             Ok(ShaderModule::new(shader_module, true, self.clone(), allocator_helper))
         }
         else {
@@ -325,7 +325,7 @@ impl Device {
             (self.loader().core.vkCreatePipelineCache)(self.handle(), &create_info.vks_struct, allocation_callbacks, &mut pipeline_cache)
         };
 
-        if res == vks::VK_SUCCESS {
+        if res == vks::core::VK_SUCCESS {
             Ok(PipelineCache::new(pipeline_cache, true, self.clone(), allocator_helper))
         }
         else {
@@ -345,7 +345,7 @@ impl Device {
             (self.loader().core.vkCreateSampler)(self.handle(), &create_info.vks_struct, allocation_callbacks, &mut sampler)
         };
 
-        if res == vks::VK_SUCCESS {
+        if res == vks::core::VK_SUCCESS {
             Ok(Sampler::new(sampler, true, self.clone(), allocator_helper))
         }
         else {
@@ -365,7 +365,7 @@ impl Device {
             (self.loader().core.vkCreateDescriptorPool)(self.handle(), &create_info.vks_struct, allocation_callbacks, &mut descriptor_pool)
         };
 
-        if res == vks::VK_SUCCESS {
+        if res == vks::core::VK_SUCCESS {
             Ok(DescriptorPool::new(descriptor_pool, true, self.clone(), allocator_helper))
         }
         else {
@@ -385,7 +385,7 @@ impl Device {
             (self.loader().core.vkCreateDescriptorSetLayout)(self.handle(), &create_info_wrapper.vks_struct, allocation_callbacks, &mut descriptor_set_layout)
         };
 
-        if res == vks::VK_SUCCESS {
+        if res == vks::core::VK_SUCCESS {
             Ok(DescriptorSetLayout::new(descriptor_set_layout, true, self.clone(), allocator_helper))
         }
         else {
@@ -405,7 +405,7 @@ impl Device {
             (self.loader().core.vkAllocateMemory)(self.handle(), &allocate_info_wrapper.vks_struct, allocation_callbacks, &mut memory)
         };
 
-        if res == vks::VK_SUCCESS {
+        if res == vks::core::VK_SUCCESS {
             Ok(DeviceMemory::new(memory, true, self.clone(), allocator_helper, allocate_info.allocation_size))
         }
         else {
@@ -421,7 +421,7 @@ impl Device {
         };
 
         let create_info_wrappers: Vec<_> = create_infos.iter().map(|c| core::VkGraphicsPipelineCreateInfoWrapper::new(c, true)).collect();
-        let vk_create_infos: Vec<vks::VkGraphicsPipelineCreateInfo> = create_info_wrappers.iter().map(|c| c.vks_struct).collect();
+        let vk_create_infos: Vec<vks::core::VkGraphicsPipelineCreateInfo> = create_info_wrappers.iter().map(|c| c.vks_struct).collect();
 
         let allocator_helper = allocator.map(AllocatorHelper::new);
         let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), AllocatorHelper::callbacks);
@@ -432,7 +432,7 @@ impl Device {
             (self.loader().core.vkCreateGraphicsPipelines)(self.handle(), pipeline_cache_handle, create_infos.len() as u32, vk_create_infos.as_ptr(), allocation_callbacks, pipelines.as_mut_ptr())
         };
 
-        if res == vks::VK_SUCCESS {
+        if res == vks::core::VK_SUCCESS {
             Ok(pipelines.iter().map(|p| Pipeline::new(*p, true, self.clone(), allocator_helper.clone())).collect())
         }
         else {
@@ -456,7 +456,7 @@ impl Device {
         };
 
         let create_info_wrappers: Vec<_> = create_infos.iter().map(|c| core::VkComputePipelineCreateInfoWrapper::new(c, true)).collect();
-        let vk_create_infos: Vec<vks::VkComputePipelineCreateInfo> = create_info_wrappers.iter().map(|c| c.vks_struct).collect();
+        let vk_create_infos: Vec<vks::core::VkComputePipelineCreateInfo> = create_info_wrappers.iter().map(|c| c.vks_struct).collect();
 
         let allocator_helper = allocator.map(AllocatorHelper::new);
         let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), AllocatorHelper::callbacks);
@@ -467,7 +467,7 @@ impl Device {
             (self.loader().core.vkCreateComputePipelines)(self.handle(), pipeline_cache_handle, create_infos.len() as u32, vk_create_infos.as_ptr(), allocation_callbacks, pipelines.as_mut_ptr())
         };
 
-        if res == vks::VK_SUCCESS {
+        if res == vks::core::VK_SUCCESS {
             Ok(pipelines.iter().map(|p| Pipeline::new(*p, true, self.clone(), allocator_helper.clone())).collect())
         }
         else {
@@ -495,7 +495,7 @@ impl Device {
             (self.loader().core.vkCreatePipelineLayout)(self.handle(), &create_info_wrapper.vks_struct, allocation_callbacks, &mut pipeline_layout)
         };
 
-        if res == vks::VK_SUCCESS {
+        if res == vks::core::VK_SUCCESS {
             Ok(PipelineLayout::new(pipeline_layout, true, self.clone(), allocator_helper))
         }
         else {
@@ -515,7 +515,7 @@ impl Device {
             (self.loader().core.vkCreateFramebuffer)(self.handle(), &create_info_wrapper.vks_struct, allocation_callbacks, &mut framebuffer)
         };
 
-        if res == vks::VK_SUCCESS {
+        if res == vks::core::VK_SUCCESS {
             Ok(Framebuffer::new(framebuffer, true, self.clone(), allocator_helper))
         }
         else {
@@ -535,7 +535,7 @@ impl Device {
             (self.loader().core.vkCreateRenderPass)(self.handle(), &create_info_wrapper.vks_struct, allocation_callbacks, &mut render_pass)
         };
 
-        if res == vks::VK_SUCCESS {
+        if res == vks::core::VK_SUCCESS {
             Ok(RenderPass::new(render_pass, true, self.clone(), allocator_helper))
         }
         else {
@@ -549,7 +549,7 @@ impl Device {
             (self.loader().core.vkDeviceWaitIdle)(self.handle())
         };
 
-        if res == vks::VK_SUCCESS {
+        if res == vks::core::VK_SUCCESS {
             Ok(())
         }
         else {
@@ -569,7 +569,7 @@ impl Device {
             (self.loader().khr_swapchain.vkCreateSwapchainKHR)(self.handle(), &create_info_wrapper.vks_struct, allocation_callbacks, &mut swapchain)
         };
 
-        if res == vks::VK_SUCCESS {
+        if res == vks::core::VK_SUCCESS {
             Ok(khr_swapchain::SwapchainKhr::new(swapchain, true, self.clone(), allocator_helper))
         }
         else {
@@ -591,7 +591,7 @@ impl Device {
             (self.loader().khr_display_swapchain.vkCreateSharedSwapchainsKHR)(self.handle(), create_infos.len() as u32, vk_create_infos.as_ptr(), allocation_callbacks, swapchains.as_mut_ptr())
         };
 
-        if res == vks::VK_SUCCESS {
+        if res == vks::core::VK_SUCCESS {
             Ok(swapchains.iter().map(|&s| khr_swapchain::SwapchainKhr::new(s, true, self.clone(), allocator_helper.clone())).collect())
         }
         else {
@@ -605,7 +605,7 @@ impl Device {
         let wrapper = ext_debug_marker::VkDebugMarkerObjectTagInfoEXTWrapper::new(tag_info, true);
 
         let res = unsafe { (self.loader().ext_debug_marker.vkDebugMarkerSetObjectTagEXT)(self.handle(), &wrapper.vks_struct as *const _ as _) };
-        if res == vks::VK_SUCCESS {
+        if res == vks::core::VK_SUCCESS {
             Ok(())
         }
         else {
@@ -619,7 +619,7 @@ impl Device {
         let wrapper = ext_debug_marker::VkDebugMarkerObjectNameInfoEXTWrapper::new(name_info, true);
 
         let res = unsafe { (self.loader().ext_debug_marker.vkDebugMarkerSetObjectNameEXT)(self.handle(), &wrapper.vks_struct as *const _ as _) };
-        if res == vks::VK_SUCCESS {
+        if res == vks::core::VK_SUCCESS {
             Ok(())
         }
         else {
@@ -630,7 +630,7 @@ impl Device {
 
 #[derive(Debug)]
 struct Inner {
-    handle: vks::VkDevice,
+    handle: vks::core::VkDevice,
     instance: Instance,
     allocator: Option<AllocatorHelper>,
     loader: vks::DeviceProcAddrLoader,
