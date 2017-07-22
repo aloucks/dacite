@@ -45,7 +45,15 @@ mod shader_module;
 
 pub(crate) mod allocator_helper;
 
+use amd_rasterization_order;
+use ext_debug_report;
+use ext_validation_flags;
+use khr_get_physical_device_properties2;
 use libc::{c_char, c_void};
+use nv_dedicated_allocation;
+use nv_external_memory;
+use nv_external_memory_win32;
+use nv_win32_keyed_mutex;
 use std::cmp;
 use std::collections::{HashMap, HashSet};
 use std::ffi::{CStr, CString};
@@ -3083,22 +3091,22 @@ gen_chain_struct! {
     input: true,
     output: false,
 
-    debug_report_callback_create_info_ext: DebugReportCallbackCreateInfoExt {
+    debug_report_callback_create_info_ext: ext_debug_report::DebugReportCallbackCreateInfoExt {
         mod: ext_debug_report,
         fn_add: add_debug_report_callback_create_info_ext,
         fn_has: has_debug_report_callback_create_info_ext,
         fn_get: get_debug_report_callback_create_info_ext,
-        wrapper: VkDebugReportCallbackCreateInfoEXTWrapper,
+        wrapper: ext_debug_report::VkDebugReportCallbackCreateInfoEXTWrapper,
         vks: vks::ext_debug_report::VkDebugReportCallbackCreateInfoEXT,
         stype: vks::core::VK_STRUCTURE_TYPE_DEBUG_REPORT_CALLBACK_CREATE_INFO_EXT,
     }
 
-    validation_flags_ext: ValidationFlagsExt {
+    validation_flags_ext: ext_validation_flags::ValidationFlagsExt {
         mod: ext_validation_flags,
         fn_add: add_validation_flags_ext,
         fn_has: has_validation_flags_ext,
         fn_get: get_validation_flags_ext,
-        wrapper: VkValidationFlagsEXTWrapper,
+        wrapper: ext_validation_flags::VkValidationFlagsEXTWrapper,
         vks: vks::ext_validation_flags::VkValidationFlagsEXT,
         stype: vks::core::VK_STRUCTURE_TYPE_VALIDATION_FLAGS_EXT,
     }
@@ -4437,12 +4445,12 @@ gen_chain_struct! {
     input: true,
     output: false,
 
-    physical_device_features2_khr: PhysicalDeviceFeatures2Khr {
+    physical_device_features2_khr: khr_get_physical_device_properties2::PhysicalDeviceFeatures2Khr {
         mod: khr_get_physical_device_properties2,
         fn_add: add_physical_device_features2_khr,
         fn_has: has_physical_device_features2_khr,
         fn_get: get_physical_device_features2_khr,
-        wrapper: VkPhysicalDeviceFeatures2KHRWrapper,
+        wrapper: khr_get_physical_device_properties2::VkPhysicalDeviceFeatures2KHRWrapper,
         vks: vks::khr_get_physical_device_properties2::VkPhysicalDeviceFeatures2KHR,
         stype: vks::core::VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2_KHR,
     }
@@ -4812,12 +4820,12 @@ gen_chain_struct! {
     input: true,
     output: false,
 
-    win32_keyed_mutex_acquire_release_info_nv: Win32KeyedMutexAcquireReleaseInfoNv {
+    win32_keyed_mutex_acquire_release_info_nv: nv_win32_keyed_mutex::Win32KeyedMutexAcquireReleaseInfoNv {
         mod: nv_win32_keyed_mutex,
         fn_add: add_win32_keyed_mutex_acquire_release_info_nv,
         fn_has: has_win32_keyed_mutex_acquire_release_info_nv,
         fn_get: get_win32_keyed_mutex_acquire_release_info_nv,
-        wrapper: VkWin32KeyedMutexAcquireReleaseInfoNVWrapper,
+        wrapper: nv_win32_keyed_mutex::VkWin32KeyedMutexAcquireReleaseInfoNVWrapper,
         vks: vks::nv_win32_keyed_mutex::VkWin32KeyedMutexAcquireReleaseInfoNV,
         stype: vks::core::VK_STRUCTURE_TYPE_WIN32_KEYED_MUTEX_ACQUIRE_RELEASE_INFO_NV,
     }
@@ -4910,42 +4918,42 @@ gen_chain_struct! {
     input: true,
     output: false,
 
-    dedicated_allocation_memory_allocate_info_nv: DedicatedAllocationMemoryAllocateInfoNv {
+    dedicated_allocation_memory_allocate_info_nv: nv_dedicated_allocation::DedicatedAllocationMemoryAllocateInfoNv {
         mod: nv_dedicated_allocation,
         fn_add: add_dedicated_allocation_memory_allocate_info_nv,
         fn_has: has_dedicated_allocation_memory_allocate_info_nv,
         fn_get: get_dedicated_allocation_memory_allocate_info_nv,
-        wrapper: VkDedicatedAllocationMemoryAllocateInfoNVWrapper,
+        wrapper: nv_dedicated_allocation::VkDedicatedAllocationMemoryAllocateInfoNVWrapper,
         vks: vks::nv_dedicated_allocation::VkDedicatedAllocationMemoryAllocateInfoNV,
         stype: vks::core::VK_STRUCTURE_TYPE_DEDICATED_ALLOCATION_MEMORY_ALLOCATE_INFO_NV,
     }
 
-    export_memory_allocate_info_nv: ExportMemoryAllocateInfoNv {
+    export_memory_allocate_info_nv: nv_external_memory::ExportMemoryAllocateInfoNv {
         mod: nv_external_memory,
         fn_add: add_export_memory_allocate_info_nv,
         fn_has: has_export_memory_allocate_info_nv,
         fn_get: get_export_memory_allocate_info_nv,
-        wrapper: VkExportMemoryAllocateInfoNVWrapper,
+        wrapper: nv_external_memory::VkExportMemoryAllocateInfoNVWrapper,
         vks: vks::nv_external_memory::VkExportMemoryAllocateInfoNV,
         stype: vks::core::VK_STRUCTURE_TYPE_EXPORT_MEMORY_ALLOCATE_INFO_NV,
     }
 
-    import_memory_win32_handle_info_nv: ImportMemoryWin32HandleInfoNv {
+    import_memory_win32_handle_info_nv: nv_external_memory_win32::ImportMemoryWin32HandleInfoNv {
         mod: nv_external_memory_win32,
         fn_add: add_import_memory_win32_handle_info_nv,
         fn_has: has_import_memory_win32_handle_info_nv,
         fn_get: get_import_memory_win32_handle_info_nv,
-        wrapper: VkImportMemoryWin32HandleInfoNVWrapper,
+        wrapper: nv_external_memory_win32::VkImportMemoryWin32HandleInfoNVWrapper,
         vks: vks::nv_external_memory_win32::VkImportMemoryWin32HandleInfoNV,
         stype: vks::core::VK_STRUCTURE_TYPE_IMPORT_MEMORY_WIN32_HANDLE_INFO_NV,
     }
 
-    export_memory_win32_handle_info_nv: ExportMemoryWin32HandleInfoNv {
+    export_memory_win32_handle_info_nv: nv_external_memory_win32::ExportMemoryWin32HandleInfoNv {
         mod: nv_external_memory_win32,
         fn_add: add_export_memory_win32_handle_info_nv,
         fn_has: has_export_memory_win32_handle_info_nv,
         fn_get: get_export_memory_win32_handle_info_nv,
-        wrapper: VkExportMemoryWin32HandleInfoNVWrapper,
+        wrapper: nv_external_memory_win32::VkExportMemoryWin32HandleInfoNVWrapper,
         vks: vks::nv_external_memory_win32::VkExportMemoryWin32HandleInfoNV,
         stype: vks::core::VK_STRUCTURE_TYPE_EXPORT_MEMORY_WIN32_HANDLE_INFO_NV,
     }
@@ -5603,12 +5611,12 @@ gen_chain_struct! {
     input: true,
     output: false,
 
-    dedicated_allocation_buffer_create_info_nv: DedicatedAllocationBufferCreateInfoNv {
+    dedicated_allocation_buffer_create_info_nv: nv_dedicated_allocation::DedicatedAllocationBufferCreateInfoNv {
         mod: nv_dedicated_allocation,
         fn_add: add_dedicated_allocation_buffer_create_info_nv,
         fn_has: has_dedicated_allocation_buffer_create_info_nv,
         fn_get: get_dedicated_allocation_buffer_create_info_nv,
-        wrapper: VkDedicatedAllocationBufferCreateInfoNVWrapper,
+        wrapper: nv_dedicated_allocation::VkDedicatedAllocationBufferCreateInfoNVWrapper,
         vks: vks::nv_dedicated_allocation::VkDedicatedAllocationBufferCreateInfoNV,
         stype: vks::core::VK_STRUCTURE_TYPE_DEDICATED_ALLOCATION_BUFFER_CREATE_INFO_NV,
     }
@@ -5714,22 +5722,22 @@ gen_chain_struct! {
     input: true,
     output: false,
 
-    dedicated_allocation_image_create_info_nv: DedicatedAllocationImageCreateInfoNv {
+    dedicated_allocation_image_create_info_nv: nv_dedicated_allocation::DedicatedAllocationImageCreateInfoNv {
         mod: nv_dedicated_allocation,
         fn_add: add_dedicated_allocation_image_create_info_nv,
         fn_has: has_dedicated_allocation_image_create_info_nv,
         fn_get: get_dedicated_allocation_image_create_info_nv,
-        wrapper: VkDedicatedAllocationImageCreateInfoNVWrapper,
+        wrapper: nv_dedicated_allocation::VkDedicatedAllocationImageCreateInfoNVWrapper,
         vks: vks::nv_dedicated_allocation::VkDedicatedAllocationImageCreateInfoNV,
         stype: vks::core::VK_STRUCTURE_TYPE_DEDICATED_ALLOCATION_IMAGE_CREATE_INFO_NV,
     }
 
-    external_memory_image_create_info_nv: ExternalMemoryImageCreateInfoNv {
+    external_memory_image_create_info_nv: nv_external_memory::ExternalMemoryImageCreateInfoNv {
         mod: nv_external_memory,
         fn_add: add_external_memory_image_create_info_nv,
         fn_has: has_external_memory_image_create_info_nv,
         fn_get: get_external_memory_image_create_info_nv,
-        wrapper: VkExternalMemoryImageCreateInfoNVWrapper,
+        wrapper: nv_external_memory::VkExternalMemoryImageCreateInfoNVWrapper,
         vks: vks::nv_external_memory::VkExternalMemoryImageCreateInfoNV,
         stype: vks::core::VK_STRUCTURE_TYPE_EXTERNAL_MEMORY_IMAGE_CREATE_INFO_NV,
     }
@@ -6566,12 +6574,12 @@ gen_chain_struct! {
     input: true,
     output: false,
 
-    pipeline_rasterization_state_rasterization_order_amd: PipelineRasterizationStateRasterizationOrderAmd {
+    pipeline_rasterization_state_rasterization_order_amd: amd_rasterization_order::PipelineRasterizationStateRasterizationOrderAmd {
         mod: amd_rasterization_order,
         fn_add: add_pipeline_rasterization_state_rasterization_order_amd,
         fn_has: has_pipeline_rasterization_state_rasterization_order_amd,
         fn_get: get_pipeline_rasterization_state_rasterization_order_amd,
-        wrapper: VkPipelineRasterizationStateRasterizationOrderAMDWrapper,
+        wrapper: amd_rasterization_order::VkPipelineRasterizationStateRasterizationOrderAMDWrapper,
         vks: vks::amd_rasterization_order::VkPipelineRasterizationStateRasterizationOrderAMD,
         stype: vks::core::VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_RASTERIZATION_ORDER_AMD,
     }

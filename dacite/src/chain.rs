@@ -21,12 +21,12 @@ macro_rules! gen_chain_struct {
         output: $is_output:ident,
 
         $(
-            $field_name:ident: $field_ty:ident {
+            $field_name:ident: $field_ty:ty {
                 mod: $field_mod:ident,
                 fn_add: $field_fn_add:ident,
                 fn_has: $field_fn_has:ident,
                 fn_get: $field_fn_get:ident,
-                wrapper: $field_wrapper_ty:ident,
+                wrapper: $field_wrapper_ty:ty,
                 vks: $field_vks_ty:ty,
                 stype: $field_stype:pat,
             }
@@ -34,7 +34,7 @@ macro_rules! gen_chain_struct {
     ) => {
         #[derive(Debug, Clone, Default, PartialEq)]
         pub struct $name {
-            $( $field_name: Option<::$field_mod::$field_ty>, )*
+            $( $field_name: Option<$field_ty>, )*
             guard: (),
         }
 
@@ -46,7 +46,7 @@ macro_rules! gen_chain_struct {
 
             $(
                 #[inline]
-                pub fn $field_fn_add(&mut self, $field_name: ::$field_mod::$field_ty) -> &mut Self {
+                pub fn $field_fn_add(&mut self, $field_name: $field_ty) -> &mut Self {
                     self.$field_name = Some($field_name);
                     self
                 }
@@ -57,7 +57,7 @@ macro_rules! gen_chain_struct {
                 }
 
                 #[inline]
-                pub fn $field_fn_get(&self) -> Option<&::$field_mod::$field_ty> {
+                pub fn $field_fn_get(&self) -> Option<&$field_ty> {
                     self.$field_name.as_ref()
                 }
             )*
@@ -140,12 +140,12 @@ macro_rules! gen_chain_struct {
         output: true,
 
         $(
-            $field_name:ident: $field_ty:ident {
+            $field_name:ident: $field_ty:ty {
                 mod: $field_mod:ident,
                 fn_add: $field_fn_add:ident,
                 fn_has: $field_fn_has:ident,
                 fn_get: $field_fn_get:ident,
-                wrapper: $field_wrapper_ty:ident,
+                wrapper: $field_wrapper_ty:ty,
                 vks: $field_vks_ty:ty,
                 stype: $field_stype:pat,
             }
@@ -166,7 +166,7 @@ macro_rules! gen_chain_struct {
                 while !pnext.is_null() {
                     let tmp = &*(pnext as *const VkStructure);
                     match tmp.sType {
-                        $( $field_stype => res.$field_name = Some(::$field_mod::$field_ty::from_vks(&*(pnext as *const $field_vks_ty), false)), )*
+                        $( $field_stype => res.$field_name = Some(<$field_ty>::from_vks(&*(pnext as *const $field_vks_ty), false)), )*
                         _ => { }
                     }
 
@@ -198,12 +198,12 @@ macro_rules! gen_chain_struct {
         output: false,
 
         $(
-            $field_name:ident: $field_ty:ident {
+            $field_name:ident: $field_ty:ty {
                 mod: $field_mod:ident,
                 fn_add: $field_fn_add:ident,
                 fn_has: $field_fn_has:ident,
                 fn_get: $field_fn_get:ident,
-                wrapper: $field_wrapper_ty:ident,
+                wrapper: $field_wrapper_ty:ty,
                 vks: $field_vks_ty:ty,
                 stype: $field_stype:pat,
             }
@@ -220,12 +220,12 @@ macro_rules! gen_chain_struct {
         output: $is_output:ident,
 
         $(
-            $field_name:ident: $field_ty:ident {
+            $field_name:ident: $field_ty:ty {
                 mod: $field_mod:ident,
                 fn_add: $field_fn_add:ident,
                 fn_has: $field_fn_has:ident,
                 fn_get: $field_fn_get:ident,
-                wrapper: $field_wrapper_ty:ident,
+                wrapper: $field_wrapper_ty:ty,
                 vks: $field_vks_ty:ty,
                 stype: $field_stype:pat,
             }
@@ -234,7 +234,7 @@ macro_rules! gen_chain_struct {
         #[derive(Debug)]
         pub(crate) struct $wrapper_name {
             pub pnext: *mut ::libc::c_void,
-            $( $field_name: Option<Box<::$field_mod::$field_wrapper_ty>>, )*
+            $( $field_name: Option<Box<$field_wrapper_ty>>, )*
         }
 
         impl $wrapper_name {
@@ -246,7 +246,7 @@ macro_rules! gen_chain_struct {
 
                 $(
                     let $field_name = from.$field_name.as_ref().map(|$field_name| {
-                        let mut $field_name: Box<_> = Box::new(::$field_mod::$field_wrapper_ty::new($field_name, false));
+                        let mut $field_name: Box<_> = Box::new(<$field_wrapper_ty>::new($field_name, false));
                         unsafe {
                             *pnext = &$field_name.vks_struct as *const _ as *mut ::libc::c_void;
                             pnext = &mut ($field_name.vks_struct.pNext as *mut _);
@@ -286,12 +286,12 @@ macro_rules! gen_chain_struct {
         output: $is_output:ident,
 
         $(
-            $field_name:ident: $field_ty:ident {
+            $field_name:ident: $field_ty:ty {
                 mod: $field_mod:ident,
                 fn_add: $field_fn_add:ident,
                 fn_has: $field_fn_has:ident,
                 fn_get: $field_fn_get:ident,
-                wrapper: $field_wrapper_ty:ident,
+                wrapper: $field_wrapper_ty:ty,
                 vks: $field_vks_ty:ty,
                 stype: $field_stype:pat,
             }
@@ -308,12 +308,12 @@ macro_rules! gen_chain_struct {
         output: true,
 
         $(
-            $field_name:ident: $field_ty:ident {
+            $field_name:ident: $field_ty:ty {
                 mod: $field_mod:ident,
                 fn_add: $field_fn_add:ident,
                 fn_has: $field_fn_has:ident,
                 fn_get: $field_fn_get:ident,
-                wrapper: $field_wrapper_ty:ident,
+                wrapper: $field_wrapper_ty:ty,
                 vks: $field_vks_ty:ty,
                 stype: $field_stype:pat,
             }
@@ -394,12 +394,12 @@ macro_rules! gen_chain_struct {
         output: false,
 
         $(
-            $field_name:ident: $field_ty:ident {
+            $field_name:ident: $field_ty:ty {
                 mod: $field_mod:ident,
                 fn_add: $field_fn_add:ident,
                 fn_has: $field_fn_has:ident,
                 fn_get: $field_fn_get:ident,
-                wrapper: $field_wrapper_ty:ident,
+                wrapper: $field_wrapper_ty:ty,
                 vks: $field_vks_ty:ty,
                 stype: $field_stype:pat,
             }

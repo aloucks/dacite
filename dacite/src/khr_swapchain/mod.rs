@@ -17,6 +17,7 @@
 mod swapchain;
 
 use core;
+use khr_display_swapchain;
 use khr_surface;
 use std::ptr;
 use utils;
@@ -139,12 +140,12 @@ gen_chain_struct! {
     input: true,
     output: false,
 
-    display_present_info_khr: DisplayPresentInfoKhr {
+    display_present_info_khr: khr_display_swapchain::DisplayPresentInfoKhr {
         mod: khr_display_swapchain,
         fn_add: add_display_present_info_khr,
         fn_has: has_display_present_info_khr,
         fn_get: get_display_present_info_khr,
-        wrapper: VkDisplayPresentInfoKHRWrapper,
+        wrapper: khr_display_swapchain::VkDisplayPresentInfoKHRWrapper,
         vks: vks::khr_display_swapchain::VkDisplayPresentInfoKHR,
         stype: vks::core::VK_STRUCTURE_TYPE_DISPLAY_PRESENT_INFO_KHR,
     }
