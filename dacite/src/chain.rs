@@ -22,7 +22,6 @@ macro_rules! gen_chain_struct {
 
         $(
             $field_name:ident: $field_ty:ty {
-                mod: $field_mod:ident,
                 fn_add: $field_fn_add:ident,
                 fn_has: $field_fn_has:ident,
                 fn_get: $field_fn_get:ident,
@@ -74,7 +73,6 @@ macro_rules! gen_chain_struct {
 
             $(
                 $field_name: $field_ty {
-                    mod: $field_mod,
                     fn_add: $field_fn_add,
                     fn_has: $field_fn_has,
                     fn_get: $field_fn_get,
@@ -96,7 +94,6 @@ macro_rules! gen_chain_struct {
 
             $(
                 $field_name: $field_ty {
-                    mod: $field_mod,
                     fn_add: $field_fn_add,
                     fn_has: $field_fn_has,
                     fn_get: $field_fn_get,
@@ -118,7 +115,6 @@ macro_rules! gen_chain_struct {
 
             $(
                 $field_name: $field_ty {
-                    mod: $field_mod,
                     fn_add: $field_fn_add,
                     fn_has: $field_fn_has,
                     fn_get: $field_fn_get,
@@ -141,7 +137,6 @@ macro_rules! gen_chain_struct {
 
         $(
             $field_name:ident: $field_ty:ty {
-                mod: $field_mod:ident,
                 fn_add: $field_fn_add:ident,
                 fn_has: $field_fn_has:ident,
                 fn_get: $field_fn_get:ident,
@@ -199,7 +194,6 @@ macro_rules! gen_chain_struct {
 
         $(
             $field_name:ident: $field_ty:ty {
-                mod: $field_mod:ident,
                 fn_add: $field_fn_add:ident,
                 fn_has: $field_fn_has:ident,
                 fn_get: $field_fn_get:ident,
@@ -221,7 +215,6 @@ macro_rules! gen_chain_struct {
 
         $(
             $field_name:ident: $field_ty:ty {
-                mod: $field_mod:ident,
                 fn_add: $field_fn_add:ident,
                 fn_has: $field_fn_has:ident,
                 fn_get: $field_fn_get:ident,
@@ -287,7 +280,6 @@ macro_rules! gen_chain_struct {
 
         $(
             $field_name:ident: $field_ty:ty {
-                mod: $field_mod:ident,
                 fn_add: $field_fn_add:ident,
                 fn_has: $field_fn_has:ident,
                 fn_get: $field_fn_get:ident,
@@ -309,7 +301,6 @@ macro_rules! gen_chain_struct {
 
         $(
             $field_name:ident: $field_ty:ty {
-                mod: $field_mod:ident,
                 fn_add: $field_fn_add:ident,
                 fn_has: $field_fn_has:ident,
                 fn_get: $field_fn_get:ident,
@@ -395,7 +386,6 @@ macro_rules! gen_chain_struct {
 
         $(
             $field_name:ident: $field_ty:ty {
-                mod: $field_mod:ident,
                 fn_add: $field_fn_add:ident,
                 fn_has: $field_fn_has:ident,
                 fn_get: $field_fn_get:ident,

@@ -141,7 +141,6 @@ gen_chain_struct! {
     output: false,
 
     display_present_info_khr: khr_display_swapchain::DisplayPresentInfoKhr {
-        mod: khr_display_swapchain,
         fn_add: add_display_present_info_khr,
         fn_has: has_display_present_info_khr,
         fn_get: get_display_present_info_khr,

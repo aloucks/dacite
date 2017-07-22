@@ -3092,7 +3092,6 @@ gen_chain_struct! {
     output: false,
 
     debug_report_callback_create_info_ext: ext_debug_report::DebugReportCallbackCreateInfoExt {
-        mod: ext_debug_report,
         fn_add: add_debug_report_callback_create_info_ext,
         fn_has: has_debug_report_callback_create_info_ext,
         fn_get: get_debug_report_callback_create_info_ext,
@@ -3102,7 +3101,6 @@ gen_chain_struct! {
     }
 
     validation_flags_ext: ext_validation_flags::ValidationFlagsExt {
-        mod: ext_validation_flags,
         fn_add: add_validation_flags_ext,
         fn_has: has_validation_flags_ext,
         fn_get: get_validation_flags_ext,
@@ -4446,7 +4444,6 @@ gen_chain_struct! {
     output: false,
 
     physical_device_features2_khr: khr_get_physical_device_properties2::PhysicalDeviceFeatures2Khr {
-        mod: khr_get_physical_device_properties2,
         fn_add: add_physical_device_features2_khr,
         fn_has: has_physical_device_features2_khr,
         fn_get: get_physical_device_features2_khr,
@@ -4821,7 +4818,6 @@ gen_chain_struct! {
     output: false,
 
     win32_keyed_mutex_acquire_release_info_nv: nv_win32_keyed_mutex::Win32KeyedMutexAcquireReleaseInfoNv {
-        mod: nv_win32_keyed_mutex,
         fn_add: add_win32_keyed_mutex_acquire_release_info_nv,
         fn_has: has_win32_keyed_mutex_acquire_release_info_nv,
         fn_get: get_win32_keyed_mutex_acquire_release_info_nv,
@@ -4919,7 +4915,6 @@ gen_chain_struct! {
     output: false,
 
     dedicated_allocation_memory_allocate_info_nv: nv_dedicated_allocation::DedicatedAllocationMemoryAllocateInfoNv {
-        mod: nv_dedicated_allocation,
         fn_add: add_dedicated_allocation_memory_allocate_info_nv,
         fn_has: has_dedicated_allocation_memory_allocate_info_nv,
         fn_get: get_dedicated_allocation_memory_allocate_info_nv,
@@ -4929,7 +4924,6 @@ gen_chain_struct! {
     }
 
     export_memory_allocate_info_nv: nv_external_memory::ExportMemoryAllocateInfoNv {
-        mod: nv_external_memory,
         fn_add: add_export_memory_allocate_info_nv,
         fn_has: has_export_memory_allocate_info_nv,
         fn_get: get_export_memory_allocate_info_nv,
@@ -4939,7 +4933,6 @@ gen_chain_struct! {
     }
 
     import_memory_win32_handle_info_nv: nv_external_memory_win32::ImportMemoryWin32HandleInfoNv {
-        mod: nv_external_memory_win32,
         fn_add: add_import_memory_win32_handle_info_nv,
         fn_has: has_import_memory_win32_handle_info_nv,
         fn_get: get_import_memory_win32_handle_info_nv,
@@ -4949,7 +4942,6 @@ gen_chain_struct! {
     }
 
     export_memory_win32_handle_info_nv: nv_external_memory_win32::ExportMemoryWin32HandleInfoNv {
-        mod: nv_external_memory_win32,
         fn_add: add_export_memory_win32_handle_info_nv,
         fn_has: has_export_memory_win32_handle_info_nv,
         fn_get: get_export_memory_win32_handle_info_nv,
@@ -5612,7 +5604,6 @@ gen_chain_struct! {
     output: false,
 
     dedicated_allocation_buffer_create_info_nv: nv_dedicated_allocation::DedicatedAllocationBufferCreateInfoNv {
-        mod: nv_dedicated_allocation,
         fn_add: add_dedicated_allocation_buffer_create_info_nv,
         fn_has: has_dedicated_allocation_buffer_create_info_nv,
         fn_get: get_dedicated_allocation_buffer_create_info_nv,
@@ -5723,7 +5714,6 @@ gen_chain_struct! {
     output: false,
 
     dedicated_allocation_image_create_info_nv: nv_dedicated_allocation::DedicatedAllocationImageCreateInfoNv {
-        mod: nv_dedicated_allocation,
         fn_add: add_dedicated_allocation_image_create_info_nv,
         fn_has: has_dedicated_allocation_image_create_info_nv,
         fn_get: get_dedicated_allocation_image_create_info_nv,
@@ -5733,7 +5723,6 @@ gen_chain_struct! {
     }
 
     external_memory_image_create_info_nv: nv_external_memory::ExternalMemoryImageCreateInfoNv {
-        mod: nv_external_memory,
         fn_add: add_external_memory_image_create_info_nv,
         fn_has: has_external_memory_image_create_info_nv,
         fn_get: get_external_memory_image_create_info_nv,
@@ -6575,7 +6564,6 @@ gen_chain_struct! {
     output: false,
 
     pipeline_rasterization_state_rasterization_order_amd: amd_rasterization_order::PipelineRasterizationStateRasterizationOrderAmd {
-        mod: amd_rasterization_order,
         fn_add: add_pipeline_rasterization_state_rasterization_order_amd,
         fn_has: has_pipeline_rasterization_state_rasterization_order_amd,
         fn_get: get_pipeline_rasterization_state_rasterization_order_amd,
