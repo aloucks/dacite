@@ -1355,7 +1355,7 @@ impl Timeout {
     pub fn as_nanoseconds(&self) -> u64 {
         match *self {
             Timeout::None => 0,
-            Timeout::Some(ref d) => 1000000000u64 * d.as_secs() + d.subsec_nanos() as u64,
+            Timeout::Some(ref d) => 1_000_000_000u64 * d.as_secs() + d.subsec_nanos() as u64,
             Timeout::Infinite => u64::max_value(),
         }
     }
