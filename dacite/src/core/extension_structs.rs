@@ -125,20 +125,22 @@ macro_rules! gen_extension_structs {
 
             #[allow(dead_code)]
             #[allow(unused_variables)]
-            #[inline]
             unsafe fn load_instance(&self, loader: &mut vks::InstanceProcAddrLoader, instance: vks::VkInstance) {
-                $(
-                    $( loader.$ext_load_instance(instance); )*
-                )*
+                $( $(
+                    if self.$ext_fn_has() {
+                        loader.$ext_load_instance(instance);
+                    }
+                )* )*
             }
 
             #[allow(dead_code)]
             #[allow(unused_variables)]
-            #[inline]
             unsafe fn load_device(&self, loader: &mut vks::DeviceProcAddrLoader, device: vks::VkDevice) {
-                $(
-                    $( loader.$ext_load_device(device); )*
-                )*
+                $( $(
+                    if self.$ext_fn_has() {
+                        loader.$ext_load_device(device);
+                    }
+                )* )*
             }
 
             fn to_cstring_vec(&self) -> Vec<CString> {
