@@ -1,4 +1,4 @@
-image: "scorpil/rust:nightly"
+image: "rust:1.20.0"
 
 before_script:
     - apt-get update
