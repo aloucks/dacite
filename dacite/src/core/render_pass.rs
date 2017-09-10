@@ -114,7 +114,7 @@ impl RenderPass {
     pub fn get_render_area_granularity(&self) -> core::Extent2D {
         unsafe {
             let mut granularity = mem::uninitialized();
-            (self.loader().core.vkGetRenderAreaGranularity)(self.device_handle(), self.handle(), &mut granularity);
+            self.loader().core.vkGetRenderAreaGranularity(self.device_handle(), self.handle(), &mut granularity);
             (&granularity).into()
         }
     }
@@ -137,7 +137,7 @@ impl Drop for Inner {
             };
 
             unsafe {
-                (self.device.loader().core.vkDestroyRenderPass)(self.device.handle(), self.handle, allocator);
+                self.device.loader().core.vkDestroyRenderPass(self.device.handle(), self.handle, allocator);
             }
         }
     }

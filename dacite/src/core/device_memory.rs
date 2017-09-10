@@ -126,7 +126,7 @@ impl DeviceMemory {
     pub fn get_commitment(&self) -> u64 {
         let mut commitment = 0;
         unsafe {
-            (self.loader().core.vkGetDeviceMemoryCommitment)(self.device_handle(), self.handle(), &mut commitment)
+            self.loader().core.vkGetDeviceMemoryCommitment(self.device_handle(), self.handle(), &mut commitment)
         };
 
         commitment
@@ -136,7 +136,7 @@ impl DeviceMemory {
     pub fn map(&self, offset: u64, size: core::OptionalDeviceSize, flags: core::MemoryMapFlags) -> Result<MappedMemory, core::Error> {
         let mut mapped = ptr::null_mut();
         let res = unsafe {
-            (self.loader().core.vkMapMemory)(self.device_handle(), self.handle(), offset, size.into(), flags.bits(), &mut mapped)
+            self.loader().core.vkMapMemory(self.device_handle(), self.handle(), offset, size.into(), flags.bits(), &mut mapped)
         };
 
         if res == vks::core::VK_SUCCESS {
@@ -166,7 +166,7 @@ impl DeviceMemory {
         let ranges: Vec<_> = ranges_wrappers.iter().map(|r| r.vks_struct).collect();
 
         let res = unsafe {
-            (loader.core.vkFlushMappedMemoryRanges)(device_handle, ranges.len() as u32, ranges.as_ptr())
+            loader.core.vkFlushMappedMemoryRanges(device_handle, ranges.len() as u32, ranges.as_ptr())
         };
 
         if res == vks::core::VK_SUCCESS {
@@ -186,7 +186,7 @@ impl DeviceMemory {
         let ranges: Vec<_> = ranges_wrappers.iter().map(|r| r.vks_struct).collect();
 
         let res = unsafe {
-            (loader.core.vkInvalidateMappedMemoryRanges)(device_handle, ranges.len() as u32, ranges.as_ptr())
+            loader.core.vkInvalidateMappedMemoryRanges(device_handle, ranges.len() as u32, ranges.as_ptr())
         };
 
         if res == vks::core::VK_SUCCESS {
@@ -202,7 +202,7 @@ impl DeviceMemory {
     pub fn get_win32_handle_nv(&self, handle_type: nv_external_memory_capabilities::ExternalMemoryHandleTypeFlagsNv) -> Result<win32_types::HANDLE, core::Error> {
         unsafe {
             let mut handle = mem::uninitialized();
-            let res = (self.loader().nv_external_memory_win32.vkGetMemoryWin32HandleNV)(self.device_handle(), self.handle(), handle_type.bits(), &mut handle);
+            let res = self.loader().nv_external_memory_win32.vkGetMemoryWin32HandleNV(self.device_handle(), self.handle(), handle_type.bits(), &mut handle);
 
             if res == vks::core::VK_SUCCESS {
                 Ok(handle)
@@ -225,7 +225,7 @@ pub struct MappedMemory {
 impl Drop for MappedMemory {
     fn drop(&mut self) {
         unsafe {
-            (self.memory.loader().core.vkUnmapMemory)(self.memory.device_handle(), self.memory.handle());
+            self.memory.loader().core.vkUnmapMemory(self.memory.device_handle(), self.memory.handle());
         }
     }
 }
@@ -257,7 +257,7 @@ impl MappedMemory {
         };
 
         let res = unsafe {
-            (self.memory.loader().core.vkFlushMappedMemoryRanges)(self.memory.device_handle(), 1, &range)
+            self.memory.loader().core.vkFlushMappedMemoryRanges(self.memory.device_handle(), 1, &range)
         };
 
         if res == vks::core::VK_SUCCESS {
@@ -282,7 +282,7 @@ impl MappedMemory {
         };
 
         let res = unsafe {
-            (self.memory.loader().core.vkInvalidateMappedMemoryRanges)(self.memory.device_handle(), 1, &range)
+            self.memory.loader().core.vkInvalidateMappedMemoryRanges(self.memory.device_handle(), 1, &range)
         };
 
         if res == vks::core::VK_SUCCESS {
@@ -312,7 +312,7 @@ impl Drop for Inner {
             };
 
             unsafe {
-                (self.device.loader().core.vkFreeMemory)(self.device.handle(), self.handle, allocator);
+                self.device.loader().core.vkFreeMemory(self.device.handle(), self.handle, allocator);
             }
         }
     }

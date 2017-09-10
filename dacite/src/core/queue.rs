@@ -118,7 +118,7 @@ impl Queue {
         let fence = fence.map_or(Default::default(), Fence::handle);
 
         let res = unsafe {
-            (self.loader().core.vkQueueSubmit)(self.handle, submits_count, vk_submits_ptr, fence)
+            self.loader().core.vkQueueSubmit(self.handle, submits_count, vk_submits_ptr, fence)
         };
 
         if res == vks::core::VK_SUCCESS {
@@ -132,7 +132,7 @@ impl Queue {
     /// See [`vkQueueWaitIdle`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkQueueWaitIdle)
     pub fn wait_idle(&self) -> Result<(), core::Error> {
         let res = unsafe {
-            (self.loader().core.vkQueueWaitIdle)(self.handle)
+            self.loader().core.vkQueueWaitIdle(self.handle)
         };
 
         if res == vks::core::VK_SUCCESS {
@@ -159,7 +159,7 @@ impl Queue {
         let fence = fence.map_or(Default::default(), Fence::handle);
 
         let res = unsafe {
-            (self.loader().core.vkQueueBindSparse)(self.handle, bind_infos_count, vk_bind_infos_ptr, fence)
+            self.loader().core.vkQueueBindSparse(self.handle, bind_infos_count, vk_bind_infos_ptr, fence)
         };
 
         if res == vks::core::VK_SUCCESS {
@@ -176,7 +176,7 @@ impl Queue {
         let present_info_wrapper = khr_swapchain::VkPresentInfoKHRWrapper::new(present_info, true);
 
         let res = unsafe {
-            (self.loader().khr_swapchain.vkQueuePresentKHR)(self.handle, &present_info_wrapper.vks_struct)
+            self.loader().khr_swapchain.vkQueuePresentKHR(self.handle, &present_info_wrapper.vks_struct)
         };
 
         if let Some(ref mut results) = present_info.results {

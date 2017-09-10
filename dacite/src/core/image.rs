@@ -119,7 +119,7 @@ impl Image {
     /// See [`vkBindImageMemory`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkBindImageMemory)
     pub fn bind_memory(&self, memory: DeviceMemory, offset: u64) -> Result<(), core::Error> {
         let res = unsafe {
-            (self.loader().core.vkBindImageMemory)(self.device_handle(), self.handle(), memory.handle(), offset)
+            self.loader().core.vkBindImageMemory(self.device_handle(), self.handle(), memory.handle(), offset)
         };
 
         if res == vks::core::VK_SUCCESS {
@@ -134,7 +134,7 @@ impl Image {
     pub fn get_memory_requirements(&self) -> core::MemoryRequirements {
         unsafe {
             let mut requirements = mem::uninitialized();
-            (self.loader().core.vkGetImageMemoryRequirements)(self.device_handle(), self.handle(), &mut requirements);
+            self.loader().core.vkGetImageMemoryRequirements(self.device_handle(), self.handle(), &mut requirements);
             (&requirements).into()
         }
     }
@@ -145,13 +145,13 @@ impl Image {
     {
         let mut num_requirements = 0;
         unsafe {
-            (self.loader().core.vkGetImageSparseMemoryRequirements)(self.device_handle(), self.handle(), &mut num_requirements, ptr::null_mut());
+            self.loader().core.vkGetImageSparseMemoryRequirements(self.device_handle(), self.handle(), &mut num_requirements, ptr::null_mut());
         }
 
         let mut requirements = Vec::with_capacity(num_requirements as usize);
         unsafe {
             requirements.set_len(num_requirements as usize);
-            (self.loader().core.vkGetImageSparseMemoryRequirements)(self.device_handle(), self.handle(), &mut num_requirements, requirements.as_mut_ptr());
+            self.loader().core.vkGetImageSparseMemoryRequirements(self.device_handle(), self.handle(), &mut num_requirements, requirements.as_mut_ptr());
         }
 
         requirements.iter().map(From::from).collect()
@@ -163,7 +163,7 @@ impl Image {
 
         unsafe {
             let mut layout = mem::uninitialized();
-            (self.loader().core.vkGetImageSubresourceLayout)(self.device_handle(), self.handle(), &subresource, &mut layout);
+            self.loader().core.vkGetImageSubresourceLayout(self.device_handle(), self.handle(), &subresource, &mut layout);
             (&layout).into()
         }
     }
@@ -186,7 +186,7 @@ impl Drop for Inner {
             };
 
             unsafe {
-                (self.device.loader().core.vkDestroyImage)(self.device.handle(), self.handle, allocator);
+                self.device.loader().core.vkDestroyImage(self.device.handle(), self.handle, allocator);
             }
         }
     }

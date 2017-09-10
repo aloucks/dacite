@@ -143,14 +143,14 @@ impl DescriptorSet {
         };
 
         unsafe {
-            (loader.core.vkUpdateDescriptorSets)(device_handle, writes_count, writes_ptr, copies_count, copies_ptr);
+            loader.core.vkUpdateDescriptorSets(device_handle, writes_count, writes_ptr, copies_count, copies_ptr);
         }
     }
 
     /// See [`vkFreeDescriptorSets`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkFreeDescriptorSets)
     pub fn free(&self) -> Result<(), core::Error> {
         let res = unsafe {
-            (self.loader().core.vkFreeDescriptorSets)(self.device_handle(), self.descriptor_pool.handle(), 1, &self.handle)
+            self.loader().core.vkFreeDescriptorSets(self.device_handle(), self.descriptor_pool.handle(), 1, &self.handle)
         };
 
         if res == vks::core::VK_SUCCESS {

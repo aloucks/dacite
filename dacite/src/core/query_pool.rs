@@ -120,7 +120,7 @@ impl QueryPool {
 
             let res = unsafe {
                 data.set_len(results.len());
-                (self.loader().core.vkGetQueryPoolResults)(self.device_handle(), self.handle(), first_query, query_count, data_size, data.as_mut_ptr() as *mut c_void, stride_u64, flags.bits())
+                self.loader().core.vkGetQueryPoolResults(self.device_handle(), self.handle(), first_query, query_count, data_size, data.as_mut_ptr() as *mut c_void, stride_u64, flags.bits())
             };
 
             match res {
@@ -143,7 +143,7 @@ impl QueryPool {
 
             let res = unsafe {
                 data.set_len(results.len());
-                (self.loader().core.vkGetQueryPoolResults)(self.device_handle(), self.handle(), first_query, query_count, data_size, data.as_mut_ptr() as *mut c_void, stride_u32, flags.bits())
+                self.loader().core.vkGetQueryPoolResults(self.device_handle(), self.handle(), first_query, query_count, data_size, data.as_mut_ptr() as *mut c_void, stride_u32, flags.bits())
             };
 
             match res {
@@ -179,7 +179,7 @@ impl Drop for Inner {
             };
 
             unsafe {
-                (self.device.loader().core.vkDestroyQueryPool)(self.device.handle(), self.handle, allocator);
+                self.device.loader().core.vkDestroyQueryPool(self.device.handle(), self.handle, allocator);
             }
         }
     }

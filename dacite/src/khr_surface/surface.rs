@@ -117,7 +117,7 @@ impl Drop for Inner {
             };
 
             unsafe {
-                (self.instance.loader().khr_surface.vkDestroySurfaceKHR)(self.instance.handle(), self.handle, allocator);
+                self.instance.loader().khr_surface.vkDestroySurfaceKHR(self.instance.handle(), self.handle, allocator);
             }
         }
     }

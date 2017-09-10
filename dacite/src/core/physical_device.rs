@@ -119,7 +119,7 @@ impl PhysicalDevice {
     pub fn get_properties(&self) -> core::PhysicalDeviceProperties {
         unsafe {
             let mut properties = mem::uninitialized();
-            (self.loader().core.vkGetPhysicalDeviceProperties)(self.handle, &mut properties);
+            self.loader().core.vkGetPhysicalDeviceProperties(self.handle, &mut properties);
             (&properties).into()
         }
     }
@@ -128,7 +128,7 @@ impl PhysicalDevice {
     pub fn get_features(&self) -> core::PhysicalDeviceFeatures {
         unsafe {
             let mut features = mem::uninitialized();
-            (self.loader().core.vkGetPhysicalDeviceFeatures)(self.handle, &mut features);
+            self.loader().core.vkGetPhysicalDeviceFeatures(self.handle, &mut features);
             (&features).into()
         }
     }
@@ -139,13 +139,13 @@ impl PhysicalDevice {
     {
         unsafe {
             let mut num_layer_properties = 0;
-            let res = (self.loader().core.vkEnumerateDeviceLayerProperties)(self.handle, &mut num_layer_properties, ptr::null_mut());
+            let res = self.loader().core.vkEnumerateDeviceLayerProperties(self.handle, &mut num_layer_properties, ptr::null_mut());
             if res != vks::core::VK_SUCCESS {
                 return Err(res.into());
             }
 
             let mut layer_properties = Vec::with_capacity(num_layer_properties as usize);
-            let res = (self.loader().core.vkEnumerateDeviceLayerProperties)(self.handle, &mut num_layer_properties, layer_properties.as_mut_ptr());
+            let res = self.loader().core.vkEnumerateDeviceLayerProperties(self.handle, &mut num_layer_properties, layer_properties.as_mut_ptr());
             layer_properties.set_len(num_layer_properties as usize);
             if res != vks::core::VK_SUCCESS {
                 return Err(res.into());
@@ -161,14 +161,14 @@ impl PhysicalDevice {
             let layer_name_cstr = utils::cstr_from_str(layer_name);
 
             let mut num_extension_properties = 0;
-            let res = (self.loader().core.vkEnumerateDeviceExtensionProperties)(self.handle, layer_name_cstr.1, &mut num_extension_properties, ptr::null_mut());
+            let res = self.loader().core.vkEnumerateDeviceExtensionProperties(self.handle, layer_name_cstr.1, &mut num_extension_properties, ptr::null_mut());
             if res != vks::core::VK_SUCCESS {
                 return Err(res.into());
             }
 
             let mut extension_properties = Vec::with_capacity(num_extension_properties as usize);
             extension_properties.set_len(num_extension_properties as usize);
-            let res = (self.loader().core.vkEnumerateDeviceExtensionProperties)(self.handle, layer_name_cstr.1, &mut num_extension_properties, extension_properties.as_mut_ptr());
+            let res = self.loader().core.vkEnumerateDeviceExtensionProperties(self.handle, layer_name_cstr.1, &mut num_extension_properties, extension_properties.as_mut_ptr());
             if res != vks::core::VK_SUCCESS {
                 return Err(res.into());
             }
@@ -188,7 +188,7 @@ impl PhysicalDevice {
         let mut properties = unsafe { mem::uninitialized() };
 
         unsafe {
-            (self.loader().core.vkGetPhysicalDeviceFormatProperties)(self.handle, format.into(), &mut properties);
+            self.loader().core.vkGetPhysicalDeviceFormatProperties(self.handle, format.into(), &mut properties);
         }
 
         (&properties).into()
@@ -199,7 +199,7 @@ impl PhysicalDevice {
         let mut properties = unsafe { mem::uninitialized() };
 
         let res = unsafe {
-            (self.loader().core.vkGetPhysicalDeviceImageFormatProperties)(self.handle, format.into(), image_type.into(), tiling.into(), usage.bits(), flags.bits(), &mut properties)
+            self.loader().core.vkGetPhysicalDeviceImageFormatProperties(self.handle, format.into(), image_type.into(), tiling.into(), usage.bits(), flags.bits(), &mut properties)
         };
 
         if res == vks::core::VK_SUCCESS {
@@ -216,12 +216,12 @@ impl PhysicalDevice {
     {
         let mut num_properties = 0;
         unsafe {
-            (self.loader().core.vkGetPhysicalDeviceSparseImageFormatProperties)(self.handle, format.into(), image_type.into(), samples.bits(), usage.bits(), tiling.into(), &mut num_properties, ptr::null_mut());
+            self.loader().core.vkGetPhysicalDeviceSparseImageFormatProperties(self.handle, format.into(), image_type.into(), samples.bits(), usage.bits(), tiling.into(), &mut num_properties, ptr::null_mut());
         }
 
         let mut properties = Vec::with_capacity(num_properties as usize);
         unsafe {
-            (self.loader().core.vkGetPhysicalDeviceSparseImageFormatProperties)(self.handle, format.into(), image_type.into(), samples.bits(), usage.bits(), tiling.into(), &mut num_properties, properties.as_mut_ptr());
+            self.loader().core.vkGetPhysicalDeviceSparseImageFormatProperties(self.handle, format.into(), image_type.into(), samples.bits(), usage.bits(), tiling.into(), &mut num_properties, properties.as_mut_ptr());
             properties.set_len(num_properties as usize);
         }
 
@@ -234,12 +234,12 @@ impl PhysicalDevice {
     {
         let mut num_properties = 0;
         unsafe {
-            (self.loader().core.vkGetPhysicalDeviceQueueFamilyProperties)(self.handle, &mut num_properties, ptr::null_mut());
+            self.loader().core.vkGetPhysicalDeviceQueueFamilyProperties(self.handle, &mut num_properties, ptr::null_mut());
         }
 
         let mut properties = Vec::with_capacity(num_properties as usize);
         unsafe {
-            (self.loader().core.vkGetPhysicalDeviceQueueFamilyProperties)(self.handle, &mut num_properties, properties.as_mut_ptr());
+            self.loader().core.vkGetPhysicalDeviceQueueFamilyProperties(self.handle, &mut num_properties, properties.as_mut_ptr());
             properties.set_len(num_properties as usize);
         }
 
@@ -251,7 +251,7 @@ impl PhysicalDevice {
         let mut properties = unsafe { mem::uninitialized() };
 
         unsafe {
-            (self.loader().core.vkGetPhysicalDeviceMemoryProperties)(self.handle, &mut properties);
+            self.loader().core.vkGetPhysicalDeviceMemoryProperties(self.handle, &mut properties);
         }
 
         (&properties).into()
@@ -265,11 +265,11 @@ impl PhysicalDevice {
 
         let mut device = ptr::null_mut();
         let res = unsafe {
-            (self.loader().core.vkCreateDevice)(self.handle, &create_info_wrapper.vks_struct, allocation_callbacks, &mut device)
+            self.loader().core.vkCreateDevice(self.handle, &create_info_wrapper.vks_struct, allocation_callbacks, &mut device)
         };
 
         if res == vks::core::VK_SUCCESS {
-            let mut loader = vks::DeviceProcAddrLoader::from_get_device_proc_addr(self.loader().core.vkGetDeviceProcAddr);
+            let mut loader = vks::DeviceProcAddrLoader::from_get_device_proc_addr(self.loader().core.pfn_vkGetDeviceProcAddr);
 
             unsafe {
                 loader.load_core(device);
@@ -289,7 +289,7 @@ impl PhysicalDevice {
     pub fn get_surface_support_khr(&self, queue_family_index: u32, surface: &khr_surface::SurfaceKhr) -> Result<bool, core::Error> {
         let mut supported = vks::core::VK_FALSE;
         let res = unsafe {
-            (self.loader().khr_surface.vkGetPhysicalDeviceSurfaceSupportKHR)(self.handle, queue_family_index, surface.handle(), &mut supported)
+            self.loader().khr_surface.vkGetPhysicalDeviceSurfaceSupportKHR(self.handle, queue_family_index, surface.handle(), &mut supported)
         };
 
         if res == vks::core::VK_SUCCESS {
@@ -305,7 +305,7 @@ impl PhysicalDevice {
     pub fn get_surface_capabilities_khr(&self, surface: &khr_surface::SurfaceKhr) -> Result<khr_surface::SurfaceCapabilitiesKhr, core::Error> {
         unsafe {
             let mut capabilities = mem::uninitialized();
-            let res = (self.loader().khr_surface.vkGetPhysicalDeviceSurfaceCapabilitiesKHR)(self.handle, surface.handle(), &mut capabilities);
+            let res = self.loader().khr_surface.vkGetPhysicalDeviceSurfaceCapabilitiesKHR(self.handle, surface.handle(), &mut capabilities);
 
             if res == vks::core::VK_SUCCESS {
                 Ok((&capabilities).into())
@@ -323,7 +323,7 @@ impl PhysicalDevice {
     {
         let mut num_formats = 0;
         let res = unsafe {
-            (self.loader().khr_surface.vkGetPhysicalDeviceSurfaceFormatsKHR)(self.handle, surface.handle(), &mut num_formats, ptr::null_mut())
+            self.loader().khr_surface.vkGetPhysicalDeviceSurfaceFormatsKHR(self.handle, surface.handle(), &mut num_formats, ptr::null_mut())
         };
 
         if (res != vks::core::VK_SUCCESS) && (res != vks::core::VK_INCOMPLETE) {
@@ -332,7 +332,7 @@ impl PhysicalDevice {
 
         let mut formats = Vec::with_capacity(num_formats as usize);
         let res = unsafe {
-            (self.loader().khr_surface.vkGetPhysicalDeviceSurfaceFormatsKHR)(self.handle, surface.handle(), &mut num_formats, formats.as_mut_ptr())
+            self.loader().khr_surface.vkGetPhysicalDeviceSurfaceFormatsKHR(self.handle, surface.handle(), &mut num_formats, formats.as_mut_ptr())
         };
 
         if res == vks::core::VK_SUCCESS {
@@ -354,7 +354,7 @@ impl PhysicalDevice {
     {
         let mut num_modes = 0;
         let res = unsafe {
-            (self.loader().khr_surface.vkGetPhysicalDeviceSurfacePresentModesKHR)(self.handle, surface.handle(), &mut num_modes, ptr::null_mut())
+            self.loader().khr_surface.vkGetPhysicalDeviceSurfacePresentModesKHR(self.handle, surface.handle(), &mut num_modes, ptr::null_mut())
         };
 
         if (res != vks::core::VK_SUCCESS) && (res != vks::core::VK_INCOMPLETE) {
@@ -363,7 +363,7 @@ impl PhysicalDevice {
 
         let mut modes = Vec::with_capacity(num_modes as usize);
         let res = unsafe {
-            (self.loader().khr_surface.vkGetPhysicalDeviceSurfacePresentModesKHR)(self.handle, surface.handle(), &mut num_modes, modes.as_mut_ptr())
+            self.loader().khr_surface.vkGetPhysicalDeviceSurfacePresentModesKHR(self.handle, surface.handle(), &mut num_modes, modes.as_mut_ptr())
         };
 
         if res == vks::core::VK_SUCCESS {
@@ -383,7 +383,7 @@ impl PhysicalDevice {
     pub fn get_display_properties_khr(&self) -> Result<Vec<khr_display::DisplayPropertiesKhr>, core::Error> {
         let mut len = 0;
         let res = unsafe {
-            (self.loader().khr_display.vkGetPhysicalDeviceDisplayPropertiesKHR)(self.handle, &mut len, ptr::null_mut())
+            self.loader().khr_display.vkGetPhysicalDeviceDisplayPropertiesKHR(self.handle, &mut len, ptr::null_mut())
         };
 
         if res != vks::core::VK_SUCCESS {
@@ -393,7 +393,7 @@ impl PhysicalDevice {
         let mut properties = Vec::with_capacity(len as usize);
         let res = unsafe {
             properties.set_len(len as usize);
-            (self.loader().khr_display.vkGetPhysicalDeviceDisplayPropertiesKHR)(self.handle, &mut len, properties.as_mut_ptr())
+            self.loader().khr_display.vkGetPhysicalDeviceDisplayPropertiesKHR(self.handle, &mut len, properties.as_mut_ptr())
         };
 
         if res == vks::core::VK_SUCCESS {
@@ -411,7 +411,7 @@ impl PhysicalDevice {
     pub fn get_display_plane_properties_khr(&self) -> Result<Vec<khr_display::DisplayPlanePropertiesKhr>, core::Error> {
         let mut len = 0;
         let res = unsafe {
-            (self.loader().khr_display.vkGetPhysicalDeviceDisplayPlanePropertiesKHR)(self.handle, &mut len, ptr::null_mut())
+            self.loader().khr_display.vkGetPhysicalDeviceDisplayPlanePropertiesKHR(self.handle, &mut len, ptr::null_mut())
         };
 
         if res != vks::core::VK_SUCCESS {
@@ -421,7 +421,7 @@ impl PhysicalDevice {
         let mut properties = Vec::with_capacity(len as usize);
         let res = unsafe {
             properties.set_len(len as usize);
-            (self.loader().khr_display.vkGetPhysicalDeviceDisplayPlanePropertiesKHR)(self.handle, &mut len, properties.as_mut_ptr())
+            self.loader().khr_display.vkGetPhysicalDeviceDisplayPlanePropertiesKHR(self.handle, &mut len, properties.as_mut_ptr())
         };
 
         if res == vks::core::VK_SUCCESS {
@@ -439,7 +439,7 @@ impl PhysicalDevice {
     pub fn get_display_plane_supported_displays_khr(&self, plane_index: u32) -> Result<Vec<khr_display::DisplayKhr>, core::Error> {
         let mut len = 0;
         let res = unsafe {
-            (self.loader().khr_display.vkGetDisplayPlaneSupportedDisplaysKHR)(self.handle, plane_index, &mut len, ptr::null_mut())
+            self.loader().khr_display.vkGetDisplayPlaneSupportedDisplaysKHR(self.handle, plane_index, &mut len, ptr::null_mut())
         };
 
         if res != vks::core::VK_SUCCESS {
@@ -449,7 +449,7 @@ impl PhysicalDevice {
         let mut displays = Vec::with_capacity(len as usize);
         let res = unsafe {
             displays.set_len(len as usize);
-            (self.loader().khr_display.vkGetDisplayPlaneSupportedDisplaysKHR)(self.handle, plane_index, &mut len, displays.as_mut_ptr())
+            self.loader().khr_display.vkGetDisplayPlaneSupportedDisplaysKHR(self.handle, plane_index, &mut len, displays.as_mut_ptr())
         };
 
         if res == vks::core::VK_SUCCESS {
@@ -465,7 +465,7 @@ impl PhysicalDevice {
     #[cfg_attr(feature = "cargo-clippy", allow(not_unsafe_ptr_arg_deref))]
     pub fn get_xlib_presentation_support_khr(&self, queue_family_index: u32, dpy: *mut xlib_types::Display, visual_id: xlib_types::VisualID) -> bool {
         let res = unsafe {
-            (self.loader().khr_xlib_surface.vkGetPhysicalDeviceXlibPresentationSupportKHR)(self.handle, queue_family_index, dpy, visual_id)
+            self.loader().khr_xlib_surface.vkGetPhysicalDeviceXlibPresentationSupportKHR(self.handle, queue_family_index, dpy, visual_id)
         };
 
         utils::from_vk_bool(res)
@@ -476,7 +476,7 @@ impl PhysicalDevice {
     #[cfg_attr(feature = "cargo-clippy", allow(not_unsafe_ptr_arg_deref))]
     pub fn get_wayland_presentation_support_khr(&self, queue_family_index: u32, display: *mut wayland_types::wl_display) -> bool {
         let res = unsafe {
-            (self.loader().khr_wayland_surface.vkGetPhysicalDeviceWaylandPresentationSupportKHR)(self.handle, queue_family_index, display)
+            self.loader().khr_wayland_surface.vkGetPhysicalDeviceWaylandPresentationSupportKHR(self.handle, queue_family_index, display)
         };
 
         utils::from_vk_bool(res)
@@ -487,7 +487,7 @@ impl PhysicalDevice {
     #[cfg_attr(feature = "cargo-clippy", allow(not_unsafe_ptr_arg_deref))]
     pub fn get_xcb_presentation_support_khr(&self, queue_family_index: u32, connection: *mut xcb_types::xcb_connection_t, visual_id: xcb_types::xcb_visualid_t) -> bool {
         let res = unsafe {
-            (self.loader().khr_xcb_surface.vkGetPhysicalDeviceXcbPresentationSupportKHR)(self.handle, queue_family_index, connection, visual_id)
+            self.loader().khr_xcb_surface.vkGetPhysicalDeviceXcbPresentationSupportKHR(self.handle, queue_family_index, connection, visual_id)
         };
 
         utils::from_vk_bool(res)
@@ -498,7 +498,7 @@ impl PhysicalDevice {
     #[cfg_attr(feature = "cargo-clippy", allow(not_unsafe_ptr_arg_deref))]
     pub fn get_mir_presentation_support_khr(&self, queue_family_index: u32, connection: *mut mir_types::MirConnection) -> bool {
         let res = unsafe {
-            (self.loader().khr_mir_surface.vkGetPhysicalDeviceMirPresentationSupportKHR)(self.handle, queue_family_index, connection)
+            self.loader().khr_mir_surface.vkGetPhysicalDeviceMirPresentationSupportKHR(self.handle, queue_family_index, connection)
         };
 
         utils::from_vk_bool(res)
@@ -508,7 +508,7 @@ impl PhysicalDevice {
     /// and extension [`VK_KHR_win32_surface`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_win32_surface)
     pub fn get_win32_presentation_support_khr(&self, queue_family_index: u32) -> bool {
         let res = unsafe {
-            (self.loader().khr_win32_surface.vkGetPhysicalDeviceWin32PresentationSupportKHR)(self.handle, queue_family_index)
+            self.loader().khr_win32_surface.vkGetPhysicalDeviceWin32PresentationSupportKHR(self.handle, queue_family_index)
         };
 
         utils::from_vk_bool(res)
@@ -519,7 +519,7 @@ impl PhysicalDevice {
     pub fn get_features2_khr(&self, chain_query: Option<&khr_get_physical_device_properties2::PhysicalDeviceFeatures2ChainQueryKhr>) -> khr_get_physical_device_properties2::PhysicalDeviceFeatures2Khr {
         let mut chain_query_wrapper = khr_get_physical_device_properties2::PhysicalDeviceFeatures2ChainQueryKhrWrapper::new_optional(chain_query);
         unsafe {
-            (self.loader().khr_get_physical_device_properties2.vkGetPhysicalDeviceFeatures2KHR)(self.handle, &mut chain_query_wrapper.vks_struct);
+            self.loader().khr_get_physical_device_properties2.vkGetPhysicalDeviceFeatures2KHR(self.handle, &mut chain_query_wrapper.vks_struct);
             khr_get_physical_device_properties2::PhysicalDeviceFeatures2Khr::from_vks(&chain_query_wrapper.vks_struct, true)
         }
     }
@@ -529,7 +529,7 @@ impl PhysicalDevice {
     pub fn get_properties2_khr(&self, chain_query: Option<&khr_get_physical_device_properties2::PhysicalDeviceProperties2ChainQueryKhr>) -> khr_get_physical_device_properties2::PhysicalDeviceProperties2Khr {
         let mut chain_query_wrapper = khr_get_physical_device_properties2::PhysicalDeviceProperties2ChainQueryKhrWrapper::new_optional(chain_query);
         unsafe {
-            (self.loader().khr_get_physical_device_properties2.vkGetPhysicalDeviceProperties2KHR)(self.handle, &mut chain_query_wrapper.vks_struct);
+            self.loader().khr_get_physical_device_properties2.vkGetPhysicalDeviceProperties2KHR(self.handle, &mut chain_query_wrapper.vks_struct);
             khr_get_physical_device_properties2::PhysicalDeviceProperties2Khr::from_vks(&chain_query_wrapper.vks_struct, true)
         }
     }
@@ -539,7 +539,7 @@ impl PhysicalDevice {
     pub fn get_format_properties2_khr(&self, format: core::Format, chain_query: Option<&khr_get_physical_device_properties2::FormatProperties2ChainQueryKhr>) -> khr_get_physical_device_properties2::FormatProperties2Khr {
         let mut chain_query_wrapper = khr_get_physical_device_properties2::FormatProperties2ChainQueryKhrWrapper::new_optional(chain_query);
         unsafe {
-            (self.loader().khr_get_physical_device_properties2.vkGetPhysicalDeviceFormatProperties2KHR)(self.handle, format.into(), &mut chain_query_wrapper.vks_struct);
+            self.loader().khr_get_physical_device_properties2.vkGetPhysicalDeviceFormatProperties2KHR(self.handle, format.into(), &mut chain_query_wrapper.vks_struct);
             khr_get_physical_device_properties2::FormatProperties2Khr::from_vks(&chain_query_wrapper.vks_struct, true)
         }
     }
@@ -551,7 +551,7 @@ impl PhysicalDevice {
         let mut chain_query_wrapper = khr_get_physical_device_properties2::ImageFormatProperties2ChainQueryKhrWrapper::new_optional(chain_query);
 
         unsafe {
-            let res = (self.loader().khr_get_physical_device_properties2.vkGetPhysicalDeviceImageFormatProperties2KHR)(self.handle, &image_format_info_wrapper.vks_struct, &mut chain_query_wrapper.vks_struct);
+            let res = self.loader().khr_get_physical_device_properties2.vkGetPhysicalDeviceImageFormatProperties2KHR(self.handle, &image_format_info_wrapper.vks_struct, &mut chain_query_wrapper.vks_struct);
 
             if res == vks::core::VK_SUCCESS {
                 Ok(khr_get_physical_device_properties2::ImageFormatProperties2Khr::from_vks(&chain_query_wrapper.vks_struct, true))
@@ -569,7 +569,7 @@ impl PhysicalDevice {
     {
         unsafe {
             let mut num = 0;
-            (self.loader().khr_get_physical_device_properties2.vkGetPhysicalDeviceQueueFamilyProperties2KHR)(self.handle, &mut num, ptr::null_mut());
+            self.loader().khr_get_physical_device_properties2.vkGetPhysicalDeviceQueueFamilyProperties2KHR(self.handle, &mut num, ptr::null_mut());
 
             let mut chain_query_wrappers = Vec::with_capacity(num as usize);
             for _ in 0..num {
@@ -577,7 +577,7 @@ impl PhysicalDevice {
             }
 
             let mut vks_structs: Vec<_> = chain_query_wrappers.iter().map(|w| w.vks_struct).collect();
-            (self.loader().khr_get_physical_device_properties2.vkGetPhysicalDeviceQueueFamilyProperties2KHR)(self.handle, &mut num, vks_structs.as_mut_ptr());
+            self.loader().khr_get_physical_device_properties2.vkGetPhysicalDeviceQueueFamilyProperties2KHR(self.handle, &mut num, vks_structs.as_mut_ptr());
 
             vks_structs.iter().map(|p| khr_get_physical_device_properties2::QueueFamilyProperties2Khr::from_vks(p, true)).collect()
         }
@@ -588,7 +588,7 @@ impl PhysicalDevice {
     pub fn get_memory_properties2_khr(&self, chain_query: Option<&khr_get_physical_device_properties2::PhysicalDeviceMemoryProperties2ChainQueryKhr>) -> khr_get_physical_device_properties2::PhysicalDeviceMemoryProperties2Khr {
         let mut chain_query_wrapper = khr_get_physical_device_properties2::PhysicalDeviceMemoryProperties2ChainQueryKhrWrapper::new_optional(chain_query);
         unsafe {
-            (self.loader().khr_get_physical_device_properties2.vkGetPhysicalDeviceMemoryProperties2KHR)(self.handle, &mut chain_query_wrapper.vks_struct);
+            self.loader().khr_get_physical_device_properties2.vkGetPhysicalDeviceMemoryProperties2KHR(self.handle, &mut chain_query_wrapper.vks_struct);
             khr_get_physical_device_properties2::PhysicalDeviceMemoryProperties2Khr::from_vks(&chain_query_wrapper.vks_struct, true)
         }
     }
@@ -602,7 +602,7 @@ impl PhysicalDevice {
 
         unsafe {
             let mut num = 0;
-            (self.loader().khr_get_physical_device_properties2.vkGetPhysicalDeviceSparseImageFormatProperties2KHR)(self.handle, &format_info_wrapper.vks_struct, &mut num, ptr::null_mut());
+            self.loader().khr_get_physical_device_properties2.vkGetPhysicalDeviceSparseImageFormatProperties2KHR(self.handle, &format_info_wrapper.vks_struct, &mut num, ptr::null_mut());
 
             let mut chain_query_wrappers = Vec::with_capacity(num as usize);
             for _ in 0..num {
@@ -610,7 +610,7 @@ impl PhysicalDevice {
             }
 
             let mut vks_structs: Vec<_> = chain_query_wrappers.iter().map(|w| w.vks_struct).collect();
-            (self.loader().khr_get_physical_device_properties2.vkGetPhysicalDeviceSparseImageFormatProperties2KHR)(self.handle, &format_info_wrapper.vks_struct, &mut num, vks_structs.as_mut_ptr());
+            self.loader().khr_get_physical_device_properties2.vkGetPhysicalDeviceSparseImageFormatProperties2KHR(self.handle, &format_info_wrapper.vks_struct, &mut num, vks_structs.as_mut_ptr());
 
             vks_structs.iter().map(|p| khr_get_physical_device_properties2::SparseImageFormatProperties2Khr::from_vks(p, true)).collect()
         }
@@ -622,7 +622,7 @@ impl PhysicalDevice {
         let mut properties = unsafe { mem::uninitialized() };
 
         let res = unsafe {
-            (self.loader().nv_external_memory_capabilities.vkGetPhysicalDeviceExternalImageFormatPropertiesNV)(self.handle, format.into(), image_type.into(), tiling.into(), usage.bits(), flags.bits(), external_handle_type.bits(), &mut properties)
+            self.loader().nv_external_memory_capabilities.vkGetPhysicalDeviceExternalImageFormatPropertiesNV(self.handle, format.into(), image_type.into(), tiling.into(), usage.bits(), flags.bits(), external_handle_type.bits(), &mut properties)
         };
 
         if res == vks::core::VK_SUCCESS {

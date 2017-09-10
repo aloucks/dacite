@@ -117,7 +117,7 @@ impl Drop for Inner {
             };
 
             unsafe {
-                (self.device.loader().core.vkDestroyDescriptorSetLayout)(self.device.handle(), self.handle, allocator);
+                self.device.loader().core.vkDestroyDescriptorSetLayout(self.device.handle(), self.handle, allocator);
             }
         }
     }

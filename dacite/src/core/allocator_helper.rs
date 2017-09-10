@@ -14,7 +14,6 @@
 
 use core;
 use libc::c_void;
-use std::mem;
 use std::sync::Arc;
 use vks;
 
@@ -58,16 +57,16 @@ impl AllocatorHelper {
 
         let mut allocation_callbacks = vks::core::VkAllocationCallbacks {
             pUserData: allocator_ptr as *mut c_void,
-            pfnAllocation: alloc,
-            pfnReallocation: realloc,
-            pfnFree: free,
-            pfnInternalAllocation: unsafe { mem::transmute(0usize) },
-            pfnInternalFree: unsafe { mem::transmute(0usize) },
+            pfnAllocation: Some(alloc),
+            pfnReallocation: Some(realloc),
+            pfnFree: Some(free),
+            pfnInternalAllocation: None,
+            pfnInternalFree: None,
         };
 
         if has_internal_alloc {
-            allocation_callbacks.pfnInternalAllocation = internal_alloc;
-            allocation_callbacks.pfnInternalFree = internal_free;
+            allocation_callbacks.pfnInternalAllocation = Some(internal_alloc);
+            allocation_callbacks.pfnInternalFree = Some(internal_free);
         }
 
         AllocatorHelper {

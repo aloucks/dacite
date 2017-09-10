@@ -117,7 +117,7 @@ impl Drop for Inner {
             };
 
             unsafe {
-                (self.device.loader().core.vkDestroyShaderModule)(self.device.handle(), self.handle, allocator);
+                self.device.loader().core.vkDestroyShaderModule(self.device.handle(), self.handle, allocator);
             }
         }
     }

@@ -114,7 +114,7 @@ impl SwapchainKhr {
     pub fn get_images_khr(&self) -> Result<Vec<core::Image>, core::Error> {
         let mut num = 0;
         let res = unsafe {
-            (self.loader().khr_swapchain.vkGetSwapchainImagesKHR)(self.device_handle(), self.handle(), &mut num, ptr::null_mut())
+            self.loader().khr_swapchain.vkGetSwapchainImagesKHR(self.device_handle(), self.handle(), &mut num, ptr::null_mut())
         };
 
         if res != vks::core::VK_SUCCESS {
@@ -124,7 +124,7 @@ impl SwapchainKhr {
         let mut images = Vec::with_capacity(num as usize);
         let res = unsafe {
             images.set_len(num as usize);
-            (self.loader().khr_swapchain.vkGetSwapchainImagesKHR)(self.device_handle(), self.handle(), &mut num, images.as_mut_ptr())
+            self.loader().khr_swapchain.vkGetSwapchainImagesKHR(self.device_handle(), self.handle(), &mut num, images.as_mut_ptr())
         };
 
         if res == vks::core::VK_SUCCESS {
@@ -142,7 +142,7 @@ impl SwapchainKhr {
 
         let mut index = 0;
         let res = unsafe {
-            (self.loader().khr_swapchain.vkAcquireNextImageKHR)(self.device_handle(), self.handle(), timeout.as_nanoseconds(), semaphore, fence, &mut index)
+            self.loader().khr_swapchain.vkAcquireNextImageKHR(self.device_handle(), self.handle(), timeout.as_nanoseconds(), semaphore, fence, &mut index)
         };
 
         match res {
@@ -172,7 +172,7 @@ impl Drop for Inner {
             };
 
             unsafe {
-                (self.device.loader().khr_swapchain.vkDestroySwapchainKHR)(self.device.handle(), self.handle, allocator);
+                self.device.loader().khr_swapchain.vkDestroySwapchainKHR(self.device.handle(), self.handle, allocator);
             }
         }
     }

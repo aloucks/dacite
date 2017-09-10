@@ -112,7 +112,7 @@ impl Event {
     /// See [`vkGetEventStatus`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetEventStatus)
     pub fn get_status(&self) -> Result<bool, core::Error> {
         let res = unsafe {
-            (self.loader().core.vkGetEventStatus)(self.device_handle(), self.handle())
+            self.loader().core.vkGetEventStatus(self.device_handle(), self.handle())
         };
 
         match res {
@@ -125,7 +125,7 @@ impl Event {
     /// See [`vkSetEvent`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkSetEvent)
     pub fn set(&self) -> Result<(), core::Error> {
         let res = unsafe {
-            (self.loader().core.vkSetEvent)(self.device_handle(), self.handle())
+            self.loader().core.vkSetEvent(self.device_handle(), self.handle())
         };
 
         if res == vks::core::VK_SUCCESS {
@@ -139,7 +139,7 @@ impl Event {
     /// See [`vkResetEvent`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkResetEvent)
     pub fn reset(&self) -> Result<(), core::Error> {
         let res = unsafe {
-            (self.loader().core.vkResetEvent)(self.device_handle(), self.handle())
+            self.loader().core.vkResetEvent(self.device_handle(), self.handle())
         };
 
         if res == vks::core::VK_SUCCESS {
@@ -168,7 +168,7 @@ impl Drop for Inner {
             };
 
             unsafe {
-                (self.device.loader().core.vkDestroyEvent)(self.device.handle(), self.handle, allocator);
+                self.device.loader().core.vkDestroyEvent(self.device.handle(), self.handle, allocator);
             }
         }
     }

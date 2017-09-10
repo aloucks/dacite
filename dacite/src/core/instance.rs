@@ -151,7 +151,7 @@ impl Instance {
         let create_info_wrapper = core::VkInstanceCreateInfoWrapper::new(create_info, true);
         let mut instance = ptr::null_mut();
         let res = unsafe {
-            (loader.core_global.vkCreateInstance)(&create_info_wrapper.vks_struct, allocation_callbacks, &mut instance)
+            loader.core_global.vkCreateInstance(&create_info_wrapper.vks_struct, allocation_callbacks, &mut instance)
         };
         if res != vks::core::VK_SUCCESS {
             return Err(res.into());
@@ -189,7 +189,7 @@ impl Instance {
     pub fn enumerate_physical_devices(&self) -> Result<Vec<PhysicalDevice>, core::Error> {
         let mut num_physical_devices = 0;
         let res = unsafe {
-            (self.loader().core.vkEnumeratePhysicalDevices)(self.handle(), &mut num_physical_devices, ptr::null_mut())
+            self.loader().core.vkEnumeratePhysicalDevices(self.handle(), &mut num_physical_devices, ptr::null_mut())
         };
         if res != vks::core::VK_SUCCESS {
             return Err(res.into());
@@ -197,7 +197,7 @@ impl Instance {
 
         let mut physical_devices = Vec::with_capacity(num_physical_devices as usize);
         let res = unsafe {
-            (self.loader().core.vkEnumeratePhysicalDevices)(self.handle(), &mut num_physical_devices, physical_devices.as_mut_ptr())
+            self.loader().core.vkEnumeratePhysicalDevices(self.handle(), &mut num_physical_devices, physical_devices.as_mut_ptr())
         };
         if res != vks::core::VK_SUCCESS {
             return Err(res.into());
@@ -229,14 +229,14 @@ impl Instance {
             loader.load(*vk_get_instance_proc_addr, ptr::null_mut());
 
             let mut num_layer_properties = 0;
-            let res = (loader.vkEnumerateInstanceLayerProperties)(&mut num_layer_properties, ptr::null_mut());
+            let res = loader.vkEnumerateInstanceLayerProperties(&mut num_layer_properties, ptr::null_mut());
             if res != vks::core::VK_SUCCESS {
                 return Err(res.into());
             }
 
             let mut layer_properties = Vec::with_capacity(num_layer_properties as usize);
             layer_properties.set_len(num_layer_properties as usize);
-            let res = (loader.vkEnumerateInstanceLayerProperties)(&mut num_layer_properties, layer_properties.as_mut_ptr());
+            let res = loader.vkEnumerateInstanceLayerProperties(&mut num_layer_properties, layer_properties.as_mut_ptr());
             if res != vks::core::VK_SUCCESS {
                 return Err(res.into());
             }
@@ -260,14 +260,14 @@ impl Instance {
             let layer_name_cstr = utils::cstr_from_str(layer_name);
 
             let mut num_extension_properties = 0;
-            let res = (loader.vkEnumerateInstanceExtensionProperties)(layer_name_cstr.1, &mut num_extension_properties, ptr::null_mut());
+            let res = loader.vkEnumerateInstanceExtensionProperties(layer_name_cstr.1, &mut num_extension_properties, ptr::null_mut());
             if res != vks::core::VK_SUCCESS {
                 return Err(res.into());
             }
 
             let mut extension_properties = Vec::with_capacity(num_extension_properties as usize);
             extension_properties.set_len(num_extension_properties as usize);
-            let res = (loader.vkEnumerateInstanceExtensionProperties)(layer_name_cstr.1, &mut num_extension_properties, extension_properties.as_mut_ptr());
+            let res = loader.vkEnumerateInstanceExtensionProperties(layer_name_cstr.1, &mut num_extension_properties, extension_properties.as_mut_ptr());
             if res != vks::core::VK_SUCCESS {
                 return Err(res.into());
             }
@@ -291,7 +291,7 @@ impl Instance {
 
         let mut debug_report_callback = Default::default();
         let res = unsafe {
-            (self.loader().ext_debug_report.vkCreateDebugReportCallbackEXT)(self.handle(), &create_info_wrapper.vks_struct, allocation_callbacks, &mut debug_report_callback)
+            self.loader().ext_debug_report.vkCreateDebugReportCallbackEXT(self.handle(), &create_info_wrapper.vks_struct, allocation_callbacks, &mut debug_report_callback)
         };
 
         if res == vks::core::VK_SUCCESS {
@@ -312,7 +312,7 @@ impl Instance {
         let message = CString::new(message).unwrap();
 
         unsafe {
-            (self.loader().ext_debug_report.vkDebugReportMessageEXT)(self.handle(), flags.bits(), object_type.into(), object, location, message_code, layer_prefix.as_ptr(), message.as_ptr());
+            self.loader().ext_debug_report.vkDebugReportMessageEXT(self.handle(), flags.bits(), object_type.into(), object, location, message_code, layer_prefix.as_ptr(), message.as_ptr());
         }
     }
 
@@ -326,7 +326,7 @@ impl Instance {
 
         let mut surface = Default::default();
         let res = unsafe {
-            (self.loader().khr_display.vkCreateDisplayPlaneSurfaceKHR)(self.handle(), &create_info_wrapper.vks_struct, allocation_callbacks, &mut surface)
+            self.loader().khr_display.vkCreateDisplayPlaneSurfaceKHR(self.handle(), &create_info_wrapper.vks_struct, allocation_callbacks, &mut surface)
         };
 
         if res == vks::core::VK_SUCCESS {
@@ -347,7 +347,7 @@ impl Instance {
 
         let mut surface = Default::default();
         let res = unsafe {
-            (self.loader().khr_xlib_surface.vkCreateXlibSurfaceKHR)(self.handle(), &create_info_wrapper.vks_struct, allocation_callbacks, &mut surface)
+            self.loader().khr_xlib_surface.vkCreateXlibSurfaceKHR(self.handle(), &create_info_wrapper.vks_struct, allocation_callbacks, &mut surface)
         };
 
         if res == vks::core::VK_SUCCESS {
@@ -368,7 +368,7 @@ impl Instance {
 
         let mut surface = Default::default();
         let res = unsafe {
-            (self.loader().khr_wayland_surface.vkCreateWaylandSurfaceKHR)(self.handle(), &create_info_wrapper.vks_struct, allocation_callbacks, &mut surface)
+            self.loader().khr_wayland_surface.vkCreateWaylandSurfaceKHR(self.handle(), &create_info_wrapper.vks_struct, allocation_callbacks, &mut surface)
         };
 
         if res == vks::core::VK_SUCCESS {
@@ -389,7 +389,7 @@ impl Instance {
 
         let mut surface = Default::default();
         let res = unsafe {
-            (self.loader().khr_xcb_surface.vkCreateXcbSurfaceKHR)(self.handle(), &create_info_wrapper.vks_struct, allocation_callbacks, &mut surface)
+            self.loader().khr_xcb_surface.vkCreateXcbSurfaceKHR(self.handle(), &create_info_wrapper.vks_struct, allocation_callbacks, &mut surface)
         };
 
         if res == vks::core::VK_SUCCESS {
@@ -410,7 +410,7 @@ impl Instance {
 
         let mut surface = Default::default();
         let res = unsafe {
-            (self.loader().khr_mir_surface.vkCreateMirSurfaceKHR)(self.handle(), &create_info_wrapper.vks_struct, allocation_callbacks, &mut surface)
+            self.loader().khr_mir_surface.vkCreateMirSurfaceKHR(self.handle(), &create_info_wrapper.vks_struct, allocation_callbacks, &mut surface)
         };
 
         if res == vks::core::VK_SUCCESS {
@@ -431,7 +431,7 @@ impl Instance {
 
         let mut surface = Default::default();
         let res = unsafe {
-            (self.loader().khr_android_surface.vkCreateAndroidSurfaceKHR)(self.handle(), &create_info_wrapper.vks_struct, allocation_callbacks, &mut surface)
+            self.loader().khr_android_surface.vkCreateAndroidSurfaceKHR(self.handle(), &create_info_wrapper.vks_struct, allocation_callbacks, &mut surface)
         };
 
         if res == vks::core::VK_SUCCESS {
@@ -452,7 +452,7 @@ impl Instance {
 
         let mut surface = Default::default();
         let res = unsafe {
-            (self.loader().khr_win32_surface.vkCreateWin32SurfaceKHR)(self.handle(), &create_info_wrapper.vks_struct, allocation_callbacks, &mut surface)
+            self.loader().khr_win32_surface.vkCreateWin32SurfaceKHR(self.handle(), &create_info_wrapper.vks_struct, allocation_callbacks, &mut surface)
         };
 
         if res == vks::core::VK_SUCCESS {
@@ -483,7 +483,7 @@ impl Drop for Inner {
         };
 
         unsafe {
-            (self.loader.core.vkDestroyInstance)(self.handle, allocator);
+            self.loader.core.vkDestroyInstance(self.handle, allocator);
         }
     }
 }

@@ -113,7 +113,7 @@ impl Buffer {
     /// See [`vkBindBufferMemory`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkBindBufferMemory)
     pub fn bind_memory(&self, memory: DeviceMemory, offset: u64) -> Result<(), core::Error> {
         let res = unsafe {
-            (self.loader().core.vkBindBufferMemory)(self.device_handle(), self.handle(), memory.handle(), offset)
+            self.loader().core.vkBindBufferMemory(self.device_handle(), self.handle(), memory.handle(), offset)
         };
 
         if res == vks::core::VK_SUCCESS {
@@ -128,7 +128,7 @@ impl Buffer {
     pub fn get_memory_requirements(&self) -> core::MemoryRequirements {
         unsafe {
             let mut requirements = mem::uninitialized();
-            (self.loader().core.vkGetBufferMemoryRequirements)(self.device_handle(), self.handle(), &mut requirements);
+            self.loader().core.vkGetBufferMemoryRequirements(self.device_handle(), self.handle(), &mut requirements);
             (&requirements).into()
         }
     }
@@ -151,7 +151,7 @@ impl Drop for Inner {
             };
 
             unsafe {
-                (self.device.loader().core.vkDestroyBuffer)(self.device.handle(), self.handle, allocator);
+                self.device.loader().core.vkDestroyBuffer(self.device.handle(), self.handle, allocator);
             }
         }
     }

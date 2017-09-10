@@ -22,7 +22,6 @@ use vks;
 
 unsafe extern "system" fn debug_report_callback(flags: vks::ext_debug_report::VkDebugReportFlagsEXT, object_type: vks::ext_debug_report::VkDebugReportObjectTypeEXT, object: u64, location: usize, message_code: i32, layer_prefix: *const c_char, message: *const c_char, user_data: *mut c_void) -> vks::core::VkBool32 {
     let callback = user_data as *const Arc<ext_debug_report::DebugReportCallbacksExt>;
-    // (*callback).alloc(size, alignment, allocation_scope.into())
 
     let layer_prefix = if !layer_prefix.is_null() {
         Some(CStr::from_ptr(layer_prefix).to_str().unwrap())
@@ -61,7 +60,7 @@ impl Clone for CallbackHelper {
 impl fmt::Debug for CallbackHelper {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("CallbackHelper")
-            .field("vks_callback", &(self.vks_callback as *mut c_void))
+            .field("vks_callback", &self.vks_callback.map(|vks_callback| vks_callback as *mut c_void))
             .field("user_data", &self.user_data)
             .field("callback", &self.callback)
             .finish()
@@ -75,7 +74,7 @@ impl CallbackHelper {
         let callback = unsafe { Arc::from_raw(callback_ptr) };
 
         CallbackHelper {
-            vks_callback: debug_report_callback,
+            vks_callback: Some(debug_report_callback),
             user_data: callback_ptr as *mut c_void,
             callback: callback,
         }

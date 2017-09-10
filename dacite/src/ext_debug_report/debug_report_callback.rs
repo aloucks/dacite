@@ -120,7 +120,7 @@ impl Drop for Inner {
             };
 
             unsafe {
-                (self.instance.loader().ext_debug_report.vkDestroyDebugReportCallbackEXT)(self.instance.handle(), self.handle, allocator);
+                self.instance.loader().ext_debug_report.vkDestroyDebugReportCallbackEXT(self.instance.handle(), self.handle, allocator);
             }
         }
     }

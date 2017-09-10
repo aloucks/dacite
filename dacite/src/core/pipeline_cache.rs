@@ -115,7 +115,7 @@ impl PipelineCache {
         let caches: Vec<_> = caches.iter().map(PipelineCache::handle).collect();
 
         let res = unsafe {
-            (self.loader().core.vkMergePipelineCaches)(self.device_handle(), self.handle(), caches.len() as u32, caches.as_ptr())
+            self.loader().core.vkMergePipelineCaches(self.device_handle(), self.handle(), caches.len() as u32, caches.as_ptr())
         };
 
         if res == vks::core::VK_SUCCESS {
@@ -132,7 +132,7 @@ impl PipelineCache {
             let mut data: Vec<u8> = Vec::with_capacity(max_size);
             let res = unsafe {
                 data.set_len(max_size);
-                (self.loader().core.vkGetPipelineCacheData)(self.device_handle(), self.handle(), &mut max_size, data.as_mut_ptr() as *mut c_void)
+                self.loader().core.vkGetPipelineCacheData(self.device_handle(), self.handle(), &mut max_size, data.as_mut_ptr() as *mut c_void)
             };
 
             if (res == vks::core::VK_SUCCESS) || (res == vks::core::VK_INCOMPLETE) {
@@ -145,7 +145,7 @@ impl PipelineCache {
         else {
             let mut size = 0;
             let res = unsafe {
-                (self.loader().core.vkGetPipelineCacheData)(self.device_handle(), self.handle(), &mut size, ptr::null_mut())
+                self.loader().core.vkGetPipelineCacheData(self.device_handle(), self.handle(), &mut size, ptr::null_mut())
             };
 
             if (res != vks::core::VK_SUCCESS) && (res != vks::core::VK_INCOMPLETE) {
@@ -155,7 +155,7 @@ impl PipelineCache {
             let mut data: Vec<u8> = Vec::with_capacity(size);
             let res = unsafe {
                 data.set_len(size);
-                (self.loader().core.vkGetPipelineCacheData)(self.device_handle(), self.handle(), &mut size, data.as_mut_ptr() as *mut c_void)
+                self.loader().core.vkGetPipelineCacheData(self.device_handle(), self.handle(), &mut size, data.as_mut_ptr() as *mut c_void)
             };
 
             if (res == vks::core::VK_SUCCESS) || (res == vks::core::VK_INCOMPLETE) {
@@ -185,7 +185,7 @@ impl Drop for Inner {
             };
 
             unsafe {
-                (self.device.loader().core.vkDestroyPipelineCache)(self.device.handle(), self.handle, allocator);
+                self.device.loader().core.vkDestroyPipelineCache(self.device.handle(), self.handle, allocator);
             }
         }
     }

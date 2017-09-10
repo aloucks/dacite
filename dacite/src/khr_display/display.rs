@@ -118,7 +118,7 @@ impl DisplayKhr {
     pub fn get_display_mode_properties_khr(&self) -> Result<Vec<khr_display::DisplayModePropertiesKhr>, core::Error> {
         let mut len = 0;
         let res = unsafe {
-            (self.loader().khr_display.vkGetDisplayModePropertiesKHR)(self.physical_device_handle(), self.handle, &mut len, ptr::null_mut())
+            self.loader().khr_display.vkGetDisplayModePropertiesKHR(self.physical_device_handle(), self.handle, &mut len, ptr::null_mut())
         };
 
         if res != vks::core::VK_SUCCESS {
@@ -128,7 +128,7 @@ impl DisplayKhr {
         let mut properties = Vec::with_capacity(len as usize);
         let res = unsafe {
             properties.set_len(len as usize);
-            (self.loader().khr_display.vkGetDisplayModePropertiesKHR)(self.physical_device_handle(), self.handle, &mut len, properties.as_mut_ptr())
+            self.loader().khr_display.vkGetDisplayModePropertiesKHR(self.physical_device_handle(), self.handle, &mut len, properties.as_mut_ptr())
         };
 
         if res == vks::core::VK_SUCCESS {
@@ -147,7 +147,7 @@ impl DisplayKhr {
 
         let mut display_mode = Default::default();
         let res = unsafe {
-            (self.loader().khr_display.vkCreateDisplayModeKHR)(self.physical_device_handle(), self.handle, &create_info_wrapper.vks_struct, allocation_callbacks, &mut display_mode)
+            self.loader().khr_display.vkCreateDisplayModeKHR(self.physical_device_handle(), self.handle, &create_info_wrapper.vks_struct, allocation_callbacks, &mut display_mode)
         };
 
         if res == vks::core::VK_SUCCESS {

@@ -117,7 +117,7 @@ impl DescriptorPool {
         let mut descriptor_sets = Vec::with_capacity(allocate_info.set_layouts.len());
         let res = unsafe {
             descriptor_sets.set_len(allocate_info.set_layouts.len());
-            (descriptor_pool.loader().core.vkAllocateDescriptorSets)(descriptor_pool.device_handle(), &allocate_info_wrapper.vks_struct, descriptor_sets.as_mut_ptr())
+            descriptor_pool.loader().core.vkAllocateDescriptorSets(descriptor_pool.device_handle(), &allocate_info_wrapper.vks_struct, descriptor_sets.as_mut_ptr())
         };
 
         if res == vks::core::VK_SUCCESS {
@@ -133,7 +133,7 @@ impl DescriptorPool {
         let descriptor_sets: Vec<_> = descriptor_sets.iter().map(DescriptorSet::handle).collect();
 
         let res = unsafe {
-            (self.loader().core.vkFreeDescriptorSets)(self.device_handle(), self.handle(), descriptor_sets.len() as u32, descriptor_sets.as_ptr())
+            self.loader().core.vkFreeDescriptorSets(self.device_handle(), self.handle(), descriptor_sets.len() as u32, descriptor_sets.as_ptr())
         };
 
         if res == vks::core::VK_SUCCESS {
@@ -147,7 +147,7 @@ impl DescriptorPool {
     /// See [`vkResetDescriptorPool`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkResetDescriptorPool)
     pub fn reset(&self, flags: core::DescriptorPoolResetFlags) -> Result<(), core::Error> {
         let res = unsafe {
-            (self.loader().core.vkResetDescriptorPool)(self.device_handle(), self.handle(), flags.bits())
+            self.loader().core.vkResetDescriptorPool(self.device_handle(), self.handle(), flags.bits())
         };
 
         if res == vks::core::VK_SUCCESS {
@@ -176,7 +176,7 @@ impl Drop for Inner {
             };
 
             unsafe {
-                (self.device.loader().core.vkDestroyDescriptorPool)(self.device.handle(), self.handle, allocator);
+                self.device.loader().core.vkDestroyDescriptorPool(self.device.handle(), self.handle, allocator);
             }
         }
     }

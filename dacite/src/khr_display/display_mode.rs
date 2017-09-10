@@ -112,7 +112,7 @@ impl DisplayModeKhr {
     pub fn get_display_plane_capabilities_khr(&self, plane_index: u32) -> Result<khr_display::DisplayPlaneCapabilitiesKhr, core::Error> {
         unsafe {
             let mut capabilities = mem::uninitialized();
-            let res = (self.loader().khr_display.vkGetDisplayPlaneCapabilitiesKHR)(self.physical_device_handle(), self.handle, plane_index, &mut capabilities);
+            let res = self.loader().khr_display.vkGetDisplayPlaneCapabilitiesKHR(self.physical_device_handle(), self.handle, plane_index, &mut capabilities);
 
             if res == vks::core::VK_SUCCESS {
                 Ok((&capabilities).into())
