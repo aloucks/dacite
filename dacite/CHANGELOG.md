@@ -17,6 +17,7 @@ This release contains breaking changes.
 ### Changed
  - Bumped lowest supported Rust version to 1.20.
  - Updated `vks` to 0.20.
+ - Updated `bitflags` to version 1.0. All bitflags values are now associated consts.
 
 
 ## [0.6.1] - 2017-07-09

@@ -111,7 +111,7 @@ fn find_queue_family_indices(physical_device: &dacite::core::PhysicalDevice, sur
             continue;
         }
 
-        if graphics.is_none() && queue_family_properties.queue_flags.contains(dacite::core::QUEUE_GRAPHICS_BIT) {
+        if graphics.is_none() && queue_family_properties.queue_flags.contains(dacite::core::QueueFlags::QUEUE_GRAPHICS_BIT) {
             graphics = Some(index);
         }
 
@@ -272,11 +272,11 @@ fn create_swapchain(physical_device: &dacite::core::PhysicalDevice, device: &dac
         image_color_space: color_space.unwrap(),
         image_extent: extent,
         image_array_layers: 1,
-        image_usage: dacite::core::IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
+        image_usage: dacite::core::ImageUsageFlags::IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
         image_sharing_mode: image_sharing_mode,
         queue_family_indices: queue_family_indices,
         pre_transform: capabilities.current_transform,
-        composite_alpha: dacite::khr_surface::COMPOSITE_ALPHA_OPAQUE_BIT_KHR,
+        composite_alpha: dacite::khr_surface::CompositeAlphaFlagsKhr::COMPOSITE_ALPHA_OPAQUE_BIT_KHR,
         present_mode: present_mode.unwrap(),
         clipped: true,
         old_swapchain: None,
@@ -300,7 +300,7 @@ fn create_swapchain(physical_device: &dacite::core::PhysicalDevice, device: &dac
             format: format,
             components: dacite::core::ComponentMapping::identity(),
             subresource_range: dacite::core::ImageSubresourceRange {
-                aspect_mask: dacite::core::IMAGE_ASPECT_COLOR_BIT,
+                aspect_mask: dacite::core::ImageAspectFlags::IMAGE_ASPECT_COLOR_BIT,
                 base_mip_level: 0,
                 level_count: dacite::core::OptionalMipLevels::MipLevels(1),
                 base_array_layer: 0,
@@ -330,7 +330,7 @@ fn create_render_pass(device: &dacite::core::Device, format: dacite::core::Forma
         attachments: vec![dacite::core::AttachmentDescription {
             flags: dacite::core::AttachmentDescriptionFlags::empty(),
             format: format,
-            samples: dacite::core::SAMPLE_COUNT_1_BIT,
+            samples: dacite::core::SampleCountFlags::SAMPLE_COUNT_1_BIT,
             load_op: dacite::core::AttachmentLoadOp::Clear,
             store_op: dacite::core::AttachmentStoreOp::Store,
             stencil_load_op: dacite::core::AttachmentLoadOp::DontCare,
@@ -468,7 +468,7 @@ fn create_pipeline(device: &dacite::core::Device, render_pass: &dacite::core::Re
         stages: vec![
             dacite::core::PipelineShaderStageCreateInfo {
                 flags: dacite::core::PipelineShaderStageCreateFlags::empty(),
-                stage: dacite::core::SHADER_STAGE_VERTEX_BIT,
+                stage: dacite::core::ShaderStageFlags::SHADER_STAGE_VERTEX_BIT,
                 module: vertex_shader.clone(),
                 name: "main".to_owned(),
                 specialization_info: None,
@@ -476,7 +476,7 @@ fn create_pipeline(device: &dacite::core::Device, render_pass: &dacite::core::Re
             },
             dacite::core::PipelineShaderStageCreateInfo {
                 flags: dacite::core::PipelineShaderStageCreateFlags::empty(),
-                stage: dacite::core::SHADER_STAGE_FRAGMENT_BIT,
+                stage: dacite::core::ShaderStageFlags::SHADER_STAGE_FRAGMENT_BIT,
                 module: fragment_shader.clone(),
                 name: "main".to_owned(),
                 specialization_info: None,
@@ -514,7 +514,7 @@ fn create_pipeline(device: &dacite::core::Device, render_pass: &dacite::core::Re
             depth_clamp_enable: false,
             rasterizer_discard_enable: false,
             polygon_mode: dacite::core::PolygonMode::Fill,
-            cull_mode: dacite::core::CULL_MODE_NONE,
+            cull_mode: dacite::core::CullModeFlags::CULL_MODE_NONE,
             front_face: dacite::core::FrontFace::Clockwise,
             depth_bias_enable: false,
             depth_bias_constant_factor: 0.0,
@@ -525,7 +525,7 @@ fn create_pipeline(device: &dacite::core::Device, render_pass: &dacite::core::Re
         },
         multisample_state: Some(dacite::core::PipelineMultisampleStateCreateInfo {
             flags: dacite::core::PipelineMultisampleStateCreateFlags::empty(),
-            rasterization_samples: dacite::core::SAMPLE_COUNT_1_BIT,
+            rasterization_samples: dacite::core::SampleCountFlags::SAMPLE_COUNT_1_BIT,
             sample_shading_enable: false,
             min_sample_shading: 1.0,
             sample_mask: vec![],
@@ -546,7 +546,7 @@ fn create_pipeline(device: &dacite::core::Device, render_pass: &dacite::core::Re
                 src_alpha_blend_factor: dacite::core::BlendFactor::One,
                 dst_alpha_blend_factor: dacite::core::BlendFactor::Zero,
                 alpha_blend_op: dacite::core::BlendOp::Add,
-                color_write_mask: dacite::core::COLOR_COMPONENT_R_BIT | dacite::core::COLOR_COMPONENT_G_BIT | dacite::core::COLOR_COMPONENT_B_BIT,
+                color_write_mask: dacite::core::ColorComponentFlags::COLOR_COMPONENT_R_BIT | dacite::core::ColorComponentFlags::COLOR_COMPONENT_G_BIT | dacite::core::ColorComponentFlags::COLOR_COMPONENT_B_BIT,
             }],
             blend_constants: [0.0, 0.0, 0.0, 0.0],
             chain: None,
@@ -654,7 +654,7 @@ fn render(graphics_queue: &dacite::core::Queue, present_queue: &dacite::core::Qu
 
     let submit_infos = vec![dacite::core::SubmitInfo {
         wait_semaphores: vec![image_acquired.clone()],
-        wait_dst_stage_mask: vec![dacite::core::PIPELINE_STAGE_TOP_OF_PIPE_BIT],
+        wait_dst_stage_mask: vec![dacite::core::PipelineStageFlags::PIPELINE_STAGE_TOP_OF_PIPE_BIT],
         command_buffers: vec![command_buffers[next_image].clone()],
         signal_semaphores: vec![image_rendered.clone()],
         chain: None,
