@@ -216,12 +216,12 @@ impl PhysicalDevice {
     {
         let mut num_properties = 0;
         unsafe {
-            self.loader().core.vkGetPhysicalDeviceSparseImageFormatProperties(self.handle, format.into(), image_type.into(), samples.bits(), usage.bits(), tiling.into(), &mut num_properties, ptr::null_mut());
+            self.loader().core.vkGetPhysicalDeviceSparseImageFormatProperties(self.handle, format.into(), image_type.into(), samples.bit(), usage.bits(), tiling.into(), &mut num_properties, ptr::null_mut());
         }
 
         let mut properties = Vec::with_capacity(num_properties as usize);
         unsafe {
-            self.loader().core.vkGetPhysicalDeviceSparseImageFormatProperties(self.handle, format.into(), image_type.into(), samples.bits(), usage.bits(), tiling.into(), &mut num_properties, properties.as_mut_ptr());
+            self.loader().core.vkGetPhysicalDeviceSparseImageFormatProperties(self.handle, format.into(), image_type.into(), samples.bit(), usage.bits(), tiling.into(), &mut num_properties, properties.as_mut_ptr());
             properties.set_len(num_properties as usize);
         }
 

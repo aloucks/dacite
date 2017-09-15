@@ -22,6 +22,9 @@ extern crate vks;
 #[macro_use]
 mod chain;
 
+#[macro_use]
+mod dacite_bitflags;
+
 mod utils;
 mod vulkan_object;
 

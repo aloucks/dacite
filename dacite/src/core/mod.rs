@@ -91,1143 +91,797 @@ pub use self::sampler::{Sampler, FromNativeSamplerParameters};
 pub use self::semaphore::{Semaphore, FromNativeSemaphoreParameters};
 pub use self::shader_module::{ShaderModule, FromNativeShaderModuleParameters};
 
-bitflags! {
+dacite_bitflags! {
     /// See [`VkInstanceCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkInstanceCreateFlags)
-    #[derive(Default)]
-    pub struct InstanceCreateFlags: vks::core::VkInstanceCreateFlags {
-        /// See [`VkInstanceCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkInstanceCreateFlags)
-        const INSTANCE_CREATE_FLAG_BITS_MAX_ENUM = vks::core::VK_INSTANCE_CREATE_FLAG_BITS_MAX_ENUM;
-    }
+    pub struct InstanceCreateFlags: vks::core::VkInstanceCreateFlags;
+    pub enum InstanceCreateFlagBits: vks::core::VkInstanceCreateFlagBits;
+    max_enum: vks::core::VK_INSTANCE_CREATE_FLAG_BITS_MAX_ENUM;
+
+    flags {}
+    no_bits {}
 }
 
-/// See [`VkInstanceCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkInstanceCreateFlags)
-pub type InstanceCreateFlagBits = InstanceCreateFlags;
-
-bitflags! {
+dacite_bitflags! {
     /// See [`VkFormatFeatureFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkFormatFeatureFlagBits)
-    #[derive(Default)]
-    pub struct FormatFeatureFlags: vks::core::VkFormatFeatureFlags {
-        /// See [`VkFormatFeatureFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkFormatFeatureFlagBits)
-        const FORMAT_FEATURE_FLAG_BITS_MAX_ENUM = vks::core::VK_FORMAT_FEATURE_FLAG_BITS_MAX_ENUM;
+    pub struct FormatFeatureFlags: vks::core::VkFormatFeatureFlags;
+    pub enum FormatFeatureFlagBits: vks::core::VkFormatFeatureFlagBits;
+    max_enum: vks::core::VK_FORMAT_FEATURE_FLAG_BITS_MAX_ENUM;
 
-        /// See [`VkFormatFeatureFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkFormatFeatureFlagBits)
-        const FORMAT_FEATURE_SAMPLED_IMAGE_BIT = vks::core::VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT;
+    flags {
+        const SAMPLED_IMAGE [SampledImage] = vks::core::VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT;
+        const STORAGE_IMAGE [StorageImage] = vks::core::VK_FORMAT_FEATURE_STORAGE_IMAGE_BIT;
+        const STORAGE_IMAGE_ATOMIC [StorageImageAtomic] = vks::core::VK_FORMAT_FEATURE_STORAGE_IMAGE_ATOMIC_BIT;
+        const UNIFORM_TEXEL_BUFFER [UniformTexelBuffer] = vks::core::VK_FORMAT_FEATURE_UNIFORM_TEXEL_BUFFER_BIT;
+        const STORAGE_TEXEL_BUFFER [StorageTexelBuffer] = vks::core::VK_FORMAT_FEATURE_STORAGE_TEXEL_BUFFER_BIT;
+        const STORAGE_TEXEL_BUFFER_ATOMIC [StorageTexelBufferAtomic] = vks::core::VK_FORMAT_FEATURE_STORAGE_TEXEL_BUFFER_ATOMIC_BIT;
+        const VERTEX_BUFFER [VertexBuffer] = vks::core::VK_FORMAT_FEATURE_VERTEX_BUFFER_BIT;
+        const COLOR_ATTACHMENT [ColorAttachment] = vks::core::VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT;
+        const COLOR_ATTACHMENT_BLEND [ColorAttachmentBlend] = vks::core::VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BLEND_BIT;
+        const DEPTH_STENCIL_ATTACHMENT [DepthStencilAttachment] = vks::core::VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT;
+        const BLIT_SRC [BlitSrc] = vks::core::VK_FORMAT_FEATURE_BLIT_SRC_BIT;
+        const BLIT_DST [BlitDst] = vks::core::VK_FORMAT_FEATURE_BLIT_DST_BIT;
+        const SAMPLED_IMAGE_FILTER_LINEAR [SampledImageFilterLinear] = vks::core::VK_FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_LINEAR_BIT;
 
-        /// See [`VkFormatFeatureFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkFormatFeatureFlagBits)
-        const FORMAT_FEATURE_STORAGE_IMAGE_BIT = vks::core::VK_FORMAT_FEATURE_STORAGE_IMAGE_BIT;
-
-        /// See [`VkFormatFeatureFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkFormatFeatureFlagBits)
-        const FORMAT_FEATURE_STORAGE_IMAGE_ATOMIC_BIT = vks::core::VK_FORMAT_FEATURE_STORAGE_IMAGE_ATOMIC_BIT;
-
-        /// See [`VkFormatFeatureFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkFormatFeatureFlagBits)
-        const FORMAT_FEATURE_UNIFORM_TEXEL_BUFFER_BIT = vks::core::VK_FORMAT_FEATURE_UNIFORM_TEXEL_BUFFER_BIT;
-
-        /// See [`VkFormatFeatureFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkFormatFeatureFlagBits)
-        const FORMAT_FEATURE_STORAGE_TEXEL_BUFFER_BIT = vks::core::VK_FORMAT_FEATURE_STORAGE_TEXEL_BUFFER_BIT;
-
-        /// See [`VkFormatFeatureFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkFormatFeatureFlagBits)
-        const FORMAT_FEATURE_STORAGE_TEXEL_BUFFER_ATOMIC_BIT = vks::core::VK_FORMAT_FEATURE_STORAGE_TEXEL_BUFFER_ATOMIC_BIT;
-
-        /// See [`VkFormatFeatureFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkFormatFeatureFlagBits)
-        const FORMAT_FEATURE_VERTEX_BUFFER_BIT = vks::core::VK_FORMAT_FEATURE_VERTEX_BUFFER_BIT;
-
-        /// See [`VkFormatFeatureFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkFormatFeatureFlagBits)
-        const FORMAT_FEATURE_COLOR_ATTACHMENT_BIT = vks::core::VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT;
-
-        /// See [`VkFormatFeatureFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkFormatFeatureFlagBits)
-        const FORMAT_FEATURE_COLOR_ATTACHMENT_BLEND_BIT = vks::core::VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BLEND_BIT;
-
-        /// See [`VkFormatFeatureFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkFormatFeatureFlagBits)
-        const FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT = vks::core::VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT;
-
-        /// See [`VkFormatFeatureFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkFormatFeatureFlagBits)
-        const FORMAT_FEATURE_BLIT_SRC_BIT = vks::core::VK_FORMAT_FEATURE_BLIT_SRC_BIT;
-
-        /// See [`VkFormatFeatureFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkFormatFeatureFlagBits)
-        const FORMAT_FEATURE_BLIT_DST_BIT = vks::core::VK_FORMAT_FEATURE_BLIT_DST_BIT;
-
-        /// See [`VkFormatFeatureFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkFormatFeatureFlagBits)
-        const FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_LINEAR_BIT = vks::core::VK_FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_LINEAR_BIT;
-
-        /// See [`VkFormatFeatureFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkFormatFeatureFlagBits)
-        /// and extension [`VK_IMG_filter_cubic`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_IMG_filter_cubic)
-        const FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_CUBIC_BIT_IMG = vks::core::VK_FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_CUBIC_BIT_IMG;
+        // /// See extension [`VK_IMG_filter_cubic`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_IMG_filter_cubic)
+        const SAMPLED_IMAGE_FILTER_CUBIC_BIT [SampledImageFilterCubicImg] = vks::core::VK_FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_CUBIC_BIT_IMG;
     }
+
+    no_bits {}
 }
 
-/// See [`VkFormatFeatureFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkFormatFeatureFlagBits)
-pub type FormatFeatureFlagBits = FormatFeatureFlags;
-
-bitflags! {
+dacite_bitflags! {
     /// See [`VkImageUsageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageUsageFlagBits)
-    #[derive(Default)]
-    pub struct ImageUsageFlags: vks::core::VkImageUsageFlags {
-        /// See [`VkImageUsageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageUsageFlagBits)
-        const IMAGE_USAGE_FLAG_BITS_MAX_ENUM = vks::core::VK_IMAGE_USAGE_FLAG_BITS_MAX_ENUM;
+    pub struct ImageUsageFlags: vks::core::VkImageUsageFlags;
+    pub enum ImageUsageFlagBits: vks::core::VkImageUsageFlagBits;
+    max_enum: vks::core::VK_IMAGE_USAGE_FLAG_BITS_MAX_ENUM;
 
-        /// See [`VkImageUsageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageUsageFlagBits)
-        const IMAGE_USAGE_TRANSFER_SRC_BIT = vks::core::VK_IMAGE_USAGE_TRANSFER_SRC_BIT;
-
-        /// See [`VkImageUsageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageUsageFlagBits)
-        const IMAGE_USAGE_TRANSFER_DST_BIT = vks::core::VK_IMAGE_USAGE_TRANSFER_DST_BIT;
-
-        /// See [`VkImageUsageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageUsageFlagBits)
-        const IMAGE_USAGE_SAMPLED_BIT = vks::core::VK_IMAGE_USAGE_SAMPLED_BIT;
-
-        /// See [`VkImageUsageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageUsageFlagBits)
-        const IMAGE_USAGE_STORAGE_BIT = vks::core::VK_IMAGE_USAGE_STORAGE_BIT;
-
-        /// See [`VkImageUsageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageUsageFlagBits)
-        const IMAGE_USAGE_COLOR_ATTACHMENT_BIT = vks::core::VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
-
-        /// See [`VkImageUsageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageUsageFlagBits)
-        const IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT = vks::core::VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT;
-
-        /// See [`VkImageUsageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageUsageFlagBits)
-        const IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT = vks::core::VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT;
-
-        /// See [`VkImageUsageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageUsageFlagBits)
-        const IMAGE_USAGE_INPUT_ATTACHMENT_BIT = vks::core::VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT;
+    flags {
+        const TRANSFER_SRC [TransferSrc] = vks::core::VK_IMAGE_USAGE_TRANSFER_SRC_BIT;
+        const TRANSFER_DST [TransferDst] = vks::core::VK_IMAGE_USAGE_TRANSFER_DST_BIT;
+        const SAMPLED [Sampled] = vks::core::VK_IMAGE_USAGE_SAMPLED_BIT;
+        const STORAGE [Storage] = vks::core::VK_IMAGE_USAGE_STORAGE_BIT;
+        const COLOR_ATTACHMENT [ColorAttachment] = vks::core::VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+        const DEPTH_STENCIL_ATTACHMENT [DepthStencilAttachment] = vks::core::VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT;
+        const TRANSIENT_ATTACHMENT [TransientAttachment] = vks::core::VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT;
+        const INPUT_ATTACHMENT [InputAttachment] = vks::core::VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT;
     }
+
+    no_bits {}
 }
 
-/// See [`VkImageUsageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageUsageFlagBits)
-pub type ImageUsageFlagBits = ImageUsageFlags;
-
-bitflags! {
+dacite_bitflags! {
     /// See [`VkImageCreateFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageCreateFlagBits)
-    #[derive(Default)]
-    pub struct ImageCreateFlags: vks::core::VkImageCreateFlags {
-        /// See [`VkImageCreateFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageCreateFlagBits)
-        const IMAGE_CREATE_FLAG_BITS_MAX_ENUM = vks::core::VK_IMAGE_CREATE_FLAG_BITS_MAX_ENUM;
+    pub struct ImageCreateFlags: vks::core::VkImageCreateFlags;
+    pub enum ImageCreateFlagBits: vks::core::VkImageCreateFlagBits;
+    max_enum: vks::core::VK_IMAGE_CREATE_FLAG_BITS_MAX_ENUM;
 
-        /// See [`VkImageCreateFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageCreateFlagBits)
-        const IMAGE_CREATE_SPARSE_BINDING_BIT = vks::core::VK_IMAGE_CREATE_SPARSE_BINDING_BIT;
-
-        /// See [`VkImageCreateFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageCreateFlagBits)
-        const IMAGE_CREATE_SPARSE_RESIDENCY_BIT = vks::core::VK_IMAGE_CREATE_SPARSE_RESIDENCY_BIT;
-
-        /// See [`VkImageCreateFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageCreateFlagBits)
-        const IMAGE_CREATE_SPARSE_ALIASED_BIT = vks::core::VK_IMAGE_CREATE_SPARSE_ALIASED_BIT;
-
-        /// See [`VkImageCreateFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageCreateFlagBits)
-        const IMAGE_CREATE_MUTABLE_FORMAT_BIT = vks::core::VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT;
-
-        /// See [`VkImageCreateFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageCreateFlagBits)
-        const IMAGE_CREATE_CUBE_COMPATIBLE_BIT = vks::core::VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT;
+    flags {
+        const SPARSE_BINDING [SparseBinding] = vks::core::VK_IMAGE_CREATE_SPARSE_BINDING_BIT;
+        const SPARSE_RESIDENCY [SparseResidency] = vks::core::VK_IMAGE_CREATE_SPARSE_RESIDENCY_BIT;
+        const SPARSE_ALIASED [SparseAliased] = vks::core::VK_IMAGE_CREATE_SPARSE_ALIASED_BIT;
+        const MUTABLE_FORMAT [MutableFormat] = vks::core::VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT;
+        const CUBE_COMPATIBLE [CubeCompatible] = vks::core::VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT;
     }
+
+    no_bits {}
 }
 
-/// See [`VkImageCreateFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageCreateFlagBits)
-pub type ImageCreateFlagBits = ImageCreateFlags;
-
-bitflags! {
+dacite_bitflags! {
     /// See [`VkSampleCountFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSampleCountFlagBits)
-    #[derive(Default)]
-    pub struct SampleCountFlags: vks::core::VkSampleCountFlags {
-        /// See [`VkSampleCountFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSampleCountFlagBits)
-        const SAMPLE_COUNT_FLAG_BITS_MAX_ENUM = vks::core::VK_SAMPLE_COUNT_FLAG_BITS_MAX_ENUM;
+    pub struct SampleCountFlags: vks::core::VkSampleCountFlags;
+    pub enum SampleCountFlagBits: vks::core::VkSampleCountFlagBits;
+    max_enum: vks::core::VK_SAMPLE_COUNT_FLAG_BITS_MAX_ENUM;
 
-        /// See [`VkSampleCountFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSampleCountFlagBits)
-        const SAMPLE_COUNT_1_BIT = vks::core::VK_SAMPLE_COUNT_1_BIT;
-
-        /// See [`VkSampleCountFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSampleCountFlagBits)
-        const SAMPLE_COUNT_2_BIT = vks::core::VK_SAMPLE_COUNT_2_BIT;
-
-        /// See [`VkSampleCountFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSampleCountFlagBits)
-        const SAMPLE_COUNT_4_BIT = vks::core::VK_SAMPLE_COUNT_4_BIT;
-
-        /// See [`VkSampleCountFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSampleCountFlagBits)
-        const SAMPLE_COUNT_8_BIT = vks::core::VK_SAMPLE_COUNT_8_BIT;
-
-        /// See [`VkSampleCountFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSampleCountFlagBits)
-        const SAMPLE_COUNT_16_BIT = vks::core::VK_SAMPLE_COUNT_16_BIT;
-
-        /// See [`VkSampleCountFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSampleCountFlagBits)
-        const SAMPLE_COUNT_32_BIT = vks::core::VK_SAMPLE_COUNT_32_BIT;
-
-        /// See [`VkSampleCountFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSampleCountFlagBits)
-        const SAMPLE_COUNT_64_BIT = vks::core::VK_SAMPLE_COUNT_64_BIT;
+    flags {
+        const SAMPLE_COUNT_1 [SampleCount1] = vks::core::VK_SAMPLE_COUNT_1_BIT;
+        const SAMPLE_COUNT_2 [SampleCount2] = vks::core::VK_SAMPLE_COUNT_2_BIT;
+        const SAMPLE_COUNT_4 [SampleCount4] = vks::core::VK_SAMPLE_COUNT_4_BIT;
+        const SAMPLE_COUNT_8 [SampleCount8] = vks::core::VK_SAMPLE_COUNT_8_BIT;
+        const SAMPLE_COUNT_16 [SampleCount16] = vks::core::VK_SAMPLE_COUNT_16_BIT;
+        const SAMPLE_COUNT_32 [SampleCount32] = vks::core::VK_SAMPLE_COUNT_32_BIT;
+        const SAMPLE_COUNT_64 [SampleCount64] = vks::core::VK_SAMPLE_COUNT_64_BIT;
     }
+
+    no_bits {}
 }
 
-/// See [`VkSampleCountFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSampleCountFlagBits)
-pub type SampleCountFlagBits = SampleCountFlags;
-
-bitflags! {
+dacite_bitflags! {
     /// See [`VkQueueFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueueFlagBits)
-    #[derive(Default)]
-    pub struct QueueFlags: vks::core::VkQueueFlags {
-        /// See [`VkQueueFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueueFlagBits)
-        const QUEUE_FLAG_BITS_MAX_ENUM = vks::core::VK_QUEUE_FLAG_BITS_MAX_ENUM;
+    pub struct QueueFlags: vks::core::VkQueueFlags;
+    pub enum QueueFlagBits: vks::core::VkQueueFlagBits;
+    max_enum: vks::core::VK_QUEUE_FLAG_BITS_MAX_ENUM;
 
-        /// See [`VkQueueFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueueFlagBits)
-        const QUEUE_GRAPHICS_BIT = vks::core::VK_QUEUE_GRAPHICS_BIT;
-
-        /// See [`VkQueueFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueueFlagBits)
-        const QUEUE_COMPUTE_BIT = vks::core::VK_QUEUE_COMPUTE_BIT;
-
-        /// See [`VkQueueFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueueFlagBits)
-        const QUEUE_TRANSFER_BIT = vks::core::VK_QUEUE_TRANSFER_BIT;
-
-        /// See [`VkQueueFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueueFlagBits)
-        const QUEUE_SPARSE_BINDING_BIT = vks::core::VK_QUEUE_SPARSE_BINDING_BIT;
+    flags {
+        const GRAPHICS [Graphics] = vks::core::VK_QUEUE_GRAPHICS_BIT;
+        const COMPUTE [Compute] = vks::core::VK_QUEUE_COMPUTE_BIT;
+        const TRANSFER [Transfer] = vks::core::VK_QUEUE_TRANSFER_BIT;
+        const SPARSE_BINDING [SparseBinding] = vks::core::VK_QUEUE_SPARSE_BINDING_BIT;
     }
+
+    no_bits {}
 }
 
-/// See [`VkQueueFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueueFlagBits)
-pub type QueueFlagBits = QueueFlags;
-
-bitflags! {
+dacite_bitflags! {
     /// See [`VkMemoryPropertyFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkMemoryPropertyFlagBits)
-    #[derive(Default)]
-    pub struct MemoryPropertyFlags: vks::core::VkMemoryPropertyFlags {
-        /// See [`VkMemoryPropertyFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkMemoryPropertyFlagBits)
-        const MEMORY_PROPERTY_FLAG_BITS_MAX_ENUM = vks::core::VK_MEMORY_PROPERTY_FLAG_BITS_MAX_ENUM;
+    pub struct MemoryPropertyFlags: vks::core::VkMemoryPropertyFlags;
+    pub enum MemoryPropertyFlagBits: vks::core::VkMemoryPropertyFlagBits;
+    max_enum: vks::core::VK_MEMORY_PROPERTY_FLAG_BITS_MAX_ENUM;
 
-        /// See [`VkMemoryPropertyFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkMemoryPropertyFlagBits)
-        const MEMORY_PROPERTY_DEVICE_LOCAL_BIT = vks::core::VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
-
-        /// See [`VkMemoryPropertyFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkMemoryPropertyFlagBits)
-        const MEMORY_PROPERTY_HOST_VISIBLE_BIT = vks::core::VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT;
-
-        /// See [`VkMemoryPropertyFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkMemoryPropertyFlagBits)
-        const MEMORY_PROPERTY_HOST_COHERENT_BIT = vks::core::VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
-
-        /// See [`VkMemoryPropertyFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkMemoryPropertyFlagBits)
-        const MEMORY_PROPERTY_HOST_CACHED_BIT = vks::core::VK_MEMORY_PROPERTY_HOST_CACHED_BIT;
-
-        /// See [`VkMemoryPropertyFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkMemoryPropertyFlagBits)
-        const MEMORY_PROPERTY_LAZILY_ALLOCATED_BIT = vks::core::VK_MEMORY_PROPERTY_LAZILY_ALLOCATED_BIT;
+    flags {
+        const DEVICE_LOCAL [DeviceLocal] = vks::core::VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
+        const HOST_VISIBLE [HostVisible] = vks::core::VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT;
+        const HOST_COHERENT [HostCoherent] = vks::core::VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
+        const HOST_CACHED [HostCached] = vks::core::VK_MEMORY_PROPERTY_HOST_CACHED_BIT;
+        const LAZILY_ALLOCATED [LazilyAllocated] = vks::core::VK_MEMORY_PROPERTY_LAZILY_ALLOCATED_BIT;
     }
+
+    no_bits {}
 }
 
-/// See [`VkMemoryPropertyFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkMemoryPropertyFlagBits)
-pub type MemoryPropertyFlagBits = MemoryPropertyFlags;
-
-bitflags! {
+dacite_bitflags! {
     /// See [`VkMemoryHeapFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkMemoryHeapFlagBits)
-    #[derive(Default)]
-    pub struct MemoryHeapFlags: vks::core::VkMemoryHeapFlags {
-        /// See [`VkMemoryHeapFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkMemoryHeapFlagBits)
-        const MEMORY_HEAP_FLAG_BITS_MAX_ENUM = vks::core::VK_MEMORY_HEAP_FLAG_BITS_MAX_ENUM;
+    pub struct MemoryHeapFlags: vks::core::VkMemoryHeapFlags;
+    pub enum MemoryHeapFlagBits: vks::core::VkMemoryHeapFlagBits;
+    max_enum: vks::core::VK_MEMORY_HEAP_FLAG_BITS_MAX_ENUM;
 
-        /// See [`VkMemoryHeapFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkMemoryHeapFlagBits)
-        const MEMORY_HEAP_DEVICE_LOCAL_BIT = vks::core::VK_MEMORY_HEAP_DEVICE_LOCAL_BIT;
+    flags {
+        const DEVICE_LOCAL [DeviceLocal] = vks::core::VK_MEMORY_HEAP_DEVICE_LOCAL_BIT;
     }
+
+    no_bits {}
 }
 
-/// See [`VkMemoryHeapFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkMemoryHeapFlagBits)
-pub type MemoryHeapFlagBits = MemoryHeapFlags;
-
-bitflags! {
+dacite_bitflags! {
     /// See [`VkDeviceCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDeviceCreateFlags)
-    #[derive(Default)]
-    pub struct DeviceCreateFlags: vks::core::VkDeviceCreateFlags {
-        /// See [`VkDeviceCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDeviceCreateFlags)
-        const DEVICE_CREATE_FLAG_BITS_MAX_ENUM = vks::core::VK_DEVICE_CREATE_FLAG_BITS_MAX_ENUM;
-    }
+    pub struct DeviceCreateFlags: vks::core::VkDeviceCreateFlags;
+    pub enum DeviceCreateFlagBits: vks::core::VkDeviceCreateFlagBits;
+    max_enum: vks::core::VK_DEVICE_CREATE_FLAG_BITS_MAX_ENUM;
+
+    flags {}
+    no_bits {}
 }
 
-/// See [`VkDeviceCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDeviceCreateFlags)
-pub type DeviceCreateFlagBits = DeviceCreateFlags;
-
-bitflags! {
+dacite_bitflags! {
     /// See [`VkDeviceQueueCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDeviceQueueCreateFlags)
-    #[derive(Default)]
-    pub struct DeviceQueueCreateFlags: vks::core::VkDeviceQueueCreateFlags {
-        /// See [`VkDeviceQueueCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDeviceQueueCreateFlags)
-        const DEVICE_QUEUE_CREATE_FLAG_BITS_MAX_ENUM = vks::core::VK_DEVICE_QUEUE_CREATE_FLAG_BITS_MAX_ENUM;
-    }
+    pub struct DeviceQueueCreateFlags: vks::core::VkDeviceQueueCreateFlags;
+    pub enum DeviceQueueCreateFlagBits: vks::core::VkDeviceQueueCreateFlagBits;
+    max_enum: vks::core::VK_DEVICE_QUEUE_CREATE_FLAG_BITS_MAX_ENUM;
+
+    flags {}
+    no_bits {}
 }
 
-/// See [`VkDeviceQueueCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDeviceQueueCreateFlags)
-pub type DeviceQueueCreateFlagBits = DeviceQueueCreateFlags;
-
-bitflags! {
+dacite_bitflags! {
     /// See [`VkPipelineStageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineStageFlagBits)
-    #[derive(Default)]
-    pub struct PipelineStageFlags: vks::core::VkPipelineStageFlags {
-        /// See [`VkPipelineStageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineStageFlagBits)
-        const PIPELINE_STAGE_FLAG_BITS_MAX_ENUM = vks::core::VK_PIPELINE_STAGE_FLAG_BITS_MAX_ENUM;
+    pub struct PipelineStageFlags: vks::core::VkPipelineStageFlags;
+    pub enum PipelineStageFlagBits: vks::core::VkPipelineStageFlagBits;
+    max_enum: vks::core::VK_PIPELINE_STAGE_FLAG_BITS_MAX_ENUM;
 
-        /// See [`VkPipelineStageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineStageFlagBits)
-        const PIPELINE_STAGE_TOP_OF_PIPE_BIT = vks::core::VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT;
-
-        /// See [`VkPipelineStageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineStageFlagBits)
-        const PIPELINE_STAGE_DRAW_INDIRECT_BIT = vks::core::VK_PIPELINE_STAGE_DRAW_INDIRECT_BIT;
-
-        /// See [`VkPipelineStageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineStageFlagBits)
-        const PIPELINE_STAGE_VERTEX_INPUT_BIT = vks::core::VK_PIPELINE_STAGE_VERTEX_INPUT_BIT;
-
-        /// See [`VkPipelineStageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineStageFlagBits)
-        const PIPELINE_STAGE_VERTEX_SHADER_BIT = vks::core::VK_PIPELINE_STAGE_VERTEX_SHADER_BIT;
-
-        /// See [`VkPipelineStageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineStageFlagBits)
-        const PIPELINE_STAGE_TESSELLATION_CONTROL_SHADER_BIT = vks::core::VK_PIPELINE_STAGE_TESSELLATION_CONTROL_SHADER_BIT;
-
-        /// See [`VkPipelineStageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineStageFlagBits)
-        const PIPELINE_STAGE_TESSELLATION_EVALUATION_SHADER_BIT = vks::core::VK_PIPELINE_STAGE_TESSELLATION_EVALUATION_SHADER_BIT;
-
-        /// See [`VkPipelineStageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineStageFlagBits)
-        const PIPELINE_STAGE_GEOMETRY_SHADER_BIT = vks::core::VK_PIPELINE_STAGE_GEOMETRY_SHADER_BIT;
-
-        /// See [`VkPipelineStageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineStageFlagBits)
-        const PIPELINE_STAGE_FRAGMENT_SHADER_BIT = vks::core::VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
-
-        /// See [`VkPipelineStageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineStageFlagBits)
-        const PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT = vks::core::VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT;
-
-        /// See [`VkPipelineStageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineStageFlagBits)
-        const PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT = vks::core::VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT;
-
-        /// See [`VkPipelineStageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineStageFlagBits)
-        const PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT = vks::core::VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-
-        /// See [`VkPipelineStageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineStageFlagBits)
-        const PIPELINE_STAGE_COMPUTE_SHADER_BIT = vks::core::VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT;
-
-        /// See [`VkPipelineStageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineStageFlagBits)
-        const PIPELINE_STAGE_TRANSFER_BIT = vks::core::VK_PIPELINE_STAGE_TRANSFER_BIT;
-
-        /// See [`VkPipelineStageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineStageFlagBits)
-        const PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT = vks::core::VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT;
-
-        /// See [`VkPipelineStageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineStageFlagBits)
-        const PIPELINE_STAGE_HOST_BIT = vks::core::VK_PIPELINE_STAGE_HOST_BIT;
-
-        /// See [`VkPipelineStageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineStageFlagBits)
-        const PIPELINE_STAGE_ALL_GRAPHICS_BIT = vks::core::VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT;
-
-        /// See [`VkPipelineStageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineStageFlagBits)
-        const PIPELINE_STAGE_ALL_COMMANDS_BIT = vks::core::VK_PIPELINE_STAGE_ALL_COMMANDS_BIT;
+    flags {
+        const TOP_OF_PIPE [TopOfPipe] = vks::core::VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT;
+        const DRAW_INDIRECT [DrawIndirect] = vks::core::VK_PIPELINE_STAGE_DRAW_INDIRECT_BIT;
+        const VERTEX_INPUT [VertexInput] = vks::core::VK_PIPELINE_STAGE_VERTEX_INPUT_BIT;
+        const VERTEX_SHADER [VertexShader] = vks::core::VK_PIPELINE_STAGE_VERTEX_SHADER_BIT;
+        const TESSELLATION_CONTROL_SHADER [TessellationControlShader] = vks::core::VK_PIPELINE_STAGE_TESSELLATION_CONTROL_SHADER_BIT;
+        const TESSELLATION_EVALUATION_SHADER [TessellationEvaluationShader] = vks::core::VK_PIPELINE_STAGE_TESSELLATION_EVALUATION_SHADER_BIT;
+        const GEOMETRY_SHADER [GeometryShader] = vks::core::VK_PIPELINE_STAGE_GEOMETRY_SHADER_BIT;
+        const FRAGMENT_SHADER [FragmentShader] = vks::core::VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
+        const EARLY_FRAGMENT_TESTS [EarlyFragmentTests] = vks::core::VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT;
+        const LATE_FRAGMENT_TESTS [LateFragmentTests] = vks::core::VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT;
+        const COLOR_ATTACHMENT_OUTPUT [ColorAttachmentOutput] = vks::core::VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+        const COMPUTE_SHADER [ComputeShader] = vks::core::VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT;
+        const TRANSFER [Transfer] = vks::core::VK_PIPELINE_STAGE_TRANSFER_BIT;
+        const BOTTOM_OF_PIPE [BottomOfPipe] = vks::core::VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT;
+        const HOST [Host] = vks::core::VK_PIPELINE_STAGE_HOST_BIT;
+        const ALL_GRAPHICS [AllGraphics] = vks::core::VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT;
+        const ALL_COMMANDS [AllCommands] = vks::core::VK_PIPELINE_STAGE_ALL_COMMANDS_BIT;
     }
+
+    no_bits {}
 }
 
-/// See [`VkPipelineStageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineStageFlagBits)
-pub type PipelineStageFlagBits = PipelineStageFlags;
-
-bitflags! {
+dacite_bitflags! {
     /// See [`VkMemoryMapFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkMemoryMapFlags)
-    #[derive(Default)]
-    pub struct MemoryMapFlags: vks::core::VkMemoryMapFlags {
-        /// See [`VkMemoryMapFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkMemoryMapFlags)
-        const MEMORY_MAP_FLAG_BITS_MAX_ENUM = vks::core::VK_MEMORY_MAP_FLAG_BITS_MAX_ENUM;
-    }
+    pub struct MemoryMapFlags: vks::core::VkMemoryMapFlags;
+    pub enum MemoryMapFlagBits: vks::core::VkMemoryMapFlagBits;
+    max_enum: vks::core::VK_MEMORY_MAP_FLAG_BITS_MAX_ENUM;
+
+    flags {}
+    no_bits {}
 }
 
-/// See [`VkMemoryMapFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkMemoryMapFlags)
-pub type MemoryMapFlagBits = MemoryMapFlags;
-
-bitflags! {
+dacite_bitflags! {
     /// See [`VkImageAspectFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageAspectFlagBits)
-    #[derive(Default)]
-    pub struct ImageAspectFlags: vks::core::VkImageAspectFlags {
-        /// See [`VkImageAspectFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageAspectFlagBits)
-        const IMAGE_ASPECT_FLAG_BITS_MAX_ENUM = vks::core::VK_IMAGE_ASPECT_FLAG_BITS_MAX_ENUM;
+    pub struct ImageAspectFlags: vks::core::VkImageAspectFlags;
+    pub enum ImageAspectFlagBits: vks::core::VkImageAspectFlagBits;
+    max_enum: vks::core::VK_IMAGE_ASPECT_FLAG_BITS_MAX_ENUM;
 
-        /// See [`VkImageAspectFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageAspectFlagBits)
-        const IMAGE_ASPECT_COLOR_BIT = vks::core::VK_IMAGE_ASPECT_COLOR_BIT;
-
-        /// See [`VkImageAspectFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageAspectFlagBits)
-        const IMAGE_ASPECT_DEPTH_BIT = vks::core::VK_IMAGE_ASPECT_DEPTH_BIT;
-
-        /// See [`VkImageAspectFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageAspectFlagBits)
-        const IMAGE_ASPECT_STENCIL_BIT = vks::core::VK_IMAGE_ASPECT_STENCIL_BIT;
-
-        /// See [`VkImageAspectFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageAspectFlagBits)
-        const IMAGE_ASPECT_METADATA_BIT = vks::core::VK_IMAGE_ASPECT_METADATA_BIT;
+    flags {
+        const COLOR [Color] = vks::core::VK_IMAGE_ASPECT_COLOR_BIT;
+        const DEPTH [Depth] = vks::core::VK_IMAGE_ASPECT_DEPTH_BIT;
+        const STENCIL [Stencil] = vks::core::VK_IMAGE_ASPECT_STENCIL_BIT;
+        const METADATA [Metadata] = vks::core::VK_IMAGE_ASPECT_METADATA_BIT;
     }
+
+    no_bits {}
 }
 
-/// See [`VkImageAspectFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageAspectFlagBits)
-pub type ImageAspectFlagBits = ImageAspectFlags;
-
-bitflags! {
+dacite_bitflags! {
     /// See [`VkSparseImageFormatFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSparseImageFormatFlagBits)
-    #[derive(Default)]
-    pub struct SparseImageFormatFlags: vks::core::VkSparseImageFormatFlags {
-        /// See [`VkSparseImageFormatFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSparseImageFormatFlagBits)
-        const SPARSE_IMAGE_FORMAT_FLAG_BITS_MAX_ENUM = vks::core::VK_SPARSE_IMAGE_FORMAT_FLAG_BITS_MAX_ENUM;
+    pub struct SparseImageFormatFlags: vks::core::VkSparseImageFormatFlags;
+    pub enum SparseImageFormatFlagBits: vks::core::VkSparseImageFormatFlagBits;
+    max_enum: vks::core::VK_SPARSE_IMAGE_FORMAT_FLAG_BITS_MAX_ENUM;
 
-        /// See [`VkSparseImageFormatFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSparseImageFormatFlagBits)
-        const SPARSE_IMAGE_FORMAT_SINGLE_MIPTAIL_BIT = vks::core::VK_SPARSE_IMAGE_FORMAT_SINGLE_MIPTAIL_BIT;
-
-        /// See [`VkSparseImageFormatFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSparseImageFormatFlagBits)
-        const SPARSE_IMAGE_FORMAT_ALIGNED_MIP_SIZE_BIT = vks::core::VK_SPARSE_IMAGE_FORMAT_ALIGNED_MIP_SIZE_BIT;
-
-        /// See [`VkSparseImageFormatFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSparseImageFormatFlagBits)
-        const SPARSE_IMAGE_FORMAT_NONSTANDARD_BLOCK_SIZE_BIT = vks::core::VK_SPARSE_IMAGE_FORMAT_NONSTANDARD_BLOCK_SIZE_BIT;
+    flags {
+        const SINGLE_MIPTAIL [SingleMiptail] = vks::core::VK_SPARSE_IMAGE_FORMAT_SINGLE_MIPTAIL_BIT;
+        const ALIGNED_MIP_SIZE [AlignedMipSize] = vks::core::VK_SPARSE_IMAGE_FORMAT_ALIGNED_MIP_SIZE_BIT;
+        const NONSTANDARD_BLOCK_SIZE [NonstandardBlockSize] = vks::core::VK_SPARSE_IMAGE_FORMAT_NONSTANDARD_BLOCK_SIZE_BIT;
     }
+
+    no_bits {}
 }
 
-/// See [`VkSparseImageFormatFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSparseImageFormatFlagBits)
-pub type SparseImageFormatFlagBits = SparseImageFormatFlags;
-
-bitflags! {
+dacite_bitflags! {
     /// See [`VkSparseMemoryBindFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSparseMemoryBindFlagBits)
-    #[derive(Default)]
-    pub struct SparseMemoryBindFlags: vks::core::VkSparseMemoryBindFlags {
-        /// See [`VkSparseMemoryBindFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSparseMemoryBindFlagBits)
-        const SPARSE_MEMORY_BIND_FLAG_BITS_MAX_ENUM = vks::core::VK_SPARSE_MEMORY_BIND_FLAG_BITS_MAX_ENUM;
+    pub struct SparseMemoryBindFlags: vks::core::VkSparseMemoryBindFlags;
+    pub enum SparseMemoryBindFlagBits: vks::core::VkSparseMemoryBindFlagBits;
+    max_enum: vks::core::VK_SPARSE_MEMORY_BIND_FLAG_BITS_MAX_ENUM;
 
-        /// See [`VkSparseMemoryBindFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSparseMemoryBindFlagBits)
-        const SPARSE_MEMORY_BIND_METADATA_BIT = vks::core::VK_SPARSE_MEMORY_BIND_METADATA_BIT;
+    flags {
+        const METADATA [Metadata] = vks::core::VK_SPARSE_MEMORY_BIND_METADATA_BIT;
     }
+
+    no_bits {}
 }
 
-/// See [`VkSparseMemoryBindFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSparseMemoryBindFlagBits)
-pub type SparseMemoryBindFlagBits = SparseMemoryBindFlags;
-
-bitflags! {
+dacite_bitflags! {
     /// See [`VkFenceCreateFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkFenceCreateFlagBits)
-    #[derive(Default)]
-    pub struct FenceCreateFlags: vks::core::VkFenceCreateFlags {
-        /// See [`VkFenceCreateFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkFenceCreateFlagBits)
-        const FENCE_CREATE_FLAG_BITS_MAX_ENUM = vks::core::VK_FENCE_CREATE_FLAG_BITS_MAX_ENUM;
+    pub struct FenceCreateFlags: vks::core::VkFenceCreateFlags;
+    pub enum FenceCreateFlagBits: vks::core::VkFenceCreateFlagBits;
+    max_enum: vks::core::VK_FENCE_CREATE_FLAG_BITS_MAX_ENUM;
 
-        /// See [`VkFenceCreateFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkFenceCreateFlagBits)
-        const FENCE_CREATE_SIGNALED_BIT = vks::core::VK_FENCE_CREATE_SIGNALED_BIT;
+    flags {
+        const SIGNALED [Signaled] = vks::core::VK_FENCE_CREATE_SIGNALED_BIT;
     }
+
+    no_bits {}
 }
 
-/// See [`VkFenceCreateFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkFenceCreateFlagBits)
-pub type FenceCreateFlagBits = FenceCreateFlags;
-
-bitflags! {
+dacite_bitflags! {
     /// See [`VkSemaphoreCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSemaphoreCreateFlags)
-    #[derive(Default)]
-    pub struct SemaphoreCreateFlags: vks::core::VkSemaphoreCreateFlags {
-        /// See [`VkSemaphoreCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSemaphoreCreateFlags)
-        const SEMAPHORE_CREATE_FLAG_BITS_MAX_ENUM = vks::core::VK_SEMAPHORE_CREATE_FLAG_BITS_MAX_ENUM;
-    }
+    pub struct SemaphoreCreateFlags: vks::core::VkSemaphoreCreateFlags;
+    pub enum SemaphoreCreateFlagBits: vks::core::VkSemaphoreCreateFlagBits;
+    max_enum: vks::core::VK_SEMAPHORE_CREATE_FLAG_BITS_MAX_ENUM;
+
+    flags {}
+    no_bits {}
 }
 
-/// See [`VkSemaphoreCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSemaphoreCreateFlags)
-pub type SemaphoreCreateFlagBits = SemaphoreCreateFlags;
-
-bitflags! {
+dacite_bitflags! {
     /// See [`VkEventCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkEventCreateFlags)
-    #[derive(Default)]
-    pub struct EventCreateFlags: vks::core::VkEventCreateFlags {
-        /// See [`VkEventCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkEventCreateFlags)
-        const EVENT_CREATE_FLAG_BITS_MAX_ENUM = vks::core::VK_EVENT_CREATE_FLAG_BITS_MAX_ENUM;
-    }
+    pub struct EventCreateFlags: vks::core::VkEventCreateFlags;
+    pub enum EventCreateFlagBits: vks::core::VkEventCreateFlagBits;
+    max_enum: vks::core::VK_EVENT_CREATE_FLAG_BITS_MAX_ENUM;
+
+    flags {}
+    no_bits {}
 }
 
-/// See [`VkEventCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkEventCreateFlags)
-pub type EventCreateFlagBits = EventCreateFlags;
-
-bitflags! {
+dacite_bitflags! {
     /// See [`VkQueryPoolCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueryPoolCreateFlags)
-    #[derive(Default)]
-    pub struct QueryPoolCreateFlags: vks::core::VkQueryPoolCreateFlags {
-        /// See [`VkQueryPoolCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueryPoolCreateFlags)
-        const QUERY_POOL_CREATE_FLAG_BITS_MAX_ENUM = vks::core::VK_QUERY_POOL_CREATE_FLAG_BITS_MAX_ENUM;
-    }
+    pub struct QueryPoolCreateFlags: vks::core::VkQueryPoolCreateFlags;
+    pub enum QueryPoolCreateFlagBits: vks::core::VkQueryPoolCreateFlagBits;
+    max_enum: vks::core::VK_QUERY_POOL_CREATE_FLAG_BITS_MAX_ENUM;
+
+    flags {}
+    no_bits {}
 }
 
-/// See [`VkQueryPoolCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueryPoolCreateFlags)
-pub type QueryPoolCreateFlagBits = QueryPoolCreateFlags;
-
-bitflags! {
+dacite_bitflags! {
     /// See [`VkQueryPipelineStatisticFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueryPipelineStatisticFlagBits)
-    #[derive(Default)]
-    pub struct QueryPipelineStatisticFlags: vks::core::VkQueryPipelineStatisticFlags {
-        /// See [`VkQueryPipelineStatisticFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueryPipelineStatisticFlagBits)
-        const QUERY_PIPELINE_STATISTIC_FLAG_BITS_MAX_ENUM = vks::core::VK_QUERY_PIPELINE_STATISTIC_FLAG_BITS_MAX_ENUM;
+    pub struct QueryPipelineStatisticFlags: vks::core::VkQueryPipelineStatisticFlags;
+    pub enum QueryPipelineStatisticFlagBits: vks::core::VkQueryPipelineStatisticFlagBits;
+    max_enum: vks::core::VK_QUERY_PIPELINE_STATISTIC_FLAG_BITS_MAX_ENUM;
 
-        /// See [`VkQueryPipelineStatisticFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueryPipelineStatisticFlagBits)
-        const QUERY_PIPELINE_STATISTIC_INPUT_ASSEMBLY_VERTICES_BIT = vks::core::VK_QUERY_PIPELINE_STATISTIC_INPUT_ASSEMBLY_VERTICES_BIT;
-
-        /// See [`VkQueryPipelineStatisticFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueryPipelineStatisticFlagBits)
-        const QUERY_PIPELINE_STATISTIC_INPUT_ASSEMBLY_PRIMITIVES_BIT = vks::core::VK_QUERY_PIPELINE_STATISTIC_INPUT_ASSEMBLY_PRIMITIVES_BIT;
-
-        /// See [`VkQueryPipelineStatisticFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueryPipelineStatisticFlagBits)
-        const QUERY_PIPELINE_STATISTIC_VERTEX_SHADER_INVOCATIONS_BIT = vks::core::VK_QUERY_PIPELINE_STATISTIC_VERTEX_SHADER_INVOCATIONS_BIT;
-
-        /// See [`VkQueryPipelineStatisticFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueryPipelineStatisticFlagBits)
-        const QUERY_PIPELINE_STATISTIC_GEOMETRY_SHADER_INVOCATIONS_BIT = vks::core::VK_QUERY_PIPELINE_STATISTIC_GEOMETRY_SHADER_INVOCATIONS_BIT;
-
-        /// See [`VkQueryPipelineStatisticFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueryPipelineStatisticFlagBits)
-        const QUERY_PIPELINE_STATISTIC_GEOMETRY_SHADER_PRIMITIVES_BIT = vks::core::VK_QUERY_PIPELINE_STATISTIC_GEOMETRY_SHADER_PRIMITIVES_BIT;
-
-        /// See [`VkQueryPipelineStatisticFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueryPipelineStatisticFlagBits)
-        const QUERY_PIPELINE_STATISTIC_CLIPPING_INVOCATIONS_BIT = vks::core::VK_QUERY_PIPELINE_STATISTIC_CLIPPING_INVOCATIONS_BIT;
-
-        /// See [`VkQueryPipelineStatisticFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueryPipelineStatisticFlagBits)
-        const QUERY_PIPELINE_STATISTIC_CLIPPING_PRIMITIVES_BIT = vks::core::VK_QUERY_PIPELINE_STATISTIC_CLIPPING_PRIMITIVES_BIT;
-
-        /// See [`VkQueryPipelineStatisticFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueryPipelineStatisticFlagBits)
-        const QUERY_PIPELINE_STATISTIC_FRAGMENT_SHADER_INVOCATIONS_BIT = vks::core::VK_QUERY_PIPELINE_STATISTIC_FRAGMENT_SHADER_INVOCATIONS_BIT;
-
-        /// See [`VkQueryPipelineStatisticFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueryPipelineStatisticFlagBits)
-        const QUERY_PIPELINE_STATISTIC_TESSELLATION_CONTROL_SHADER_PATCHES_BIT = vks::core::VK_QUERY_PIPELINE_STATISTIC_TESSELLATION_CONTROL_SHADER_PATCHES_BIT;
-
-        /// See [`VkQueryPipelineStatisticFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueryPipelineStatisticFlagBits)
-        const QUERY_PIPELINE_STATISTIC_TESSELLATION_EVALUATION_SHADER_INVOCATIONS_BIT = vks::core::VK_QUERY_PIPELINE_STATISTIC_TESSELLATION_EVALUATION_SHADER_INVOCATIONS_BIT;
-
-        /// See [`VkQueryPipelineStatisticFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueryPipelineStatisticFlagBits)
-        const QUERY_PIPELINE_STATISTIC_COMPUTE_SHADER_INVOCATIONS_BIT = vks::core::VK_QUERY_PIPELINE_STATISTIC_COMPUTE_SHADER_INVOCATIONS_BIT;
+    flags {
+        const INPUT_ASSEMBLY_VERTICES [InputAssemblyVertices] = vks::core::VK_QUERY_PIPELINE_STATISTIC_INPUT_ASSEMBLY_VERTICES_BIT;
+        const INPUT_ASSEMBLY_PRIMITIVES [InputAssemblyPrimitives] = vks::core::VK_QUERY_PIPELINE_STATISTIC_INPUT_ASSEMBLY_PRIMITIVES_BIT;
+        const VERTEX_SHADER_INVOCATIONS [VertexShaderInvocations] = vks::core::VK_QUERY_PIPELINE_STATISTIC_VERTEX_SHADER_INVOCATIONS_BIT;
+        const GEOMETRY_SHADER_INVOCATIONS [GeometryShaderInvocations] = vks::core::VK_QUERY_PIPELINE_STATISTIC_GEOMETRY_SHADER_INVOCATIONS_BIT;
+        const GEOMETRY_SHADER_PRIMITIVES [GeometryShaderPrimitives] = vks::core::VK_QUERY_PIPELINE_STATISTIC_GEOMETRY_SHADER_PRIMITIVES_BIT;
+        const CLIPPING_INVOCATIONS [ClippingInvocations] = vks::core::VK_QUERY_PIPELINE_STATISTIC_CLIPPING_INVOCATIONS_BIT;
+        const CLIPPING_PRIMITIVES [ClippingPrimitives] = vks::core::VK_QUERY_PIPELINE_STATISTIC_CLIPPING_PRIMITIVES_BIT;
+        const FRAGMENT_SHADER_INVOCATIONS [FragmentShaderInvocations] = vks::core::VK_QUERY_PIPELINE_STATISTIC_FRAGMENT_SHADER_INVOCATIONS_BIT;
+        const TESSELLATION_CONTROL_SHADER_PATCHES [TessellationControlShaderPatches] = vks::core::VK_QUERY_PIPELINE_STATISTIC_TESSELLATION_CONTROL_SHADER_PATCHES_BIT;
+        const TESSELLATION_EVALUATION_SHADER_INVOCATIONS [TessellationEvaluationShaderInvocations] = vks::core::VK_QUERY_PIPELINE_STATISTIC_TESSELLATION_EVALUATION_SHADER_INVOCATIONS_BIT;
+        const COMPUTE_SHADER_INVOCATIONS [ComputeShaderInvocations] = vks::core::VK_QUERY_PIPELINE_STATISTIC_COMPUTE_SHADER_INVOCATIONS_BIT;
     }
+
+    no_bits {}
 }
 
-/// See [`VkQueryPipelineStatisticFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueryPipelineStatisticFlagBits)
-pub type QueryPipelineStatisticFlagBits = QueryPipelineStatisticFlags;
-
-bitflags! {
+dacite_bitflags! {
     /// See [`VkQueryResultFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueryResultFlagBits)
-    #[derive(Default)]
-    pub struct QueryResultFlags: vks::core::VkQueryResultFlags {
-        /// See [`VkQueryResultFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueryResultFlagBits)
-        const QUERY_RESULT_FLAG_BITS_MAX_ENUM = vks::core::VK_QUERY_RESULT_FLAG_BITS_MAX_ENUM;
+    pub struct QueryResultFlags: vks::core::VkQueryResultFlags;
+    pub enum QueryResultFlagBits: vks::core::VkQueryResultFlagBits;
+    max_enum: vks::core::VK_QUERY_RESULT_FLAG_BITS_MAX_ENUM;
 
-        /// See [`VkQueryResultFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueryResultFlagBits)
-        const QUERY_RESULT_64_BIT = vks::core::VK_QUERY_RESULT_64_BIT;
-
-        /// See [`VkQueryResultFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueryResultFlagBits)
-        const QUERY_RESULT_WAIT_BIT = vks::core::VK_QUERY_RESULT_WAIT_BIT;
-
-        /// See [`VkQueryResultFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueryResultFlagBits)
-        const QUERY_RESULT_WITH_AVAILABILITY_BIT = vks::core::VK_QUERY_RESULT_WITH_AVAILABILITY_BIT;
-
-        /// See [`VkQueryResultFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueryResultFlagBits)
-        const QUERY_RESULT_PARTIAL_BIT = vks::core::VK_QUERY_RESULT_PARTIAL_BIT;
+    flags {
+        const RESULT_64 [Result64] = vks::core::VK_QUERY_RESULT_64_BIT;
+        const WAIT [Wait] = vks::core::VK_QUERY_RESULT_WAIT_BIT;
+        const WITH_AVAILABILITY [WithAvailability] = vks::core::VK_QUERY_RESULT_WITH_AVAILABILITY_BIT;
+        const PARTIAL [Partial] = vks::core::VK_QUERY_RESULT_PARTIAL_BIT;
     }
+
+    no_bits {}
 }
 
-/// See [`VkQueryResultFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueryResultFlagBits)
-pub type QueryResultFlagBits = QueryResultFlags;
-
-bitflags! {
+dacite_bitflags! {
     /// See [`VkBufferCreateFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkBufferCreateFlagBits)
-    #[derive(Default)]
-    pub struct BufferCreateFlags: vks::core::VkBufferCreateFlags {
-        /// See [`VkBufferCreateFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkBufferCreateFlagBits)
-        const BUFFER_CREATE_FLAG_BITS_MAX_ENUM = vks::core::VK_BUFFER_CREATE_FLAG_BITS_MAX_ENUM;
+    pub struct BufferCreateFlags: vks::core::VkBufferCreateFlags;
+    pub enum BufferCreateFlagBits: vks::core::VkBufferCreateFlagBits;
+    max_enum: vks::core::VK_BUFFER_CREATE_FLAG_BITS_MAX_ENUM;
 
-        /// See [`VkBufferCreateFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkBufferCreateFlagBits)
-        const BUFFER_CREATE_SPARSE_BINDING_BIT = vks::core::VK_BUFFER_CREATE_SPARSE_BINDING_BIT;
-
-        /// See [`VkBufferCreateFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkBufferCreateFlagBits)
-        const BUFFER_CREATE_SPARSE_RESIDENCY_BIT = vks::core::VK_BUFFER_CREATE_SPARSE_RESIDENCY_BIT;
-
-        /// See [`VkBufferCreateFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkBufferCreateFlagBits)
-        const BUFFER_CREATE_SPARSE_ALIASED_BIT = vks::core::VK_BUFFER_CREATE_SPARSE_ALIASED_BIT;
+    flags {
+        const SPARSE_BINDING [SparseBinding] = vks::core::VK_BUFFER_CREATE_SPARSE_BINDING_BIT;
+        const SPARSE_RESIDENCY [SparseResidency] = vks::core::VK_BUFFER_CREATE_SPARSE_RESIDENCY_BIT;
+        const SPARSE_ALIASED [SparseAliased] = vks::core::VK_BUFFER_CREATE_SPARSE_ALIASED_BIT;
     }
+
+    no_bits {}
 }
 
-/// See [`VkBufferCreateFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkBufferCreateFlagBits)
-pub type BufferCreateFlagBits = BufferCreateFlags;
-
-bitflags! {
+dacite_bitflags! {
     /// See [`VkBufferUsageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkBufferUsageFlagBits)
-    #[derive(Default)]
-    pub struct BufferUsageFlags: vks::core::VkBufferUsageFlags {
-        /// See [`VkBufferUsageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkBufferUsageFlagBits)
-        const BUFFER_USAGE_FLAG_BITS_MAX_ENUM = vks::core::VK_BUFFER_USAGE_FLAG_BITS_MAX_ENUM;
+    pub struct BufferUsageFlags: vks::core::VkBufferUsageFlags;
+    pub enum BufferUsageFlagBits: vks::core::VkBufferUsageFlagBits;
+    max_enum: vks::core::VK_BUFFER_USAGE_FLAG_BITS_MAX_ENUM;
 
-        /// See [`VkBufferUsageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkBufferUsageFlagBits)
-        const BUFFER_USAGE_TRANSFER_SRC_BIT = vks::core::VK_BUFFER_USAGE_TRANSFER_SRC_BIT;
-
-        /// See [`VkBufferUsageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkBufferUsageFlagBits)
-        const BUFFER_USAGE_TRANSFER_DST_BIT = vks::core::VK_BUFFER_USAGE_TRANSFER_DST_BIT;
-
-        /// See [`VkBufferUsageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkBufferUsageFlagBits)
-        const BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT = vks::core::VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT;
-
-        /// See [`VkBufferUsageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkBufferUsageFlagBits)
-        const BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT = vks::core::VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT;
-
-        /// See [`VkBufferUsageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkBufferUsageFlagBits)
-        const BUFFER_USAGE_UNIFORM_BUFFER_BIT = vks::core::VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT;
-
-        /// See [`VkBufferUsageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkBufferUsageFlagBits)
-        const BUFFER_USAGE_STORAGE_BUFFER_BIT = vks::core::VK_BUFFER_USAGE_STORAGE_BUFFER_BIT;
-
-        /// See [`VkBufferUsageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkBufferUsageFlagBits)
-        const BUFFER_USAGE_INDEX_BUFFER_BIT = vks::core::VK_BUFFER_USAGE_INDEX_BUFFER_BIT;
-
-        /// See [`VkBufferUsageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkBufferUsageFlagBits)
-        const BUFFER_USAGE_VERTEX_BUFFER_BIT = vks::core::VK_BUFFER_USAGE_VERTEX_BUFFER_BIT;
-
-        /// See [`VkBufferUsageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkBufferUsageFlagBits)
-        const BUFFER_USAGE_INDIRECT_BUFFER_BIT = vks::core::VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT;
+    flags {
+        const TRANSFER_SRC [TransferSrc] = vks::core::VK_BUFFER_USAGE_TRANSFER_SRC_BIT;
+        const TRANSFER_DST [TransferDst] = vks::core::VK_BUFFER_USAGE_TRANSFER_DST_BIT;
+        const UNIFORM_TEXEL_BUFFER [UniformTexelBuffer] = vks::core::VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT;
+        const STORAGE_TEXEL_BUFFER [StorageTexelBuffer] = vks::core::VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT;
+        const UNIFORM_BUFFER [UniformBuffer] = vks::core::VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT;
+        const STORAGE_BUFFER [StorageBuffer] = vks::core::VK_BUFFER_USAGE_STORAGE_BUFFER_BIT;
+        const INDEX_BUFFER [IndexBuffer] = vks::core::VK_BUFFER_USAGE_INDEX_BUFFER_BIT;
+        const VERTEX_BUFFER [VertexBuffer] = vks::core::VK_BUFFER_USAGE_VERTEX_BUFFER_BIT;
+        const INDIRECT_BUFFER [IndirectBuffer] = vks::core::VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT;
     }
+
+    no_bits {}
 }
 
-/// See [`VkBufferUsageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkBufferUsageFlagBits)
-pub type BufferUsageFlagBits = BufferUsageFlags;
-
-bitflags! {
+dacite_bitflags! {
     /// See [`VkBufferViewCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkBufferViewCreateFlags)
-    #[derive(Default)]
-    pub struct BufferViewCreateFlags: vks::core::VkBufferViewCreateFlags {
-        /// See [`VkBufferViewCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkBufferViewCreateFlags)
-        const BUFFER_VIEW_CREATE_FLAG_BITS_MAX_ENUM = vks::core::VK_BUFFER_VIEW_CREATE_FLAG_BITS_MAX_ENUM;
-    }
+    pub struct BufferViewCreateFlags: vks::core::VkBufferViewCreateFlags;
+    pub enum BufferViewCreateFlagBits: vks::core::VkBufferViewCreateFlagBits;
+    max_enum: vks::core::VK_BUFFER_VIEW_CREATE_FLAG_BITS_MAX_ENUM;
+
+    flags {}
+    no_bits {}
 }
 
-/// See [`VkBufferViewCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkBufferViewCreateFlags)
-pub type BufferViewCreateFlagBits = BufferViewCreateFlags;
-
-bitflags! {
+dacite_bitflags! {
     /// See [`VkImageViewCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageViewCreateFlags)
-    #[derive(Default)]
-    pub struct ImageViewCreateFlags: vks::core::VkImageViewCreateFlags {
-        /// See [`VkImageViewCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageViewCreateFlags)
-        const IMAGE_VIEW_CREATE_FLAG_BITS_MAX_ENUM = vks::core::VK_IMAGE_VIEW_CREATE_FLAG_BITS_MAX_ENUM;
-    }
+    pub struct ImageViewCreateFlags: vks::core::VkImageViewCreateFlags;
+    pub enum ImageViewCreateFlagBits: vks::core::VkImageViewCreateFlagBits;
+    max_enum: vks::core::VK_IMAGE_VIEW_CREATE_FLAG_BITS_MAX_ENUM;
+
+    flags {}
+    no_bits {}
 }
 
-/// See [`VkImageViewCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkImageViewCreateFlags)
-pub type ImageViewCreateFlagBits = ImageViewCreateFlags;
-
-bitflags! {
+dacite_bitflags! {
     /// See [`VkShaderModuleCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkShaderModuleCreateFlags)
-    #[derive(Default)]
-    pub struct ShaderModuleCreateFlags: vks::core::VkShaderModuleCreateFlags {
-        /// See [`VkShaderModuleCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkShaderModuleCreateFlags)
-        const SHADER_MODULE_CREATE_FLAG_BITS_MAX_ENUM = vks::core::VK_SHADER_MODULE_CREATE_FLAG_BITS_MAX_ENUM;
-    }
+    pub struct ShaderModuleCreateFlags: vks::core::VkShaderModuleCreateFlags;
+    pub enum ShaderModuleCreateFlagBits: vks::core::VkShaderModuleCreateFlagBits;
+    max_enum: vks::core::VK_SHADER_MODULE_CREATE_FLAG_BITS_MAX_ENUM;
+
+    flags {}
+    no_bits {}
 }
 
-/// See [`VkShaderModuleCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkShaderModuleCreateFlags)
-pub type ShaderModuleCreateFlagBits = ShaderModuleCreateFlags;
-
-bitflags! {
+dacite_bitflags! {
     /// See [`VkPipelineCacheCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineCacheCreateFlags)
-    #[derive(Default)]
-    pub struct PipelineCacheCreateFlags: vks::core::VkPipelineCacheCreateFlags {
-        /// See [`VkPipelineCacheCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineCacheCreateFlags)
-        const PIPELINE_CACHE_CREATE_FLAG_BITS_MAX_ENUM = vks::core::VK_PIPELINE_CACHE_CREATE_FLAG_BITS_MAX_ENUM;
-    }
+    pub struct PipelineCacheCreateFlags: vks::core::VkPipelineCacheCreateFlags;
+    pub enum PipelineCacheCreateFlagBits: vks::core::VkPipelineCacheCreateFlagBits;
+    max_enum: vks::core::VK_PIPELINE_CACHE_CREATE_FLAG_BITS_MAX_ENUM;
+
+    flags {}
+    no_bits {}
 }
 
-/// See [`VkPipelineCacheCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineCacheCreateFlags)
-pub type PipelineCacheCreateFlagBits = PipelineCacheCreateFlags;
-
-bitflags! {
+dacite_bitflags! {
     /// See [`VkPipelineCreateFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineCreateFlagBits)
-    #[derive(Default)]
-    pub struct PipelineCreateFlags: vks::core::VkPipelineCreateFlags {
-        /// See [`VkPipelineCreateFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineCreateFlagBits)
-        const PIPELINE_CREATE_FLAG_BITS_MAX_ENUM = vks::core::VK_PIPELINE_CREATE_FLAG_BITS_MAX_ENUM;
+    pub struct PipelineCreateFlags: vks::core::VkPipelineCreateFlags;
+    pub enum PipelineCreateFlagBits: vks::core::VkPipelineCreateFlagBits;
+    max_enum: vks::core::VK_PIPELINE_CREATE_FLAG_BITS_MAX_ENUM;
 
-        /// See [`VkPipelineCreateFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineCreateFlagBits)
-        const PIPELINE_CREATE_DISABLE_OPTIMIZATION_BIT = vks::core::VK_PIPELINE_CREATE_DISABLE_OPTIMIZATION_BIT;
-
-        /// See [`VkPipelineCreateFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineCreateFlagBits)
-        const PIPELINE_CREATE_ALLOW_DERIVATIVES_BIT = vks::core::VK_PIPELINE_CREATE_ALLOW_DERIVATIVES_BIT;
-
-        /// See [`VkPipelineCreateFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineCreateFlagBits)
-        const PIPELINE_CREATE_DERIVATIVE_BIT = vks::core::VK_PIPELINE_CREATE_DERIVATIVE_BIT;
+    flags {
+        const DISABLE_OPTIMIZATION [DisableOptimization] = vks::core::VK_PIPELINE_CREATE_DISABLE_OPTIMIZATION_BIT;
+        const ALLOW_DERIVATIVES [AllowDerivatives] = vks::core::VK_PIPELINE_CREATE_ALLOW_DERIVATIVES_BIT;
+        const DERIVATIVE [Derivative] = vks::core::VK_PIPELINE_CREATE_DERIVATIVE_BIT;
     }
+
+    no_bits {}
 }
 
-/// See [`VkPipelineCreateFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineCreateFlagBits)
-pub type PipelineCreateFlagBits = PipelineCreateFlags;
-
-bitflags! {
+dacite_bitflags! {
     /// See [`VkPipelineShaderStageCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineShaderStageCreateFlags)
-    #[derive(Default)]
-    pub struct PipelineShaderStageCreateFlags: vks::core::VkPipelineShaderStageCreateFlags {
-        /// See [`VkPipelineShaderStageCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineShaderStageCreateFlags)
-        const PIPELINE_SHADER_STAGE_CREATE_FLAG_BITS_MAX_ENUM = vks::core::VK_PIPELINE_SHADER_STAGE_CREATE_FLAG_BITS_MAX_ENUM;
-    }
+    pub struct PipelineShaderStageCreateFlags: vks::core::VkPipelineShaderStageCreateFlags;
+    pub enum PipelineShaderStageCreateFlagBits: vks::core::VkPipelineShaderStageCreateFlagBits;
+    max_enum: vks::core::VK_PIPELINE_SHADER_STAGE_CREATE_FLAG_BITS_MAX_ENUM;
+
+    flags {}
+    no_bits {}
 }
 
-/// See [`VkPipelineShaderStageCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineShaderStageCreateFlags)
-pub type PipelineShaderStageCreateFlagBits = PipelineShaderStageCreateFlags;
-
-bitflags! {
+dacite_bitflags! {
     /// See [`VkShaderStageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkShaderStageFlagBits)
-    #[derive(Default)]
-    pub struct ShaderStageFlags: vks::core::VkShaderStageFlags {
-        /// See [`VkShaderStageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkShaderStageFlagBits)
-        const SHADER_STAGE_FLAG_BITS_MAX_ENUM = vks::core::VK_SHADER_STAGE_FLAG_BITS_MAX_ENUM;
+    pub struct ShaderStageFlags: vks::core::VkShaderStageFlags;
+    pub enum ShaderStageFlagBits: vks::core::VkShaderStageFlagBits;
+    max_enum: vks::core::VK_SHADER_STAGE_FLAG_BITS_MAX_ENUM;
 
-        /// See [`VkShaderStageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkShaderStageFlagBits)
-        const SHADER_STAGE_VERTEX_BIT = vks::core::VK_SHADER_STAGE_VERTEX_BIT;
+    flags {
+        const VERTEX [Vertex] = vks::core::VK_SHADER_STAGE_VERTEX_BIT;
+        const TESSELLATION_CONTROL [TessellationControl] = vks::core::VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT;
+        const TESSELLATION_EVALUATION [TessellationEvaluation] = vks::core::VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT;
+        const GEOMETRY [Geometry] = vks::core::VK_SHADER_STAGE_GEOMETRY_BIT;
+        const FRAGMENT [Fragment] = vks::core::VK_SHADER_STAGE_FRAGMENT_BIT;
+        const COMPUTE [Compute] = vks::core::VK_SHADER_STAGE_COMPUTE_BIT;
+    }
 
-        /// See [`VkShaderStageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkShaderStageFlagBits)
-        const SHADER_STAGE_TESSELLATION_CONTROL_BIT = vks::core::VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT;
-
-        /// See [`VkShaderStageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkShaderStageFlagBits)
-        const SHADER_STAGE_TESSELLATION_EVALUATION_BIT = vks::core::VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT;
-
-        /// See [`VkShaderStageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkShaderStageFlagBits)
-        const SHADER_STAGE_GEOMETRY_BIT = vks::core::VK_SHADER_STAGE_GEOMETRY_BIT;
-
-        /// See [`VkShaderStageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkShaderStageFlagBits)
-        const SHADER_STAGE_FRAGMENT_BIT = vks::core::VK_SHADER_STAGE_FRAGMENT_BIT;
-
-        /// See [`VkShaderStageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkShaderStageFlagBits)
-        const SHADER_STAGE_COMPUTE_BIT = vks::core::VK_SHADER_STAGE_COMPUTE_BIT;
-
-        /// See [`VkShaderStageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkShaderStageFlagBits)
-        const SHADER_STAGE_ALL_GRAPHICS = vks::core::VK_SHADER_STAGE_ALL_GRAPHICS;
-
-        /// See [`VkShaderStageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkShaderStageFlagBits)
-        const SHADER_STAGE_ALL = vks::core::VK_SHADER_STAGE_ALL;
+    no_bits {
+        const ALL_GRAPHICS = vks::core::VK_SHADER_STAGE_ALL_GRAPHICS;
+        const ALL = vks::core::VK_SHADER_STAGE_ALL;
     }
 }
 
-/// See [`VkShaderStageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkShaderStageFlagBits)
-pub type ShaderStageFlagBits = ShaderStageFlags;
-
-bitflags! {
+dacite_bitflags! {
     /// See [`VkPipelineVertexInputStateCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineVertexInputStateCreateFlags)
-    #[derive(Default)]
-    pub struct PipelineVertexInputStateCreateFlags: vks::core::VkPipelineVertexInputStateCreateFlags {
-        /// See [`VkPipelineVertexInputStateCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineVertexInputStateCreateFlags)
-        const PIPELINE_VERTEX_INPUT_STATE_CREATE_FLAG_BITS_MAX_ENUM = vks::core::VK_PIPELINE_VERTEX_INPUT_STATE_CREATE_FLAG_BITS_MAX_ENUM;
-    }
+    pub struct PipelineVertexInputStateCreateFlags: vks::core::VkPipelineVertexInputStateCreateFlags;
+    pub enum PipelineVertexInputStateCreateFlagBits: vks::core::VkPipelineVertexInputStateCreateFlagBits;
+    max_enum: vks::core::VK_PIPELINE_VERTEX_INPUT_STATE_CREATE_FLAG_BITS_MAX_ENUM;
+
+    flags {}
+    no_bits {}
 }
 
-/// See [`VkPipelineVertexInputStateCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineVertexInputStateCreateFlags)
-pub type PipelineVertexInputStateCreateFlagBits = PipelineVertexInputStateCreateFlags;
-
-bitflags! {
+dacite_bitflags! {
     /// See [`VkPipelineInputAssemblyStateCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineInputAssemblyStateCreateFlags)
-    #[derive(Default)]
-    pub struct PipelineInputAssemblyStateCreateFlags: vks::core::VkPipelineInputAssemblyStateCreateFlags {
-        /// See [`VkPipelineInputAssemblyStateCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineInputAssemblyStateCreateFlags)
-        const PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_FLAG_BITS_MAX_ENUM = vks::core::VK_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_FLAG_BITS_MAX_ENUM;
-    }
+    pub struct PipelineInputAssemblyStateCreateFlags: vks::core::VkPipelineInputAssemblyStateCreateFlags;
+    pub enum PipelineInputAssemblyStateCreateFlagBits: vks::core::VkPipelineInputAssemblyStateCreateFlagBits;
+    max_enum: vks::core::VK_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_FLAG_BITS_MAX_ENUM;
+
+    flags {}
+    no_bits {}
 }
 
-/// See [`VkPipelineInputAssemblyStateCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineInputAssemblyStateCreateFlags)
-pub type PipelineInputAssemblyStateCreateFlagBits = PipelineInputAssemblyStateCreateFlags;
-
-bitflags! {
+dacite_bitflags! {
     /// See [`VkPipelineTessellationStateCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineTessellationStateCreateFlags)
-    #[derive(Default)]
-    pub struct PipelineTessellationStateCreateFlags: vks::core::VkPipelineTessellationStateCreateFlags {
-        /// See [`VkPipelineTessellationStateCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineTessellationStateCreateFlags)
-        const PIPELINE_TESSELLATION_STATE_CREATE_FLAG_BITS_MAX_ENUM = vks::core::VK_PIPELINE_TESSELLATION_STATE_CREATE_FLAG_BITS_MAX_ENUM;
-    }
+    pub struct PipelineTessellationStateCreateFlags: vks::core::VkPipelineTessellationStateCreateFlags;
+    pub enum PipelineTessellationStateCreateFlagBits: vks::core::VkPipelineTessellationStateCreateFlagBits;
+    max_enum: vks::core::VK_PIPELINE_TESSELLATION_STATE_CREATE_FLAG_BITS_MAX_ENUM;
+
+    flags {}
+    no_bits {}
 }
 
-/// See [`VkPipelineTessellationStateCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineTessellationStateCreateFlags)
-pub type PipelineTessellationStateCreateFlagBits = PipelineTessellationStateCreateFlags;
-
-bitflags! {
+dacite_bitflags! {
     /// See [`VkPipelineViewportStateCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineViewportStateCreateFlags)
-    #[derive(Default)]
-    pub struct PipelineViewportStateCreateFlags: vks::core::VkPipelineViewportStateCreateFlags {
-        /// See [`VkPipelineViewportStateCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineViewportStateCreateFlags)
-        const PIPELINE_VIEWPORT_STATE_CREATE_FLAG_BITS_MAX_ENUM = vks::core::VK_PIPELINE_VIEWPORT_STATE_CREATE_FLAG_BITS_MAX_ENUM;
-    }
+    pub struct PipelineViewportStateCreateFlags: vks::core::VkPipelineViewportStateCreateFlags;
+    pub enum PipelineViewportStateCreateFlagBits: vks::core::VkPipelineViewportStateCreateFlagBits;
+    max_enum: vks::core::VK_PIPELINE_VIEWPORT_STATE_CREATE_FLAG_BITS_MAX_ENUM;
+
+    flags {}
+    no_bits {}
 }
 
-/// See [`VkPipelineViewportStateCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineViewportStateCreateFlags)
-pub type PipelineViewportStateCreateFlagBits = PipelineViewportStateCreateFlags;
-
-bitflags! {
+dacite_bitflags! {
     /// See [`VkPipelineRasterizationStateCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineRasterizationStateCreateFlags)
-    #[derive(Default)]
-    pub struct PipelineRasterizationStateCreateFlags: vks::core::VkPipelineRasterizationStateCreateFlags {
-        /// See [`VkPipelineRasterizationStateCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineRasterizationStateCreateFlags)
-        const PIPELINE_RASTERIZATION_STATE_CREATE_FLAG_BITS_MAX_ENUM = vks::core::VK_PIPELINE_RASTERIZATION_STATE_CREATE_FLAG_BITS_MAX_ENUM;
-    }
+    pub struct PipelineRasterizationStateCreateFlags: vks::core::VkPipelineRasterizationStateCreateFlags;
+    pub enum PipelineRasterizationStateCreateFlagBits: vks::core::VkPipelineRasterizationStateCreateFlagBits;
+    max_enum: vks::core::VK_PIPELINE_RASTERIZATION_STATE_CREATE_FLAG_BITS_MAX_ENUM;
+
+    flags {}
+    no_bits {}
 }
 
-/// See [`VkPipelineRasterizationStateCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineRasterizationStateCreateFlags)
-pub type PipelineRasterizationStateCreateFlagBits = PipelineRasterizationStateCreateFlags;
-
-bitflags! {
+dacite_bitflags! {
     /// See [`VkCullModeFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCullModeFlagBits)
-    #[derive(Default)]
-    pub struct CullModeFlags: vks::core::VkCullModeFlags {
-        /// See [`VkCullModeFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCullModeFlagBits)
-        const CULL_MODE_FLAG_BITS_MAX_ENUM = vks::core::VK_CULL_MODE_FLAG_BITS_MAX_ENUM;
+    pub struct CullModeFlags: vks::core::VkCullModeFlags;
+    pub enum CullModeFlagBits: vks::core::VkCullModeFlagBits;
+    max_enum: vks::core::VK_CULL_MODE_FLAG_BITS_MAX_ENUM;
 
-        /// See [`VkCullModeFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCullModeFlagBits)
-        const CULL_MODE_NONE = vks::core::VK_CULL_MODE_NONE;
+    flags {
+        const FRONT [Front] = vks::core::VK_CULL_MODE_FRONT_BIT;
+        const BACK [Back] = vks::core::VK_CULL_MODE_BACK_BIT;
+    }
 
-        /// See [`VkCullModeFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCullModeFlagBits)
-        const CULL_MODE_FRONT_BIT = vks::core::VK_CULL_MODE_FRONT_BIT;
-
-        /// See [`VkCullModeFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCullModeFlagBits)
-        const CULL_MODE_BACK_BIT = vks::core::VK_CULL_MODE_BACK_BIT;
-
-        /// See [`VkCullModeFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCullModeFlagBits)
-        const CULL_MODE_FRONT_AND_BACK = vks::core::VK_CULL_MODE_FRONT_AND_BACK;
+    no_bits {
+        const NONE = vks::core::VK_CULL_MODE_NONE;
+        const FRONT_AND_BACK = vks::core::VK_CULL_MODE_FRONT_AND_BACK;
     }
 }
 
-/// See [`VkCullModeFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCullModeFlagBits)
-pub type CullModeFlagBits = CullModeFlags;
-
-bitflags! {
+dacite_bitflags! {
     /// See [`VkPipelineMultisampleStateCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineMultisampleStateCreateFlags)
-    #[derive(Default)]
-    pub struct PipelineMultisampleStateCreateFlags: vks::core::VkPipelineMultisampleStateCreateFlags {
-        /// See [`VkPipelineMultisampleStateCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineMultisampleStateCreateFlags)
-        const PIPELINE_MULTISAMPLE_STATE_CREATE_FLAG_BITS_MAX_ENUM = vks::core::VK_PIPELINE_MULTISAMPLE_STATE_CREATE_FLAG_BITS_MAX_ENUM;
-    }
+    pub struct PipelineMultisampleStateCreateFlags: vks::core::VkPipelineMultisampleStateCreateFlags;
+    pub enum PipelineMultisampleStateCreateFlagBits: vks::core::VkPipelineMultisampleStateCreateFlagBits;
+    max_enum: vks::core::VK_PIPELINE_MULTISAMPLE_STATE_CREATE_FLAG_BITS_MAX_ENUM;
+
+    flags {}
+    no_bits {}
 }
 
-/// See [`VkPipelineMultisampleStateCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineMultisampleStateCreateFlags)
-pub type PipelineMultisampleStateCreateFlagBits = PipelineMultisampleStateCreateFlags;
-
-bitflags! {
+dacite_bitflags! {
     /// See [`VkPipelineDepthStencilStateCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineDepthStencilStateCreateFlags)
-    #[derive(Default)]
-    pub struct PipelineDepthStencilStateCreateFlags: vks::core::VkPipelineDepthStencilStateCreateFlags {
-        /// See [`VkPipelineDepthStencilStateCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineDepthStencilStateCreateFlags)
-        const PIPELINE_DEPTH_STENCIL_STATE_CREATE_FLAG_BITS_MAX_ENUM = vks::core::VK_PIPELINE_DEPTH_STENCIL_STATE_CREATE_FLAG_BITS_MAX_ENUM;
-    }
+    pub struct PipelineDepthStencilStateCreateFlags: vks::core::VkPipelineDepthStencilStateCreateFlags;
+    pub enum PipelineDepthStencilStateCreateFlagBits: vks::core::VkPipelineDepthStencilStateCreateFlagBits;
+    max_enum: vks::core::VK_PIPELINE_DEPTH_STENCIL_STATE_CREATE_FLAG_BITS_MAX_ENUM;
+
+    flags {}
+    no_bits {}
 }
 
-/// See [`VkPipelineDepthStencilStateCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineDepthStencilStateCreateFlags)
-pub type PipelineDepthStencilStateCreateFlagBits = PipelineDepthStencilStateCreateFlags;
-
-bitflags! {
+dacite_bitflags! {
     /// See [`VkPipelineColorBlendStateCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineColorBlendStateCreateFlags)
-    #[derive(Default)]
-    pub struct PipelineColorBlendStateCreateFlags: vks::core::VkPipelineColorBlendStateCreateFlags {
-        /// See [`VkPipelineColorBlendStateCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineColorBlendStateCreateFlags)
-        const PIPELINE_COLOR_BLEND_STATE_CREATE_FLAG_BITS_MAX_ENUM = vks::core::VK_PIPELINE_COLOR_BLEND_STATE_CREATE_FLAG_BITS_MAX_ENUM;
-    }
+    pub struct PipelineColorBlendStateCreateFlags: vks::core::VkPipelineColorBlendStateCreateFlags;
+    pub enum PipelineColorBlendStateCreateFlagBits: vks::core::VkPipelineColorBlendStateCreateFlagBits;
+    max_enum: vks::core::VK_PIPELINE_COLOR_BLEND_STATE_CREATE_FLAG_BITS_MAX_ENUM;
+
+    flags {}
+    no_bits {}
 }
 
-/// See [`VkPipelineColorBlendStateCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineColorBlendStateCreateFlags)
-pub type PipelineColorBlendStateCreateFlagBits = PipelineColorBlendStateCreateFlags;
-
-bitflags! {
+dacite_bitflags! {
     /// See [`VkColorComponentFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkColorComponentFlagBits)
-    #[derive(Default)]
-    pub struct ColorComponentFlags: vks::core::VkColorComponentFlags {
-        /// See [`VkColorComponentFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkColorComponentFlagBits)
-        const COLOR_COMPONENT_FLAG_BITS_MAX_ENUM = vks::core::VK_COLOR_COMPONENT_FLAG_BITS_MAX_ENUM;
+    pub struct ColorComponentFlags: vks::core::VkColorComponentFlags;
+    pub enum ColorComponentFlagBits: vks::core::VkColorComponentFlagBits;
+    max_enum: vks::core::VK_COLOR_COMPONENT_FLAG_BITS_MAX_ENUM;
 
-        /// See [`VkColorComponentFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkColorComponentFlagBits)
-        const COLOR_COMPONENT_R_BIT = vks::core::VK_COLOR_COMPONENT_R_BIT;
-
-        /// See [`VkColorComponentFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkColorComponentFlagBits)
-        const COLOR_COMPONENT_G_BIT = vks::core::VK_COLOR_COMPONENT_G_BIT;
-
-        /// See [`VkColorComponentFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkColorComponentFlagBits)
-        const COLOR_COMPONENT_B_BIT = vks::core::VK_COLOR_COMPONENT_B_BIT;
-
-        /// See [`VkColorComponentFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkColorComponentFlagBits)
-        const COLOR_COMPONENT_A_BIT = vks::core::VK_COLOR_COMPONENT_A_BIT;
+    flags {
+        const R [R] = vks::core::VK_COLOR_COMPONENT_R_BIT;
+        const G [G] = vks::core::VK_COLOR_COMPONENT_G_BIT;
+        const B [B] = vks::core::VK_COLOR_COMPONENT_B_BIT;
+        const A [A] = vks::core::VK_COLOR_COMPONENT_A_BIT;
     }
+
+    no_bits {}
 }
 
-/// See [`VkColorComponentFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkColorComponentFlagBits)
-pub type ColorComponentFlagBits = ColorComponentFlags;
-
-bitflags! {
+dacite_bitflags! {
     /// See [`VkPipelineDynamicStateCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineDynamicStateCreateFlags)
-    #[derive(Default)]
-    pub struct PipelineDynamicStateCreateFlags: vks::core::VkPipelineDynamicStateCreateFlags {
-        /// See [`VkPipelineDynamicStateCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineDynamicStateCreateFlags)
-        const PIPELINE_DYNAMIC_STATE_CREATE_FLAG_BITS_MAX_ENUM = vks::core::VK_PIPELINE_DYNAMIC_STATE_CREATE_FLAG_BITS_MAX_ENUM;
-    }
+    pub struct PipelineDynamicStateCreateFlags: vks::core::VkPipelineDynamicStateCreateFlags;
+    pub enum PipelineDynamicStateCreateFlagBits: vks::core::VkPipelineDynamicStateCreateFlagBits;
+    max_enum: vks::core::VK_PIPELINE_DYNAMIC_STATE_CREATE_FLAG_BITS_MAX_ENUM;
+
+    flags {}
+    no_bits {}
 }
 
-/// See [`VkPipelineDynamicStateCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineDynamicStateCreateFlags)
-pub type PipelineDynamicStateCreateFlagBits = PipelineDynamicStateCreateFlags;
-
-bitflags! {
+dacite_bitflags! {
     /// See [`VkPipelineLayoutCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineLayoutCreateFlags)
-    #[derive(Default)]
-    pub struct PipelineLayoutCreateFlags: vks::core::VkPipelineLayoutCreateFlags {
-        /// See [`VkPipelineLayoutCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineLayoutCreateFlags)
-        const PIPELINE_LAYOUT_CREATE_FLAG_BITS_MAX_ENUM = vks::core::VK_PIPELINE_LAYOUT_CREATE_FLAG_BITS_MAX_ENUM;
-    }
+    pub struct PipelineLayoutCreateFlags: vks::core::VkPipelineLayoutCreateFlags;
+    pub enum PipelineLayoutCreateFlagBits: vks::core::VkPipelineLayoutCreateFlagBits;
+    max_enum: vks::core::VK_PIPELINE_LAYOUT_CREATE_FLAG_BITS_MAX_ENUM;
+
+    flags {}
+    no_bits {}
 }
 
-/// See [`VkPipelineLayoutCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPipelineLayoutCreateFlags)
-pub type PipelineLayoutCreateFlagBits = PipelineLayoutCreateFlags;
-
-bitflags! {
+dacite_bitflags! {
     /// See [`VkSamplerCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSamplerCreateFlags)
-    #[derive(Default)]
-    pub struct SamplerCreateFlags: vks::core::VkSamplerCreateFlags {
-        /// See [`VkSamplerCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSamplerCreateFlags)
-        const SAMPLER_CREATE_FLAG_BITS_MAX_ENUM = vks::core::VK_SAMPLER_CREATE_FLAG_BITS_MAX_ENUM;
-    }
+    pub struct SamplerCreateFlags: vks::core::VkSamplerCreateFlags;
+    pub enum SamplerCreateFlagBits: vks::core::VkSamplerCreateFlagBits;
+    max_enum: vks::core::VK_SAMPLER_CREATE_FLAG_BITS_MAX_ENUM;
+
+    flags {}
+    no_bits {}
 }
 
-/// See [`VkSamplerCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSamplerCreateFlags)
-pub type SamplerCreateFlagBits = SamplerCreateFlags;
-
-bitflags! {
+dacite_bitflags! {
     /// See [`VkDescriptorSetLayoutCreateFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDescriptorSetLayoutCreateFlagBits)
-    #[derive(Default)]
-    pub struct DescriptorSetLayoutCreateFlags: vks::core::VkDescriptorSetLayoutCreateFlags {
-        /// See [`VkDescriptorSetLayoutCreateFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDescriptorSetLayoutCreateFlagBits)
-        const DESCRIPTOR_SET_LAYOUT_CREATE_FLAG_BITS_MAX_ENUM = vks::core::VK_DESCRIPTOR_SET_LAYOUT_CREATE_FLAG_BITS_MAX_ENUM;
-    }
+    pub struct DescriptorSetLayoutCreateFlags: vks::core::VkDescriptorSetLayoutCreateFlags;
+    pub enum DescriptorSetLayoutCreateFlagBits: vks::core::VkDescriptorSetLayoutCreateFlagBits;
+    max_enum: vks::core::VK_DESCRIPTOR_SET_LAYOUT_CREATE_FLAG_BITS_MAX_ENUM;
+
+    flags {}
+    no_bits {}
 }
 
-/// See [`VkDescriptorSetLayoutCreateFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDescriptorSetLayoutCreateFlagBits)
-pub type DescriptorSetLayoutCreateFlagBits = DescriptorSetLayoutCreateFlags;
-
-bitflags! {
+dacite_bitflags! {
     /// See [`VkDescriptorPoolCreateFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDescriptorPoolCreateFlagBits)
-    #[derive(Default)]
-    pub struct DescriptorPoolCreateFlags: vks::core::VkDescriptorPoolCreateFlags {
-        /// See [`VkDescriptorPoolCreateFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDescriptorPoolCreateFlagBits)
-        const DESCRIPTOR_POOL_CREATE_FLAG_BITS_MAX_ENUM = vks::core::VK_DESCRIPTOR_POOL_CREATE_FLAG_BITS_MAX_ENUM;
+    pub struct DescriptorPoolCreateFlags: vks::core::VkDescriptorPoolCreateFlags;
+    pub enum DescriptorPoolCreateFlagBits: vks::core::VkDescriptorPoolCreateFlagBits;
+    max_enum: vks::core::VK_DESCRIPTOR_POOL_CREATE_FLAG_BITS_MAX_ENUM;
 
-        /// See [`VkDescriptorPoolCreateFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDescriptorPoolCreateFlagBits)
-        const DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT = vks::core::VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;
+    flags {
+        const FREE_DESCRIPTOR_SET [FreeDescriptorSet] = vks::core::VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;
     }
+
+    no_bits {}
 }
 
-/// See [`VkDescriptorPoolCreateFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDescriptorPoolCreateFlagBits)
-pub type DescriptorPoolCreateFlagBits = DescriptorPoolCreateFlags;
-
-bitflags! {
+dacite_bitflags! {
     /// See [`VkDescriptorPoolResetFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDescriptorPoolResetFlags)
-    #[derive(Default)]
-    pub struct DescriptorPoolResetFlags: vks::core::VkDescriptorPoolResetFlags {
-        /// See [`VkDescriptorPoolResetFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDescriptorPoolResetFlags)
-        const DESCRIPTOR_POOL_RESET_FLAG_BITS_MAX_ENUM = vks::core::VK_DESCRIPTOR_POOL_RESET_FLAG_BITS_MAX_ENUM;
-    }
+    pub struct DescriptorPoolResetFlags: vks::core::VkDescriptorPoolResetFlags;
+    pub enum DescriptorPoolResetFlagBits: vks::core::VkDescriptorPoolResetFlagBits;
+    max_enum: vks::core::VK_DESCRIPTOR_POOL_RESET_FLAG_BITS_MAX_ENUM;
+
+    flags {}
+    no_bits {}
 }
 
-/// See [`VkDescriptorPoolResetFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDescriptorPoolResetFlags)
-pub type DescriptorPoolResetFlagBits = DescriptorPoolResetFlags;
-
-bitflags! {
+dacite_bitflags! {
     /// See [`VkFramebufferCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkFramebufferCreateFlags)
-    #[derive(Default)]
-    pub struct FramebufferCreateFlags: vks::core::VkFramebufferCreateFlags {
-        /// See [`VkFramebufferCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkFramebufferCreateFlags)
-        const FRAMEBUFFER_CREATE_FLAG_BITS_MAX_ENUM = vks::core::VK_FRAMEBUFFER_CREATE_FLAG_BITS_MAX_ENUM;
-    }
+    pub struct FramebufferCreateFlags: vks::core::VkFramebufferCreateFlags;
+    pub enum FramebufferCreateFlagBits: vks::core::VkFramebufferCreateFlagBits;
+    max_enum: vks::core::VK_FRAMEBUFFER_CREATE_FLAG_BITS_MAX_ENUM;
+
+    flags {}
+    no_bits {}
 }
 
-/// See [`VkFramebufferCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkFramebufferCreateFlags)
-pub type FramebufferCreateFlagBits = FramebufferCreateFlags;
-
-bitflags! {
+dacite_bitflags! {
     /// See [`VkRenderPassCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkRenderPassCreateFlags)
-    #[derive(Default)]
-    pub struct RenderPassCreateFlags: vks::core::VkRenderPassCreateFlags {
-        /// See [`VkRenderPassCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkRenderPassCreateFlags)
-        const RENDER_PASS_CREATE_FLAG_BITS_MAX_ENUM = vks::core::VK_RENDER_PASS_CREATE_FLAG_BITS_MAX_ENUM;
-    }
+    pub struct RenderPassCreateFlags: vks::core::VkRenderPassCreateFlags;
+    pub enum RenderPassCreateFlagBits: vks::core::VkRenderPassCreateFlagBits;
+    max_enum: vks::core::VK_RENDER_PASS_CREATE_FLAG_BITS_MAX_ENUM;
+
+    flags {}
+    no_bits {}
 }
 
-/// See [`VkRenderPassCreateFlags`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkRenderPassCreateFlags)
-pub type RenderPassCreateFlagBits = RenderPassCreateFlags;
-
-bitflags! {
+dacite_bitflags! {
     /// See [`VkAttachmentDescriptionFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkAttachmentDescriptionFlagBits)
-    #[derive(Default)]
-    pub struct AttachmentDescriptionFlags: vks::core::VkAttachmentDescriptionFlags {
-        /// See [`VkAttachmentDescriptionFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkAttachmentDescriptionFlagBits)
-        const ATTACHMENT_DESCRIPTION_FLAG_BITS_MAX_ENUM = vks::core::VK_ATTACHMENT_DESCRIPTION_FLAG_BITS_MAX_ENUM;
+    pub struct AttachmentDescriptionFlags: vks::core::VkAttachmentDescriptionFlags;
+    pub enum AttachmentDescriptionFlagBits: vks::core::VkAttachmentDescriptionFlagBits;
+    max_enum: vks::core::VK_ATTACHMENT_DESCRIPTION_FLAG_BITS_MAX_ENUM;
 
-        /// See [`VkAttachmentDescriptionFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkAttachmentDescriptionFlagBits)
-        const ATTACHMENT_DESCRIPTION_MAY_ALIAS_BIT = vks::core::VK_ATTACHMENT_DESCRIPTION_MAY_ALIAS_BIT;
+    flags {
+        const MAY_ALIAS [MayAlias] = vks::core::VK_ATTACHMENT_DESCRIPTION_MAY_ALIAS_BIT;
     }
+
+    no_bits {}
 }
 
-/// See [`VkAttachmentDescriptionFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkAttachmentDescriptionFlagBits)
-pub type AttachmentDescriptionFlagBits = AttachmentDescriptionFlags;
-
-bitflags! {
+dacite_bitflags! {
     /// See [`VkSubpassDescriptionFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSubpassDescriptionFlagBits)
-    #[derive(Default)]
-    pub struct SubpassDescriptionFlags: vks::core::VkSubpassDescriptionFlags {
-        /// See [`VkSubpassDescriptionFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSubpassDescriptionFlagBits)
-        const SUBPASS_DESCRIPTION_FLAG_BITS_MAX_ENUM = vks::core::VK_SUBPASS_DESCRIPTION_FLAG_BITS_MAX_ENUM;
-    }
+    pub struct SubpassDescriptionFlags: vks::core::VkSubpassDescriptionFlags;
+    pub enum SubpassDescriptionFlagBits: vks::core::VkSubpassDescriptionFlagBits;
+    max_enum: vks::core::VK_SUBPASS_DESCRIPTION_FLAG_BITS_MAX_ENUM;
+
+    flags {}
+    no_bits {}
 }
 
-/// See [`VkSubpassDescriptionFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSubpassDescriptionFlagBits)
-pub type SubpassDescriptionFlagBits = SubpassDescriptionFlags;
-
-bitflags! {
+dacite_bitflags! {
     /// See [`VkAccessFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkAccessFlagBits)
-    #[derive(Default)]
-    pub struct AccessFlags: vks::core::VkAccessFlags {
-        /// See [`VkAccessFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkAccessFlagBits)
-        const ACCESS_FLAG_BITS_MAX_ENUM = vks::core::VK_ACCESS_FLAG_BITS_MAX_ENUM;
+    pub struct AccessFlags: vks::core::VkAccessFlags;
+    pub enum AccessFlagBits: vks::core::VkAccessFlagBits;
+    max_enum: vks::core::VK_ACCESS_FLAG_BITS_MAX_ENUM;
 
-        /// See [`VkAccessFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkAccessFlagBits)
-        const ACCESS_INDIRECT_COMMAND_READ_BIT = vks::core::VK_ACCESS_INDIRECT_COMMAND_READ_BIT;
-
-        /// See [`VkAccessFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkAccessFlagBits)
-        const ACCESS_INDEX_READ_BIT = vks::core::VK_ACCESS_INDEX_READ_BIT;
-
-        /// See [`VkAccessFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkAccessFlagBits)
-        const ACCESS_VERTEX_ATTRIBUTE_READ_BIT = vks::core::VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT;
-
-        /// See [`VkAccessFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkAccessFlagBits)
-        const ACCESS_UNIFORM_READ_BIT = vks::core::VK_ACCESS_UNIFORM_READ_BIT;
-
-        /// See [`VkAccessFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkAccessFlagBits)
-        const ACCESS_INPUT_ATTACHMENT_READ_BIT = vks::core::VK_ACCESS_INPUT_ATTACHMENT_READ_BIT;
-
-        /// See [`VkAccessFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkAccessFlagBits)
-        const ACCESS_SHADER_READ_BIT = vks::core::VK_ACCESS_SHADER_READ_BIT;
-
-        /// See [`VkAccessFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkAccessFlagBits)
-        const ACCESS_SHADER_WRITE_BIT = vks::core::VK_ACCESS_SHADER_WRITE_BIT;
-
-        /// See [`VkAccessFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkAccessFlagBits)
-        const ACCESS_COLOR_ATTACHMENT_READ_BIT = vks::core::VK_ACCESS_COLOR_ATTACHMENT_READ_BIT;
-
-        /// See [`VkAccessFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkAccessFlagBits)
-        const ACCESS_COLOR_ATTACHMENT_WRITE_BIT = vks::core::VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
-
-        /// See [`VkAccessFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkAccessFlagBits)
-        const ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT = vks::core::VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT;
-
-        /// See [`VkAccessFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkAccessFlagBits)
-        const ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT = vks::core::VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
-
-        /// See [`VkAccessFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkAccessFlagBits)
-        const ACCESS_TRANSFER_READ_BIT = vks::core::VK_ACCESS_TRANSFER_READ_BIT;
-
-        /// See [`VkAccessFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkAccessFlagBits)
-        const ACCESS_TRANSFER_WRITE_BIT = vks::core::VK_ACCESS_TRANSFER_WRITE_BIT;
-
-        /// See [`VkAccessFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkAccessFlagBits)
-        const ACCESS_HOST_READ_BIT = vks::core::VK_ACCESS_HOST_READ_BIT;
-
-        /// See [`VkAccessFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkAccessFlagBits)
-        const ACCESS_HOST_WRITE_BIT = vks::core::VK_ACCESS_HOST_WRITE_BIT;
-
-        /// See [`VkAccessFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkAccessFlagBits)
-        const ACCESS_MEMORY_READ_BIT = vks::core::VK_ACCESS_MEMORY_READ_BIT;
-
-        /// See [`VkAccessFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkAccessFlagBits)
-        const ACCESS_MEMORY_WRITE_BIT = vks::core::VK_ACCESS_MEMORY_WRITE_BIT;
+    flags {
+        const INDIRECT_COMMAND_READ [IndirectCommandRead] = vks::core::VK_ACCESS_INDIRECT_COMMAND_READ_BIT;
+        const INDEX_READ [IndexRead] = vks::core::VK_ACCESS_INDEX_READ_BIT;
+        const VERTEX_ATTRIBUTE_READ [VertexAttributeRead] = vks::core::VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT;
+        const UNIFORM_READ [UniformRead] = vks::core::VK_ACCESS_UNIFORM_READ_BIT;
+        const INPUT_ATTACHMENT_READ [InputAttachmentRead] = vks::core::VK_ACCESS_INPUT_ATTACHMENT_READ_BIT;
+        const SHADER_READ [ShaderRead] = vks::core::VK_ACCESS_SHADER_READ_BIT;
+        const SHADER_WRITE [ShaderWrite] = vks::core::VK_ACCESS_SHADER_WRITE_BIT;
+        const COLOR_ATTACHMENT_READ [ColorAttachmentRead] = vks::core::VK_ACCESS_COLOR_ATTACHMENT_READ_BIT;
+        const COLOR_ATTACHMENT_WRITE [ColorAttachmentWrite] = vks::core::VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+        const DEPTH_STENCIL_ATTACHMENT_READ [DepthStencilAttachmentRead] = vks::core::VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT;
+        const DEPTH_STENCIL_ATTACHMENT_WRITE [DepthStencilAttachmentWrite] = vks::core::VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
+        const TRANSFER_READ [TransferRead] = vks::core::VK_ACCESS_TRANSFER_READ_BIT;
+        const TRANSFER_WRITE [TransferWrite] = vks::core::VK_ACCESS_TRANSFER_WRITE_BIT;
+        const HOST_READ [HostRead] = vks::core::VK_ACCESS_HOST_READ_BIT;
+        const HOST_WRITE [HostWrite] = vks::core::VK_ACCESS_HOST_WRITE_BIT;
+        const MEMORY_READ [MemoryRead] = vks::core::VK_ACCESS_MEMORY_READ_BIT;
+        const MEMORY_WRITE [MemoryWrite] = vks::core::VK_ACCESS_MEMORY_WRITE_BIT;
     }
+
+    no_bits {}
 }
 
-/// See [`VkAccessFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkAccessFlagBits)
-pub type AccessFlagBits = AccessFlags;
-
-bitflags! {
+dacite_bitflags! {
     /// See [`VkDependencyFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDependencyFlagBits)
-    #[derive(Default)]
-    pub struct DependencyFlags: vks::core::VkDependencyFlags {
-        /// See [`VkDependencyFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDependencyFlagBits)
-        const DEPENDENCY_FLAG_BITS_MAX_ENUM = vks::core::VK_DEPENDENCY_FLAG_BITS_MAX_ENUM;
+    pub struct DependencyFlags: vks::core::VkDependencyFlags;
+    pub enum DependencyFlagBits: vks::core::VkDependencyFlagBits;
+    max_enum: vks::core::VK_DEPENDENCY_FLAG_BITS_MAX_ENUM;
 
-        /// See [`VkDependencyFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDependencyFlagBits)
-        const DEPENDENCY_BY_REGION_BIT = vks::core::VK_DEPENDENCY_BY_REGION_BIT;
+    flags {
+        const BY_REGION [ByRegion] = vks::core::VK_DEPENDENCY_BY_REGION_BIT;
     }
+
+    no_bits {}
 }
 
-/// See [`VkDependencyFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDependencyFlagBits)
-pub type DependencyFlagBits = DependencyFlags;
-
-bitflags! {
+dacite_bitflags! {
     /// See [`VkCommandPoolCreateFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCommandPoolCreateFlagBits)
-    #[derive(Default)]
-    pub struct CommandPoolCreateFlags: vks::core::VkCommandPoolCreateFlags {
-        /// See [`VkCommandPoolCreateFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCommandPoolCreateFlagBits)
-        const COMMAND_POOL_CREATE_FLAG_BITS_MAX_ENUM = vks::core::VK_COMMAND_POOL_CREATE_FLAG_BITS_MAX_ENUM;
+    pub struct CommandPoolCreateFlags: vks::core::VkCommandPoolCreateFlags;
+    pub enum CommandPoolCreateFlagBits: vks::core::VkCommandPoolCreateFlagBits;
+    max_enum: vks::core::VK_COMMAND_POOL_CREATE_FLAG_BITS_MAX_ENUM;
 
-        /// See [`VkCommandPoolCreateFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCommandPoolCreateFlagBits)
-        const COMMAND_POOL_CREATE_TRANSIENT_BIT = vks::core::VK_COMMAND_POOL_CREATE_TRANSIENT_BIT;
-
-        /// See [`VkCommandPoolCreateFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCommandPoolCreateFlagBits)
-        const COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT = vks::core::VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
+    flags {
+        const TRANSIENT [Transient] = vks::core::VK_COMMAND_POOL_CREATE_TRANSIENT_BIT;
+        const RESET_COMMAND_BUFFER [ResetCommandBuffer] = vks::core::VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
     }
+
+    no_bits {}
 }
 
-/// See [`VkCommandPoolCreateFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCommandPoolCreateFlagBits)
-pub type CommandPoolCreateFlagBits = CommandPoolCreateFlags;
-
-bitflags! {
+dacite_bitflags! {
     /// See [`VkCommandPoolResetFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCommandPoolResetFlagBits)
-    #[derive(Default)]
-    pub struct CommandPoolResetFlags: vks::core::VkCommandPoolResetFlags {
-        /// See [`VkCommandPoolResetFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCommandPoolResetFlagBits)
-        const COMMAND_POOL_RESET_FLAG_BITS_MAX_ENUM = vks::core::VK_COMMAND_POOL_RESET_FLAG_BITS_MAX_ENUM;
+    pub struct CommandPoolResetFlags: vks::core::VkCommandPoolResetFlags;
+    pub enum CommandPoolResetFlagBits: vks::core::VkCommandPoolResetFlagBits;
+    max_enum: vks::core::VK_COMMAND_POOL_RESET_FLAG_BITS_MAX_ENUM;
 
-        /// See [`VkCommandPoolResetFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCommandPoolResetFlagBits)
-        const COMMAND_POOL_RESET_RELEASE_RESOURCES_BIT = vks::core::VK_COMMAND_POOL_RESET_RELEASE_RESOURCES_BIT;
+    flags {
+        const RELEASE_RESOURCES [ReleaseResources] = vks::core::VK_COMMAND_POOL_RESET_RELEASE_RESOURCES_BIT;
     }
+
+    no_bits {}
 }
 
-/// See [`VkCommandPoolResetFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCommandPoolResetFlagBits)
-pub type CommandPoolResetFlagBits = CommandPoolResetFlags;
-
-bitflags! {
+dacite_bitflags! {
     /// See [`VkCommandBufferUsageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCommandBufferUsageFlagBits)
-    #[derive(Default)]
-    pub struct CommandBufferUsageFlags: vks::core::VkCommandBufferUsageFlags {
-        /// See [`VkCommandBufferUsageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCommandBufferUsageFlagBits)
-        const COMMAND_BUFFER_USAGE_FLAG_BITS_MAX_ENUM = vks::core::VK_COMMAND_BUFFER_USAGE_FLAG_BITS_MAX_ENUM;
+    pub struct CommandBufferUsageFlags: vks::core::VkCommandBufferUsageFlags;
+    pub enum CommandBufferUsageFlagBits: vks::core::VkCommandBufferUsageFlagBits;
+    max_enum: vks::core::VK_COMMAND_BUFFER_USAGE_FLAG_BITS_MAX_ENUM;
 
-        /// See [`VkCommandBufferUsageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCommandBufferUsageFlagBits)
-        const COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT = vks::core::VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
-
-        /// See [`VkCommandBufferUsageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCommandBufferUsageFlagBits)
-        const COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT = vks::core::VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT;
-
-        /// See [`VkCommandBufferUsageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCommandBufferUsageFlagBits)
-        const COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT = vks::core::VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT;
+    flags {
+        const ONE_TIME_SUBMIT [OneTimeSubmit] = vks::core::VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+        const RENDER_PASS_CONTINUE [RenderPassContinue] = vks::core::VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT;
+        const SIMULTANEOUS_USE [SimultaneousUse] = vks::core::VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT;
     }
+
+    no_bits {}
 }
 
-/// See [`VkCommandBufferUsageFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCommandBufferUsageFlagBits)
-pub type CommandBufferUsageFlagBits = CommandBufferUsageFlags;
-
-bitflags! {
+dacite_bitflags! {
     /// See [`VkQueryControlFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueryControlFlagBits)
-    #[derive(Default)]
-    pub struct QueryControlFlags: vks::core::VkQueryControlFlags {
-        /// See [`VkQueryControlFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueryControlFlagBits)
-        const QUERY_CONTROL_FLAG_BITS_MAX_ENUM = vks::core::VK_QUERY_CONTROL_FLAG_BITS_MAX_ENUM;
+    pub struct QueryControlFlags: vks::core::VkQueryControlFlags;
+    pub enum QueryControlFlagBits: vks::core::VkQueryControlFlagBits;
+    max_enum: vks::core::VK_QUERY_CONTROL_FLAG_BITS_MAX_ENUM;
 
-        /// See [`VkQueryControlFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueryControlFlagBits)
-        const QUERY_CONTROL_PRECISE_BIT = vks::core::VK_QUERY_CONTROL_PRECISE_BIT;
+    flags {
+        const PRECISE [Precise] = vks::core::VK_QUERY_CONTROL_PRECISE_BIT;
     }
+
+    no_bits {}
 }
 
-/// See [`VkQueryControlFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueryControlFlagBits)
-pub type QueryControlFlagBits = QueryControlFlags;
-
-bitflags! {
+dacite_bitflags! {
     /// See [`VkCommandBufferResetFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCommandBufferResetFlagBits)
-    #[derive(Default)]
-    pub struct CommandBufferResetFlags: vks::core::VkCommandBufferResetFlags {
-        /// See [`VkCommandBufferResetFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCommandBufferResetFlagBits)
-        const COMMAND_BUFFER_RESET_FLAG_BITS_MAX_ENUM = vks::core::VK_COMMAND_BUFFER_RESET_FLAG_BITS_MAX_ENUM;
+    pub struct CommandBufferResetFlags: vks::core::VkCommandBufferResetFlags;
+    pub enum CommandBufferResetFlagBits: vks::core::VkCommandBufferResetFlagBits;
+    max_enum: vks::core::VK_COMMAND_BUFFER_RESET_FLAG_BITS_MAX_ENUM;
 
-        /// See [`VkCommandBufferResetFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCommandBufferResetFlagBits)
-        const COMMAND_BUFFER_RESET_RELEASE_RESOURCES_BIT = vks::core::VK_COMMAND_BUFFER_RESET_RELEASE_RESOURCES_BIT;
+    flags {
+        const RELEASE_RESOURCES [ReleaseResources] = vks::core::VK_COMMAND_BUFFER_RESET_RELEASE_RESOURCES_BIT;
     }
+
+    no_bits {}
 }
 
-/// See [`VkCommandBufferResetFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkCommandBufferResetFlagBits)
-pub type CommandBufferResetFlagBits = CommandBufferResetFlags;
-
-bitflags! {
+dacite_bitflags! {
     /// See [`VkStencilFaceFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkStencilFaceFlagBits)
-    #[derive(Default)]
-    pub struct StencilFaceFlags: vks::core::VkStencilFaceFlags {
-        /// See [`VkStencilFaceFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkStencilFaceFlagBits)
-        const STENCIL_FACE_FLAG_BITS_MAX_ENUM = vks::core::VK_STENCIL_FACE_FLAG_BITS_MAX_ENUM;
+    pub struct StencilFaceFlags: vks::core::VkStencilFaceFlags;
+    pub enum StencilFaceFlagBits: vks::core::VkStencilFaceFlagBits;
+    max_enum: vks::core::VK_STENCIL_FACE_FLAG_BITS_MAX_ENUM;
 
-        /// See [`VkStencilFaceFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkStencilFaceFlagBits)
-        const STENCIL_FACE_FRONT_BIT = vks::core::VK_STENCIL_FACE_FRONT_BIT;
+    flags {
+        const FRONT [Front] = vks::core::VK_STENCIL_FACE_FRONT_BIT;
+        const BACK [Back] = vks::core::VK_STENCIL_FACE_BACK_BIT;
+    }
 
-        /// See [`VkStencilFaceFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkStencilFaceFlagBits)
-        const STENCIL_FACE_BACK_BIT = vks::core::VK_STENCIL_FACE_BACK_BIT;
-
-        /// See [`VkStencilFaceFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkStencilFaceFlagBits)
-        const STENCIL_FRONT_AND_BACK = vks::core::VK_STENCIL_FRONT_AND_BACK;
+    no_bits {
+        const FRONT_AND_BACK = vks::core::VK_STENCIL_FRONT_AND_BACK;
     }
 }
-
-/// See [`VkStencilFaceFlagBits`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkStencilFaceFlagBits)
-pub type StencilFaceFlagBits = StencilFaceFlags;
 
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum OptionalDeviceSize {
@@ -5779,7 +5433,7 @@ impl VkImageCreateInfoWrapper {
                 extent: (&create_info.extent).into(),
                 mipLevels: create_info.mip_levels,
                 arrayLayers: create_info.array_layers,
-                samples: create_info.samples.bits(),
+                samples: create_info.samples.bit(),
                 tiling: create_info.tiling.into(),
                 usage: create_info.usage.bits(),
                 sharingMode: create_info.sharing_mode.into(),
@@ -6158,7 +5812,7 @@ impl VkPipelineShaderStageCreateInfoWrapper {
                 sType: vks::core::VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
                 pNext: pnext,
                 flags: create_info.flags.bits(),
-                stage: create_info.stage.bits(),
+                stage: create_info.stage.bit(),
                 module: create_info.module.handle(),
                 pName: name.as_ptr(),
                 pSpecializationInfo: specialization_info_ptr,
@@ -6666,7 +6320,7 @@ impl VkPipelineMultisampleStateCreateInfoWrapper {
                 sType: vks::core::VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO,
                 pNext: pnext,
                 flags: create_info.flags.bits(),
-                rasterizationSamples: create_info.rasterization_samples.bits(),
+                rasterizationSamples: create_info.rasterization_samples.bit(),
                 sampleShadingEnable: utils::to_vk_bool(create_info.sample_shading_enable),
                 minSampleShading: create_info.min_sample_shading,
                 pSampleMask: sample_mask_ptr,
@@ -7767,7 +7421,7 @@ impl<'a> From<&'a AttachmentDescription> for vks::core::VkAttachmentDescription 
         vks::core::VkAttachmentDescription {
             flags: description.flags.bits(),
             format: description.format.into(),
-            samples: description.samples.bits(),
+            samples: description.samples.bit(),
             loadOp: description.load_op.into(),
             storeOp: description.store_op.into(),
             stencilLoadOp: description.stencil_load_op.into(),
@@ -7783,7 +7437,7 @@ impl<'a> From<&'a vks::core::VkAttachmentDescription> for AttachmentDescription 
         AttachmentDescription {
             flags: AttachmentDescriptionFlags::from_bits_truncate(description.flags),
             format: description.format.into(),
-            samples: SampleCountFlags::from_bits_truncate(description.samples),
+            samples: SampleCountFlagBits::from_bits(description.samples).unwrap(),
             load_op: description.loadOp.into(),
             store_op: description.storeOp.into(),
             stencil_load_op: description.stencilLoadOp.into(),

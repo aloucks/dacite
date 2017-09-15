@@ -138,32 +138,22 @@ impl From<DebugReportObjectTypeExt> for vks::ext_debug_report::VkDebugReportObje
     }
 }
 
-bitflags! {
+dacite_bitflags! {
     /// See [`VkDebugReportFlagBitsEXT`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDebugReportFlagBitsEXT)
-    #[derive(Default)]
-    pub struct DebugReportFlagsExt: vks::ext_debug_report::VkDebugReportFlagsEXT {
-        /// See [`VkDebugReportFlagBitsEXT`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDebugReportFlagBitsEXT)
-        const DEBUG_REPORT_FLAG_BITS_MAX_ENUM_EXT = vks::ext_debug_report::VK_DEBUG_REPORT_FLAG_BITS_MAX_ENUM_EXT;
+    pub struct DebugReportFlagsExt: vks::ext_debug_report::VkDebugReportFlagsEXT;
+    pub enum DebugReportFlagBitsExt: vks::ext_debug_report::VkDebugReportFlagBitsEXT;
+    max_enum: vks::ext_debug_report::VK_DEBUG_REPORT_FLAG_BITS_MAX_ENUM_EXT;
 
-        /// See [`VkDebugReportFlagBitsEXT`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDebugReportFlagBitsEXT)
-        const DEBUG_REPORT_INFORMATION_BIT_EXT = vks::ext_debug_report::VK_DEBUG_REPORT_INFORMATION_BIT_EXT;
-
-        /// See [`VkDebugReportFlagBitsEXT`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDebugReportFlagBitsEXT)
-        const DEBUG_REPORT_WARNING_BIT_EXT = vks::ext_debug_report::VK_DEBUG_REPORT_WARNING_BIT_EXT;
-
-        /// See [`VkDebugReportFlagBitsEXT`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDebugReportFlagBitsEXT)
-        const DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT = vks::ext_debug_report::VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT;
-
-        /// See [`VkDebugReportFlagBitsEXT`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDebugReportFlagBitsEXT)
-        const DEBUG_REPORT_ERROR_BIT_EXT = vks::ext_debug_report::VK_DEBUG_REPORT_ERROR_BIT_EXT;
-
-        /// See [`VkDebugReportFlagBitsEXT`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDebugReportFlagBitsEXT)
-        const DEBUG_REPORT_DEBUG_BIT_EXT = vks::ext_debug_report::VK_DEBUG_REPORT_DEBUG_BIT_EXT;
+    flags {
+        const INFORMATION [Information] = vks::ext_debug_report::VK_DEBUG_REPORT_INFORMATION_BIT_EXT;
+        const WARNING [Warning] = vks::ext_debug_report::VK_DEBUG_REPORT_WARNING_BIT_EXT;
+        const PERFORMANCE_WARNING [PerformanceWarning] = vks::ext_debug_report::VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT;
+        const ERROR [Error] = vks::ext_debug_report::VK_DEBUG_REPORT_ERROR_BIT_EXT;
+        const DEBUG [Debug] = vks::ext_debug_report::VK_DEBUG_REPORT_DEBUG_BIT_EXT;
     }
-}
 
-/// See [`VkDebugReportFlagBitsEXT`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDebugReportFlagBitsEXT)
-pub type DebugReportFlagBitsExt = DebugReportFlagsExt;
+    no_bits {}
+}
 
 /// See [`PFN_vkDebugReportCallbackEXT`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#PFN_vkDebugReportCallbackEXT)
 pub trait DebugReportCallbacksExt: Send + Sync + fmt::Debug {

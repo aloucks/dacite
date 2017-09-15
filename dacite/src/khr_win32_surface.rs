@@ -17,17 +17,15 @@
 use vks;
 use win32_types;
 
-bitflags! {
+dacite_bitflags! {
     /// See [`VkWin32SurfaceCreateFlagsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkWin32SurfaceCreateFlagsKHR)
-    #[derive(Default)]
-    pub struct Win32SurfaceCreateFlagsKhr: vks::khr_win32_surface::VkWin32SurfaceCreateFlagsKHR {
-        /// See [`VkWin32SurfaceCreateFlagsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkWin32SurfaceCreateFlagsKHR)
-        const WIN32_SURFACE_CREATE_FLAG_BITS_MAX_ENUM_KHR = vks::khr_win32_surface::VK_WIN32_SURFACE_CREATE_FLAG_BITS_MAX_ENUM_KHR;
-    }
-}
+    pub struct Win32SurfaceCreateFlagsKhr: vks::khr_win32_surface::VkWin32SurfaceCreateFlagsKHR;
+    pub enum Win32SurfaceCreateFlagBitsKhr: vks::khr_win32_surface::VkWin32SurfaceCreateFlagBitsKHR;
+    max_enum: vks::khr_win32_surface::VK_WIN32_SURFACE_CREATE_FLAG_BITS_MAX_ENUM_KHR;
 
-/// See [`VkWin32SurfaceCreateFlagsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkWin32SurfaceCreateFlagsKHR)
-pub type Win32SurfaceCreateFlagBitsKhr = Win32SurfaceCreateFlagsKhr;
+    flags {}
+    no_bits {}
+}
 
 gen_chain_struct! {
     name: Win32SurfaceCreateInfoChainKhr [Win32SurfaceCreateInfoChainKhrWrapper],

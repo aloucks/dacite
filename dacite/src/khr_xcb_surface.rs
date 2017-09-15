@@ -17,17 +17,15 @@
 use vks;
 use xcb_types;
 
-bitflags! {
+dacite_bitflags! {
     /// See [`VkXcbSurfaceCreateFlagsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkXcbSurfaceCreateFlagsKHR)
-    #[derive(Default)]
-    pub struct XcbSurfaceCreateFlagsKhr: vks::khr_xcb_surface::VkXcbSurfaceCreateFlagsKHR {
-        /// See [`VkXcbSurfaceCreateFlagsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkXcbSurfaceCreateFlagsKHR)
-        const XCB_SURFACE_CREATE_FLAG_BITS_MAX_ENUM_KHR = vks::khr_xcb_surface::VK_XCB_SURFACE_CREATE_FLAG_BITS_MAX_ENUM_KHR;
-    }
-}
+    pub struct XcbSurfaceCreateFlagsKhr: vks::khr_xcb_surface::VkXcbSurfaceCreateFlagsKHR;
+    pub enum XcbSurfaceCreateFlagBitsKhr: vks::khr_xcb_surface::VkXcbSurfaceCreateFlagBitsKHR;
+    max_enum: vks::khr_xcb_surface::VK_XCB_SURFACE_CREATE_FLAG_BITS_MAX_ENUM_KHR;
 
-/// See [`VkXcbSurfaceCreateFlagsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkXcbSurfaceCreateFlagsKHR)
-pub type XcbSurfaceCreateFlagBitsKhr = XcbSurfaceCreateFlagsKhr;
+    flags {}
+    no_bits {}
+}
 
 gen_chain_struct! {
     name: XcbSurfaceCreateInfoChainKhr [XcbSurfaceCreateInfoChainKhrWrapper],

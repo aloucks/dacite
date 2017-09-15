@@ -285,7 +285,7 @@ impl VkPhysicalDeviceSparseImageFormatInfo2KHRWrapper {
                 pNext: pnext,
                 format: info.format.into(),
                 type_: info.image_type.into(),
-                samples: info.samples.bits(),
+                samples: info.samples.bit(),
                 usage: info.usage.bits(),
                 tiling: info.tiling.into(),
             },

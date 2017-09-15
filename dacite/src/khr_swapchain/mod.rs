@@ -25,17 +25,15 @@ use vks;
 
 pub use self::swapchain::{SwapchainKhr, FromNativeSwapchainKhrParameters};
 
-bitflags! {
+dacite_bitflags! {
     /// See [`VkSwapchainCreateFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSwapchainCreateFlagBitsKHR)
-    #[derive(Default)]
-    pub struct SwapchainCreateFlagsKhr: vks::khr_swapchain::VkSwapchainCreateFlagsKHR {
-        /// See [`VkSwapchainCreateFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSwapchainCreateFlagBitsKHR)
-        const SWAPCHAIN_CREATE_FLAG_BITS_MAX_ENUM_KHR = vks::khr_swapchain::VK_SWAPCHAIN_CREATE_FLAG_BITS_MAX_ENUM_KHR;
-    }
-}
+    pub struct SwapchainCreateFlagsKhr: vks::khr_swapchain::VkSwapchainCreateFlagsKHR;
+    pub enum SwapchainCreateFlagBitsKhr: vks::khr_swapchain::VkSwapchainCreateFlagBitsKHR;
+    max_enum: vks::khr_swapchain::VK_SWAPCHAIN_CREATE_FLAG_BITS_MAX_ENUM_KHR;
 
-/// See [`VkSwapchainCreateFlagBitsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkSwapchainCreateFlagBitsKHR)
-pub type SwapchainCreateFlagBitsKhr = SwapchainCreateFlagsKhr;
+    flags {}
+    no_bits {}
+}
 
 /// See [`vkAcquireNextImageKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkAcquireNextImageKHR)
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -119,8 +117,8 @@ impl VkSwapchainCreateInfoKHRWrapper {
                 imageSharingMode: create_info.image_sharing_mode.into(),
                 queueFamilyIndexCount: queue_family_indices.len() as u32,
                 pQueueFamilyIndices: queue_family_indices_ptr,
-                preTransform: create_info.pre_transform.bits(),
-                compositeAlpha: create_info.composite_alpha.bits(),
+                preTransform: create_info.pre_transform.bit(),
+                compositeAlpha: create_info.composite_alpha.bit(),
                 presentMode: create_info.present_mode.into(),
                 clipped: utils::to_vk_bool(create_info.clipped),
                 oldSwapchain: old_swapchain_handle,

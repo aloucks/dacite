@@ -17,17 +17,15 @@
 use vks;
 use wayland_types;
 
-bitflags! {
+dacite_bitflags! {
     /// See [`VkWaylandSurfaceCreateFlagsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkWaylandSurfaceCreateFlagsKHR)
-    #[derive(Default)]
-    pub struct WaylandSurfaceCreateFlagsKhr: vks::khr_wayland_surface::VkWaylandSurfaceCreateFlagsKHR {
-        /// See [`VkWaylandSurfaceCreateFlagsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkWaylandSurfaceCreateFlagsKHR)
-        const WAYLAND_SURFACE_CREATE_FLAG_BITS_MAX_ENUM_KHR = vks::khr_wayland_surface::VK_WAYLAND_SURFACE_CREATE_FLAG_BITS_MAX_ENUM_KHR;
-    }
-}
+    pub struct WaylandSurfaceCreateFlagsKhr: vks::khr_wayland_surface::VkWaylandSurfaceCreateFlagsKHR;
+    pub enum WaylandSurfaceCreateFlagBitsKhr: vks::khr_wayland_surface::VkWaylandSurfaceCreateFlagBitsKHR;
+    max_enum: vks::khr_wayland_surface::VK_WAYLAND_SURFACE_CREATE_FLAG_BITS_MAX_ENUM_KHR;
 
-/// See [`VkWaylandSurfaceCreateFlagsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkWaylandSurfaceCreateFlagsKHR)
-pub type WaylandSurfaceCreateFlagBitsKhr = WaylandSurfaceCreateFlagsKhr;
+    flags {}
+    no_bits {}
+}
 
 gen_chain_struct! {
     name: WaylandSurfaceCreateInfoChainKhr [WaylandSurfaceCreateInfoChainKhrWrapper],

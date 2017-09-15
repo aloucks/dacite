@@ -504,7 +504,7 @@ impl CommandBuffer {
     /// See [`vkCmdWriteTimestamp`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCmdWriteTimestamp)
     pub fn write_timestamp(&self, pipeline_stage: core::PipelineStageFlagBits, query_pool: &QueryPool, query: u32) {
         unsafe {
-            self.loader().core.vkCmdWriteTimestamp(self.handle(), pipeline_stage.bits(), query_pool.handle(), query);
+            self.loader().core.vkCmdWriteTimestamp(self.handle(), pipeline_stage.bit(), query_pool.handle(), query);
         }
     }
 

@@ -17,50 +17,36 @@
 use core;
 use vks;
 
-bitflags! {
+dacite_bitflags! {
     /// See [`VkExternalMemoryHandleTypeFlagBitsNV`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkExternalMemoryHandleTypeFlagBitsNV)
-    #[derive(Default)]
-    pub struct ExternalMemoryHandleTypeFlagsNv: vks::nv_external_memory_capabilities::VkExternalMemoryHandleTypeFlagsNV {
-        /// See [`VkExternalMemoryHandleTypeFlagBitsNV`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkExternalMemoryHandleTypeFlagBitsNV)
-        const EXTERNAL_MEMORY_HANDLE_TYPE_FLAG_BITS_MAX_ENUM_NV = vks::nv_external_memory_capabilities::VK_EXTERNAL_MEMORY_HANDLE_TYPE_FLAG_BITS_MAX_ENUM_NV;
+    pub struct ExternalMemoryHandleTypeFlagsNv: vks::nv_external_memory_capabilities::VkExternalMemoryHandleTypeFlagsNV;
+    pub enum ExternalMemoryHandleTypeFlagBitsNv: vks::nv_external_memory_capabilities::VkExternalMemoryHandleTypeFlagBitsNV;
+    max_enum: vks::nv_external_memory_capabilities::VK_EXTERNAL_MEMORY_HANDLE_TYPE_FLAG_BITS_MAX_ENUM_NV;
 
-        /// See [`VkExternalMemoryHandleTypeFlagBitsNV`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkExternalMemoryHandleTypeFlagBitsNV)
-        const EXTERNAL_MEMORY_HANDLE_TYPE_OPAQUE_WIN32_BIT_NV = vks::nv_external_memory_capabilities::VK_EXTERNAL_MEMORY_HANDLE_TYPE_OPAQUE_WIN32_BIT_NV;
-
-        /// See [`VkExternalMemoryHandleTypeFlagBitsNV`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkExternalMemoryHandleTypeFlagBitsNV)
-        const EXTERNAL_MEMORY_HANDLE_TYPE_OPAQUE_WIN32_KMT_BIT_NV = vks::nv_external_memory_capabilities::VK_EXTERNAL_MEMORY_HANDLE_TYPE_OPAQUE_WIN32_KMT_BIT_NV;
-
-        /// See [`VkExternalMemoryHandleTypeFlagBitsNV`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkExternalMemoryHandleTypeFlagBitsNV)
-        const EXTERNAL_MEMORY_HANDLE_TYPE_D3D11_IMAGE_BIT_NV = vks::nv_external_memory_capabilities::VK_EXTERNAL_MEMORY_HANDLE_TYPE_D3D11_IMAGE_BIT_NV;
-
-        /// See [`VkExternalMemoryHandleTypeFlagBitsNV`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkExternalMemoryHandleTypeFlagBitsNV)
-        const EXTERNAL_MEMORY_HANDLE_TYPE_D3D11_IMAGE_KMT_BIT_NV = vks::nv_external_memory_capabilities::VK_EXTERNAL_MEMORY_HANDLE_TYPE_D3D11_IMAGE_KMT_BIT_NV;
+    flags {
+        const OPAQUE_WIN32 [OpaqueWin32] = vks::nv_external_memory_capabilities::VK_EXTERNAL_MEMORY_HANDLE_TYPE_OPAQUE_WIN32_BIT_NV;
+        const OPAQUE_WIN32_KMT [OpaqueWin32Kmt] = vks::nv_external_memory_capabilities::VK_EXTERNAL_MEMORY_HANDLE_TYPE_OPAQUE_WIN32_KMT_BIT_NV;
+        const D3D11_IMAGE [D3D11Image] = vks::nv_external_memory_capabilities::VK_EXTERNAL_MEMORY_HANDLE_TYPE_D3D11_IMAGE_BIT_NV;
+        const D3D11_IMAGE_KMT [D3D11ImageKmt] = vks::nv_external_memory_capabilities::VK_EXTERNAL_MEMORY_HANDLE_TYPE_D3D11_IMAGE_KMT_BIT_NV;
     }
+
+    no_bits {}
 }
 
-/// See [`VkExternalMemoryHandleTypeFlagBitsNV`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkExternalMemoryHandleTypeFlagBitsNV)
-pub type ExternalMemoryHandleTypeFlagBitsNv = ExternalMemoryHandleTypeFlagsNv;
-
-bitflags! {
+dacite_bitflags! {
     /// See [`VkExternalMemoryFeatureFlagBitsNV`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkExternalMemoryFeatureFlagBitsNV)
-    #[derive(Default)]
-    pub struct ExternalMemoryFeatureFlagsNv: vks::nv_external_memory_capabilities::VkExternalMemoryFeatureFlagsNV {
-        /// See [`VkExternalMemoryFeatureFlagBitsNV`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkExternalMemoryFeatureFlagBitsNV)
-        const EXTERNAL_MEMORY_FEATURE_FLAG_BITS_MAX_ENUM_NV = vks::nv_external_memory_capabilities::VK_EXTERNAL_MEMORY_FEATURE_FLAG_BITS_MAX_ENUM_NV;
+    pub struct ExternalMemoryFeatureFlagsNv: vks::nv_external_memory_capabilities::VkExternalMemoryFeatureFlagsNV;
+    pub enum ExternalMemoryFeatureFlagBitsNv: vks::nv_external_memory_capabilities::VkExternalMemoryFeatureFlagBitsNV;
+    max_enum: vks::nv_external_memory_capabilities::VK_EXTERNAL_MEMORY_FEATURE_FLAG_BITS_MAX_ENUM_NV;
 
-        /// See [`VkExternalMemoryFeatureFlagBitsNV`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkExternalMemoryFeatureFlagBitsNV)
-        const EXTERNAL_MEMORY_FEATURE_DEDICATED_ONLY_BIT_NV = vks::nv_external_memory_capabilities::VK_EXTERNAL_MEMORY_FEATURE_DEDICATED_ONLY_BIT_NV;
-
-        /// See [`VkExternalMemoryFeatureFlagBitsNV`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkExternalMemoryFeatureFlagBitsNV)
-        const EXTERNAL_MEMORY_FEATURE_EXPORTABLE_BIT_NV = vks::nv_external_memory_capabilities::VK_EXTERNAL_MEMORY_FEATURE_EXPORTABLE_BIT_NV;
-
-        /// See [`VkExternalMemoryFeatureFlagBitsNV`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkExternalMemoryFeatureFlagBitsNV)
-        const EXTERNAL_MEMORY_FEATURE_IMPORTABLE_BIT_NV = vks::nv_external_memory_capabilities::VK_EXTERNAL_MEMORY_FEATURE_IMPORTABLE_BIT_NV;
+    flags {
+        const DEDICATED_ONLY [DedicatedOnly] = vks::nv_external_memory_capabilities::VK_EXTERNAL_MEMORY_FEATURE_DEDICATED_ONLY_BIT_NV;
+        const EXPORTABLE [Exportable] = vks::nv_external_memory_capabilities::VK_EXTERNAL_MEMORY_FEATURE_EXPORTABLE_BIT_NV;
+        const IMPORTABLE [Importable] = vks::nv_external_memory_capabilities::VK_EXTERNAL_MEMORY_FEATURE_IMPORTABLE_BIT_NV;
     }
-}
 
-/// See [`VkExternalMemoryFeatureFlagBitsNV`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkExternalMemoryFeatureFlagBitsNV)
-pub type ExternalMemoryFeatureFlagBitsNv = ExternalMemoryFeatureFlagsNv;
+    no_bits {}
+}
 
 /// See [`VkExternalImageFormatPropertiesNV`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkExternalImageFormatPropertiesNV)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]

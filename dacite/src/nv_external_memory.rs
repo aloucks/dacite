@@ -82,7 +82,7 @@ impl VkExportMemoryAllocateInfoNVWrapper {
             vks_struct: vks::nv_external_memory::VkExportMemoryAllocateInfoNV {
                 sType: vks::core::VK_STRUCTURE_TYPE_EXPORT_MEMORY_ALLOCATE_INFO_NV,
                 pNext: pnext,
-                handleTypes: info.handle_types.bits(),
+                handleTypes: info.handle_types.bit(),
             },
             chain: chain,
         }

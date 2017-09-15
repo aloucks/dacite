@@ -17,17 +17,15 @@
 use android_types;
 use vks;
 
-bitflags! {
+dacite_bitflags! {
     /// See [`VkAndroidSurfaceCreateFlagsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkAndroidSurfaceCreateFlagsKHR)
-    #[derive(Default)]
-    pub struct AndroidSurfaceCreateFlagsKhr: vks::khr_android_surface::VkAndroidSurfaceCreateFlagsKHR {
-        /// See [`VkAndroidSurfaceCreateFlagsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkAndroidSurfaceCreateFlagsKHR)
-        const ANDROID_SURFACE_CREATE_FLAG_BITS_MAX_ENUM_KHR = vks::khr_android_surface::VK_ANDROID_SURFACE_CREATE_FLAG_BITS_MAX_ENUM_KHR;
-    }
-}
+    pub struct AndroidSurfaceCreateFlagsKhr: vks::khr_android_surface::VkAndroidSurfaceCreateFlagsKHR;
+    pub enum AndroidSurfaceCreateFlagBitsKhr: vks::khr_android_surface::VkAndroidSurfaceCreateFlagBitsKHR;
+    max_enum: vks::khr_android_surface::VK_ANDROID_SURFACE_CREATE_FLAG_BITS_MAX_ENUM_KHR;
 
-/// See [`VkAndroidSurfaceCreateFlagsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkAndroidSurfaceCreateFlagsKHR)
-pub type AndroidSurfaceCreateFlagBitsKhr = AndroidSurfaceCreateFlagsKhr;
+    flags {}
+    no_bits {}
+}
 
 gen_chain_struct! {
     name: AndroidSurfaceCreateInfoChainKhr [AndroidSurfaceCreateInfoChainKhrWrapper],

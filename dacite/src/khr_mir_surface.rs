@@ -17,17 +17,15 @@
 use mir_types;
 use vks;
 
-bitflags! {
+dacite_bitflags! {
     /// See [`VkMirSurfaceCreateFlagsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkMirSurfaceCreateFlagsKHR)
-    #[derive(Default)]
-    pub struct MirSurfaceCreateFlagsKhr: vks::khr_mir_surface::VkMirSurfaceCreateFlagsKHR {
-        /// See [`VkMirSurfaceCreateFlagsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkMirSurfaceCreateFlagsKHR)
-        const MIR_SURFACE_CREATE_FLAG_BITS_MAX_ENUM_KHR = vks::khr_mir_surface::VK_MIR_SURFACE_CREATE_FLAG_BITS_MAX_ENUM_KHR;
-    }
-}
+    pub struct MirSurfaceCreateFlagsKhr: vks::khr_mir_surface::VkMirSurfaceCreateFlagsKHR;
+    pub enum MirSurfaceCreateFlagBitsKhr: vks::khr_mir_surface::VkMirSurfaceCreateFlagBitsKHR;
+    max_enum: vks::khr_mir_surface::VK_MIR_SURFACE_CREATE_FLAG_BITS_MAX_ENUM_KHR;
 
-/// See [`VkMirSurfaceCreateFlagsKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkMirSurfaceCreateFlagsKHR)
-pub type MirSurfaceCreateFlagBitsKhr = MirSurfaceCreateFlagsKhr;
+    flags {}
+    no_bits {}
+}
 
 gen_chain_struct! {
     name: MirSurfaceCreateInfoChainKhr [MirSurfaceCreateInfoChainKhrWrapper],

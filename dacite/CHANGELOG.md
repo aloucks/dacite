@@ -18,6 +18,9 @@ This release contains breaking changes.
  - Bumped lowest supported Rust version to 1.20.
  - Updated `vks` to 0.20.
  - Updated `bitflags` to version 1.0. All bitflags values are now associated consts.
+ - The `FlagBits` types are now proper enums instead of simple aliases for `Flags`. This provides an
+   additional layer of type safety. Vulkan uses `FlagBits` types, whenever only a single bit is
+   supposed to be set.
 
 
 ## [0.6.1] - 2017-07-09
