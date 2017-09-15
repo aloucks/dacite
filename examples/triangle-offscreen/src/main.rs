@@ -228,7 +228,7 @@ fn create_framebuffer(device: &dacite::core::Device, render_pass: &dacite::core:
 fn create_buffer(device: &dacite::core::Device, extent: &dacite::core::Extent2D, memory_types: &[dacite::core::MemoryType]) -> Result<BufferSettings, ()> {
     let create_info = dacite::core::BufferCreateInfo {
         flags: dacite::core::BufferCreateFlags::empty(),
-        size: 4 * extent.width as u64 * extent.height as u64,
+        size: 4 * u64::from(extent.width) * u64::from(extent.height),
         usage: dacite::core::BUFFER_USAGE_TRANSFER_DST_BIT,
         sharing_mode: dacite::core::SharingMode::Exclusive,
         queue_family_indices: vec![],
