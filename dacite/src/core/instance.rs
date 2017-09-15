@@ -164,7 +164,7 @@ impl Instance {
 
         let debug_report_callback = if let Some(ref chain) = create_info.chain {
             if let Some(ref debug_report_callback_create_info_ext) = chain.debug_report_callback_create_info_ext {
-                Some(debug_report_callback_create_info_ext.callback.clone())
+                Some(Arc::clone(&debug_report_callback_create_info_ext.callback))
             }
             else {
                 None

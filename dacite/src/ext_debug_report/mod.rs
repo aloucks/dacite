@@ -204,7 +204,7 @@ pub(crate) struct VkDebugReportCallbackCreateInfoEXTWrapper {
 
 impl VkDebugReportCallbackCreateInfoEXTWrapper {
     pub fn new(create_info: &DebugReportCallbackCreateInfoExt, with_chain: bool) -> Self {
-        let callback_helper = CallbackHelper::new(create_info.callback.clone());
+        let callback_helper = CallbackHelper::new(Arc::clone(&create_info.callback));
         let (pnext, chain) = DebugReportCallbackCreateInfoChainWrapperExt::new_optional(&create_info.chain, with_chain);
 
         VkDebugReportCallbackCreateInfoEXTWrapper {

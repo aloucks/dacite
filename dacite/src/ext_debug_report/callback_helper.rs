@@ -52,7 +52,7 @@ impl Clone for CallbackHelper {
         CallbackHelper {
             vks_callback: self.vks_callback,
             user_data: self.user_data,
-            callback: self.callback.clone(),
+            callback: Arc::clone(&self.callback),
         }
     }
 }
