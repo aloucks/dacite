@@ -8,6 +8,15 @@ Items listed in "Changed" sub-sections are usually breaking changes. Any additio
 in other sub-sections are prefixed with "**BREAKING**" to increase visibility.
 
 
+## [Unreleased]
+This release contains breaking changes.
+
+### Changed
+ - Updated `bitflags` to version 1.0. `SurfaceCreateFlags` now uses associated consts. This
+   shouldn't actually break any existing code, because there is only a single dummy value defined,
+   which shouldn't be used anyway.
+
+
 ## [0.6.0] - 2017-07-08
 This release contains breaking changes.
 

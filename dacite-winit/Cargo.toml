@@ -19,5 +19,5 @@ version = "0.6"
 path = "../dacite"
 
 [dependencies]
-bitflags = "0.9"
+bitflags = "1.0"
 winit = "0.7"
