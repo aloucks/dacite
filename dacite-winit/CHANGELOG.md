@@ -8,13 +8,14 @@ Items listed in "Changed" sub-sections are usually breaking changes. Any additio
 in other sub-sections are prefixed with "**BREAKING**" to increase visibility.
 
 
-## [Unreleased]
+## [0.7.0] - 2017-09-19
 This release contains breaking changes.
 
 ### Changed
  - Updated `bitflags` to version 1.0. `SurfaceCreateFlags` now uses associated consts. This
    shouldn't actually break any existing code, because there is only a single dummy value defined,
    which shouldn't be used anyway.
+ - Updated `dacite` to 0.7.0
 
 
 ## [0.6.0] - 2017-07-08

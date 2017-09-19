@@ -5,7 +5,7 @@ This repository hosts multiple related projects:
 | Project | Description | Version | Changelog | crates.io | Documentation | License |
 | --- | --- | --- | --- | --- | --- | --- |
 | [dacite] | The main project, a mostly safe Vulkan library for Rust | 0.7.0 | [Changelog][dacite-changelog] | [![dacite on crates.io](https://img.shields.io/crates/v/dacite.svg)](https://crates.io/crates/dacite) | [![dacite on docs.rs](https://docs.rs/dacite/badge.svg)](https://docs.rs/dacite) | [![dacite license](https://img.shields.io/badge/license-ISC-blue.svg)](dacite/LICENSE) |
-| [dacite-winit] | Easy, platform-independent winit-based surface creation | 0.6.0 | [Changelog][dacite-winit-changelog] | [![dacite-winit on crates.io](https://img.shields.io/crates/v/dacite-winit.svg)](https://crates.io/crates/dacite-winit) | [![dacite-winit on docs.rs](https://docs.rs/dacite-winit/badge.svg)](https://docs.rs/dacite-winit) | [![dacite-winit license](https://img.shields.io/badge/license-ISC-blue.svg)](dacite-winit/LICENSE) |
+| [dacite-winit] | Easy, platform-independent winit-based surface creation | 0.7.0 | [Changelog][dacite-winit-changelog] | [![dacite-winit on crates.io](https://img.shields.io/crates/v/dacite-winit.svg)](https://crates.io/crates/dacite-winit) | [![dacite-winit on docs.rs](https://docs.rs/dacite-winit/badge.svg)](https://docs.rs/dacite-winit) | [![dacite-winit license](https://img.shields.io/badge/license-ISC-blue.svg)](dacite-winit/LICENSE) |
 
 See the project specific subdirectories for more information.
 
