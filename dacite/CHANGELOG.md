@@ -8,7 +8,7 @@ Items listed in "Changed" sub-sections are usually breaking changes. Any additio
 in other sub-sections are prefixed with "**BREAKING**" to increase visibility.
 
 
-## [Unreleased]
+## [0.7.0] - 2017-09-19
 This release contains breaking changes.
 
 ### Fixed
