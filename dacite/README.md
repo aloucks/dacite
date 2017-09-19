@@ -26,7 +26,7 @@ dacite is different from the C API will be documented over time.
 
 ## Usage
 
-Rust 1.18.0 or newer is required.
+Rust 1.20.0 or newer is required.
 
 Dacite is available on [crates.io]. Add this to your `Cargo.toml`:
 
