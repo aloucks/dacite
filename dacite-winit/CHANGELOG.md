@@ -1,34 +1,48 @@
 # dacite-winit Changelog
+All notable changes to this project will be documented in this file.
 
-## Version 0.6.0, released on 08.07.2017
+The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
+and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
- - Compatibility with dacite 0.6.0
-
-
-## Version 0.5.0, released on 02.07.2017
-
- - Compatibility with dacite 0.5.0
+Items listed in "Changed" sub-sections are usually breaking changes. Any additional breaking changes
+in other sub-sections are prefixed with "**BREAKING**" to increase visibility.
 
 
-## Version 0.4.0, released on 25.06.2017
+## [0.6.0] - 2017-07-08
+This release contains breaking changes.
 
- - Compatibility with dacite 0.4.0
-
-### Breaking changes
-
- - winit was updated to 0.7.x.
+### Changed
+ - Updated `dacite` to 0.6.0
 
 
-## Version 0.3.0, released on 06.06.2017
+## [0.5.0] - 2017-07-02
+This release contains breaking changes.
 
- - Compatibility with dacite 0.3.0
-
-
-## Version 0.2.0, released on 05.06.2017
-
- - Compatibility with dacite 0.2.0
+### Changed
+ - Updated `dacite` to 0.5.0
 
 
-## Version 0.1.0, released on 05.06.2017
+## [0.4.0] - 2017-06-25
+This release contains breaking changes.
 
- - This is the initial release of dacite-winit.
+### Changed
+ - Updated `dacite` to 0.4.0
+ - Updated `winit` to 0.7.x.
+
+
+## [0.3.0] - 2017-06-06
+This release contains breaking changes.
+
+### Changed
+ - Updated `dacite` to 0.3.0
+
+
+## [0.2.0] - 2017-06-05
+This release contains breaking changes.
+
+### Changed
+ - Updated `dacite` to 0.2.0
+
+
+## [0.1.0] - 2017-06-05
+This is the initial release of dacite-winit.
