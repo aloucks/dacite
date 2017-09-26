@@ -255,7 +255,7 @@ fn get_backend(window: &Window) -> Result<Backend, Error> {
         if let (Some(display), Some(window)) = (window.get_xlib_display(), window.get_xlib_window()) {
             return Ok(Backend::Xlib {
                 display: display as _,
-                window: xlib_types::Window(window as _),
+                window: window as _,
             });
         }
 
