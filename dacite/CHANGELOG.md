@@ -8,6 +8,13 @@ Items listed in "Changed" and "Removed" sub-sections are usually breaking change
 breaking changes in other sub-sections are prefixed with "**BREAKING**" to increase visibility.
 
 
+## [Unreleased]
+This release contains breaking changes.
+
+### Changed
+ - Update `vks` to 0.21.
+
+
 ## [0.7.0] - 2017-09-19
 This release contains breaking changes.
 
