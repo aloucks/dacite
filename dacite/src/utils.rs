@@ -18,17 +18,17 @@ use std::ptr;
 use vks;
 
 #[inline]
-pub fn from_vk_bool(v: vks::core::VkBool32) -> bool {
-    v != vks::core::VK_FALSE
+pub fn from_vk_bool(v: vks::vk::VkBool32) -> bool {
+    v != vks::vk::VK_FALSE
 }
 
 #[inline]
-pub fn to_vk_bool(v: bool) -> vks::core::VkBool32 {
+pub fn to_vk_bool(v: bool) -> vks::vk::VkBool32 {
     if v {
-        vks::core::VK_TRUE
+        vks::vk::VK_TRUE
     }
     else {
-        vks::core::VK_FALSE
+        vks::vk::VK_FALSE
     }
 }
 

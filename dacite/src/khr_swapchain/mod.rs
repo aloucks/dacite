@@ -104,7 +104,7 @@ impl VkSwapchainCreateInfoKHRWrapper {
 
         VkSwapchainCreateInfoKHRWrapper {
             vks_struct: vks::khr_swapchain::VkSwapchainCreateInfoKHR {
-                sType: vks::core::VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR,
+                sType: vks::vk::VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR,
                 pNext: pnext,
                 flags: create_info.flags.bits(),
                 surface: create_info.surface.handle(),
@@ -144,7 +144,7 @@ gen_chain_struct! {
         fn_get: get_display_present_info_khr,
         wrapper: khr_display_swapchain::VkDisplayPresentInfoKHRWrapper,
         vks: vks::khr_display_swapchain::VkDisplayPresentInfoKHR,
-        stype: vks::core::VK_STRUCTURE_TYPE_DISPLAY_PRESENT_INFO_KHR,
+        stype: vks::vk::VK_STRUCTURE_TYPE_DISPLAY_PRESENT_INFO_KHR,
     }
 }
 
@@ -161,9 +161,9 @@ pub struct PresentInfoKhr {
 #[derive(Debug)]
 pub(crate) struct VkPresentInfoKHRWrapper {
     pub vks_struct: vks::khr_swapchain::VkPresentInfoKHR,
-    pub results: Option<Vec<vks::core::VkResult>>,
+    pub results: Option<Vec<vks::vk::VkResult>>,
     wait_semaphores: Vec<core::Semaphore>,
-    vk_wait_semaphores: Vec<vks::core::VkSemaphore>,
+    vk_wait_semaphores: Vec<vks::vk::VkSemaphore>,
     swapchains: Vec<SwapchainKhr>,
     vk_swapchains: Vec<vks::khr_swapchain::VkSwapchainKHR>,
     image_indices: Vec<u32>,
@@ -198,7 +198,7 @@ impl VkPresentInfoKHRWrapper {
 
         VkPresentInfoKHRWrapper {
             vks_struct: vks::khr_swapchain::VkPresentInfoKHR {
-                sType: vks::core::VK_STRUCTURE_TYPE_PRESENT_INFO_KHR,
+                sType: vks::vk::VK_STRUCTURE_TYPE_PRESENT_INFO_KHR,
                 pNext: pnext,
                 waitSemaphoreCount: wait_semaphores.len() as u32,
                 pWaitSemaphores: wait_semaphores_ptr,

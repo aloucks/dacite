@@ -56,7 +56,7 @@ impl VkWin32SurfaceCreateInfoKHRWrapper {
 
         VkWin32SurfaceCreateInfoKHRWrapper {
             vks_struct: vks::khr_win32_surface::VkWin32SurfaceCreateInfoKHR {
-                sType: vks::core::VK_STRUCTURE_TYPE_WIN32_SURFACE_CREATE_INFO_KHR,
+                sType: vks::vk::VK_STRUCTURE_TYPE_WIN32_SURFACE_CREATE_INFO_KHR,
                 pNext: pnext,
                 flags: create_info.flags.bits(),
                 hinstance: create_info.hinstance,

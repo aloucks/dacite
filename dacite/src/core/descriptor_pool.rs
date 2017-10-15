@@ -29,7 +29,7 @@ use vks;
 pub struct DescriptorPool(Arc<Inner>);
 
 impl VulkanObject for DescriptorPool {
-    type NativeVulkanObject = vks::core::VkDescriptorPool;
+    type NativeVulkanObject = vks::vk::VkDescriptorPool;
 
     #[inline]
     fn id(&self) -> u64 {
@@ -85,7 +85,7 @@ impl FromNativeObject for DescriptorPool {
 }
 
 impl DescriptorPool {
-    pub(crate) fn new(handle: vks::core::VkDescriptorPool, owned: bool, device: Device, allocator: Option<AllocatorHelper>) -> Self {
+    pub(crate) fn new(handle: vks::vk::VkDescriptorPool, owned: bool, device: Device, allocator: Option<AllocatorHelper>) -> Self {
         DescriptorPool(Arc::new(Inner {
             handle: handle,
             owned: owned,
@@ -95,7 +95,7 @@ impl DescriptorPool {
     }
 
     #[inline]
-    pub(crate) fn handle(&self) -> vks::core::VkDescriptorPool {
+    pub(crate) fn handle(&self) -> vks::vk::VkDescriptorPool {
         self.0.handle
     }
 
@@ -105,7 +105,7 @@ impl DescriptorPool {
     }
 
     #[inline]
-    pub(crate) fn device_handle(&self) -> vks::core::VkDevice {
+    pub(crate) fn device_handle(&self) -> vks::vk::VkDevice {
         self.0.device.handle()
     }
 
@@ -117,10 +117,10 @@ impl DescriptorPool {
         let mut descriptor_sets = Vec::with_capacity(allocate_info.set_layouts.len());
         let res = unsafe {
             descriptor_sets.set_len(allocate_info.set_layouts.len());
-            descriptor_pool.loader().core.vkAllocateDescriptorSets(descriptor_pool.device_handle(), &allocate_info_wrapper.vks_struct, descriptor_sets.as_mut_ptr())
+            descriptor_pool.loader().vk.vkAllocateDescriptorSets(descriptor_pool.device_handle(), &allocate_info_wrapper.vks_struct, descriptor_sets.as_mut_ptr())
         };
 
-        if res == vks::core::VK_SUCCESS {
+        if res == vks::vk::VK_SUCCESS {
             Ok(descriptor_sets.iter().map(|s| DescriptorSet::new(*s, descriptor_pool.clone())).collect())
         }
         else {
@@ -133,10 +133,10 @@ impl DescriptorPool {
         let descriptor_sets: Vec<_> = descriptor_sets.iter().map(DescriptorSet::handle).collect();
 
         let res = unsafe {
-            self.loader().core.vkFreeDescriptorSets(self.device_handle(), self.handle(), descriptor_sets.len() as u32, descriptor_sets.as_ptr())
+            self.loader().vk.vkFreeDescriptorSets(self.device_handle(), self.handle(), descriptor_sets.len() as u32, descriptor_sets.as_ptr())
         };
 
-        if res == vks::core::VK_SUCCESS {
+        if res == vks::vk::VK_SUCCESS {
             Ok(())
         }
         else {
@@ -147,10 +147,10 @@ impl DescriptorPool {
     /// See [`vkResetDescriptorPool`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkResetDescriptorPool)
     pub fn reset(&self, flags: core::DescriptorPoolResetFlags) -> Result<(), core::Error> {
         let res = unsafe {
-            self.loader().core.vkResetDescriptorPool(self.device_handle(), self.handle(), flags.bits())
+            self.loader().vk.vkResetDescriptorPool(self.device_handle(), self.handle(), flags.bits())
         };
 
-        if res == vks::core::VK_SUCCESS {
+        if res == vks::vk::VK_SUCCESS {
             Ok(())
         }
         else {
@@ -161,7 +161,7 @@ impl DescriptorPool {
 
 #[derive(Debug)]
 struct Inner {
-    handle: vks::core::VkDescriptorPool,
+    handle: vks::vk::VkDescriptorPool,
     owned: bool,
     device: Device,
     allocator: Option<AllocatorHelper>,
@@ -176,7 +176,7 @@ impl Drop for Inner {
             };
 
             unsafe {
-                self.device.loader().core.vkDestroyDescriptorPool(self.device.handle(), self.handle, allocator);
+                self.device.loader().vk.vkDestroyDescriptorPool(self.device.handle(), self.handle, allocator);
             }
         }
     }

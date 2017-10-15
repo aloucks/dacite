@@ -56,7 +56,7 @@ impl VkXcbSurfaceCreateInfoKHRWrapper {
 
         VkXcbSurfaceCreateInfoKHRWrapper {
             vks_struct: vks::khr_xcb_surface::VkXcbSurfaceCreateInfoKHR {
-                sType: vks::core::VK_STRUCTURE_TYPE_XCB_SURFACE_CREATE_INFO_KHR,
+                sType: vks::vk::VK_STRUCTURE_TYPE_XCB_SURFACE_CREATE_INFO_KHR,
                 pNext: pnext,
                 flags: create_info.flags.bits(),
                 connection: create_info.connection,

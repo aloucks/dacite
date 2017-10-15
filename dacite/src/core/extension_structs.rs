@@ -125,7 +125,7 @@ macro_rules! gen_extension_structs {
 
             #[allow(dead_code)]
             #[allow(unused_variables)]
-            unsafe fn load_instance(&self, loader: &mut vks::InstanceProcAddrLoader, instance: vks::core::VkInstance) {
+            unsafe fn load_instance(&self, loader: &mut vks::InstanceProcAddrLoader, instance: vks::vk::VkInstance) {
                 $( $(
                     if self.$ext_fn_has() {
                         loader.$ext_load_instance(instance);
@@ -135,7 +135,7 @@ macro_rules! gen_extension_structs {
 
             #[allow(dead_code)]
             #[allow(unused_variables)]
-            unsafe fn load_device(&self, loader: &mut vks::DeviceProcAddrLoader, device: vks::core::VkDevice) {
+            unsafe fn load_device(&self, loader: &mut vks::DeviceProcAddrLoader, device: vks::vk::VkDevice) {
                 $( $(
                     if self.$ext_fn_has() {
                         loader.$ext_load_device(device);

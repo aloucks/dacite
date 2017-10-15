@@ -46,7 +46,7 @@ impl VkImportMemoryWin32HandleInfoNVWrapper {
 
         VkImportMemoryWin32HandleInfoNVWrapper {
             vks_struct: vks::nv_external_memory_win32::VkImportMemoryWin32HandleInfoNV {
-                sType: vks::core::VK_STRUCTURE_TYPE_IMPORT_MEMORY_WIN32_HANDLE_INFO_NV,
+                sType: vks::vk::VK_STRUCTURE_TYPE_IMPORT_MEMORY_WIN32_HANDLE_INFO_NV,
                 pNext: pnext,
                 handleType: info.handle_type.bits(),
                 handle: info.handle,
@@ -84,7 +84,7 @@ impl VkExportMemoryWin32HandleInfoNVWrapper {
 
         VkExportMemoryWin32HandleInfoNVWrapper {
             vks_struct: vks::nv_external_memory_win32::VkExportMemoryWin32HandleInfoNV {
-                sType: vks::core::VK_STRUCTURE_TYPE_EXPORT_MEMORY_WIN32_HANDLE_INFO_NV,
+                sType: vks::vk::VK_STRUCTURE_TYPE_EXPORT_MEMORY_WIN32_HANDLE_INFO_NV,
                 pNext: pnext,
                 pAttributes: info.attributes,
                 dwAccess: info.dw_access,

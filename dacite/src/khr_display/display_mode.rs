@@ -104,7 +104,7 @@ impl DisplayModeKhr {
     }
 
     #[inline]
-    pub(crate) fn physical_device_handle(&self) -> vks::core::VkPhysicalDevice {
+    pub(crate) fn physical_device_handle(&self) -> vks::vk::VkPhysicalDevice {
         self.display.physical_device_handle()
     }
 
@@ -114,7 +114,7 @@ impl DisplayModeKhr {
             let mut capabilities = mem::uninitialized();
             let res = self.loader().khr_display.vkGetDisplayPlaneCapabilitiesKHR(self.physical_device_handle(), self.handle, plane_index, &mut capabilities);
 
-            if res == vks::core::VK_SUCCESS {
+            if res == vks::vk::VK_SUCCESS {
                 Ok((&capabilities).into())
             }
             else {

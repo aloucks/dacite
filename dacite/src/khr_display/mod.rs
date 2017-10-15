@@ -156,7 +156,7 @@ impl VkDisplayModeCreateInfoKHRWrapper {
 
         VkDisplayModeCreateInfoKHRWrapper {
             vks_struct: vks::khr_display::VkDisplayModeCreateInfoKHR {
-                sType: vks::core::VK_STRUCTURE_TYPE_DISPLAY_MODE_CREATE_INFO_KHR,
+                sType: vks::vk::VK_STRUCTURE_TYPE_DISPLAY_MODE_CREATE_INFO_KHR,
                 pNext: pnext,
                 flags: create_info.flags.bits(),
                 parameters: (&create_info.parameters).into(),
@@ -253,7 +253,7 @@ impl VkDisplaySurfaceCreateInfoKHRWrapper {
 
         VkDisplaySurfaceCreateInfoKHRWrapper {
             vks_struct: vks::khr_display::VkDisplaySurfaceCreateInfoKHR {
-                sType: vks::core::VK_STRUCTURE_TYPE_DISPLAY_SURFACE_CREATE_INFO_KHR,
+                sType: vks::vk::VK_STRUCTURE_TYPE_DISPLAY_SURFACE_CREATE_INFO_KHR,
                 pNext: pnext,
                 flags: create_info.flags.bits(),
                 displayMode: create_info.display_mode.handle,

@@ -29,7 +29,7 @@ use vks;
 pub struct DescriptorSetLayout(Arc<Inner>);
 
 impl VulkanObject for DescriptorSetLayout {
-    type NativeVulkanObject = vks::core::VkDescriptorSetLayout;
+    type NativeVulkanObject = vks::vk::VkDescriptorSetLayout;
 
     #[inline]
     fn id(&self) -> u64 {
@@ -85,7 +85,7 @@ impl FromNativeObject for DescriptorSetLayout {
 }
 
 impl DescriptorSetLayout {
-    pub(crate) fn new(handle: vks::core::VkDescriptorSetLayout, owned: bool, device: Device, allocator: Option<AllocatorHelper>) -> Self {
+    pub(crate) fn new(handle: vks::vk::VkDescriptorSetLayout, owned: bool, device: Device, allocator: Option<AllocatorHelper>) -> Self {
         DescriptorSetLayout(Arc::new(Inner {
             handle: handle,
             owned: owned,
@@ -95,14 +95,14 @@ impl DescriptorSetLayout {
     }
 
     #[inline]
-    pub(crate) fn handle(&self) -> vks::core::VkDescriptorSetLayout {
+    pub(crate) fn handle(&self) -> vks::vk::VkDescriptorSetLayout {
         self.0.handle
     }
 }
 
 #[derive(Debug)]
 struct Inner {
-    handle: vks::core::VkDescriptorSetLayout,
+    handle: vks::vk::VkDescriptorSetLayout,
     owned: bool,
     device: Device,
     allocator: Option<AllocatorHelper>,
@@ -117,7 +117,7 @@ impl Drop for Inner {
             };
 
             unsafe {
-                self.device.loader().core.vkDestroyDescriptorSetLayout(self.device.handle(), self.handle, allocator);
+                self.device.loader().vk.vkDestroyDescriptorSetLayout(self.device.handle(), self.handle, allocator);
             }
         }
     }

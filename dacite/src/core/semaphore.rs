@@ -29,7 +29,7 @@ use vks;
 pub struct Semaphore(Arc<Inner>);
 
 impl VulkanObject for Semaphore {
-    type NativeVulkanObject = vks::core::VkSemaphore;
+    type NativeVulkanObject = vks::vk::VkSemaphore;
 
     #[inline]
     fn id(&self) -> u64 {
@@ -85,7 +85,7 @@ impl FromNativeObject for Semaphore {
 }
 
 impl Semaphore {
-    pub(crate) fn new(handle: vks::core::VkSemaphore, owned: bool, device: Device, allocator: Option<AllocatorHelper>) -> Self {
+    pub(crate) fn new(handle: vks::vk::VkSemaphore, owned: bool, device: Device, allocator: Option<AllocatorHelper>) -> Self {
         Semaphore(Arc::new(Inner {
             handle: handle,
             owned: owned,
@@ -95,14 +95,14 @@ impl Semaphore {
     }
 
     #[inline]
-    pub(crate) fn handle(&self) -> vks::core::VkSemaphore {
+    pub(crate) fn handle(&self) -> vks::vk::VkSemaphore {
         self.0.handle
     }
 }
 
 #[derive(Debug)]
 struct Inner {
-    handle: vks::core::VkSemaphore,
+    handle: vks::vk::VkSemaphore,
     owned: bool,
     device: Device,
     allocator: Option<AllocatorHelper>,
@@ -117,7 +117,7 @@ impl Drop for Inner {
             };
 
             unsafe {
-                self.device.loader().core.vkDestroySemaphore(self.device.handle(), self.handle, allocator);
+                self.device.loader().vk.vkDestroySemaphore(self.device.handle(), self.handle, allocator);
             }
         }
     }

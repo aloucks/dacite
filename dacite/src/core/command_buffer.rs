@@ -40,7 +40,7 @@ use vks;
 pub struct CommandBuffer(Arc<Inner>);
 
 impl VulkanObject for CommandBuffer {
-    type NativeVulkanObject = vks::core::VkCommandBuffer;
+    type NativeVulkanObject = vks::vk::VkCommandBuffer;
 
     #[inline]
     fn id(&self) -> u64 {
@@ -90,7 +90,7 @@ impl FromNativeObject for CommandBuffer {
 }
 
 impl CommandBuffer {
-    pub(crate) fn new(handle: vks::core::VkCommandBuffer, owned: bool, command_pool: CommandPool) -> Self {
+    pub(crate) fn new(handle: vks::vk::VkCommandBuffer, owned: bool, command_pool: CommandPool) -> Self {
         CommandBuffer(Arc::new(Inner {
             handle: handle,
             owned: owned,
@@ -99,7 +99,7 @@ impl CommandBuffer {
     }
 
     #[inline]
-    pub(crate) fn handle(&self) -> vks::core::VkCommandBuffer {
+    pub(crate) fn handle(&self) -> vks::vk::VkCommandBuffer {
         self.0.handle
     }
 
@@ -113,10 +113,10 @@ impl CommandBuffer {
         let begin_info_wrapper = core::VkCommandBufferBeginInfoWrapper::new(begin_info, true);
 
         let res = unsafe {
-            self.loader().core.vkBeginCommandBuffer(self.handle(), &begin_info_wrapper.vks_struct)
+            self.loader().vk.vkBeginCommandBuffer(self.handle(), &begin_info_wrapper.vks_struct)
         };
 
-        if res == vks::core::VK_SUCCESS {
+        if res == vks::vk::VK_SUCCESS {
             Ok(())
         }
         else {
@@ -127,10 +127,10 @@ impl CommandBuffer {
     /// See [`vkEndCommandBuffer`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkEndCommandBuffer)
     pub fn end(&self) -> Result<(), core::Error> {
         let res = unsafe {
-            self.loader().core.vkEndCommandBuffer(self.handle())
+            self.loader().vk.vkEndCommandBuffer(self.handle())
         };
 
-        if res == vks::core::VK_SUCCESS {
+        if res == vks::vk::VK_SUCCESS {
             Ok(())
         }
         else {
@@ -141,10 +141,10 @@ impl CommandBuffer {
     /// See [`vkResetCommandBuffer`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkResetCommandBuffer)
     pub fn reset(&self, flags: core::CommandBufferResetFlags) -> Result<(), core::Error> {
         let res = unsafe {
-            self.loader().core.vkResetCommandBuffer(self.handle(), flags.bits())
+            self.loader().vk.vkResetCommandBuffer(self.handle(), flags.bits())
         };
 
-        if res == vks::core::VK_SUCCESS {
+        if res == vks::vk::VK_SUCCESS {
             Ok(())
         }
         else {
@@ -155,7 +155,7 @@ impl CommandBuffer {
     /// See [`vkCmdBindPipeline`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCmdBindPipeline)
     pub fn bind_pipeline(&self, pipeline_bind_point: core::PipelineBindPoint, pipeline: &Pipeline) {
         unsafe {
-            self.loader().core.vkCmdBindPipeline(self.handle(), pipeline_bind_point.into(), pipeline.handle());
+            self.loader().vk.vkCmdBindPipeline(self.handle(), pipeline_bind_point.into(), pipeline.handle());
         }
     }
 
@@ -163,7 +163,7 @@ impl CommandBuffer {
     pub fn set_viewport(&self, first_viewport: u32, viewports: &[core::Viewport]) {
         let viewports: Vec<_> = viewports.iter().map(From::from).collect();
         unsafe {
-            self.loader().core.vkCmdSetViewport(self.handle(), first_viewport, viewports.len() as u32, viewports.as_ptr());
+            self.loader().vk.vkCmdSetViewport(self.handle(), first_viewport, viewports.len() as u32, viewports.as_ptr());
         }
     }
 
@@ -171,56 +171,56 @@ impl CommandBuffer {
     pub fn set_scissor(&self, first_scissor: u32, scissors: &[core::Rect2D]) {
         let scissors: Vec<_> = scissors.iter().map(From::from).collect();
         unsafe {
-            self.loader().core.vkCmdSetScissor(self.handle(), first_scissor, scissors.len() as u32, scissors.as_ptr());
+            self.loader().vk.vkCmdSetScissor(self.handle(), first_scissor, scissors.len() as u32, scissors.as_ptr());
         }
     }
 
     /// See [`vkCmdSetLineWidth`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCmdSetLineWidth)
     pub fn set_line_width(&self, line_width: f32) {
         unsafe {
-            self.loader().core.vkCmdSetLineWidth(self.handle(), line_width);
+            self.loader().vk.vkCmdSetLineWidth(self.handle(), line_width);
         }
     }
 
     /// See [`vkCmdSetDepthBias`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCmdSetDepthBias)
     pub fn set_depth_bias(&self, depth_bias_constant_factor: f32, depth_bias_clamp: f32, depth_bias_slope_factor: f32) {
         unsafe {
-            self.loader().core.vkCmdSetDepthBias(self.handle(), depth_bias_constant_factor, depth_bias_clamp, depth_bias_slope_factor);
+            self.loader().vk.vkCmdSetDepthBias(self.handle(), depth_bias_constant_factor, depth_bias_clamp, depth_bias_slope_factor);
         }
     }
 
     /// See [`vkCmdSetBlendConstants`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCmdSetBlendConstants)
     pub fn set_blend_constants(&self, blend_constants: &[f32]) {
         unsafe {
-            self.loader().core.vkCmdSetBlendConstants(self.handle(), blend_constants.as_ptr());
+            self.loader().vk.vkCmdSetBlendConstants(self.handle(), blend_constants.as_ptr());
         }
     }
 
     /// See [`vkCmdSetDepthBounds`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCmdSetDepthBounds)
     pub fn set_depth_bounds(&self, min_depth_bounds: f32, max_depth_bounds: f32) {
         unsafe {
-            self.loader().core.vkCmdSetDepthBounds(self.handle(), min_depth_bounds, max_depth_bounds);
+            self.loader().vk.vkCmdSetDepthBounds(self.handle(), min_depth_bounds, max_depth_bounds);
         }
     }
 
     /// See [`vkCmdSetStencilCompareMask`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCmdSetStencilCompareMask)
     pub fn set_stencil_compare_mask(&self, face_mask: core::StencilFaceFlags, compare_mask: u32) {
         unsafe {
-            self.loader().core.vkCmdSetStencilCompareMask(self.handle(), face_mask.bits(), compare_mask);
+            self.loader().vk.vkCmdSetStencilCompareMask(self.handle(), face_mask.bits(), compare_mask);
         }
     }
 
     /// See [`vkCmdSetStencilWriteMask`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCmdSetStencilWriteMask)
     pub fn set_stencil_write_mask(&self, face_mask: core::StencilFaceFlags, write_mask: u32) {
         unsafe {
-            self.loader().core.vkCmdSetStencilWriteMask(self.handle(), face_mask.bits(), write_mask);
+            self.loader().vk.vkCmdSetStencilWriteMask(self.handle(), face_mask.bits(), write_mask);
         }
     }
 
     /// See [`vkCmdSetStencilReference`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCmdSetStencilReference)
     pub fn set_stencil_reference(&self, face_mask: core::StencilFaceFlags, reference: u32) {
         unsafe {
-            self.loader().core.vkCmdSetStencilReference(self.handle(), face_mask.bits(), reference);
+            self.loader().vk.vkCmdSetStencilReference(self.handle(), face_mask.bits(), reference);
         }
     }
 
@@ -234,14 +234,14 @@ impl CommandBuffer {
         };
 
         unsafe {
-            self.loader().core.vkCmdBindDescriptorSets(self.handle(), pipeline_bind_point.into(), layout.handle(), first_set, descriptor_sets.len() as u32, descriptor_sets.as_ptr(), dynamic_offsets_count, dynamic_offsets_ptr);
+            self.loader().vk.vkCmdBindDescriptorSets(self.handle(), pipeline_bind_point.into(), layout.handle(), first_set, descriptor_sets.len() as u32, descriptor_sets.as_ptr(), dynamic_offsets_count, dynamic_offsets_ptr);
         }
     }
 
     /// See [`vkCmdBindIndexBuffer`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCmdBindIndexBuffer)
     pub fn bind_index_buffer(&self, buffer: &Buffer, offset: u64, index_type: core::IndexType) {
         unsafe {
-            self.loader().core.vkCmdBindIndexBuffer(self.handle(), buffer.handle(), offset, index_type.into());
+            self.loader().vk.vkCmdBindIndexBuffer(self.handle(), buffer.handle(), offset, index_type.into());
         }
     }
 
@@ -249,49 +249,49 @@ impl CommandBuffer {
     pub fn bind_vertex_buffers(&self, first_binding: u32, buffers: &[Buffer], offsets: &[u64]) {
         let buffers: Vec<_> = buffers.iter().map(Buffer::handle).collect();
         unsafe {
-            self.loader().core.vkCmdBindVertexBuffers(self.handle(), first_binding, buffers.len() as u32, buffers.as_ptr(), offsets.as_ptr());
+            self.loader().vk.vkCmdBindVertexBuffers(self.handle(), first_binding, buffers.len() as u32, buffers.as_ptr(), offsets.as_ptr());
         }
     }
 
     /// See [`vkCmdDraw`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCmdDraw)
     pub fn draw(&self, vertex_count: u32, instance_count: u32, first_vertex: u32, first_instance: u32) {
         unsafe {
-            self.loader().core.vkCmdDraw(self.handle(), vertex_count, instance_count, first_vertex, first_instance);
+            self.loader().vk.vkCmdDraw(self.handle(), vertex_count, instance_count, first_vertex, first_instance);
         }
     }
 
     /// See [`vkCmdDrawIndexed`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCmdDrawIndexed)
     pub fn draw_indexed(&self, index_count: u32, instance_count: u32, first_index: u32, vertex_offset: i32, first_instance: u32) {
         unsafe {
-            self.loader().core.vkCmdDrawIndexed(self.handle(), index_count, instance_count, first_index, vertex_offset, first_instance);
+            self.loader().vk.vkCmdDrawIndexed(self.handle(), index_count, instance_count, first_index, vertex_offset, first_instance);
         }
     }
 
     /// See [`vkCmdDrawIndirect`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCmdDrawIndirect)
     pub fn draw_indirect(&self, buffer: &Buffer, offset: u64, draw_count: u32, stride: u32) {
         unsafe {
-            self.loader().core.vkCmdDrawIndirect(self.handle(), buffer.handle(), offset, draw_count, stride);
+            self.loader().vk.vkCmdDrawIndirect(self.handle(), buffer.handle(), offset, draw_count, stride);
         }
     }
 
     /// See [`vkCmdDrawIndexedIndirect`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCmdDrawIndexedIndirect)
     pub fn draw_indexed_indirect(&self, buffer: &Buffer, offset: u64, draw_count: u32, stride: u32) {
         unsafe {
-            self.loader().core.vkCmdDrawIndexedIndirect(self.handle(), buffer.handle(), offset, draw_count, stride);
+            self.loader().vk.vkCmdDrawIndexedIndirect(self.handle(), buffer.handle(), offset, draw_count, stride);
         }
     }
 
     /// See [`vkCmdDispatch`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCmdDispatch)
     pub fn dispatch(&self, group_count_x: u32, group_count_y: u32, group_count_z: u32) {
         unsafe {
-            self.loader().core.vkCmdDispatch(self.handle(), group_count_x, group_count_y, group_count_z);
+            self.loader().vk.vkCmdDispatch(self.handle(), group_count_x, group_count_y, group_count_z);
         }
     }
 
     /// See [`vkCmdDispatchIndirect`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCmdDispatchIndirect)
     pub fn dispatch_indirect(&self, buffer: &Buffer, offset: u64) {
         unsafe {
-            self.loader().core.vkCmdDispatchIndirect(self.handle(), buffer.handle(), offset);
+            self.loader().vk.vkCmdDispatchIndirect(self.handle(), buffer.handle(), offset);
         }
     }
 
@@ -299,7 +299,7 @@ impl CommandBuffer {
     pub fn copy_buffer(&self, src_buffer: &Buffer, dst_buffer: &Buffer, regions: &[core::BufferCopy]) {
         let regions: Vec<_> = regions.iter().map(From::from).collect();
         unsafe {
-            self.loader().core.vkCmdCopyBuffer(self.handle(), src_buffer.handle(), dst_buffer.handle(), regions.len() as u32, regions.as_ptr());
+            self.loader().vk.vkCmdCopyBuffer(self.handle(), src_buffer.handle(), dst_buffer.handle(), regions.len() as u32, regions.as_ptr());
         }
     }
 
@@ -307,7 +307,7 @@ impl CommandBuffer {
     pub fn copy_image(&self, src_image: &Image, src_image_layout: core::ImageLayout, dst_image: &Image, dst_image_layout: core::ImageLayout, regions: &[core::ImageCopy]) {
         let regions: Vec<_> = regions.iter().map(From::from).collect();
         unsafe {
-            self.loader().core.vkCmdCopyImage(self.handle(), src_image.handle(), src_image_layout.into(), dst_image.handle(), dst_image_layout.into(), regions.len() as u32, regions.as_ptr());
+            self.loader().vk.vkCmdCopyImage(self.handle(), src_image.handle(), src_image_layout.into(), dst_image.handle(), dst_image_layout.into(), regions.len() as u32, regions.as_ptr());
         }
     }
 
@@ -315,7 +315,7 @@ impl CommandBuffer {
     pub fn blit_image(&self, src_image: &Image, src_image_layout: core::ImageLayout, dst_image: &Image, dst_image_layout: core::ImageLayout, regions: &[core::ImageBlit], filter: core::Filter) {
         let regions: Vec<_> = regions.iter().map(From::from).collect();
         unsafe {
-            self.loader().core.vkCmdBlitImage(self.handle(), src_image.handle(), src_image_layout.into(), dst_image.handle(), dst_image_layout.into(), regions.len() as u32, regions.as_ptr(), filter.into());
+            self.loader().vk.vkCmdBlitImage(self.handle(), src_image.handle(), src_image_layout.into(), dst_image.handle(), dst_image_layout.into(), regions.len() as u32, regions.as_ptr(), filter.into());
         }
     }
 
@@ -323,7 +323,7 @@ impl CommandBuffer {
     pub fn copy_buffer_to_image(&self, src_buffer: &Buffer, dst_image: &Image, dst_image_layout: core::ImageLayout, regions: &[core::BufferImageCopy]) {
         let regions: Vec<_> = regions.iter().map(From::from).collect();
         unsafe {
-            self.loader().core.vkCmdCopyBufferToImage(self.handle(), src_buffer.handle(), dst_image.handle(), dst_image_layout.into(), regions.len() as u32, regions.as_ptr());
+            self.loader().vk.vkCmdCopyBufferToImage(self.handle(), src_buffer.handle(), dst_image.handle(), dst_image_layout.into(), regions.len() as u32, regions.as_ptr());
         }
     }
 
@@ -331,21 +331,21 @@ impl CommandBuffer {
     pub fn copy_image_to_buffer(&self, src_image: &Image, src_image_layout: core::ImageLayout, dst_buffer: &Buffer, regions: &[core::BufferImageCopy]) {
         let regions: Vec<_> = regions.iter().map(From::from).collect();
         unsafe {
-            self.loader().core.vkCmdCopyImageToBuffer(self.handle(), src_image.handle(), src_image_layout.into(), dst_buffer.handle(), regions.len() as u32, regions.as_ptr());
+            self.loader().vk.vkCmdCopyImageToBuffer(self.handle(), src_image.handle(), src_image_layout.into(), dst_buffer.handle(), regions.len() as u32, regions.as_ptr());
         }
     }
 
     /// See [`vkCmdUpdateBuffer`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCmdUpdateBuffer)
     pub fn update_buffer(&self, dst_buffer: &Buffer, dst_offset: u64, data: &[u8]) {
         unsafe {
-            self.loader().core.vkCmdUpdateBuffer(self.handle(), dst_buffer.handle(), dst_offset, data.len() as u64, data.as_ptr() as *const _);
+            self.loader().vk.vkCmdUpdateBuffer(self.handle(), dst_buffer.handle(), dst_offset, data.len() as u64, data.as_ptr() as *const _);
         }
     }
 
     /// See [`vkCmdFillBuffer`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCmdFillBuffer)
     pub fn fill_buffer(&self, dst_buffer: &Buffer, dst_offset: u64, size: core::OptionalDeviceSize, data: u32) {
         unsafe {
-            self.loader().core.vkCmdFillBuffer(self.handle(), dst_buffer.handle(), dst_offset, size.into(), data);
+            self.loader().vk.vkCmdFillBuffer(self.handle(), dst_buffer.handle(), dst_offset, size.into(), data);
         }
     }
 
@@ -354,7 +354,7 @@ impl CommandBuffer {
         let color = color.into();
         let ranges: Vec<_> = ranges.iter().map(From::from).collect();
         unsafe {
-            self.loader().core.vkCmdClearColorImage(self.handle(), image.handle(), image_layout.into(), &color, ranges.len() as u32, ranges.as_ptr());
+            self.loader().vk.vkCmdClearColorImage(self.handle(), image.handle(), image_layout.into(), &color, ranges.len() as u32, ranges.as_ptr());
         }
     }
 
@@ -363,7 +363,7 @@ impl CommandBuffer {
         let depth_stencil = depth_stencil.into();
         let ranges: Vec<_> = ranges.iter().map(From::from).collect();
         unsafe {
-            self.loader().core.vkCmdClearDepthStencilImage(self.handle(), image.handle(), image_layout.into(), &depth_stencil, ranges.len() as u32, ranges.as_ptr());
+            self.loader().vk.vkCmdClearDepthStencilImage(self.handle(), image.handle(), image_layout.into(), &depth_stencil, ranges.len() as u32, ranges.as_ptr());
         }
     }
 
@@ -372,7 +372,7 @@ impl CommandBuffer {
         let attachments: Vec<_> = attachments.iter().map(From::from).collect();
         let rects: Vec<_> = rects.iter().map(From::from).collect();
         unsafe {
-            self.loader().core.vkCmdClearAttachments(self.handle(), attachments.len() as u32, attachments.as_ptr(), rects.len() as u32, rects.as_ptr());
+            self.loader().vk.vkCmdClearAttachments(self.handle(), attachments.len() as u32, attachments.as_ptr(), rects.len() as u32, rects.as_ptr());
         }
     }
 
@@ -380,21 +380,21 @@ impl CommandBuffer {
     pub fn resolve_image(&self, src_image: &Image, src_image_layout: core::ImageLayout, dst_image: &Image, dst_image_layout: core::ImageLayout, regions: &[core::ImageResolve]) {
         let regions: Vec<_> = regions.iter().map(From::from).collect();
         unsafe {
-            self.loader().core.vkCmdResolveImage(self.handle(), src_image.handle(), src_image_layout.into(), dst_image.handle(), dst_image_layout.into(), regions.len() as u32, regions.as_ptr());
+            self.loader().vk.vkCmdResolveImage(self.handle(), src_image.handle(), src_image_layout.into(), dst_image.handle(), dst_image_layout.into(), regions.len() as u32, regions.as_ptr());
         }
     }
 
     /// See [`vkCmdSetEvent`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCmdSetEvent)
     pub fn set_event(&self, event: &Event, stage_mask: core::PipelineStageFlags) {
         unsafe {
-            self.loader().core.vkCmdSetEvent(self.handle(), event.handle(), stage_mask.bits());
+            self.loader().vk.vkCmdSetEvent(self.handle(), event.handle(), stage_mask.bits());
         }
     }
 
     /// See [`vkCmdResetEvent`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCmdResetEvent)
     pub fn reset_event(&self, event: &Event, stage_mask: core::PipelineStageFlags) {
         unsafe {
-            self.loader().core.vkCmdResetEvent(self.handle(), event.handle(), stage_mask.bits());
+            self.loader().vk.vkCmdResetEvent(self.handle(), event.handle(), stage_mask.bits());
         }
     }
 
@@ -436,7 +436,7 @@ impl CommandBuffer {
         };
 
         unsafe {
-            self.loader().core.vkCmdWaitEvents(self.handle(), events.len() as u32, events.as_ptr(), src_stage_mask.bits(), dst_stage_mask.bits(), memory_barriers_count, memory_barriers_ptr, buffer_memory_barriers_count, buffer_memory_barriers_ptr, image_memory_barriers_count, image_memory_barriers_ptr);
+            self.loader().vk.vkCmdWaitEvents(self.handle(), events.len() as u32, events.as_ptr(), src_stage_mask.bits(), dst_stage_mask.bits(), memory_barriers_count, memory_barriers_ptr, buffer_memory_barriers_count, buffer_memory_barriers_ptr, image_memory_barriers_count, image_memory_barriers_ptr);
         }
     }
 
@@ -476,35 +476,35 @@ impl CommandBuffer {
         };
 
         unsafe {
-            self.loader().core.vkCmdPipelineBarrier(self.handle(), src_stage_mask.bits(), dst_stage_mask.bits(), dependency_flags.bits(), memory_barriers_count, memory_barriers_ptr, buffer_memory_barriers_count, buffer_memory_barriers_ptr, image_memory_barriers_count, image_memory_barriers_ptr);
+            self.loader().vk.vkCmdPipelineBarrier(self.handle(), src_stage_mask.bits(), dst_stage_mask.bits(), dependency_flags.bits(), memory_barriers_count, memory_barriers_ptr, buffer_memory_barriers_count, buffer_memory_barriers_ptr, image_memory_barriers_count, image_memory_barriers_ptr);
         }
     }
 
     /// See [`vkCmdBeginQuery`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCmdBeginQuery)
     pub fn begin_query(&self, query_pool: &QueryPool, query: u32, flags: core::QueryControlFlags) {
         unsafe {
-            self.loader().core.vkCmdBeginQuery(self.handle(), query_pool.handle(), query, flags.bits());
+            self.loader().vk.vkCmdBeginQuery(self.handle(), query_pool.handle(), query, flags.bits());
         }
     }
 
     /// See [`vkCmdEndQuery`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCmdEndQuery)
     pub fn end_query(&self, query_pool: &QueryPool, query: u32) {
         unsafe {
-            self.loader().core.vkCmdEndQuery(self.handle(), query_pool.handle(), query);
+            self.loader().vk.vkCmdEndQuery(self.handle(), query_pool.handle(), query);
         }
     }
 
     /// See [`vkCmdResetQueryPool`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCmdResetQueryPool)
     pub fn reset_query_pool(&self, query_pool: &QueryPool, first_query: u32, query_count: u32) {
         unsafe {
-            self.loader().core.vkCmdResetQueryPool(self.handle(), query_pool.handle(), first_query, query_count);
+            self.loader().vk.vkCmdResetQueryPool(self.handle(), query_pool.handle(), first_query, query_count);
         }
     }
 
     /// See [`vkCmdWriteTimestamp`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCmdWriteTimestamp)
     pub fn write_timestamp(&self, pipeline_stage: core::PipelineStageFlagBits, query_pool: &QueryPool, query: u32) {
         unsafe {
-            self.loader().core.vkCmdWriteTimestamp(self.handle(), pipeline_stage.bit(), query_pool.handle(), query);
+            self.loader().vk.vkCmdWriteTimestamp(self.handle(), pipeline_stage.bit(), query_pool.handle(), query);
         }
     }
 
@@ -512,14 +512,14 @@ impl CommandBuffer {
     #[cfg_attr(feature = "cargo-clippy", allow(too_many_arguments))]
     pub fn copy_query_pool_results(&self, query_pool: &QueryPool, first_query: u32, query_count: u32, dst_buffer: &Buffer, dst_offset: u64, stride: u64, flags: core::QueryResultFlags) {
         unsafe {
-            self.loader().core.vkCmdCopyQueryPoolResults(self.handle(), query_pool.handle(), first_query, query_count, dst_buffer.handle(), dst_offset, stride, flags.bits());
+            self.loader().vk.vkCmdCopyQueryPoolResults(self.handle(), query_pool.handle(), first_query, query_count, dst_buffer.handle(), dst_offset, stride, flags.bits());
         }
     }
 
     /// See [`vkCmdPushConstants`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCmdPushConstants)
     pub fn push_constants(&self, layout: &PipelineLayout, stage_flags: core::ShaderStageFlags, offset: u32, values: &[u8]) {
         unsafe {
-            self.loader().core.vkCmdPushConstants(self.handle(), layout.handle(), stage_flags.bits(), offset, values.len() as u32, values.as_ptr() as *const c_void);
+            self.loader().vk.vkCmdPushConstants(self.handle(), layout.handle(), stage_flags.bits(), offset, values.len() as u32, values.as_ptr() as *const c_void);
         }
     }
 
@@ -527,21 +527,21 @@ impl CommandBuffer {
     pub fn begin_render_pass(&self, render_pass_begin: &core::RenderPassBeginInfo, contents: core::SubpassContents) {
         let render_pass_begin_wrapper = core::VkRenderPassBeginInfoWrapper::new(render_pass_begin, true);
         unsafe {
-            self.loader().core.vkCmdBeginRenderPass(self.handle(), &render_pass_begin_wrapper.vks_struct, contents.into());
+            self.loader().vk.vkCmdBeginRenderPass(self.handle(), &render_pass_begin_wrapper.vks_struct, contents.into());
         }
     }
 
     /// See [`vkCmdNextSubpass`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCmdNextSubpass)
     pub fn next_subpass(&self, contents: core::SubpassContents) {
         unsafe {
-            self.loader().core.vkCmdNextSubpass(self.handle(), contents.into());
+            self.loader().vk.vkCmdNextSubpass(self.handle(), contents.into());
         }
     }
 
     /// See [`vkCmdEndRenderPass`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkCmdEndRenderPass)
     pub fn end_render_pass(&self) {
         unsafe {
-            self.loader().core.vkCmdEndRenderPass(self.handle());
+            self.loader().vk.vkCmdEndRenderPass(self.handle());
         }
     }
 
@@ -549,7 +549,7 @@ impl CommandBuffer {
     pub fn execute_commands(&self, command_buffers: &[CommandBuffer]) {
         let command_buffers: Vec<_> = command_buffers.iter().map(CommandBuffer::handle).collect();
         unsafe {
-            self.loader().core.vkCmdExecuteCommands(self.handle(), command_buffers.len() as u32, command_buffers.as_ptr());
+            self.loader().vk.vkCmdExecuteCommands(self.handle(), command_buffers.len() as u32, command_buffers.as_ptr());
         }
     }
 
@@ -592,7 +592,7 @@ impl CommandBuffer {
 
 #[derive(Debug)]
 struct Inner {
-    handle: vks::core::VkCommandBuffer,
+    handle: vks::vk::VkCommandBuffer,
     owned: bool,
     command_pool: CommandPool,
 }
@@ -601,7 +601,7 @@ impl Drop for Inner {
     fn drop(&mut self) {
         if self.owned {
             unsafe {
-                self.command_pool.loader().core.vkFreeCommandBuffers(self.command_pool.device_handle(), self.command_pool.handle(), 1, &self.handle);
+                self.command_pool.loader().vk.vkFreeCommandBuffers(self.command_pool.device_handle(), self.command_pool.handle(), 1, &self.handle);
             }
         }
     }

@@ -106,7 +106,7 @@ impl SwapchainKhr {
     }
 
     #[inline]
-    pub(crate) fn device_handle(&self) -> vks::core::VkDevice {
+    pub(crate) fn device_handle(&self) -> vks::vk::VkDevice {
         self.0.device.handle()
     }
 
@@ -117,7 +117,7 @@ impl SwapchainKhr {
             self.loader().khr_swapchain.vkGetSwapchainImagesKHR(self.device_handle(), self.handle(), &mut num, ptr::null_mut())
         };
 
-        if res != vks::core::VK_SUCCESS {
+        if res != vks::vk::VK_SUCCESS {
             return Err(res.into());
         }
 
@@ -127,7 +127,7 @@ impl SwapchainKhr {
             self.loader().khr_swapchain.vkGetSwapchainImagesKHR(self.device_handle(), self.handle(), &mut num, images.as_mut_ptr())
         };
 
-        if res == vks::core::VK_SUCCESS {
+        if res == vks::vk::VK_SUCCESS {
             Ok(images.iter().map(|i| core::Image::new(*i, false, self.0.device.clone(), None)).collect())
         }
         else {
@@ -146,10 +146,10 @@ impl SwapchainKhr {
         };
 
         match res {
-            vks::core::VK_SUCCESS => Ok(AcquireNextImageResultKhr::Index(index as usize)),
-            vks::core::VK_TIMEOUT => Ok(AcquireNextImageResultKhr::Timeout),
-            vks::core::VK_NOT_READY => Ok(AcquireNextImageResultKhr::NotReady),
-            vks::core::VK_SUBOPTIMAL_KHR => Ok(AcquireNextImageResultKhr::Suboptimal(index as usize)),
+            vks::vk::VK_SUCCESS => Ok(AcquireNextImageResultKhr::Index(index as usize)),
+            vks::vk::VK_TIMEOUT => Ok(AcquireNextImageResultKhr::Timeout),
+            vks::vk::VK_NOT_READY => Ok(AcquireNextImageResultKhr::NotReady),
+            vks::vk::VK_SUBOPTIMAL_KHR => Ok(AcquireNextImageResultKhr::Suboptimal(index as usize)),
             _ => Err(res.into()),
         }
     }

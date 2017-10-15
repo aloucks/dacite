@@ -29,7 +29,7 @@ use vks;
 pub struct PipelineLayout(Arc<Inner>);
 
 impl VulkanObject for PipelineLayout {
-    type NativeVulkanObject = vks::core::VkPipelineLayout;
+    type NativeVulkanObject = vks::vk::VkPipelineLayout;
 
     #[inline]
     fn id(&self) -> u64 {
@@ -85,7 +85,7 @@ impl FromNativeObject for PipelineLayout {
 }
 
 impl PipelineLayout {
-    pub(crate) fn new(handle: vks::core::VkPipelineLayout, owned: bool, device: Device, allocator: Option<AllocatorHelper>) -> Self {
+    pub(crate) fn new(handle: vks::vk::VkPipelineLayout, owned: bool, device: Device, allocator: Option<AllocatorHelper>) -> Self {
         PipelineLayout(Arc::new(Inner {
             handle: handle,
             owned: owned,
@@ -95,14 +95,14 @@ impl PipelineLayout {
     }
 
     #[inline]
-    pub(crate) fn handle(&self) -> vks::core::VkPipelineLayout {
+    pub(crate) fn handle(&self) -> vks::vk::VkPipelineLayout {
         self.0.handle
     }
 }
 
 #[derive(Debug)]
 struct Inner {
-    handle: vks::core::VkPipelineLayout,
+    handle: vks::vk::VkPipelineLayout,
     owned: bool,
     device: Device,
     allocator: Option<AllocatorHelper>,
@@ -117,7 +117,7 @@ impl Drop for Inner {
             };
 
             unsafe {
-                self.device.loader().core.vkDestroyPipelineLayout(self.device.handle(), self.handle, allocator);
+                self.device.loader().vk.vkDestroyPipelineLayout(self.device.handle(), self.handle, allocator);
             }
         }
     }

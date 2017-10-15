@@ -47,7 +47,7 @@ impl VkDisplayPresentInfoKHRWrapper {
 
         VkDisplayPresentInfoKHRWrapper {
             vks_struct: vks::khr_display_swapchain::VkDisplayPresentInfoKHR {
-                sType: vks::core::VK_STRUCTURE_TYPE_DISPLAY_PRESENT_INFO_KHR,
+                sType: vks::vk::VK_STRUCTURE_TYPE_DISPLAY_PRESENT_INFO_KHR,
                 pNext: pnext,
                 srcRect: (&info.src_rect).into(),
                 dstRect: (&info.dst_rect).into(),

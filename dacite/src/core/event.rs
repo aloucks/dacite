@@ -29,7 +29,7 @@ use vks;
 pub struct Event(Arc<Inner>);
 
 impl VulkanObject for Event {
-    type NativeVulkanObject = vks::core::VkEvent;
+    type NativeVulkanObject = vks::vk::VkEvent;
 
     #[inline]
     fn id(&self) -> u64 {
@@ -85,7 +85,7 @@ impl FromNativeObject for Event {
 }
 
 impl Event {
-    pub(crate) fn new(handle: vks::core::VkEvent, owned: bool, device: Device, allocator: Option<AllocatorHelper>) -> Self {
+    pub(crate) fn new(handle: vks::vk::VkEvent, owned: bool, device: Device, allocator: Option<AllocatorHelper>) -> Self {
         Event(Arc::new(Inner {
             handle: handle,
             owned: owned,
@@ -95,7 +95,7 @@ impl Event {
     }
 
     #[inline]
-    pub(crate) fn handle(&self) -> vks::core::VkEvent {
+    pub(crate) fn handle(&self) -> vks::vk::VkEvent {
         self.0.handle
     }
 
@@ -105,19 +105,19 @@ impl Event {
     }
 
     #[inline]
-    pub(crate) fn device_handle(&self) -> vks::core::VkDevice {
+    pub(crate) fn device_handle(&self) -> vks::vk::VkDevice {
         self.0.device.handle()
     }
 
     /// See [`vkGetEventStatus`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetEventStatus)
     pub fn get_status(&self) -> Result<bool, core::Error> {
         let res = unsafe {
-            self.loader().core.vkGetEventStatus(self.device_handle(), self.handle())
+            self.loader().vk.vkGetEventStatus(self.device_handle(), self.handle())
         };
 
         match res {
-            vks::core::VK_EVENT_SET => Ok(true),
-            vks::core::VK_EVENT_RESET => Ok(false),
+            vks::vk::VK_EVENT_SET => Ok(true),
+            vks::vk::VK_EVENT_RESET => Ok(false),
             _ => Err(res.into()),
         }
     }
@@ -125,10 +125,10 @@ impl Event {
     /// See [`vkSetEvent`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkSetEvent)
     pub fn set(&self) -> Result<(), core::Error> {
         let res = unsafe {
-            self.loader().core.vkSetEvent(self.device_handle(), self.handle())
+            self.loader().vk.vkSetEvent(self.device_handle(), self.handle())
         };
 
-        if res == vks::core::VK_SUCCESS {
+        if res == vks::vk::VK_SUCCESS {
             Ok(())
         }
         else {
@@ -139,10 +139,10 @@ impl Event {
     /// See [`vkResetEvent`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkResetEvent)
     pub fn reset(&self) -> Result<(), core::Error> {
         let res = unsafe {
-            self.loader().core.vkResetEvent(self.device_handle(), self.handle())
+            self.loader().vk.vkResetEvent(self.device_handle(), self.handle())
         };
 
-        if res == vks::core::VK_SUCCESS {
+        if res == vks::vk::VK_SUCCESS {
             Ok(())
         }
         else {
@@ -153,7 +153,7 @@ impl Event {
 
 #[derive(Debug)]
 struct Inner {
-    handle: vks::core::VkEvent,
+    handle: vks::vk::VkEvent,
     owned: bool,
     device: Device,
     allocator: Option<AllocatorHelper>,
@@ -168,7 +168,7 @@ impl Drop for Inner {
             };
 
             unsafe {
-                self.device.loader().core.vkDestroyEvent(self.device.handle(), self.handle, allocator);
+                self.device.loader().vk.vkDestroyEvent(self.device.handle(), self.handle, allocator);
             }
         }
     }

@@ -50,7 +50,7 @@ impl VkDebugMarkerObjectNameInfoEXTWrapper {
 
         VkDebugMarkerObjectNameInfoEXTWrapper {
             vks_struct: vks::ext_debug_marker::VkDebugMarkerObjectNameInfoEXT {
-                sType: vks::core::VK_STRUCTURE_TYPE_DEBUG_MARKER_OBJECT_NAME_INFO_EXT,
+                sType: vks::vk::VK_STRUCTURE_TYPE_DEBUG_MARKER_OBJECT_NAME_INFO_EXT,
                 pNext: pnext,
                 objectType: info.object_type.into(),
                 object: info.object,
@@ -94,7 +94,7 @@ impl VkDebugMarkerObjectTagInfoEXTWrapper {
 
         VkDebugMarkerObjectTagInfoEXTWrapper {
             vks_struct: vks::ext_debug_marker::VkDebugMarkerObjectTagInfoEXT {
-                sType: vks::core::VK_STRUCTURE_TYPE_DEBUG_MARKER_OBJECT_TAG_INFO_EXT,
+                sType: vks::vk::VK_STRUCTURE_TYPE_DEBUG_MARKER_OBJECT_TAG_INFO_EXT,
                 pNext: pnext,
                 objectType: info.object_type.into(),
                 object: info.object,
@@ -138,7 +138,7 @@ impl VkDebugMarkerMarkerInfoEXTWrapper {
 
         VkDebugMarkerMarkerInfoEXTWrapper {
             vks_struct: vks::ext_debug_marker::VkDebugMarkerMarkerInfoEXT {
-                sType: vks::core::VK_STRUCTURE_TYPE_DEBUG_MARKER_MARKER_INFO_EXT,
+                sType: vks::vk::VK_STRUCTURE_TYPE_DEBUG_MARKER_MARKER_INFO_EXT,
                 pNext: pnext,
                 pMarkerName: marker_name.as_ptr(),
                 color: info.color,

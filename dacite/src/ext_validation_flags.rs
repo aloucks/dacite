@@ -69,7 +69,7 @@ impl VkValidationFlagsEXTWrapper {
 
         VkValidationFlagsEXTWrapper {
             vks_struct: vks::ext_validation_flags::VkValidationFlagsEXT {
-                sType: vks::core::VK_STRUCTURE_TYPE_VALIDATION_FLAGS_EXT,
+                sType: vks::vk::VK_STRUCTURE_TYPE_VALIDATION_FLAGS_EXT,
                 pNext: pnext,
                 disabledValidationCheckCount: vk_disabled_validation_checks.len() as u32,
                 pDisabledValidationChecks: vk_disabled_validation_checks_ptr,

@@ -53,7 +53,7 @@ impl VkPhysicalDeviceFeatures2KHRWrapper {
 
         VkPhysicalDeviceFeatures2KHRWrapper {
             vks_struct: vks::khr_get_physical_device_properties2::VkPhysicalDeviceFeatures2KHR {
-                sType: vks::core::VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2_KHR,
+                sType: vks::vk::VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2_KHR,
                 pNext: pnext,
                 features: (&features.features).into(),
             },
@@ -165,7 +165,7 @@ impl VkPhysicalDeviceImageFormatInfo2KHRWrapper {
 
         VkPhysicalDeviceImageFormatInfo2KHRWrapper  {
             vks_struct: vks::khr_get_physical_device_properties2::VkPhysicalDeviceImageFormatInfo2KHR {
-                sType: vks::core::VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_IMAGE_FORMAT_INFO_2_KHR,
+                sType: vks::vk::VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_IMAGE_FORMAT_INFO_2_KHR,
                 pNext: pnext,
                 format: info.format.into(),
                 type_: info.image_type.into(),
@@ -281,7 +281,7 @@ impl VkPhysicalDeviceSparseImageFormatInfo2KHRWrapper {
 
         VkPhysicalDeviceSparseImageFormatInfo2KHRWrapper  {
             vks_struct: vks::khr_get_physical_device_properties2::VkPhysicalDeviceSparseImageFormatInfo2KHR {
-                sType: vks::core::VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_IMAGE_FORMAT_INFO_2_KHR,
+                sType: vks::vk::VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_IMAGE_FORMAT_INFO_2_KHR,
                 pNext: pnext,
                 format: info.format.into(),
                 type_: info.image_type.into(),

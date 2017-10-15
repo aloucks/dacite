@@ -31,7 +31,7 @@ use vks;
 pub struct QueryPool(Arc<Inner>);
 
 impl VulkanObject for QueryPool {
-    type NativeVulkanObject = vks::core::VkQueryPool;
+    type NativeVulkanObject = vks::vk::VkQueryPool;
 
     #[inline]
     fn id(&self) -> u64 {
@@ -87,7 +87,7 @@ impl FromNativeObject for QueryPool {
 }
 
 impl QueryPool {
-    pub(crate) fn new(handle: vks::core::VkQueryPool, owned: bool, device: Device, allocator: Option<AllocatorHelper>) -> Self {
+    pub(crate) fn new(handle: vks::vk::VkQueryPool, owned: bool, device: Device, allocator: Option<AllocatorHelper>) -> Self {
         QueryPool(Arc::new(Inner {
             handle: handle,
             owned: owned,
@@ -97,7 +97,7 @@ impl QueryPool {
     }
 
     #[inline]
-    pub(crate) fn handle(&self) -> vks::core::VkQueryPool {
+    pub(crate) fn handle(&self) -> vks::vk::VkQueryPool {
         self.0.handle
     }
 
@@ -107,7 +107,7 @@ impl QueryPool {
     }
 
     #[inline]
-    pub(crate) fn device_handle(&self) -> vks::core::VkDevice {
+    pub(crate) fn device_handle(&self) -> vks::vk::VkDevice {
         self.0.device.handle()
     }
 
@@ -120,11 +120,11 @@ impl QueryPool {
 
             let res = unsafe {
                 data.set_len(results.len());
-                self.loader().core.vkGetQueryPoolResults(self.device_handle(), self.handle(), first_query, query_count, data_size, data.as_mut_ptr() as *mut c_void, stride_u64, flags.bits())
+                self.loader().vk.vkGetQueryPoolResults(self.device_handle(), self.handle(), first_query, query_count, data_size, data.as_mut_ptr() as *mut c_void, stride_u64, flags.bits())
             };
 
             match res {
-                vks::core::VK_SUCCESS => {
+                vks::vk::VK_SUCCESS => {
                     for (&src, dst) in data.iter().zip(results.iter_mut()) {
                         *dst = core::QueryResult::U64(src);
                     }
@@ -132,7 +132,7 @@ impl QueryPool {
                     Ok(true)
                 }
 
-                vks::core::VK_NOT_READY => Ok(false),
+                vks::vk::VK_NOT_READY => Ok(false),
                 _ => Err(res.into()),
             }
         }
@@ -143,11 +143,11 @@ impl QueryPool {
 
             let res = unsafe {
                 data.set_len(results.len());
-                self.loader().core.vkGetQueryPoolResults(self.device_handle(), self.handle(), first_query, query_count, data_size, data.as_mut_ptr() as *mut c_void, stride_u32, flags.bits())
+                self.loader().vk.vkGetQueryPoolResults(self.device_handle(), self.handle(), first_query, query_count, data_size, data.as_mut_ptr() as *mut c_void, stride_u32, flags.bits())
             };
 
             match res {
-                vks::core::VK_SUCCESS => {
+                vks::vk::VK_SUCCESS => {
                     for (&src, dst) in data.iter().zip(results.iter_mut()) {
                         *dst = core::QueryResult::U32(src);
                     }
@@ -155,7 +155,7 @@ impl QueryPool {
                     Ok(true)
                 }
 
-                vks::core::VK_NOT_READY => Ok(false),
+                vks::vk::VK_NOT_READY => Ok(false),
                 _ => Err(res.into()),
             }
         }
@@ -164,7 +164,7 @@ impl QueryPool {
 
 #[derive(Debug)]
 struct Inner {
-    handle: vks::core::VkQueryPool,
+    handle: vks::vk::VkQueryPool,
     owned: bool,
     device: Device,
     allocator: Option<AllocatorHelper>,
@@ -179,7 +179,7 @@ impl Drop for Inner {
             };
 
             unsafe {
-                self.device.loader().core.vkDestroyQueryPool(self.device.handle(), self.handle, allocator);
+                self.device.loader().vk.vkDestroyQueryPool(self.device.handle(), self.handle, allocator);
             }
         }
     }

@@ -61,7 +61,7 @@ impl VkPipelineRasterizationStateRasterizationOrderAMDWrapper {
 
         VkPipelineRasterizationStateRasterizationOrderAMDWrapper {
             vks_struct: vks::amd_rasterization_order::VkPipelineRasterizationStateRasterizationOrderAMD {
-                sType: vks::core::VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_RASTERIZATION_ORDER_AMD,
+                sType: vks::vk::VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_RASTERIZATION_ORDER_AMD,
                 pNext: pnext,
                 rasterizationOrder: order.rasterization_order.into(),
             },

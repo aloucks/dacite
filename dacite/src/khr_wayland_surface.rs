@@ -56,7 +56,7 @@ impl VkWaylandSurfaceCreateInfoKHRWrapper {
 
         VkWaylandSurfaceCreateInfoKHRWrapper {
             vks_struct: vks::khr_wayland_surface::VkWaylandSurfaceCreateInfoKHR {
-                sType: vks::core::VK_STRUCTURE_TYPE_WAYLAND_SURFACE_CREATE_INFO_KHR,
+                sType: vks::vk::VK_STRUCTURE_TYPE_WAYLAND_SURFACE_CREATE_INFO_KHR,
                 pNext: pnext,
                 flags: create_info.flags.bits(),
                 display: create_info.display,

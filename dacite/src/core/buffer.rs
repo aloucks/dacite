@@ -30,7 +30,7 @@ use vks;
 pub struct Buffer(Arc<Inner>);
 
 impl VulkanObject for Buffer {
-    type NativeVulkanObject = vks::core::VkBuffer;
+    type NativeVulkanObject = vks::vk::VkBuffer;
 
     #[inline]
     fn id(&self) -> u64 {
@@ -86,7 +86,7 @@ impl FromNativeObject for Buffer {
 }
 
 impl Buffer {
-    pub(crate) fn new(handle: vks::core::VkBuffer, owned: bool, device: Device, allocator: Option<AllocatorHelper>) -> Self {
+    pub(crate) fn new(handle: vks::vk::VkBuffer, owned: bool, device: Device, allocator: Option<AllocatorHelper>) -> Self {
         Buffer(Arc::new(Inner {
             handle: handle,
             owned: owned,
@@ -96,7 +96,7 @@ impl Buffer {
     }
 
     #[inline]
-    pub(crate) fn handle(&self) -> vks::core::VkBuffer {
+    pub(crate) fn handle(&self) -> vks::vk::VkBuffer {
         self.0.handle
     }
 
@@ -106,17 +106,17 @@ impl Buffer {
     }
 
     #[inline]
-    pub(crate) fn device_handle(&self) -> vks::core::VkDevice {
+    pub(crate) fn device_handle(&self) -> vks::vk::VkDevice {
         self.0.device.handle()
     }
 
     /// See [`vkBindBufferMemory`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkBindBufferMemory)
     pub fn bind_memory(&self, memory: DeviceMemory, offset: u64) -> Result<(), core::Error> {
         let res = unsafe {
-            self.loader().core.vkBindBufferMemory(self.device_handle(), self.handle(), memory.handle(), offset)
+            self.loader().vk.vkBindBufferMemory(self.device_handle(), self.handle(), memory.handle(), offset)
         };
 
-        if res == vks::core::VK_SUCCESS {
+        if res == vks::vk::VK_SUCCESS {
             Ok(())
         }
         else {
@@ -128,7 +128,7 @@ impl Buffer {
     pub fn get_memory_requirements(&self) -> core::MemoryRequirements {
         unsafe {
             let mut requirements = mem::uninitialized();
-            self.loader().core.vkGetBufferMemoryRequirements(self.device_handle(), self.handle(), &mut requirements);
+            self.loader().vk.vkGetBufferMemoryRequirements(self.device_handle(), self.handle(), &mut requirements);
             (&requirements).into()
         }
     }
@@ -136,7 +136,7 @@ impl Buffer {
 
 #[derive(Debug)]
 struct Inner {
-    handle: vks::core::VkBuffer,
+    handle: vks::vk::VkBuffer,
     owned: bool,
     device: Device,
     allocator: Option<AllocatorHelper>,
@@ -151,7 +151,7 @@ impl Drop for Inner {
             };
 
             unsafe {
-                self.device.loader().core.vkDestroyBuffer(self.device.handle(), self.handle, allocator);
+                self.device.loader().vk.vkDestroyBuffer(self.device.handle(), self.handle, allocator);
             }
         }
     }

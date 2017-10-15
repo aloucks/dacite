@@ -26,7 +26,7 @@ use vks;
 /// See [`VkQueue`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkQueue)
 #[derive(Debug, Clone)]
 pub struct Queue {
-    handle: vks::core::VkQueue,
+    handle: vks::vk::VkQueue,
     device: Device,
 }
 
@@ -65,7 +65,7 @@ impl Hash for Queue {
 }
 
 impl VulkanObject for Queue {
-    type NativeVulkanObject = vks::core::VkQueue;
+    type NativeVulkanObject = vks::vk::VkQueue;
 
     #[inline]
     fn id(&self) -> u64 {
@@ -91,7 +91,7 @@ impl FromNativeObject for Queue {
 }
 
 impl Queue {
-    pub(crate) fn new(handle: vks::core::VkQueue, device: Device) -> Self {
+    pub(crate) fn new(handle: vks::vk::VkQueue, device: Device) -> Self {
         Queue {
             handle: handle,
             device: device,
@@ -108,7 +108,7 @@ impl Queue {
         let (submits_count, vk_submits_ptr, vk_submits, submits_wrappers) = match submits {
             Some(submits) => {
                 let submits_wrappers: Vec<_> = submits.iter().map(|s| core::VkSubmitInfoWrapper::new(s, true)).collect();
-                let vk_submits: Vec<vks::core::VkSubmitInfo> = submits_wrappers.iter().map(|s| s.vks_struct).collect();
+                let vk_submits: Vec<vks::vk::VkSubmitInfo> = submits_wrappers.iter().map(|s| s.vks_struct).collect();
                 (submits.len() as u32, vk_submits.as_ptr(), Some(vk_submits), Some(submits_wrappers))
             }
 
@@ -118,10 +118,10 @@ impl Queue {
         let fence = fence.map_or(Default::default(), Fence::handle);
 
         let res = unsafe {
-            self.loader().core.vkQueueSubmit(self.handle, submits_count, vk_submits_ptr, fence)
+            self.loader().vk.vkQueueSubmit(self.handle, submits_count, vk_submits_ptr, fence)
         };
 
-        if res == vks::core::VK_SUCCESS {
+        if res == vks::vk::VK_SUCCESS {
             Ok(())
         }
         else {
@@ -132,10 +132,10 @@ impl Queue {
     /// See [`vkQueueWaitIdle`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkQueueWaitIdle)
     pub fn wait_idle(&self) -> Result<(), core::Error> {
         let res = unsafe {
-            self.loader().core.vkQueueWaitIdle(self.handle)
+            self.loader().vk.vkQueueWaitIdle(self.handle)
         };
 
-        if res == vks::core::VK_SUCCESS {
+        if res == vks::vk::VK_SUCCESS {
             Ok(())
         }
         else {
@@ -149,7 +149,7 @@ impl Queue {
         let (bind_infos_count, vk_bind_infos_ptr, vk_bind_infos, bind_infos_wrappers) = match bind_infos {
             Some(bind_infos) => {
                 let bind_infos_wrappers: Vec<_> = bind_infos.iter().map(|b| core::VkBindSparseInfoWrapper::new(b, true)).collect();
-                let vk_bind_infos: Vec<vks::core::VkBindSparseInfo> = bind_infos_wrappers.iter().map(|b| b.vks_struct).collect();
+                let vk_bind_infos: Vec<vks::vk::VkBindSparseInfo> = bind_infos_wrappers.iter().map(|b| b.vks_struct).collect();
                 (bind_infos.len() as u32, vk_bind_infos.as_ptr(), Some(vk_bind_infos), Some(bind_infos_wrappers))
             }
 
@@ -159,10 +159,10 @@ impl Queue {
         let fence = fence.map_or(Default::default(), Fence::handle);
 
         let res = unsafe {
-            self.loader().core.vkQueueBindSparse(self.handle, bind_infos_count, vk_bind_infos_ptr, fence)
+            self.loader().vk.vkQueueBindSparse(self.handle, bind_infos_count, vk_bind_infos_ptr, fence)
         };
 
-        if res == vks::core::VK_SUCCESS {
+        if res == vks::vk::VK_SUCCESS {
             Ok(())
         }
         else {
@@ -183,16 +183,16 @@ impl Queue {
             results.clear();
             for &result in &present_info_wrapper.results.unwrap() {
                 match result {
-                    vks::core::VK_SUCCESS => results.push(Ok(khr_swapchain::QueuePresentResultKhr::Ok)),
-                    vks::core::VK_SUBOPTIMAL_KHR => results.push(Ok(khr_swapchain::QueuePresentResultKhr::Suboptimal)),
+                    vks::vk::VK_SUCCESS => results.push(Ok(khr_swapchain::QueuePresentResultKhr::Ok)),
+                    vks::vk::VK_SUBOPTIMAL_KHR => results.push(Ok(khr_swapchain::QueuePresentResultKhr::Suboptimal)),
                     _ => results.push(Err(result.into())),
                 }
             }
         }
 
         match res {
-            vks::core::VK_SUCCESS => Ok(khr_swapchain::QueuePresentResultKhr::Ok),
-            vks::core::VK_SUBOPTIMAL_KHR => Ok(khr_swapchain::QueuePresentResultKhr::Suboptimal),
+            vks::vk::VK_SUCCESS => Ok(khr_swapchain::QueuePresentResultKhr::Ok),
+            vks::vk::VK_SUBOPTIMAL_KHR => Ok(khr_swapchain::QueuePresentResultKhr::Suboptimal),
             _ => Err(res.into()),
         }
     }

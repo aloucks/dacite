@@ -51,7 +51,7 @@ use {TryDestroyError, TryDestroyErrorKind, VulkanObject};
 pub struct Device(Arc<Inner>);
 
 impl VulkanObject for Device {
-    type NativeVulkanObject = vks::core::VkDevice;
+    type NativeVulkanObject = vks::vk::VkDevice;
 
     #[inline]
     fn id(&self) -> u64 {
@@ -75,7 +75,7 @@ impl VulkanObject for Device {
 }
 
 impl Device {
-    pub(crate) fn new(handle: vks::core::VkDevice, instance: Instance, allocator: Option<AllocatorHelper>, loader: vks::DeviceProcAddrLoader, enabled_extensions: core::DeviceExtensions) -> Self {
+    pub(crate) fn new(handle: vks::vk::VkDevice, instance: Instance, allocator: Option<AllocatorHelper>, loader: vks::DeviceProcAddrLoader, enabled_extensions: core::DeviceExtensions) -> Self {
         Device(Arc::new(Inner {
             handle: handle,
             instance: instance,
@@ -86,7 +86,7 @@ impl Device {
     }
 
     #[inline]
-    pub(crate) fn handle(&self) -> vks::core::VkDevice {
+    pub(crate) fn handle(&self) -> vks::vk::VkDevice {
         self.0.handle
     }
 
@@ -107,7 +107,7 @@ impl Device {
     pub fn get_queue(&self, queue_family_index: u32, queue_index: u32) -> Queue {
         let mut queue = ptr::null_mut();
         unsafe {
-            self.loader().core.vkGetDeviceQueue(self.handle(), queue_family_index, queue_index, &mut queue);
+            self.loader().vk.vkGetDeviceQueue(self.handle(), queue_family_index, queue_index, &mut queue);
         }
 
         Queue::new(queue, self.clone())
@@ -122,10 +122,10 @@ impl Device {
 
         let mut command_pool = Default::default();
         let res = unsafe {
-            self.loader().core.vkCreateCommandPool(self.handle(), &create_info.vks_struct, allocation_callbacks, &mut command_pool)
+            self.loader().vk.vkCreateCommandPool(self.handle(), &create_info.vks_struct, allocation_callbacks, &mut command_pool)
         };
 
-        if res == vks::core::VK_SUCCESS {
+        if res == vks::vk::VK_SUCCESS {
             Ok(CommandPool::new(command_pool, true, self.clone(), allocator_helper))
         }
         else {
@@ -142,10 +142,10 @@ impl Device {
 
         let mut fence = Default::default();
         let res = unsafe {
-            self.loader().core.vkCreateFence(self.handle(), &create_info.vks_struct, allocation_callbacks, &mut fence)
+            self.loader().vk.vkCreateFence(self.handle(), &create_info.vks_struct, allocation_callbacks, &mut fence)
         };
 
-        if res == vks::core::VK_SUCCESS {
+        if res == vks::vk::VK_SUCCESS {
             Ok(Fence::new(fence, true, self.clone(), allocator_helper))
         }
         else {
@@ -162,10 +162,10 @@ impl Device {
 
         let mut semaphore = Default::default();
         let res = unsafe {
-            self.loader().core.vkCreateSemaphore(self.handle(), &create_info.vks_struct, allocation_callbacks, &mut semaphore)
+            self.loader().vk.vkCreateSemaphore(self.handle(), &create_info.vks_struct, allocation_callbacks, &mut semaphore)
         };
 
-        if res == vks::core::VK_SUCCESS {
+        if res == vks::vk::VK_SUCCESS {
             Ok(Semaphore::new(semaphore, true, self.clone(), allocator_helper))
         }
         else {
@@ -182,10 +182,10 @@ impl Device {
 
         let mut event = Default::default();
         let res = unsafe {
-            self.loader().core.vkCreateEvent(self.handle(), &create_info.vks_struct, allocation_callbacks, &mut event)
+            self.loader().vk.vkCreateEvent(self.handle(), &create_info.vks_struct, allocation_callbacks, &mut event)
         };
 
-        if res == vks::core::VK_SUCCESS {
+        if res == vks::vk::VK_SUCCESS {
             Ok(Event::new(event, true, self.clone(), allocator_helper))
         }
         else {
@@ -202,10 +202,10 @@ impl Device {
 
         let mut query_pool = Default::default();
         let res = unsafe {
-            self.loader().core.vkCreateQueryPool(self.handle(), &create_info.vks_struct, allocation_callbacks, &mut query_pool)
+            self.loader().vk.vkCreateQueryPool(self.handle(), &create_info.vks_struct, allocation_callbacks, &mut query_pool)
         };
 
-        if res == vks::core::VK_SUCCESS {
+        if res == vks::vk::VK_SUCCESS {
             Ok(QueryPool::new(query_pool, true, self.clone(), allocator_helper))
         }
         else {
@@ -222,10 +222,10 @@ impl Device {
 
         let mut buffer = Default::default();
         let res = unsafe {
-            self.loader().core.vkCreateBuffer(self.handle(), &create_info.vks_struct, allocation_callbacks, &mut buffer)
+            self.loader().vk.vkCreateBuffer(self.handle(), &create_info.vks_struct, allocation_callbacks, &mut buffer)
         };
 
-        if res == vks::core::VK_SUCCESS {
+        if res == vks::vk::VK_SUCCESS {
             Ok(Buffer::new(buffer, true, self.clone(), allocator_helper))
         }
         else {
@@ -242,10 +242,10 @@ impl Device {
 
         let mut image = Default::default();
         let res = unsafe {
-            self.loader().core.vkCreateImage(self.handle(), &create_info.vks_struct, allocation_callbacks, &mut image)
+            self.loader().vk.vkCreateImage(self.handle(), &create_info.vks_struct, allocation_callbacks, &mut image)
         };
 
-        if res == vks::core::VK_SUCCESS {
+        if res == vks::vk::VK_SUCCESS {
             Ok(Image::new(image, true, self.clone(), allocator_helper))
         }
         else {
@@ -262,10 +262,10 @@ impl Device {
 
         let mut buffer_view = Default::default();
         let res = unsafe {
-            self.loader().core.vkCreateBufferView(self.handle(), &create_info_wrapper.vks_struct, allocation_callbacks, &mut buffer_view)
+            self.loader().vk.vkCreateBufferView(self.handle(), &create_info_wrapper.vks_struct, allocation_callbacks, &mut buffer_view)
         };
 
-        if res == vks::core::VK_SUCCESS {
+        if res == vks::vk::VK_SUCCESS {
             Ok(BufferView::new(buffer_view, true, self.clone(), allocator_helper))
         }
         else {
@@ -282,10 +282,10 @@ impl Device {
 
         let mut image_view = Default::default();
         let res = unsafe {
-            self.loader().core.vkCreateImageView(self.handle(), &create_info_wrapper.vks_struct, allocation_callbacks, &mut image_view)
+            self.loader().vk.vkCreateImageView(self.handle(), &create_info_wrapper.vks_struct, allocation_callbacks, &mut image_view)
         };
 
-        if res == vks::core::VK_SUCCESS {
+        if res == vks::vk::VK_SUCCESS {
             Ok(ImageView::new(image_view, true, self.clone(), allocator_helper))
         }
         else {
@@ -302,10 +302,10 @@ impl Device {
 
         let mut shader_module = Default::default();
         let res = unsafe {
-            self.loader().core.vkCreateShaderModule(self.handle(), &create_info.vks_struct, allocation_callbacks, &mut shader_module)
+            self.loader().vk.vkCreateShaderModule(self.handle(), &create_info.vks_struct, allocation_callbacks, &mut shader_module)
         };
 
-        if res == vks::core::VK_SUCCESS {
+        if res == vks::vk::VK_SUCCESS {
             Ok(ShaderModule::new(shader_module, true, self.clone(), allocator_helper))
         }
         else {
@@ -322,10 +322,10 @@ impl Device {
 
         let mut pipeline_cache = Default::default();
         let res = unsafe {
-            self.loader().core.vkCreatePipelineCache(self.handle(), &create_info.vks_struct, allocation_callbacks, &mut pipeline_cache)
+            self.loader().vk.vkCreatePipelineCache(self.handle(), &create_info.vks_struct, allocation_callbacks, &mut pipeline_cache)
         };
 
-        if res == vks::core::VK_SUCCESS {
+        if res == vks::vk::VK_SUCCESS {
             Ok(PipelineCache::new(pipeline_cache, true, self.clone(), allocator_helper))
         }
         else {
@@ -342,10 +342,10 @@ impl Device {
 
         let mut sampler = Default::default();
         let res = unsafe {
-            self.loader().core.vkCreateSampler(self.handle(), &create_info.vks_struct, allocation_callbacks, &mut sampler)
+            self.loader().vk.vkCreateSampler(self.handle(), &create_info.vks_struct, allocation_callbacks, &mut sampler)
         };
 
-        if res == vks::core::VK_SUCCESS {
+        if res == vks::vk::VK_SUCCESS {
             Ok(Sampler::new(sampler, true, self.clone(), allocator_helper))
         }
         else {
@@ -362,10 +362,10 @@ impl Device {
 
         let mut descriptor_pool = Default::default();
         let res = unsafe {
-            self.loader().core.vkCreateDescriptorPool(self.handle(), &create_info.vks_struct, allocation_callbacks, &mut descriptor_pool)
+            self.loader().vk.vkCreateDescriptorPool(self.handle(), &create_info.vks_struct, allocation_callbacks, &mut descriptor_pool)
         };
 
-        if res == vks::core::VK_SUCCESS {
+        if res == vks::vk::VK_SUCCESS {
             Ok(DescriptorPool::new(descriptor_pool, true, self.clone(), allocator_helper))
         }
         else {
@@ -382,10 +382,10 @@ impl Device {
 
         let mut descriptor_set_layout = Default::default();
         let res = unsafe {
-            self.loader().core.vkCreateDescriptorSetLayout(self.handle(), &create_info_wrapper.vks_struct, allocation_callbacks, &mut descriptor_set_layout)
+            self.loader().vk.vkCreateDescriptorSetLayout(self.handle(), &create_info_wrapper.vks_struct, allocation_callbacks, &mut descriptor_set_layout)
         };
 
-        if res == vks::core::VK_SUCCESS {
+        if res == vks::vk::VK_SUCCESS {
             Ok(DescriptorSetLayout::new(descriptor_set_layout, true, self.clone(), allocator_helper))
         }
         else {
@@ -402,10 +402,10 @@ impl Device {
 
         let mut memory = Default::default();
         let res = unsafe {
-            self.loader().core.vkAllocateMemory(self.handle(), &allocate_info_wrapper.vks_struct, allocation_callbacks, &mut memory)
+            self.loader().vk.vkAllocateMemory(self.handle(), &allocate_info_wrapper.vks_struct, allocation_callbacks, &mut memory)
         };
 
-        if res == vks::core::VK_SUCCESS {
+        if res == vks::vk::VK_SUCCESS {
             Ok(DeviceMemory::new(memory, true, self.clone(), allocator_helper, allocate_info.allocation_size))
         }
         else {
@@ -421,7 +421,7 @@ impl Device {
         };
 
         let create_info_wrappers: Vec<_> = create_infos.iter().map(|c| core::VkGraphicsPipelineCreateInfoWrapper::new(c, true)).collect();
-        let vk_create_infos: Vec<vks::core::VkGraphicsPipelineCreateInfo> = create_info_wrappers.iter().map(|c| c.vks_struct).collect();
+        let vk_create_infos: Vec<vks::vk::VkGraphicsPipelineCreateInfo> = create_info_wrappers.iter().map(|c| c.vks_struct).collect();
 
         let allocator_helper = allocator.map(AllocatorHelper::new);
         let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), AllocatorHelper::callbacks);
@@ -429,10 +429,10 @@ impl Device {
         let mut pipelines = Vec::with_capacity(create_infos.len());
         let res = unsafe {
             pipelines.set_len(create_infos.len());
-            self.loader().core.vkCreateGraphicsPipelines(self.handle(), pipeline_cache_handle, create_infos.len() as u32, vk_create_infos.as_ptr(), allocation_callbacks, pipelines.as_mut_ptr())
+            self.loader().vk.vkCreateGraphicsPipelines(self.handle(), pipeline_cache_handle, create_infos.len() as u32, vk_create_infos.as_ptr(), allocation_callbacks, pipelines.as_mut_ptr())
         };
 
-        if res == vks::core::VK_SUCCESS {
+        if res == vks::vk::VK_SUCCESS {
             Ok(pipelines.iter().map(|p| Pipeline::new(*p, true, self.clone(), allocator_helper.clone())).collect())
         }
         else {
@@ -456,7 +456,7 @@ impl Device {
         };
 
         let create_info_wrappers: Vec<_> = create_infos.iter().map(|c| core::VkComputePipelineCreateInfoWrapper::new(c, true)).collect();
-        let vk_create_infos: Vec<vks::core::VkComputePipelineCreateInfo> = create_info_wrappers.iter().map(|c| c.vks_struct).collect();
+        let vk_create_infos: Vec<vks::vk::VkComputePipelineCreateInfo> = create_info_wrappers.iter().map(|c| c.vks_struct).collect();
 
         let allocator_helper = allocator.map(AllocatorHelper::new);
         let allocation_callbacks = allocator_helper.as_ref().map_or(ptr::null(), AllocatorHelper::callbacks);
@@ -464,10 +464,10 @@ impl Device {
         let mut pipelines = Vec::with_capacity(create_infos.len());
         let res = unsafe {
             pipelines.set_len(create_infos.len());
-            self.loader().core.vkCreateComputePipelines(self.handle(), pipeline_cache_handle, create_infos.len() as u32, vk_create_infos.as_ptr(), allocation_callbacks, pipelines.as_mut_ptr())
+            self.loader().vk.vkCreateComputePipelines(self.handle(), pipeline_cache_handle, create_infos.len() as u32, vk_create_infos.as_ptr(), allocation_callbacks, pipelines.as_mut_ptr())
         };
 
-        if res == vks::core::VK_SUCCESS {
+        if res == vks::vk::VK_SUCCESS {
             Ok(pipelines.iter().map(|p| Pipeline::new(*p, true, self.clone(), allocator_helper.clone())).collect())
         }
         else {
@@ -492,10 +492,10 @@ impl Device {
 
         let mut pipeline_layout = Default::default();
         let res = unsafe {
-            self.loader().core.vkCreatePipelineLayout(self.handle(), &create_info_wrapper.vks_struct, allocation_callbacks, &mut pipeline_layout)
+            self.loader().vk.vkCreatePipelineLayout(self.handle(), &create_info_wrapper.vks_struct, allocation_callbacks, &mut pipeline_layout)
         };
 
-        if res == vks::core::VK_SUCCESS {
+        if res == vks::vk::VK_SUCCESS {
             Ok(PipelineLayout::new(pipeline_layout, true, self.clone(), allocator_helper))
         }
         else {
@@ -512,10 +512,10 @@ impl Device {
 
         let mut framebuffer = Default::default();
         let res = unsafe {
-            self.loader().core.vkCreateFramebuffer(self.handle(), &create_info_wrapper.vks_struct, allocation_callbacks, &mut framebuffer)
+            self.loader().vk.vkCreateFramebuffer(self.handle(), &create_info_wrapper.vks_struct, allocation_callbacks, &mut framebuffer)
         };
 
-        if res == vks::core::VK_SUCCESS {
+        if res == vks::vk::VK_SUCCESS {
             Ok(Framebuffer::new(framebuffer, true, self.clone(), allocator_helper))
         }
         else {
@@ -532,10 +532,10 @@ impl Device {
 
         let mut render_pass = Default::default();
         let res = unsafe {
-            self.loader().core.vkCreateRenderPass(self.handle(), &create_info_wrapper.vks_struct, allocation_callbacks, &mut render_pass)
+            self.loader().vk.vkCreateRenderPass(self.handle(), &create_info_wrapper.vks_struct, allocation_callbacks, &mut render_pass)
         };
 
-        if res == vks::core::VK_SUCCESS {
+        if res == vks::vk::VK_SUCCESS {
             Ok(RenderPass::new(render_pass, true, self.clone(), allocator_helper))
         }
         else {
@@ -546,10 +546,10 @@ impl Device {
     /// See [`vkDeviceWaitIdle`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkDeviceWaitIdle)
     pub fn wait_idle(&self) -> Result<(), core::Error> {
         let res = unsafe {
-            self.loader().core.vkDeviceWaitIdle(self.handle())
+            self.loader().vk.vkDeviceWaitIdle(self.handle())
         };
 
-        if res == vks::core::VK_SUCCESS {
+        if res == vks::vk::VK_SUCCESS {
             Ok(())
         }
         else {
@@ -569,7 +569,7 @@ impl Device {
             self.loader().khr_swapchain.vkCreateSwapchainKHR(self.handle(), &create_info_wrapper.vks_struct, allocation_callbacks, &mut swapchain)
         };
 
-        if res == vks::core::VK_SUCCESS {
+        if res == vks::vk::VK_SUCCESS {
             Ok(khr_swapchain::SwapchainKhr::new(swapchain, true, self.clone(), allocator_helper))
         }
         else {
@@ -591,7 +591,7 @@ impl Device {
             self.loader().khr_display_swapchain.vkCreateSharedSwapchainsKHR(self.handle(), create_infos.len() as u32, vk_create_infos.as_ptr(), allocation_callbacks, swapchains.as_mut_ptr())
         };
 
-        if res == vks::core::VK_SUCCESS {
+        if res == vks::vk::VK_SUCCESS {
             Ok(swapchains.iter().map(|&s| khr_swapchain::SwapchainKhr::new(s, true, self.clone(), allocator_helper.clone())).collect())
         }
         else {
@@ -605,7 +605,7 @@ impl Device {
         let wrapper = ext_debug_marker::VkDebugMarkerObjectTagInfoEXTWrapper::new(tag_info, true);
 
         let res = unsafe { self.loader().ext_debug_marker.vkDebugMarkerSetObjectTagEXT(self.handle(), &wrapper.vks_struct as *const _ as _) };
-        if res == vks::core::VK_SUCCESS {
+        if res == vks::vk::VK_SUCCESS {
             Ok(())
         }
         else {
@@ -619,7 +619,7 @@ impl Device {
         let wrapper = ext_debug_marker::VkDebugMarkerObjectNameInfoEXTWrapper::new(name_info, true);
 
         let res = unsafe { self.loader().ext_debug_marker.vkDebugMarkerSetObjectNameEXT(self.handle(), &wrapper.vks_struct as *const _ as _) };
-        if res == vks::core::VK_SUCCESS {
+        if res == vks::vk::VK_SUCCESS {
             Ok(())
         }
         else {
@@ -630,7 +630,7 @@ impl Device {
 
 #[derive(Debug)]
 struct Inner {
-    handle: vks::core::VkDevice,
+    handle: vks::vk::VkDevice,
     instance: Instance,
     allocator: Option<AllocatorHelper>,
     loader: vks::DeviceProcAddrLoader,
@@ -645,7 +645,7 @@ impl Drop for Inner {
         };
 
         unsafe {
-            self.loader.core.vkDestroyDevice(self.handle, allocator);
+            self.loader.vk.vkDestroyDevice(self.handle, allocator);
         }
     }
 }

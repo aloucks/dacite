@@ -41,11 +41,11 @@ pub struct Win32KeyedMutexAcquireReleaseInfoNv {
 pub(crate) struct VkWin32KeyedMutexAcquireReleaseInfoNVWrapper {
     pub vks_struct: vks::nv_win32_keyed_mutex::VkWin32KeyedMutexAcquireReleaseInfoNV,
     acquire_syncs: Vec<core::DeviceMemory>,
-    vk_acquire_syncs: Vec<vks::core::VkDeviceMemory>,
+    vk_acquire_syncs: Vec<vks::vk::VkDeviceMemory>,
     acquire_keys: Vec<u64>,
     acquire_timeout_milliseconds: Vec<u32>,
     release_syncs: Vec<core::DeviceMemory>,
-    vk_release_syncs: Vec<vks::core::VkDeviceMemory>,
+    vk_release_syncs: Vec<vks::vk::VkDeviceMemory>,
     release_keys: Vec<u64>,
     chain: Option<Win32KeyedMutexAcquireReleaseInfoChainNvWrapper>,
 }
@@ -79,7 +79,7 @@ impl VkWin32KeyedMutexAcquireReleaseInfoNVWrapper {
 
         VkWin32KeyedMutexAcquireReleaseInfoNVWrapper {
             vks_struct: vks::nv_win32_keyed_mutex::VkWin32KeyedMutexAcquireReleaseInfoNV {
-                sType: vks::core::VK_STRUCTURE_TYPE_WIN32_KEYED_MUTEX_ACQUIRE_RELEASE_INFO_NV,
+                sType: vks::vk::VK_STRUCTURE_TYPE_WIN32_KEYED_MUTEX_ACQUIRE_RELEASE_INFO_NV,
                 pNext: pnext,
                 acquireCount: acquire_syncs.len() as u32,
                 pAcquireSyncs: vk_acquire_syncs_ptr,

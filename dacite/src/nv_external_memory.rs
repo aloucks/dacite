@@ -44,7 +44,7 @@ impl VkExternalMemoryImageCreateInfoNVWrapper {
 
         VkExternalMemoryImageCreateInfoNVWrapper {
             vks_struct: vks::nv_external_memory::VkExternalMemoryImageCreateInfoNV {
-                sType: vks::core::VK_STRUCTURE_TYPE_EXTERNAL_MEMORY_IMAGE_CREATE_INFO_NV,
+                sType: vks::vk::VK_STRUCTURE_TYPE_EXTERNAL_MEMORY_IMAGE_CREATE_INFO_NV,
                 pNext: pnext,
                 handleTypes: create_info.handle_types.bits(),
             },
@@ -80,7 +80,7 @@ impl VkExportMemoryAllocateInfoNVWrapper {
 
         VkExportMemoryAllocateInfoNVWrapper {
             vks_struct: vks::nv_external_memory::VkExportMemoryAllocateInfoNV {
-                sType: vks::core::VK_STRUCTURE_TYPE_EXPORT_MEMORY_ALLOCATE_INFO_NV,
+                sType: vks::vk::VK_STRUCTURE_TYPE_EXPORT_MEMORY_ALLOCATE_INFO_NV,
                 pNext: pnext,
                 handleTypes: info.handle_types.bit(),
             },

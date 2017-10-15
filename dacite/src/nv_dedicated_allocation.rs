@@ -45,7 +45,7 @@ impl VkDedicatedAllocationImageCreateInfoNVWrapper {
 
         VkDedicatedAllocationImageCreateInfoNVWrapper {
             vks_struct: vks::nv_dedicated_allocation::VkDedicatedAllocationImageCreateInfoNV {
-                sType: vks::core::VK_STRUCTURE_TYPE_DEDICATED_ALLOCATION_IMAGE_CREATE_INFO_NV,
+                sType: vks::vk::VK_STRUCTURE_TYPE_DEDICATED_ALLOCATION_IMAGE_CREATE_INFO_NV,
                 pNext: pnext,
                 dedicatedAllocation: utils::to_vk_bool(create_info.dedicated_allocation),
             },
@@ -81,7 +81,7 @@ impl VkDedicatedAllocationBufferCreateInfoNVWrapper {
 
         VkDedicatedAllocationBufferCreateInfoNVWrapper {
             vks_struct: vks::nv_dedicated_allocation::VkDedicatedAllocationBufferCreateInfoNV {
-                sType: vks::core::VK_STRUCTURE_TYPE_DEDICATED_ALLOCATION_BUFFER_CREATE_INFO_NV,
+                sType: vks::vk::VK_STRUCTURE_TYPE_DEDICATED_ALLOCATION_BUFFER_CREATE_INFO_NV,
                 pNext: pnext,
                 dedicatedAllocation: utils::to_vk_bool(create_info.dedicated_allocation),
             },
@@ -120,7 +120,7 @@ impl VkDedicatedAllocationMemoryAllocateInfoNVWrapper {
 
         VkDedicatedAllocationMemoryAllocateInfoNVWrapper {
             vks_struct: vks::nv_dedicated_allocation::VkDedicatedAllocationMemoryAllocateInfoNV {
-                sType: vks::core::VK_STRUCTURE_TYPE_DEDICATED_ALLOCATION_MEMORY_ALLOCATE_INFO_NV,
+                sType: vks::vk::VK_STRUCTURE_TYPE_DEDICATED_ALLOCATION_MEMORY_ALLOCATE_INFO_NV,
                 pNext: pnext,
                 image: info.image.as_ref().map_or(Default::default(), core::Image::handle),
                 buffer: info.buffer.as_ref().map_or(Default::default(), core::Buffer::handle),

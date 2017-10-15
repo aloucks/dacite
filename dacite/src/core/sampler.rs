@@ -29,7 +29,7 @@ use vks;
 pub struct Sampler(Arc<Inner>);
 
 impl VulkanObject for Sampler {
-    type NativeVulkanObject = vks::core::VkSampler;
+    type NativeVulkanObject = vks::vk::VkSampler;
 
     #[inline]
     fn id(&self) -> u64 {
@@ -85,7 +85,7 @@ impl FromNativeObject for Sampler {
 }
 
 impl Sampler {
-    pub(crate) fn new(handle: vks::core::VkSampler, owned: bool, device: Device, allocator: Option<AllocatorHelper>) -> Self {
+    pub(crate) fn new(handle: vks::vk::VkSampler, owned: bool, device: Device, allocator: Option<AllocatorHelper>) -> Self {
         Sampler(Arc::new(Inner {
             handle: handle,
             owned: owned,
@@ -95,14 +95,14 @@ impl Sampler {
     }
 
     #[inline]
-    pub(crate) fn handle(&self) -> vks::core::VkSampler {
+    pub(crate) fn handle(&self) -> vks::vk::VkSampler {
         self.0.handle
     }
 }
 
 #[derive(Debug)]
 struct Inner {
-    handle: vks::core::VkSampler,
+    handle: vks::vk::VkSampler,
     owned: bool,
     device: Device,
     allocator: Option<AllocatorHelper>,
@@ -117,7 +117,7 @@ impl Drop for Inner {
             };
 
             unsafe {
-                self.device.loader().core.vkDestroySampler(self.device.handle(), self.handle, allocator);
+                self.device.loader().vk.vkDestroySampler(self.device.handle(), self.handle, allocator);
             }
         }
     }

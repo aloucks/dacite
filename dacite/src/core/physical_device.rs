@@ -38,7 +38,7 @@ use xlib_types;
 /// See [`VkPhysicalDevice`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkPhysicalDevice)
 #[derive(Debug, Clone)]
 pub struct PhysicalDevice {
-    pub(crate) handle: vks::core::VkPhysicalDevice,
+    pub(crate) handle: vks::vk::VkPhysicalDevice,
     pub(crate) instance: Instance,
 }
 
@@ -77,7 +77,7 @@ impl Hash for PhysicalDevice {
 }
 
 impl VulkanObject for PhysicalDevice {
-    type NativeVulkanObject = vks::core::VkPhysicalDevice;
+    type NativeVulkanObject = vks::vk::VkPhysicalDevice;
 
     #[inline]
     fn id(&self) -> u64 {
@@ -103,7 +103,7 @@ impl FromNativeObject for PhysicalDevice {
 }
 
 impl PhysicalDevice {
-    pub(crate) fn new(handle: vks::core::VkPhysicalDevice, instance: Instance) -> Self {
+    pub(crate) fn new(handle: vks::vk::VkPhysicalDevice, instance: Instance) -> Self {
         PhysicalDevice {
             handle: handle,
             instance: instance,
@@ -119,7 +119,7 @@ impl PhysicalDevice {
     pub fn get_properties(&self) -> core::PhysicalDeviceProperties {
         unsafe {
             let mut properties = mem::uninitialized();
-            self.loader().core.vkGetPhysicalDeviceProperties(self.handle, &mut properties);
+            self.loader().vk.vkGetPhysicalDeviceProperties(self.handle, &mut properties);
             (&properties).into()
         }
     }
@@ -128,7 +128,7 @@ impl PhysicalDevice {
     pub fn get_features(&self) -> core::PhysicalDeviceFeatures {
         unsafe {
             let mut features = mem::uninitialized();
-            self.loader().core.vkGetPhysicalDeviceFeatures(self.handle, &mut features);
+            self.loader().vk.vkGetPhysicalDeviceFeatures(self.handle, &mut features);
             (&features).into()
         }
     }
@@ -139,15 +139,15 @@ impl PhysicalDevice {
     {
         unsafe {
             let mut num_layer_properties = 0;
-            let res = self.loader().core.vkEnumerateDeviceLayerProperties(self.handle, &mut num_layer_properties, ptr::null_mut());
-            if res != vks::core::VK_SUCCESS {
+            let res = self.loader().vk.vkEnumerateDeviceLayerProperties(self.handle, &mut num_layer_properties, ptr::null_mut());
+            if res != vks::vk::VK_SUCCESS {
                 return Err(res.into());
             }
 
             let mut layer_properties = Vec::with_capacity(num_layer_properties as usize);
-            let res = self.loader().core.vkEnumerateDeviceLayerProperties(self.handle, &mut num_layer_properties, layer_properties.as_mut_ptr());
+            let res = self.loader().vk.vkEnumerateDeviceLayerProperties(self.handle, &mut num_layer_properties, layer_properties.as_mut_ptr());
             layer_properties.set_len(num_layer_properties as usize);
-            if res != vks::core::VK_SUCCESS {
+            if res != vks::vk::VK_SUCCESS {
                 return Err(res.into());
             }
 
@@ -161,15 +161,15 @@ impl PhysicalDevice {
             let layer_name_cstr = utils::cstr_from_str(layer_name);
 
             let mut num_extension_properties = 0;
-            let res = self.loader().core.vkEnumerateDeviceExtensionProperties(self.handle, layer_name_cstr.1, &mut num_extension_properties, ptr::null_mut());
-            if res != vks::core::VK_SUCCESS {
+            let res = self.loader().vk.vkEnumerateDeviceExtensionProperties(self.handle, layer_name_cstr.1, &mut num_extension_properties, ptr::null_mut());
+            if res != vks::vk::VK_SUCCESS {
                 return Err(res.into());
             }
 
             let mut extension_properties = Vec::with_capacity(num_extension_properties as usize);
             extension_properties.set_len(num_extension_properties as usize);
-            let res = self.loader().core.vkEnumerateDeviceExtensionProperties(self.handle, layer_name_cstr.1, &mut num_extension_properties, extension_properties.as_mut_ptr());
-            if res != vks::core::VK_SUCCESS {
+            let res = self.loader().vk.vkEnumerateDeviceExtensionProperties(self.handle, layer_name_cstr.1, &mut num_extension_properties, extension_properties.as_mut_ptr());
+            if res != vks::vk::VK_SUCCESS {
                 return Err(res.into());
             }
 
@@ -188,7 +188,7 @@ impl PhysicalDevice {
         let mut properties = unsafe { mem::uninitialized() };
 
         unsafe {
-            self.loader().core.vkGetPhysicalDeviceFormatProperties(self.handle, format.into(), &mut properties);
+            self.loader().vk.vkGetPhysicalDeviceFormatProperties(self.handle, format.into(), &mut properties);
         }
 
         (&properties).into()
@@ -199,10 +199,10 @@ impl PhysicalDevice {
         let mut properties = unsafe { mem::uninitialized() };
 
         let res = unsafe {
-            self.loader().core.vkGetPhysicalDeviceImageFormatProperties(self.handle, format.into(), image_type.into(), tiling.into(), usage.bits(), flags.bits(), &mut properties)
+            self.loader().vk.vkGetPhysicalDeviceImageFormatProperties(self.handle, format.into(), image_type.into(), tiling.into(), usage.bits(), flags.bits(), &mut properties)
         };
 
-        if res == vks::core::VK_SUCCESS {
+        if res == vks::vk::VK_SUCCESS {
             Ok((&properties).into())
         }
         else {
@@ -216,12 +216,12 @@ impl PhysicalDevice {
     {
         let mut num_properties = 0;
         unsafe {
-            self.loader().core.vkGetPhysicalDeviceSparseImageFormatProperties(self.handle, format.into(), image_type.into(), samples.bit(), usage.bits(), tiling.into(), &mut num_properties, ptr::null_mut());
+            self.loader().vk.vkGetPhysicalDeviceSparseImageFormatProperties(self.handle, format.into(), image_type.into(), samples.bit(), usage.bits(), tiling.into(), &mut num_properties, ptr::null_mut());
         }
 
         let mut properties = Vec::with_capacity(num_properties as usize);
         unsafe {
-            self.loader().core.vkGetPhysicalDeviceSparseImageFormatProperties(self.handle, format.into(), image_type.into(), samples.bit(), usage.bits(), tiling.into(), &mut num_properties, properties.as_mut_ptr());
+            self.loader().vk.vkGetPhysicalDeviceSparseImageFormatProperties(self.handle, format.into(), image_type.into(), samples.bit(), usage.bits(), tiling.into(), &mut num_properties, properties.as_mut_ptr());
             properties.set_len(num_properties as usize);
         }
 
@@ -234,12 +234,12 @@ impl PhysicalDevice {
     {
         let mut num_properties = 0;
         unsafe {
-            self.loader().core.vkGetPhysicalDeviceQueueFamilyProperties(self.handle, &mut num_properties, ptr::null_mut());
+            self.loader().vk.vkGetPhysicalDeviceQueueFamilyProperties(self.handle, &mut num_properties, ptr::null_mut());
         }
 
         let mut properties = Vec::with_capacity(num_properties as usize);
         unsafe {
-            self.loader().core.vkGetPhysicalDeviceQueueFamilyProperties(self.handle, &mut num_properties, properties.as_mut_ptr());
+            self.loader().vk.vkGetPhysicalDeviceQueueFamilyProperties(self.handle, &mut num_properties, properties.as_mut_ptr());
             properties.set_len(num_properties as usize);
         }
 
@@ -251,7 +251,7 @@ impl PhysicalDevice {
         let mut properties = unsafe { mem::uninitialized() };
 
         unsafe {
-            self.loader().core.vkGetPhysicalDeviceMemoryProperties(self.handle, &mut properties);
+            self.loader().vk.vkGetPhysicalDeviceMemoryProperties(self.handle, &mut properties);
         }
 
         (&properties).into()
@@ -265,14 +265,14 @@ impl PhysicalDevice {
 
         let mut device = ptr::null_mut();
         let res = unsafe {
-            self.loader().core.vkCreateDevice(self.handle, &create_info_wrapper.vks_struct, allocation_callbacks, &mut device)
+            self.loader().vk.vkCreateDevice(self.handle, &create_info_wrapper.vks_struct, allocation_callbacks, &mut device)
         };
 
-        if res == vks::core::VK_SUCCESS {
-            let mut loader = vks::DeviceProcAddrLoader::from_get_device_proc_addr(self.loader().core.pfn_vkGetDeviceProcAddr);
+        if res == vks::vk::VK_SUCCESS {
+            let mut loader = vks::DeviceProcAddrLoader::from_get_device_proc_addr(self.loader().vk.pfn_vkGetDeviceProcAddr);
 
             unsafe {
-                loader.load_core(device);
+                loader.load_vk(device);
                 create_info.enabled_extensions.load_device(&mut loader, device);
                 self.instance.get_enabled_extensions().load_device(&mut loader, device);
             }
@@ -287,12 +287,12 @@ impl PhysicalDevice {
     /// See [`vkGetPhysicalDeviceSurfaceSupportKHR`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetPhysicalDeviceSurfaceSupportKHR)
     /// and extension [`VK_KHR_surface`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VK_KHR_surface)
     pub fn get_surface_support_khr(&self, queue_family_index: u32, surface: &khr_surface::SurfaceKhr) -> Result<bool, core::Error> {
-        let mut supported = vks::core::VK_FALSE;
+        let mut supported = vks::vk::VK_FALSE;
         let res = unsafe {
             self.loader().khr_surface.vkGetPhysicalDeviceSurfaceSupportKHR(self.handle, queue_family_index, surface.handle(), &mut supported)
         };
 
-        if res == vks::core::VK_SUCCESS {
+        if res == vks::vk::VK_SUCCESS {
             Ok(utils::from_vk_bool(supported))
         }
         else {
@@ -307,7 +307,7 @@ impl PhysicalDevice {
             let mut capabilities = mem::uninitialized();
             let res = self.loader().khr_surface.vkGetPhysicalDeviceSurfaceCapabilitiesKHR(self.handle, surface.handle(), &mut capabilities);
 
-            if res == vks::core::VK_SUCCESS {
+            if res == vks::vk::VK_SUCCESS {
                 Ok((&capabilities).into())
             }
             else {
@@ -326,7 +326,7 @@ impl PhysicalDevice {
             self.loader().khr_surface.vkGetPhysicalDeviceSurfaceFormatsKHR(self.handle, surface.handle(), &mut num_formats, ptr::null_mut())
         };
 
-        if (res != vks::core::VK_SUCCESS) && (res != vks::core::VK_INCOMPLETE) {
+        if (res != vks::vk::VK_SUCCESS) && (res != vks::vk::VK_INCOMPLETE) {
             return Err(res.into());
         }
 
@@ -335,7 +335,7 @@ impl PhysicalDevice {
             self.loader().khr_surface.vkGetPhysicalDeviceSurfaceFormatsKHR(self.handle, surface.handle(), &mut num_formats, formats.as_mut_ptr())
         };
 
-        if res == vks::core::VK_SUCCESS {
+        if res == vks::vk::VK_SUCCESS {
             unsafe {
                 formats.set_len(num_formats as usize);
             }
@@ -357,7 +357,7 @@ impl PhysicalDevice {
             self.loader().khr_surface.vkGetPhysicalDeviceSurfacePresentModesKHR(self.handle, surface.handle(), &mut num_modes, ptr::null_mut())
         };
 
-        if (res != vks::core::VK_SUCCESS) && (res != vks::core::VK_INCOMPLETE) {
+        if (res != vks::vk::VK_SUCCESS) && (res != vks::vk::VK_INCOMPLETE) {
             return Err(res.into());
         }
 
@@ -366,7 +366,7 @@ impl PhysicalDevice {
             self.loader().khr_surface.vkGetPhysicalDeviceSurfacePresentModesKHR(self.handle, surface.handle(), &mut num_modes, modes.as_mut_ptr())
         };
 
-        if res == vks::core::VK_SUCCESS {
+        if res == vks::vk::VK_SUCCESS {
             unsafe {
                 modes.set_len(num_modes as usize);
             }
@@ -386,7 +386,7 @@ impl PhysicalDevice {
             self.loader().khr_display.vkGetPhysicalDeviceDisplayPropertiesKHR(self.handle, &mut len, ptr::null_mut())
         };
 
-        if res != vks::core::VK_SUCCESS {
+        if res != vks::vk::VK_SUCCESS {
             return Err(res.into());
         }
 
@@ -396,7 +396,7 @@ impl PhysicalDevice {
             self.loader().khr_display.vkGetPhysicalDeviceDisplayPropertiesKHR(self.handle, &mut len, properties.as_mut_ptr())
         };
 
-        if res == vks::core::VK_SUCCESS {
+        if res == vks::vk::VK_SUCCESS {
             unsafe {
                 Ok(properties.iter().map(|p| khr_display::DisplayPropertiesKhr::from_vks(p, self.clone())).collect())
             }
@@ -414,7 +414,7 @@ impl PhysicalDevice {
             self.loader().khr_display.vkGetPhysicalDeviceDisplayPlanePropertiesKHR(self.handle, &mut len, ptr::null_mut())
         };
 
-        if res != vks::core::VK_SUCCESS {
+        if res != vks::vk::VK_SUCCESS {
             return Err(res.into());
         }
 
@@ -424,7 +424,7 @@ impl PhysicalDevice {
             self.loader().khr_display.vkGetPhysicalDeviceDisplayPlanePropertiesKHR(self.handle, &mut len, properties.as_mut_ptr())
         };
 
-        if res == vks::core::VK_SUCCESS {
+        if res == vks::vk::VK_SUCCESS {
             unsafe {
                 Ok(properties.iter().map(|p| khr_display::DisplayPlanePropertiesKhr::from_vks(p, self)).collect())
             }
@@ -442,7 +442,7 @@ impl PhysicalDevice {
             self.loader().khr_display.vkGetDisplayPlaneSupportedDisplaysKHR(self.handle, plane_index, &mut len, ptr::null_mut())
         };
 
-        if res != vks::core::VK_SUCCESS {
+        if res != vks::vk::VK_SUCCESS {
             return Err(res.into());
         }
 
@@ -452,7 +452,7 @@ impl PhysicalDevice {
             self.loader().khr_display.vkGetDisplayPlaneSupportedDisplaysKHR(self.handle, plane_index, &mut len, displays.as_mut_ptr())
         };
 
-        if res == vks::core::VK_SUCCESS {
+        if res == vks::vk::VK_SUCCESS {
             Ok(displays.iter().map(|d| khr_display::DisplayKhr::new(*d, self.clone())).collect())
         }
         else {
@@ -553,7 +553,7 @@ impl PhysicalDevice {
         unsafe {
             let res = self.loader().khr_get_physical_device_properties2.vkGetPhysicalDeviceImageFormatProperties2KHR(self.handle, &image_format_info_wrapper.vks_struct, &mut chain_query_wrapper.vks_struct);
 
-            if res == vks::core::VK_SUCCESS {
+            if res == vks::vk::VK_SUCCESS {
                 Ok(khr_get_physical_device_properties2::ImageFormatProperties2Khr::from_vks(&chain_query_wrapper.vks_struct, true))
             }
             else {
@@ -625,7 +625,7 @@ impl PhysicalDevice {
             self.loader().nv_external_memory_capabilities.vkGetPhysicalDeviceExternalImageFormatPropertiesNV(self.handle, format.into(), image_type.into(), tiling.into(), usage.bits(), flags.bits(), external_handle_type.bits(), &mut properties)
         };
 
-        if res == vks::core::VK_SUCCESS {
+        if res == vks::vk::VK_SUCCESS {
             Ok((&properties).into())
         }
         else {

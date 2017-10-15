@@ -29,7 +29,7 @@ use vks;
 pub struct ShaderModule(Arc<Inner>);
 
 impl VulkanObject for ShaderModule {
-    type NativeVulkanObject = vks::core::VkShaderModule;
+    type NativeVulkanObject = vks::vk::VkShaderModule;
 
     #[inline]
     fn id(&self) -> u64 {
@@ -85,7 +85,7 @@ impl FromNativeObject for ShaderModule {
 }
 
 impl ShaderModule {
-    pub(crate) fn new(handle: vks::core::VkShaderModule, owned: bool, device: Device, allocator: Option<AllocatorHelper>) -> Self {
+    pub(crate) fn new(handle: vks::vk::VkShaderModule, owned: bool, device: Device, allocator: Option<AllocatorHelper>) -> Self {
         ShaderModule(Arc::new(Inner {
             handle: handle,
             owned: owned,
@@ -95,14 +95,14 @@ impl ShaderModule {
     }
 
     #[inline]
-    pub(crate) fn handle(&self) -> vks::core::VkShaderModule {
+    pub(crate) fn handle(&self) -> vks::vk::VkShaderModule {
         self.0.handle
     }
 }
 
 #[derive(Debug)]
 struct Inner {
-    handle: vks::core::VkShaderModule,
+    handle: vks::vk::VkShaderModule,
     owned: bool,
     device: Device,
     allocator: Option<AllocatorHelper>,
@@ -117,7 +117,7 @@ impl Drop for Inner {
             };
 
             unsafe {
-                self.device.loader().core.vkDestroyShaderModule(self.device.handle(), self.handle, allocator);
+                self.device.loader().vk.vkDestroyShaderModule(self.device.handle(), self.handle, allocator);
             }
         }
     }

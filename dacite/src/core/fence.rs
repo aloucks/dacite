@@ -30,7 +30,7 @@ use vks;
 pub struct Fence(Arc<Inner>);
 
 impl VulkanObject for Fence {
-    type NativeVulkanObject = vks::core::VkFence;
+    type NativeVulkanObject = vks::vk::VkFence;
 
     #[inline]
     fn id(&self) -> u64 {
@@ -86,7 +86,7 @@ impl FromNativeObject for Fence {
 }
 
 impl Fence {
-    pub(crate) fn new(handle: vks::core::VkFence, owned: bool, device: Device, allocator: Option<AllocatorHelper>) -> Self {
+    pub(crate) fn new(handle: vks::vk::VkFence, owned: bool, device: Device, allocator: Option<AllocatorHelper>) -> Self {
         Fence(Arc::new(Inner {
             handle: handle,
             owned: owned,
@@ -96,7 +96,7 @@ impl Fence {
     }
 
     #[inline]
-    pub(crate) fn handle(&self) -> vks::core::VkFence {
+    pub(crate) fn handle(&self) -> vks::vk::VkFence {
         self.0.handle
     }
 
@@ -106,7 +106,7 @@ impl Fence {
     }
 
     #[inline]
-    pub(crate) fn device_handle(&self) -> vks::core::VkDevice {
+    pub(crate) fn device_handle(&self) -> vks::vk::VkDevice {
         self.0.device.handle()
     }
 
@@ -117,12 +117,12 @@ impl Fence {
         let fences: Vec<_> = fences.iter().map(Fence::handle).collect();
 
         let res = unsafe {
-            loader.core.vkWaitForFences(device, fences.len() as u32, fences.as_ptr(), utils::to_vk_bool(wait_all), timeout.as_nanoseconds())
+            loader.vk.vkWaitForFences(device, fences.len() as u32, fences.as_ptr(), utils::to_vk_bool(wait_all), timeout.as_nanoseconds())
         };
 
         match res {
-            vks::core::VK_SUCCESS => Ok(true),
-            vks::core::VK_TIMEOUT => Ok(false),
+            vks::vk::VK_SUCCESS => Ok(true),
+            vks::vk::VK_TIMEOUT => Ok(false),
             _ => Err(res.into()),
         }
     }
@@ -140,10 +140,10 @@ impl Fence {
         let fences: Vec<_> = fences.iter().map(Fence::handle).collect();
 
         let res = unsafe {
-            loader.core.vkResetFences(device, fences.len() as u32, fences.as_ptr())
+            loader.vk.vkResetFences(device, fences.len() as u32, fences.as_ptr())
         };
 
-        if res == vks::core::VK_SUCCESS {
+        if res == vks::vk::VK_SUCCESS {
             Ok(())
         }
         else {
@@ -160,12 +160,12 @@ impl Fence {
     /// See [`vkGetFenceStatus`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkGetFenceStatus)
     pub fn get_status(&self) -> Result<bool, core::Error> {
         let res = unsafe {
-            self.loader().core.vkGetFenceStatus(self.device_handle(), self.handle())
+            self.loader().vk.vkGetFenceStatus(self.device_handle(), self.handle())
         };
 
         match res {
-            vks::core::VK_SUCCESS => Ok(true),
-            vks::core::VK_NOT_READY => Ok(false),
+            vks::vk::VK_SUCCESS => Ok(true),
+            vks::vk::VK_NOT_READY => Ok(false),
             _ => Err(res.into()),
         }
     }
@@ -173,7 +173,7 @@ impl Fence {
 
 #[derive(Debug)]
 struct Inner {
-    handle: vks::core::VkFence,
+    handle: vks::vk::VkFence,
     owned: bool,
     device: Device,
     allocator: Option<AllocatorHelper>,
@@ -188,7 +188,7 @@ impl Drop for Inner {
             };
 
             unsafe {
-                self.device.loader().core.vkDestroyFence(self.device.handle(), self.handle, allocator);
+                self.device.loader().vk.vkDestroyFence(self.device.handle(), self.handle, allocator);
             }
         }
     }

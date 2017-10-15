@@ -105,7 +105,7 @@ impl DisplayKhr {
     }
 
     #[inline]
-    pub(crate) fn physical_device_handle(&self) -> vks::core::VkPhysicalDevice {
+    pub(crate) fn physical_device_handle(&self) -> vks::vk::VkPhysicalDevice {
         self.physical_device.handle
     }
 
@@ -121,7 +121,7 @@ impl DisplayKhr {
             self.loader().khr_display.vkGetDisplayModePropertiesKHR(self.physical_device_handle(), self.handle, &mut len, ptr::null_mut())
         };
 
-        if res != vks::core::VK_SUCCESS {
+        if res != vks::vk::VK_SUCCESS {
             return Err(res.into());
         }
 
@@ -131,7 +131,7 @@ impl DisplayKhr {
             self.loader().khr_display.vkGetDisplayModePropertiesKHR(self.physical_device_handle(), self.handle, &mut len, properties.as_mut_ptr())
         };
 
-        if res == vks::core::VK_SUCCESS {
+        if res == vks::vk::VK_SUCCESS {
             Ok(properties.iter().map(|p| khr_display::DisplayModePropertiesKhr::from_vks(p, self.clone())).collect())
         }
         else {
@@ -150,7 +150,7 @@ impl DisplayKhr {
             self.loader().khr_display.vkCreateDisplayModeKHR(self.physical_device_handle(), self.handle, &create_info_wrapper.vks_struct, allocation_callbacks, &mut display_mode)
         };
 
-        if res == vks::core::VK_SUCCESS {
+        if res == vks::vk::VK_SUCCESS {
             if let Some(allocator_helper) = allocator_helper {
                 self.instance().add_display_mode_allocator(allocator_helper);
             }

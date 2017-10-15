@@ -154,7 +154,7 @@ macro_rules! gen_chain_struct {
                 #[allow(non_snake_case)]
                 #[repr(C)]
                 pub struct VkStructure {
-                    pub sType: vks::core::VkStructureType,
+                    pub sType: vks::vk::VkStructureType,
                     pub pNext: *mut ::libc::c_void,
                 }
 

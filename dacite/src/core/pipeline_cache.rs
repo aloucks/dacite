@@ -30,7 +30,7 @@ use vks;
 pub struct PipelineCache(Arc<Inner>);
 
 impl VulkanObject for PipelineCache {
-    type NativeVulkanObject = vks::core::VkPipelineCache;
+    type NativeVulkanObject = vks::vk::VkPipelineCache;
 
     #[inline]
     fn id(&self) -> u64 {
@@ -86,7 +86,7 @@ impl FromNativeObject for PipelineCache {
 }
 
 impl PipelineCache {
-    pub(crate) fn new(handle: vks::core::VkPipelineCache, owned: bool, device: Device, allocator: Option<AllocatorHelper>) -> Self {
+    pub(crate) fn new(handle: vks::vk::VkPipelineCache, owned: bool, device: Device, allocator: Option<AllocatorHelper>) -> Self {
         PipelineCache(Arc::new(Inner {
             handle: handle,
             owned: owned,
@@ -96,7 +96,7 @@ impl PipelineCache {
     }
 
     #[inline]
-    pub(crate) fn handle(&self) -> vks::core::VkPipelineCache {
+    pub(crate) fn handle(&self) -> vks::vk::VkPipelineCache {
         self.0.handle
     }
 
@@ -106,7 +106,7 @@ impl PipelineCache {
     }
 
     #[inline]
-    pub(crate) fn device_handle(&self) -> vks::core::VkDevice {
+    pub(crate) fn device_handle(&self) -> vks::vk::VkDevice {
         self.0.device.handle()
     }
 
@@ -115,10 +115,10 @@ impl PipelineCache {
         let caches: Vec<_> = caches.iter().map(PipelineCache::handle).collect();
 
         let res = unsafe {
-            self.loader().core.vkMergePipelineCaches(self.device_handle(), self.handle(), caches.len() as u32, caches.as_ptr())
+            self.loader().vk.vkMergePipelineCaches(self.device_handle(), self.handle(), caches.len() as u32, caches.as_ptr())
         };
 
-        if res == vks::core::VK_SUCCESS {
+        if res == vks::vk::VK_SUCCESS {
             Ok(())
         }
         else {
@@ -132,10 +132,10 @@ impl PipelineCache {
             let mut data: Vec<u8> = Vec::with_capacity(max_size);
             let res = unsafe {
                 data.set_len(max_size);
-                self.loader().core.vkGetPipelineCacheData(self.device_handle(), self.handle(), &mut max_size, data.as_mut_ptr() as *mut c_void)
+                self.loader().vk.vkGetPipelineCacheData(self.device_handle(), self.handle(), &mut max_size, data.as_mut_ptr() as *mut c_void)
             };
 
-            if (res == vks::core::VK_SUCCESS) || (res == vks::core::VK_INCOMPLETE) {
+            if (res == vks::vk::VK_SUCCESS) || (res == vks::vk::VK_INCOMPLETE) {
                 Ok(data)
             }
             else {
@@ -145,20 +145,20 @@ impl PipelineCache {
         else {
             let mut size = 0;
             let res = unsafe {
-                self.loader().core.vkGetPipelineCacheData(self.device_handle(), self.handle(), &mut size, ptr::null_mut())
+                self.loader().vk.vkGetPipelineCacheData(self.device_handle(), self.handle(), &mut size, ptr::null_mut())
             };
 
-            if (res != vks::core::VK_SUCCESS) && (res != vks::core::VK_INCOMPLETE) {
+            if (res != vks::vk::VK_SUCCESS) && (res != vks::vk::VK_INCOMPLETE) {
                 return Err(res.into());
             }
 
             let mut data: Vec<u8> = Vec::with_capacity(size);
             let res = unsafe {
                 data.set_len(size);
-                self.loader().core.vkGetPipelineCacheData(self.device_handle(), self.handle(), &mut size, data.as_mut_ptr() as *mut c_void)
+                self.loader().vk.vkGetPipelineCacheData(self.device_handle(), self.handle(), &mut size, data.as_mut_ptr() as *mut c_void)
             };
 
-            if (res == vks::core::VK_SUCCESS) || (res == vks::core::VK_INCOMPLETE) {
+            if (res == vks::vk::VK_SUCCESS) || (res == vks::vk::VK_INCOMPLETE) {
                 Ok(data)
             }
             else {
@@ -170,7 +170,7 @@ impl PipelineCache {
 
 #[derive(Debug)]
 struct Inner {
-    handle: vks::core::VkPipelineCache,
+    handle: vks::vk::VkPipelineCache,
     owned: bool,
     device: Device,
     allocator: Option<AllocatorHelper>,
@@ -185,7 +185,7 @@ impl Drop for Inner {
             };
 
             unsafe {
-                self.device.loader().core.vkDestroyPipelineCache(self.device.handle(), self.handle, allocator);
+                self.device.loader().vk.vkDestroyPipelineCache(self.device.handle(), self.handle, allocator);
             }
         }
     }

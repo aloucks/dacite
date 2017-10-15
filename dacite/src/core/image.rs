@@ -31,7 +31,7 @@ use vks;
 pub struct Image(Arc<Inner>);
 
 impl VulkanObject for Image {
-    type NativeVulkanObject = vks::core::VkImage;
+    type NativeVulkanObject = vks::vk::VkImage;
 
     #[inline]
     fn id(&self) -> u64 {
@@ -92,7 +92,7 @@ impl FromNativeObject for Image {
 }
 
 impl Image {
-    pub(crate) fn new(handle: vks::core::VkImage, owned: bool, device: Device, allocator: Option<AllocatorHelper>) -> Self {
+    pub(crate) fn new(handle: vks::vk::VkImage, owned: bool, device: Device, allocator: Option<AllocatorHelper>) -> Self {
         Image(Arc::new(Inner {
             handle: handle,
             owned: owned,
@@ -102,7 +102,7 @@ impl Image {
     }
 
     #[inline]
-    pub(crate) fn handle(&self) -> vks::core::VkImage {
+    pub(crate) fn handle(&self) -> vks::vk::VkImage {
         self.0.handle
     }
 
@@ -112,17 +112,17 @@ impl Image {
     }
 
     #[inline]
-    pub(crate) fn device_handle(&self) -> vks::core::VkDevice {
+    pub(crate) fn device_handle(&self) -> vks::vk::VkDevice {
         self.0.device.handle()
     }
 
     /// See [`vkBindImageMemory`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkBindImageMemory)
     pub fn bind_memory(&self, memory: DeviceMemory, offset: u64) -> Result<(), core::Error> {
         let res = unsafe {
-            self.loader().core.vkBindImageMemory(self.device_handle(), self.handle(), memory.handle(), offset)
+            self.loader().vk.vkBindImageMemory(self.device_handle(), self.handle(), memory.handle(), offset)
         };
 
-        if res == vks::core::VK_SUCCESS {
+        if res == vks::vk::VK_SUCCESS {
             Ok(())
         }
         else {
@@ -134,7 +134,7 @@ impl Image {
     pub fn get_memory_requirements(&self) -> core::MemoryRequirements {
         unsafe {
             let mut requirements = mem::uninitialized();
-            self.loader().core.vkGetImageMemoryRequirements(self.device_handle(), self.handle(), &mut requirements);
+            self.loader().vk.vkGetImageMemoryRequirements(self.device_handle(), self.handle(), &mut requirements);
             (&requirements).into()
         }
     }
@@ -145,13 +145,13 @@ impl Image {
     {
         let mut num_requirements = 0;
         unsafe {
-            self.loader().core.vkGetImageSparseMemoryRequirements(self.device_handle(), self.handle(), &mut num_requirements, ptr::null_mut());
+            self.loader().vk.vkGetImageSparseMemoryRequirements(self.device_handle(), self.handle(), &mut num_requirements, ptr::null_mut());
         }
 
         let mut requirements = Vec::with_capacity(num_requirements as usize);
         unsafe {
             requirements.set_len(num_requirements as usize);
-            self.loader().core.vkGetImageSparseMemoryRequirements(self.device_handle(), self.handle(), &mut num_requirements, requirements.as_mut_ptr());
+            self.loader().vk.vkGetImageSparseMemoryRequirements(self.device_handle(), self.handle(), &mut num_requirements, requirements.as_mut_ptr());
         }
 
         requirements.iter().map(From::from).collect()
@@ -163,7 +163,7 @@ impl Image {
 
         unsafe {
             let mut layout = mem::uninitialized();
-            self.loader().core.vkGetImageSubresourceLayout(self.device_handle(), self.handle(), &subresource, &mut layout);
+            self.loader().vk.vkGetImageSubresourceLayout(self.device_handle(), self.handle(), &subresource, &mut layout);
             (&layout).into()
         }
     }
@@ -171,7 +171,7 @@ impl Image {
 
 #[derive(Debug)]
 struct Inner {
-    handle: vks::core::VkImage,
+    handle: vks::vk::VkImage,
     owned: bool,
     device: Device,
     allocator: Option<AllocatorHelper>,
@@ -186,7 +186,7 @@ impl Drop for Inner {
             };
 
             unsafe {
-                self.device.loader().core.vkDestroyImage(self.device.handle(), self.handle, allocator);
+                self.device.loader().vk.vkDestroyImage(self.device.handle(), self.handle, allocator);
             }
         }
     }

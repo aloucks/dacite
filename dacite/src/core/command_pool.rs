@@ -29,7 +29,7 @@ use vks;
 pub struct CommandPool(Arc<Inner>);
 
 impl VulkanObject for CommandPool {
-    type NativeVulkanObject = vks::core::VkCommandPool;
+    type NativeVulkanObject = vks::vk::VkCommandPool;
 
     #[inline]
     fn id(&self) -> u64 {
@@ -85,7 +85,7 @@ impl FromNativeObject for CommandPool {
 }
 
 impl CommandPool {
-    pub(crate) fn new(handle: vks::core::VkCommandPool, owned: bool, device: Device, allocator: Option<AllocatorHelper>) -> Self {
+    pub(crate) fn new(handle: vks::vk::VkCommandPool, owned: bool, device: Device, allocator: Option<AllocatorHelper>) -> Self {
         CommandPool(Arc::new(Inner {
             handle: handle,
             owned: owned,
@@ -95,7 +95,7 @@ impl CommandPool {
     }
 
     #[inline]
-    pub(crate) fn handle(&self) -> vks::core::VkCommandPool {
+    pub(crate) fn handle(&self) -> vks::vk::VkCommandPool {
         self.0.handle
     }
 
@@ -105,17 +105,17 @@ impl CommandPool {
     }
 
     #[inline]
-    pub(crate) fn device_handle(&self) -> vks::core::VkDevice {
+    pub(crate) fn device_handle(&self) -> vks::vk::VkDevice {
         self.0.device.handle()
     }
 
     /// See [`vkResetCommandPool`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkResetCommandPool)
     pub fn reset(&self, flags: core::CommandPoolResetFlags) -> Result<(), core::Error> {
         let res = unsafe {
-            self.loader().core.vkResetCommandPool(self.device_handle(), self.handle(), flags.bits())
+            self.loader().vk.vkResetCommandPool(self.device_handle(), self.handle(), flags.bits())
         };
 
-        if res == vks::core::VK_SUCCESS {
+        if res == vks::vk::VK_SUCCESS {
             Ok(())
         }
         else {
@@ -131,10 +131,10 @@ impl CommandPool {
         let mut command_buffers = Vec::with_capacity(allocate_info.command_buffer_count as usize);
         let res = unsafe {
             command_buffers.set_len(allocate_info.command_buffer_count as usize);
-            command_pool.loader().core.vkAllocateCommandBuffers(command_pool.device_handle(), &allocate_info_wrapper.vks_struct, command_buffers.as_mut_ptr())
+            command_pool.loader().vk.vkAllocateCommandBuffers(command_pool.device_handle(), &allocate_info_wrapper.vks_struct, command_buffers.as_mut_ptr())
         };
 
-        if res == vks::core::VK_SUCCESS {
+        if res == vks::vk::VK_SUCCESS {
             Ok(command_buffers.iter().map(|&c| CommandBuffer::new(c, true, command_pool.clone())).collect())
         }
         else {
@@ -145,7 +145,7 @@ impl CommandPool {
 
 #[derive(Debug)]
 struct Inner {
-    handle: vks::core::VkCommandPool,
+    handle: vks::vk::VkCommandPool,
     owned: bool,
     device: Device,
     allocator: Option<AllocatorHelper>,
@@ -160,7 +160,7 @@ impl Drop for Inner {
             };
 
             unsafe {
-                self.device.loader().core.vkDestroyCommandPool(self.device.handle(), self.handle, allocator);
+                self.device.loader().vk.vkDestroyCommandPool(self.device.handle(), self.handle, allocator);
             }
         }
     }

@@ -30,7 +30,7 @@ use vks;
 pub struct RenderPass(Arc<Inner>);
 
 impl VulkanObject for RenderPass {
-    type NativeVulkanObject = vks::core::VkRenderPass;
+    type NativeVulkanObject = vks::vk::VkRenderPass;
 
     #[inline]
     fn id(&self) -> u64 {
@@ -86,7 +86,7 @@ impl FromNativeObject for RenderPass {
 }
 
 impl RenderPass {
-    pub(crate) fn new(handle: vks::core::VkRenderPass, owned: bool, device: Device, allocator: Option<AllocatorHelper>) -> Self {
+    pub(crate) fn new(handle: vks::vk::VkRenderPass, owned: bool, device: Device, allocator: Option<AllocatorHelper>) -> Self {
         RenderPass(Arc::new(Inner {
             handle: handle,
             owned: owned,
@@ -96,7 +96,7 @@ impl RenderPass {
     }
 
     #[inline]
-    pub(crate) fn handle(&self) -> vks::core::VkRenderPass {
+    pub(crate) fn handle(&self) -> vks::vk::VkRenderPass {
         self.0.handle
     }
 
@@ -106,7 +106,7 @@ impl RenderPass {
     }
 
     #[inline]
-    pub(crate) fn device_handle(&self) -> vks::core::VkDevice {
+    pub(crate) fn device_handle(&self) -> vks::vk::VkDevice {
         self.0.device.handle()
     }
 
@@ -114,7 +114,7 @@ impl RenderPass {
     pub fn get_render_area_granularity(&self) -> core::Extent2D {
         unsafe {
             let mut granularity = mem::uninitialized();
-            self.loader().core.vkGetRenderAreaGranularity(self.device_handle(), self.handle(), &mut granularity);
+            self.loader().vk.vkGetRenderAreaGranularity(self.device_handle(), self.handle(), &mut granularity);
             (&granularity).into()
         }
     }
@@ -122,7 +122,7 @@ impl RenderPass {
 
 #[derive(Debug)]
 struct Inner {
-    handle: vks::core::VkRenderPass,
+    handle: vks::vk::VkRenderPass,
     owned: bool,
     device: Device,
     allocator: Option<AllocatorHelper>,
@@ -137,7 +137,7 @@ impl Drop for Inner {
             };
 
             unsafe {
-                self.device.loader().core.vkDestroyRenderPass(self.device.handle(), self.handle, allocator);
+                self.device.loader().vk.vkDestroyRenderPass(self.device.handle(), self.handle, allocator);
             }
         }
     }

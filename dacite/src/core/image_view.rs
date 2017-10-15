@@ -29,7 +29,7 @@ use vks;
 pub struct ImageView(Arc<Inner>);
 
 impl VulkanObject for ImageView {
-    type NativeVulkanObject = vks::core::VkImageView;
+    type NativeVulkanObject = vks::vk::VkImageView;
 
     #[inline]
     fn id(&self) -> u64 {
@@ -85,7 +85,7 @@ impl FromNativeObject for ImageView {
 }
 
 impl ImageView {
-    pub(crate) fn new(handle: vks::core::VkImageView, owned: bool, device: Device, allocator: Option<AllocatorHelper>) -> Self {
+    pub(crate) fn new(handle: vks::vk::VkImageView, owned: bool, device: Device, allocator: Option<AllocatorHelper>) -> Self {
         ImageView(Arc::new(Inner {
             handle: handle,
             owned: owned,
@@ -95,14 +95,14 @@ impl ImageView {
     }
 
     #[inline]
-    pub(crate) fn handle(&self) -> vks::core::VkImageView {
+    pub(crate) fn handle(&self) -> vks::vk::VkImageView {
         self.0.handle
     }
 }
 
 #[derive(Debug)]
 struct Inner {
-    handle: vks::core::VkImageView,
+    handle: vks::vk::VkImageView,
     owned: bool,
     device: Device,
     allocator: Option<AllocatorHelper>,
@@ -117,7 +117,7 @@ impl Drop for Inner {
             };
 
             unsafe {
-                self.device.loader().core.vkDestroyImageView(self.device.handle(), self.handle, allocator);
+                self.device.loader().vk.vkDestroyImageView(self.device.handle(), self.handle, allocator);
             }
         }
     }

@@ -25,12 +25,12 @@ use vks;
 /// See [`VkDescriptorSet`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#VkDescriptorSet)
 #[derive(Debug, Clone)]
 pub struct DescriptorSet {
-    handle: vks::core::VkDescriptorSet,
+    handle: vks::vk::VkDescriptorSet,
     descriptor_pool: DescriptorPool,
 }
 
 impl VulkanObject for DescriptorSet {
-    type NativeVulkanObject = vks::core::VkDescriptorSet;
+    type NativeVulkanObject = vks::vk::VkDescriptorSet;
 
     #[inline]
     fn id(&self) -> u64 {
@@ -90,7 +90,7 @@ impl Hash for DescriptorSet {
 }
 
 impl DescriptorSet {
-    pub(crate) fn new(handle: vks::core::VkDescriptorSet, descriptor_pool: DescriptorPool) -> Self {
+    pub(crate) fn new(handle: vks::vk::VkDescriptorSet, descriptor_pool: DescriptorPool) -> Self {
         DescriptorSet {
             handle: handle,
             descriptor_pool: descriptor_pool,
@@ -98,7 +98,7 @@ impl DescriptorSet {
     }
 
     #[inline]
-    pub(crate) fn handle(&self) -> vks::core::VkDescriptorSet {
+    pub(crate) fn handle(&self) -> vks::vk::VkDescriptorSet {
         self.handle
     }
 
@@ -108,7 +108,7 @@ impl DescriptorSet {
     }
 
     #[inline]
-    pub(crate) fn device_handle(&self) -> vks::core::VkDevice {
+    pub(crate) fn device_handle(&self) -> vks::vk::VkDevice {
         self.descriptor_pool.device_handle()
     }
 
@@ -143,17 +143,17 @@ impl DescriptorSet {
         };
 
         unsafe {
-            loader.core.vkUpdateDescriptorSets(device_handle, writes_count, writes_ptr, copies_count, copies_ptr);
+            loader.vk.vkUpdateDescriptorSets(device_handle, writes_count, writes_ptr, copies_count, copies_ptr);
         }
     }
 
     /// See [`vkFreeDescriptorSets`](https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#vkFreeDescriptorSets)
     pub fn free(&self) -> Result<(), core::Error> {
         let res = unsafe {
-            self.loader().core.vkFreeDescriptorSets(self.device_handle(), self.descriptor_pool.handle(), 1, &self.handle)
+            self.loader().vk.vkFreeDescriptorSets(self.device_handle(), self.descriptor_pool.handle(), 1, &self.handle)
         };
 
-        if res == vks::core::VK_SUCCESS {
+        if res == vks::vk::VK_SUCCESS {
             Ok(())
         }
         else {
