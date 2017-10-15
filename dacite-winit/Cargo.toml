@@ -20,4 +20,4 @@ path = "../dacite"
 
 [dependencies]
 bitflags = "1.0"
-winit = "0.7"
+winit = "0.8"
