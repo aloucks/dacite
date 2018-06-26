@@ -13,6 +13,7 @@ This release contains breaking changes.
 
 ### Changed
  - Update `vks` to 0.21.
+ - Bumped lowest supported Rust version to 1.26.
 
 
 ## [0.7.0] - 2017-09-19
