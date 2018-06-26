@@ -11,7 +11,7 @@ breaking changes in other sub-sections are prefixed with "**BREAKING**" to incre
 ## [Unreleased]
 
 ### Changed
- - Update `winit` to 0.8.
+ - Update `winit` to 0.16.
 
 
 ## [0.7.0] - 2017-09-19

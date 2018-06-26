@@ -33,13 +33,16 @@ struct SwapchainSettings {
 }
 
 fn create_window(extent: &dacite::core::Extent2D) -> Result<Window, ()> {
+    let dimensions = winit::dpi::LogicalSize {
+        width: extent.width as f64,
+        height: extent.height as f64,
+    };
     let events_loop = winit::EventsLoop::new();
     let window = winit::WindowBuilder::new()
         .with_title("dacite triangle example")
-        .with_dimensions(extent.width, extent.height)
-        .with_min_dimensions(extent.width, extent.height)
-        .with_max_dimensions(extent.width, extent.height)
-        .with_visibility(false)
+        .with_dimensions(dimensions)
+        .with_min_dimensions(dimensions)
+        .with_max_dimensions(dimensions)
         .build(&events_loop);
 
     let window = window.map_err(|e| {
@@ -719,12 +722,10 @@ fn real_main() -> Result<(), ()> {
     let command_buffers = record_command_buffer(&command_pool, &pipeline, &framebuffers, &render_pass, &extent)?;
     let (image_acquired, image_rendered) = create_semaphores(&device)?;
 
-    window.show();
-
     let mut running = true;
     while running {
         events_loop.poll_events(|event| {
-            if let winit::Event::WindowEvent { event: winit::WindowEvent::Closed, .. } = event {
+            if let winit::Event::WindowEvent { event: winit::WindowEvent::CloseRequested, .. } = event {
                 running = false;
             }
         });

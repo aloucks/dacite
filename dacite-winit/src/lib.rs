@@ -42,6 +42,7 @@
 //!
 //!         // Other functions from the `WindowExt` trait can also return errors, which should be
 //!         // handled appropriately.
+//!  #      unimplemented!()
 //!     }
 //! };
 //!
@@ -50,6 +51,10 @@
 //!     // ...
 //!     enabled_extensions: required_extensions.to_extensions(),
 //!     // ...
+//! #   flags: dacite::core::InstanceCreateFlags::empty(),
+//! #   application_info: None,
+//! #   enabled_layers: vec![],
+//! #   chain: None,
 //! };
 //!
 //! let instance = dacite::core::Instance::create(&create_info, None).unwrap();
@@ -57,7 +62,11 @@
 //! // While searching for a suitable physical device, use
 //! // WindowExt::is_presentation_supported() to determine if the physical device has a queue
 //! // family, that can present to the window.
-//! let physical_device = // ...
+//! let find_suitable_device = |physical_devices: Vec<dacite::core::PhysicalDevice>| {
+//!     // ...
+//! #   panic!()
+//! };
+//! let physical_device = instance.enumerate_physical_devices().map(find_suitable_device);
 //!
 //! // And finally, create a `Surface` from the window:
 //! let surface = window.create_surface(&instance,

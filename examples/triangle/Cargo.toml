@@ -11,6 +11,6 @@ path = "../../dacite"
 path = "../../dacite-winit"
 
 [dependencies]
-winit = "0.8"
+winit = "0.16"
 glsl-to-spirv-macros = "0.1"
 glsl-to-spirv-macros-impl = "0.1"
