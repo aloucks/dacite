@@ -64,7 +64,7 @@
 //! // family, that can present to the window.
 //! let find_suitable_device = |physical_devices: Vec<dacite::core::PhysicalDevice>| {
 //!     // ...
-//! #   panic!()
+//! #   unimplemented!()
 //! };
 //! let physical_device = instance.enumerate_physical_devices().map(find_suitable_device);
 //!
